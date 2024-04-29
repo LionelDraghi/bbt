@@ -1,0 +1,63 @@
+project UUT is
+
+   for Source_Dirs use ("./");
+   for Object_Dir use "obj/";
+   for Exec_Dir use "./";
+   for Main use ("uut.adb");
+
+   package Builder is
+      for Executable ("uut.adb") use "uut";
+      for Default_Switches ("ada") use ("-j2");
+   end Builder;
+
+   package Compiler is
+      for Switches ("ada") use ("-gnat2022",
+                                "-g",
+                                "-O0",
+                                "-gnatQ",
+                                "-gnatf",
+                                "-gnato",
+                                "-fstack-check",
+                                "-gnata",
+                                "-gnateE",
+                                "-gnatVa",
+                                "-gnatwa",
+                                "-gnatyabefhiklnprtx");
+      -- -gnatQ : Don't quit
+      -- -gnatf : Full errors
+      -- -gnato : Intermediate overflows to be handled in strict mode.
+      -- -fstack-check : stack checking
+      -- -gnata : assertions
+      -- -gnateE : extra infos in exception messages
+      -- -gnatVa : all validity checks
+      -- -gnatwa : activate most optional warning messages
+      --
+      -- Style checking :
+      -- a : Check attribute casing
+      -- b : Blanks not allowed at statement end
+      -- e : Check end/exit labels
+      -- f : No form feeds or vertical tabs
+      -- h : No horizontal tabs
+      -- i : Check if-then layout
+      -- k : Check keyword casing
+      -- l : Check layout
+      -- n : Check casing of entities in Standard
+      -- p : Check pragma casing
+      -- r : Check references
+      -- t : Check token spacing
+      --removed  M100 : Set maximum line length
+      -- x : Check extra parentheses.
+
+   end Compiler;
+
+   package Linker is
+      for Switches ("ada") use ("-g", "-lgcov");
+      -- lgcov = -fprofile-arcs for coverage
+   end Linker;
+
+   package Binder is
+      for Switches ("ada") use ("-Es");
+      -- -Es : store symbolic tracebacks
+   end Binder;
+
+end UUT;
