@@ -33,6 +33,8 @@ procedure Analyze_BBT_File (File_Name : String) is
    --  Base_Name : String := Ada.Directories.Base_Name (File_Name);
    --  Dir_Name  : String := Ada.Directories.Containing_Directory (File_Name);
    Input : Ada.Text_IO.File_Type;
+   Context : Extended_Step_Categories := Unknown;
+
    -- --------------------------------------------------------------------------
    -- IO renamed with "Spawn" as Topic
    procedure Put_Line
@@ -42,7 +44,7 @@ procedure Analyze_BBT_File (File_Name : String) is
       Level : IO.Print_Out_Level := Normal;
       Topic : Settings.Extended_Topics := Settings.Lexer) renames IO.Put_Line;
 
-
+   use Ada.Text_IO;
 
 begin
    Put_Line ("Analysing file " & File_Name, Level => Debug);
@@ -77,8 +79,12 @@ begin
             when Step_Line =>
                declare
                   S : constant Step_Details :=
-                        Step_Lexer.Parse (Attrib.Step_Ln);
+                        Step_Lexer.Parse (Attrib.Step_Ln, Context);
+                  -- We give context to the parser, so that it can understand
+                  -- that a "And" line is in fact a "When" line thanks to the
+                  -- previous.
                begin
+                  Context := S.Cat;
                   Tests_Builder.Add_Step (S);
                   -- Put_Line (S'Image, Level => Quiet);
                   -- Tests_Builder.Add_Step (S);
@@ -101,7 +107,7 @@ begin
    -- and finally, let's record the document
    Close (Input);
    Put_Line ("Doc_List = " & Tests_Builder.The_Document_List.all'Image,
-             Level => Verbose);
+             Level => Debug);
 
 exception
    when E : Missing_Scenario =>

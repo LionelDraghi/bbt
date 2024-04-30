@@ -14,6 +14,8 @@
 -- limitations under the License.
 -- -----------------------------------------------------------------------------
 
+with BBT.Settings;
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
 
@@ -30,8 +32,11 @@ private package BBT.Files is
    package File_List is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                String);
 
-   procedure Append (File_Name : String);
-   procedure Find_BBT_Files (Recursive : Boolean);
+   procedure Append_File (File_Name : String);
+   procedure Find_BBT_Files
+     (Recursive   : Boolean;
+      Start_In    : String := "./";
+      Remove_Root : String := Settings.Initial_Directory);
    function No_BBT_File return Boolean;
    function BBT_Files return File_List.Vector;
 

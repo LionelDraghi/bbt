@@ -54,21 +54,25 @@ package body BBT.Files is
    The_List : File_List.Vector;
 
    -- --------------------------------------------------------------------------
-   procedure Append (File_Name : String) is
+   procedure Append_File (File_Name : String) is
+      use Ada.Directories;
    begin
-      --  if File_Name /= Settings.Template_Name then
-      --     --  The md file created with --create-template is not supposed to
-      --     --  be executed.
+      if Full_Name (File_Name) /= Full_Name (Settings.Template_Name) then
+         --  Filters the md file created with --create-template, that is
+         --  not supposed to be executed.
          The_List.Append (File_Name);
-      --  end if;
-   end Append;
+      end if;
+   end Append_File;
 
    -- --------------------------------------------------------------------------
-   procedure Find_BBT_Files (Recursive : Boolean) is
+   procedure Find_BBT_Files
+     (Recursive   : Boolean;
+      Start_In    : String := "./";
+      Remove_Root : String := Settings.Initial_Directory)
 
+   is
       use Ada.Directories;
-
-      Current : constant String := Current_Directory;
+      -- Current : constant String := Current_Directory;
 
       -- -----------------------------------------------------------------------
       procedure Walk (Name : String) is
@@ -76,24 +80,25 @@ package body BBT.Files is
          -- https://rosettacode.org/wiki/Walk_a_directory/Recursively#Ada
 
          -- --------------------------------------------------------------------
-         procedure Print (Item : Directory_Entry_Type) is
+         procedure Process_File (Item : Directory_Entry_Type) is
             -- Fixme: rename Print
             Name : constant String := Full_Name (Item);
          begin
-            if Name'Length > Current'Length and then
-              Name (Name'First .. Name'First + Current'Length - 1) = Current
+            if Name'Length > Remove_Root'Length and then
+              Name (Name'First .. Name'First + Remove_Root'Length - 1)
+              = Remove_Root
             -- Simple optimization : if the long path is a subdir of the
             -- current one, we only print the subdir
             then
-               Files.The_List.Append
-                 ((Name (Name'First + Current'Length + 1 .. Name'Last)));
+               Append_File
+                 ((Name (Name'First + Remove_Root'Length + 1 .. Name'Last)));
             else
-               Files.The_List.Append ((Name));
+               Append_File ((Name));
             end if;
-         end Print;
+         end Process_File;
 
          -- --------------------------------------------------------------------
-         procedure Walk (Item : Directory_Entry_Type) is
+         procedure Process_Dir (Item : Directory_Entry_Type) is
          begin
             if Simple_Name (Item) /= "." and then Simple_Name (Item) /= ".."
             then
@@ -102,7 +107,7 @@ package body BBT.Files is
                Walk (Full_Name (Item));
             end if;
          exception when Name_Error => null;
-         end Walk;
+         end Process_Dir;
 
          Extension : constant String := "*.md";
 
@@ -111,17 +116,17 @@ package body BBT.Files is
          Search (Directory => Name,
                  Pattern   => Extension,
                  Filter    => [Directory => False, others => True],
-                 Process   => Print'Access);
+                 Process   => Process_File'Access);
          if Recursive then
             Search (Directory => Name,
                     Pattern   => "",
                     Filter    => [Directory => True, others => False],
-                    Process   => Walk'Access);
+                    Process   => Process_Dir'Access);
          end if;
       end Walk;
 
    begin
-      Walk ("./");
+      Walk (Start_In);
       Put_Line (Item  => "Found " & The_List'Image, Level => IO.Debug);
 
    end Find_BBT_Files;

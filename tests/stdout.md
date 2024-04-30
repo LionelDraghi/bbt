@@ -5,4 +5,4 @@ Test an app returning a single line message
 ### Scenario outline : asking for uut version
 
   - When I run `uut -v`
-  - Then I get `uut version 0.0.1`
+  - Then I get `version 1.0`

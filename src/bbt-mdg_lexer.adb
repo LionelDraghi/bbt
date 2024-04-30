@@ -24,23 +24,6 @@ package body BBT.MDG_Lexer is
    Blanks  : constant Ada.Strings.Maps.Character_Set
      := Ada.Strings.Maps.To_Set (" " & Ada.Characters.Latin_1.HT);
 
-   --  package String_Arrays is new Ada.Containers.Indefinite_Vectors (Positive,
-   --                                                                  String);
-   --  Keywords       : constant String_Arrays.Vector := [1  => "a",
-   --                                                     2  => "and",
-   --                                                     3  => "are",
-   --                                                     4  => "contains",
-   --                                                     5  => "independent",
-   --                                                     6  => "is",
-   --                                                     7  => "files",
-   --                                                     8  => "layer",
-   --                                                     9  => "only",
-   --                                                     10 => "may",
-   --                                                     11 => "over",
-   --                                                     12 => "use",
-   --                                                     13 => "forbidden",
-   --                                                     14 => "allowed"];
-
    -- --------------------------------------------------------------------------
    function Find_Heading_Mark (Line       : String;
                                First      : out Natural;

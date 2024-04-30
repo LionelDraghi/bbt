@@ -1,7 +1,6 @@
-with Ada.Text_IO; use Ada.Text_IO;
-
-with BBT.Tests_Builder;
+with BBT.IO;           use BBT.IO;
 with BBT.Settings;
+with BBT.Tests_Builder;
 
 package body BBT.Documents is
 
@@ -20,6 +19,16 @@ package body BBT.Documents is
      (To_Bold (To_String (S), Bold));
 
    -- --------------------------------------------------------------------------
+   procedure Add_Fail (To : in out Scenario_Type) is
+   begin
+      To.Failed_Step_Count := @ + 1;
+   end Add_Fail;
+   procedure Add_Success (To : in out Scenario_Type) is
+   begin
+      To.Successful_Step_Count := @ + 1;
+   end Add_Success;
+
+   -- --------------------------------------------------------------------------
    procedure Put_Text (Text : Texts.Vector) is
       Pref : constant String := Prefix (Current_Indent_Level);
    begin
@@ -29,34 +38,17 @@ package body BBT.Documents is
    end Put_Text;
 
    -- --------------------------------------------------------------------------
-   procedure Put_File_Content (Text : Texts.Vector) is
-      Pref : constant String := Prefix (Current_Indent_Level);
-   begin
-      if not Text.Is_Empty then
-         Put_Line (Pref & "```");
-         Put_Text (Text);
-         Put_Line (Pref & "```");
-      end if;
-   end Put_File_Content;
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Step (Step               : Step_Type;
-   --                      With_Comments      : Boolean := False;
-   --                      With_Bold_Keywords : Boolean := False) is
-   --     pragma Unreferenced (With_Comments, With_Bold_Keywords);
+   --  procedure Put_File_Content (Text : Texts.Vector) is
+   --     Pref : constant String := Prefix (Current_Indent_Level);
    --  begin
-   --     Current_Indent_Level := 1;
-   --     declare
-   --        Pref : constant String := Prefix (Current_Indent_Level);
-   --     begin
-   --        --** Put_Line (Pref & S.Kind'Image);
-   --        Put_Line (Pref & "- " & To_String (Step.Text));
-   --        Put_File_Content (Step.File_Content);
-   --        New_Line;
-   --     end;
-   --  end Put_Step;
+   --     if not Text.Is_Empty then
+   --        Put_Line (Pref & "```");
+   --        Put_Text (Text);
+   --        Put_Line (Pref & "```");
+   --     end if;
+   --  end Put_File_Content;
 
-   --  -- --------------------------------------------------------------------------
+    --  -- --------------------------------------------------------------------------
    procedure Put_Step (Step               : Step_Type;
                        With_Comments      : Boolean := False;
                        With_Bold_Keywords : Boolean := False) is
@@ -71,57 +63,6 @@ package body BBT.Documents is
          New_Line;
       end;
    end Put_Step;
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Step (Step               : Given_Step_Type;
-   --                      With_Comments      : Boolean := False;
-   --                      With_Bold_Keywords : Boolean := False) is
-   --     pragma Unreferenced (With_Comments, With_Bold_Keywords);
-   --  begin
-   --     Current_Indent_Level := 1;
-   --     declare
-   --        Pref : constant String := Prefix (Current_Indent_Level);
-   --     begin
-   --        --** Put_Line (Pref & S.Kind'Image);
-   --        Put_Line (Pref & "- " & To_String (Step.Text));
-   --        Put_File_Content (Step.File_Content);
-   --        New_Line;
-   --     end;
-   --  end Put_Step;
-   --
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Step (Step               : When_Step_Type;
-   --                      With_Comments      : Boolean := False;
-   --                      With_Bold_Keywords : Boolean := False) is
-   --     pragma Unreferenced (With_Comments, With_Bold_Keywords);
-   --  begin
-   --     Current_Indent_Level := 1;
-   --     declare
-   --        Pref : constant String := Prefix (Current_Indent_Level);
-   --     begin
-   --        --** Put_Line (Pref & S.Kind'Image);
-   --        Put_Line (Pref & "- " & To_String (Step.Text));
-   --        Put_File_Content (Step.File_Content);
-   --        New_Line;
-   --     end;
-   --  end Put_Step;
-   --
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Step (Step               : Then_Step_Type;
-   --                      With_Comments      : Boolean := False;
-   --                      With_Bold_Keywords : Boolean := False) is
-   --     pragma Unreferenced (With_Comments, With_Bold_Keywords);
-   --  begin
-   --     Current_Indent_Level := 1;
-   --     declare
-   --        Pref : constant String := Prefix (Current_Indent_Level);
-   --     begin
-   --        --** Put_Line (Pref & S.Kind'Image);
-   --        Put_Line (Pref & "- " & To_String (Step.Text));
-   --        Put_File_Content (Step.File_Content);
-   --        New_Line;
-   --     end;
-   --  end Put_Step;
 
    -- --------------------------------------------------------------------------
    procedure Put_Scenario (Scenario           : Scenario_Type;
@@ -217,15 +158,15 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Run_Summary is
-      Failed_Step_Count     : Natural := 0;
-      Successful_Step_Count : Natural := 0;
+      -- Failed_Step_Count     : Natural := 0;
+      -- Successful_Step_Count : Natural := 0;
       Test_Result_Counts    : array (Test_Result) of Natural := [others => 0];
    begin
       for D of BBT.Tests_Builder.The_Document_List.all loop
          for F of D.Feature_List loop
             for Scen of F.Scenario_List loop
-               Successful_Step_Count := @ + Scen.Successful_Step_Count;
-               Failed_Step_Count     := @ + Scen.Failed_Step_Count;
+               -- Successful_Step_Count := @ + Scen.Successful_Step_Count;
+               -- Failed_Step_Count     := @ + Scen.Failed_Step_Count;
                Test_Result_Counts (Result (Scen)) := @ + 1;
             end loop;
          end loop;
@@ -234,9 +175,9 @@ package body BBT.Documents is
       Put_Line ("Failed     tests = " & Test_Result_Counts (Failed)'Image);
       Put_Line ("Successful tests = " & Test_Result_Counts (Successful)'Image);
       Put_Line ("Empty      tests = " & Test_Result_Counts (Empty)'Image);
-      New_Line;
-      Put_Line ("Failed     steps = " & Failed_Step_Count'Image);
-      Put_Line ("Successful steps = " & Successful_Step_Count'Image);
+      --  New_Line;
+      --  Put_Line ("Failed     steps = " & Failed_Step_Count'Image);
+      --  Put_Line ("Successful steps = " & Successful_Step_Count'Image);
    end Put_Run_Summary;
 
 end BBT.Documents;

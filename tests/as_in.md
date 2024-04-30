@@ -1,11 +1,11 @@
 ## Feature : “as in” test
 
-Test the –version option
+Test the ability to share post-conditions between tests
 
 ### Scenario : Short option form
-  - When I run `uut -v`
-  - Then I get no error
-  - And I get `uut v0.1.0` 
+  - When I run `uut -v`  
+  - Then I should get no error
+  - And I get `version 1.0` 
 
 ### Scenario : Long form
 

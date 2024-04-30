@@ -31,23 +31,23 @@ package BBT.Documents is
 
    type Step_Kind is (Unknown,
                       Run_Cmd,
+                      Successfully_Run_Cmd,
                       Error_Return_Code,
                       No_Error_Return_Code,
-                      Std_Output);
+                      Get_Output,
+                      Output_Is,
+                      File_Is,
+                      Output_Contains,
+                      File_Contains);
 
    -- --------------------------------------------------------------------------
-   type Step_Details (Kind : Step_Kind := Unknown) is record
-      Text : Unbounded_String;
-      Cat : Extended_Step_Categories;
-      case Kind is
-         when Run_Cmd =>
-            Cmd : Unbounded_String;
-         when Error_Return_Code | No_Error_Return_Code =>
-            null;
-         when Std_Output =>
-            Expected_Output : Unbounded_String;
-         when Unknown => null;
-      end case;
+   type Step_Details is record
+      Kind            : Step_Kind := Unknown;
+      Text            : Unbounded_String := Null_Unbounded_String;
+      Cat             : Extended_Step_Categories;
+      Cmd             : Unbounded_String := Null_Unbounded_String;
+      Expected_Output : Unbounded_String := Null_Unbounded_String;
+      File_Name       : Unbounded_String := Null_Unbounded_String;
    end record;
 
    -- --------------------------------------------------------------------------
@@ -69,9 +69,10 @@ package BBT.Documents is
       Failed_Step_Count     : Natural := 0;
       Successful_Step_Count : Natural := 0;
    end record;
+   procedure Add_Fail   (To : in out Scenario_Type);
+   procedure Add_Success (To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Scenario_Type);
---   function Run_Result (Scenario : Scenario_Type) return Test_Result;
 
    -- --------------------------------------------------------------------------
    type Feature_Type is record
@@ -81,7 +82,6 @@ package BBT.Documents is
    end record;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Feature_Type);
-   -- function Run_Result (Scenario : Feature_Type) return Test_Result;
 
    -- --------------------------------------------------------------------------
    type Document_Type is record
@@ -91,7 +91,6 @@ package BBT.Documents is
    end record;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type);
-   -- function Run_Result (Scenario : Document_Type) return Test_Result;
 
    -- --------------------------------------------------------------------------
    procedure Put_Text (Text : Texts.Vector);
@@ -113,6 +112,7 @@ package BBT.Documents is
                                 With_Bold_Keywords : Boolean);
 
    -- --------------------------------------------------------------------------
+   function Result (Scenario : Scenario_Type) return Test_Result;
    procedure Put_Run_Summary;
 
 

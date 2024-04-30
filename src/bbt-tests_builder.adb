@@ -46,7 +46,7 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      Put_Line ("Add_Document", Level => IO.Verbose);
+      Put_Line ("Add_Document """ & Name & """", Level => IO.Debug);
       The_Doc_List.Append (Document_Type'
                              (Name         => To_Unbounded_String (Name),
                               Feature_List => Feature_Lists.Empty,

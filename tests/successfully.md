@@ -8,12 +8,10 @@ should be equivalent to
 
 `Then I get no error`
 
-**how to test that???**
-
 ### Scenario outline : successfully
 
 Test the *when I successfully run* command with a wrong command line
   - When I successfully run `uut -vza`
-  - Then I get `unknown option`
+  - Then I get `unknown option -vza`
 
  

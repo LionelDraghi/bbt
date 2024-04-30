@@ -26,13 +26,10 @@ private package BBT.Settings is
    BBT_Version : constant String := Bbt_Config.Crate_Version;
 
    -- --------------------------------------------------------------------------
-   Build_Missing_Targets : Boolean := False;
-   Always_Make           : Boolean := False;
    Explain               : Boolean := False;
    Dry_Run               : Boolean := False;
    Keep_Going            : Boolean := False;
    Ignore_Errors         : Boolean := False;
-   Long_Listing_Format   : Boolean := False;
    Warnings_As_Errors    : Boolean := False;
    No_File_Given         : Boolean := True;
    Recursive             : Boolean := False;
@@ -42,6 +39,8 @@ private package BBT.Settings is
    With_Bold_Keywords    : Boolean := False;
    Create_Template       : Boolean := False;
    Template_Name         : constant String := "./bbt_template.md";
+   List_Settings         : Boolean := False;
+   List_Topics           : Boolean := False;
 
    -- --------------------------------------------------------------------------
    -- Observability!
@@ -57,12 +56,6 @@ private package BBT.Settings is
    procedure Enable_Topic (Topic : Topics);
    function Is_Enabled (Topic : Extended_Topics) return Boolean;
    -- return always false for None
-
-   -- --------------------------------------------------------------------------
-   Shell_Cmd             : constant String := "/bin/sh";
-   -- Shell_Opt             : constant String := "-c "; -- no space before -c!
-   --  Strace_Cmd            : constant String
-   --    := "/usr/bin/strace -y -q -qq -f -s 100 -e trace=file -o ";
 
    -- --------------------------------------------------------------------------
    function Initial_Directory return String;

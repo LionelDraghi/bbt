@@ -53,6 +53,10 @@ begin
       Put_Line ("-- File generated with BBT " & Settings.BBT_Version);
 
       Close (Template);
+      Set_Output (Standard_Output);
+
+      Put_Line ("Template file " & File_Name & " created.");
+
    end if;
 
 end Create_Template;
