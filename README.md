@@ -75,17 +75,53 @@ options :
 - diff
 - environment
 
-## Cookbook 
+## Syntax 
 
-- **When** I **run** `cmd`  
-  Return *success* if `cmd` was run
+**1. Given**  
+   
+**2. When**  
+
+  **a.** `When` has two main functions : checking that a file with some contents is available before run, and running  a command.   
+  - `When I run \`cmd\`` 
+
+    Return *success* if `cmd` was run.  
+    *failed* usually means that `bbt` couldn't find the cmd to run.
+
+  - `When I successfully run \`cmd\``  
+
+    Return *success* if `cmd` was run **and** returned no error.  
+  (This is a shortcut to avoid the usual following line `Then I get no error`).
+  - `When file is \`text\`` 
+  
+    Return *success* if `file` contains **only** `text` 
+  - `when file contains \`Text\``  
+  
+    Return *success* if `file` contains `text`, but not necessarily only that text. 
+
+Note that both `is` and `contains` may followed by a multiline text :
+
+~~~
+When `file` contains 
+```
+  line 1
+  line 2
+  line 3
+```
+~~~
+    Return *success* if `cmd` was run
+  - **get** and a text, or  **error** / **no error**
+  - **successfully run**  
+
+
+- **When** I **successfully** **run** `cmd`  
+  Return *success* if both `cmd` was run and returned no error  
+  (This is a shortcut to avoid the usual line **Then** I **get** **no** **error**)
+
+** 3. Then**  
 - **then** I **get** **no** **error**  
   Return *success* if `cmd` returned no error code 
 - **then** I **get** **error**  
   Return *success** if `cmd` returned an error code 
-- **When** I **successfully** **run** `cmd`  
-  Return *success* if both `cmd` was run and returned no error  
-  (This is a shortcut to avoid the usual line **Then** I **get** **no** **error**)
 - **then** **output** **contains** `text`  
   Return *success* if `cmd` output contains `text` 
 - **then** **output** **is** `text`  
@@ -97,9 +133,12 @@ options :
 - **then** **error output** **is** `text`  
   Return *success* if `cmd` error output is only `text`
 - **then** `file` **contains** `text`  
-  Return *success* if `file` contains `text` 
 - **then** `file` **is** `text`  
   Return *success* if `file` contains only `text`
+
+
+
+
 
 ## TDL
 
