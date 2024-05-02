@@ -60,7 +60,14 @@ package body BBT.Documents is
       begin
          --** Put_Line (Pref & S.Kind'Image);
          Put_Line (Pref & "- " & To_String (Step.Text));
-         New_Line;
+         if not Texts.Is_Empty (Step.File_Content) then
+            Put_Line ("```");
+            for L of Step.File_Content loop
+               Put_Line (Pref & "  " & L);
+            end loop;
+            Put_Line ("```");
+            New_Line;
+         end if;
       end;
    end Put_Step;
 
@@ -80,9 +87,11 @@ package body BBT.Documents is
             Put_Line (Pref & "Scenario: " & To_String (Scenario.Name));
          end if;
          New_Line;
+
          for Step of Scenario.Step_List loop
             Put_Step (Step, With_Comments, With_Bold_Keywords);
          end loop;
+
          if With_Comments then
             Put_Text (Scenario.Comment);
          end if;

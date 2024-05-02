@@ -1,6 +1,8 @@
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Text_Utilities; use Text_Utilities;
+
 package BBT.Documents is
 
    --  A simplified subset of Gerkhin AST :
@@ -12,12 +14,6 @@ package BBT.Documents is
    --  Given, When, Then, And, But for steps
    --     (that is line starting starting with ('-' '*' or '+')
    --  Background
-
-   -- --------------------------------------------------------------------------
-   package Texts is new Ada.Containers.Indefinite_Vectors (Positive,
-                                                           String);
-   subtype String_Vector is Texts.Vector;
-   Empty_Text : constant String_Vector := Texts.Empty_Vector;
 
    -- --------------------------------------------------------------------------
    type Test_Result is (Failed, Empty, Successful);
@@ -35,10 +31,16 @@ package BBT.Documents is
                       Error_Return_Code,
                       No_Error_Return_Code,
                       Get_Output,
-                      Output_Is,
-                      File_Is,
-                      Output_Contains,
-                      File_Contains);
+                      Output_Is_String,
+                      File_Is_String,
+                      Output_Contains_String,
+                      File_Contains_String,
+                      Output_Is_File,
+                      File_Is_File,
+                      Output_Contains_File,
+                      File_Contains_File,
+                      Existing_File,
+                      File_Creation);
 
    -- --------------------------------------------------------------------------
    type Step_Details is record
@@ -53,7 +55,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Step_Type is record
       Text         : Unbounded_String;
-      File_Content : String_Vector;
+      File_Content : Texts.Vector;
       Details      : Step_Details;
       Category     : Extended_Step_Categories := Unknown;
    end record;
@@ -63,7 +65,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Scenario_Type is record
       Name      : Unbounded_String;
-      Comment   : String_Vector;
+      Comment   : Texts.Vector;
       Step_List : Step_Lists.Vector;
       -----------------------
       Failed_Step_Count     : Natural := 0;
@@ -77,7 +79,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Feature_Type is record
       Name          : Unbounded_String;
-      Comment       : String_Vector;
+      Comment       : Texts.Vector;
       Scenario_List : Scenario_Lists.Vector;
    end record;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
@@ -86,7 +88,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Document_Type is record
       Name         : Unbounded_String;
-      Comment      : String_Vector;
+      Comment      : Texts.Vector;
       Feature_List : Feature_Lists.Vector;
    end record;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors

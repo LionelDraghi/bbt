@@ -20,7 +20,7 @@ begin
    Put_Line ("   Verbosity         : "
              & Print_Out_Level'Image (Verbosity));
    Put_Line ("   bbt files         : "
-             & Files.BBT_Files'Image);
+             & Scenario_Files.BBT_Files'Image);
    Put_Line ("   Initial directory : " & Initial_Directory);
    New_Line;
    Put_Line ("   " & Checkbox (Explain)

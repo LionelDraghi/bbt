@@ -105,3 +105,13 @@ And there is also MDG (for Markdown Gherkin)
 
 [Specification as a ubiquitous language](https://en.wikipedia.org/wiki/Behavior-driven_development#Specification_as_a_ubiquitous_language)
 *A ubiquitous language is a (semi-)formal language that is shared by all members of a software development team — both software developers and non-technical personnel.*
+
+
+
+
+## Synonymes : ???
+
+  Stderr = error output  
+  Stdout = output
+
+  

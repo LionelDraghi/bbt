@@ -17,7 +17,8 @@ with Ada.Text_IO;
 
 with BBT.Documents; use BBT.Documents;
 with BBT.IO;
-with BBT.Files;
+with BBT.Scenario_Files;
+with BBT.Step_Lexer;
 with BBT.Settings;
 with BBT.Tests_Builder;
 with BBT.Tests_Runner;
@@ -39,7 +40,7 @@ procedure BBT.Main is
    procedure Create_Template  is separate;
    procedure Analyze_BBT_File (File_Name : String) is separate;
    procedure Analyze_Cmd_Line is separate; -- Cmd line options are then
-                                           -- available in the Settings package.
+   -- available in the Settings package.
 
 begin
    -- --------------------------------------------------------------------------
@@ -57,11 +58,11 @@ begin
    -- (options are already processed in the analyze Cmd_Line procedure)
 
    if Settings.No_File_Given then
-      Files.Find_BBT_Files (Settings.Recursive);
+      Scenario_Files.Find_BBT_Files (Settings.Recursive);
    end if;
 
    if Settings.List_Files then
-      for File of Files.BBT_Files loop
+      for File of Scenario_Files.BBT_Files loop
          Ada.Text_IO.Put_Line (File);
       end loop;
       return;
@@ -87,11 +88,16 @@ begin
       return;
    end if;
 
-   if Files.No_BBT_File then
+   if Settings.List_Keywords then
+      BBT.Step_Lexer.Put_Keywords;
+      return;
+   end if;
+
+   if Scenario_Files.No_BBT_File then
       -- No file given on cmd line, and no bbt file found
-      Put_Error ("No bbt file found");
+      IO.Put_Line ("No md file found", Level => IO.Quiet);
    else
-      for File of Files.BBT_Files loop
+      for File of Scenario_Files.BBT_Files loop
          IO.Put_Line ("Loading " & File'Image, Level => IO.Verbose);
          Analyze_BBT_File (File);
       end loop;

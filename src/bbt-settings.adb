@@ -60,25 +60,24 @@ package body BBT.Settings is
      (Initial_Directory); -- for now : in the future, should run where the
                           -- scenario file is
 
-   --  -- --------------------------------------------------------------------------
-   --  procedure Set_Runfile_Name (Name : String) is
-   --  begin
-   --     Runfl_Name := new String'(Name);
-   --  end Set_Runfile_Name;
-
-   --  function Runfile_Name return String is
-   --    (if Runfl_Name = null then "" else Runfl_Name.all);
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Add_To_Command_Line (Text : String) is
-   --  begin
-   --     if Cmd_Line = "" then
-   --        Cmd_Line := To_Unbounded_String (Text);
-   --     else
-   --        Cmd_Line := Cmd_Line & " " & Text;
-   --     end if;
-   --  end Add_To_Command_Line;
-   --
-   --  function Command_Line return String is (To_String (Cmd_Line));
+   -- --------------------------------------------------------------------------
+   function Is_Authorised (Level : Print_Out_Level) return Boolean is
+   begin
+      case Level is
+         when Debug =>
+            return True;
+         when Verbose =>
+            return
+              Verbosity = Verbose or
+              Verbosity = Normal or
+              Verbosity = Quiet;
+         when Normal =>
+            return
+              Verbosity = Normal or
+              Verbosity = Quiet;
+         when Quiet =>
+            return Verbosity = Quiet;
+      end case;
+   end Is_Authorised;
 
 end BBT.Settings;

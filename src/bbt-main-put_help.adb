@@ -28,7 +28,8 @@ begin
    New_Line;
    Put_Line ("Command :");
    Put_Line ("   run                    : the default command");
-   Put_Line ("   -lf  | list-files      : list scenarii files found");
+   Put_Line ("   -lf  | list_files      : list scenarii files found");
+   Put_Line ("   -lk  | list_keywords   : list bbt keywords");
    Put_Line ("   -e   | explain         : explain what bbt understand from scenarii files");
    Put_Line ("   -ct  | create-template : create a commented example of rules file");
    Put_Line ("   -d   | dry-run         : print the commands that would be");

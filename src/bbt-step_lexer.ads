@@ -11,4 +11,6 @@ package BBT.Step_Lexer is
    -- line that starts with "And" for example will inherit their type from
    -- the previouly analyzed lines.
 
+   procedure Put_Keywords;
+
 end BBT.Step_Lexer;

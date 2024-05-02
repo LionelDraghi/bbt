@@ -43,7 +43,7 @@ begin
    -- NB: command line, including arguments should comply with GNU Coding
    -- standards
    -- (https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
-   Opt_Analyzis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
+   Opt_Analysis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
 
       declare
          Opt : constant String := Ada.Command_Line.Argument (Arg_Counter);
@@ -57,10 +57,13 @@ begin
          elsif Opt = "-e" or Opt = "explain" then
             Settings.Explain := True;
 
-         elsif Opt = "-lf" or Opt = "list-files" then
+         elsif Opt = "-lf" or Opt = "list_files" then
             Settings.List_Files := True;
 
-         elsif Opt = "-ct" or Opt = "--create-template" then
+         elsif Opt = "-lk" or Opt = "list_keywords" then
+            Settings.List_Keywords := True;
+
+         elsif Opt = "-ct" or Opt = "--create_template" then
             Settings.Create_Template := True;
 
          elsif Opt = "-n" or Opt = "--dry-run" then
@@ -70,7 +73,7 @@ begin
          elsif Opt = "-r" or Opt = "--recursive" then
             Settings.Recursive := True;
 
-         elsif Opt = "-k" or Opt = "--keep-going" then
+         elsif Opt = "-k" or Opt = "--keep_going" then
             Settings.Keep_Going := True;
 
          elsif Opt = "-v" or Opt = "--verbose" then
@@ -83,10 +86,10 @@ begin
             -- undocumented option
             Settings.Verbosity := Settings.Debug;
 
-         elsif Opt = "-wc" or Opt = "--with-comments" then
+         elsif Opt = "-wc" or Opt = "--with_comments" then
             Settings.With_Comments := True;
 
-         elsif Opt = "-bk" or Opt = "--bold-keywords" then
+         elsif Opt = "-bk" or Opt = "--bold_keywords" then
             Settings.With_Bold_Keywords := True;
 
             -- Debug command ---------------------------------------------------
@@ -117,20 +120,22 @@ begin
                case Kind (Opt) is
                   when Directory =>
                      Settings.No_File_Given := False;
-                     Files.Find_BBT_Files (Start_In  => Opt,
+                     Scenario_Files.Find_BBT_Files (Start_In  => Opt,
                                            Recursive => Settings.Recursive);
                   when Ordinary_File =>
                      Settings.No_File_Given := False;
-                     Files.Append_File (Opt);
+                     Scenario_Files.Append_File (Opt);
 
                   when Special_File =>
-                     Put_Error ("Unknown file type """ & Opt & """");
+                     IO.Put_Line ("Unknown file type """ & Opt & """",
+                                     Level => IO.Quiet);
                      return;
 
                end case;
 
             else
-               Put_Error ("Unknown bbt file """ & Opt & """");
+               IO.Put_Line ("Unknown bbt file """ & Opt & """",
+                         Level => IO.Quiet);
                return;
 
             end if;
@@ -144,7 +149,7 @@ begin
 
       Next_Arg;
 
-   end loop Opt_Analyzis_Loop;
+   end loop Opt_Analysis_Loop;
 
    -- --------------------------------------------------------------------------
    if Settings.Debug_Mode then

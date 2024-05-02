@@ -1,6 +1,10 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with BBT.IO;
 with BBT.Settings; -- use BBT.IO;
+
+with Text_Utilities; use Text_Utilities;
+
 
 package body BBT.Tests_Builder is
 
@@ -103,8 +107,9 @@ package body BBT.Tests_Builder is
          elsif State = In_Then_Step then
             Cat := Then_Step;
          else
-            IO.Put_Error
-              ("Add_Step : unknown category, but not already in a step???");
+            IO.Put_Line
+              ("Add_Step : unknown category, but not already in a step???",
+               Level => IO.Quiet);
          end if;
 
       else
@@ -202,8 +207,9 @@ package body BBT.Tests_Builder is
                   Last_Step_Ref.File_Content.Append (Line);
 
                when others =>
-                  IO.Put_Error ("Recording file content """ &
-                               Line & """ but Previous state is not a Step");
+                  IO.Put_Line ("Recording file content """ &
+                                 Line & """ but Previous state is not a Step",
+                               Level => IO.Quiet);
 
             end case;
       end case;

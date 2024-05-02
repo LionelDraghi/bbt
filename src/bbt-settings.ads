@@ -41,6 +41,7 @@ private package BBT.Settings is
    Template_Name         : constant String := "./bbt_template.md";
    List_Settings         : Boolean := False;
    List_Topics           : Boolean := False;
+   List_Keywords         : Boolean := False;
 
    -- --------------------------------------------------------------------------
    -- Observability!
@@ -71,6 +72,7 @@ private package BBT.Settings is
    -- verbose: Both normal messages and verbose messages are displayed.
    --          This mode can be achieved using option --verbose.
    Verbosity : Print_Out_Level := Normal;
+   function Is_Authorised (Level : Print_Out_Level) return Boolean;
 
    -- --------------------------------------------------------------------------
    function Debug_Mode return Boolean is (Verbosity = Debug);

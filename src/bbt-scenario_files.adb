@@ -19,7 +19,7 @@ with BBT.Settings;       use BBT.Settings;
 
 with Ada.Directories;
 
-package body BBT.Files is
+package body BBT.Scenario_Files is
 
    -- --------------------------------------------------------------------------
    -- IO renamed with "Spawn" as Topic
@@ -135,4 +135,4 @@ package body BBT.Files is
    function No_bbt_File return Boolean is (The_List.Is_Empty);
    function bbt_Files return File_List.Vector is (The_List);
 
-end BBT.Files;
+end BBT.Scenario_Files;

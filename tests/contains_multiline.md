@@ -4,10 +4,10 @@
 
 ### Scenario outline : test the standard output
 
-  -  When I run `uut -create config.ini “mode=silent”`
-  -  And    I run `uut -append config.ini “lang=fr”`
-  -  And    I run `uut -append config.ini “recurse=true”`
-  -  And    I run `uut -append config.ini “autosave=true”`
+  -  When I run `uut create mode=silent config.ini `
+  -  And  I run `uut append lang=fr config.ini`
+  -  And  I run `uut append recurse=true config.ini`
+  -  And  I run `uut append config.ini autosave=true config.ini`
   -  Then `config.ini` contains 
 ```
 Lang=fr
@@ -26,6 +26,13 @@ autosave=true
 ```
 Mode=silent
 Lang=fr
+recurse=true
+autosave=true
+```
+   - But `config.ini` do not contains 
+```
+Mode=silent
+Lang=uk
 recurse=true
 autosave=true
 ```

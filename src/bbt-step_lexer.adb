@@ -5,6 +5,7 @@ with Ada.Characters.Latin_1;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
+with Ada.Text_IO;
 
 package body BBT.Step_Lexer is
 
@@ -42,6 +43,8 @@ package body BBT.Step_Lexer is
                              First : Positive;
                              Last  : Natural := 0) return Boolean;
 
+      procedure Put_Keywords;
+
    end Internal;
 
    -- --------------------------------------------------------------------------
@@ -60,12 +63,14 @@ package body BBT.Step_Lexer is
                    ["given",
                     "when",
                     "then",
-                    "and",
-                    -- "but",
-                    "run",
+                    "and", -- "and" and "but" are equivalent to "Given" if they
+                    "but", -- appear in the "Given" section, to "Then" if tey
+                    "run", -- appear in the "Then" section, etc.
                     "get",
                     "existing",
-                    "no",
+                    "no", -- "no" = "not" = "dont"
+                    "not",
+                    "dont",
                     "error",
                     "is",
                     "file",
@@ -74,7 +79,12 @@ package body BBT.Step_Lexer is
                     "Successfully"
                    ];
 
-      -- 0 means not found
+      procedure Put_Keywords is
+      begin
+         for K of Keywords loop
+            Ada.Text_IO.Put_Line ("- " & K);
+         end loop;
+      end Put_Keywords;
 
       -- --------------------------------------------------------------------------
       procedure Initialize_Cursor is begin
@@ -129,8 +139,9 @@ package body BBT.Step_Lexer is
                               [Backtick],
                               From => First + 1);
                if Last = 0 then
-                  IO.Put_Error ("Missing closing backtick in """ &
-                                  Line.all (Cursor .. Line'Last));
+                  IO.Put_Line ("Missing closing backtick in """ &
+                                  Line.all (Cursor .. Line'Last),
+                                Level => IO.Quiet);
                   Finish_Line;
                else
                   -- Code span -------------------------------------------------
@@ -208,12 +219,14 @@ package body BBT.Step_Lexer is
       Cat              : Extended_Step_Categories := Unknown;
       Cmd_To_Run,
       File_Name,
-      Text_To_Find     : Unbounded_String;
+      String_To_Find   : Unbounded_String;
       Output_Met       : Boolean := False;
       File_Met         : Boolean := False;
       No_Met           : Boolean := False;
       -- Line format :
       -- Run_Cmd              : when I run `cmd`
+      -- Successfully         : when i successfully run `cmd`
+      --
       -- Error_Return_Code    : then I get error
       -- No_Error_Return_Code : then I get no error
       -- Get_Output           : then I get `msg`
@@ -221,7 +234,10 @@ package body BBT.Step_Lexer is
       -- Output_Contains      : then output contains `msg`
       -- File_Is              : then `config.ini` is       `mode=silent`
       -- File_Contains        : then `config.ini` contains `mode=silent`
-      -- Successfully         : when i successfully run `cmd`
+      --
+      -- Existing_File        : given then existing `config.ini` file
+      -- File_Creation        : given the file `config.ini`
+      --                        followed by the code fenced file content
 
       -- Previous_Token  : Unbounded_String;
 
@@ -231,10 +247,9 @@ package body BBT.Step_Lexer is
       Put_Line ("Parsing """ & To_String (Line) & """", Level => IO.Debug);
       Line_Processing : while More_Token loop
          declare
-            TT   : Token_Type;
-            Tmp  : aliased constant String := To_String (Line);
-            Tok  : constant String := Next_Token (Tmp'Access, TT);
-
+            TT       : Token_Type;
+            Tmp      : aliased constant String := To_String (Line);
+            Tok      : constant String := Next_Token (Tmp'Access, TT);
          begin
             case TT is
                when Keyword =>
@@ -252,7 +267,9 @@ package body BBT.Step_Lexer is
                            Cat := When_Step;
                         elsif Lower_Keyword = "then" then
                            Cat := Then_Step;
-                        elsif Lower_Keyword = "and" then
+                        elsif Lower_Keyword = "and" or else
+                          Lower_Keyword = "but"
+                        then
                            Cat := Context;
                            -- inherited from the context
                         else
@@ -278,20 +295,26 @@ package body BBT.Step_Lexer is
 
                      elsif Lower_Keyword = "is" then
                         if Output_Met then
-                           The_Kind := Output_Is;
+                           The_Kind := Output_Is_String;
                         elsif File_Met then
-                           The_Kind := File_Is;
+                           The_Kind := File_Is_String;
                         end if;
                         -- Is_Met := True;
 
                      elsif Lower_Keyword = "file" then
+                        if The_Kind = Unknown then
+                           The_Kind := File_Creation;
+                           -- note that this may be overriden later in the line
+                        end if;
                         File_Met := True;
 
-                     elsif Lower_Keyword = "no" then
+                     elsif Lower_Keyword = "no"
+                       or Lower_Keyword = "not"
+                       or Lower_Keyword = "dont" then
                         No_Met := True;
 
                      elsif Lower_Keyword = "successfully" then
-                         The_Kind := Successfully_Run_Cmd;
+                        The_Kind := Successfully_Run_Cmd;
 
                      elsif Lower_Keyword = "error" then
                         -- Put_Line ("   error");
@@ -308,10 +331,14 @@ package body BBT.Step_Lexer is
 
                      elsif Lower_Keyword = "contains" then
                         if Output_Met then
-                           The_Kind := Output_Contains;
+                           The_Kind := Output_Contains_String;
                         else
-                           The_Kind := File_Contains;
+                           The_Kind := File_Contains_String;
                         end if;
+
+                     elsif Lower_Keyword = "existing" then
+                        The_Kind := Existing_File;
+
                      end if;
 
                   end;
@@ -326,24 +353,34 @@ package body BBT.Step_Lexer is
                           Successfully_Run_Cmd =>
                         Cmd_To_Run := To_Unbounded_String (Tok);
 
-                     when Get_Output      |
-                          File_Contains   |
-                          File_Is         |
-                          Output_Contains |
-                          Output_Is       =>
+                     when Get_Output             |
+                          File_Contains_String   |
+                          File_Is_String         |
+                          Output_Contains_String |
+                          Output_Is_String       =>
                      -- Get keywords + code span means that the code span
                      -- is the message expected
-                     Text_To_Find := To_Unbounded_String (Tok);
+                     String_To_Find := To_Unbounded_String (Tok);
 
-                     when Unknown =>
-                     -- If it appears at the beginning, it should be the
-                     -- file name that will be used later in the line
+                     when Unknown       |
+                          File_Creation |
+                          Existing_File =>
+                     -- If it appears at the beginning, so that Kind is still
+                     -- unknown, it should be the file name that will be
+                     -- used later in the line.
                         File_Name := To_Unbounded_String (Tok);
 
                      when No_Error_Return_Code |
                           Error_Return_Code    =>
-                        IO.Put_Error
-                          ("No code span expected after ""no error""");
+                        IO.Put_Line
+                          ("No code span expected after ""no error""",
+                           Level => IO.Quiet);
+
+                     when Output_Is_File       |
+                          File_Is_File         |
+                          Output_Contains_File |
+                          File_Contains_File   =>
+                        IO.Put_Line ("WTF???", Level => IO.Quiet);
 
                   end case;
 
@@ -358,9 +395,24 @@ package body BBT.Step_Lexer is
 
       end loop Line_Processing;
 
-      --  if Successfully_Met and The_Kind = Run_Cmd then
-      --     The_Kind := Successfully_Run_Cmd;
-      --  end if;
+      -- If we have no string to find at the end of the line, it's because it
+      -- will be in the following line as a text content
+      if String_To_Find = Null_Unbounded_String then
+
+         if The_Kind = File_Contains_String then
+            The_Kind := File_Contains_File;
+
+         elsif The_Kind = File_Is_String then
+            The_Kind := File_Is_File;
+
+         elsif The_Kind = Output_Contains_String then
+            The_Kind := Output_Contains_File;
+
+         elsif The_Kind = Output_Is_String then
+            The_Kind := Output_Is_File;
+
+         end if;
+      end if;
 
       case The_Kind is
          when Run_Cmd =>
@@ -396,36 +448,80 @@ package body BBT.Step_Lexer is
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Text_To_Find,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => Null_Unbounded_String);
-         when Output_Is =>
-            return Step_Details'(Kind             => Output_Is,
+         when Output_Is_String =>
+            return Step_Details'(Kind             => Output_Is_String,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Text_To_Find,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => Null_Unbounded_String);
-         when Output_Contains =>
-            return Step_Details'(Kind             => Output_Contains,
+         when Output_Contains_String =>
+            return Step_Details'(Kind             => Output_Contains_String,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Text_To_Find,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => Null_Unbounded_String);
-         when File_Is =>
-            return Step_Details'(Kind             => File_Is,
+         when File_Is_String =>
+            return Step_Details'(Kind             => File_Is_String,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Text_To_Find,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => File_Name);
-         when File_Contains =>
-            return Step_Details'(Kind             => File_Contains,
+         when File_Contains_String =>
+            return Step_Details'(Kind             => File_Contains_String,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Text_To_Find,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => File_Name);
+         when Output_Is_File =>
+            return Step_Details'(Kind             => Output_Is_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+         when File_Is_File =>
+            return Step_Details'(Kind             => File_Is_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+         when Output_Contains_File =>
+            return Step_Details'(Kind             => Output_Contains_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+         when File_Contains_File =>
+            return Step_Details'(Kind             => File_Contains_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+         when Existing_File =>
+            return Step_Details'(Kind             => Existing_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+
+         when File_Creation =>
+            return Step_Details'(Kind             => File_Creation,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
+                                 File_Name        => File_Name);
+
          when Unknown =>
             return Step_Details'(Kind             => Unknown,
                                  Text             => Line,
@@ -437,5 +533,6 @@ package body BBT.Step_Lexer is
 
    end Parse;
 
+   procedure Put_Keywords renames Internal.Put_Keywords;
 
 end BBT.Step_Lexer;

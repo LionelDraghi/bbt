@@ -114,8 +114,8 @@ exception
       Put_Error (Ada.Exceptions.Exception_Message (E));
       Put_Error ("Interrupting " & File_Name & " processing");
 
-   --  when E : others =>
-   --     Put_Error (Ada.Exceptions.Exception_Message (E));
-   --     Put_Error ("Unkown exception while processing " & File_Name);
+   when E : others =>
+      Put_Error (Ada.Exceptions.Exception_Message (E));
+      Put_Error ("Unknown exception while processing " & File_Name);
 
 end Analyze_BBT_File;
