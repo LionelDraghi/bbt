@@ -94,7 +94,7 @@ begin
                Tests_Builder.Add_Code_Block;
 
             when Text_Line =>
-               Add_Line (To_String (Attrib.Line));
+               Tests_Builder.Add_Line (To_String (Attrib.Line));
 
             when Empty_Line => null;
 

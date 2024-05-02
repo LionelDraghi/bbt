@@ -25,22 +25,31 @@ package BBT.Documents is
    subtype Step_Categories is Extended_Step_Categories range
      Extended_Step_Categories'Succ (Unknown) .. Extended_Step_Categories'Last;
 
-   type Step_Kind is (Unknown,
-                      Run_Cmd,
-                      Successfully_Run_Cmd,
-                      Error_Return_Code,
-                      No_Error_Return_Code,
-                      Get_Output,
-                      Output_Is_String,
-                      File_Is_String,
-                      Output_Contains_String,
-                      File_Contains_String,
-                      Output_Is_File,
-                      File_Is_File,
-                      Output_Contains_File,
-                      File_Contains_File,
-                      Existing_File,
-                      File_Creation);
+   type Step_Kind is
+     (Unknown,
+      Run_Cmd,                -- when I run `cmd`
+      Successfully_Run_Cmd,   -- when i successfully run `cmd`
+      --                      --------------------------------------------------
+      Error_Return_Code,      -- then I get error
+      No_Error_Return_Code,   -- then I get no error
+      Output_Is_String,       -- then output is `msg`
+      --                      or then I get     `msg`
+      Output_Contains_String, -- then output contains `msg`
+      Output_Contains_File,   -- then output contains
+      --                           followed by code fenced content
+      -- Output_Is_File,         -- then output is
+      -- --                           followed by code fenced content
+      File_Is_String,         -- then      `config.ini` is `mode=silent`
+      --                         then file `config.ini` is `mode=silent`
+      File_Contains_String,   -- Then `config.ini` contains `--version`
+      File_Is_File,           -- Then `config.ini` is
+      --                           followed by code fenced content
+      File_Contains_File,     -- Then `config.ini` contains
+      --                           followed by code fenced content
+      --                      --------------------------------------------------
+      Existing_File,          -- given then existing `config.ini` file
+      File_Creation);         -- given the file `config.ini`
+                              -- followed by code fenced content
 
    -- --------------------------------------------------------------------------
    type Step_Details is record
@@ -54,8 +63,8 @@ package BBT.Documents is
 
    -- --------------------------------------------------------------------------
    type Step_Type is record
-      Text         : Unbounded_String;
-      File_Content : Texts.Vector;
+      Step_String  : Unbounded_String;
+      File_Content : Text;
       Details      : Step_Details;
       Category     : Extended_Step_Categories := Unknown;
    end record;
@@ -65,7 +74,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Scenario_Type is record
       Name      : Unbounded_String;
-      Comment   : Texts.Vector;
+      Comment   : Text;
       Step_List : Step_Lists.Vector;
       -----------------------
       Failed_Step_Count     : Natural := 0;
@@ -79,7 +88,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Feature_Type is record
       Name          : Unbounded_String;
-      Comment       : Texts.Vector;
+      Comment       : Text;
       Scenario_List : Scenario_Lists.Vector;
    end record;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
@@ -88,14 +97,14 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Document_Type is record
       Name         : Unbounded_String;
-      Comment      : Texts.Vector;
+      Comment      : Text;
       Feature_List : Feature_Lists.Vector;
    end record;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type);
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text (Text : Texts.Vector);
+   procedure Put_Text (The_Text : Text);
 
    procedure Put_Step (Step               : Step_Type;
                        With_Comments      : Boolean := False;

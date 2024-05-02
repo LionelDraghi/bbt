@@ -50,7 +50,7 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      Put_Line ("Add_Document """ & Name & """", Level => IO.Debug);
+      Put_Line ("Add_Document " & Name'Image, Level => IO.Debug);
       The_Doc_List.Append (Document_Type'
                              (Name         => To_Unbounded_String (Name),
                               Feature_List => Feature_Lists.Empty,
@@ -61,7 +61,7 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Feature (Name : String) is
    begin
-      Put_Line ("Add_Feature = """ & Name & """", Level => IO.Debug);
+      Put_Line ("Add_Feature " & Name'Image, Level => IO.Debug);
       Last_Doc_Ref.Feature_List.Append
         (Feature_Type'(Name          => To_Unbounded_String (Name),
                        Scenario_List => Scenario_Lists.Empty,
@@ -72,15 +72,17 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Scenario (Name : String) is
    begin
-      Put_Line ("Add_Scenario """ & Name & """", Level => IO.Debug);
+      -- We accept scenario without Feature
+      if Last_Doc_Ref.Feature_List.Is_Empty then
+         Add_Feature (""); -- no name feature
+      end if;
+      Put_Line ("Add_Scenario " & Name'Image, Level => IO.Debug);
       Last_Feature_Ref.Scenario_List.Append
-        (Scenario_Type'(Name       => To_Unbounded_String (Name),
-                        Step_List => Step_Lists.Empty,
-                        --  Given_List => Given_Lists.Empty,
-                        --  When_List  => When_Lists.Empty,
-                        --  Then_List  => Then_Lists.Empty,
-                        Comment    => Empty_Text,
-                        Failed_Step_Count | Successful_Step_Count => 0));
+        (Scenario_Type'(Name                  => To_Unbounded_String (Name),
+                        Step_List             => Step_Lists.Empty,
+                        Comment               => Empty_Text,
+                        Failed_Step_Count     |
+                        Successful_Step_Count => 0));
       State := In_Scenario;
    end Add_Scenario;
 
@@ -88,6 +90,7 @@ package body BBT.Tests_Builder is
    procedure Add_Step (Step : Step_Details) is
       Cat : Extended_Step_Categories := Unknown;
    begin
+      Put_Line ("Add_Step " & Step'Image, Level => IO.Debug);
       if State = In_Document or State = In_Feature then
          raise Missing_Scenario with "Premature Step """ &
            To_String (Step.Text) & """ declaration, missing Scenario";
@@ -120,7 +123,7 @@ package body BBT.Tests_Builder is
       case Step.Cat is
          when Unknown =>
             null; --  impossible, but if ever, there is an error
-                  --  message here above
+            --  message here above
 
          when Given_Step =>
             if State = In_When_Step then
@@ -145,7 +148,7 @@ package body BBT.Tests_Builder is
       end case;
 
       Last_Scenario_Ref.Step_List.Append
-        (Step_Type'(Text         => Step.Text,
+        (Step_Type'(Step_String         => Step.Text,
                     File_Content => Empty_Text,
                     Details      => Step,
                     Category     => Cat));
@@ -186,6 +189,7 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String) is
    begin
+      Put_Line ("Add_Line " & Line'Image, Level => IO.Debug);
       case State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);

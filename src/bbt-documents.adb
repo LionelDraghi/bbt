@@ -29,10 +29,10 @@ package body BBT.Documents is
    end Add_Success;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text (Text : Texts.Vector) is
+   procedure Put_Text (The_Text : Text) is
       Pref : constant String := Prefix (Current_Indent_Level);
    begin
-      for L of Text loop
+      for L of The_Text loop
          Put_Line (Pref & L);
       end loop;
    end Put_Text;
@@ -59,7 +59,7 @@ package body BBT.Documents is
          Pref : constant String := Prefix (Current_Indent_Level);
       begin
          --** Put_Line (Pref & S.Kind'Image);
-         Put_Line (Pref & "- " & To_String (Step.Text));
+         Put_Line (Pref & "- " & To_String (Step.Step_String));
          if not Texts.Is_Empty (Step.File_Content) then
             Put_Line ("```");
             for L of Step.File_Content loop

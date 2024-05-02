@@ -50,7 +50,8 @@ private package BBT.Settings is
                             Lexer,
                             BBT_Files,
                             Builder,
-                            Step_Lexer);
+                            Step_Lexer,
+                            Runner);
    subtype Topics is Extended_Topics range Extended_Topics'Succ (None) .. Extended_Topics'Last;
    --  None is the default parameter for IO operation, but is not in Topics
    --  range, used when setting what should be printed.

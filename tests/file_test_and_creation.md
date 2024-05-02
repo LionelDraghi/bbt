@@ -3,14 +3,14 @@
 
 Test both the ability to check that a file exists, or to directly create one
 
-### Scenario outline : a required file does not exist
+### Scenario outline : a required file does not exist  
 
   - Given the existing file `config.ini`
   - When I run `uut read config.ini`
   - Then I get error
 
 
-### Scenario outline : same as previous, but with the keyword file before the file name
+### Scenario outline : same as previous, but with the keyword file before the file name  
 
   - Given the existing file `config.ini`
   - When I run `uut read config.ini`

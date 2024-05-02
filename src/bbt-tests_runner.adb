@@ -1,19 +1,27 @@
 with BBT.Documents;
 with BBT.IO;
-with BBT.Settings;      use BBT.Settings;
+with BBT.Settings;          use BBT.Settings;
 with BBT.Tests_Builder;
 
 with GNAT.OS_Lib;
 
+with Ada.Command_Line;
 with Ada.Directories;       use Ada.Directories;
 with Ada.Exceptions;
-with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO;
 
 with Text_Utilities; use Text_Utilities;
 
 package body BBT.Tests_Runner is
+
+   -- --------------------------------------------------------------------------
+   -- IO renamed with local Topic
+   procedure Put_Line
+     (Item  : String;
+      File  : String  := "";
+      Line  : Integer := 0;
+      Level : BBT.Settings.Print_Out_Level := BBT.IO.Normal;
+      Topic : Settings.Extended_Topics := Settings.Runner) renames IO.Put_Line;
 
    -- --------------------------------------------------------------------------
    procedure Spawn_Cmd (Cmd         : String;
@@ -52,10 +60,10 @@ package body BBT.Tests_Runner is
       Return_Code : Integer;
       use Documents;
 
-      -- Run_Outfile : Ada.Text_IO.File_Type;
-
-      function Is_Success (I : Integer) return Boolean is (I = 0);
-      -- Fixme: harcoded value : use Command_Line Success constant?
+      function Is_Success (I : Integer) return Boolean is
+        (I = Integer (Ada.Command_Line.Success));
+      -- Fixme: can I compare the return status of spawn with
+      --        Ada.Command_Line Success or Fail?
 
       function Output_File_Name (D : Document_Type) return String is
         (To_String (D.Name) & ".out");
@@ -72,61 +80,36 @@ package body BBT.Tests_Runner is
                     Spawn_OK    => Spawn_OK,
                     Return_Code => Return_Code);
          if not Spawn_OK then
-            IO.Put_Line ("unable to run """ & Cmd & """",
-                            Level => IO.Quiet);
+            Put_Line ("unable to run """ & Cmd & """",
+                      Level => IO.Quiet);
          end if;
       end Run_Cmd;
 
       -- -----------------------------------------------------------------------
-      function Output_File_Contains (The_String  : String;
-                                     In_The_File : String;
-                                     Full_Line   : Boolean) return Boolean is
-         Run_Outfile : Ada.Text_IO.File_Type;
+      function Get_Expected (Step : Step_Type) return Text is
+         T : Text;
+         use type Text;
       begin
-         Ada.Text_IO.Open (Run_Outfile,
-                           Ada.Text_IO.In_File,
-                           In_The_File);
-         while not Ada.Text_IO.End_Of_File (Run_Outfile) loop
-            declare
-               use Ada.Text_IO;
-               L : constant String := Get_Line (Run_Outfile);
-            begin
-               IO.Put_Line ("=== """ & The_String & """ in " & L'Image,
-                            Level => IO.Quiet);
-               if (Full_Line and L = The_String) or else
-                 (not Full_Line and
-                    Ada.Strings.Fixed.Index (Source  => L,
-                                             Pattern => The_String,
-                                             From    => L'First) /= 0)
-                 -- Ada.Strings.Equal_Case_Insensitive
-               then
-                  IO.Put_Line ("  Found """ & The_String & """ in " & L'Image,
-                               Level => IO.Verbose);
-
-                  Ada.Text_IO.Close (Run_Outfile);
-                  return True;
-               end if;
-            end;
-         end loop;
-         IO.Put_Line ("Fail : " & The_String'Image &
-                           ", not found in " & In_The_File,
-                         Level => IO.Quiet);
-
-         Ada.Text_IO.Close (Run_Outfile);
-         return False;
-      end Output_File_Contains;
-
+         if Step.Details.Expected_Output /= Null_Unbounded_String then
+            T := [1 => To_String (Step.Details.Expected_Output)];
+         elsif Step.File_Content /= Empty_Text then
+            T := Step.File_Content;
+         else
+            T := Get_Text (Step.Details.File_Name);
+         end if;
+         return T;
+      end Get_Expected;
 
    begin
       -- let's run the test
       for D of BBT.Tests_Builder.The_Document_List.all loop
          IO.New_Line (Level => Verbose);
-         IO.Put_Line ("Running file " & D.Name'Image, Level => Verbose);
+         Put_Line ("Running file " & D.Name'Image, Level => Verbose);
          for F of D.Feature_List loop
 
             for Scen of F.Scenario_List loop
-               IO.Put_Line ("  Running scenario " & Scen.Name'Image,
-                            Level => Verbose);
+               Put_Line ("  Running scenario " & Scen.Name'Image,
+                         Level => Verbose);
                Return_Code := 0;
                Step_Processing : for Step of Scen.Step_List loop
 
@@ -139,15 +122,15 @@ package body BBT.Tests_Runner is
                                  Return_Code => Return_Code);
                         if Spawn_OK then
                            Add_Success (Scen);
-                           IO.Put_Line ("  Run " & Step.Details.Cmd'Image,
-                                        Level => IO.Verbose);
+                           Put_Line ("  Run " & Step.Details.Cmd'Image,
+                                     Level => IO.Verbose);
                         else
                            Add_Fail (Scen);
                            -- We don't want the run fail to goes unnoticed,
                            -- so an error is immediatly added
-                           IO.Put_Line ("  Unsuccessfully run " &
-                                             Step.Details.Cmd'Image,
-                                           Level => IO.Quiet);
+                           Put_Line ("  Unsuccessfully run " &
+                                       Step.Details.Cmd'Image,
+                                     Level => IO.Quiet);
                         end if;
 
                      when Successfully_Run_Cmd =>
@@ -157,25 +140,25 @@ package body BBT.Tests_Runner is
                                  Return_Code => Return_Code);
                         if Spawn_OK and Is_Success (Return_Code) then
                            Add_Success (Scen);
-                           IO.Put_Line ("  Successfully run " &
-                                          Step.Details.Cmd'Image,
-                                        Level => IO.Verbose);
+                           Put_Line ("  Successfully run " &
+                                       Step.Details.Cmd'Image,
+                                     Level => IO.Verbose);
                         else
                            Add_Fail (Scen);
-                           IO.Put_Line ("  Unsuccessfully run " &
-                                             Step.Details.Cmd'Image,
-                                           Level => IO.Quiet);
+                           Put_Line ("  Unsuccessfully run " &
+                                       Step.Details.Cmd'Image,
+                                     Level => IO.Quiet);
                         end if;
 
                      when Error_Return_Code =>
                         if not Is_Success (Return_Code) then
                            -- error expected, it's a fail
                            Add_Success (Scen);
-                           IO.Put_Line ("  Got expected error code",
-                                        Level => IO.Verbose);
+                           Put_Line ("  Got expected error code",
+                                     Level => IO.Verbose);
                         else
                            Add_Fail (Scen);
-                           IO.Put_Line
+                           Put_Line
                              ("  Expected error code, got no error",
                               Level => IO.Quiet);
                         end if;
@@ -183,118 +166,178 @@ package body BBT.Tests_Runner is
                      when No_Error_Return_Code =>
                         if Is_Success (Return_Code) then
                            Add_Success (Scen);
-                           IO.Put_Line ("  Got no error as expected",
-                                        Level => IO.Verbose);
+                           Put_Line ("  Got no error as expected",
+                                     Level => IO.Verbose);
                         else
                            Add_Fail (Scen);
-                           IO.Put_Line ("  No error expected, but got one",
-                                           Level => IO.Quiet);
+                           Put_Line ("  No error expected, but got one",
+                                     Level => IO.Quiet);
                         end if;
 
-                     when Output_Is_String | Get_Output =>
-                        if Output_File_Contains
-                          (To_String (Step.Details.Expected_Output),
-                           In_The_File => Output_File_Name (D),
-                           Full_Line   => True)
-                        then
-                           Add_Success (Scen);
-                           IO.Put_Line ("  Output equal to expected " &
-                                          Step.Details.Expected_Output'Image,
+                     when Output_Is_String =>
+                        declare
+                           T1 : constant Text := Get_Text (Output_File_Name (D));
+                           T2 : constant Text := Get_Expected (Step);
+                        begin
+                           if Is_Equal (T1, T2) then
+                              Add_Success (Scen);
+                              Put_Line ("  Output equal to expected "
+                                        & T2'Image,
                                         Level => IO.Verbose);
-                        else
-                           Add_Fail (Scen);
-                           IO.Put_Line ("  Output not equal to expected "
-                                           & Step.Details.Expected_Output'Image,
-                                           Level => IO.Quiet);
-                        end if;
+                           else
+                              Add_Fail (Scen);
+                              Put_Line ("  Output " & T1'Image,
+                                        Level => IO.Quiet);
+                              Put_Line ("  not equal to expected "
+                                        & T2'Image,
+                                        Level => IO.Quiet);
+                           end if;
+                        end;
 
                      when Output_Contains_String =>
                         -- example : Then the output contains `--version`
-                        if Output_File_Contains
-                          (To_String (Step.Details.Expected_Output),
-                           In_The_File => Output_File_Name (D),
-                           Full_Line   => False)
-                        then
-                           Add_Success (Scen);
-                           IO.Put_Line ("  Output contains expected " &
-                                          To_String (Step.Details.Expected_Output),
+                        declare
+                           T1 : constant Text := Get_Text (Output_File_Name (D));
+                           T2 : constant Text := Get_Expected (Step);
+                        begin
+                           if Contains (T1, T2) then
+                              Add_Success (Scen);
+                              Put_Line ("Output contains expected "
+                                        & T2'Image,
                                         Level => IO.Verbose);
-                        else
-                           Add_Fail (Scen);
-                           IO.Put_Line ("  Output doesn't expected "
-                                           & Step.Details.Expected_Output'Image,
-                                           Level => IO.Quiet);
-                        end if;
+                           else
+                              Add_Fail (Scen);
+                              Put_Line ("  Output " & T1'Image,
+                                        Level => IO.Quiet);
+                              Put_Line ("  does not contain expected "
+                                        & T2'Image,
+                                        Level => IO.Quiet);
+                           end if;
+                        end;
 
                      when File_Contains_String =>
                         -- example : Then `config.ini` contains `--version`
-                        if Output_File_Contains
-                          (To_String (Step.Details.Expected_Output),
-                           In_The_File =>
-                             To_String (Step.Details.File_Name),
-                           Full_Line   => False)
+                        if Contains_String
+                          (File_Name  => To_String (Step.Details.File_Name),
+                           The_String => To_String (Step.Details.Expected_Output))
                         then
                            Add_Success (Scen);
-                           IO.Put_Line ("  File contains expected " &
-                                          To_String (Step.Details.Expected_Output),
-                                        Level => IO.Verbose);
+                           Put_Line ("  File contains expected " &
+                                       To_String (Step.Details.Expected_Output),
+                                     Level => IO.Verbose);
                         else
                            Add_Fail (Scen);
-                           IO.Put_Line ("  Fail : no existing " &
-                                             Step.Details.File_Name'Image,
-                                           Level => IO.Quiet);
+                           Put_Line ("  Fail : no existing " &
+                                       Step.Details.File_Name'Image,
+                                     Level => IO.Quiet);
                         end if;
+
+                        when Output_Contains_File =>
+                           declare
+                              T1 : constant Text
+                                := Get_Text (Output_File_Name (D));
+                              T2 : constant Text := Step.File_Content;
+                           begin
+                              if Contains (T1, T2) then
+                                 Add_Success (Scen);
+                                 Put_Line ("  output is equal to expected " & T2'Image,
+                                           Level => IO.Verbose);
+                              else
+                                 Add_Fail (Scen);
+                                 Put_Line ("  Fail : output "
+                                           & To_String (Step.Details.File_Name)
+                                           & " is not equal to "
+                                           & T2'Image,
+                                           Level => IO.Quiet);
+                              end if;
+                           end;
+
+                        when File_Is_File   =>
+                        declare
+                           T1 : constant Text := Get_Text
+                             (To_String (Step.Details.File_Name));
+                           T2 : constant Text := Step.File_Content;
+                        begin
+                           if Is_Equal (T1, T2) then
+                              Add_Success (Scen);
+                              Put_Line ("  File is equal to expected " & T2'Image,
+                                        Level => IO.Verbose);
+                           else
+                              Add_Fail (Scen);
+                              Put_Line ("  Fail : file "
+                                        & To_String (Step.Details.File_Name)
+                                        & " is not equal to "
+                                        & T2'Image,
+                                        Level => IO.Quiet);
+                           end if;
+                        end;
+
+                     when File_Contains_File   =>
+                        declare
+                           T1 : constant Text := Get_Text
+                             (To_String (Step.Details.File_Name));
+                           T2 : constant Text := Step.File_Content;
+                        begin
+                           if Contains (T1, T2) then
+                              Add_Success (Scen);
+                              Put_Line ("  File contains expected " & T2'Image,
+                                        Level => IO.Verbose);
+                           else
+                              Add_Fail (Scen);
+                              Put_Line ("  Fail : file "
+                                        & To_String (Step.Details.File_Name)
+                                        & " does not contain "
+                                        & T2'Image,
+                                        Level => IO.Quiet);
+                           end if;
+                        end;
 
                      when File_Is_String =>
                         declare
-                           Identical : Boolean;
+                           T1 : constant Text := Get_Text
+                             (To_String (Step.Details.File_Name));
+                           T2 : constant Text
+                             := [To_String (Step.Details.Expected_Output)];
+                           Identical  : Boolean;
                            Diff_Index : Natural;
                         begin
-                           Compare
-                             (Text1 => Step.File_Content,
-                              Text2 =>
-                                [To_String (Step.Details.Expected_Output)],
-                              Identical  => Identical,
-                              Diff_Index => Diff_Index);
+                           -- Put_Line ("Step = " & Step'Image);
+                           Compare (Text1              => T1,
+                                    Text2              => T2,
+                                    Ignore_Blank_Lines => True,
+                                    Identical          => Identical,
+                                    Diff_Index         => Diff_Index);
                            if Identical then
                               Add_Success (Scen);
-                              IO.Put_Line
+                              Put_Line
                                 ("  File is as expected " &
                                    To_String (Step.Details.Expected_Output),
                                  Level => IO.Verbose);
                            else
                               Add_Fail (Scen);
-                              IO.Put_Line ("  Fail : expected " &
-                                             To_String (Step.Details.Expected_Output),
-                                           Level => IO.Quiet);
-                              IO.Put_Line ("         got : ",
-                                           Level => IO.Quiet);
-                              Put_Text_Head (Item       => Step.File_Content,
-                                             Line_Count => 4);
+                              Put_Line
+                                ("  Fail : " & To_String (Step.Details.File_Name)
+                                 & " not equal to expected "
+                                 & To_String (Step.Details.Expected_Output),
+                                 Level => IO.Quiet);
                            end if;
                         end;
+
                         when Existing_File =>
                            if Ada.Directories.Exists
                              (To_String (Step.Details.File_Name)) then
                               Add_Success (Scen);
-                              IO.Put_Line ("  Expected file " &
-                                             Step.Details.File_Name'Image &
-                                             " exists",
-                                           Level => IO.Verbose);
+                              Put_Line ("  Expected file " &
+                                          Step.Details.File_Name'Image &
+                                          " exists",
+                                        Level => IO.Verbose);
                            else
                               Add_Fail (Scen);
-                              IO.Put_Line ("  Expected file " &
-                                                Step.Details.File_Name'Image &
-                                                " doesn't exists",
-                                              Level => IO.Quiet);
+                              Put_Line ("  Expected file " &
+                                          Step.Details.File_Name'Image &
+                                          " doesn't exists",
+                                        Level => IO.Quiet);
                            end if;
-
-                        when Output_Is_File       |
-                             File_Is_File         |
-                             Output_Contains_File |
-                             File_Contains_File   =>
-                           IO.Put_Error ("  Not yet implemented");
-                           Add_Fail (Scen);
 
                         when File_Creation =>
                            if Create_File
@@ -310,51 +353,43 @@ package body BBT.Tests_Runner is
                               Add_Fail (Scen);
                               -- But if it fails, we don't want that to
                               -- to goes unnoticed.
-                              IO.Put_Line ("  Unable to create file " &
-                                                Step.Details.File_Name'Image,
-                                              Level => IO.Quiet);
+                              Put_Line ("  Unable to create file " &
+                                          Step.Details.File_Name'Image,
+                                        Level => IO.Quiet);
                            end if;
 
                         when Unknown =>
                            Add_Fail (Scen);
-                           IO.Put_Line ("Unrecognised step " & Step.Text'image,
-                                        Level => IO.Quiet);
-                           -- Put_Line (Step'Image);
-                           -- IO.New_Line;
+                           Put_Line ("Unrecognised step " & Step.Step_String'Image,
+                                     Level => IO.Quiet);
 
                      end case;
 
-                  --  exception
-                  --     when E : others =>
-                  --        Add_Fail (Scen);
-                  --        IO.Put_Line (Ada.Exceptions.Exception_Message (E),
-                  --                        Level => IO.Quiet);
-                  --        IO.Put_Line ("Unkown exception while processing scenario "
-                  --                        & Scen.Name'Image,
-                  --                        Level => IO.Quiet);
+                  exception
+                     when E : others =>
+                        Add_Fail (Scen);
+                        Put_Line (Ada.Exceptions.Exception_Message (E),
+                                  Level => IO.Quiet);
+                        Put_Line ("Unkown exception while processing scenario "
+                                  & Scen.Name'Image,
+                                  Level => IO.Quiet);
                   end;
 
                end loop Step_Processing;
 
                case Documents.Result (Scen) is
                   when Empty =>
-                     IO.Put_Line ("  - [ ] " & To_String (D.Name) &
-                                    ", Scenario """ & To_String (Scen.Name) &
-                                    """ is empty, nothing tested");
-                     IO.New_Line;
-
+                     Put_Line ("  - [ ] " & To_String (D.Name) &
+                                 ", Scenario """ & To_String (Scen.Name) &
+                                 """ is empty, nothing tested");
                   when Successful =>
-                     IO.Put_Line ("  - [X] " & To_String (D.Name) &
-                                    ", Scenario """ & To_String (Scen.Name) &
-                                    """ pass");
-                     IO.New_Line;
-
+                     Put_Line ("  - [X] " & To_String (D.Name) &
+                                 ", Scenario """ & To_String (Scen.Name) &
+                                 """ pass");
                   when Failed =>
-                     IO.Put_Line ("  - [ ] " & To_String (D.Name) &
-                                    ", Scenario """ & To_String (Scen.Name) &
-                                    """ fails");
-                     IO.New_Line;
-
+                     Put_Line ("  - [ ] " & To_String (D.Name) &
+                                 ", Scenario """ & To_String (Scen.Name) &
+                                 """ fails");
                end case;
             end loop;
          end loop;

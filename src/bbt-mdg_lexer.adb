@@ -47,9 +47,9 @@ package body BBT.MDG_Lexer is
       -- First point to the first character after #
       if First /= 0 then
          Colon := Index (Source  => Line,
-                              Pattern => ":",
-                              From    => First,
-                              Going   => Forward);
+                         Pattern => ":",
+                         From    => First,
+                         Going   => Forward);
          if Colon = 0 then
             return False;
 
@@ -80,13 +80,16 @@ package body BBT.MDG_Lexer is
 
       end if;
 
-     end Find_Heading_Mark;
+   end Find_Heading_Mark;
 
    -- --------------------------------------------------------------------------
    function Bullet_List_Marker (Line  : String;
-                                  First : out Natural) return Boolean is
+                                First : out Natural) return Boolean is
       -- refer to https://spec.commonmark.org/0.31.2/#bullet-list-marker
-      -- for specification
+      -- for specification.
+      -- We voluntary limit bullet to '-', so that bullet list may appear in
+      -- comments, providing you use '*' or '+', without interfering with bbt.
+
    begin
       First := Index_Non_Blank (Line, Going => Forward);
       if Line'Last - First < 2 then
@@ -95,7 +98,7 @@ package body BBT.MDG_Lexer is
          return False;
       end if;
 
-      if (Line (First) = '-' or Line (First) = '*'  or Line (First) = '+')
+      if Line (First) = '-' -- or Line (First) = '*'  or Line (First) = '+')
         and Line (First + 1) = ' '
       then
          -- test the space after the list mark, because
@@ -117,7 +120,7 @@ package body BBT.MDG_Lexer is
 
    -- --------------------------------------------------------------------------
    function Parse_Line (Line : access constant String)
-                       return Line_Attributes is
+                        return Line_Attributes is
       First, Last, Title_First : Natural;
    begin
       Put_Line ("Parsing = """ & Line.all & """", Level => IO.Debug);
@@ -140,7 +143,7 @@ package body BBT.MDG_Lexer is
          --               & Line.all (First .. Line.all'Last),
          --               Level => IO.Debug);
          return (Kind      => Step_Line,
-                 Step_Ln => To_Unbounded_String
+                 Step_Ln   => To_Unbounded_String
                    (Line.all (First .. Line.all'Last)));
 
       elsif Code_Fence_Line (Line.all) then

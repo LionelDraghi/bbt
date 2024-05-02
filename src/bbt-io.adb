@@ -58,8 +58,8 @@ package body BBT.IO is
    end GNU_Prefix;
 
    -- --------------------------------------------------------------------------
-   function Prefix (Topic : Extended_Topics) return String is
-     (if Topic = None then "" else Topic'Image & " ");
+   function Prefix (Topic : Extended_Topics) return String is ("");
+    -- (if Topic = None then "" else Topic'Image & " ");
 
    -- --------------------------------------------------------------------------
    procedure Put_Warning (Msg  : String;

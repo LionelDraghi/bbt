@@ -65,18 +65,18 @@ package body BBT.Settings is
    begin
       case Level is
          when Debug =>
-            return True;
+            return Verbosity = Debug;
          when Verbose =>
             return
               Verbosity = Verbose or
-              Verbosity = Normal or
-              Verbosity = Quiet;
+              Verbosity = Debug;
          when Normal =>
             return
-              Verbosity = Normal or
-              Verbosity = Quiet;
+              Verbosity = Verbose or
+              Verbosity = Debug or
+              Verbosity = Normal;
          when Quiet =>
-            return Verbosity = Quiet;
+            return True;
       end case;
    end Is_Authorised;
 
