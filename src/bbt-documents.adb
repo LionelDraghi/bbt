@@ -167,15 +167,15 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Run_Summary is
-      -- Failed_Step_Count     : Natural := 0;
-      -- Successful_Step_Count : Natural := 0;
+      Failed_Step_Count     : Natural := 0;
+      Successful_Step_Count : Natural := 0;
       Test_Result_Counts    : array (Test_Result) of Natural := [others => 0];
    begin
       for D of BBT.Tests_Builder.The_Document_List.all loop
          for F of D.Feature_List loop
             for Scen of F.Scenario_List loop
-               -- Successful_Step_Count := @ + Scen.Successful_Step_Count;
-               -- Failed_Step_Count     := @ + Scen.Failed_Step_Count;
+               Successful_Step_Count := @ + Scen.Successful_Step_Count;
+               Failed_Step_Count     := @ + Scen.Failed_Step_Count;
                Test_Result_Counts (Result (Scen)) := @ + 1;
             end loop;
          end loop;
@@ -184,9 +184,11 @@ package body BBT.Documents is
       Put_Line ("Failed     tests = " & Test_Result_Counts (Failed)'Image);
       Put_Line ("Successful tests = " & Test_Result_Counts (Successful)'Image);
       Put_Line ("Empty      tests = " & Test_Result_Counts (Empty)'Image);
-      --  New_Line;
-      --  Put_Line ("Failed     steps = " & Failed_Step_Count'Image);
-      --  Put_Line ("Successful steps = " & Successful_Step_Count'Image);
+      if Settings.Is_Authorised (Verbose) then
+         New_Line;
+         Put_Line ("Failed     steps = " & Failed_Step_Count'Image);
+         Put_Line ("Successful steps = " & Successful_Step_Count'Image);
+      end if;
    end Put_Run_Summary;
 
 end BBT.Documents;

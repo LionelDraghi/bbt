@@ -9,6 +9,7 @@ package BBT.MDG_Lexer is
 
    type Line_Kind is (Feature_Line,
                       Scenario_Line,
+                      Background_Line,
                       Step_Line,
                       Code_Fence,
                       Text_Line,
@@ -23,7 +24,7 @@ package BBT.MDG_Lexer is
 
    type Line_Attributes (Kind : Line_Kind) is record
       case Kind is
-         when Feature_Line | Scenario_Line =>
+         when Feature_Line | Scenario_Line | Background_Line =>
             -- For Feature or Scenario, the line is divided in
             --   ### Kind : Name
             -- For example, for

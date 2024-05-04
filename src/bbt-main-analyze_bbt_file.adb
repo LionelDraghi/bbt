@@ -25,6 +25,8 @@ with BBT.MDG_Lexer;
 with BBT.Step_Lexer;
 with BBT.Tests_Builder; use BBT.Tests_Builder;
 
+with GNAT.Traceback.Symbolic;
+
 separate (BBT.Main)
 
 procedure Analyze_BBT_File (File_Name : String) is
@@ -66,7 +68,7 @@ begin
                                                           MDG_Lexer_Context);
 
       begin
-         -- Put_Line ("Processing Line = " & Line,         Level => Verbose);
+         Put_Line ("Processing Line = " & Line,         Level => Debug);
          -- Put_Line ("State           = " & State'Image,  Level => Verbose);
          -- Put_Line ("Attrib          = " & Attrib'Image, Level => Debug);
          -- New_Line (Level => Verbose);
@@ -79,6 +81,9 @@ begin
             when Scenario_Line =>
                Tests_Builder.Add_Scenario (To_String (Attrib.Name));
 
+            when Background_Line =>
+               Tests_Builder.Add_Background (To_String (Attrib.Name));
+
             when Step_Line =>
                declare
                   S : constant Step_Details :=
@@ -89,8 +94,6 @@ begin
                begin
                   Step_Lexer_Context := S.Cat;
                   Tests_Builder.Add_Step (S);
-                  -- Put_Line (S'Image, Level => Quiet);
-                  -- Tests_Builder.Add_Step (S);
                end;
 
             when Code_Fence =>
@@ -116,9 +119,11 @@ exception
    when E : Missing_Scenario =>
       Put_Error (Ada.Exceptions.Exception_Message (E));
       Put_Error ("Interrupting " & File_Name & " processing");
+      Ada.Text_IO.Put_Line (GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
 
    when E : others =>
       Put_Error (Ada.Exceptions.Exception_Message (E));
       Put_Error ("Unknown exception while processing " & File_Name);
+      Ada.Text_IO.Put_Line (GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
 
 end Analyze_BBT_File;

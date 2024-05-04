@@ -16,4 +16,4 @@ clean:
 	alr clean
 	cd tools && alr clean
 	@ $(MAKE) clean --directory=tests
-	
+	@ - rm config.ini *.out

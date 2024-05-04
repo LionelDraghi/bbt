@@ -13,13 +13,35 @@ package body BBT.Tests_Builder is
    type States is (In_Document,
                    In_Feature,
                    In_Scenario,
-                   In_Given_Step,
-                   In_When_Step,
-                   In_Then_Step,
+                   In_Background,
+                   In_Step,
                    In_File_Content);
-   subtype Step_States is States range In_Given_Step .. In_Then_Step;
-   State : States := In_Document;
-   Previous_State : States;
+
+   type Step_States is (In_Given_Step,
+                        In_When_Step,
+                        In_Then_Step);
+
+   type Backgrounds is (None, Doc, Feature);
+
+   -- --------------------------------------------------------------------------
+   package FSM is
+
+      function Current_State return States;
+      procedure Set_State (To_State : States);
+      procedure Restore_Previous_State;
+
+      function Current_Step_State return Step_States;
+      procedure Set_Step_State (To_State : Step_States);
+
+      function Current_Background return Backgrounds;
+      procedure Set_Background (The_Background : Backgrounds);
+
+   end FSM;
+
+   package body FSM is separate;
+
+   use FSM;
+
 
    -- --------------------------------------------------------------------------
    -- IO renamed with local Topic
@@ -50,50 +72,72 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      Put_Line ("Add_Document " & Name'Image, Level => IO.Debug);
-      The_Doc_List.Append (Document_Type'
-                             (Name         => To_Unbounded_String (Name),
-                              Feature_List => Feature_Lists.Empty,
-                              Comment      => Empty_Text));
-      State := In_Document;
+      --  Put_Line ("Add_Document " & Name'Image, Level => IO.Debug);
+      The_Doc_List.Append ((Empty_Document with delta
+                             Name => To_Unbounded_String (Name)));
+      Set_State (In_Document);
+      Set_Background (Doc);
    end Add_Document;
 
    -- --------------------------------------------------------------------------
    procedure Add_Feature (Name : String) is
    begin
-      Put_Line ("Add_Feature " & Name'Image, Level => IO.Debug);
+      --  Put_Line ("Add_Feature " & Name'Image, Level => IO.Debug);
       Last_Doc_Ref.Feature_List.Append
-        (Feature_Type'(Name          => To_Unbounded_String (Name),
-                       Scenario_List => Scenario_Lists.Empty,
-                       Comment       => Empty_Text));
-      State := In_Feature;
+        ((Empty_Feature with delta Name => To_Unbounded_String (Name)));
+      Set_State (In_Feature);
+      Set_Background (Feature);
    end Add_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Add_Scenario (Name : String) is
    begin
+      --  Put_Line ("Add_Scenario " & Name'Image, Level => IO.Debug);
+
       -- We accept scenario without Feature
       if Last_Doc_Ref.Feature_List.Is_Empty then
          Add_Feature (""); -- no name feature
       end if;
-      Put_Line ("Add_Scenario " & Name'Image, Level => IO.Debug);
+
       Last_Feature_Ref.Scenario_List.Append
-        (Scenario_Type'(Name                  => To_Unbounded_String (Name),
-                        Step_List             => Step_Lists.Empty,
-                        Comment               => Empty_Text,
-                        Failed_Step_Count     |
-                        Successful_Step_Count => 0));
-      State := In_Scenario;
+        ((Empty_Scenario with delta Name => To_Unbounded_String (Name)));
+
+      Set_State (In_Scenario);
+      Set_Background (None);
+
    end Add_Scenario;
+
+   -- --------------------------------------------------------------------------
+   procedure Add_Background (Name : String) is
+   begin
+      --  Put_Line ("Add_Background " & Name'Image, Level => IO.Debug);
+
+      case Current_State is
+         when In_Document =>
+            Last_Doc_Ref.Background.Name := To_Unbounded_String (Name);
+
+         when In_Feature =>
+            Last_Feature_Ref.Background.Name := To_Unbounded_String (Name);
+
+         when others =>
+            IO.Put_Error ("Background should be declared at document"
+                          & "or at Feature level, not " & Current_State'Image);
+      end case;
+
+      Set_State (In_Background);
+   end Add_Background;
 
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step : Step_Details) is
       Cat : Extended_Step_Categories := Unknown;
    begin
-      Put_Line ("Add_Step " & Step'Image, Level => IO.Debug);
-      if State = In_Document or State = In_Feature then
+      Put_Line ("Add_Step " & Step'Image,
+                -- & " Current_Background = " & Current_Background'Image
+                -- & "========================================",
+                Level => IO.Debug);
+      if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Premature Step """ &
-           To_String (Step.Text) & """ declaration, missing Scenario";
+           To_String (Step.Text) & """ declaration, should be in Scenario or Background";
          -- Fixme : ajouter file location
       end if;
       --  Put_Line ("Add_Step : " & Step'Image,
@@ -103,11 +147,11 @@ package body BBT.Tests_Builder is
          -- with "and"), and so the category will defined by the history
          -- (if the previous line was "given" then the folowwine "and" line will
          -- be in the same category).
-         if State = In_Given_Step then
+         if Current_Step_State = In_Given_Step then
             Cat := Given_Step;
-         elsif State = In_When_Step then
+         elsif Current_Step_State = In_When_Step then
             Cat := When_Step;
-         elsif State = In_Then_Step then
+         elsif Current_Step_State = In_Then_Step then
             Cat := Then_Step;
          else
             IO.Put_Line
@@ -126,33 +170,53 @@ package body BBT.Tests_Builder is
             --  message here above
 
          when Given_Step =>
-            if State = In_When_Step then
+            if Current_Step_State = In_When_Step then
                IO.Put_Warning ("Given step """ & To_String (Step.Text) &
                                  """ appears to late, after a ""When""");
-            elsif State = In_Then_Step then
+            elsif Current_Step_State = In_Then_Step then
                IO.Put_Warning ("Given step """ & To_String (Step.Text) &
                                  """ appears to late, after a ""Then""");
             end if;
-            State := In_Given_Step;
+            Set_Step_State (In_Given_Step);
 
          when When_Step  =>
-            if State = In_Then_Step then
+            if Current_Step_State = In_Then_Step then
                IO.Put_Warning ("When step """ & To_String (Step.Text) &
                                  """ appears to late, after a ""Then""");
             end if;
-            State := In_When_Step;
+            Set_Step_State (In_When_Step);
 
          when Then_Step  =>
-            State := In_Then_Step;
+            Set_Step_State (In_Then_Step);
 
       end case;
 
-      Last_Scenario_Ref.Step_List.Append
-        (Step_Type'(Step_String         => Step.Text,
-                    File_Content => Empty_Text,
-                    Details      => Step,
-                    Category     => Cat));
-
+      case Current_Background is
+         when Doc =>
+            Last_Doc_Ref.Background.Step_List.Append
+              (Step_Type'(Step_String  => Step.Text,
+                          File_Content => Empty_Text,
+                          Details      => Step,
+                          Category     => Cat));
+            --  Put_Line ("******* to Doc",
+            --            Level => IO.Debug);
+         when Feature =>
+            Last_Feature_Ref.Background.Step_List.Append
+              (Step_Type'(Step_String  => Step.Text,
+                          File_Content => Empty_Text,
+                          Details      => Step,
+                          Category     => Cat));
+            --  Put_Line ("******* to Feature",
+            --            Level => IO.Debug);
+         when None =>
+            Last_Scenario_Ref.Step_List.Append
+              (Step_Type'(Step_String  => Step.Text,
+                          File_Content => Empty_Text,
+                          Details      => Step,
+                          Category     => Cat));
+            --  Put_Line ("******* to Last_Scenario.Step_list",
+            --            Level => IO.Debug);
+      end case;
 
    end Add_Step;
 
@@ -164,15 +228,19 @@ package body BBT.Tests_Builder is
       -- At the end of the code block section, the previous Step state
       -- is restored.
    begin
-      case State is
-         when Step_States =>
-            -- entering code block
-            Previous_State := State;
-            State := In_File_Content;
+      Put_Line ("Add_Code_Block, Current_State = "
+                & Current_State'Image, Level => IO.Debug);
+      case Current_State is
+         when In_Step | In_Scenario | In_Background =>
+            -- Entering code block
+            -- note that In_Scenario is included, so that if a comment is
+            -- inserted between the step and the code fenced file content,
+            -- it will work.
+            Set_State (In_File_Content);
 
          when In_File_Content =>
-            -- exiting code block
-            State := Previous_State;
+            -- Exiting code block
+            Restore_Previous_State;
 
          when In_Document =>
             Last_Doc_Ref.Comment.Append ("```");
@@ -180,24 +248,21 @@ package body BBT.Tests_Builder is
          when In_Feature =>
             Last_Feature_Ref.Comment.Append ("```");
 
-         when In_Scenario =>
-            Last_Scenario_Ref.Comment.Append ("```");
-
       end case;
    end Add_Code_Block;
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String) is
    begin
-      Put_Line ("Add_Line " & Line'Image, Level => IO.Debug);
-      case State is
+      -- Put_Line ("Add_Line " & Line'Image, Level => IO.Debug);
+      case Current_State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);
 
          when In_Feature =>
             Last_Feature_Ref.Comment.Append (Line);
 
-         when In_Scenario | Step_States =>
+         when In_Scenario | In_Step | In_Background =>
             Last_Scenario_Ref.Comment.Append (Line);
             -- There is no comment attached to Step
 
@@ -205,17 +270,8 @@ package body BBT.Tests_Builder is
             -- this is not a comment, we are in a file content description
             Put_Line ("File content = """ & Line & """",
                       Level => IO.Debug);
+            Last_Step_Ref.File_Content.Append (Line);
 
-            case Previous_State is
-               when In_Given_Step | In_When_Step | In_Then_Step =>
-                  Last_Step_Ref.File_Content.Append (Line);
-
-               when others =>
-                  IO.Put_Line ("Recording file content """ &
-                                 Line & """ but Previous state is not a Step",
-                               Level => IO.Quiet);
-
-            end case;
       end case;
    end Add_Line;
 

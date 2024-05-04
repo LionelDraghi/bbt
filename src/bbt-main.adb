@@ -39,8 +39,8 @@ procedure BBT.Main is
                         With_Help : Boolean := False) is separate;
    procedure Create_Template  is separate;
    procedure Analyze_BBT_File (File_Name : String) is separate;
-   procedure Analyze_Cmd_Line is separate; -- Cmd line options are then
-   -- available in the Settings package.
+   procedure Analyze_Cmd_Line is separate;
+   -- Cmd line options are then available in the Settings package.
 
 begin
    -- --------------------------------------------------------------------------

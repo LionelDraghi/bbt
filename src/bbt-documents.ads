@@ -3,15 +3,21 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Text_Utilities; use Text_Utilities;
 
-package BBT.Documents is
+-- Defines the main bbt internal data structure, wich is essentialy a tree of
+-- Documents containing Features containing scenarii containing steps.
+-- This structure is a a simplified subset of Gerkhin AST :
+-- https://github.com/cucumber/gherkin?tab=readme-ov-file#abstract-syntax-tree-ast
+--
+-- The various type of step are also defined here, and this is bbt's own
+-- vocabulary.
 
-   --  A simplified subset of Gerkhin AST :
-   --  https://github.com/cucumber/gherkin?tab=readme-ov-file#abstract-syntax-tree-ast
+package BBT.Documents is
 
    -- Keywords (https://cucumber.io/docs/gherkin/reference/) :
    --  Feature
    --  Example (or Scenario)
    --  Given, When, Then, And, But for steps
+   --     (that is line starting starting with ('-' '*' or '+')
    --     (that is line starting starting with ('-' '*' or '+')
    --  Background
 
@@ -48,8 +54,9 @@ package BBT.Documents is
       --                           followed by code fenced content
       --                      or Then `config.ini` contains `--version`
       --                      --------------------------------------------------
-      Existing_File,          -- given then existing `config.ini` file
-      File_Creation);         -- given the file `config.ini`
+      No_File,                -- Given there is no `config.ini` file
+      Existing_File,          -- Given then existing `config.ini` file
+      File_Creation);         -- Given the file `config.ini`
                               -- followed by code fenced content
 
    -- --------------------------------------------------------------------------
@@ -61,6 +68,7 @@ package BBT.Documents is
       Expected_Output : Unbounded_String := Null_Unbounded_String;
       File_Name       : Unbounded_String := Null_Unbounded_String;
    end record;
+   Empty_Step_Details : constant Step_Details;
 
    -- --------------------------------------------------------------------------
    type Step_Type is record
@@ -69,6 +77,7 @@ package BBT.Documents is
       Details      : Step_Details;
       Category     : Extended_Step_Categories := Unknown;
    end record;
+   Empty_Step : constant Step_Type;
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type);
 
@@ -81,6 +90,7 @@ package BBT.Documents is
       Failed_Step_Count     : Natural := 0;
       Successful_Step_Count : Natural := 0;
    end record;
+   Empty_Scenario : constant Scenario_Type;
    procedure Add_Fail   (To : in out Scenario_Type);
    procedure Add_Success (To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
@@ -91,7 +101,9 @@ package BBT.Documents is
       Name          : Unbounded_String;
       Comment       : Text;
       Scenario_List : Scenario_Lists.Vector;
+      Background    : Scenario_Type;
    end record;
+   Empty_Feature : constant Feature_Type;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Feature_Type);
 
@@ -100,7 +112,9 @@ package BBT.Documents is
       Name         : Unbounded_String;
       Comment      : Text;
       Feature_List : Feature_Lists.Vector;
+      Background   : Scenario_Type;
    end record;
+   Empty_Document : constant Document_Type;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type);
 
@@ -127,5 +141,34 @@ package BBT.Documents is
    function Result (Scenario : Scenario_Type) return Test_Result;
    procedure Put_Run_Summary;
 
+private
+   Empty_Step_Details : constant Step_Details
+     := (Kind            => Unknown,
+         Text            => Null_Unbounded_String,
+         Cat             => Unknown,
+         Cmd             => Null_Unbounded_String,
+         Expected_Output => Null_Unbounded_String,
+         File_Name       => Null_Unbounded_String);
+   Empty_Step : constant Step_Type
+     := (Step_String  => Null_Unbounded_String,
+         File_Content => Empty_Text,
+         Details      => Empty_Step_Details,
+         Category     => Unknown);
+   Empty_Scenario : constant Scenario_Type
+     := (Name                  => Null_Unbounded_String,
+         Step_List             => Step_Lists.Empty,
+         Comment               => Empty_Text,
+         Failed_Step_Count     |
+         Successful_Step_Count => 0);
+   Empty_Feature : constant Feature_Type
+     :=  (Name          => Null_Unbounded_String,
+          Scenario_List => Scenario_Lists.Empty,
+          Comment       => Empty_Text,
+          Background    => Empty_Scenario);
+   Empty_Document : constant Document_Type
+     := (Name         => Null_Unbounded_String,
+         Comment      => Empty_Text,
+         Feature_List => Feature_Lists.Empty,
+         Background   => Empty_Scenario);
 
 end BBT.Documents;

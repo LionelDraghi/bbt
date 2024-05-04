@@ -18,10 +18,19 @@ check: ../bbt ../uut
 	../bbt contains_multiline.md > output.4
 	sdiff -sbB expected.4 output.4 || meld expected.4 output.4
 
+	rm config.ini
+	../bbt background.md > output.5
+	sdiff -sbB expected.5 output.5 || meld expected.5 output.5
+
+	../bbt run_or.md > output.6
+	sdiff -sbB expected.6 output.6 || meld expected.6 output.6
+
 	# Then we run all scenarii that should pass
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
 	../bbt pass_tests/*.md
+
+	@ echo Tests OK
 
 .PHONY : clean
 clean:

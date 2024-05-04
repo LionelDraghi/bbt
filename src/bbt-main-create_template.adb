@@ -17,36 +17,35 @@ begin
       Create (Template, Name => Settings.Template_Name);
       Set_Output (Template);
 
-      Put_Line ("## Feature : *as in* test");
+      Put_Line ("## Feature : Command line");
       New_Line;
-
+      Put_Line ("No special marks for comments, it's just normal markdown text.");
       New_Line;
-      Put_Line ("Testing that a message is put on standard output");
-      Put_Line ("and that the command returns no error");
-      New_Line;
-      Put_Line ("### Scenario : Short option form");
-      Put_Line ("  - When I run 'uut -v'");
+      Put_Line ("### Scenario : version message");
+      Put_Line ("  - When I run `uut -v` or `uut --version`");
       Put_Line ("  - Then I get no error");
       Put_Line ("  - And I get 'uut v0.1.0'");
       New_Line;
-      Put_Line ("### Scenario : Long form");
-      New_Line;
-      Put_Line ("Checking the postconditions of another test when running something else");
-      Put_Line ("(here, an equivalent option on command line");
-      New_Line;
-
-      Put_Line ("  - Then I get just as in `Short option form` scenario");
-      New_Line;
-      Put_Line ("Testing an expected multiline output");
-      New_Line;
-      Put_Line ("### Scenario : asking for uut help");
-      New_Line;
-
-      Put_Line ("- Then I get ");
-      New_Line;
+      Put_Line ("### Scenario : Help message");
+      Put_Line ("  - When I run `uut -h` or `uut --help`");
+      Put_Line ("  - Then I get no error");
       Put_Line ("```");
       Put_Line ("uut usage :");
       Put_Line ("uut file_name create|read|append [-with text]");
+      Put_Line ("```");
+      New_Line;
+      Put_Line ("## Feature : File manipulation");
+      New_Line;
+      Put_Line ("### Scenario : append");
+      Put_Line ("  - Given the `config.ini` file");
+      Put_Line ("```");
+      Put_Line ("verbose=false");
+      Put_Line ("```");
+      Put_Line ("  - When I successfully run `uut append lang=uk config.ini`");
+      Put_Line ("  - Then I get");
+      Put_Line ("```");
+      Put_Line ("verbose=false");
+      Put_Line ("lang=uk");
       Put_Line ("```");
       New_Line;
       Put_Line ("-- More extensive explanations : http://lionel.draghi.free.fr/Archicheck/rules/");

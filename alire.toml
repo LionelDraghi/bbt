@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Gherkin markdown format test runner"
-version = "0.1.0-dev"
+version = "0.0.0"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
@@ -12,8 +12,8 @@ tags = ["gherkin", "test", "markdown", "tdd", "black-box"]
 executables = ["bbt", "uut"]
 
 [configuration]
-output_dir   = "src/Alire_config"
-generate_C   = false
+output_dir = "src/Alire_config"
+generate_C = false
 
 [[depends-on]]
 # markdown = "^24.0.0"

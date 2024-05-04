@@ -18,6 +18,7 @@ package body BBT.Step_Lexer is
       Level : BBT.Settings.Print_Out_Level := BBT.IO.Normal;
       Topic : Settings.Extended_Topics := Settings.Step_Lexer)
       renames IO.Put_Line;
+   pragma Unreferenced (Put_Line);
 
    -- --------------------------------------------------------------------------
    package Internal is
@@ -58,25 +59,26 @@ package body BBT.Step_Lexer is
 
       package String_Arrays is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                       String);
-      Keywords : constant String_Arrays.Vector :=
-                   ["given",
-                    "when",
-                    "then",
-                    "and", -- "and" and "but" are equivalent to "Given" if they
-                    "but", -- appear in the "Given" section, to "Then" if tey
-                    "run", -- appear in the "Then" section, etc.
-                    "running", -- "When I run" = "When running"
-                    "get",
-                    "existing",
-                    "no", -- "no" = "not" = "dont"
-                    "not",
-                    "dont",
-                    "error",
-                    "is",
-                    "output",
-                    "contains",
-                    "successfully"
-                   ];
+      Keywords : constant String_Arrays.Vector
+        := [
+            "given",
+            "when",
+            "then",
+            "and",      -- "and" and "but" are equivalent to "Given" if they
+            "but",      -- appear in the "Given" section, to "Then" if tey
+            "run",      -- appear in the "Then" section, etc.
+            "running",  -- "When I run" = "When running"
+            "get",
+            "existing",
+            "no",       -- "no" = "not" = "dont"
+            "not",
+            "dont",
+            "error",
+            "is",
+            "output",
+            "contains",
+            "successfully"
+           ];
       -- NB : all keywords must be in lower case!
       -- ----------------------------------------
 
@@ -119,17 +121,17 @@ package body BBT.Step_Lexer is
                      Test   => Ada.Strings.Outside,
                      First  => First,
                      Last   => Last);
-         Put_Line ("processing token = """ & Line.all (First .. Last) &
-                     """ in " & Line.all,
-                   Level => IO.Debug);
+         --  Put_Line ("processing token = """ & Line.all (First .. Last) &
+         --              """ in " & Line.all,
+         --            Level => IO.Debug);
          Cursor := (Natural'Min (Line.all'Length, Last + 1));
          -- Jump to next char unless already on the last
          if Is_A_Keyword (Line, First, Last) then
             -- Keyword ---------------------------------------------------------
             Tok_Type := Keyword;
-            Put_Line ("Found Keyword """ & Line.all (First .. Last) &
-                        """ in " & Line.all,
-                      Level => IO.Debug);
+            --  Put_Line ("Found Keyword """ & Line.all (First .. Last) &
+            --              """ in " & Line.all,
+            --            Level => IO.Debug);
 
          elsif Line (First) = Backtick then
             if Line'Last > First and then Line (First + 1) /= Backtick then
@@ -151,9 +153,9 @@ package body BBT.Step_Lexer is
                   First := @ + 1; -- remove first backtick
                   Last  := @ - 1; -- remove final backtick
 
-                  Put_Line ("Found code span = """ & Line.all (First .. Last) &
-                              """ in " & Line.all,
-                            Level => IO.Debug);
+                  --  Put_Line ("Found code span = """ & Line.all (First .. Last) &
+                  --              """ in " & Line.all,
+                  --            Level => IO.Debug);
                   Tok_Type := Code_Span;
                end if;
 
@@ -197,7 +199,7 @@ package body BBT.Step_Lexer is
          return not Line_Finished;
       end More_Token;
 
-      -- --------------------------------------------------------------------------
+      -- -----------------------------------------------------------------------
       function Is_A_Keyword (S      : access constant String;
                              First  : Positive;
                              Last   : Natural := 0)
@@ -224,11 +226,12 @@ package body BBT.Step_Lexer is
       String_To_Find   : Unbounded_String;
       Output_Met       : Boolean := False;
       No_Met           : Boolean := False;
+      Is_Met           : Boolean := False;
 
    begin
       Initialize_Cursor;
 
-      Put_Line ("Parsing """ & To_String (Line) & """", Level => IO.Debug);
+      -- Put_Line ("Parsing """ & To_String (Line) & """", Level => IO.Debug);
       Line_Processing : while More_Token loop
          declare
             TT       : Token_Type;
@@ -279,6 +282,7 @@ package body BBT.Step_Lexer is
                         -- synonym of the previous Get_Ouput
 
                      elsif Lower_Keyword = "is" then
+                        Is_Met := True;
                         if Output_Met then
                            The_Kind := Output_Is;
                         else
@@ -287,8 +291,12 @@ package body BBT.Step_Lexer is
 
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
-                       or Lower_Keyword = "dont" then
+                       or Lower_Keyword = "dont"
+                     then
                         No_Met := True;
+                        if Is_Met then
+                           The_Kind := No_File;
+                        end if;
 
                      elsif Lower_Keyword = "successfully" then
                         The_Kind := Successfully_Run_Cmd;
@@ -338,8 +346,7 @@ package body BBT.Step_Lexer is
                      -- is the message expected
                      String_To_Find := To_Unbounded_String (Tok);
 
-                     when File_Creation | -- impossible
-                          Unknown =>
+                     when Unknown =>
                         -- If it appears at the beginning, so that Kind is still
                         -- unknown, it should be the file name that will be
                         -- used later in the line.
@@ -349,6 +356,9 @@ package body BBT.Step_Lexer is
                         --           ```
                         -- There is no keyword at all
                         The_Kind := File_Creation;
+                        File_Name := To_Unbounded_String (Tok);
+
+                     when No_File =>
                         File_Name := To_Unbounded_String (Tok);
 
                      when Existing_File =>
@@ -368,9 +378,13 @@ package body BBT.Step_Lexer is
                           ("No code span expected after ""no error""",
                            Level => IO.Quiet);
 
-                     --  when -- Output_Is_File       |
-                     --       File_Is_File    =>
-                     --     IO.Put_Line ("WTF???", Level => IO.Quiet);
+                     when File_Creation =>
+                        -- Impossible, we may only conclude that it's a
+                        -- File_Creation at the end of the line, so there
+                        -- can't be a new token in this state.
+                        IO.Put_Warning
+                          ("Processing token " & Tok
+                           & " while already in File_Creation state");
 
                   end case;
 
@@ -441,6 +455,13 @@ package body BBT.Step_Lexer is
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
                                  Expected_Output  => String_To_Find,
+                                 File_Name        => File_Name);
+         when No_File =>
+            return Step_Details'(Kind             => No_File,
+                                 Text             => Line,
+                                 Cat              => Cat,
+                                 Cmd              => Null_Unbounded_String,
+                                 Expected_Output  => Null_Unbounded_String,
                                  File_Name        => File_Name);
          when Existing_File =>
             return Step_Details'(Kind             => Existing_File,

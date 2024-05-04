@@ -1,5 +1,5 @@
 -- -----------------------------------------------------------------------------
--- bbt, the BlackBox tester (http://lionel.draghi.free.fr/bbt/)
+-- BBT, the BlackBox tester (http://lionel.draghi.free.fr/BBT/)
 -- © 2018, 2019 Lionel Draghi <lionel.draghi@free.fr>
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
@@ -15,15 +15,15 @@
 -- -----------------------------------------------------------------------------
 
 -- -----------------------------------------------------------------------------
--- Package: bbt specification
+-- Package: BBT specification
 --
 -- Purpose:
 --    This package is empty. Child units do the real job :
 --
---    procedure <bbt.Main> - is in charge of
+--    procedure <BBT.Main> - is in charge of
 --       controlling the execution flow according to the command line
---    package <bbt.Cmd_Line> - do the command line analysis
---    package <bbt.Settings> - global settings, resulting mainly from
+--    package <BBT.Cmd_Line> - do the command line analysis
+--    package <BBT.Settings> - global settings, resulting mainly from
 --       cmd line analysis (and env. variables in the future)
 --    ...
 --

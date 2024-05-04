@@ -41,16 +41,23 @@ package body BBT.MDG_Lexer is
    begin
       First := Index (Source => Line,
                       Set    => Ada.Strings.Maps.To_Set ("#"),
-                      Test   => Ada.Strings.Outside,
+                      Test   => Ada.Strings.Inside,
                       From   => Line'First,
                       Going  => Forward);
-      -- First point to the first character after #
+      -- First point to the first  #
       if First /= 0 then
+         First := Index (Source => Line,
+                         Set    => Ada.Strings.Maps.To_Set ("# "),
+                         Test   => Ada.Strings.Outside,
+                         From   => First,
+                         Going  => Forward);
+         -- Now First point to the first non blank character after all '#'
          Colon := Index (Source  => Line,
                          Pattern => ":",
                          From    => First,
                          Going   => Forward);
          if Colon = 0 then
+            --  Put_Line ("no Heading_Mark found within """ & Line);
             return False;
 
          else
@@ -61,8 +68,6 @@ package body BBT.MDG_Lexer is
                         Test   => Ada.Strings.Outside,
                         First  => First,
                         Last   => Last);
-            --  Put_Line ("Find_Heading_Mark within """ & Line & """, First = "
-            --            & First'Image & ", Last =" & Last'Image);
             if Colon = Line'Last then
                -- pathological case where the line ends on the colon character
                -- (no title after)
@@ -71,6 +76,8 @@ package body BBT.MDG_Lexer is
                Colon_Succ := Colon + 1;
             end if;
 
+            --  Put_Line ("Find_Heading_Mark within """ & Line & """, First = "
+            --            & First'Image & ", Last =" & Last'Image);
             return True;
 
          end if;
@@ -128,7 +135,7 @@ package body BBT.MDG_Lexer is
                         return Line_Attributes is
       First, Last, Title_First : Natural;
    begin
-      Put_Line ("Parsing = """ & Line.all & """", Level => IO.Debug);
+      -- Put_Line ("Parsing = """ & Line.all & """", Level => IO.Debug);
       Find_Token (Source => Line.all,
                   Set    => Blanks,
                   Test   => Ada.Strings.Outside,
@@ -179,8 +186,8 @@ package body BBT.MDG_Lexer is
                              Left  => Blanks,
                              Right => Blanks);
          begin
-            Put_Line ("Header = """ & Header & """, Title = """ & Title & """",
-                      Level => IO.Debug);
+            --  Put_Line ("Header = """ & Header & """, Title = """ & Title & """",
+            --            Level => IO.Debug);
             if Ada.Strings.Equal_Case_Insensitive (Header, "Feature") then
                -- Feature line -------------------------------------------------
                --  IO.Put ("Feature line = " & Line.all (First .. Last),
@@ -195,9 +202,17 @@ package body BBT.MDG_Lexer is
                --               Level => IO.Debug);
                return (Kind => Scenario_Line,
                        Name => To_Unbounded_String (Title));
+
+            elsif Ada.Strings.Equal_Case_Insensitive (Header, "Background") then
+               -- Background Scenario line -------------------------------------
+               --  Put_Line ("Scenario line = " & Line.all (First .. Last),
+               --               Level => IO.Debug);
+               return (Kind => Background_Line,
+                       Name => To_Unbounded_String (Title));
+
             else
                -- WTF Header ---------------------------------------------------
-               Put_Line ("Unkown Header = """ & Header
+               Put_Line ("Unkown Header = " & Header'Image
                          & ", should be Features or Scenario",
                          Level => IO.Debug);
             end if;
@@ -209,17 +224,5 @@ package body BBT.MDG_Lexer is
               Line => To_Unbounded_String (Line.all));
 
    end Parse_Line;
-
-   --  -- --------------------------------------------------------------------------
-   --  function Is_A_Keyword (S      : access constant String;
-   --                         First  : Positive;
-   --                         Last   : Natural := 0
-   --                        ) return Boolean is
-   --  begin
-   --     return Keywords.Contains
-   --       (Translate (Source  => S.all (First .. Last),
-   --                   Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map));
-   --  end Is_A_Keyword;
-
 
 end BBT.MDG_Lexer;

@@ -2,7 +2,7 @@
 
 ## Feature : testing that a file contains a string  
 
-### Scenario outline : test the standard output
+### Scenario : test the standard output
 
   -  When I run `uut create               config.ini`
   -  When I run `uut append mode=silent   config.ini`
@@ -33,11 +33,10 @@ Lang=fr
 recurse=true
 autosave=true
 ```
-### Scenario outline : should fail
-  - But `config.ini` do not contains 
+### Scenario : should fail
+  - Then `config.ini` contains 
   
-  Lang changed for "uk"
-
+  Lang changed for "uk"   (Comment in the middle of the step!)
 
 ```
 Mode=silent
