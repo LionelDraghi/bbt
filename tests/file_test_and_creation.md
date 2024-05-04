@@ -18,7 +18,7 @@ Test both the ability to check that a file exists, or to directly create one
 
 
 ### Scenario outline : the required file is created
-  - Given the `config.ini` file
+  - Given my favorite and so useful `config.ini` file
 ```
 Tmp_dir=/tmp
 Alias l="ls -tla"

@@ -32,20 +32,21 @@ package BBT.Documents is
       --                      --------------------------------------------------
       Error_Return_Code,      -- then I get error
       No_Error_Return_Code,   -- then I get no error
-      Output_Is_String,       -- then output is `msg`
+      Output_Is,              -- then output is `msg`
+      --                      or then output is
+      --                           followed by code fenced content
       --                      or then I get     `msg`
-      Output_Contains_String, -- then output contains `msg`
-      Output_Contains_File,   -- then output contains
+      --                      or then I get
       --                           followed by code fenced content
-      -- Output_Is_File,         -- then output is
-      -- --                           followed by code fenced content
-      File_Is_String,         -- then      `config.ini` is `mode=silent`
-      --                         then file `config.ini` is `mode=silent`
-      File_Contains_String,   -- Then `config.ini` contains `--version`
-      File_Is_File,           -- Then `config.ini` is
+      Output_Contains,        -- then output contains `msg`
+      --                      or then output contains
       --                           followed by code fenced content
-      File_Contains_File,     -- Then `config.ini` contains
+      File_Is,                -- Then `config.ini` is
       --                           followed by code fenced content
+      --                      or then `config.ini` is `mode=silent`
+      File_Contains,          -- Then `config.ini` contains
+      --                           followed by code fenced content
+      --                      or Then `config.ini` contains `--version`
       --                      --------------------------------------------------
       Existing_File,          -- given then existing `config.ini` file
       File_Creation);         -- given the file `config.ini`

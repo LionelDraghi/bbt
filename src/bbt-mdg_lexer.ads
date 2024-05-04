@@ -45,8 +45,17 @@ package BBT.MDG_Lexer is
       end case;
    end record;
 
+   type Parsing_Context is limited private;
+
    -- --------------------------------------------------------------------------
-   function Parse_Line (Line : access constant String)
+   function Initialize_Context return Parsing_Context;
+   function Parse_Line (Line    : access constant String;
+                        Context : in out Parsing_Context)
                         return Line_Attributes;
+
+private
+   type Parsing_Context is record
+      In_Code_Fence : Boolean;
+   end record;
 
 end BBT.MDG_Lexer;

@@ -119,7 +119,12 @@ package body BBT.MDG_Lexer is
    -- for specification
 
    -- --------------------------------------------------------------------------
-   function Parse_Line (Line : access constant String)
+   function Initialize_Context return Parsing_Context is
+     ((In_Code_Fence => False));
+
+   -- --------------------------------------------------------------------------
+   function Parse_Line (Line    : access constant String;
+                        Context : in out Parsing_Context)
                         return Line_Attributes is
       First, Last, Title_First : Natural;
    begin
@@ -137,6 +142,19 @@ package body BBT.MDG_Lexer is
          return (Kind => Empty_Line);
 
 
+      elsif Code_Fence_Line (Line.all) then
+         -- Code_Block Mark ----------------------------------------------------
+         --  Put_Line ("BlockCode mark = " & Line.all,
+         --               Level => IO.Debug);
+         Context.In_Code_Fence := not @;
+         return (Kind => Code_Fence);
+
+      elsif Context.In_Code_Fence then
+         -- While in code fence, al is considered as text (otherwise a comment
+         -- with a bullet marker '-' would be interpreted as a Step).
+         return (Kind => Text_Line,
+                 Line => To_Unbounded_String (Line.all));
+
       elsif Bullet_List_Marker (Line.all, First) then
          -- Step line ----------------------------------------------------------
          --  Put_Line ("List Mark line = "
@@ -145,12 +163,6 @@ package body BBT.MDG_Lexer is
          return (Kind      => Step_Line,
                  Step_Ln   => To_Unbounded_String
                    (Line.all (First .. Line.all'Last)));
-
-      elsif Code_Fence_Line (Line.all) then
-         -- Code_Block Mark ----------------------------------------------------
-         --  Put_Line ("BlockCode mark = " & Line.all,
-         --               Level => IO.Debug);
-         return (Kind => Code_Fence);
 
       elsif Find_Heading_Mark (Line       => Line.all (First .. Line.all'Last),
                                First      => First,
@@ -190,7 +202,6 @@ package body BBT.MDG_Lexer is
                          Level => IO.Debug);
             end if;
          end;
-
       end if;
 
       -- Text line -------------------------------------------------------------

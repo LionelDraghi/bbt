@@ -33,7 +33,7 @@ procedure Analyze_BBT_File (File_Name : String) is
    --  Base_Name : String := Ada.Directories.Base_Name (File_Name);
    --  Dir_Name  : String := Ada.Directories.Containing_Directory (File_Name);
    Input : Ada.Text_IO.File_Type;
-   Context : Extended_Step_Categories := Unknown;
+   Step_Lexer_Context : Extended_Step_Categories := Unknown; -- Fixme: a privatiser
 
    -- --------------------------------------------------------------------------
    -- IO renamed with "Spawn" as Topic
@@ -45,6 +45,9 @@ procedure Analyze_BBT_File (File_Name : String) is
       Topic : Settings.Extended_Topics := Settings.Lexer) renames IO.Put_Line;
 
    use Ada.Text_IO;
+
+   use BBT.MDG_Lexer;
+   MDG_Lexer_Context : Parsing_Context := Initialize_Context;
 
 begin
    Put_Line ("Analysing file " & File_Name, Level => Debug);
@@ -59,8 +62,8 @@ begin
    while not End_Of_File (Input) loop
       Line_Processing : declare
          Line : aliased constant String := Get_Line (Input);
-         use BBT.MDG_Lexer;
-         Attrib : constant Line_Attributes := Parse_Line (Line'Access);
+         Attrib : constant Line_Attributes := Parse_Line (Line'Access,
+                                                          MDG_Lexer_Context);
 
       begin
          -- Put_Line ("Processing Line = " & Line,         Level => Verbose);
@@ -79,12 +82,12 @@ begin
             when Step_Line =>
                declare
                   S : constant Step_Details :=
-                        Step_Lexer.Parse (Attrib.Step_Ln, Context);
+                        Step_Lexer.Parse (Attrib.Step_Ln, Step_Lexer_Context);
                   -- We give context to the parser, so that it can understand
                   -- that a "And" line is in fact a "When" line thanks to the
                   -- previous.
                begin
-                  Context := S.Cat;
+                  Step_Lexer_Context := S.Cat;
                   Tests_Builder.Add_Step (S);
                   -- Put_Line (S'Image, Level => Quiet);
                   -- Tests_Builder.Add_Step (S);

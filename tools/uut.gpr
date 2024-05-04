@@ -2,7 +2,7 @@ project UUT is
 
    for Source_Dirs use ("./");
    for Object_Dir use "obj/";
-   for Exec_Dir use "./";
+   for Exec_Dir use "../";
    for Main use ("uut.adb");
 
    package Builder is

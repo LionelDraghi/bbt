@@ -73,7 +73,6 @@ package body BBT.Step_Lexer is
                     "dont",
                     "error",
                     "is",
-                    "file",
                     "output",
                     "contains",
                     "successfully"
@@ -276,25 +275,15 @@ package body BBT.Step_Lexer is
 
                      elsif Lower_Keyword = "get" then
                         -- Get_Met := True;
-                        The_Kind := Output_Is_String;
+                        The_Kind := Output_Is;
                         -- synonym of the previous Get_Ouput
 
                      elsif Lower_Keyword = "is" then
                         if Output_Met then
-                           The_Kind := Output_Is_String;
-                        else -- elsif File_Met then
-                           The_Kind := File_Is_String;
-                           -- obvious case where there is the "file" keyword
-                           -- before the file name
+                           The_Kind := Output_Is;
+                        else
+                           The_Kind := File_Is;
                         end if;
-                        -- Is_Met := True;
-
-                     elsif Lower_Keyword = "file" then
-                        if The_Kind = Unknown then
-                           The_Kind := File_Creation;
-                           -- note that this may be overriden later in the line
-                        end if;
-                        -- File_Met := True;
 
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
@@ -319,9 +308,9 @@ package body BBT.Step_Lexer is
 
                      elsif Lower_Keyword = "contains" then
                         if Output_Met then
-                           The_Kind := Output_Contains_String;
+                           The_Kind := Output_Contains;
                         else
-                           The_Kind := File_Contains_String;
+                           The_Kind := File_Contains;
                         end if;
 
                      elsif Lower_Keyword = "existing" then
@@ -341,20 +330,36 @@ package body BBT.Step_Lexer is
                           Successfully_Run_Cmd =>
                         Cmd_To_Run := To_Unbounded_String (Tok);
 
-                     when File_Contains_String   |
-                          File_Is_String         |
-                          Output_Contains_String |
-                          Output_Is_String       =>
+                     when File_Contains   |
+                          File_Is         |
+                          Output_Contains |
+                          Output_Is       =>
                      -- Get keywords + code span means that the code span
                      -- is the message expected
                      String_To_Find := To_Unbounded_String (Tok);
 
-                     when Unknown       |
-                          File_Creation |
-                          Existing_File =>
-                     -- If it appears at the beginning, so that Kind is still
-                     -- unknown, it should be the file name that will be
-                     -- used later in the line.
+                     when File_Creation | -- impossible
+                          Unknown =>
+                        -- If it appears at the beginning, so that Kind is still
+                        -- unknown, it should be the file name that will be
+                        -- used later in the line.
+                        -- Example : Given `config.ini`
+                        --           ```
+                        --           param=true
+                        --           ```
+                        -- There is no keyword at all
+                        The_Kind := File_Creation;
+                        File_Name := To_Unbounded_String (Tok);
+
+                     when Existing_File =>
+                        -- If it appears at the beginning, so that Kind is still
+                        -- unknown, it should be the file name that will be
+                        -- used later in the line.
+                        -- Example : Given `config.ini`
+                        --           ```
+                        --           param=true
+                        --           ```
+                        -- There is no keyword at all
                         File_Name := To_Unbounded_String (Tok);
 
                      when No_Error_Return_Code |
@@ -363,11 +368,9 @@ package body BBT.Step_Lexer is
                           ("No code span expected after ""no error""",
                            Level => IO.Quiet);
 
-                     when -- Output_Is_File       |
-                          File_Is_File         |
-                          Output_Contains_File |
-                          File_Contains_File   =>
-                        IO.Put_Line ("WTF???", Level => IO.Quiet);
+                     --  when -- Output_Is_File       |
+                     --       File_Is_File    =>
+                     --     IO.Put_Line ("WTF???", Level => IO.Quiet);
 
                   end case;
 
@@ -381,25 +384,6 @@ package body BBT.Step_Lexer is
          First_Token := False;
 
       end loop Line_Processing;
-
-      -- If we have no string to find at the end of the line, it's because it
-      -- will be in the following line as a text content
-      if String_To_Find = Null_Unbounded_String then
-
-         if The_Kind = File_Contains_String then
-            The_Kind := File_Contains_File;
-
-         elsif The_Kind = File_Is_String then
-            The_Kind := File_Is_File;
-
-         elsif The_Kind = Output_Contains_String then
-            The_Kind := Output_Contains_File;
-
-         --  elsif The_Kind = Output_Is_String then
-         --     The_Kind := Output_Is_File;
-
-         end if;
-      end if;
 
       case The_Kind is
          when Run_Cmd =>
@@ -430,54 +414,33 @@ package body BBT.Step_Lexer is
                                  Cmd             => Null_Unbounded_String,
                                  Expected_Output => Null_Unbounded_String,
                                  File_Name       => Null_Unbounded_String);
-         when Output_Is_String =>
-            return Step_Details'(Kind             => Output_Is_String,
+         when Output_Is =>
+            return Step_Details'(Kind             => Output_Is,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
                                  Expected_Output  => String_To_Find,
                                  File_Name        => Null_Unbounded_String);
-         when Output_Contains_String =>
-            return Step_Details'(Kind             => Output_Contains_String,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => String_To_Find,
-                                 File_Name        => Null_Unbounded_String);
-         when File_Is_String =>
-            return Step_Details'(Kind             => File_Is_String,
+         when Output_Contains =>
+            return Step_Details'(Kind             => Output_Contains,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
                                  Expected_Output  => String_To_Find,
                                  File_Name        => File_Name);
-         when File_Contains_String =>
-            return Step_Details'(Kind             => File_Contains_String,
+         when File_Is =>
+            return Step_Details'(Kind             => File_Is,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
                                  Expected_Output  => String_To_Find,
                                  File_Name        => File_Name);
-         when File_Is_File =>
-            return Step_Details'(Kind             => File_Is_File,
+         when File_Contains =>
+            return Step_Details'(Kind             => File_Contains,
                                  Text             => Line,
                                  Cat              => Cat,
                                  Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => File_Name);
-         when Output_Contains_File =>
-            return Step_Details'(Kind             => Output_Contains_File,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => File_Name);
-         when File_Contains_File =>
-            return Step_Details'(Kind             => File_Contains_File,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
+                                 Expected_Output  => String_To_Find,
                                  File_Name        => File_Name);
          when Existing_File =>
             return Step_Details'(Kind             => Existing_File,

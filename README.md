@@ -78,7 +78,6 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
 - dont
 - error
 - is
-- file
 - output
 - contains
 - Successfully
@@ -89,7 +88,7 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
 
   *Given* is used to setup the run.
 
-  - `` Given the `file` ``  
+  - ``Given the file `file_name` ``  
     ~~~
     ```
     line 1
@@ -97,9 +96,17 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
     line 3
     ```
     ~~~
-    Return *success* if bbt could create a *file* containing the text in the code fenced lines.
+    Return *success* if bbt could create a file *file_name* containing the text in the code fenced lines.
     This command overwrite an existing *file*, and as this is the normal behavior, there is no error here.  
     If you want to add something to an existing file, wait, there's a ``When I append `text` to `file` `` in the TDL :-)
+
+    Note that there is no other keyword than *Given* on this line.  
+    You could write a minimalist  
+    `` Given `file_name` ``  
+    or  
+    ``Given my favorite and so useful file `file_name` ``  
+
+    That's the same. 
    
 **2. When**  
 

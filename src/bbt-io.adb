@@ -57,11 +57,7 @@ package body BBT.IO is
       end if;
    end GNU_Prefix;
 
-   -- --------------------------------------------------------------------------
-   function Prefix (Topic : Extended_Topics) return String is ("");
-    -- (if Topic = None then "" else Topic'Image & " ");
-
-   -- --------------------------------------------------------------------------
+    -- --------------------------------------------------------------------------
    procedure Put_Warning (Msg  : String;
                           File : String  := "";
                           Line : Integer := 0) is
@@ -117,7 +113,7 @@ package body BBT.IO is
                        Topic : Extended_Topics := None) is
    begin
       if Level >= Settings.Verbosity or else Is_Enabled (Topic) then
-         Ada.Text_IO.Put_Line (GNU_Prefix (File, Line) & Prefix (Topic) & Item);
+         Ada.Text_IO.Put_Line (GNU_Prefix (File, Line) & Item);
       end if;
    end Put_Line;
 
@@ -129,7 +125,7 @@ package body BBT.IO is
                   Topic : Extended_Topics := None) is
    begin
       if Level >= Settings.Verbosity or else Is_Enabled (Topic) then
-         Ada.Text_IO.Put (GNU_Prefix (File, Line) & Prefix (Topic) & Item);
+         Ada.Text_IO.Put (GNU_Prefix (File, Line) & Item);
       end if;
    end Put;
 
