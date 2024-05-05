@@ -127,7 +127,24 @@ package body BBT.MDG_Lexer is
 
    -- --------------------------------------------------------------------------
    function Initialize_Context return Parsing_Context is
-     ((In_Code_Fence => False));
+     ((In_Code_Fence => False, In_Scenario => False));
+
+
+   procedure Put_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      A      :        Line_Attributes) is
+   begin
+      Output.Put (Line_Kind'Image (A.Kind) & " ");
+      case A.Kind is
+         when Feature_Line    |
+              Scenario_Line   |
+              Background_Line => Output.Put (A.Name'Image);
+         when Text_Line       => Output.Put (A.Line'Image);
+         when Step_Line       => Output.Put (A.Step_Ln'Image);
+         when Code_Fence      |
+              Empty_Line      => null;
+      end case;
+   end Put_Image;
 
    -- --------------------------------------------------------------------------
    function Parse_Line (Line    : access constant String;
@@ -162,8 +179,12 @@ package body BBT.MDG_Lexer is
          return (Kind => Text_Line,
                  Line => To_Unbounded_String (Line.all));
 
-      elsif Bullet_List_Marker (Line.all, First) then
+      elsif Context.In_Scenario and then Bullet_List_Marker (Line.all, First) then
          -- Step line ----------------------------------------------------------
+         -- We don't take into account bullet list before beeing in Scenario,
+         -- to let the use most Markdown possibilities before Steps, for
+         -- example to Have a TOC, or just better comments.
+
          --  Put_Line ("List Mark line = "
          --               & Line.all (First .. Line.all'Last),
          --               Level => IO.Debug);
@@ -200,13 +221,16 @@ package body BBT.MDG_Lexer is
                -- Scenario line ------------------------------------------------
                --  Put_Line ("Scenario line = " & Line.all (First .. Last),
                --               Level => IO.Debug);
+               Context.In_Scenario := True;
                return (Kind => Scenario_Line,
                        Name => To_Unbounded_String (Title));
 
             elsif Ada.Strings.Equal_Case_Insensitive (Header, "Background") then
                -- Background Scenario line -------------------------------------
-               --  Put_Line ("Scenario line = " & Line.all (First .. Last),
+               --  Put_Line ("Background scenario line = "
+               --            & Line.all (First .. Last),
                --               Level => IO.Debug);
+               Context.In_Scenario := True;
                return (Kind => Background_Line,
                        Name => To_Unbounded_String (Title));
 

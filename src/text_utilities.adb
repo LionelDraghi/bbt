@@ -394,7 +394,11 @@ package body Text_Utilities is
    function First_Non_Blank_Line (In_Text : Text;
                                   From    : Positive := 1) return Natural is
    begin
-      if From > In_Text.Last_Index then
+      if In_Text.Last_Index = 0 then
+         -- Null Text
+         return 0;
+
+      elsif From > In_Text.Last_Index then
          Put_Line ("Non_Blank_Line : starting search outside of Text range");
          Put_Line ("First Non_Blank_Line : From " & From'Image
                    & " not in In_Text range " & In_Text.First_Index'Image

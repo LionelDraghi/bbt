@@ -27,6 +27,7 @@ package body BBT.Settings is
    -- Cmd_Line        : Unbounded_String := Null_Unbounded_String;
    WD : constant access String :=
           new String'(Ada.Directories.Current_Directory);
+   Outfile_Name      : access String := null;
 
    Enabled_Topics : array (Extended_Topics) of Boolean := [others => False];
 
@@ -79,5 +80,14 @@ package body BBT.Settings is
             return True;
       end case;
    end Is_Authorised;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Output_File (File_Name : String) is
+   begin
+      Outfile_Name := new String'(File_Name);
+   end Set_Output_File;
+
+   function Get_Output_File_Name return String  is
+     (if Outfile_Name = null then "" else Outfile_Name.all);
 
 end BBT.Settings;

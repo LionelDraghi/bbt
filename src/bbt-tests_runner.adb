@@ -94,12 +94,12 @@ package body BBT.Tests_Runner is
          T : Text;
          use type Text;
       begin
-         if Step.Details.Expected_Output /= Null_Unbounded_String then
-            T := [1 => To_String (Step.Details.Expected_Output)];
+         if Step.Expected_Output /= Null_Unbounded_String then
+            T := [1 => To_String (Step.Expected_Output)];
          elsif Step.File_Content /= Empty_Text then
             T := Step.File_Content;
          else
-            T := Get_Text (Step.Details.File_Name);
+            T := Get_Text (Step.File_Name);
          end if;
          return T;
       end Get_Expected;
@@ -116,22 +116,23 @@ package body BBT.Tests_Runner is
          Step_Processing : for Step of The_Scenario.Step_List loop
 
             begin
-               case Step.Details.Kind is
+               case Step.Kind is
                   when Run_Cmd =>
-                     Run_Cmd (Cmd         => To_String (Step.Details.Cmd),
+                     Run_Cmd (Cmd         => To_String (Step.Cmd),
                               Output_Name => Output_File_Name (The_Doc),
                               Spawn_OK    => Spawn_OK,
                               Return_Code => Return_Code);
                      if Spawn_OK then
                         Add_Success (The_Scenario);
-                        Put_Line (Prefix (Spawn_OK) & "Run " & Step.Details.Cmd'Image,
+                        Put_Line (Prefix (Spawn_OK) & "Run " & Step.Cmd'Image
+                                  & "  ",
                                   Level => IO.Verbose);
                      else
                         Add_Fail (The_Scenario);
                         -- We don't want the run fail to goes unnoticed,
                         -- so an error is immediatly added
                         Put_Line (Prefix (Spawn_OK) & "Couldn't run " &
-                                    Step.Details.Cmd'Image,
+                                    Step.Cmd'Image & "  ",
                                   Level => IO.Quiet);
                      end if;
                      if not Spawn_OK then
@@ -140,19 +141,19 @@ package body BBT.Tests_Runner is
                      end if;
 
                   when Successfully_Run_Cmd =>
-                     Run_Cmd (Cmd         => To_String (Step.Details.Cmd),
+                     Run_Cmd (Cmd         => To_String (Step.Cmd),
                               Output_Name => Output_File_Name (The_Doc),
                               Spawn_OK    => Spawn_OK,
                               Return_Code => Return_Code);
                      if Spawn_OK and Is_Success (Return_Code) then
                         Add_Success (The_Scenario);
                         Put_Line (Prefix (True) & "Successfully run " &
-                                    Step.Details.Cmd'Image,
+                                    Step.Cmd'Image & "  ",
                                   Level => IO.Verbose);
                      else
                         Add_Fail (The_Scenario);
                         Put_Line (Prefix (False) & "Unsuccessfully run " &
-                                    Step.Details.Cmd'Image,
+                                    Step.Cmd'Image & "  ",
                                   Level => IO.Quiet);
                      end if;
                      if not Spawn_OK then
@@ -164,23 +165,25 @@ package body BBT.Tests_Runner is
                      if not Is_Success (Return_Code) then
                         -- error expected, it's a fail
                         Add_Success (The_Scenario);
-                        Put_Line (Prefix (True) & "Got expected error code",
+                        Put_Line (Prefix (True) & "Got expected error code  ",
                                   Level => IO.Verbose);
                      else
                         Add_Fail (The_Scenario);
                         Put_Line
-                          (Prefix (False) & "Expected error code, got no error",
+                          (Prefix (False)
+                           & "Expected error code, got no error  ",
                            Level => IO.Quiet);
                      end if;
 
                   when No_Error_Return_Code =>
                      if Is_Success (Return_Code) then
                         Add_Success (The_Scenario);
-                        Put_Line (Prefix (True) & "Got no error as expected",
+                        Put_Line (Prefix (True) & "Got no error as expected  ",
                                   Level => IO.Verbose);
                      else
                         Add_Fail (The_Scenario);
-                        Put_Line (Prefix (False) & "No error expected, but got one",
+                        Put_Line (Prefix (False)
+                                  & "No error expected, but got one  ",
                                   Level => IO.Quiet);
                      end if;
 
@@ -193,14 +196,15 @@ package body BBT.Tests_Runner is
                         if Is_Equal (T1, T2) then
                            Add_Success (The_Scenario);
                            Put_Line (Prefix (True) & "Output equal to expected "
-                                     & T2'Image,
+                                     & T2'Image & "  ",
                                      Level => IO.Verbose);
                         else
                            Add_Fail (The_Scenario);
-                           Put_Line (Prefix (False) & "Output " & T1'Image,
+                           Put_Line (Prefix (False) & "Output " & T1'Image
+                                     & "  ",
                                      Level => IO.Quiet);
-                           Put_Line ("    not equal to expected "
-                                     & T2'Image,
+                           Put_Line ("    not equal to expected  "
+                                     & T2'Image & "  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
@@ -215,14 +219,15 @@ package body BBT.Tests_Runner is
                         if Contains (T1, T2) then
                            Add_Success (The_Scenario);
                            Put_Line (Prefix (True) & "Output contains expected "
-                                     & T2'Image,
+                                     & T2'Image & "  ",
                                      Level => IO.Verbose);
                         else
                            Add_Fail (The_Scenario);
-                           Put_Line (Prefix (False) & "Output " & T1'Image,
+                           Put_Line (Prefix (False) & "Output " & T1'Image
+                                     & "  ",
                                      Level => IO.Quiet);
-                           Put_Line ("    does not contain expected "
-                                     & T2'Image,
+                           Put_Line ("    does not contain expected  "
+                                     & T2'Image & "  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
@@ -230,18 +235,21 @@ package body BBT.Tests_Runner is
                   when File_Is   =>
                      declare
                         File_Name : constant String
-                          := To_String (Step.Details.File_Name);
+                          := To_String (Step.File_Name);
                         T1        : constant Text := Get_Text (File_Name);
                         T2        : constant Text := Get_Expected (Step);
                      begin
                         if Is_Equal (T1, T2) then
                            Add_Success (The_Scenario);
-                           Put_Line (Prefix (True) & "File is equal to expected " & T2'Image,
+                           Put_Line (Prefix (True)
+                                     & "File is equal to expected "
+                                     & T2'Image & "  ",
                                      Level => IO.Verbose);
                         else
                            Add_Fail (The_Scenario);
                            Put_Line (Prefix (False) & File_Name
-                                     & " not equal to " & T2'Image,
+                                     & " " & T1'Image
+                                     & " not equal to " & T2'Image & "  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
@@ -249,21 +257,23 @@ package body BBT.Tests_Runner is
                   when File_Contains   =>
                      declare
                         File_Name : constant String
-                          := To_String (Step.Details.File_Name);
+                          := To_String (Step.File_Name);
                         T1        : constant Text := Get_Text (File_Name);
                         T2        : constant Text := Get_Expected (Step);
 
                      begin
                         if Contains (T1, T2) then
                            Add_Success (The_Scenario);
-                           Put_Line (Prefix (True) & "  File contains expected " & T2'Image,
+                           Put_Line (Prefix (True)
+                                     & "  File contains expected " & T2'Image
+                                     & "  ",
                                      Level => IO.Verbose);
                         else
                            Add_Fail (The_Scenario);
                            Put_Line (Prefix (False) & "file "
-                                     & To_String (Step.Details.File_Name)
+                                     & To_String (Step.File_Name)
                                      & " does not contain "
-                                     & T2'Image,
+                                     & T2'Image & "  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
@@ -271,18 +281,20 @@ package body BBT.Tests_Runner is
                   when No_File =>
                      declare
                         File_Name : constant String
-                          := To_String (Step.Details.File_Name);
+                          := To_String (Step.File_Name);
                      begin
                         if not Ada.Directories.Exists (File_Name)
                         then
                            Add_Success (The_Scenario);
                            Put_Line (Prefix (True) & "file "
-                                     & File_Name'Image & " doesn't exists",
+                                     & File_Name'Image
+                                     & " doesn't exists" & "  ",
                                      Level => IO.Verbose);
                         else
                            Add_Fail (The_Scenario);
                            Put_Line (Prefix (False) & "file "
-                                     & File_Name'Image & " shouldn't exists",
+                                     & File_Name'Image
+                                     & " shouldn't exists" & "  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
@@ -290,44 +302,75 @@ package body BBT.Tests_Runner is
                   when Existing_File =>
                      declare
                         File_Name : constant String
-                          := To_String (Step.Details.File_Name);
+                          := To_String (Step.File_Name);
                      begin
-                        if Ada.Directories.Exists (File_Name) then
-                           Add_Success (The_Scenario);
-                           Put_Line (Prefix (True) & "Expected file "
-                                     & File_Name'Image & " exists",
-                                     Level => IO.Verbose);
+                        if Exists (File_Name) then
+                           if Kind (File_Name) = Step.File_Type then
+                              Add_Success (The_Scenario);
+                              Put_Line (Prefix (True) & "Expected file "
+                                        & File_Name'Image & " exists" & "  ",
+                                        Level => IO.Verbose);
+                           else
+                              Add_Fail (The_Scenario);
+                              Put_Line
+                                (Prefix (False) & "File " & File_Name'Image
+                                 & " exists but isn't a dir/file as expected  ",
+                                 Level => IO.Quiet);
+                           end if;
+
                         else
                            Add_Fail (The_Scenario);
                            Put_Line (Prefix (False) & "Expected file "
-                                     & File_Name'Image & " doesn't exists",
+                                     & File_Name'Image & " doesn't exists  ",
                                      Level => IO.Quiet);
                         end if;
                      end;
 
                   when File_Creation =>
-                     if Create_File
-                       (File_Name    => Step.Details.File_Name,
-                        With_Content => Step.File_Content)
-                     then
-                        if Settings.Is_Authorised (Verbose) then
-                           Put_Text (Step.File_Content);
+                     if Step.File_Type = Ordinary_File then
+                        if Create_File
+                          (File_Name    => Step.File_Name,
+                           With_Content => Step.File_Content)
+                        then
+                           Add_Success (The_Scenario);
+
+                           if Settings.Is_Authorised (Verbose) then
+                              Put_Text (Step.File_Content);
+                           end if;
+
+                        else
+                           Add_Fail (The_Scenario);
+                           -- But if it fails, we don't want that to
+                           -- to goes unnoticed.
+                           Put_Line (Prefix (False) & "Unable to create file " &
+                                       Step.File_Name'Image & "  ",
+                                     Level => IO.Quiet);
                         end if;
-                        -- We don't count the precondition execution as
-                        -- a pass test,
-                     else
-                        Add_Fail (The_Scenario);
-                        -- But if it fails, we don't want that to
-                        -- to goes unnoticed.
-                        Put_Line (Prefix (False) & "Unable to create file " &
-                                    Step.Details.File_Name'Image,
-                                  Level => IO.Quiet);
+
+                     elsif Step.File_Type = Directory then
+                        declare
+                           Dir_Name : constant String
+                             := To_String (Step.File_Name);
+                        begin
+                           Create_Directory (Dir_Name);
+                           if Exists (Dir_Name) and Kind (Dir_Name) = Directory then
+                              Add_Success (The_Scenario);
+                              Put_Line (Prefix (True) & "Dir "
+                                        & Step.File_Name'Image & " created  ",
+                                        Level => IO.Verbose);
+                           else
+                              Add_Fail (The_Scenario);
+                              Put_Line (Prefix (False) & "Unable to create directory " &
+                                          Step.File_Name'Image & "  ",
+                                        Level => IO.Quiet);
+                           end if;
+                        end;
                      end if;
 
                   when Unknown =>
                      Add_Fail (The_Scenario);
                      Put_Line (Prefix (False) & "Unrecognised step "
-                               & Step.Step_String'Image,
+                               & Step.Step_String'Image & "  ",
                                Level => IO.Quiet);
 
                end case;
@@ -397,17 +440,20 @@ package body BBT.Tests_Runner is
 
                case Documents.Result (Scen) is
                   when Empty =>
-                     Put_Line ("  - [ ] " & To_String (D.Name) &
-                                 ", Scenario """ & To_String (Scen.Name) &
-                                 """ is empty, nothing tested");
+                     -- Note the two spaces at the end to cause a new line
+                     -- in Markdown format when this line is followed by an
+                     -- error message
+                     Put_Line ("  - [ ] [" & To_String (Scen.Name) & "]("
+                               & To_String (D.Name)
+                               & ") is empty, nothing tested  ");
                   when Successful =>
-                     Put_Line ("  - [X] " & To_String (D.Name) &
-                                 ", Scenario """ & To_String (Scen.Name) &
-                                 """ pass");
+                     Put_Line ("  - [X] [" & To_String (Scen.Name) & "]("
+                               & To_String (D.Name)
+                               & ") pass  ");
                   when Failed =>
-                     Put_Line ("  - [ ] " & To_String (D.Name) &
-                                 ", Scenario """ & To_String (Scen.Name) &
-                                 """ fails");
+                     Put_Line ("  - [ ] [" & To_String (Scen.Name) & "]("
+                               & To_String (D.Name)
+                               & ") fails  ");
                end case;
             end loop;
          end loop;

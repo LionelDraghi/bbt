@@ -22,7 +22,12 @@ with Ada.Text_IO;
 
 package body BBT.IO is
 
-   Warnings : Natural := 0;
+   -- --------------------------------------------------------------------------
+   Warnings    : Natural := 0;
+
+   Tee_Enabled : Boolean := False;
+   Tee_Level   : Print_Out_Level;
+   Tee_File    : Ada.Text_IO.File_Type;
 
    -- --------------------------------------------------------------------------
    -- Function: GNU_Prefix
@@ -90,6 +95,18 @@ package body BBT.IO is
    end Put_Exception;
 
    -- --------------------------------------------------------------------------
+   procedure Enable_Tee (File_Name : String;
+                         Level     : Print_Out_Level := Normal) is
+      use Ada.Text_IO;
+   begin
+      Tee_Enabled := True;
+      Tee_Level   := Level;
+      Create (Tee_File, Name => File_Name, Mode => Out_File);
+   end Enable_Tee;
+
+
+
+   -- --------------------------------------------------------------------------
    function Error_Count   return Natural is (Errors);
    function Warning_Count return Natural is (Warnings);
 
@@ -110,10 +127,20 @@ package body BBT.IO is
                        File  : String       := "";
                        Line  : Integer      := 0;
                        Level : Print_Out_Level := Normal;
-                       Topic : Extended_Topics := None) is
+                       Topic : Extended_Topics := None)
+   is
+      Print_On_Standard_Output : constant Boolean
+        := Level >= Settings.Verbosity or else Is_Enabled (Topic);
+      Print_In_Tee_File        : constant Boolean
+        := Tee_Enabled and then
+            (Level >= Tee_Level or else Is_Enabled (Topic));
    begin
-      if Level >= Settings.Verbosity or else Is_Enabled (Topic) then
+      if Print_On_Standard_Output then
          Ada.Text_IO.Put_Line (GNU_Prefix (File, Line) & Item);
+      end if;
+      if Print_In_Tee_File then
+         Ada.Text_IO.Put_Line (Tee_File,
+                               GNU_Prefix (File, Line) & Item);
       end if;
    end Put_Line;
 
@@ -122,19 +149,38 @@ package body BBT.IO is
                   File  : String       := "";
                   Line  : Integer      := 0;
                   Level : Print_Out_Level := Normal;
-                  Topic : Extended_Topics := None) is
+                  Topic : Extended_Topics := None)
+   is
+      Print_On_Standard_Output : constant Boolean
+        := Level >= Settings.Verbosity or else Is_Enabled (Topic);
+      Print_In_Tee_File        : constant Boolean
+        := Tee_Enabled and then
+            (Level >= Tee_Level or else Is_Enabled (Topic));
    begin
-      if Level >= Settings.Verbosity or else Is_Enabled (Topic) then
+      if Print_On_Standard_Output then
          Ada.Text_IO.Put (GNU_Prefix (File, Line) & Item);
+      end if;
+      if Print_In_Tee_File then
+         Ada.Text_IO.Put (Tee_File,
+                          GNU_Prefix (File, Line) & Item);
       end if;
    end Put;
 
    -- --------------------------------------------------------------------------
    procedure New_Line (Level : Print_Out_Level := Normal;
-                       Topic : Extended_Topics := None) is
+                       Topic : Extended_Topics := None)
+   is
+      Print_On_Standard_Output : constant Boolean
+        := Level >= Settings.Verbosity or else Is_Enabled (Topic);
+      Print_In_Tee_File        : constant Boolean
+        := Tee_Enabled and then
+            (Level >= Tee_Level or else Is_Enabled (Topic));
    begin
-      if Level >= Settings.Verbosity or else Is_Enabled (Topic) then
+      if Print_On_Standard_Output then
          Ada.Text_IO.New_Line;
+      end if;
+      if Print_In_Tee_File then
+         Ada.Text_IO.New_Line (Tee_File);
       end if;
    end New_Line;
 

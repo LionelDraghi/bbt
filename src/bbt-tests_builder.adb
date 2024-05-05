@@ -128,60 +128,36 @@ package body BBT.Tests_Builder is
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step : Step_Details) is
-      Cat : Extended_Step_Categories := Unknown;
+   procedure Add_Step (Step : Step_Type) is
    begin
       Put_Line ("Add_Step " & Step'Image,
-                -- & " Current_Background = " & Current_Background'Image
-                -- & "========================================",
                 Level => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Premature Step """ &
-           To_String (Step.Text) & """ declaration, should be in Scenario or Background";
+           To_String (Step.Step_String) & """ declaration, should be in Scenario or Background";
          -- Fixme : ajouter file location
-      end if;
-      --  Put_Line ("Add_Step : " & Step'Image,
-      --            Level => IO.Debug);
-      if Step.Cat = Unknown then
-         -- category is not defined by the line (for example a line starting
-         -- with "and"), and so the category will defined by the history
-         -- (if the previous line was "given" then the folowwine "and" line will
-         -- be in the same category).
-         if Current_Step_State = In_Given_Step then
-            Cat := Given_Step;
-         elsif Current_Step_State = In_When_Step then
-            Cat := When_Step;
-         elsif Current_Step_State = In_Then_Step then
-            Cat := Then_Step;
-         else
-            IO.Put_Line
-              ("Add_Step : unknown category, but not already in a step???",
-               Level => IO.Quiet);
-         end if;
-
-      else
-         Cat := Step.Cat;
-
       end if;
 
       case Step.Cat is
          when Unknown =>
-            null; --  impossible, but if ever, there is an error
-            --  message here above
+            if Step.Kind = Unknown then
+               IO.Put_Error ("No context to determine step kind of "
+                             & To_String (Step.Step_String));
+            end if;
 
          when Given_Step =>
             if Current_Step_State = In_When_Step then
-               IO.Put_Warning ("Given step """ & To_String (Step.Text) &
+               IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
                                  """ appears to late, after a ""When""");
             elsif Current_Step_State = In_Then_Step then
-               IO.Put_Warning ("Given step """ & To_String (Step.Text) &
+               IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
                                  """ appears to late, after a ""Then""");
             end if;
             Set_Step_State (In_Given_Step);
 
          when When_Step  =>
             if Current_Step_State = In_Then_Step then
-               IO.Put_Warning ("When step """ & To_String (Step.Text) &
+               IO.Put_Warning ("When step """ & To_String (Step.Step_String) &
                                  """ appears to late, after a ""Then""");
             end if;
             Set_Step_State (In_When_Step);
@@ -192,30 +168,9 @@ package body BBT.Tests_Builder is
       end case;
 
       case Current_Background is
-         when Doc =>
-            Last_Doc_Ref.Background.Step_List.Append
-              (Step_Type'(Step_String  => Step.Text,
-                          File_Content => Empty_Text,
-                          Details      => Step,
-                          Category     => Cat));
-            --  Put_Line ("******* to Doc",
-            --            Level => IO.Debug);
-         when Feature =>
-            Last_Feature_Ref.Background.Step_List.Append
-              (Step_Type'(Step_String  => Step.Text,
-                          File_Content => Empty_Text,
-                          Details      => Step,
-                          Category     => Cat));
-            --  Put_Line ("******* to Feature",
-            --            Level => IO.Debug);
-         when None =>
-            Last_Scenario_Ref.Step_List.Append
-              (Step_Type'(Step_String  => Step.Text,
-                          File_Content => Empty_Text,
-                          Details      => Step,
-                          Category     => Cat));
-            --  Put_Line ("******* to Last_Scenario.Step_list",
-            --            Level => IO.Debug);
+         when Doc     => Last_Doc_Ref.    Background.Step_List.Append (Step);
+         when Feature => Last_Feature_Ref.Background.Step_List.Append (Step);
+         when None    => Last_Scenario_Ref.Step_List.Append           (Step);
       end case;
 
    end Add_Step;

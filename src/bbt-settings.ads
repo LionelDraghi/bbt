@@ -66,6 +66,10 @@ private package BBT.Settings is
    function Run_Dir_Name return String;
 
    -- --------------------------------------------------------------------------
+   procedure Set_Output_File (File_Name : String);
+   function Get_Output_File_Name return String;
+
+   -- --------------------------------------------------------------------------
    type Print_Out_Level is (Debug, Verbose, Normal, Quiet);
    -- default: Normal messages are displayed, verbose messages are not
    --          displayed.

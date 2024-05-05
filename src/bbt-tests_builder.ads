@@ -11,7 +11,7 @@ package BBT.Tests_Builder is
    procedure Add_Feature    (Name : String);
    procedure Add_Scenario   (Name : String);
    procedure Add_Background (Name : String);
-   procedure Add_Step       (Step : Step_Details);
+   procedure Add_Step       (Step : Step_Type);
    procedure Add_Line       (Line : String);
    procedure Add_Code_Block;
 

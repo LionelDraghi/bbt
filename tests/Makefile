@@ -2,37 +2,21 @@ all: clean check
 
 check: ../bbt ../uut
 	# We run one by one scenario with test that should fail
-	@ - ln -s ../uut uut
-	# @ - ln -s ../bbt bbt
-
-	../bbt file_is_string.md > output.1
-	sdiff -sbB expected.1 output.1 || meld expected.1 output.1
-
-	rm config.ini
-	../bbt file_test_and_creation.md > output.2
-	sdiff -sbB expected.2 output.2 || meld expected.2 output.2
-
-	../bbt successfully.md > output.3
-	sdiff -sbB expected.3 output.3 || meld expected.3 output.3
-
-	../bbt contains_multiline.md > output.4
-	sdiff -sbB expected.4 output.4 || meld expected.4 output.4
-
-	rm config.ini
-	../bbt background.md > output.5
-	sdiff -sbB expected.5 output.5 || meld expected.5 output.5
-
-	../bbt run_or.md > output.6
-	sdiff -sbB expected.6 output.6 || meld expected.6 output.6
+	@ $(MAKE) check --directory=error_tests
+	@ echo Error Tests OK ==================
+	@ echo
 
 	# Then we run all scenarii that should pass
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
-	../bbt pass_tests/*.md
+	@ - ln -fs ../uut .
+	../bbt -o pass_tests.md pass_tests/*.md 
+	@ echo Pass Tests OK ===================
+	@ echo
 
-	@ echo Tests OK
 
 .PHONY : clean
 clean:
-	@ - rm output.* *.out config.ini pass_tests/*.out
-	
+	@ $(MAKE) -s clean --directory=error_tests
+	@ - rm -f config.ini pass_tests/*.out
+

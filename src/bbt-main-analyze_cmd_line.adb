@@ -47,6 +47,7 @@ begin
 
       declare
          Opt : constant String := Ada.Command_Line.Argument (Arg_Counter);
+         use Settings;
 
       begin
          -- Commands -----------------------------------------------------------
@@ -92,6 +93,12 @@ begin
          elsif Opt = "-bk" or Opt = "--bold_keywords" then
             Settings.With_Bold_Keywords := True;
 
+         elsif Opt = "-o" or Opt = "--output" then
+            Settings.Set_Output_File
+              (Ada.Command_Line.Argument (Arg_Counter + 1));
+            Next_Arg;
+            IO.Enable_Tee (Settings.Get_Output_File_Name);
+
             -- Debug command ---------------------------------------------------
          elsif Opt = "-lt" then
             -- undocumented option, list topics
@@ -102,7 +109,6 @@ begin
             declare
                Topic : constant String :=
                          Ada.Command_Line.Argument (Arg_Counter + 1);
-               use Settings;
             begin
                Settings.Enable_Topic (Topics'Value (Topic));
                IO.Put_Line ("Enabling trace on topic " & Topic,

@@ -41,10 +41,14 @@ begin
    Put_Line ("   -v   | --verbose");
    Put_Line ("   -q   | --quiet         : no message unless error,");
    Put_Line ("                            Warning are also ignored");
-   Put_Line ("   -wc  | --with-comments : when used with -e, list the full contents of");
-   Put_Line ("                            scenarii files");
-   Put_Line ("   -bk  | --bold-keywords : when used with -e, keywords are surrouded by ""**""");
-   Put_Line ("                            for a better markdown rendering");
+   --  Put_Line ("   -wc  | --with-comments : when used with -e, list the full contents of");
+   --  Put_Line ("                            scenarii files");
+   --  Put_Line ("   -bk  | --bold-keywords : when used with -e, keywords are surrouded by ""**""");
+   --  Put_Line ("                            for a better markdown rendering");
+   Put_Line ("   -o   | --output file.md : create a Markdown file with tests results");
+   Put_Line ("                             This file will contains the normal bbt output,");
+   Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
+   Put_Line ("                             for standard output.");
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

@@ -22,6 +22,10 @@ begin
    Put_Line ("   bbt files         : "
              & Scenario_Files.BBT_Files'Image);
    Put_Line ("   Initial directory : " & Initial_Directory);
+   if Get_Output_File_Name = "" then
+      Put_Line ("   Output file       : " & Get_Output_File_Name);
+   end if;
+   Put_Line ("   Template_Name     : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Explain)
              & " Explain");
@@ -39,7 +43,6 @@ begin
              & " Warnings_As_Errors");
    Put_Line ("   " & Checkbox (Settings.Create_Template)
              & " Create_Template");
-   Put_Line ("   Template_Name" & Template_Name);
    Put_Line ("   Trace enabled for topics:");
    for T in Settings.Topics loop
       Put_Line ("     " & Checkbox (Is_Enabled (T)) & " " & To_Lower (T'Image));

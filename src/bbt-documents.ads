@@ -1,7 +1,9 @@
-with Ada.Containers.Indefinite_Vectors;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Text_Utilities;                    use Text_Utilities;
 
-with Text_Utilities; use Text_Utilities;
+with Ada.Containers.Indefinite_Vectors;
+with Ada.Directories;
+with Ada.Strings.Text_Buffers;
+with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
 
 -- Defines the main bbt internal data structure, wich is essentialy a tree of
 -- Documents containing Features containing scenarii containing steps.
@@ -31,7 +33,7 @@ package BBT.Documents is
    subtype Step_Categories is Extended_Step_Categories range
      Extended_Step_Categories'Succ (Unknown) .. Extended_Step_Categories'Last;
 
-   type Step_Kind is
+   type Step_Action is
      (Unknown,
       Run_Cmd,                -- when I run `cmd`
       Successfully_Run_Cmd,   -- when i successfully run `cmd`
@@ -44,6 +46,7 @@ package BBT.Documents is
       --                      or then I get     `msg`
       --                      or then I get
       --                           followed by code fenced content
+      --********************* or then output is equal to file `file_name`
       Output_Contains,        -- then output contains `msg`
       --                      or then output contains
       --                           followed by code fenced content
@@ -55,29 +58,30 @@ package BBT.Documents is
       --                      or Then `config.ini` contains `--version`
       --                      --------------------------------------------------
       No_File,                -- Given there is no `config.ini` file
-      Existing_File,          -- Given then existing `config.ini` file
-      File_Creation);         -- Given the file `config.ini`
-                              -- followed by code fenced content
-
-   -- --------------------------------------------------------------------------
-   type Step_Details is record
-      Kind            : Step_Kind := Unknown;
-      Text            : Unbounded_String := Null_Unbounded_String;
-      Cat             : Extended_Step_Categories;
-      Cmd             : Unbounded_String := Null_Unbounded_String;
-      Expected_Output : Unbounded_String := Null_Unbounded_String;
-      File_Name       : Unbounded_String := Null_Unbounded_String;
-   end record;
-   Empty_Step_Details : constant Step_Details;
+      Existing_File,          -- Given the existing `config.ini` file
+      --                      or Given the existing directory `dir1`
+      File_Creation           -- Given the file `config.ini`
+      --                         followed by code fenced content
+      --                      or Given the directory `dir1`
+     );
+   -- NB : file is intended here in the broader sens, that is ordinary
+   --      file or directory.
 
    -- --------------------------------------------------------------------------
    type Step_Type is record
-      Step_String  : Unbounded_String;
-      File_Content : Text;
-      Details      : Step_Details;
-      Category     : Extended_Step_Categories := Unknown;
-   end record;
+      Cat             : Extended_Step_Categories  := Unknown;
+      Kind            : Step_Action                 := Unknown;
+      Step_String     : Unbounded_String          := Null_Unbounded_String;
+      Cmd             : Unbounded_String          := Null_Unbounded_String;
+      Expected_Output : Unbounded_String          := Null_Unbounded_String;
+      File_Name       : Unbounded_String          := Null_Unbounded_String;
+      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      File_Content    : Text                      := Empty_Text;
+   end record with Put_Image => Put_Image;
    Empty_Step : constant Step_Type;
+   procedure Put_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      S      :        Step_Type);
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type);
 
@@ -122,17 +126,17 @@ package BBT.Documents is
    procedure Put_Text (The_Text : Text);
 
    procedure Put_Step (Step               : Step_Type;
-                       With_Comments      : Boolean := False;
-                       With_Bold_Keywords : Boolean := False);
+                       With_Comments      : Boolean;
+                       With_Bold_Keywords : Boolean);
    procedure Put_Scenario (Scenario           : Scenario_Type;
-                           With_Comments      : Boolean := False;
-                           With_Bold_Keywords : Boolean := False);
+                           With_Comments      : Boolean;
+                           With_Bold_Keywords : Boolean);
    procedure Put_Feature (Feature            : Feature_Type;
-                          With_Comments      : Boolean := False;
-                          With_Bold_Keywords : Boolean := False);
+                          With_Comments      : Boolean;
+                          With_Bold_Keywords : Boolean);
    procedure Put_Document (Doc                : Document_Type;
-                           With_Comments      : Boolean := False;
-                           With_Bold_Keywords : Boolean := False);
+                           With_Comments      : Boolean;
+                           With_Bold_Keywords : Boolean);
    procedure Put_Document_List (Doc_List           : Documents_Lists.Vector;
                                 With_Comments      : Boolean;
                                 With_Bold_Keywords : Boolean);
@@ -142,29 +146,29 @@ package BBT.Documents is
    procedure Put_Run_Summary;
 
 private
-   Empty_Step_Details : constant Step_Details
-     := (Kind            => Unknown,
-         Text            => Null_Unbounded_String,
+   Empty_Step : constant Step_Type
+     := (Step_String     => Null_Unbounded_String,
+         File_Content    => Empty_Text,
+         Kind            => Unknown,
          Cat             => Unknown,
          Cmd             => Null_Unbounded_String,
          Expected_Output => Null_Unbounded_String,
-         File_Name       => Null_Unbounded_String);
-   Empty_Step : constant Step_Type
-     := (Step_String  => Null_Unbounded_String,
-         File_Content => Empty_Text,
-         Details      => Empty_Step_Details,
-         Category     => Unknown);
+         File_Name       => Null_Unbounded_String,
+         File_Type       => Ada.Directories.Ordinary_File);
+
    Empty_Scenario : constant Scenario_Type
      := (Name                  => Null_Unbounded_String,
          Step_List             => Step_Lists.Empty,
          Comment               => Empty_Text,
          Failed_Step_Count     |
          Successful_Step_Count => 0);
-   Empty_Feature : constant Feature_Type
+
+   Empty_Feature  : constant Feature_Type
      :=  (Name          => Null_Unbounded_String,
           Scenario_List => Scenario_Lists.Empty,
           Comment       => Empty_Text,
           Background    => Empty_Scenario);
+
    Empty_Document : constant Document_Type
      := (Name         => Null_Unbounded_String,
          Comment      => Empty_Text,

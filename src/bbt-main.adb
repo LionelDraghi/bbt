@@ -108,13 +108,15 @@ begin
       -- comment lines are filtered out
       Put_Document_List (BBT.Tests_Builder.The_Document_List.all,
                          With_Comments      => Settings.With_Comments,
-                         With_Bold_Keywords => True);
-   end if;
+                         With_Bold_Keywords => Settings.With_Bold_Keywords);
 
-   Tests_Runner.Run_All;
-   Put_Run_Summary;
-   -- "run" is the default action, so they should'nt be any other action
-   --  processed after that point. "run" apply
+   else
+      Tests_Runner.Run_All;
+      Put_Run_Summary;
+      -- "run" is the default action, so they should'nt be any other action
+      --  processed after that point. "run" apply
+
+   end if;
 
    if IO.Some_Error and not Settings.Ignore_Errors then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);

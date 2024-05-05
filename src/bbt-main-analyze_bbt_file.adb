@@ -68,11 +68,11 @@ begin
                                                           MDG_Lexer_Context);
 
       begin
-         Put_Line ("Processing Line = " & Line,         Level => Debug);
+         Put_Line ("Processing Line """ & Line & """", Level => Debug);
          -- Put_Line ("State           = " & State'Image,  Level => Verbose);
          -- Put_Line ("Attrib          = " & Attrib'Image, Level => Debug);
          -- New_Line (Level => Verbose);
-         Put_Line ("Lexer returns :" & Attrib'Image, Level => Debug);
+         Put_Line ("  Lexer returns " & Attrib'Image, Level => Debug);
 
          case Attrib.Kind is
             when Feature_Line =>
@@ -86,7 +86,7 @@ begin
 
             when Step_Line =>
                declare
-                  S : constant Step_Details :=
+                  S : constant Step_Type :=
                         Step_Lexer.Parse (Attrib.Step_Ln, Step_Lexer_Context);
                   -- We give context to the parser, so that it can understand
                   -- that a "And" line is in fact a "When" line thanks to the
@@ -118,12 +118,14 @@ begin
 exception
    when E : Missing_Scenario =>
       Put_Error (Ada.Exceptions.Exception_Message (E));
-      Put_Error ("Interrupting " & File_Name & " processing");
+      Put_Error ("Interrupting " & File_Name
+                  & " processing");
       Ada.Text_IO.Put_Line (GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
 
    when E : others =>
       Put_Error (Ada.Exceptions.Exception_Message (E));
-      Put_Error ("Unknown exception while processing " & File_Name);
+      Put_Error ("Unknown exception while processing " & File_Name
+                 & " line " & Line (Input)'Image);
       Ada.Text_IO.Put_Line (GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
 
 end Analyze_BBT_File;

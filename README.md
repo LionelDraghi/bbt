@@ -36,11 +36,16 @@ And because it is dedicated to black box testing, it stays simple and programmin
   - [Gerkhin language subset](#gerkhin-language-subset)
   - [bbt own DSL](#bbt-own-dsl)
 - [Syntax](#syntax)
+- [More advanced feature](#more-advanced-feature)
+- [Background](#background)
 - [Behavior](#behavior)
   - [Blank lines and Case sensitivity](#blank-lines-and-case-sensitivity)
   - [Execution](#execution)
-- [Help and comments](#help-and-comments)
+- [Tips](#tips)
+  - [Understanding what he doesn't understand](#understanding-what-he-doesnt-understand)
+  - [Comments](#comments)
 - [TDL](#tdl)
+- [Help and comments](#help-and-comments)
 
 ---------------------------------------------------------------------
 
@@ -114,6 +119,7 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
 - and
 - but
 - run
+- running
 - get
 - existing
 - no
@@ -123,7 +129,8 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
 - is
 - output
 - contains
-- Successfully
+- successfully
+- directory
 
 ## Syntax 
 
@@ -203,6 +210,35 @@ bbt keywords, including both the Gerkhin subset and bbt specifics keywords (gene
   
 ---------------------------------------------------------------------
 
+## More advanced feature
+
+## Background
+*bbt* supports a Background scenario, that is a special scenario that will be executed before the start of each following scenario.
+
+```md
+### Background :
+  - Given there is no `config.ini` file
+
+### Scenario : normal use cas
+  - When I run `uut create config.ini` 
+  - When I run `uut append "size=80x40" config.ini` 
+  - Then `config.ini` should contains `"size=80x40"`
+
+### Scenario : the last command does not meet expectation (test should fail)
+  - When I run `uut -v` 
+  - Then I should get no error
+```
+
+Note that in this case, the second scenario will fail because of the background (the first create a `config.ini` file), and would not fail without the background. 
+
+
+Background may appears at the beginning, at document level, or at feature level, or both.
+Before each scenario, the document background will be executed, and then the feature background.
+
+
+
+---------------------------------------------------------------------
+
 ## Behavior
 
 ### Blank lines and Case sensitivity
@@ -219,13 +255,37 @@ bbt scenarii are Markdown files. So if you don't specify the precise file names,
 To see what files, use `bbt --list_files`, possibly with `--recurse`.  
 (or the short form `bbt -lf -r`).
 
-But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, and that maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you which.
+But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you which.
 
 ---------------------------------------------------------------------
 
-## Help and comments
+## Tips
 
-Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
+### Understanding what he doesn't understand
+
+Error messages provided by the lexer are not bullet proof (and it is likely that no special effort will be put on improving error messages in the future...).
+
+For example, if you forget backticks on dir1 in :  
+``- Given the directory dir1 ``  
+It wont tells you "didn't you forget to "code fence" dir1?".  
+It will just says :  
+`Unrecognized step "Given the directory dir1"`
+
+A good reflex in such a case is to ask *bbt* what did he understand from the test file, thanks to the -e (--explain) option.  
+It will tell you something like :  
+`GIVEN_STEP, UNKNOWN, Text = "Given the directory dir1"`  
+meaning that the only thing he was able to conclude is that it's "Given" step.  
+On the the adjusted version :  
+``GIVEN_STEP, FILE_CREATION, Text = "Given the directory `dir1`", File_Name = "dir1"``  
+you see that the (internal) action field has changed from UNKNOWN to FILE_CREATION, and that the File_Name field has now a value.
+
+### Comments
+
+Because the lexer is not able to make a difference between bullet lines in steps definition or bullet lines in normal text, there is limitations on where you can 
+use it.
+- *bbt* will consider bullet line starting with `-` as comment before the first "scenario" header. Don't use it after that.
+- *bbt* will also consider line starting with the other official bullet marker (`*`and`+`) as comment, and **not steps line marker**, so that you can use those markers where you want without interfering with the lexer.
+  
 
 ---------------------------------------------------------------------
 
@@ -247,8 +307,12 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
     
 ---------------------------------------------------------------------
 
+## Help and comments
+
+Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
+
 > [!NOTE] 
-> bbt objective is command line tools testing.  
-> For GUI testing, or complex configurations, move on, 
-and don't expect to find something as simple as bbt! :-)
+> *bbt* objective is command line tools testing.  
+> For GUI testing, or complex configurations, there are other solutions.  
+Just don't expect to find something as simple as bbt! :-)
 

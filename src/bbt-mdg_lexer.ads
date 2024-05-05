@@ -1,4 +1,5 @@
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Text_Buffers;
+with Ada.Strings.Unbounded;    use Ada.Strings.Unbounded;
 
 package BBT.MDG_Lexer is
 
@@ -44,7 +45,11 @@ package BBT.MDG_Lexer is
             null;
 
       end case;
-   end record;
+   end record with Put_Image => Put_Image;
+
+   procedure Put_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      A      :        Line_Attributes);
 
    type Parsing_Context is limited private;
 
@@ -57,6 +62,7 @@ package BBT.MDG_Lexer is
 private
    type Parsing_Context is record
       In_Code_Fence : Boolean;
+      In_Scenario   : Boolean;
    end record;
 
 end BBT.MDG_Lexer;

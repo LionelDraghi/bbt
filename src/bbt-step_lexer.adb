@@ -3,6 +3,7 @@ with BBT.Settings;
 
 with Ada.Characters.Latin_1;
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Directories;                   use Ada.Directories;
 with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
 with Ada.Text_IO;
@@ -53,7 +54,6 @@ package body BBT.Step_Lexer is
       Cursor         : Natural := 1;
       Line_Finished  : Boolean := False;
       Backtick       : constant Character := '`';
-
       The_Delimiters : constant Ada.Strings.Maps.Character_Set
         := Ada.Strings.Maps.To_Set (" " & Ada.Characters.Latin_1.HT);
 
@@ -77,7 +77,9 @@ package body BBT.Step_Lexer is
             "is",
             "output",
             "contains",
-            "successfully"
+            "successfully",
+            "directory"
+            -- "file"
            ];
       -- NB : all keywords must be in lower case!
       -- ----------------------------------------
@@ -144,8 +146,8 @@ package body BBT.Step_Lexer is
                               From => First + 1);
                if Last = 0 then
                   IO.Put_Line ("Missing closing backtick in """ &
-                                  Line.all (Cursor .. Line'Last),
-                                Level => IO.Quiet);
+                                 Line.all (Cursor .. Line'Last),
+                               Level => IO.Quiet);
                   Finish_Line;
                else
                   -- Code span -------------------------------------------------
@@ -216,10 +218,10 @@ package body BBT.Step_Lexer is
 
    -- --------------------------------------------------------------------------
    function Parse (Line    : Unbounded_String;
-                   Context : Extended_Step_Categories) return Step_Details
+                   Context : Extended_Step_Categories) return Step_Type
    is
       First_Token      : Boolean                  := True;
-      The_Kind         : Step_Kind                := Unknown;
+      The_Kind         : Step_Action                := Unknown;
       Cat              : Extended_Step_Categories := Unknown;
       Cmd_To_Run,
       File_Name,
@@ -227,6 +229,10 @@ package body BBT.Step_Lexer is
       Output_Met       : Boolean := False;
       No_Met           : Boolean := False;
       Is_Met           : Boolean := False;
+      -- File_Met         : Boolean := False;
+      -- Directory_Met    : Boolean := False;
+      File_Type        : File_Kind := Ordinary_File;
+      -- Existing_Met     : Boolean := False;
 
    begin
       Initialize_Cursor;
@@ -301,6 +307,9 @@ package body BBT.Step_Lexer is
                      elsif Lower_Keyword = "successfully" then
                         The_Kind := Successfully_Run_Cmd;
 
+                     --  elsif Lower_Keyword = "file" then
+                     --     File_Met := True;
+
                      elsif Lower_Keyword = "error" then
                         -- Put_Line ("   error");
                         if No_Met then
@@ -322,7 +331,12 @@ package body BBT.Step_Lexer is
                         end if;
 
                      elsif Lower_Keyword = "existing" then
-                        The_Kind := Existing_File;
+                        -- Existing_Met := True;
+                        The_Kind  := Existing_File;
+                        File_Type := Ordinary_File;
+
+                     elsif Lower_Keyword = "directory" then
+                        File_Type := Directory;
 
                      end if;
 
@@ -333,6 +347,14 @@ package body BBT.Step_Lexer is
                   null;
 
                when Code_Span =>
+
+                  --  if File_Met then
+                  --     File_Name := To_Unbounded_String (Tok);
+                  --     File_Met := False
+                  --     -- reset because we could have "file" twice :
+                  --     -- Then file `foo` is equal to file `bar`
+                  --  end if;
+
                   case The_Kind is
                      when Run_Cmd              |
                           Successfully_Run_Cmd =>
@@ -342,9 +364,9 @@ package body BBT.Step_Lexer is
                           File_Is         |
                           Output_Contains |
                           Output_Is       =>
-                     -- Get keywords + code span means that the code span
-                     -- is the message expected
-                     String_To_Find := To_Unbounded_String (Tok);
+                        -- Get keywords + code span means that the code span
+                        -- is the message expected
+                        String_To_Find := To_Unbounded_String (Tok);
 
                      when Unknown =>
                         -- If it appears at the beginning, so that Kind is still
@@ -354,22 +376,12 @@ package body BBT.Step_Lexer is
                         --           ```
                         --           param=true
                         --           ```
-                        -- There is no keyword at all
-                        The_Kind := File_Creation;
+                        The_Kind  := File_Creation;
+                        File_Type := Ordinary_File;
                         File_Name := To_Unbounded_String (Tok);
 
-                     when No_File =>
-                        File_Name := To_Unbounded_String (Tok);
-
-                     when Existing_File =>
-                        -- If it appears at the beginning, so that Kind is still
-                        -- unknown, it should be the file name that will be
-                        -- used later in the line.
-                        -- Example : Given `config.ini`
-                        --           ```
-                        --           param=true
-                        --           ```
-                        -- There is no keyword at all
+                     when No_File       |
+                          Existing_File =>
                         File_Name := To_Unbounded_String (Tok);
 
                      when No_Error_Return_Code |
@@ -382,9 +394,11 @@ package body BBT.Step_Lexer is
                         -- Impossible, we may only conclude that it's a
                         -- File_Creation at the end of the line, so there
                         -- can't be a new token in this state.
-                        IO.Put_Warning
-                          ("Processing token " & Tok
-                           & " while already in File_Creation state");
+                        -- UNTIL implementing multiples files or directory
+                        -- in the same Given step
+                        IO.Put_Error
+                          ("Multiple files or directories creation not yet "
+                           & " implemented.");
 
                   end case;
 
@@ -401,89 +415,91 @@ package body BBT.Step_Lexer is
 
       case The_Kind is
          when Run_Cmd =>
-            return Step_Details'(Kind            => Run_Cmd,
-                                 Text            => Line,
-                                 Cat             => Cat,
-                                 Cmd             => Cmd_To_Run,
-                                 Expected_Output => Null_Unbounded_String,
-                                 File_Name       => Null_Unbounded_String);
+            return (Kind           => Run_Cmd,
+                    Step_String    => Line,
+                    Cat            => Cat,
+                    Cmd            => Cmd_To_Run,
+                    others         => <>);
+
          when Successfully_Run_Cmd =>
-            return Step_Details'(Kind            => Successfully_Run_Cmd,
-                                 Text            => Line,
-                                 Cat             => Cat,
-                                 Cmd             => Cmd_To_Run,
-                                 Expected_Output => Null_Unbounded_String,
-                                 File_Name       => Null_Unbounded_String);
+            return (Kind            => Successfully_Run_Cmd,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    Cmd             => Cmd_To_Run,
+                    others          => <>);
+
          when Error_Return_Code =>
-            return Step_Details'(Kind            => Error_Return_Code,
-                                 Text            => Line,
-                                 Cat             => Cat,
-                                 Cmd             => Null_Unbounded_String,
-                                 Expected_Output => Null_Unbounded_String,
-                                 File_Name       => Null_Unbounded_String);
+            return (Kind            => Error_Return_Code,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    others          => <>);
+
          when No_Error_Return_Code =>
-            return Step_Details'(Kind            => No_Error_Return_Code,
-                                 Text            => Line,
-                                 Cat             => Cat,
-                                 Cmd             => Null_Unbounded_String,
-                                 Expected_Output => Null_Unbounded_String,
-                                 File_Name       => Null_Unbounded_String);
+            return (Kind            => No_Error_Return_Code,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    others          => <>);
+
          when Output_Is =>
-            return Step_Details'(Kind             => Output_Is,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => String_To_Find,
-                                 File_Name        => Null_Unbounded_String);
+            return (Kind            => Output_Is,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    Expected_Output => String_To_Find,
+                    File_Name       => File_Name,
+                    others          => <>);
+
          when Output_Contains =>
-            return Step_Details'(Kind             => Output_Contains,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => String_To_Find,
-                                 File_Name        => File_Name);
+            return (Kind            => Output_Contains,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    Expected_Output => String_To_Find,
+                    File_Name       => File_Name,
+                    others          => <>);
+
          when File_Is =>
-            return Step_Details'(Kind             => File_Is,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => String_To_Find,
-                                 File_Name        => File_Name);
+            return (Kind            => File_Is,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    Expected_Output => String_To_Find,
+                    File_Name       => File_Name,
+                    others          => <>);
+
          when File_Contains =>
-            return Step_Details'(Kind             => File_Contains,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => String_To_Find,
-                                 File_Name        => File_Name);
+            return (Kind            => File_Contains,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    Expected_Output => String_To_Find,
+                    File_Name       => File_Name,
+                    others          => <>);
+
          when No_File =>
-            return Step_Details'(Kind             => No_File,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => File_Name);
+            return (Kind            => No_File,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    File_Name       => File_Name,
+                    others          => <>);
+
          when Existing_File =>
-            return Step_Details'(Kind             => Existing_File,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => File_Name);
+            return (Kind            => Existing_File,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    File_Name       => File_Name,
+                    File_Type       => File_Type,
+                    others          => <>);
+
          when File_Creation =>
-            return Step_Details'(Kind             => File_Creation,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => File_Name);
+            return (Kind            => File_Creation,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    File_Name       => File_Name,
+                    File_Type       => File_Type,
+                    others          => <>);
+
          when Unknown =>
-            return Step_Details'(Kind             => Unknown,
-                                 Text             => Line,
-                                 Cat              => Cat,
-                                 Cmd              => Null_Unbounded_String,
-                                 Expected_Output  => Null_Unbounded_String,
-                                 File_Name        => Null_Unbounded_String);
+            return (Kind            => Unknown,
+                    Step_String     => Line,
+                    Cat             => Cat,
+                    others          => <>);
       end case;
 
    end Parse;

@@ -2,6 +2,8 @@ with BBT.IO;           use BBT.IO;
 with BBT.Settings;
 with BBT.Tests_Builder;
 
+with Ada.Directories;   use Ada.Directories;
+
 package body BBT.Documents is
 
 
@@ -17,6 +19,34 @@ package body BBT.Documents is
    function To_Bold (S : Unbounded_String;
                      Bold : Boolean) return String is
      (To_Bold (To_String (S), Bold));
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      S      :        Step_Type)
+   is
+      procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
+      begin
+         if S /= Null_Unbounded_String then
+            Output.Put (Prefix & " " & S'Image);
+         end if;
+      end Put_If_Not_Null;
+   begin
+      -- Output.Put (S.Details'Image & ", ");
+      Output.Put (S.Cat'Image & ", ");
+      Output.Put (S.Kind'Image);
+      Put_If_Not_Null (", Text =", S.Step_String);
+      Put_If_Not_Null (", Cmd =", S.Cmd);
+      Put_If_Not_Null (", Expected_Output =", S.Expected_Output);
+      if S.File_Type = Directory then
+         Put_If_Not_Null (", Dir name =", S.File_Name);
+      else
+         Put_If_Not_Null (", File name =", S.File_Name);
+      end if;
+      if not S.File_Content.Is_Empty then
+         Output.Put (S.File_Content'Image);
+      end if;
+   end Put_Image;
 
    -- --------------------------------------------------------------------------
    procedure Add_Fail (To : in out Scenario_Type) is
@@ -38,48 +68,25 @@ package body BBT.Documents is
    end Put_Text;
 
    -- --------------------------------------------------------------------------
-   --  procedure Put_File_Content (Text : Texts.Vector) is
-   --     Pref : constant String := Prefix (Current_Indent_Level);
-   --  begin
-   --     if not Text.Is_Empty then
-   --        Put_Line (Pref & "```");
-   --        Put_Text (Text);
-   --        Put_Line (Pref & "```");
-   --     end if;
-   --  end Put_File_Content;
-
-    --  -- --------------------------------------------------------------------------
    procedure Put_Step (Step               : Step_Type;
-                       With_Comments      : Boolean := False;
-                       With_Bold_Keywords : Boolean := False) is
+                       With_Comments      : Boolean;
+                       With_Bold_Keywords : Boolean) is
       pragma Unreferenced (With_Comments, With_Bold_Keywords);
+      Pref : constant String := Prefix (1);
    begin
-      Current_Indent_Level := 1;
-      declare
-         Pref : constant String := Prefix (Current_Indent_Level);
-      begin
-         --** Put_Line (Pref & S.Kind'Image);
-         Put_Line (Pref & "- " & To_String (Step.Step_String));
-         if not Texts.Is_Empty (Step.File_Content) then
-            Put_Line ("```");
-            for L of Step.File_Content loop
-               Put_Line (Pref & "  " & L);
-            end loop;
-            Put_Line ("```");
-            New_Line;
-         end if;
-      end;
+      Put_Line (Pref & Step'Image);
    end Put_Step;
 
    -- --------------------------------------------------------------------------
    procedure Put_Scenario (Scenario           : Scenario_Type;
-                           With_Comments      : Boolean := False;
-                           With_Bold_Keywords : Boolean := False) is
+                           With_Comments      : Boolean;
+                           With_Bold_Keywords : Boolean) is
    begin
       Current_Indent_Level := 1;
       declare
          Pref : constant String := Prefix (Current_Indent_Level) & "### ";
       begin
+         New_Line;
          if With_Bold_Keywords then
             Put_Line (Pref & To_Bold ("Scenario", With_Bold_Keywords)
                       & ": " &  To_String (Scenario.Name));
@@ -87,21 +94,21 @@ package body BBT.Documents is
             Put_Line (Pref & "Scenario: " & To_String (Scenario.Name));
          end if;
          New_Line;
-
+         if With_Comments then
+            Put_Text (Scenario.Comment);
+            New_Line;
+         end if;
          for Step of Scenario.Step_List loop
             Put_Step (Step, With_Comments, With_Bold_Keywords);
          end loop;
 
-         if With_Comments then
-            Put_Text (Scenario.Comment);
-         end if;
       end;
    end Put_Scenario;
 
    -- --------------------------------------------------------------------------
    procedure Put_Feature (Feature            : Feature_Type;
-                          With_Comments      : Boolean := False;
-                          With_Bold_Keywords : Boolean := False) is
+                          With_Comments      : Boolean;
+                          With_Bold_Keywords : Boolean) is
       Pref : constant String := "## ";
    begin
       Current_Indent_Level := 1;
@@ -112,35 +119,36 @@ package body BBT.Documents is
          Put_Line (Pref & "Feature" & ": " & To_String (Feature.Name));
       end if;
       New_Line;
+      if With_Comments then
+         Put_Text (Feature.Comment);
+         New_Line;
+      end if;
       for Scenario of Feature.Scenario_List loop
          Put_Scenario (Scenario, With_Comments, With_Bold_Keywords);
       end loop;
-      if With_Comments then
-         Put_Text (Feature.Comment);
-      end if;
    end Put_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Put_Document (Doc                : Document_Type;
-                           With_Comments      : Boolean := False;
-                           With_Bold_Keywords : Boolean := False) is
+                           With_Comments      : Boolean;
+                           With_Bold_Keywords : Boolean) is
    begin
       Current_Indent_Level := 1;
       Put_Line ("# " & To_Bold (Doc.Name, With_Bold_Keywords));
       New_Line;
+      if With_Comments then
+         Put_Text (Doc.Comment);
+         New_Line;
+      end if;
       for Feature of Doc.Feature_List loop
          Put_Feature (Feature, With_Comments, With_Bold_Keywords);
       end loop;
-      if With_Comments then
-         Put_Text (Doc.Comment);
-      end if;
    end Put_Document;
 
    -- --------------------------------------------------------------------------
    procedure Put_Document_List (Doc_List           : Documents_Lists.Vector;
                                 With_Comments      : Boolean;
                                 With_Bold_Keywords : Boolean) is
-      pragma Unreferenced (With_Comments, With_Bold_Keywords);
    begin
       Put_Line ("**Document list:**");
       New_Line;
@@ -148,8 +156,8 @@ package body BBT.Documents is
       New_Line;
       for Doc of Doc_List loop
          Put_Document (Doc,
-                       With_Comments      => Settings.With_Comments,
-                       With_Bold_Keywords => Settings.With_Bold_Keywords);
+                       With_Comments      => With_Comments,
+                       With_Bold_Keywords => With_Bold_Keywords);
       end loop;
    end Put_Document_List;
 
@@ -181,13 +189,14 @@ package body BBT.Documents is
          end loop;
       end loop;
       New_Line;
-      Put_Line ("Failed     tests = " & Test_Result_Counts (Failed)'Image);
-      Put_Line ("Successful tests = " & Test_Result_Counts (Successful)'Image);
-      Put_Line ("Empty      tests = " & Test_Result_Counts (Empty)'Image);
+      Put_Line ("------------------------------------------------");
+      Put_Line ("- Failed     tests = " & Test_Result_Counts (Failed)'Image);
+      Put_Line ("- Successful tests = " & Test_Result_Counts (Successful)'Image);
+      Put_Line ("- Empty      tests = " & Test_Result_Counts (Empty)'Image);
       if Settings.Is_Authorised (Verbose) then
          New_Line;
-         Put_Line ("Failed     steps = " & Failed_Step_Count'Image);
-         Put_Line ("Successful steps = " & Successful_Step_Count'Image);
+         Put_Line ("- Failed     steps = " & Failed_Step_Count'Image);
+         Put_Line ("- Successful steps = " & Successful_Step_Count'Image);
       end if;
    end Put_Run_Summary;
 

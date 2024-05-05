@@ -67,6 +67,15 @@ private package BBT.IO is
                             Line : Integer := 0);
 
    -- --------------------------------------------------------------------------
+   procedure Enable_Tee (File_Name : String;
+                         Level     : Print_Out_Level := Normal);
+   -- Enable the duplication af all Put/Put_Line/etc. in a file.
+   -- The file should contains exactly what would be the standard output with
+   -- the same Level settings.
+   -- This is a simple way to have (for example) a terse standard output,
+   -- and a verbose log file.
+
+   -- --------------------------------------------------------------------------
    -- Error_Count and Warning_Count return the number of call to Put_Error
    -- and Put_Warning.
    function Error_Count   return Natural;
