@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Gherkin markdown format test runner"
-version = "0.0.0"
+version = "0.0.1-dev"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]

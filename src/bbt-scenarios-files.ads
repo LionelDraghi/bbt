@@ -19,7 +19,10 @@ with BBT.Settings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
 
-private package BBT.Scenario_Files is
+package BBT.Scenarios.Files is
+-- Provide services related to the Scenario files list, that is mainly to :
+-- - identify (possibly recursively) Scenario files in a directory;
+-- - manually add files to the list.
 
    -- --------------------------------------------------------------------------
    type File_Name is new Unbounded_String;
@@ -34,11 +37,14 @@ private package BBT.Scenario_Files is
    procedure Append_File (File_Name : String);
 
    -- --------------------------------------------------------------------------
-   procedure Find_BBT_Files (Recursive   : Boolean;
-                             Start_In    : String := "./";
-                             Remove_Root : String :=
-                               Settings.Initial_Directory);
+   procedure Find_BBT_Files
+     (Recursive   : Boolean;
+      Start_In    : String := "./";
+      Remove_Root : String := Settings.Initial_Directory);
    function No_BBT_File return Boolean;
    function BBT_Files return File_List.Vector;
 
-end BBT.Scenario_Files;
+   -- --------------------------------------------------------------------------
+   procedure Analyze_MDG_File (File_Name : String);
+
+end BBT.Scenarios.Files;

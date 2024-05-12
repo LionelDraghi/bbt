@@ -1,10 +1,17 @@
-    NOK : Expected file "config.ini" doesn't exists  
-  - [ ] [a required file does not exist (should fail)](file_test_and_creation.md) fails  
-    NOK : Expected file "config.ini" doesn't exists  
-  - [ ] [same as previous, but with the keyword file before the file name (should fail)](file_test_and_creation.md) fails  
+
+Running file "file_test_and_creation.md"  
+
+  - [X] [a required file does not exist](file_test_and_creation.md) pass  
+
+  - [X] [same as previous, but with the keyword file before the file name](file_test_and_creation.md) pass  
+
   - [X] [the required file is created](file_test_and_creation.md) pass  
 
+*** NOK : Given there is no `config.ini` file   
+file_test_and_creation.md:38:file "config.ini" shouldn't exists  
+  - [ ] ["Given there is no", but there is! (should fail)](file_test_and_creation.md) fails  
+
 ------------------------------------------------
-- Failed     tests =  2
-- Successful tests =  1
+- Failed     tests =  1
+- Successful tests =  3
 - Empty      tests =  0

@@ -14,25 +14,90 @@
 -- limitations under the License.
 -- -----------------------------------------------------------------------------
 
+with Ada.Strings.Text_Buffers;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;              use Ada.Text_IO;
 with Ada.Calendar;
-
-with BBT.Settings; use BBT.Settings;
 
 private package BBT.IO is
 
-   -- --------------------------------------------------------------------------
-   procedure Put_Debug_Line (Msg    : String;
-                             Debug  : Boolean;
-                             Prefix : String;
-                             File   : String  := "";
-                             Line   : Integer := 0);
+   --  -- --------------------------------------------------------------------------
+   --  procedure Put_Debug_Line (Msg    : String;
+   --                            Debug  : Boolean;
+   --                            Prefix : String;
+   --                            File   : String  := "";
+   --                            Line   : Integer := 0);
 
    -- --------------------------------------------------------------------------
-   subtype Print_Out_Level is Settings.Print_Out_Level;
-   Debug   : constant Print_Out_Level := Settings.Debug;
-   Verbose : constant Print_Out_Level := Settings.Verbose;
-   Normal  : constant Print_Out_Level := Settings.Normal;
-   Quiet   : constant Print_Out_Level := Settings.Quiet;
+   type Verbosity_Levels is (Quiet, Normal, Verbose, Debug);
+   -- NB : order is significant, X is more verbose thant X'Pred!
+   -- default: Normal messages are displayed, verbose messages are not
+   --          displayed.
+   -- quiet:   Neither normal messages nor verbose messages are displayed.
+   --          This mode can be achieved using option --quiet.
+   -- verbose: Both normal messages and verbose messages are displayed.
+   --          This mode can be achieved using option --verbose.
+   function Is_Authorized (Verbosity : Verbosity_Levels) return Boolean;
+   -- return True if Verbosity is >= to current setting.
+
+   function Current_Verbosity return Verbosity_Levels;
+   procedure Set_Verbosity (To : Verbosity_Levels);
+   function Debug_Mode   return Boolean is (Current_Verbosity = Debug);
+   function Verbose_Mode return Boolean is (Current_Verbosity = Verbose);
+   function Normal_Mode  return Boolean is (Current_Verbosity = Normal);
+   function Quiet_Mode   return Boolean is (Current_Verbosity = Quiet);
+
+   -- --------------------------------------------------------------------------
+   -- Observability! (kind of a tentative of...)
+   type Extended_Topics is (None,
+                            Spawn,
+                            Lexer,
+                            BBT_Files,
+                            Tests_Builder,
+                            Step_Lexer,
+                            Runner);
+   subtype Topics is Extended_Topics range
+     Extended_Topics'Succ (None) .. Extended_Topics'Last;
+   --  None is the default parameter for IO operation, but is not in Topics
+   --  range, used when setting what should be printed.
+   procedure Enable_Topic (Topic : Topics);
+   function Is_Enabled (Topic : Extended_Topics) return Boolean;
+   -- return always false for None
+
+   -- --------------------------------------------------------------------------
+   type Location_Type is private with Put_Image => Location_GNU_Image;
+   procedure Location_GNU_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Value  : Location_Type);
+   No_Location : constant Location_Type;
+
+   -- --------------------------------------------------------------------------
+   function Image (Loc : Location_Type) return String;
+   --  Purpose:
+   --    returns a source/line/column prefix to messages compatible with
+   --    GNU Standard "sourcefile:lineno:column: message" format.
+   --    (refer to <https://www.gnu.org/prep/standards/html_node/Errors.html>),
+   --
+   --    That is :
+   --       > "sourcefile:lineno:"
+   --    if column = 0 or 1,
+   --    or
+   --       > "sourcefile:lineno.column:"
+   --    otherwise.
+
+   -- --------------------------------------------------------------------------
+   function Location (Name   : String;
+                      Line   : Positive_Count;
+                      Column : Ada.Text_IO.Count := 0) return Location_Type;
+   -- When manual adjustment is needed.
+
+   function Location (File : Ada.Text_IO.File_Type) return Location_Type;
+   -- Automatic Line/Col through Text_IO calls
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Reference_Directory (Dir_Name : String);
+   --  Register a path that will be removed from Image, to avoid long absolute
+   --  Paths.
 
    -- --------------------------------------------------------------------------
    -- Mimics eponym Text_IO functions, except that :
@@ -42,36 +107,49 @@ private package BBT.IO is
    --     unless --verbose is set on command line.
    --   - if a Topic is given, and this topic is enable, previous parameter
    --     are ignored and the Item is printed.
-   procedure Put_Line (Item  : String;
-                       File  : String  := "";
-                       Line  : Integer := 0;
-                       Level : Print_Out_Level := Normal;
-                       Topic : Extended_Topics := None);
-   procedure Put (Item  : String;
-                  File  : String  := "";
-                  Line  : Integer := 0;
-                  Level : Print_Out_Level := Normal;
-                  Topic : Extended_Topics := None);
-   procedure New_Line (Level : Print_Out_Level := Normal;
-                       Topic : Extended_Topics := None);
+   procedure Put_Line (Item      : String;
+                       File      : String           := "";
+                       Line      : Ada.Text_IO.Count;
+                       Verbosity : Verbosity_Levels := Normal;
+                       Topic     : Extended_Topics  := None);
+   procedure Put (Item      : String;
+                  File      : String           := "";
+                  Line      : Ada.Text_IO.Count;
+                  Verbosity : Verbosity_Levels := Normal;
+                  Topic     : Extended_Topics  := None);
+   procedure New_Line (Verbosity : Verbosity_Levels := Normal;
+                       Topic     : Extended_Topics  := None);
+   procedure Put_Line (Item      : String;
+                       Location  : Location_Type := No_Location;
+                       Verbosity : Verbosity_Levels := Normal;
+                       Topic     : Extended_Topics  := None);
+   procedure Put (Item      : String;
+                  Location  : Location_Type := No_Location;
+                  Verbosity : Verbosity_Levels := Normal;
+                  Topic     : Extended_Topics  := None);
 
    -- --------------------------------------------------------------------------
    procedure Put_Warning   (Msg  : String;
-                            File : String  := "";
-                            Line : Integer := 0);
+                            File : String := "";
+                            Line :  Ada.Text_IO.Count  := 0);
    procedure Put_Error     (Msg  : String;
-                            File : String  := "";
-                            Line : Integer := 0);
+                            File : String := "";
+                            Line :  Ada.Text_IO.Count  := 0);
    procedure Put_Exception (Msg  : String;
-                            File : String  := "";
-                            Line : Integer := 0);
+                            File : String := "";
+                            Line :  Ada.Text_IO.Count  := 0);
+   procedure Put_Warning   (Msg      : String;
+                            Location : Location_Type);
+   procedure Put_Error     (Msg      : String;
+                            Location : Location_Type);
+   procedure Put_Exception (Msg      : String;
+                            Location : Location_Type);
 
    -- --------------------------------------------------------------------------
    procedure Enable_Tee (File_Name : String;
-                         Level     : Print_Out_Level := Normal);
+                         Verbosity : Verbosity_Levels := Normal);
    -- Enable the duplication af all Put/Put_Line/etc. in a file.
-   -- The file should contains exactly what would be the standard output with
-   -- the same Level settings.
+   -- The Verbosity may be different for standard output and for the file.
    -- This is a simple way to have (for example) a terse standard output,
    -- and a verbose log file.
 
@@ -82,11 +160,9 @@ private package BBT.IO is
    function Warning_Count return Natural;
 
    -- --------------------------------------------------------------------------
-   -- Some_Error return True if some error occured, or if some Warning
-   -- occured and option to treat warning as error is set.
-   function Some_Error return Boolean is
-     (Error_Count /= 0 or
-        (Settings.Warnings_As_Errors and Warning_Count /= 0));
+   -- Some_Error return True if some error occurred, or if some Warning
+   -- occurred and option to treat warning as error is set.
+   function Some_Error return Boolean;
 
    -- --------------------------------------------------------------------------
    function Image (Time : Ada.Calendar.Time) return String;
@@ -98,5 +174,22 @@ private package BBT.IO is
    -- 2. Time_Zone             => Ada.Calendar.Time_Zones.UTC_Time_Offset
    --    to get the same file time tag printed in local time that the user
    --     would see by making a simple ls -l
+
+   -- --------------------------------------------------------------------------
+   use Ada.Strings.Unbounded;
+   type File_Name is new Unbounded_String;
+   function "+" (Name : File_Name) return String is (To_String (Name));
+   function "+" (Name : String) return File_Name is
+     (File_Name'(To_Unbounded_String (Name)));
+   No_Name : constant File_Name := +"";
+
+private
+   type Location_Type is record
+      File   : File_Name         := No_Name;
+      Line   : Ada.Text_IO.Count := 1;
+      Column : Ada.Text_IO.Count := 0;
+   end record;
+
+   No_Location : constant Location_Type := (No_Name, 1, 0);
 
 end BBT.IO;

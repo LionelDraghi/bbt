@@ -1,12 +1,10 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with BBT.IO;
-with BBT.Settings; -- use BBT.IO;
 
 with Text_Utilities; use Text_Utilities;
 
-
-package body BBT.Tests_Builder is
+package body BBT.Tests.Builder is
 
    The_Doc_List : aliased Documents_Lists.Vector;
 
@@ -42,18 +40,8 @@ package body BBT.Tests_Builder is
 
    use FSM;
 
-
    -- --------------------------------------------------------------------------
-   -- IO renamed with local Topic
-   procedure Put_Line
-     (Item  : String;
-      File  : String  := "";
-      Line  : Integer := 0;
-      Level : BBT.Settings.Print_Out_Level := BBT.IO.Normal;
-      Topic : Settings.Extended_Topics := Settings.Builder) renames IO.Put_Line;
-
-   -- --------------------------------------------------------------------------
-   -- function Last_Doc      return Documents_Lists.Cursor is (The_Doc_List.Last);
+   -- function Last_Doc return Documents_Lists.Cursor is (The_Doc_List.Last);
    function Last_Doc_Ref return Documents_Lists.Reference_Type is
      (The_Doc_List.Reference (The_Doc_List.Last));
 
@@ -72,7 +60,7 @@ package body BBT.Tests_Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      --  Put_Line ("Add_Document " & Name'Image, Level => IO.Debug);
+      --  Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
       The_Doc_List.Append ((Empty_Document with delta
                              Name => To_Unbounded_String (Name)));
       Set_State (In_Document);
@@ -80,37 +68,38 @@ package body BBT.Tests_Builder is
    end Add_Document;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Feature (Name : String) is
+   procedure Add_Feature (Name : String;    Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Feature " & Name'Image, Level => IO.Debug);
+      --  Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
       Last_Doc_Ref.Feature_List.Append
-        ((Empty_Feature with delta Name => To_Unbounded_String (Name)));
+        ((Empty_Feature with delta
+           Name => To_Unbounded_String (Name), Location => Loc));
       Set_State (In_Feature);
       Set_Background (Feature);
    end Add_Feature;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Scenario (Name : String) is
+   procedure Add_Scenario (Name : String;    Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Scenario " & Name'Image, Level => IO.Debug);
+      --  Put_Line ("Add_Scenario " & Name'Image, Verbosity => IO.Debug);
 
       -- We accept scenario without Feature
       if Last_Doc_Ref.Feature_List.Is_Empty then
-         Add_Feature (""); -- no name feature
+         Add_Feature ("", Loc); -- no name feature
       end if;
 
       Last_Feature_Ref.Scenario_List.Append
-        ((Empty_Scenario with delta Name => To_Unbounded_String (Name)));
-
+        ((Empty_Scenario with delta
+             Name => To_Unbounded_String (Name), Location => Loc));
       Set_State (In_Scenario);
       Set_Background (None);
 
    end Add_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Background (Name : String) is
+   procedure Add_Background (Name : String;    Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Background " & Name'Image, Level => IO.Debug);
+      --  Put_Line ("Add_Background " & Name'Image, Verbosity => IO.Debug);
 
       case Current_State is
          when In_Document =>
@@ -121,7 +110,8 @@ package body BBT.Tests_Builder is
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
-                          & "or at Feature level, not " & Current_State'Image);
+                          & "or at Feature level, not " & Current_State'Image,
+                          Loc);
       end case;
 
       Set_State (In_Background);
@@ -129,36 +119,42 @@ package body BBT.Tests_Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step : Step_Type) is
+      -- Post : constant String := Postfix (Step.Location);
    begin
       Put_Line ("Add_Step " & Step'Image,
-                Level => IO.Debug);
+                Step.Location,
+                Verbosity => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
-         raise Missing_Scenario with "Premature Step """ &
-           To_String (Step.Step_String) & """ declaration, should be in Scenario or Background";
-         -- Fixme : ajouter file location
+         raise Missing_Scenario with "Prefix & Premature Step """ &
+           To_String (Step.Step_String)
+           & """ declaration, should be in Scenarios or Background";
       end if;
 
       case Step.Cat is
          when Unknown =>
-            if Step.Kind = Unknown then
+            if Step.Action = None then
                IO.Put_Error ("No context to determine step kind of "
-                             & To_String (Step.Step_String));
+                             & To_String (Step.Step_String),
+                             Step.Location);
             end if;
 
          when Given_Step =>
             if Current_Step_State = In_When_Step then
                IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""When""");
+                                 """ appears to late, after a ""When""",
+                               Step.Location);
             elsif Current_Step_State = In_Then_Step then
                IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""Then""");
+                                 """ appears to late, after a ""Then""",
+                               Step.Location);
             end if;
             Set_Step_State (In_Given_Step);
 
          when When_Step  =>
             if Current_Step_State = In_Then_Step then
                IO.Put_Warning ("When step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""Then""");
+                                 """ appears to late, after a ""Then""",
+                               Step.Location);
             end if;
             Set_Step_State (In_When_Step);
 
@@ -176,15 +172,15 @@ package body BBT.Tests_Builder is
    end Add_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Code_Block is
+   procedure Add_Code_Block (Loc : Location_Type) is
       -- Code block outside of Steps definition is considered as a comment.
       -- There is no state change, the code block mark is just recorded in
       -- comments at the right level.
       -- At the end of the code block section, the previous Step state
       -- is restored.
+      -- Post : constant String := Postfix (Loc);
    begin
-      Put_Line ("Add_Code_Block, Current_State = "
-                & Current_State'Image, Level => IO.Debug);
+      Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Step | In_Scenario | In_Background =>
             -- Entering code block
@@ -207,9 +203,10 @@ package body BBT.Tests_Builder is
    end Add_Code_Block;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Line (Line : String) is
+   procedure Add_Line (Line : String;    Loc : Location_Type) is
+      -- Post : constant String := Postfix (Loc);
    begin
-      -- Put_Line ("Add_Line " & Line'Image, Level => IO.Debug);
+      Put_Line ("Add_Line " & Line'Image, Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);
@@ -223,15 +220,15 @@ package body BBT.Tests_Builder is
 
          when In_File_Content =>
             -- this is not a comment, we are in a file content description
-            Put_Line ("File content = """ & Line & """",
-                      Level => IO.Debug);
+            Put_Line ("File content = """ & Line & """", Loc,
+                      Verbosity => IO.Debug);
             Last_Step_Ref.File_Content.Append (Line);
 
       end case;
    end Add_Line;
 
    -- --------------------------------------------------------------------------
-   function The_Document_List return access Documents_Lists.Vector is
+   function The_Tests_List return access Documents_Lists.Vector is
      (The_Doc_List'Access);
 
-end BBT.Tests_Builder;
+end BBT.Tests.Builder;

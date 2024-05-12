@@ -7,7 +7,7 @@ check: ../../bbt ../../uut
 
 	../../bbt file_is_string.md > output.1
 	@ sdiff -sbB expected.1 output.1 || meld expected.1 output.1
-    # this first test check also that starting bbt from a different dir is OK
+	# this first test check also that starting bbt from a different dir is OK
 
 	@ rm config.ini
 	./bbt file_test_and_creation.md > output.2
@@ -31,5 +31,5 @@ check: ../../bbt ../../uut
 
 .PHONY : clean
 clean:
-	@ - rm -f output.* *.out config.ini pass_tests/*.out
+	@ - rm -rf dir1 output.* *.out config.ini pass_tests/*.out
 	

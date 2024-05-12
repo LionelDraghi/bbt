@@ -1,11 +1,8 @@
-with BBT.IO;           use BBT.IO;
-with BBT.Settings;
-with BBT.Tests_Builder;
+with BBT.Tests.Builder;
 
-with Ada.Directories;   use Ada.Directories;
+with Ada.Directories; use Ada.Directories;
 
 package body BBT.Documents is
-
 
    -- type Indent_Level is range 0 .. 3;
    Prefix : constant Texts.Vector := [1 => "",
@@ -32,31 +29,39 @@ package body BBT.Documents is
          end if;
       end Put_If_Not_Null;
    begin
-      -- Output.Put (S.Details'Image & ", ");
       Output.Put (S.Cat'Image & ", ");
-      Output.Put (S.Kind'Image);
-      Put_If_Not_Null (", Text =", S.Step_String);
-      Put_If_Not_Null (", Cmd =", S.Cmd);
-      Put_If_Not_Null (", Expected_Output =", S.Expected_Output);
-      if S.File_Type = Directory then
-         Put_If_Not_Null (", Dir name =", S.File_Name);
-      else
-         Put_If_Not_Null (", File name =", S.File_Name);
-      end if;
+      Output.Put (S.Action'Image);
+      Put_If_Not_Null (", Step_String = ", S.Step_String);
+      Put_If_Not_Null (", Object_String = ", S.Object_String);
+      Put_If_Not_Null (", Subject_String = ", S.Subject_String);
+      Output.Put (", File_Type = " & S.File_Type'Image);
+      --  if S.File_Type = Directory then
+      --     Put_If_Not_Null (", Dir name =", S.File_Name);
+      --  else
+      --     Put_If_Not_Null (", File name =", S.File_Name);
+      --  end if;
       if not S.File_Content.Is_Empty then
          Output.Put (S.File_Content'Image);
       end if;
    end Put_Image;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Fail (To : in out Scenario_Type) is
+   --  procedure Add_Fail (To : in out Scenario_Type) is
+   --  begin
+   --     To.Failed_Step_Count := @ + 1;
+   --  end Add_Fail;
+   --  procedure Add_Success (To : in out Scenario_Type) is
+   --  begin
+   --     To.Successful_Step_Count := @ + 1;
+   --  end Add_Success;
+   procedure Add_Result (Success : Boolean; To : in out Scenario_Type) is
    begin
-      To.Failed_Step_Count := @ + 1;
-   end Add_Fail;
-   procedure Add_Success (To : in out Scenario_Type) is
-   begin
-      To.Successful_Step_Count := @ + 1;
-   end Add_Success;
+      if Success then
+         To.Successful_Step_Count := @ + 1;
+      else
+         To.Failed_Step_Count := @ + 1;
+      end if;
+   end Add_Result;
 
    -- --------------------------------------------------------------------------
    procedure Put_Text (The_Text : Text) is
@@ -89,13 +94,13 @@ package body BBT.Documents is
          New_Line;
          if With_Bold_Keywords then
             Put_Line (Pref & To_Bold ("Scenario", With_Bold_Keywords)
-                      & ": " &  To_String (Scenario.Name));
+                      & ": " &  To_String ((Scenario.Name)));
          else
-            Put_Line (Pref & "Scenario: " & To_String (Scenario.Name));
+            Put_Line (Pref & "Scenario " & To_String ((Scenario.Name)));
          end if;
          New_Line;
          if With_Comments then
-            Put_Text (Scenario.Comment);
+            Put_Text ((Scenario.Comment));
             New_Line;
          end if;
          for Step of Scenario.Step_List loop
@@ -118,10 +123,9 @@ package body BBT.Documents is
       else
          Put_Line (Pref & "Feature" & ": " & To_String (Feature.Name));
       end if;
-      New_Line;
       if With_Comments then
-         Put_Text (Feature.Comment);
          New_Line;
+         Put_Text (Feature.Comment);
       end if;
       for Scenario of Feature.Scenario_List loop
          Put_Scenario (Scenario, With_Comments, With_Bold_Keywords);
@@ -179,7 +183,7 @@ package body BBT.Documents is
       Successful_Step_Count : Natural := 0;
       Test_Result_Counts    : array (Test_Result) of Natural := [others => 0];
    begin
-      for D of BBT.Tests_Builder.The_Document_List.all loop
+      for D of BBT.Tests.Builder.The_Tests_List.all loop
          for F of D.Feature_List loop
             for Scen of F.Scenario_List loop
                Successful_Step_Count := @ + Scen.Successful_Step_Count;
@@ -193,7 +197,7 @@ package body BBT.Documents is
       Put_Line ("- Failed     tests = " & Test_Result_Counts (Failed)'Image);
       Put_Line ("- Successful tests = " & Test_Result_Counts (Successful)'Image);
       Put_Line ("- Empty      tests = " & Test_Result_Counts (Empty)'Image);
-      if Settings.Is_Authorised (Verbose) then
+      if IO.Is_Authorized (Verbose) then
          New_Line;
          Put_Line ("- Failed     steps = " & Failed_Step_Count'Image);
          Put_Line ("- Successful steps = " & Successful_Step_Count'Image);

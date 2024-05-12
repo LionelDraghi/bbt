@@ -1,3 +1,6 @@
+with List_Image;
+with List_Image.Unix_Predefined_Styles;
+
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
 with Ada.Text_IO;                       use Ada.Text_IO;
@@ -22,30 +25,47 @@ package Text_Utilities is
    -- --------------------------------------------------------------------------
    procedure Put_Text (File : File_Type := Standard_Output;
                        Item : Text);
-   procedure Put_Text_Head (File       : File_Type := Standard_Output;
-                            Item       : Text;
+   procedure Put_Text_Head (Item       : Text;
+                            File       : File_Type := Standard_Output;
                             Line_Count : Positive);
-   procedure Put_Text_Tail (File       : File_Type := Standard_Output;
-                            Item       : Text;
+   procedure Put_Text_Tail (Item       : Text;
+                            File       : File_Type := Standard_Output;
                             Line_Count : Positive);
-   procedure Put_Text (File_Name : String;
-                       Item : Text);
-   procedure Put_Text_Head (File_Name : String;
-                            Item       : Text;
+   procedure Put_Text (Item      : Text;
+                       File_Name : String);
+   procedure Put_Text_Head (Item       : Text;
+                            File_Name  : String;
                             Line_Count : Positive);
-   procedure Put_Text_Tail (File_Name : String;
-                            Item       : Text;
+   procedure Put_Text_Tail (Item       : Text;
+                            File_Name  : String;
                             Line_Count : Positive);
    function Get_Text (File : File_Type)   return Text;
    function Get_Text (File_Name : String) return Text;
    function Get_Text (File_Name : Unbounded_String) return Text;
+   function Get_Text_Head (From       : Text;
+                           Line_Count : Positive) return Text;
+   --  function Get_Text_Tail (From       : Text;
+   --                          Line_Count : Positive) return Text;
+   --
+   --  subtype Min_Shrinked_Length is Positive range 2 .. Positive'Last;
+   --  function Shrink (The_Text   : Text;
+   --                   Line_Count : Min_Shrinked_Length;
+   --                   Cut_Mark   : String := "...") return Text;
+   -- If Line_Count = 5 and Cut_Mark = "...", shrink a long text to
+   --   line 1
+   --   line 2
+   --   ...
+   --   line last -1
+   --   line last
+   -- If the Text is shorter or equal to Line_Count, output is the Text,
+   -- obviously without Cut_Mark.
 
    -- --------------------------------------------------------------------------
-   procedure Compare (Text1, Text2       : Text;
-                      Ignore_Blank_Lines : Boolean := True;
-                      Case_Insensitive   : Boolean := True;
-                      Identical          : out Boolean;
-                      Diff_Index         : out Natural);
+   procedure Compare (Text1, Text2     : Text;
+                      Ignore_Blanks    : Boolean := True;
+                      Case_Insensitive : Boolean := True;
+                      Identical        : out Boolean;
+                      Diff_Index       : out Natural);
    -- If Test1 = Text2, return Identical = True and Diff_Index = 0
    -- Otherwise, return False and Index of the first different line in Text2
 
@@ -75,5 +95,16 @@ package Text_Utilities is
                                   From    : Positive := 1) return Natural;
    -- Start looking at index From
    -- Returns the index of the first non blank line if any, 0 otherwise
+
+   use Texts;
+   package Text_Cursors is new List_Image.Cursors_Signature
+     (Container => Vector,
+      Cursor    => Cursor);
+
+   function Image (C : Cursor) return String is (Element (C));
+
+   function Text_Image is new List_Image.Image
+     (Cursors => Text_Cursors,
+      Style   => List_Image.Unix_Predefined_Styles.Bulleted_List_Style);
 
 end Text_Utilities;

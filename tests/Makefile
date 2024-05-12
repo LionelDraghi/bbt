@@ -10,7 +10,7 @@ check: ../bbt ../uut
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
 	@ - ln -fs ../uut .
-	../bbt -o pass_tests.md pass_tests/*.md 
+	../bbt -q -o pass_tests.md pass_tests/*.md 
 	@ echo Pass Tests OK ===================
 	@ echo
 
@@ -18,5 +18,5 @@ check: ../bbt ../uut
 .PHONY : clean
 clean:
 	@ $(MAKE) -s clean --directory=error_tests
-	@ - rm -f config.ini pass_tests/*.out
+	@ - rm -f pass_tests/config.ini pass_tests/*.out
 

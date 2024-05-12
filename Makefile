@@ -3,7 +3,7 @@ all: build check
 
 build:
 	alr build
-	cd tools && alr build
+	cd tools && alr build --validation
 
 check: bbt
 	@ $(MAKE) check --directory=tests
@@ -16,4 +16,4 @@ clean:
 	alr clean
 	cd tools && alr clean
 	@ $(MAKE) clean --directory=tests
-	@ - rm config.ini *.out
+	@ - rm -rf config.ini *.out dir1

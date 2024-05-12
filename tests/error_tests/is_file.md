@@ -22,9 +22,7 @@ Lang=fr
 
 Note the code fence surrounding expected file, with tildes instead of backtick 
 
-   - When I run `uut create mode=silent config.ini `
-   - And  I run `uut append lang=fr     config.ini `
-   - And  I run `uut append site=http:  config.ini `
+   - When I run `uut append site=http:  config.ini `
    - Then `config.ini` is  
 ~~~
 Mode=silent

@@ -15,7 +15,6 @@
 -- -----------------------------------------------------------------------------
 
 with Ada.Directories;
--- with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Settings is
 
@@ -28,17 +27,6 @@ package body BBT.Settings is
    WD : constant access String :=
           new String'(Ada.Directories.Current_Directory);
    Outfile_Name      : access String := null;
-
-   Enabled_Topics : array (Extended_Topics) of Boolean := [others => False];
-
-   -- --------------------------------------------------------------------------
-   procedure Enable_Topic (Topic : Topics) is
-   begin
-      Enabled_Topics (Topic) := True;
-   end Enable_Topic;
-
-   function Is_Enabled (Topic : Extended_Topics) return Boolean is
-     (Topic in Topics and then Enabled_Topics (Topic));
 
    --  -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
@@ -56,30 +44,6 @@ package body BBT.Settings is
 
    -- --------------------------------------------------------------------------
    function Initial_Directory return String is (WD.all);
-   function Run_Dir_Name return String is
-      --     (Ada.Directories.Containing_Directory (Smkfile_Name));
-     (Initial_Directory); -- for now : in the future, should run where the
-                          -- scenario file is
-
-   -- --------------------------------------------------------------------------
-   function Is_Authorised (Level : Print_Out_Level) return Boolean is
-   begin
-      case Level is
-         when Debug =>
-            return Verbosity = Debug;
-         when Verbose =>
-            return
-              Verbosity = Verbose or
-              Verbosity = Debug;
-         when Normal =>
-            return
-              Verbosity = Verbose or
-              Verbosity = Debug or
-              Verbosity = Normal;
-         when Quiet =>
-            return True;
-      end case;
-   end Is_Authorised;
 
    -- --------------------------------------------------------------------------
    procedure Set_Output_File (File_Name : String) is

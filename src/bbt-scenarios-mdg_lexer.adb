@@ -1,26 +1,14 @@
 -- Header TBD
 
 with Ada.Characters.Latin_1;
--- with Ada.Containers.Indefinite_Vectors;
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;       use Ada.Strings;
 with Ada.Strings.Equal_Case_Insensitive;
-with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Maps;
 
-with BBT.IO;
-with BBT.Settings;
-
-package body BBT.MDG_Lexer is
+package body BBT.Scenarios.MDG_Lexer is
 
    -- --------------------------------------------------------------------------
-   -- IO renamed with local Topic
-   procedure Put_Line
-     (Item  : String;
-      File  : String  := "";
-      Line  : Integer := 0;
-      Level : Settings.Print_Out_Level := IO.Normal;
-      Topic : Settings.Extended_Topics := Settings.Lexer) renames IO.Put_Line;
-
    Blanks  : constant Ada.Strings.Maps.Character_Set
      := Ada.Strings.Maps.To_Set (" " & Ada.Characters.Latin_1.HT);
 
@@ -129,12 +117,11 @@ package body BBT.MDG_Lexer is
    function Initialize_Context return Parsing_Context is
      ((In_Code_Fence => False, In_Scenario => False));
 
-
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       A      :        Line_Attributes) is
    begin
-      Output.Put (Line_Kind'Image (A.Kind) & " ");
+      Output.Put (Line_Kind'Image (A.Kind) & " | ");
       case A.Kind is
          when Feature_Line    |
               Scenario_Line   |
@@ -148,11 +135,14 @@ package body BBT.MDG_Lexer is
 
    -- --------------------------------------------------------------------------
    function Parse_Line (Line    : access constant String;
-                        Context : in out Parsing_Context)
+                        Context : in out Parsing_Context;
+                        Loc     : Location_Type)
                         return Line_Attributes is
       First, Last, Title_First : Natural;
    begin
-      -- Put_Line ("Parsing = """ & Line.all & """", Level => IO.Debug);
+      IO.Put_Line ("Line  = """ & Line.all & """",
+                   Location  => Loc,
+                   Verbosity => IO.Debug);
       Find_Token (Source => Line.all,
                   Set    => Blanks,
                   Test   => Ada.Strings.Outside,
@@ -164,7 +154,6 @@ package body BBT.MDG_Lexer is
          --  Put_Line ("null line ",
          --               Level => IO.Debug);
          return (Kind => Empty_Line);
-
 
       elsif Code_Fence_Line (Line.all) then
          -- Code_Block Mark ----------------------------------------------------
@@ -181,7 +170,7 @@ package body BBT.MDG_Lexer is
 
       elsif Context.In_Scenario and then Bullet_List_Marker (Line.all, First) then
          -- Step line ----------------------------------------------------------
-         -- We don't take into account bullet list before beeing in Scenario,
+         -- We don't take into account bullet list before being in a Scenario.
          -- to let the use most Markdown possibilities before Steps, for
          -- example to Have a TOC, or just better comments.
 
@@ -195,7 +184,8 @@ package body BBT.MDG_Lexer is
       elsif Find_Heading_Mark (Line       => Line.all (First .. Line.all'Last),
                                First      => First,
                                Last       => Last,
-                               Colon_Succ => Title_First) then
+                               Colon_Succ => Title_First)
+      then
          -- There is a header --------------------------------------------------
          declare
             Header : constant String :=
@@ -216,10 +206,11 @@ package body BBT.MDG_Lexer is
                return (Kind => Feature_Line,
                        Name => To_Unbounded_String (Title));
 
-            elsif Ada.Strings.Equal_Case_Insensitive (Header, "Scenario") or
-            else Ada.Strings.Equal_Case_Insensitive (Header, "Example") then
+            elsif Ada.Strings.Equal_Case_Insensitive (Header, "Scenario")
+              or else Ada.Strings.Equal_Case_Insensitive (Header, "Example")
+            then
                -- Scenario line ------------------------------------------------
-               --  Put_Line ("Scenario line = " & Line.all (First .. Last),
+               --  Put_Line ("Scenarios.line = " & Line.all (First .. Last),
                --               Level => IO.Debug);
                Context.In_Scenario := True;
                return (Kind => Scenario_Line,
@@ -236,9 +227,10 @@ package body BBT.MDG_Lexer is
 
             else
                -- WTF Header ---------------------------------------------------
-               Put_Line ("Unkown Header = " & Header'Image
+               Put_Line ("Unknown Header = " & Header'Image
                          & ", should be Features or Scenario",
-                         Level => IO.Debug);
+                         Location  => Loc,
+                         Verbosity => IO.Debug);
             end if;
          end;
       end if;
@@ -249,4 +241,4 @@ package body BBT.MDG_Lexer is
 
    end Parse_Line;
 
-end BBT.MDG_Lexer;
+end BBT.Scenarios.MDG_Lexer;

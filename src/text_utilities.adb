@@ -5,16 +5,55 @@ with Ada.Strings.Fixed;
 package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
+   function Is_Eq (S1, S2           : String;
+                   Case_Insensitive : Boolean) return Boolean is
+     ((Case_Insensitive and Ada.Strings.Equal_Case_Insensitive (S1, S2))
+      or else S1 = S2);
+
+   -- --------------------------------------------------------------------------
    function Is_Equal (S1, S2           : String;
-                      Case_Insensitive : Boolean := True) return Boolean is
-     (S1 = S2 or else (Case_Insensitive and
-          Ada.Strings.Equal_Case_Insensitive (S1, S2)));
+                      Case_Insensitive : Boolean := True;
+                      Ignore_Blanks    : Boolean := True) return Boolean is
+   -- Fixme: blanks in the middle not taken into account
+   begin
+      if Ignore_Blanks then
+         declare
+            -- I1   : Natural := S1'First;
+            -- I2   : Natural := S2'First;
+            use Ada.Strings;
+            use Ada.Strings.Fixed;
+            Tmp1 : constant String := Trim (S1, Side => Both);
+            Tmp2 : constant String := Trim (S2, Side => Both);
+         begin
+            return Is_Eq (Tmp1, Tmp2, Case_Insensitive);
+         end;
+
+      else
+         return Is_Eq (S1, S2, Case_Insensitive);
+         --  while I1 /= Tmp1'Last and I2 /= Tmp2'Last loop
+         --
+         --     while Index_Non_Blank (Tmp1, From => I1) > I1 loop
+         --        I1 := @ + 1;
+         --     end loop;
+         --     while Index_Non_Blank (Tmp2, From => I2) > I2 loop
+         --        I2 := @ + 1;
+         --     end loop;
+         --
+         --     if not Is_Eq (Tmp1 (I1), Tmp2 (I2), Case_Insensitive) then
+         --        return False;
+         --     end if;
+         --
+         --  end loop;
+         --  return True;
+
+      end if;
+   end Is_Equal;
 
    -- --------------------------------------------------------------------------
    function Create_File (File_Name    : String;
                          With_Content : Text) return Boolean is
-      -- Return true if the file is created as expected,
-      -- false otherwise.
+   -- Return true if the file is created as expected,
+   -- false otherwise.
       Output : Ada.Text_IO.File_Type;
 
    begin
@@ -27,15 +66,6 @@ package body Text_Utilities is
       Ada.Text_IO.Close (Output);
       return True;
 
-      --  exception
-      --     when E : others =>
-      --        IO.Put_Line (Ada.Exceptions.Exception_Message (E),
-      --                     Level => IO.Quiet);
-      --        IO.Put_Line ("Unable to create file "
-      --                     & File_Name'Image,
-      --                     Level => IO.Quiet);
-      --        return False;
-      --
    end Create_File;
 
    -- -----------------------------------------------------------------------
@@ -54,9 +84,10 @@ package body Text_Utilities is
    end Put_Text;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text (File_Name : String;
-                       Item      : Text) is
+   procedure Put_Text (Item      : Text;
+                       File_Name : String) is
       File : File_Type;
+      pragma Warnings (Off, File);
    begin
       Open (File, Name => File_Name, Mode => In_File);
       Put_Text (File, Item);
@@ -65,8 +96,8 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    procedure Put_Text_Head
-     (File  : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-      Item  : Text;
+     (Item       : Text;
+      File       : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
       Line_Count : Positive)
    is
       I : Positive := 1;
@@ -79,20 +110,21 @@ package body Text_Utilities is
    end Put_Text_Head;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Head (File_Name  : String;
-                            Item       : Text;
+   procedure Put_Text_Head (Item       : Text;
+                            File_Name  : String;
                             Line_Count : Positive) is
       File : File_Type;
+      pragma Warnings (Off, File);
    begin
       Open (File, Name => File_Name, Mode => In_File);
-      Put_Text_Head (File, Item, Line_Count);
+      Put_Text_Head (Item, File, Line_Count);
       Close (File);
    end Put_Text_Head;
 
    -- --------------------------------------------------------------------------
    procedure Put_Text_Tail
-     (File  : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-      Item  : Text;
+     (Item       : Text;
+      File       : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
       Line_Count : Positive)
    is
       I : Positive := 1;
@@ -105,13 +137,14 @@ package body Text_Utilities is
    end Put_Text_Tail;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Tail (File_Name  : String;
-                            Item       : Text;
+   procedure Put_Text_Tail (Item       : Text;
+                            File_Name  : String;
                             Line_Count : Positive) is
       File : File_Type;
+      pragma Warnings (Off, File);
    begin
       Open (File, Name => File_Name, Mode => In_File);
-      Put_Text_Tail (File, Item, Line_Count);
+      Put_Text_Tail (Item, File, Line_Count);
       Close (File);
    end Put_Text_Tail;
 
@@ -128,7 +161,7 @@ package body Text_Utilities is
    -- --------------------------------------------------------------------------
    function Get_Text (File_Name : String) return Text is
       File : File_Type;
-      T : Text;
+      T    : Text;
    begin
       Open (File, Name => File_Name, Mode => In_File);
       T := Get_Text (File);
@@ -144,22 +177,97 @@ package body Text_Utilities is
      (Get_Text (To_String (File_Name)));
 
    -- --------------------------------------------------------------------------
-   procedure Compare (Text1, Text2       : Text;
-                      Ignore_Blank_Lines : Boolean := True;
-                      Case_Insensitive   : Boolean := True;
-                      Identical          : out Boolean;
-                      Diff_Index         : out Natural) is
-      use type Text;
+   function Get_Text_Head (From       : Text;
+                           Line_Count : Positive) return Text is
+      use Ada.Containers;
+   begin
+      if From = Empty_Text then
+         return Empty_Text;
+      elsif From.Length < Count_Type (Line_Count) then
+         return From;
+      else
+         declare
+            Tmp : Text;
+         begin
+            for I in From.First_Index .. From.First_Index + Line_Count - 1 loop
+               Tmp.Append (From (From.First_Index + I - 1));
+            end loop;
+            return Tmp;
+         end;
+      end if;
+   end Get_Text_Head;
+
+   --  -- --------------------------------------------------------------------------
+   --  function Get_Text_Tail (From       : Text;
+   --                          Line_Count : Positive) return Text is
+   --     use Ada.Containers;
+   --     use Texts;
+   --  begin
+   --     if From = Empty_Text then
+   --        return Empty_Text;
+   --     elsif From.Length < Count_Type (Line_Count) then
+   --        return From;
+   --     else
+   --        declare
+   --           Tmp : Text := To_Vector (Count_Type (Line_Count));
+   --        begin
+   --           for I in reverse Tmp.Iterate loop
+   --              Tmp (I) := From (From.Last_Index - To_Index (I) + 1);
+   --           end loop;
+   --           return Tmp;
+   --        end;
+   --     end if;
+   --  end Get_Text_Tail;
+   --
+   --  -- --------------------------------------------------------------------------
+   --  function Shrink (The_Text   : Text;
+   --                   Line_Count : Min_Shrinked_Length;
+   --                   Cut_Mark   : String := "...") return Text is
+   --     use Ada.Containers;
+   --     use Texts;
+   --  begin
+   --     if The_Text = Empty_Text or else
+   --       The_Text.Length <= Count_Type (Line_Count) then
+   --        return The_Text;
+   --
+   --     elsif Line_Count = 2 then
+   --        return [The_Text (The_Text.First), Cut_Mark];
+   --
+   --     else
+   --        declare
+   --           Tmp : Text := To_Vector (Count_Type (Line_Count));
+   --           subtype Head_Index is Positive range The_Text.First ..
+   --             The_Text.First + Texts.Count (Line_Count / 2 - 1);
+   --           subtype Tail_Index is Positive range
+   --             Head_Index.Last + 2 .. The_Text.Last;
+   --           Shift : constant Positive := The_Text.Last_Index - Tmp.Last_Index;
+   --        begin
+   --           for I in Head_Index loop
+   --              Tmp (I) := The_Text (I);
+   --           end loop;
+   --           Tmp (Head_Index'Last + 1) := Cut_Mark;
+   --           for I in Tail_Index loop
+   --              Tmp (I) := The_Text (I);
+   --           end loop;
+   --           return Tmp;
+   --        end;
+   --     end if;
+   --  end Shrink;
+
+   -- --------------------------------------------------------------------------
+   procedure Compare (Text1, Text2     : Text;
+                      Ignore_Blanks    : Boolean := True;
+                      Case_Insensitive : Boolean := True;
+                      Identical        : out Boolean;
+                      Diff_Index       : out Natural) is
       Idx1, Idx2 : Natural := 1;
-      use all type Texts.Cursor;
 
       -- Fixme: uggly code!!
-
    begin
       Identical := False;
 
-      -- Put_Line ("Text1 = " & Text1'Image);
-      -- Put_Line ("Text2 = " & Text2'Image);
+      --  Put_Line ("Text1 = " & Text1'Image);
+      --  Put_Line ("Text2 = " & Text2'Image);
 
       -- If Test1 = Text2, return Identical = True and Diff_Index = 0
       -- Otherwise, return False and Index of the first different line in Text2
@@ -168,7 +276,7 @@ package body Text_Utilities is
          Diff_Index := 0;
          -- Put_Line ("Text1 = Text2");
 
-      elsif Ignore_Blank_Lines then
+      elsif Ignore_Blanks then
 
          Idx1 := First_Non_Blank_Line (Text1, @);
          Idx2 := First_Non_Blank_Line (Text2, @);
@@ -191,23 +299,26 @@ package body Text_Utilities is
                   Diff_Index := Idx2;
                   -- otherwise, Diff_Index is already set to the last non blank
                   --  Put_Line ("Idx1 = 0");
-               --  else
-               --     Put_Line ("Idx2 = 0");
+                  --  else
+                  --     Put_Line ("Idx2 = 0");
                end if;
                Identical := False;
                return;
             end if;
 
-            if not Is_Equal (Text1 (Idx1), Text2 (Idx2), Case_Insensitive) then
+            if not Is_Equal (Text1 (Idx1), Text2 (Idx2),
+                             Case_Insensitive => Case_Insensitive,
+                             Ignore_Blanks    => Ignore_Blanks)
+            then
                -- Put_Line ("Text1 /= Text2");
                Identical := False;
                Diff_Index := Idx2;
                return;
-            --  else
-            --     Put_Line (" Text1 (" & Idx1'Image
-            --               & ") " & String'(Text1 (Idx1))'Image
-            --               & " = Text2 (" & Idx2'Image & ") "
-            --              & String'(Text2 (Idx2))'Image);
+               --  else
+               --     Put_Line (" Text1 (" & Idx1'Image
+               --               & ") " & String'(Text1 (Idx1))'Image
+               --               & " = Text2 (" & Idx2'Image & ") "
+               --              & String'(Text2 (Idx2))'Image);
                -- Put_Line (String'(Text1 (Idx1))'Image & " = " & String'(Text2 (Idx2))'Image);
 
             end if;
@@ -239,8 +350,8 @@ package body Text_Utilities is
                end if;
             end;
 
-            -- Put_Line ("Idx1 = " & Idx1'Image & "/" & Text1.Last_Index'Image);
-            -- Put_Line ("Idx2 = " & Idx2'Image & "/" & Text2.Last_Index'Image);
+            --  Put_Line ("Idx1 = " & Idx1'Image & "/" & Text1.Last_Index'Image);
+            --  Put_Line ("Idx2 = " & Idx2'Image & "/" & Text2.Last_Index'Image);
 
          end loop;
 
@@ -251,7 +362,7 @@ package body Text_Utilities is
       else
          -- Brut compare
          for Diff_Index in Text1.Iterate loop
-            exit when Text1 (Diff_Index) /= Text2 (Diff_Index);
+            exit when Texts."/=" (Text1 (Diff_Index), Text2 (Diff_Index));
          end loop;
       end if;
 
@@ -266,7 +377,7 @@ package body Text_Utilities is
       Diff_Index : Natural; pragma Unreferenced (Diff_Index);
    begin
       Compare (Text1, Text2,
-               Ignore_Blank_Lines => Ignore_Blank_Lines,
+               Ignore_Blanks      => Ignore_Blank_Lines,
                Case_Insensitive   => Case_Insensitive,
                Identical          => Identical,
                Diff_Index         => Diff_Index);
@@ -290,16 +401,18 @@ package body Text_Utilities is
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2     : Text;
                       Case_Insensitive : Boolean := True) return Boolean is
-      use type Text;
+   -- After eliminating easy cases T1 = T2 and T2 is longer than T1, the
+   -- comparison algorithm is :
+   -- I1 and I2 (in the loop below) are the two cursor respectively
+   -- in T1 and T2.
+   -- For each line in T1 (until there is enough lines left in T1 to
+   -- match all T2), we search for a matching line in T2.
+   -- Then, we move I1 and I2 to see if following line in both
+   -- text matches also.
+   -- If it matches until T2 last lines, return True, false otherwise.
       use type Ada.Containers.Count_Type;
-      --  function Is_Equal (T1, T2 : Text) return Boolean is
-      --    (T1.Length = T2.Length and then (T1 = T2));
 
    begin
-      --  New_Line;
-      --  Put_Line ("Text1 =" & Text1'Image);
-      --  Put_Line ("Text2 =" & Text2'Image);
-
       if Text1.Length < Text2.Length then
          return False;
 
@@ -308,26 +421,25 @@ package body Text_Utilities is
 
       else
          declare
-            Last_I1 : constant Positive := Text1.Last_Index -
-                        Positive (Text2.Length) + 1;
+            Last_I1 : constant Positive
+              := Text1.Last_Index - Positive (Text2.Length) + 1;
             I1      : Positive;
+
          begin
             for Start in Text1.First_Index .. Last_I1 loop
-               --  Put_Line ("Text1.First_Index =" & Text1.First_Index'Image);
                I1 := Start;
                Inner : for I2 in Text2.First_Index .. Text2.Last_Index loop
-                  --  Put_Line ("Text1 (" & I1'Image & ") = "
-                  --            & String'(Text1 (I1))'Image);
-                  --  Put_Line ("Text2 (" & I2'Image & ") = "
-                  --            & Text2 (I2));
+                  -- We look for a first match between texts.
                   if Search (Text1 (I1), Text2 (I2), Case_Insensitive) then
-                     --  Put_Line ("Text1 = Text1");
+                     -- Lines match
                      if I2 = Text2.Last_Index then
-                        --  Put_Line ("I2 = Text2.Last_Index return True");
+                        -- It was the last line of T2
+                        -- => Text match
                         return True;
                      else
+                        -- Not the last line of T2, so lets' go to T1 next line
+                        -- (T2 next line will be set by the loop)
                         I1 := @ + 1;
-                        --  Put_Line ("I1 += " & I1'Image);
                      end if;
                   else
                      exit Inner;

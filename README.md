@@ -1,6 +1,8 @@
 <!-- omit from toc -->
 # `bbt` README
 
+ [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html)
+
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) *Given* / *When* / *Then* usual pattern, in a simple Markdown format. 
 
@@ -69,7 +71,7 @@ bbt uses code span to express a command, a file name or some expected output.
 Fenced code block are used to specify multiline output or file content, as in: 
 
     ~~~md
-    ## [Scenario]: : Command line help
+    ## Scenario: Command line help
 
     - When I run `uut -h`
     - Then the output is

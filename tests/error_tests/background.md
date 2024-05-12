@@ -5,10 +5,10 @@ Background is a special scenario that is executed before every following tests.
 ### Background :
   - Given there is no `config.ini` file
 
-### Scenario : normal use cas
+### Scenario : normal use case
   - When I run `uut create config.ini` 
   - When I run `uut append "size=80x40" config.ini` 
-  - Then `config.ini` should be
+  - Then `config.ini` is
   ```
   "size=80x40"
   ```

@@ -1,27 +1,19 @@
-with Text_Utilities;                    use Text_Utilities;
+with BBT.IO;             use BBT.IO;
+with Text_Utilities;        use Text_Utilities;
 
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Directories;
 with Ada.Strings.Text_Buffers;
-with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+private package BBT.Documents is
 -- Defines the main bbt internal data structure, wich is essentialy a tree of
--- Documents containing Features containing scenarii containing steps.
+-- Documents containing Features containing Scenario containing steps.
 -- This structure is a a simplified subset of Gerkhin AST :
 -- https://github.com/cucumber/gherkin?tab=readme-ov-file#abstract-syntax-tree-ast
 --
 -- The various type of step are also defined here, and this is bbt's own
 -- vocabulary.
-
-package BBT.Documents is
-
-   -- Keywords (https://cucumber.io/docs/gherkin/reference/) :
-   --  Feature
-   --  Example (or Scenario)
-   --  Given, When, Then, And, But for steps
-   --     (that is line starting starting with ('-' '*' or '+')
-   --     (that is line starting starting with ('-' '*' or '+')
-   --  Background
 
    -- --------------------------------------------------------------------------
    type Test_Result is (Failed, Empty, Successful);
@@ -33,36 +25,22 @@ package BBT.Documents is
    subtype Step_Categories is Extended_Step_Categories range
      Extended_Step_Categories'Succ (Unknown) .. Extended_Step_Categories'Last;
 
-   type Step_Action is
-     (Unknown,
-      Run_Cmd,                -- when I run `cmd`
-      Successfully_Run_Cmd,   -- when i successfully run `cmd`
+   type Actions is
+     (None,
+      Run_Cmd,
+      Run_Without_Error,
       --                      --------------------------------------------------
-      Error_Return_Code,      -- then I get error
-      No_Error_Return_Code,   -- then I get no error
-      Output_Is,              -- then output is `msg`
-      --                      or then output is
-      --                           followed by code fenced content
-      --                      or then I get     `msg`
-      --                      or then I get
-      --                           followed by code fenced content
-      --********************* or then output is equal to file `file_name`
-      Output_Contains,        -- then output contains `msg`
-      --                      or then output contains
-      --                           followed by code fenced content
-      File_Is,                -- Then `config.ini` is
-      --                           followed by code fenced content
-      --                      or then `config.ini` is `mode=silent`
-      File_Contains,          -- Then `config.ini` contains
-      --                           followed by code fenced content
-      --                      or Then `config.ini` contains `--version`
+      Error_Return_Code,
+      No_Error_Return_Code,
+      Output_Is,
+      Output_Contains,
+      File_Is,
+      File_Contains,
       --                      --------------------------------------------------
-      No_File,                -- Given there is no `config.ini` file
-      Existing_File,          -- Given the existing `config.ini` file
-      --                      or Given the existing directory `dir1`
-      File_Creation           -- Given the file `config.ini`
-      --                         followed by code fenced content
-      --                      or Given the directory `dir1`
+      Check_No_File,
+      Check_File_Existence,
+      Create_If_None,
+      Create_New
      );
    -- NB : file is intended here in the broader sens, that is ordinary
    --      file or directory.
@@ -70,11 +48,11 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Step_Type is record
       Cat             : Extended_Step_Categories  := Unknown;
-      Kind            : Step_Action                 := Unknown;
+      Action          : Actions                   := None;
       Step_String     : Unbounded_String          := Null_Unbounded_String;
-      Cmd             : Unbounded_String          := Null_Unbounded_String;
-      Expected_Output : Unbounded_String          := Null_Unbounded_String;
-      File_Name       : Unbounded_String          := Null_Unbounded_String;
+      Location        : Location_Type;
+      Subject_String  : Unbounded_String          := Null_Unbounded_String;
+      Object_String   : Unbounded_String          := Null_Unbounded_String;
       File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
       File_Content    : Text                      := Empty_Text;
    end record with Put_Image => Put_Image;
@@ -85,9 +63,14 @@ package BBT.Documents is
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type);
 
+   function "+" (Name : Unbounded_String) return String is (To_String (Name));
+   function "+" (Name : String) return Unbounded_String is
+     (To_Unbounded_String (Name));
+
    -- --------------------------------------------------------------------------
    type Scenario_Type is record
       Name      : Unbounded_String;
+      Location  : Location_Type; -- record only location of the keyword line
       Comment   : Text;
       Step_List : Step_Lists.Vector;
       -----------------------
@@ -95,14 +78,16 @@ package BBT.Documents is
       Successful_Step_Count : Natural := 0;
    end record;
    Empty_Scenario : constant Scenario_Type;
-   procedure Add_Fail   (To : in out Scenario_Type);
-   procedure Add_Success (To : in out Scenario_Type);
+   --  procedure Add_Fail   (To : in out Scenario_Type);
+   --  procedure Add_Success (To : in out Scenario_Type);
+   procedure Add_Result  (Success : Boolean; To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Scenario_Type);
 
    -- --------------------------------------------------------------------------
    type Feature_Type is record
       Name          : Unbounded_String;
+      Location      : Location_Type; -- record only location of the keyword line
       Comment       : Text;
       Scenario_List : Scenario_Lists.Vector;
       Background    : Scenario_Type;
@@ -114,6 +99,7 @@ package BBT.Documents is
    -- --------------------------------------------------------------------------
    type Document_Type is record
       Name         : Unbounded_String;
+      Location     : Location_Type; -- record only location of the keyword line
       Comment      : Text;
       Feature_List : Feature_Lists.Vector;
       Background   : Scenario_Type;
@@ -147,17 +133,18 @@ package BBT.Documents is
 
 private
    Empty_Step : constant Step_Type
-     := (Step_String     => Null_Unbounded_String,
-         File_Content    => Empty_Text,
-         Kind            => Unknown,
-         Cat             => Unknown,
-         Cmd             => Null_Unbounded_String,
-         Expected_Output => Null_Unbounded_String,
-         File_Name       => Null_Unbounded_String,
-         File_Type       => Ada.Directories.Ordinary_File);
+     := (Step_String    => Null_Unbounded_String,
+         File_Content   => Empty_Text,
+         Location       => <>,
+         Action         => None,
+         Cat            => Unknown,
+         Subject_String => Null_Unbounded_String,
+         Object_String  => Null_Unbounded_String,
+         File_Type      => Ada.Directories.Ordinary_File);
 
    Empty_Scenario : constant Scenario_Type
      := (Name                  => Null_Unbounded_String,
+         Location              => <>,
          Step_List             => Step_Lists.Empty,
          Comment               => Empty_Text,
          Failed_Step_Count     |
@@ -165,12 +152,14 @@ private
 
    Empty_Feature  : constant Feature_Type
      :=  (Name          => Null_Unbounded_String,
+          Location      => <>,
           Scenario_List => Scenario_Lists.Empty,
           Comment       => Empty_Text,
           Background    => Empty_Scenario);
 
    Empty_Document : constant Document_Type
      := (Name         => Null_Unbounded_String,
+         Location     => <>,
          Comment      => Empty_Text,
          Feature_List => Feature_Lists.Empty,
          Background   => Empty_Scenario);

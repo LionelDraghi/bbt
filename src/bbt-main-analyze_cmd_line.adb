@@ -14,13 +14,12 @@
 -- limitations under the License.
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;
+with BBT.IO; use BBT.IO;
 with BBT.Settings;
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Directories;
-with Ada.Strings.Unbounded;   use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
 separate (BBT.Main)
@@ -78,14 +77,14 @@ begin
             Settings.Keep_Going := True;
 
          elsif Opt = "-v" or Opt = "--verbose" then
-            Settings.Verbosity := Settings.Verbose;
+            Set_Verbosity  (Verbose);
 
          elsif Opt = "-q" or Opt = "--quiet" then
-            Settings.Verbosity := Settings.Quiet;
+            Set_Verbosity  (Quiet);
 
          elsif Opt = "-d" then
             -- undocumented option
-            Settings.Verbosity := Settings.Debug;
+            Set_Verbosity  (Debug);
 
          elsif Opt = "-wc" or Opt = "--with_comments" then
             Settings.With_Comments := True;
@@ -110,9 +109,9 @@ begin
                Topic : constant String :=
                          Ada.Command_Line.Argument (Arg_Counter + 1);
             begin
-               Settings.Enable_Topic (Topics'Value (Topic));
+               IO.Enable_Topic (IO.Topics'Value (Topic));
                IO.Put_Line ("Enabling trace on topic " & Topic,
-                            Level => IO.Debug);
+                            Verbosity => IO.Debug);
                Next_Arg;
             end;
 
@@ -126,22 +125,23 @@ begin
                case Kind (Opt) is
                   when Directory =>
                      Settings.No_File_Given := False;
-                     Scenario_Files.Find_BBT_Files (Start_In  => Opt,
-                                           Recursive => Settings.Recursive);
+                     Scenarios.Files.Find_BBT_Files
+                       (Start_In  => Opt,
+                        Recursive => Settings.Recursive);
                   when Ordinary_File =>
                      Settings.No_File_Given := False;
-                     Scenario_Files.Append_File (Opt);
+                     Scenarios.Files.Append_File (Opt);
 
                   when Special_File =>
                      IO.Put_Line ("Unknown file type """ & Opt & """",
-                                     Level => IO.Quiet);
+                                     Verbosity => IO.Quiet);
                      return;
 
                end case;
 
             else
                IO.Put_Line ("Unknown bbt file """ & Opt & """",
-                         Level => IO.Quiet);
+                         Verbosity => IO.Quiet);
                return;
 
             end if;
@@ -158,7 +158,7 @@ begin
    end loop Opt_Analysis_Loop;
 
    -- --------------------------------------------------------------------------
-   if Settings.Debug_Mode then
+   if Debug_Mode then
       Put_Settings;
    end if;
 

@@ -10,8 +10,7 @@ procedure Create_Template is
 
 begin
    if Ada.Directories.Exists (File_Name) then
-      IO.Put_Line ("File " & File_Name & " already exists",
-                   Level => IO.Quiet);
+      IO.Put_Error ("File " & File_Name & " already exists", IO.No_Location);
 
    else
       Create (Template, Name => Settings.Template_Name);

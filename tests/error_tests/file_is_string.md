@@ -10,6 +10,7 @@
 
   - When I run `uut create config.ini`
   - When I run `uut append mode=silent config.ini`
+
   - When I run `uut append recurse=false config.ini`
   - Then file `config.ini` is `mode=silent`
  

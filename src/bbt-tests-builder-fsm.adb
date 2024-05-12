@@ -1,4 +1,4 @@
-separate (BBT.Tests_Builder)
+separate (BBT.Tests.Builder)
 
 -- --------------------------------------------------------------------------
 package body FSM is
@@ -36,12 +36,12 @@ package body FSM is
    end Set_State;
 
    -- --------------------------------------------------------------------------
-   function Current_Step_State return Step_States is (Internal_Step_State);
-
    procedure Set_Step_State (To_State : Step_States) is
    begin
       Internal_Step_State := To_State;
    end Set_Step_State;
+
+   function Current_Step_State return Step_States is (Internal_Step_State);
 
    -- --------------------------------------------------------------------------
    procedure Set_Background (The_Background : Backgrounds) is

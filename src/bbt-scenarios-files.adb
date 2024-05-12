@@ -14,29 +14,22 @@
 -- limitations under the License.
 -- -----------------------------------------------------------------------------
 
+with Ada.Exceptions;
+with Ada.Strings;
+with Ada.Text_IO;
+
+with BBT.Documents;     use BBT.Documents;
 with BBT.IO;
-with BBT.Settings;       use BBT.Settings;
+with BBT.Scenarios.MDG_Lexer;
+with BBT.Scenarios.Step_Parser;
+with BBT.Settings;      use BBT.Settings;
+with BBT.Tests.Builder; use BBT.Tests.Builder;
+
+with GNAT.Traceback.Symbolic;
 
 with Ada.Directories;
 
-package body BBT.Scenario_Files is
-
-   -- --------------------------------------------------------------------------
-   -- IO renamed with "Spawn" as Topic
-   procedure Put_Line
-     (Item  : String;
-      File  : String  := "";
-      Line  : Integer := 0;
-      Level : Print_Out_Level := Normal;
-      Topic : Extended_Topics := BBT_Files) renames IO.Put_Line;
-   --  procedure Put (Item  : String;
-   --                 File  : String  := "";
-   --                 Line  : Integer := 0;
-   --                 Level : Print_Out_Level := Normal;
-   --                 Topic : Extended_Topics := Spawn) renames IO.Put;
-   --  procedure New_Line (Level : Print_Out_Level := Normal;
-   --                      Topic : Extended_Topics := Spawn) renames IO.New_Line;
-
+package body BBT.Scenarios.Files is
 
    -- --------------------------------------------------------------------------
    function "+" (Name : File_Name) return String is
@@ -81,7 +74,6 @@ package body BBT.Scenario_Files is
 
          -- --------------------------------------------------------------------
          procedure Process_File (Item : Directory_Entry_Type) is
-            -- Fixme: rename Print
             Name : constant String := Full_Name (Item);
          begin
             if Name'Length > Remove_Root'Length and then
@@ -112,7 +104,9 @@ package body BBT.Scenario_Files is
          Extension : constant String := "*.md";
 
       begin
-         Put_Line (Item  => "Walking in " & Name, Level => IO.Debug);
+         IO.Put_Line ("Walking in " & Name,
+                      Location  => IO.No_Location,
+                      Verbosity => IO.Debug);
          Search (Directory => Name,
                  Pattern   => Extension,
                  Filter    => [Directory => False, others => True],
@@ -127,7 +121,9 @@ package body BBT.Scenario_Files is
 
    begin
       Walk (Start_In);
-      Put_Line (Item  => "Found " & The_List'Image, Level => IO.Debug);
+      IO.Put_Line ("Found " & The_List'Image,
+                   Location  => IO.No_Location,
+                   Verbosity => IO.Debug);
 
    end Find_BBT_Files;
 
@@ -135,4 +131,93 @@ package body BBT.Scenario_Files is
    function No_bbt_File return Boolean is (The_List.Is_Empty);
    function bbt_Files return File_List.Vector is (The_List);
 
-end BBT.Scenario_Files;
+   -- --------------------------------------------------------------------------
+   procedure Analyze_MDG_File (File_Name : String) is
+
+      --  Output : Text_IO.File_Type;
+      --  Base_Name : String := Ada.Directories.Base_Name (File_Name);
+      --  Dir_Name  : String := Ada.Directories.Containing_Directory (File_Name);
+      Input : Ada.Text_IO.File_Type;
+      use BBT.IO;
+
+      use Ada.Text_IO;
+
+      use BBT.Scenarios.MDG_Lexer;
+      MDG_Lexer_Context : Parsing_Context := Initialize_Context;
+      Loc               : Location_Type   := Location (Input);
+
+   begin
+      -- Put_Line ("Analyzing file " & File_Name, Verbosity => IO.Debug);
+
+      Open (Input,
+            Mode => In_File,
+            Name => File_Name);
+
+      Tests.Builder.Add_Document (File_Name);
+      -- The doc name is not in the file content
+
+      while not End_Of_File (Input) loop
+         Loc := Location (Input);
+         -- to be done before the Get_Line, otherwise Line is already on the
+         -- next one.
+
+         Line_Processing : declare
+            Line   : aliased constant String  := Get_Line (Input);
+            Attrib : constant Line_Attributes := Parse_Line
+              (Line'Access, MDG_Lexer_Context, Loc);
+            S      : Step_Type;
+
+         begin
+            --  Put_Line (File_Name & Ada.Text_IO.Line (Input)'Image & " : """
+            --            & Line & """", Verbosity => Verbose);
+            -- Put_Line ("State           = " & State'Image,  Verbosity => Verbose);
+            -- Put_Line ("Attrib          = " & Attrib'Image, Verbosity => Debug);
+            -- New_Line (Verbosity => Verbose);
+            Put_Line (Image (Loc)
+                      & "Parsed: " & Attrib'Image, Verbosity => IO.Debug);
+
+            case Attrib.Kind is
+            when Feature_Line =>
+               Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
+
+            when Scenario_Line =>
+               Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
+
+            when Background_Line =>
+               Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
+
+            when Step_Line =>
+               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc);
+               Put_Line ("Step = " & S'Image, Verbosity => IO.Debug);
+               Tests.Builder.Add_Step (S);
+
+            when Code_Fence =>
+               Tests.Builder.Add_Code_Block (Loc);
+
+            when Text_Line =>
+               Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);
+
+            when Empty_Line => null;
+
+            end case;
+
+         end Line_Processing;
+
+      end loop;
+
+      -- and finally, let's record the document
+      Close (Input);
+      Put_Line ("Doc_List = " & Tests.Builder.The_Tests_List.all'Image,
+                Verbosity => IO.Debug);
+
+   exception
+      when E : others =>
+         -- Missing_Scenario
+         IO.Put_Exception (Ada.Exceptions.Exception_Message (E)
+                           & "while processing " & File_Name
+                           & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
+                           Loc);
+
+   end Analyze_MDG_File;
+
+end BBT.Scenarios.Files;

@@ -28,9 +28,9 @@ begin
    New_Line;
    Put_Line ("Command :");
    Put_Line ("   run                    : the default command");
-   Put_Line ("   -lf  | list_files      : list scenarii files found");
+   Put_Line ("   -lf  | list_files      : list Scenario files found");
    Put_Line ("   -lk  | list_keywords   : list bbt keywords");
-   Put_Line ("   -e   | explain         : explain what bbt understand from scenarii files");
+   Put_Line ("   -e   | explain         : explain what bbt understand from Scenarios files");
    Put_Line ("   -ct  | create-template : create a commented example of rules file");
    Put_Line ("   -d   | dry-run         : print the commands that would be");
    Put_Line ("   -h   | help            : this message");
@@ -42,7 +42,7 @@ begin
    Put_Line ("   -q   | --quiet         : no message unless error,");
    Put_Line ("                            Warning are also ignored");
    --  Put_Line ("   -wc  | --with-comments : when used with -e, list the full contents of");
-   --  Put_Line ("                            scenarii files");
+   --  Put_Line ("                            Scenarios Files");
    --  Put_Line ("   -bk  | --bold-keywords : when used with -e, keywords are surrouded by ""**""");
    --  Put_Line ("                            for a better markdown rendering");
    Put_Line ("   -o   | --output file.md : create a Markdown file with tests results");

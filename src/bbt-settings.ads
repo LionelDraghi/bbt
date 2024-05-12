@@ -44,43 +44,12 @@ private package BBT.Settings is
    List_Keywords         : Boolean := False;
 
    -- --------------------------------------------------------------------------
-   -- Observability!
-   type Extended_Topics is (None,
-                            Spawn,
-                            Lexer,
-                            BBT_Files,
-                            Builder,
-                            Step_Lexer,
-                            Runner);
-   subtype Topics is Extended_Topics range
-     Extended_Topics'Succ (None) .. Extended_Topics'Last;
-   --  None is the default parameter for IO operation, but is not in Topics
-   --  range, used when setting what should be printed.
-   procedure Enable_Topic (Topic : Topics);
-   function Is_Enabled (Topic : Extended_Topics) return Boolean;
-   -- return always false for None
-
-   -- --------------------------------------------------------------------------
    function Initial_Directory return String;
    -- returns Ada.Directories.Current_Directory at bbt launch.
-   function Run_Dir_Name return String;
+   -- function Run_Dir_Name return String;
 
    -- --------------------------------------------------------------------------
    procedure Set_Output_File (File_Name : String);
    function Get_Output_File_Name return String;
-
-   -- --------------------------------------------------------------------------
-   type Print_Out_Level is (Debug, Verbose, Normal, Quiet);
-   -- default: Normal messages are displayed, verbose messages are not
-   --          displayed.
-   -- quiet:   Neither normal messages nor verbose messages are displayed.
-   --          This mode can be achieved using option --quiet.
-   -- verbose: Both normal messages and verbose messages are displayed.
-   --          This mode can be achieved using option --verbose.
-   Verbosity : Print_Out_Level := Normal;
-   function Is_Authorised (Level : Print_Out_Level) return Boolean;
-
-   -- --------------------------------------------------------------------------
-   function Debug_Mode return Boolean is (Verbosity = Debug);
 
 end BBT.Settings;

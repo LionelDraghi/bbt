@@ -24,7 +24,7 @@ procedure Put_Topics is
    use Ada.Characters.Handling;
 begin
    Ada.Text_IO.Put_Line ("Available topics :");
-   for T in Settings.Topics loop
+   for T in IO.Topics loop
       Ada.Text_IO.Put_Line ("- " & To_Lower (T'Image));
    end loop;
 end Put_Topics;
