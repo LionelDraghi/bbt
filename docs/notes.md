@@ -60,19 +60,14 @@ Not as easy to read as English, and not suitable for immediate insertion in docu
 
 ## TDL, What is not (yet) implemented :
 
-    - Command line Interactive testing (if the command prompt Y/N before continuing…)
-    - no new files feature
-    - Functionnalité intéressante pour le futur sur les interactive command line interface a mettre dans la TDL
-    - regexp
+- Command line Interactive testing (if the command prompt Y/N before continuing…)
+- no new files feature
+- Functionnalité intéressante pour le futur sur les interactive command line interface a mettre dans la TDL
+- regexp
 
      
 ## What it is not mean for :
 
-    UI testing
-    Obviously white box testing, checking internal states
-    Note that you can have a kind of “grey box” testing with an exe providing “observability” features, interesting discussion on this and TTD [here](https://www.youtube.com/watch?v=prLRI3VEVq4&t=2190s)
-    Very complex interaction with the file system
-    Web interaction (could be done with some kind of stubbing?)
 
 
 ## Design
@@ -106,7 +101,7 @@ And there is also MDG (for Markdown Gherkin)
 [Specification as a ubiquitous language](https://en.wikipedia.org/wiki/Behavior-driven_development#Specification_as_a_ubiquitous_language)
 *A ubiquitous language is a (semi-)formal language that is shared by all members of a software development team — both software developers and non-technical personnel.*
 
-
+Interesting discussion on observability and TTD [here](https://www.youtube.com/watch?v=prLRI3VEVq4&t=2190s)
 
 
 ## Synonymes : ???

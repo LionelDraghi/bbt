@@ -1,4 +1,4 @@
-###
+### Existing comparables
 
 https://github.com/cucumber/aruba/blob/main/features/06_use_aruba_cli/initialize_project_with_aruba.feature
 
