@@ -26,13 +26,13 @@ begin
    Put_Line ("   Template_Name     : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Explain) & " Explain");
-   Put_Line ("   " & Checkbox (No_File_Given) & " No_File_Given");
-   Put_Line ("   " & Checkbox (Explain) & " Explain");
    Put_Line ("   " & Checkbox (Dry_Run) & " Dry_Run");
+   Put_Line ("   " & Checkbox (No_File_Given) & " No_File_Given");
    Put_Line ("   " & Checkbox (Keep_Going) & " Keep_Going");
+   Put_Line ("   " & Checkbox (List_Topics) & " List_Topics");
+   Put_Line ("   " & Checkbox (List_Keywords) & " List_Keywords");
+   Put_Line ("   " & Checkbox (List_Grammar) & " List_Grammar");
    Put_Line ("   " & Checkbox (Ignore_Errors) & " Ignore_Errors");
-   Put_Line ("   " & Checkbox (With_Comments) & " With_Comments");
-   Put_Line ("   " & Checkbox (With_Bold_Keywords) & " With_Bold_Keywords");
    Put_Line ("   " & Checkbox (Recursive) & " Recursive");
    Put_Line ("   " & Checkbox (Warnings_As_Errors) & " Warnings_As_Errors");
    Put_Line ("   " & Checkbox (Settings.Create_Template)

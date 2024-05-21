@@ -10,50 +10,29 @@ package body BBT.Documents is
    Current_Indent_Level : Positive := 1;
 
    -- --------------------------------------------------------------------------
-   function To_Bold (S    : String;
-                     Bold : Boolean) return String is
-     (if Bold then "**" & S & "**" else S);
-   function To_Bold (S : Unbounded_String;
-                     Bold : Boolean) return String is
-     (To_Bold (To_String (S), Bold));
-
-   -- --------------------------------------------------------------------------
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type)
    is
-      procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
-      begin
-         if S /= Null_Unbounded_String then
-            Output.Put (Prefix & " " & S'Image);
-         end if;
-      end Put_If_Not_Null;
+      --  procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
+      --  begin
+      --     if S /= Null_Unbounded_String then
+      --        Output.Put (Prefix & " " & S'Image);
+      --     end if;
+      --  end Put_If_Not_Null;
    begin
       Output.Put (S.Cat'Image & ", ");
       Output.Put (S.Action'Image);
-      Put_If_Not_Null (", Step_String = ", S.Step_String);
-      Put_If_Not_Null (", Object_String = ", S.Object_String);
-      Put_If_Not_Null (", Subject_String = ", S.Subject_String);
-      Output.Put (", File_Type = " & S.File_Type'Image);
-      --  if S.File_Type = Directory then
-      --     Put_If_Not_Null (", Dir name =", S.File_Name);
-      --  else
-      --     Put_If_Not_Null (", File name =", S.File_Name);
-      --  end if;
+      Output.Put (", Step_String = "    & S.Step_String'Image);
+      Output.Put (", Object_String = "  & S.Object_String'Image);
+      Output.Put (", Subject_String = " & S.Subject_String'Image);
+      Output.Put (", File_Type = "      & S.File_Type'Image);
       if not S.File_Content.Is_Empty then
          Output.Put (S.File_Content'Image);
       end if;
    end Put_Image;
 
    -- --------------------------------------------------------------------------
-   --  procedure Add_Fail (To : in out Scenario_Type) is
-   --  begin
-   --     To.Failed_Step_Count := @ + 1;
-   --  end Add_Fail;
-   --  procedure Add_Success (To : in out Scenario_Type) is
-   --  begin
-   --     To.Successful_Step_Count := @ + 1;
-   --  end Add_Success;
    procedure Add_Result (Success : Boolean; To : in out Scenario_Type) is
    begin
       if Success then
@@ -73,95 +52,66 @@ package body BBT.Documents is
    end Put_Text;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step (Step               : Step_Type;
-                       With_Comments      : Boolean;
-                       With_Bold_Keywords : Boolean) is
-      pragma Unreferenced (With_Comments, With_Bold_Keywords);
+   procedure Put_Step (Step : Step_Type) is
       Pref : constant String := Prefix (1);
    begin
       Put_Line (Pref & Step'Image);
    end Put_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario (Scenario           : Scenario_Type;
-                           With_Comments      : Boolean;
-                           With_Bold_Keywords : Boolean) is
+   procedure Put_Scenario (Scenario : Scenario_Type) is
    begin
       Current_Indent_Level := 1;
       declare
          Pref : constant String := Prefix (Current_Indent_Level) & "### ";
       begin
          New_Line;
-         if With_Bold_Keywords then
-            Put_Line (Pref & To_Bold ("Scenario", With_Bold_Keywords)
-                      & ": " &  To_String ((Scenario.Name)));
-         else
-            Put_Line (Pref & "Scenario " & To_String ((Scenario.Name)));
-         end if;
+         Put_Line (Pref & "Scenario " & To_String ((Scenario.Name)));
          New_Line;
-         if With_Comments then
-            Put_Text ((Scenario.Comment));
-            New_Line;
-         end if;
          for Step of Scenario.Step_List loop
-            Put_Step (Step, With_Comments, With_Bold_Keywords);
+            Put_Step (Step);
          end loop;
-
       end;
    end Put_Scenario;
 
+   function Parent_Doc (Scen : Scenario_Type) return access Document_Type is
+     (if Scen.Parent_Feature /= null then Scen.Parent_Feature.Parent_Document
+      else Scen.Parent_Document);
+
+   function Is_In_Feature (Scen : Scenario_Type) return Boolean is
+     (Scen.Parent_Feature /= null);
+
    -- --------------------------------------------------------------------------
-   procedure Put_Feature (Feature            : Feature_Type;
-                          With_Comments      : Boolean;
-                          With_Bold_Keywords : Boolean) is
+   procedure Put_Feature (Feature : Feature_Type) is
       Pref : constant String := "## ";
    begin
       Current_Indent_Level := 1;
-      if With_Bold_Keywords then
-         Put_Line (Pref & To_Bold ("Feature",
-                   With_Bold_Keywords) & ": " & To_String (Feature.Name));
-      else
-         Put_Line (Pref & "Feature" & ": " & To_String (Feature.Name));
-      end if;
-      if With_Comments then
-         New_Line;
-         Put_Text (Feature.Comment);
-      end if;
+      Put_Line (Pref & "Feature" & ": " & To_String (Feature.Name));
       for Scenario of Feature.Scenario_List loop
-         Put_Scenario (Scenario, With_Comments, With_Bold_Keywords);
+         Put_Scenario (Scenario);
       end loop;
    end Put_Feature;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document (Doc                : Document_Type;
-                           With_Comments      : Boolean;
-                           With_Bold_Keywords : Boolean) is
+   procedure Put_Document (Doc : Document_Type) is
    begin
       Current_Indent_Level := 1;
-      Put_Line ("# " & To_Bold (Doc.Name, With_Bold_Keywords));
+      Put_Line ("# " & To_String (Doc.Name));
       New_Line;
-      if With_Comments then
-         Put_Text (Doc.Comment);
-         New_Line;
-      end if;
       for Feature of Doc.Feature_List loop
-         Put_Feature (Feature, With_Comments, With_Bold_Keywords);
+         Put_Feature (Feature);
       end loop;
    end Put_Document;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_List (Doc_List           : Documents_Lists.Vector;
-                                With_Comments      : Boolean;
-                                With_Bold_Keywords : Boolean) is
+   procedure Put_Document_List (Doc_List : Documents_Lists.Vector) is
    begin
       Put_Line ("**Document list:**");
       New_Line;
       Put_Line ("[[TOC]]");
       New_Line;
       for Doc of Doc_List loop
-         Put_Document (Doc,
-                       With_Comments      => With_Comments,
-                       With_Bold_Keywords => With_Bold_Keywords);
+         Put_Document (Doc);
       end loop;
    end Put_Document_List;
 
@@ -179,29 +129,67 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Run_Summary is
-      Failed_Step_Count     : Natural := 0;
-      Successful_Step_Count : Natural := 0;
-      Test_Result_Counts    : array (Test_Result) of Natural := [others => 0];
+      Test_Result_Counts : array (Test_Result) of Natural := [others => 0];
+      procedure Get_Results (S : Scenario_Type) is
+      begin
+         Test_Result_Counts (Result (S)) := @ + 1;
+      end Get_Results;
    begin
       for D of BBT.Tests.Builder.The_Tests_List.all loop
+
+         if D.Feature_List.Is_Empty and D.Scenario_List.Is_Empty then
+            -- Empty Doc should be reported
+            Test_Result_Counts (Empty) := @ + 1;
+         end if;
+         --
+         --  if D.Background /= null then
+         --     -- Background results are normally moved to the scenario after run,
+         --     -- but in case of a scenario where there is only the background...
+         --     -- Fixme: not sure this is usefull at all.
+         --     Get_Results (D.Background.all);
+         --  end if;
+         --
+         for Scen of D.Scenario_List loop
+            Get_Results (Scen);
+         end loop;
+
          for F of D.Feature_List loop
+
+            if F.Scenario_List.Is_Empty then
+               -- Empty Feature should be reported
+               Test_Result_Counts (Empty) := @ + 1;
+            end if;
+
+            --  if F.Background /= null then
+            --     -- Background results are normally moved to the scenario after
+            --     -- run, but in case of a scenario where there is only the
+            --     -- background...
+            --     -- Fixme: not sure this is usefull at all.
+            --     Get_Results (F.Background.all);
+            --  end if;
+
             for Scen of F.Scenario_List loop
-               Successful_Step_Count := @ + Scen.Successful_Step_Count;
-               Failed_Step_Count     := @ + Scen.Failed_Step_Count;
-               Test_Result_Counts (Result (Scen)) := @ + 1;
+               Get_Results (Scen);
             end loop;
+
          end loop;
       end loop;
+
       New_Line;
       Put_Line ("------------------------------------------------");
       Put_Line ("- Failed     tests = " & Test_Result_Counts (Failed)'Image);
       Put_Line ("- Successful tests = " & Test_Result_Counts (Successful)'Image);
       Put_Line ("- Empty      tests = " & Test_Result_Counts (Empty)'Image);
-      if IO.Is_Authorized (Verbose) then
-         New_Line;
-         Put_Line ("- Failed     steps = " & Failed_Step_Count'Image);
-         Put_Line ("- Successful steps = " & Successful_Step_Count'Image);
-      end if;
+
    end Put_Run_Summary;
+
+   -- --------------------------------------------------------------------------
+   procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is
+   begin
+      To_Scen.Failed_Step_Count     := @ + From_Scen.Failed_Step_Count;
+      To_Scen.Successful_Step_Count := @ + From_Scen.Successful_Step_Count;
+      From_Scen.Failed_Step_Count     := 0;
+      From_Scen.Successful_Step_Count := 0;
+   end Move_Results;
 
 end BBT.Documents;

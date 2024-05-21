@@ -27,23 +27,29 @@ private package BBT.Documents is
 
    type Actions is
      (None,
-      Run_Cmd,
-      Run_Without_Error,
-      --                      --------------------------------------------------
-      Error_Return_Code,
-      No_Error_Return_Code,
-      Output_Is,
-      Output_Contains,
-      File_Is,
-      File_Contains,
-      --                      --------------------------------------------------
-      Check_No_File,
       Check_File_Existence,
+      Check_Dir_Existence,
+      Check_No_File,
+      Check_No_Dir,
       Create_If_None,
-      Create_New
-     );
-   -- NB : file is intended here in the broader sens, that is ordinary
-   --      file or directory.
+      Create_New,
+      Delete_File,
+      Delete_Dir,
+      Error_Return_Code,
+      File_Contains,
+      File_Is,
+      No_Error_Return_Code,
+      Output_Contains,
+      Output_Is,
+      Run_Cmd,
+      Run_Without_Error);
+
+   type Scenario_Type;
+   type Feature_Type;
+   type Document_Type;
+
+   package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
+     (Positive, String);
 
    -- --------------------------------------------------------------------------
    type Step_Type is record
@@ -53,115 +59,86 @@ private package BBT.Documents is
       Location        : Location_Type;
       Subject_String  : Unbounded_String          := Null_Unbounded_String;
       Object_String   : Unbounded_String          := Null_Unbounded_String;
-      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File; -- ** essayer Special_File
       File_Content    : Text                      := Empty_Text;
+      Parent_Scenario : access Scenario_Type;
    end record with Put_Image => Put_Image;
-   Empty_Step : constant Step_Type;
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type);
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type);
-
    function "+" (Name : Unbounded_String) return String is (To_String (Name));
    function "+" (Name : String) return Unbounded_String is
      (To_Unbounded_String (Name));
 
    -- --------------------------------------------------------------------------
    type Scenario_Type is record
-      Name      : Unbounded_String;
-      Location  : Location_Type; -- record only location of the keyword line
-      Comment   : Text;
-      Step_List : Step_Lists.Vector;
-      -----------------------
+      Name                  : Unbounded_String;
+      Location              : Location_Type; -- record only the keyword line
+      Comment               : Text;
+      Step_List             : aliased Step_Lists.Vector;
+      Parent_Feature        : access Feature_Type;
+      Parent_Document       : access Document_Type;
       Failed_Step_Count     : Natural := 0;
       Successful_Step_Count : Natural := 0;
+      Cmd_List              : Cmd_Lists.Vector;
+      -- Cmd_List is fulfilled in the parser.
+      -- Then, in the the builder, the scenario is expanded in one scenario
+      -- by Cmd, and the Cmd_List is emptied.
+      -- Each scenario will be identical, except for the run command, that will
+      -- be in Object_String, one by Cmd_List item.
+      Cmd_List_Step_Index   : Natural := 0;
+      -- store the index in Step_List where the cmd_list was found
    end record;
-   Empty_Scenario : constant Scenario_Type;
-   --  procedure Add_Fail   (To : in out Scenario_Type);
-   --  procedure Add_Success (To : in out Scenario_Type);
+   -- with Type_Invariant => Parent_Feature /= null xor Parent_Document /= null;
+   function Parent_Doc (Scen : Scenario_Type) return access Document_Type;
+   function Is_In_Feature (Scen : Scenario_Type) return Boolean;
+   function Has_Cmd_List (Scen : Scenario_Type) return Boolean is
+     (Scen.Cmd_List_Step_Index /= 0);
    procedure Add_Result  (Success : Boolean; To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Scenario_Type);
 
    -- --------------------------------------------------------------------------
    type Feature_Type is record
+      Name            : Unbounded_String;
+      Location        : Location_Type; -- only record the keyword line
+      Comment         : Text;
+      Scenario_List   : Scenario_Lists.Vector;
+      Background      : access Scenario_Type;
+      Parent_Document : access Document_Type;
+   end record;
+   package Feature_Lists is new Ada.Containers.Indefinite_Vectors
+     (Positive, Feature_Type);
+   function Has_Background (F : Feature_Type) return Boolean is
+     (F.Background /= null and then not F.Background.Step_List.Is_Empty);
+
+   -- --------------------------------------------------------------------------
+   type Document_Type is record
       Name          : Unbounded_String;
       Location      : Location_Type; -- record only location of the keyword line
       Comment       : Text;
       Scenario_List : Scenario_Lists.Vector;
-      Background    : Scenario_Type;
+      Feature_List  : Feature_Lists.Vector;
+      Background    : access Scenario_Type;
    end record;
-   Empty_Feature : constant Feature_Type;
-   package Feature_Lists is new Ada.Containers.Indefinite_Vectors
-     (Positive, Feature_Type);
-
-   -- --------------------------------------------------------------------------
-   type Document_Type is record
-      Name         : Unbounded_String;
-      Location     : Location_Type; -- record only location of the keyword line
-      Comment      : Text;
-      Feature_List : Feature_Lists.Vector;
-      Background   : Scenario_Type;
-   end record;
-   Empty_Document : constant Document_Type;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type);
+   function Has_Background (D : Document_Type) return Boolean is
+     (D.Background /= null and then not D.Background.Step_List.Is_Empty);
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text (The_Text : Text);
-
-   procedure Put_Step (Step               : Step_Type;
-                       With_Comments      : Boolean;
-                       With_Bold_Keywords : Boolean);
-   procedure Put_Scenario (Scenario           : Scenario_Type;
-                           With_Comments      : Boolean;
-                           With_Bold_Keywords : Boolean);
-   procedure Put_Feature (Feature            : Feature_Type;
-                          With_Comments      : Boolean;
-                          With_Bold_Keywords : Boolean);
-   procedure Put_Document (Doc                : Document_Type;
-                           With_Comments      : Boolean;
-                           With_Bold_Keywords : Boolean);
-   procedure Put_Document_List (Doc_List           : Documents_Lists.Vector;
-                                With_Comments      : Boolean;
-                                With_Bold_Keywords : Boolean);
+   procedure Put_Text          (The_Text : Text);
+   procedure Put_Step          (Step     : Step_Type);
+   procedure Put_Scenario      (Scenario : Scenario_Type);
+   procedure Put_Feature       (Feature  : Feature_Type);
+   procedure Put_Document      (Doc      : Document_Type);
+   procedure Put_Document_List (Doc_List : Documents_Lists.Vector);
 
    -- --------------------------------------------------------------------------
    function Result (Scenario : Scenario_Type) return Test_Result;
    procedure Put_Run_Summary;
-
-private
-   Empty_Step : constant Step_Type
-     := (Step_String    => Null_Unbounded_String,
-         File_Content   => Empty_Text,
-         Location       => <>,
-         Action         => None,
-         Cat            => Unknown,
-         Subject_String => Null_Unbounded_String,
-         Object_String  => Null_Unbounded_String,
-         File_Type      => Ada.Directories.Ordinary_File);
-
-   Empty_Scenario : constant Scenario_Type
-     := (Name                  => Null_Unbounded_String,
-         Location              => <>,
-         Step_List             => Step_Lists.Empty,
-         Comment               => Empty_Text,
-         Failed_Step_Count     |
-         Successful_Step_Count => 0);
-
-   Empty_Feature  : constant Feature_Type
-     :=  (Name          => Null_Unbounded_String,
-          Location      => <>,
-          Scenario_List => Scenario_Lists.Empty,
-          Comment       => Empty_Text,
-          Background    => Empty_Scenario);
-
-   Empty_Document : constant Document_Type
-     := (Name         => Null_Unbounded_String,
-         Location     => <>,
-         Comment      => Empty_Text,
-         Feature_List => Feature_Lists.Empty,
-         Background   => Empty_Scenario);
+   procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type);
 
 end BBT.Documents;

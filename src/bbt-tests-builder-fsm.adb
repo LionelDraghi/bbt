@@ -1,6 +1,6 @@
 separate (BBT.Tests.Builder)
 
--- --------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 package body FSM is
 
    Internal_State          : States := In_Document;
@@ -9,6 +9,8 @@ package body FSM is
    Internal_Step_State     : Step_States;
 
    Internal_Background     : Backgrounds := Doc;
+
+   Internal_Doc_State      : Doc_States := In_Document;
 
    -- --------------------------------------------------------------------------
    function Current_State  return States is (Internal_State);
@@ -20,35 +22,51 @@ package body FSM is
 
    procedure Set_State (To_State : States) is
    begin
+      --  if To_State = Internal_State then
+      --     -- If we are already in this state, ignore the call
+      --     null;
+      --
+      --  else
+      -- Stack new state
       Internal_Previous_State := Internal_State;
-      Internal_State := To_State;
+      Internal_State          := To_State;
 
-      case Internal_State is
+      case To_State is
          when In_Document   |
               In_Feature    |
               In_Scenario   |
               In_Background =>
+            -- Reset Background and Step related states
             Internal_Step_State := In_Given_Step;
-            Internal_Background := Doc;
          when others => null;
       end case;
 
+      case To_State is
+         when In_Document => Internal_Doc_State := In_Document;
+         when In_Feature  => Internal_Doc_State := In_Feature;
+         when others      => null;
+      end case;
+
+      case To_State is
+         when In_Document => Internal_Background := Doc;
+         when In_Feature  => Internal_Background := Feature;
+         when In_Scenario => Internal_Background := None;
+         when others      => null;
+      end case;
+
+      --  end if;
+
    end Set_State;
+
+   -- --------------------------------------------------------------------------
+   function Current_Doc_State  return Doc_States  is (Internal_Doc_State);
+   function Current_Background return Backgrounds is (Internal_Background);
+   function Current_Step_State return Step_States is (Internal_Step_State);
 
    -- --------------------------------------------------------------------------
    procedure Set_Step_State (To_State : Step_States) is
    begin
       Internal_Step_State := To_State;
    end Set_Step_State;
-
-   function Current_Step_State return Step_States is (Internal_Step_State);
-
-   -- --------------------------------------------------------------------------
-   procedure Set_Background (The_Background : Backgrounds) is
-   begin
-      Internal_Background := The_Background;
-   end Set_Background;
-
-   function Current_Background return Backgrounds is (Internal_Background);
 
 end FSM;

@@ -50,9 +50,11 @@ package body BBT.Scenarios.Files is
    procedure Append_File (File_Name : String) is
       use Ada.Directories;
    begin
-      if Full_Name (File_Name) /= Full_Name (Settings.Template_Name) then
+      if Full_Name (File_Name) /= Full_Name (Settings.Template_Name)
+        and then Full_Name (File_Name) /=  Get_Output_File_Name
+      then
          --  Filters the md file created with --create-template, that is
-         --  not supposed to be executed.
+         --  not supposed to be executed, and the output file if any.
          The_List.Append (File_Name);
       end if;
    end Append_File;
@@ -166,6 +168,7 @@ package body BBT.Scenarios.Files is
             Attrib : constant Line_Attributes := Parse_Line
               (Line'Access, MDG_Lexer_Context, Loc);
             S      : Step_Type;
+            Cmd_List : Cmd_Lists.Vector;
 
          begin
             --  Put_Line (File_Name & Ada.Text_IO.Line (Input)'Image & " : """
@@ -187,9 +190,9 @@ package body BBT.Scenarios.Files is
                Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
 
             when Step_Line =>
-               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc);
-               Put_Line ("Step = " & S'Image, Verbosity => IO.Debug);
-               Tests.Builder.Add_Step (S);
+               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc, Cmd_List);
+               Put_Line ("sortie de parser : Step = " & S'Image, Verbosity => IO.Verbose);
+               Tests.Builder.Add_Step (S, Cmd_List);
 
             when Code_Fence =>
                Tests.Builder.Add_Code_Block (Loc);
@@ -214,7 +217,7 @@ package body BBT.Scenarios.Files is
       when E : others =>
          -- Missing_Scenario
          IO.Put_Exception (Ada.Exceptions.Exception_Message (E)
-                           & "while processing " & File_Name
+                           & " while processing " & File_Name
                            & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                            Loc);
 

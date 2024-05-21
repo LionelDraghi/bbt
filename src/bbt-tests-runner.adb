@@ -7,20 +7,20 @@ with Text_Utilities;        use Text_Utilities;
 
 with GNAT.Traceback.Symbolic;
 
-with Ada.Command_Line;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Tests.Runner is
 
    -- -----------------------------------------------------------------------
-   function Output_File_Name (D : Document_Type) return String is
-     (To_String (D.Name) & ".out");
-
-   function Is_Success (I : Integer) return Boolean is
-     (I = Integer (Ada.Command_Line.Success));
+   --  function Is_Success (I : Integer) return Boolean is
+   --    (I = Integer (Ada.Command_Line.Success));
    -- Fixme: can I compare the return status of spawn with
    --        Ada.Command_Line Success or Fail?
+
+   -- -----------------------------------------------------------------------
+   function Output_File_Name (D : Document_Type) return String is
+     (To_String (D.Name) & ".out");
 
    function Subject_Or_Object_String (Step : Step_Type) return String is
      (To_String (if Step.Object_String = Null_Unbounded_String then
@@ -29,113 +29,105 @@ package body BBT.Tests.Runner is
    Return_Code : Integer := 0;
 
    -- -----------------------------------------------------------------------
-   procedure Run_Scenario (The_Scenario : in out Scenario_Type;
-                           The_Feature  :        Feature_Type;
-                           The_Doc      :        Document_Type) is
-      pragma Unreferenced (The_Feature);
+   procedure Run_Scenario (Scen : in out Scenario_Type) is
+      Spawn_OK : Boolean := False;
+      The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
    begin
-      Step_Processing : for Step of The_Scenario.Step_List loop
-         declare
-            Spawn_OK : Boolean := False;
+      Step_Processing : for Step of Scen.Step_List loop
+         Spawn_OK := False;
          begin
             case Step.Action is
-               when Run_Cmd =>
-                  Run_Cmd (Cmd         => To_String (Step.Object_String),
-                           Output_Name => Output_File_Name (The_Doc),
-                           Spawn_OK    => Spawn_OK,
-                           Return_Code => Return_Code);
-                  Put_Step_Result (Step        => Step,
-                                   Success     => Spawn_OK,
-                                   --  Success_Msg => "Run " &
-                                   --    Step.Object_String'Image,
-                                   Fail_Msg    => "Couldn't run " &
+            when Run_Cmd =>
+               Run_Cmd (Cmd         => To_String (Step.Object_String),
+                        Output_Name => Output_File_Name (The_Doc),
+                        Spawn_OK    => Spawn_OK,
+                        Return_Code => Return_Code);
+               Put_Step_Result (Step     => Step,
+                                Success  => Spawn_OK,
+                                Fail_Msg => "Couldn't run " &
+                                  Step.Object_String'Image,
+                                Loc      => Step.Location);
+               if not Spawn_OK then
+                  exit Step_Processing;
+               end if;
+
+            when Run_Without_Error =>
+               Run_Cmd (Cmd         => To_String (Step.Object_String),
+                        Output_Name => Output_File_Name (The_Doc),
+                        Spawn_OK    => Spawn_OK,
+                        Return_Code => Return_Code);
+
+               if Spawn_OK then
+                  Put_Step_Result (Step     => Step,
+                                   Success  => Is_Success (Return_Code),
+                                   Fail_Msg => "Unsuccessfully run " &
                                      Step.Object_String'Image,
-                                   Loc         => Step.Location,
-                                   Scenario    => The_Scenario);
-                  if not Spawn_OK then
-                     exit Step_Processing;
-                  end if;
+                                   Loc      => Step.Location);
+               else
+                  Put_Step_Result (Step     => Step,
+                                   Success  => False,
+                                   Fail_Msg => "Couldn't run " &
+                                     Step.Object_String'Image,
+                                   Loc      => Step.Location);
+                  exit Step_Processing;
+               end if;
 
-               when Run_Without_Error =>
-                  Run_Cmd (Cmd         => To_String (Step.Object_String),
-                           Output_Name => Output_File_Name (The_Doc),
-                           Spawn_OK    => Spawn_OK,
-                           Return_Code => Return_Code);
+            when Error_Return_Code =>
+               Return_Error (Return_Code, Step);
 
-                  if not Spawn_OK then
-                     Put_Step_Result (Step => Step,
-                                      Success     => False,
-                                      -- Success_Msg => "", -- impossible
-                                      Fail_Msg    => "Couldn't run " &
-                                        Step.Object_String'Image,
-                                      Loc         => Step.Location,
-                                      Scenario    => The_Scenario);
-                     exit Step_Processing;
+            when No_Error_Return_Code =>
+               Return_No_Error (Return_Code, Step);
 
-                  else
-                     Put_Step_Result (Step => Step,
-                                      Success     => Is_Success (Return_Code),
-                                      --  Success_Msg => "Successfully run " &
-                                      --    Step.Object_String'Image,
-                                      Fail_Msg    => "Unsuccessfully run " &
-                                        Step.Object_String'Image,
-                                      Loc         => Step.Location,
-                                      Scenario    => The_Scenario);
-                  end if;
+            when Output_Is =>
+               Output_Equal_To (Get_Text (Output_File_Name (The_Doc)), Step);
 
-               when Error_Return_Code =>
-                  Return_Error (Return_Code, Step, The_Scenario);
+            when Output_Contains =>
+               -- example : Then the output contains `--version`
+               Output_Contains (Get_Text (Output_File_Name (The_Doc)), Step);
 
-               when No_Error_Return_Code =>
-                  Return_No_Error (Return_Code, Step, The_Scenario);
+            when File_Is =>
+               Files_Is (Step);
 
-               when Output_Is =>
-                  Output_Equal_To (Get_Text (Output_File_Name (The_Doc)),
-                                   Step,
-                                   The_Scenario);
+            when File_Contains =>
+               File_Contains (Step);
 
-               when Output_Contains =>
-                  -- example : Then the output contains `--version`
-                  Output_Contains (Get_Text (Output_File_Name (The_Doc)),
-                                   Step,
-                                   The_Scenario);
+            when Check_No_File =>
+               Check_No_File (Subject_Or_Object_String (Step), Step);
 
-               when File_Is   =>
-                  Files_Equal_To (Step, The_Scenario);
+            when Check_No_Dir =>
+               Check_No_Dir (Subject_Or_Object_String (Step), Step);
 
-               when File_Contains   =>
-                  File_Contains (Step, The_Scenario);
+            when Check_File_Existence =>
+               Check_File_Existence (Subject_Or_Object_String (Step), Step);
 
-               when Check_No_File =>
-                  Check_No_File (Subject_Or_Object_String (Step),
-                                 Step,
-                                 The_Scenario);
+            when Check_Dir_Existence =>
+               Check_Dir_Existence (Subject_Or_Object_String (Step), Step);
 
-               when Check_File_Existence =>
-                  Check_File_Existence (Subject_Or_Object_String (Step),
-                                        Step,
-                                        The_Scenario);
+            when Create_If_None =>
+               Create_If_None (Step);
 
-               when Create_If_None =>
-                  Create_File (Step, The_Scenario);
+            when Create_New =>
+               Create_New (Step);
 
-               when Create_New =>
-                  Delete_File (Step, The_Scenario);
-                  Create_File (Step, The_Scenario);
+            when Delete_File =>
+               Delete_File (Step);
 
-               when None =>
-                  Add_Result (False, The_Scenario);
-                  IO.Put_Error ("Unrecognized step " & Step.Step_String'Image,
-                                Step.Location);
+            when Delete_Dir =>
+               Delete_Dir (Step);
+
+            when None =>
+               Add_Result (False, Scen);
+               IO.Put_Error ("Unrecognized step " & Step.Step_String'Image,
+                             Step.Location);
 
             end case;
 
          exception
             when E : others =>
-               Add_Result (False, The_Scenario);
+               Add_Result (False, Scen);
                Put_Exception ("while processing scenario "
-                              & The_Scenario.Name'Image
-                              & Ada.Exceptions.Exception_Message (E)
+                              & Scen.Name'Image
+                              & " : " & Ada.Exceptions.Exception_Message (E)
                               & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                               Step.Location);
          end;
@@ -145,71 +137,98 @@ package body BBT.Tests.Runner is
    end Run_Scenario;
 
    -- --------------------------------------------------------------------------
+   procedure Run_Doc_Background (Scen : in out Scenario_Type) is
+   -- Run background scenario at document level, if any
+      Doc : constant Document_Type := Parent_Doc (Scen).all;
+   begin
+      if Has_Background (Doc) then
+         Put_Line ("  Document Background "
+                   & (+Doc.Background.Name)
+                   & "  ", IO.No_Location, IO.Verbose);
+         Run_Scenario (Doc.Background.all);
+         Move_Results (From_Scen => Doc.Background.all,
+                       To_Scen   => Scen);
+      end if;
+   end Run_Doc_Background;
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Feature_Background (Scen : in out Scenario_Type) is
+   -- Run background scenario at feature level, if any
+   begin
+      if Is_In_Feature (Scen) and Has_Background (Scen.Parent_Feature.all)
+      then
+         declare
+            Feat : constant Feature_Type := Scen.Parent_Feature.all;
+         begin
+            Put_Line ("  Feature background " & (+Feat.Background.Name) &
+                        "  ", IO.No_Location, IO.Verbose);
+            Run_Scenario (Feat.Background.all);
+            Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
+         end;
+      end if;
+   end Run_Feature_Background;
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
+   begin
+      for Scen of L loop
+         IO.New_Line (Verbosity => IO.Normal);
+         --  Put_Line ("  Scenario " & Scen.Name'Image & "  ",
+         --            IO.No_Location, IO.Verbose);
+
+         -- Run background scenarios
+         Run_Doc_Background (Scen);
+         if Is_In_Feature (Scen) then
+            Run_Feature_Background (Scen);
+         end if;
+
+         -- And finally run the scenario
+         Run_Scenario (Scen);
+
+         case Documents.Result (Scen) is
+            when Empty =>
+               -- Note the two spaces at the end of each line, to cause a
+               -- new line in Markdown format when this line is followed
+               -- by an error message.
+               Put_Line ("  - [ ] scenario " & Scen.Name'Image &
+                           " is empty, nothing tested  ");
+            when Successful =>
+               Put_Line ("  - [X] scenario " & Scen.Name'Image & " pass  ");
+            when Failed =>
+               Put_Line ("  - [ ] scenario " & Scen.Name'Image & " fails  ");
+         end case;
+      end loop;
+   end Run_Scenario_List;
+
+   -- --------------------------------------------------------------------------
    procedure Run_All is
    begin
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
          IO.New_Line (Verbosity => IO.Normal);
          Put_Line ("Running file " & D.Name'Image & "  ");
+
+         if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
+         then
+            Put_Warning ("No scenario in document " & D.Name'Image & "  ",
+                         D.Location);
+         end if;
+
+         -- Run scenarios directly attached to the document (not in a Feature)
+         Run_Scenario_List (D.Scenario_List);
+
          for F of D.Feature_List loop
+            -- Then run scenarios attached to each Feature
+            IO.Put_Line ("Running feature " & F.Name'Image & "  ",
+                         Verbosity => Verbose);
 
-            for Scen of F.Scenario_List loop
-               IO.New_Line (Verbosity => IO.Normal);
-               Put_Line ("  Scenario " & Scen.Name'Image & "  ",
-                         IO.No_Location, IO.Verbose);
+            if F.Scenario_List.Is_Empty then
+               Put_Warning ("No scenario in feature " & F.Name'Image & "  ",
+                            F.Location);
+            else
+               Run_Scenario_List (F.Scenario_List);
+            end if;
 
-               -- Run background scenario at document level, if any
-               if D.Background /= Empty_Scenario then
-                  Put_Line ("  Document Background " & (+D.Background.Name) &
-                              "  ", IO.No_Location, IO.Verbose);
-                  Run_Scenario (D.Background,
-                                F,
-                                D);
-                  -- Background results are reported in the scenario
-                  Scen.Failed_Step_Count
-                    := @ + D.Background.Failed_Step_Count;
-                  Scen.Successful_Step_Count
-                    := @ + D.Background.Successful_Step_Count;
-               end if;
-
-               -- Run background scenario at feature level, if any
-               if F.Background /= Empty_Scenario then
-                  Put_Line ("  Feature background " & (+F.Background.Name) &
-                              "  ", IO.No_Location, IO.Verbose);
-                  Run_Scenario (F.Background,
-                                F,
-                                D);
-                  -- Background results are reported in the scenario
-                  Scen.Failed_Step_Count
-                    := @ + F.Background.Failed_Step_Count;
-                  Scen.Successful_Step_Count
-                    := @ + F.Background.Successful_Step_Count;
-               end if;
-               Put_Line ("  Scenario  ", IO.No_Location, IO.Verbose);
-
-               -- And finally run the scenario
-               Run_Scenario (Scen,
-                             F,
-                             D);
-
-               case Documents.Result (Scen) is
-               when Empty =>
-                  -- Note the two spaces at the end to cause a new line
-                  -- in Markdown format when this line is followed by an
-                  -- error message
-                  Put_Line ("  - [ ] [" & To_String (Scen.Name) & "]("
-                            & To_String (D.Name)
-                            & ") is empty, nothing tested  ");
-               when Successful =>
-                  Put_Line ("  - [X] [" & To_String (Scen.Name) & "]("
-                            & To_String (D.Name)
-                            & ") pass  ");
-               when Failed =>
-                  Put_Line ("  - [ ] [" & To_String (Scen.Name) & "]("
-                            & To_String (D.Name)
-                            & ") fails  ");
-               end case;
-            end loop;
          end loop;
          -- New_Line (Verbosity => IO.Normal);
       end loop;

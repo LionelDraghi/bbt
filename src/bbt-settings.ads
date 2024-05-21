@@ -26,26 +26,26 @@ private package BBT.Settings is
    BBT_Version : constant String := Bbt_Config.Crate_Version;
 
    -- --------------------------------------------------------------------------
-   Explain               : Boolean := False;
-   Dry_Run               : Boolean := False;
-   Keep_Going            : Boolean := False;
-   Ignore_Errors         : Boolean := False;
-   Warnings_As_Errors    : Boolean := False;
-   No_File_Given         : Boolean := True;
-   Recursive             : Boolean := False;
-   Help_Needed           : Boolean := False;
-   List_Files            : Boolean := False;
-   With_Comments         : Boolean := False;
-   With_Bold_Keywords    : Boolean := False;
-   Create_Template       : Boolean := False;
-   Template_Name         : constant String := "./bbt_template.md";
-   List_Settings         : Boolean := False;
-   List_Topics           : Boolean := False;
-   List_Keywords         : Boolean := False;
+   Explain            : Boolean := False;
+   Dry_Run            : Boolean := False;
+   Keep_Going         : Boolean := False;
+   Ignore_Errors      : Boolean := False;
+   Warnings_As_Errors : Boolean := False;
+   No_File_Given      : Boolean := True;
+   Recursive          : Boolean := False;
+   Help_Needed        : Boolean := False;
+   List_Files         : Boolean := False;
+   Create_Template    : Boolean := False;
+   List_Settings      : Boolean := False;
+   List_Topics        : Boolean := False;
+   List_Keywords      : Boolean := False;
+   List_Grammar       : Boolean := False;
+   Assume_Yes         : Boolean := False;
+   Template_Name      : constant String := "./bbt_template.md";
 
    -- --------------------------------------------------------------------------
    function Initial_Directory return String;
-   -- returns Ada.Directories.Current_Directory at bbt launch.
+   -- Returns Ada.Directories.Current_Directory at bbt launch.
    -- function Run_Dir_Name return String;
 
    -- --------------------------------------------------------------------------

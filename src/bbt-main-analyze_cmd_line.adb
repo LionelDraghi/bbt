@@ -54,27 +54,38 @@ begin
             Settings.Help_Needed := True;
             return;
 
-         elsif Opt = "-e" or Opt = "explain" then
+         elsif Opt = "-e" or Opt = "--explain" then
             Settings.Explain := True;
 
-         elsif Opt = "-lf" or Opt = "list_files" then
+         elsif Opt = "-lf" or Opt = "--list_files" then
             Settings.List_Files := True;
 
-         elsif Opt = "-lk" or Opt = "list_keywords" then
+         elsif Opt = "-lk" or Opt = "--list_keywords" then
             Settings.List_Keywords := True;
+
+         elsif Opt = "-lg" or Opt = "--list_grammar" then
+            Settings.List_Grammar := True;
 
          elsif Opt = "-ct" or Opt = "--create_template" then
             Settings.Create_Template := True;
 
-         elsif Opt = "-n" or Opt = "--dry-run" then
-            Settings.Dry_Run := True;
-
             -- Options ---------------------------------------------------------
+         elsif Opt = "-o" or Opt = "--output" then
+            Next_Arg;
+            Settings.Set_Output_File (Ada.Command_Line.Argument (Arg_Counter));
+            IO.Enable_Tee (Settings.Get_Output_File_Name);
+
+            --  elsif Opt = "-n" or Opt = "--dry-run" then
+            --     Settings.Dry_Run := True;
+
          elsif Opt = "-r" or Opt = "--recursive" then
             Settings.Recursive := True;
 
          elsif Opt = "-k" or Opt = "--keep_going" then
             Settings.Keep_Going := True;
+
+         elsif Opt = "-y" or Opt = "--assume_yes" then
+            Settings.Assume_Yes := True;
 
          elsif Opt = "-v" or Opt = "--verbose" then
             Set_Verbosity  (Verbose);
@@ -86,42 +97,12 @@ begin
             -- undocumented option
             Set_Verbosity  (Debug);
 
-         elsif Opt = "-wc" or Opt = "--with_comments" then
-            Settings.With_Comments := True;
-
-         elsif Opt = "-bk" or Opt = "--bold_keywords" then
-            Settings.With_Bold_Keywords := True;
-
-         elsif Opt = "-o" or Opt = "--output" then
-            Settings.Set_Output_File
-              (Ada.Command_Line.Argument (Arg_Counter + 1));
-            Next_Arg;
-            IO.Enable_Tee (Settings.Get_Output_File_Name);
-
-            -- Debug command ---------------------------------------------------
-         elsif Opt = "-lt" then
-            -- undocumented option, list topics
-            Settings.List_Topics := True;
-
-         elsif Opt = "-t" then
-            -- undocumented option, print topics
-            declare
-               Topic : constant String :=
-                         Ada.Command_Line.Argument (Arg_Counter + 1);
-            begin
-               IO.Enable_Topic (IO.Topics'Value (Topic));
-               IO.Put_Line ("Enabling trace on topic " & Topic,
-                            Verbosity => IO.Debug);
-               Next_Arg;
-            end;
-
          elsif Opt = "-ls" then
             -- undocumented option, list settings
             Settings.List_Settings := True;
 
-         else
-            -- if it's not an option, its a file name
-            if Ada.Directories.Exists (Opt) then
+         elsif Ada.Directories.Exists (Opt) then
+               -- if it's not an option, its a file name
                case Kind (Opt) is
                   when Directory =>
                      Settings.No_File_Given := False;
@@ -133,18 +114,13 @@ begin
                      Scenarios.Files.Append_File (Opt);
 
                   when Special_File =>
-                     IO.Put_Line ("Unknown file type """ & Opt & """",
-                                     Verbosity => IO.Quiet);
+                     IO.Put_Error ("Unknown file type """ & Opt & """");
                      return;
 
                end case;
 
-            else
-               IO.Put_Line ("Unknown bbt file """ & Opt & """",
-                         Verbosity => IO.Quiet);
-               return;
-
-            end if;
+         else
+            IO.Put_Error ("Unknown option """ & Opt & """");
 
          end if;
 

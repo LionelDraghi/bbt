@@ -21,6 +21,8 @@ package body BBT.Tests.Builder is
 
    type Backgrounds is (None, Doc, Feature);
 
+   subtype Doc_States is States range In_Document .. In_Feature;
+
    -- --------------------------------------------------------------------------
    package FSM is
 
@@ -28,11 +30,11 @@ package body BBT.Tests.Builder is
       procedure Set_State (To_State : States);
       procedure Restore_Previous_State;
 
-      function Current_Step_State return Step_States;
-      procedure Set_Step_State (To_State : Step_States);
-
+      function Current_Doc_State return Doc_States;
       function Current_Background return Backgrounds;
-      procedure Set_Background (The_Background : Backgrounds);
+      function Current_Step_State return Step_States;
+
+      procedure Set_Step_State (To_State : Step_States);
 
    end FSM;
 
@@ -41,7 +43,6 @@ package body BBT.Tests.Builder is
    use FSM;
 
    -- --------------------------------------------------------------------------
-   -- function Last_Doc return Documents_Lists.Cursor is (The_Doc_List.Last);
    function Last_Doc_Ref return Documents_Lists.Reference_Type is
      (The_Doc_List.Reference (The_Doc_List.Last));
 
@@ -50,8 +51,11 @@ package body BBT.Tests.Builder is
         (Last_Doc_Ref.Element.Feature_List.Last));
 
    function Last_Scenario_Ref return Scenario_Lists.Reference_Type is
-     (Last_Feature_Ref.Element.Scenario_List.Reference
-        (Last_Feature_Ref.Scenario_List.Last));
+     (if Current_Doc_State = In_Feature
+      then Last_Feature_Ref.Element.Scenario_List.Reference
+        (Last_Feature_Ref.Scenario_List.Last)
+      else Last_Doc_Ref.    Element.Scenario_List.Reference
+        (Last_Doc_Ref.    Scenario_List.Last));
 
    function Last_Step_Ref return Step_Lists.Reference_Type is
      (Last_Scenario_Ref.Element.Step_List.Reference
@@ -60,53 +64,64 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      --  Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
-      The_Doc_List.Append ((Empty_Document with delta
-                             Name => To_Unbounded_String (Name)));
+      Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
+      The_Doc_List.Append
+        (Document_Type'(Name   => To_Unbounded_String (Name),
+                        others => <>));
       Set_State (In_Document);
-      Set_Background (Doc);
    end Add_Document;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Feature (Name : String;    Loc : Location_Type) is
+   procedure Add_Feature (Name : String; Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
+      Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
       Last_Doc_Ref.Feature_List.Append
-        ((Empty_Feature with delta
-           Name => To_Unbounded_String (Name), Location => Loc));
+        (Feature_Type'(Name            => To_Unbounded_String (Name),
+                       Parent_Document => Last_Doc_Ref.Element,
+                       Location        => Loc,
+                       others          => <>));
       Set_State (In_Feature);
-      Set_Background (Feature);
    end Add_Feature;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Scenario (Name : String;    Loc : Location_Type) is
+   procedure Add_Scenario (Name : String; Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Scenario " & Name'Image, Verbosity => IO.Debug);
-
-      -- We accept scenario without Feature
-      if Last_Doc_Ref.Feature_List.Is_Empty then
-         Add_Feature ("", Loc); -- no name feature
-      end if;
-
-      Last_Feature_Ref.Scenario_List.Append
-        ((Empty_Scenario with delta
-             Name => To_Unbounded_String (Name), Location => Loc));
+      case Current_Doc_State is
+         when In_Document =>
+            Last_Doc_Ref.Scenario_List.Append
+              (Scenario_Type'(Name            => To_Unbounded_String (Name),
+                              Parent_Document => Last_Doc_Ref.Element,
+                              Location        => Loc,
+                              others          => <>));
+         when In_Feature =>
+            Last_Feature_Ref.Scenario_List.Append
+              (Scenario_Type'(Name           => To_Unbounded_String (Name),
+                              Parent_Feature => Last_Feature_Ref.Element,
+                              Location       => Loc,
+                              others         => <>));
+      end case;
       Set_State (In_Scenario);
-      Set_Background (None);
-
    end Add_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Background (Name : String;    Loc : Location_Type) is
+   procedure Add_Background (Name : String; Loc : Location_Type) is
    begin
       --  Put_Line ("Add_Background " & Name'Image, Verbosity => IO.Debug);
 
       case Current_State is
          when In_Document =>
-            Last_Doc_Ref.Background.Name := To_Unbounded_String (Name);
+            -- There is no feature at thtat point
+            -- Add_Feature ("", Loc); -- no name feature
+            Last_Doc_Ref.Background := new Scenario_Type'
+              (Name            => To_Unbounded_String (Name),
+               Parent_Document => Last_Doc_Ref.Element,
+               others          => <>);
 
          when In_Feature =>
-            Last_Feature_Ref.Background.Name := To_Unbounded_String (Name);
+            Last_Feature_Ref.Background := new Scenario_Type'
+              (Name           => To_Unbounded_String (Name),
+               Parent_Feature => Last_Feature_Ref.Element,
+               others         => <>);
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
@@ -118,12 +133,49 @@ package body BBT.Tests.Builder is
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step : Step_Type) is
-      -- Post : constant String := Postfix (Step.Location);
+   procedure Add_Step (Step     : Step_Type;
+                       Cmd_List : Cmd_Lists.Vector) is
+
+      -- -----------------------------------------------------------------------
+      procedure Append_Step (Scen : not null access Scenario_Type) is
+      begin
+         -- Scen.Step_List.Append
+         --  (Step_Type'(Step with delta Parent_Scenario => Scen));
+         if Cmd_List.Is_Empty then
+            -- normal case, there is no "or"
+            Scen.Step_List.Append ((Step with delta Parent_Scenario => Scen));
+            --  declare
+            --     S2 : Step_Type := Step;
+            --  begin
+            --     S2.Parent_Scenario := Scen;
+            --     Scen.Step_List.Append ((S2));
+            --  end;
+
+         else
+            -- "or" case, we will duplicate the whome scenario, except the
+            -- cmd
+
+            -- the existing scenario will receive the first cmd
+            Scen.Step_List.Append ((Step with delta
+                                     Object_String => +Cmd_List.First_Element,
+                                   Parent_Scenario => Scen));
+
+            --  for S in 1 .. Cmd_List.Count - 1 loop
+            --     Scen.Step_List
+            --  end loop;
+            --
+            --  Scen.Cmd_List := Cmd_List;
+            --  Scen.Cmd_List_Step_Index := Scen.Step_List.Last_Index;
+            -- By definition, the Last_Index point to the current Step,
+            -- the one we want to store as containing the command list.
+            -- NB : there can't be two "or" per scenario, only one.
+         end if;
+      end Append_Step;
+
    begin
-      Put_Line ("Add_Step " & Step'Image,
-                Step.Location,
-                Verbosity => IO.Debug);
+      --  Put_Line ("Add_Step " & Step'Image,
+      --            Step.Location,
+      --            Verbosity => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
            To_String (Step.Step_String)
@@ -163,22 +215,32 @@ package body BBT.Tests.Builder is
 
       end case;
 
-      case Current_Background is
-         when Doc     => Last_Doc_Ref.    Background.Step_List.Append (Step);
-         when Feature => Last_Feature_Ref.Background.Step_List.Append (Step);
-         when None    => Last_Scenario_Ref.Step_List.Append           (Step);
-      end case;
+      --  case Current_Background is
+      --     when Doc     =>
+      --        Put_Line ("Add_Step back doc Last_Scenario_Ref = " &
+      --                    Scenario_Type'(Last_Scenario_Ref)'Image);
+      --        Append_Step (Last_Doc_Ref.Background);
+      --     when Feature =>
+      --        Put_Line ("Add_Step back feat Last_Scenario_Ref.Background = " &
+      --                    Scenario_Type'(Last_Scenario_Ref)'Image);
+      --        Append_Step (Last_Feature_Ref.Background);
+      --     when None    =>
 
+      --  Put_Line ("Add_Step back none Last_Scenario_Ref = " &
+      --              Scenario_Type'(Last_Scenario_Ref)'Image);
+      Last_Scenario_Ref.Element.Step_List.Append
+        ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
+      --  end case;
    end Add_Step;
 
    -- --------------------------------------------------------------------------
    procedure Add_Code_Block (Loc : Location_Type) is
-      -- Code block outside of Steps definition is considered as a comment.
-      -- There is no state change, the code block mark is just recorded in
-      -- comments at the right level.
-      -- At the end of the code block section, the previous Step state
-      -- is restored.
-      -- Post : constant String := Postfix (Loc);
+   -- Code block outside of Steps definition is considered as a comment.
+   -- There is no state change, the code block mark is just recorded in
+   -- comments at the right level.
+   -- At the end of the code block section, the previous Step state
+   -- is restored.
+   -- Post : constant String := Postfix (Loc);
    begin
       Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
@@ -203,8 +265,7 @@ package body BBT.Tests.Builder is
    end Add_Code_Block;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Line (Line : String;    Loc : Location_Type) is
-      -- Post : constant String := Postfix (Loc);
+   procedure Add_Line (Line : String; Loc : Location_Type) is
    begin
       Put_Line ("Add_Line " & Line'Image, Loc, Verbosity => IO.Debug);
       case Current_State is
@@ -226,6 +287,32 @@ package body BBT.Tests.Builder is
 
       end case;
    end Add_Line;
+
+   -- --------------------------------------------------------------------------
+   procedure Duplicate_Multiple_Run is
+      procedure Duplicate (Scen : in out Scenario_Type) is
+      begin
+         if Has_Cmd_List (Scen) then
+            for Cmd of Scen.Cmd_List loop
+               Put_Line ("Cmd list item = " & Cmd'Image,
+                         Verbosity => IO.Verbose);
+            end loop;
+         end if;
+      end Duplicate;
+
+   begin
+      for D of The_Doc_List loop
+         for S of D.Scenario_List loop
+            Duplicate (S);
+         end loop;
+
+         for F of D.Feature_List loop
+            for S of F.Scenario_List loop
+               Duplicate (S);
+            end loop;
+         end loop;
+      end loop;
+   end Duplicate_Multiple_Run;
 
    -- --------------------------------------------------------------------------
    function The_Tests_List return access Documents_Lists.Vector is

@@ -1,9 +1,9 @@
+### Background :
+  - Then there is no `config.ini` file
+
 ## Feature : “background” test
 
 Background is a special scenario that is executed before every following tests.
-
-### Background :
-  - Given there is no `config.ini` file
 
 ### Scenario : normal use case
   - When I run `uut create config.ini` 

@@ -168,7 +168,9 @@ package body BBT.Scenarios.MDG_Lexer is
          return (Kind => Text_Line,
                  Line => To_Unbounded_String (Line.all));
 
-      elsif Context.In_Scenario and then Bullet_List_Marker (Line.all, First) then
+      elsif Context.In_Scenario
+        and then Bullet_List_Marker (Line.all, First)
+      then
          -- Step line ----------------------------------------------------------
          -- We don't take into account bullet list before being in a Scenario.
          -- to let the use most Markdown possibilities before Steps, for

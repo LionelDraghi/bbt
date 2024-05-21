@@ -83,3 +83,27 @@ Pour inspirer les keywords :
 And the following predicate matchers:
 ·       be_a_success / be_success asserts the exit status was zero
 ·       be_a_failure / be_failure asserts the exit status was not zero
+
+-----------------------
+
+
+### Simplicity
+An important feature is the low effort needed to have documented and executable specification and tests.
+The markdown format of the scenarii is nicely rendered on most platform like github.  
+bbt is not going to modify those files, for example to insert the test results.
+
+Instead, a test report is output by the tools (currently on the standard output), with a md format, provided no option modifying the verbosity like `-v` is used.  
+
+Just run :  
+`bbt -r tests > report.md`
+
+### Portability
+Several tools dedicated to black box testing exists, but they all uses as their description language either a programming language, or some shell scripting.
+This is a powerful way to go, and you may consider worthwhile tho invest time doing so. 
+
+On the other hand, bbt aims at immediate use, with almost no learning curve.
+One of the goal of bbt is to do 90% of the job that others do, with a simple and natural language, independent of external tools or interpreters. For this reason, bbt DSL provide ways to create or compare files, that is things usually done in more or less portable manner with makefiles.   
+
+-----------------------
+
+

@@ -90,7 +90,12 @@ begin
    end if;
 
    if Settings.List_Keywords then
-      BBT.Scenarios.Step_Parser.Put_Keywords_and_Grammar;
+      BBT.Scenarios.Step_Parser.Put_Keywords;
+      return;
+   end if;
+
+   if Settings.List_Grammar then
+      BBT.Scenarios.Step_Parser.Put_Grammar;
       return;
    end if;
 
@@ -102,14 +107,15 @@ begin
          IO.Put_Line ("Loading " & File'Image, IO.No_Location, IO.Debug);
          Scenarios.Files.Analyze_MDG_File (File);
       end loop;
+      Tests.Builder.Duplicate_Multiple_Run;
+      -- Process in all recorded scenario the
+      -- duplication of the "run X or Y" steps.
    end if;
 
    if Settings.Explain then
       -- let's display our rebuild of the original test definition file
       -- comment lines are filtered out
-      Put_Document_List (BBT.Tests.Builder.The_Tests_List.all,
-                         With_Comments      => Settings.With_Comments,
-                         With_Bold_Keywords => Settings.With_Bold_Keywords);
+      Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
    else
       Tests.Runner.Run_All;

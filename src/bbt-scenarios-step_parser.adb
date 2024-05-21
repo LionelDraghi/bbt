@@ -52,8 +52,7 @@ package body BBT.Scenarios.Step_Parser is
                                                                       String);
       -- -----------------------------------------------------------------------
       Keywords : constant String_Arrays.Vector
-        := [
-            "given",
+        := ["given",
             "when",
             "then",
             "and",      -- "and" and "but" are equivalent to "Given" if they
@@ -61,19 +60,19 @@ package body BBT.Scenarios.Step_Parser is
             "run",      -- appear in the "Then" section, etc.
             "running",  -- "When I run" = "When running"
             "get",
-            "existing",
+            "new",
             "no",       -- "no" = "not" = "dont"
             "not",
             "dont",
             "error",
             "is",
+            "or",
             "output",
             "contains",
             "containing",
             "successfully",
-            "directory",
-            "file"
-           ];
+            "file",
+            "directory"];
       -- NB : all keywords must be in lower case!
 
       -- -----------------------------------------------------------------------
@@ -228,11 +227,13 @@ package body BBT.Scenarios.Step_Parser is
                        -- Subjects Attribute -----------------------------------
                        No_SA, -- = no Subject Attribute
                        -- Empty,
-                       Existing,
+                       -- Existing,
+                       New_SA,
                        -- Subjects ---------------------------------------------
                        No_Subject,
-                       Subject_File_Ref, -- file or dir name
-                       Subject_Text,     -- content of code span or following
+                       Subject_Dir,  -- dir name
+                       Subject_File, -- file name
+                       Subject_Text, -- content of code span or following
                        --                   code fenced lines, before verb
                        Output,
                        -- Verbs ------------------------------------------------
@@ -247,10 +248,11 @@ package body BBT.Scenarios.Step_Parser is
                        Is_No,
                        -- Objects ----------------------------------------------
                        No_Object,
-                       Id,
-                       Object_File_Ref, -- file or dir name
+                       Object_File,
+                       Object_Dir,  -- file or dir name
                        Object_Text, -- content of code span or following
                        --              code fenced lines, before verb
+                       Command_List,
                        Error);
 
       subtype Objects        is Tokens range No_Object    .. Tokens'Last;
@@ -292,11 +294,12 @@ package body BBT.Scenarios.Step_Parser is
             when When_P           => return "When";
             when Then_P           => return "Then";
             when No_SA            => return "";
-            when Existing         => return "existing";
+            when New_SA           => return "new";
             when No_Subject       => return "";
             when Output           => return "output";
-            when Subject_File_Ref => return "file|dir";
-            when Subject_Text     => return "text|file";
+            when Subject_File     => return "`file`";
+            when Subject_Dir      => return "`dir`";
+            when Subject_Text     => return "`text`";
             when No_Verb          => return "";
             when Run              => return "run";
             when Successful_Run   => return "successfully run";
@@ -307,9 +310,10 @@ package body BBT.Scenarios.Step_Parser is
             when Is_V             => return "is";
             when Is_No            => return "is no";
             when No_Object        => return "";
-            when Id               => return "`Id`";
-            when Object_File_Ref  => return "file|dir";
-            when Object_Text      => return "text|file";
+            when Object_File      => return "`file`";
+            when Object_Dir       => return "`dir`";
+            when Object_Text      => return "`text`";
+            when Command_List     => return "`cmd` [or `cmd`]*";
             when Error            => return "error";
          end case;
       end Image;
@@ -324,34 +328,37 @@ package body BBT.Scenarios.Step_Parser is
       function Create_Grammar return Grammar is
          G : Grammar := Null_Grammar;
       begin
-         G (Given,  No_SA, No_Subject,      Is_No,    Object_File_Ref) := Check_No_File; -- Given there is no `config.ini` file
-         --                                                                                 Given there is no `dir1`       directory
-         G (Given,  No_SA, No_Subject,      Is_V,     Object_File_Ref) := Check_File_Existence; -- Given there is an existing `config.ini` file
-         G (Given,  No_SA, Subject_File_Ref, Containing, Object_Text)  := Create_New; -- Given file `config.ini` containing `lang=it`
-         G (Given,  Existing, Subject_Text, No_Verb,  No_Object)       := Check_File_Existence; -- Given the existing `config.ini` file
-         --                                                                                        Given the existing directory `dir1`
-         G (Given,  No_SA, Subject_File_Ref, No_Verb, Object_Text)     := Create_If_None; -- Given the directory `dir1`
-         G (Given,  No_SA, Subject_File_Ref, No_Verb, No_Object)       := Create_If_None; -- Given the file `config.ini`
-         --                                                                               followed by code fenced content
-         G (When_P, No_SA, No_Subject,      Run,      Object_Text)     := Run_Cmd; -- when I run `cmd`
-         G (When_P, No_SA, No_Subject, Successful_Run, Object_Text)    := Run_Without_Error; -- when i successfully run `cmd`
-         G (Then_P, No_SA, No_Subject,      Get,      Error)           := Error_Return_Code; -- then I get error
-         G (Then_P, No_SA, No_Subject,      Get_No,   Error)           := No_Error_Return_Code; -- then I get no error
-         G (Then_P, No_SA, Output,          Is_V,     Object_Text)     := Output_Is; -- then output is `msg`
-         G (Then_P, No_SA, Output,          Is_V,     No_Object)       := Output_Is; -- then output is
-         --                                                                             followed by code fenced content
-         G (Then_P, No_SA, No_Subject,      Get,      Object_Text)     := Output_Is; -- then I get `msg`
-         G (Then_P, No_SA, No_Subject,      Get,      No_Object)       := Output_Is; -- then I get
-         --                                                                             followed by code fenced content
-         G (Then_P, No_SA, Output,          Contains, Object_Text)     := Output_Contains; -- then output contains `msg`
-         G (Then_P, No_SA, Output,          Contains, No_Object)       := Output_Contains; -- then output contains
-         --                                                                                   followed by code fenced content
-         G (Then_P, No_SA, Subject_Text,    Is_V,     Object_Text)     := File_Is; -- then `config.ini` is `mode=silent`
-         G (Then_P, No_SA, Subject_Text,    Is_V,     No_Object)       := File_Is; -- Then `config.ini` is
-         --                                                                           followed by code fenced content
-         G (Then_P, No_SA, Subject_Text,    Contains, Object_Text)     := File_Contains; -- Then `config.ini` contains `--version`
-         G (Then_P, No_SA, Subject_Text,    Contains, No_Object)       := File_Contains; -- Then `config.ini` contains
-         --                                                                                 followed by code fenced content
+         G (Given, No_SA,  No_Subject,   Is_No,      Object_File) := Delete_File; -- Given there is no `config.ini` file
+         G (Given, No_SA,  No_Subject,   Is_No,      Object_Dir)  := Delete_Dir;  -- Given there is no `dir1`       directory
+         G (Given, No_SA,  No_Subject,   Is_V,       Object_File) := Check_File_Existence; -- Given there is a `config.ini` file
+         G (Given, No_SA,  No_Subject,   Is_V,       Object_Dir)  := Check_Dir_Existence;  -- Given there is a `dir1` directory
+         G (Given, No_SA,  Subject_File, Containing, Object_Text) := File_Contains; -- Given the file `config.ini` containing `lang=it`
+         G (Given, New_SA, Subject_File, No_Verb,    No_Object)   := Create_New; -- Given the new file `config.ini` followed by code fenced content
+         G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Create_New; -- Given the new directory `dir1`
+         G (Given, No_SA,  Subject_File, No_Verb,    No_Object)   := Create_If_None; -- Given the file `config.ini` followed by code fenced content
+         G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)   := Create_If_None; -- Given the directory `dir1`
+
+         G (When_P, No_SA, No_Subject, Run,            Object_Text)  := Run_Cmd;           -- when I run `cmd`
+         G (When_P, No_SA, No_Subject, Successful_Run, Object_Text)  := Run_Without_Error; -- when i successfully run `cmd`
+         G (When_P, No_SA, No_Subject, Run,            Command_List) := Run_Cmd;           -- when I run `cmd` or `cmd2` or `cmd3`
+         G (When_P, No_SA, No_Subject, Successful_Run, Command_List) := Run_Without_Error; -- when i successfully run `cmd` or `cmd2` or `cmd3`
+
+         G (Then_P, No_SA, No_Subject,   Is_V,     Object_File) := Check_File_Existence; -- Then there is a  `config.ini` file
+         G (Then_P, No_SA, No_Subject,   Is_No,    Object_File) := Check_No_File;        -- Then there is no `config.ini` file
+         G (Then_P, No_SA, No_Subject,   Is_V,     Object_Dir)  := Check_Dir_Existence; -- Then there is a  `dir1` directory
+         G (Then_P, No_SA, No_Subject,   Is_No,    Object_Dir)  := Check_No_Dir;        -- Then there is no `dir1` directory
+         G (Then_P, No_SA, No_Subject,   Get,      Error)       := Error_Return_Code;    -- then I get error
+         G (Then_P, No_SA, No_Subject,   Get_No,   Error)       := No_Error_Return_Code; -- then I get no error
+         G (Then_P, No_SA, Output,       Is_V,     Object_Text) := Output_Is; -- then output is `msg`
+         G (Then_P, No_SA, Output,       Is_V,     No_Object)   := Output_Is; -- then output is followed by code fenced content
+         G (Then_P, No_SA, No_Subject,   Get,      Object_Text) := Output_Is; -- then I get `msg`
+         G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
+         G (Then_P, No_SA, Output,       Contains, Object_Text) := Output_Contains; -- then output contains `msg`
+         G (Then_P, No_SA, Output,       Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
+         G (Then_P, No_SA, Subject_File, Is_V,     Object_Text) := File_Is; -- then `config.ini` is `mode=silent`
+         G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
+         G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
+         G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content
          return G;
       end Create_Grammar;
 
@@ -378,10 +385,10 @@ package body BBT.Scenarios.Step_Parser is
       begin
          if Is_Authorized (Verbosity) then
             Ada.Text_IO.Put (Image (P));  C := @ +  6; Set_Col (C);
-            Ada.Text_IO.Put (Image (SA)); C := @ +  9; Set_Col (C);
-            Ada.Text_IO.Put (Image (S));  C := @ + 10; Set_Col (C);
+            Ada.Text_IO.Put (Image (SA)); C := @ +  4; Set_Col (C);
+            Ada.Text_IO.Put (Image (S));  C := @ + 12; Set_Col (C);
             Ada.Text_IO.Put (Image (V));  C := @ + 17; Set_Col (C);
-            Ada.Text_IO.Put (Image (O));  C := @ +  9; Set_Col (C);
+            Ada.Text_IO.Put (Image (O));  C := @ + 11; Set_Col (C);
             Ada.Text_IO.Put_Line (" --> " & A'Image);
          end if;
       end Put_Rule;
@@ -414,19 +421,20 @@ package body BBT.Scenarios.Step_Parser is
    -- This variable keep the memory of where we are between call Parse.
 
    -- --------------------------------------------------------------------------
-   function Parse (Line : Unbounded_String;
-                   Loc  : Location_Type) return Step_Type
+   function Parse (Line     :     Unbounded_String;
+                   Loc      :     Location_Type;
+                   Cmd_List : out Cmd_Lists.Vector) return Step_Type
    is
       use Lexer;
       use Parser;
 
-      First_Token      : Boolean            := True;
-      Successfully_Met : Boolean            := False;
+      First_Token      : Boolean        := True;
+      Successfully_Met : Boolean        := False;
       Prep             : Prepositions;
       Subject_Attr     : Subject_Attrib := No_SA;
-      Subject          : Subjects           := No_Subject;
-      Verb             : Verbs              := No_Verb;
-      Object           : Objects            := No_Object;
+      Subject          : Subjects       := No_Subject;
+      Verb             : Verbs          := No_Verb;
+      Object           : Objects        := No_Object;
 
       -- All component of the returned Step are initialized :
       Cat              : Extended_Step_Categories := Unknown;
@@ -434,12 +442,17 @@ package body BBT.Scenarios.Step_Parser is
       Step_String      : Unbounded_String         := Null_Unbounded_String;
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
       Object_String    : Unbounded_String         := Null_Unbounded_String;
+
       File_Type        : File_Kind                := Ordinary_File;
 
       Prefix : constant String := Image (Loc);
 
+      function In_Subject_Part return Boolean is (Verb  = No_Verb);
+      function In_Object_Part  return Boolean is (Verb /= No_Verb);
+
    begin
       Step_String := Line;
+      Cmd_List    := Cmd_Lists.Empty_Vector;
 
       Initialize_Lexer;
 
@@ -485,8 +498,8 @@ package body BBT.Scenarios.Step_Parser is
                               when Then_Step  => Prep := Then_P;
                            end case;
                         else
-                           null;
                            IO.Put_Warning ("Keyword : " & Tok & " ignored", Loc);
+
                         end if;
                         -- Put_Line (Prefix & "Prep = " & Prep'Image);
 
@@ -504,6 +517,16 @@ package body BBT.Scenarios.Step_Parser is
                            Verb := Run;
                            -- Put_Line (Prefix & "Verb = run");
                         end if;
+
+                     elsif Lower_Keyword = "or" then
+                        if Object /= Command_List then
+                           Object := Command_List;
+                           -- there should already be a code span, let's
+                           -- store it in the list
+                           Cmd_List.Append (+Object_String);
+                           Object_String := Null_Unbounded_String;
+                        end if;
+                        -- Put_Line ("--> Cmd list " & Cmd_List'Image);
 
                      elsif Lower_Keyword = "get" then
                         Verb := Get;
@@ -539,15 +562,33 @@ package body BBT.Scenarios.Step_Parser is
                      elsif Lower_Keyword = "containing" then
                         Verb := Containing;
 
-                     elsif Lower_Keyword = "existing" then
-                        Subject_Attr := Existing;
+                     elsif Lower_Keyword = "new" then
+                        Subject_Attr := New_SA;
                         File_Type := Ordinary_File;
+                        -- "file" keyword is not mandatory, this is the default.
 
                      elsif Lower_Keyword = "directory" then
                         File_Type := Directory;
 
-                     end if;
+                        if In_Subject_Part then
+                           Subject := Subject_Dir;
 
+                        elsif In_Object_Part then
+                           Object := Object_Dir;
+
+                        end if;
+
+                     elsif Lower_Keyword = "file" then
+                        File_Type := Ordinary_File;
+
+                        if In_Subject_Part then
+                           Subject := Subject_File;
+
+                        elsif In_Object_Part then
+                           Object := Object_File;
+
+                        end if;
+                     end if;
                   end;
 
                when Identifier =>
@@ -555,29 +596,66 @@ package body BBT.Scenarios.Step_Parser is
                   null;
 
                when Code_Span =>
-                  if Verb = No_Verb then
-                     -- string before verb
+                  if Object = Command_List then
+                     Cmd_List.Append (Tok);
+
+                  elsif In_Subject_Part and then Subject = No_Subject then
+                     if File_Type = Directory then
+                        Subject := Subject_Dir;
+                     else
+                        Subject := Subject_File;
+                     end if;
                      Subject_String := To_Unbounded_String (Tok);
-                     if Prep = Given then
-                        -- Special case for : Given the `config.ini` file
-                        -- followed by the content.
-                        -- This mess may diapear if (when!) I will switch to
-                        -- MD file notation
-                        Subject := Subject_File_Ref;
-                     else
-                        Subject := Subject_Text;
-                     end if;
+
+                  elsif In_Object_Part and then Object = No_Object then
+                     case Verb is
+                        when No_Verb |
+                             Is_No   =>
+                           -- Verbs always followed by a file/dir
+                           if File_Type = Directory then
+                              Object := Object_Dir;
+                           else
+                              Object := Object_File;
+                           end if;
+                           Object_String := To_Unbounded_String (Tok);
+
+                        when Run            |
+                             Successful_Run |
+                             Get            |
+                             Get_No         |
+                             Contains       |
+                             Containing     =>
+                           -- Verbs always followed by a text
+                           Object := Object_Text;
+                           Object_String := To_Unbounded_String (Tok);
+
+                        when Is_V =>
+                           -- Complex case where it depends not only on the
+                           -- verb...
+                           if Subject = No_Subject then
+                              -- Given there is a `config.ini` file
+                              if File_Type = Directory then
+                                 Object := Object_Dir;
+                              else
+                                 Object := Object_File;
+                              end if;
+                              Object_String := To_Unbounded_String (Tok);
+
+                           else
+                              -- Then output is xxxx
+                              -- or
+                              -- Then `file` is xxxx
+                              Object := Object_Text;
+
+                           end if;
+                     end case;
+
                   else
-                     -- string after verb
-                     Object_String := To_Unbounded_String (Tok);
-                     if Prep = Given and Subject = No_Subject then
-                        -- Special case for : Given there is no `config.ini` file
-                        -- This mess may diapear if (when!) I will switch to
-                        -- MD file notation
-                        Object := Object_File_Ref;
-                     else
-                        Object := Object_Text;
-                     end if;
+                     null;
+                     -- Subject or Object (depending if we are in the
+                     -- Subject_Part or in the Object_Part) is already known
+                     -- thaks to "file" or "directory" keyword.
+
                   end if;
 
                when Empty =>
@@ -590,18 +668,13 @@ package body BBT.Scenarios.Step_Parser is
 
       end loop Line_Processing;
 
-      --  Put_Line (Prep'Image);
-      --  Put_Line (Subject_Attr'Image);
-      --  Put_Line (Subject'Image);
-      --  Put_Line (Verb'Image);
-      --  Put_Line (Object'Image);
-
       Action := Get_Action (Prep, Subject_Attr, Subject, Verb, Object);
       IO.Put (Prefix & "Rule = ", Verbosity => IO.Debug);
       Put_Rule (Prep, Subject_Attr, Subject, Verb, Object, Action,
                 Verbosity => IO.Debug);
 
       Context := Cat;
+
       return (Cat,
               Action,
               Step_String,
@@ -609,14 +682,19 @@ package body BBT.Scenarios.Step_Parser is
               Subject_String,
               Object_String,
               File_Type,
-              File_Content => Empty_Text);
+              File_Content    => Empty_Text,
+              Parent_Scenario => null);
 
    end Parse;
 
-   procedure Put_Keywords_and_Grammar is
+   procedure Put_Keywords is
    begin
       Lexer.Put_Keywords;
+   end Put_Keywords;
+
+   procedure Put_Grammar is
+   begin
       Parser.Put_Grammar;
-   end Put_Keywords_and_Grammar;
+   end Put_Grammar;
 
 end BBT.Scenarios.Step_Parser;

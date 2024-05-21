@@ -93,10 +93,8 @@ package body BBT.IO is
    function Image (Loc : Location_Type) return String is
       use Ada.Strings;
       use Ada.Strings.Fixed;
-      Trimmed_Line   : constant String := Trim (Loc.Line'Image,
-                                                Side => Left);
-      Trimmed_Column : constant String := Trim (Loc.Column'Image,
-                                                Side => Left);
+      Trimmed_Line   : constant String := Trim (Loc.Line'Image,   Side => Left);
+      Trimmed_Column : constant String := Trim (Loc.Column'Image, Side => Left);
    begin
       if Loc.File = "" then
          return "";
@@ -188,7 +186,7 @@ package body BBT.IO is
 
    -- --------------------------------------------------------------------------
    function Location (Name   : String;
-                      Line   : Positive_Count;
+                      Line   : Ada.Text_IO.Count;
                       Column : Ada.Text_IO.Count := 0) return Location_Type is
    begin
       if Name = "" then
@@ -273,12 +271,15 @@ package body BBT.IO is
       Print_In_Tee_File        : constant Boolean
         := Tee_Enabled and then
             (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic));
+      Prefix                   : constant String :=
+                                   (if Location'Image = "" then ""
+                                    else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
-         Ada.Text_IO.Put_Line (Location'Image & Item);
+         Ada.Text_IO.Put_Line (Prefix & Item);
       end if;
       if Print_In_Tee_File then
-         Ada.Text_IO.Put_Line (Tee_File, Location'Image & Item);
+         Ada.Text_IO.Put_Line (Tee_File, Prefix & Item);
       end if;
    end Put_Line;
 
@@ -291,12 +292,15 @@ package body BBT.IO is
         := Verbosity <= Current_Verbosity or else Is_Enabled (Topic);
       Print_In_Tee_File        : constant Boolean := Tee_Enabled
         and then (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic));
+      Prefix                   : constant String :=
+                                   (if Location'Image = "" then ""
+                                    else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
-         Ada.Text_IO.Put (Location'Image & Item);
+         Ada.Text_IO.Put (Prefix & Item);
       end if;
       if Print_In_Tee_File then
-         Ada.Text_IO.Put (Tee_File, Location'Image & Item);
+         Ada.Text_IO.Put (Tee_File, Prefix & Item);
       end if;
    end Put;
 

@@ -21,21 +21,14 @@ with Ada.Calendar;
 
 private package BBT.IO is
 
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Debug_Line (Msg    : String;
-   --                            Debug  : Boolean;
-   --                            Prefix : String;
-   --                            File   : String  := "";
-   --                            Line   : Integer := 0);
-
    -- --------------------------------------------------------------------------
    type Verbosity_Levels is (Quiet, Normal, Verbose, Debug);
    -- NB : order is significant, X is more verbose thant X'Pred!
-   -- default: Normal messages are displayed, verbose messages are not
+   -- Default: Normal messages are displayed, verbose messages are not
    --          displayed.
-   -- quiet:   Neither normal messages nor verbose messages are displayed.
+   -- Quiet:   Neither normal messages nor verbose messages are displayed.
    --          This mode can be achieved using option --quiet.
-   -- verbose: Both normal messages and verbose messages are displayed.
+   -- Verbose: Both normal messages and verbose messages are displayed.
    --          This mode can be achieved using option --verbose.
    function Is_Authorized (Verbosity : Verbosity_Levels) return Boolean;
    -- return True if Verbosity is >= to current setting.
@@ -58,8 +51,8 @@ private package BBT.IO is
                             Runner);
    subtype Topics is Extended_Topics range
      Extended_Topics'Succ (None) .. Extended_Topics'Last;
-   --  None is the default parameter for IO operation, but is not in Topics
-   --  range, used when setting what should be printed.
+   -- None is the default parameter for IO operation, but is not in Topics
+   -- range, used when setting what should be printed.
    procedure Enable_Topic (Topic : Topics);
    function Is_Enabled (Topic : Extended_Topics) return Boolean;
    -- return always false for None
@@ -87,7 +80,7 @@ private package BBT.IO is
 
    -- --------------------------------------------------------------------------
    function Location (Name   : String;
-                      Line   : Positive_Count;
+                      Line   : Ada.Text_IO.Count;
                       Column : Ada.Text_IO.Count := 0) return Location_Type;
    -- When manual adjustment is needed.
 

@@ -6,32 +6,24 @@ package body BBT.Tests is
              False => "*** NOK :"];
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Step        : Step_Type;
-                              Success     :        Boolean;
-                              -- Success_Msg :        String;
-                              Fail_Msg    :        String;
-                              Loc         :        Location_Type;
-                              Scenario    : in out Scenario_Type) is
+   procedure Put_Step_Result (Step     : Step_Type;
+                              Success  : Boolean;
+                              Fail_Msg : String;
+                              Loc      : Location_Type) is
       Pre  : constant String := Pref (Success) & " ";
    begin
-      Add_Result (Success, Scenario);
+      --  Put_Line ("Put_Step_Result = " & Step'Image);
+      --  Put_Line ("Step.Parent     = " & Step.Parent_Scenario'Image);
+      Add_Result (Success, Step.Parent_Scenario.all);
       if Success then
          IO.Put_Line (Item      => Pre & (+Step.Step_String),
                       Verbosity => IO.Verbose);
       else
          IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
                       Verbosity => IO.Normal);
-         -- IO.New_Line (Verbosity => IO.Quiet);
          IO.Put_Line (Image (Loc) & Fail_Msg & "  ",
                       Verbosity => IO.Normal);
-         -- IO.New_Line (Verbosity => IO.Quiet);
       end if;
    end Put_Step_Result;
-
-   --  function Prefix (Success     : Boolean;
-   --                   Loc         : Location_Type) return String is
-   --  begin
-   --     return Pref (Success) & Image (Loc);
-   --  end Prefix;
 
 end BBT.Tests;
