@@ -62,11 +62,11 @@ Basic concepts of bbt files are illustrated in the previous example :
 bbt use a subset of the [Gerkhin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
 
 2. [**bbt keywords**](#Keywords) : *run*, *output*, *contains*, etc.  
-Here is an example with keywords in bold :
-**Given** there **is** **no** `.utt` **directory**
-**When** I **run** `uut --init`
-**Then** there **is** **no** **error**
-**And** **file** `.uut/config.ini` **contains** `lang=de`
+Here is an example with keywords in bold :  
+**Given** there **is** **no** `.utt` **directory**  
+**When** I **run** `uut --init`  
+**Then** there **is** **no** **error**  
+**And** **file** `.uut/config.ini` **contains** `lang=de`  
   
 4. **glue word** : *I*, *the*
 As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
