@@ -62,15 +62,19 @@ Basic concepts of bbt files are illustrated in the previous example :
 bbt use a subset of the [Gerkhin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
 
 2. [**bbt keywords**](#Keywords) : *run*, *output*, *contains*, etc.  
-This is where bbt magic stands.
+Here is an example with keywords in bold :
+**Given** there **is** **no** `.utt` **directory**
+**When** I **run** `uut --init`
+**Then** there **is** **no** **error**
+**And** **file** `.uut/config.ini` **contains** `lang=de`
   
-3. **glue word** : *I*, *the*
-Glue word are ignored by bbt. Their only aim is to give users a way to write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low. (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
+4. **glue word** : *I*, *the*
+As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
    
-4. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `uut --version` ``, `` `version 1.0` ``  
-bbt uses code span to express a command, a file name or some expected output.
+5. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `uut --version` ``, `` `version 1.0` ``  
+bbt uses code span to express a command, a file or directory name or some expected output.
 
-5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ``` or ~~~  
+6. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ``` or ~~~  
 Fenced code block are used to specify multiline output or file content, as in: 
 
     ~~~md
@@ -245,7 +249,6 @@ Most of the action have an obvious name.
 
 Note that in this case, the second scenario will fail because of the background (the first create a `config.ini` file), and would not fail without the background. 
 
-
 Background may appears at the beginning, at document level, or at feature level, or both.
 Before each scenario, the document background will be executed, and then the feature background.
 
@@ -286,10 +289,11 @@ The BBT Markdown subset try to comply with [CommonMark Spec](https://spec.common
 On the other hand, restrictions apply when writing bbt scenario.
 
 #### Steps
-Because the lexer is not able to make a difference between bullet lines in steps definition or bullet lines in normal text, there is limitations on where you can 
-use it.
-- *bbt* will consider bullet line starting with `-` as comment before the first "scenario" header. Don't use it after that.
-- *bbt* will also consider line starting with the other official bullet marker (`*`and`+`) as comment, and **not steps line marker**, so that you can use those markers where you want without interfering with the lexer.
+Because the lexer is not able to make a difference between bullet lines in steps definition or bullet lines in normal text, there is limitations on where you can use it.
+- *bbt* will consider bullet line starting with `-` as comment before the first "scenario" header. 
+- *bbt* will consider all lines starting with `-` as Step within a scenario. As a consequence, **Don't use `-` in comments whithin a Scenario.**
+- *bbt* will also consider line starting with the other official bullet markers (`*`and`+`) as comment, and **not steps line marker**, so that you can use those markers where you want without interfering with the lexer.  
+Our simple suggestion : uses `-` for Steps and `*` for all bullet list in comments.
 
 #### Headings
 Only [ATX Heading](https://spec.commonmark.org/0.31.2/#atx-headings) are supported, not [Setext](https://spec.commonmark.org/0.31.2/#setext-headings), meaning that you can write :
