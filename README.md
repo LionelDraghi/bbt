@@ -68,7 +68,7 @@ Here is an example with keywords in bold :
 **Then** there **is** **no** **error**  
 **And** **file** `.uut/config.ini` **contains** `lang=de`  
   
-4. **glue word** : *I*, *the*
+4. **glue word** : *I*, *the*  
 As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
    
 5. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `uut --version` ``, `` `version 1.0` ``  
