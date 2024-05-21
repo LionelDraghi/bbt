@@ -20,5 +20,6 @@ check: ../bbt ../uut
 .PHONY : clean
 clean:
 	@ $(MAKE) -s clean --directory=error_tests
+	@ $(MAKE) -s clean --directory=robustness
 	@ - rm -f pass_tests/config.ini pass_tests/*.out gmon.out
 
