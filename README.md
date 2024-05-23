@@ -14,7 +14,7 @@ It can be as simple as :
 - Then the output contains `version 1.0`
 ```
 
-bbt original feature is that this specification is directly executable : there is no use of a shell"ish" language, no glue code, no configuration file.
+bbt interesting feature is that this specification is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.
 
 Just simple and readable English sentences.
 
@@ -37,14 +37,14 @@ I could have written **behavior is easy to describe**. There is no difference, t
 
 Here is the magic : bbt understand some of the words in the step description (that is words afters *When*, *Then*, etc.). It has it's own simple [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), with a vocabulary dedicated to test, with  keywords like *run*, *output*, *contains*, etc.
 
-### Tests are easy to run
-bbt as no dependencies on external lib or tools (diff tools, for example), and aims at reducing uses of other tools, Makefile complexity, and platform dependency.  
-*Describe behavior once, verify everywhere!*
-You don't have to learn it by heart : ask for a template file with  
+Althrough simple, you don't have to learn this language by heart : ask for a template file with  
 `bbt -ct` (or `--create_template`)  
 or ask for the grammar with  
 `bbt -lg` (or `--list_grammar`)  
 
+### Tests are easy to run
+bbt as no dependencies on external lib or tools (diff tools, for example), and aims at reducing uses of other tools, Makefile complexity, and platform dependency.  
+*Describe behavior once, verify everywhere!*
 
 ### Tests are Self documented
 Your tests scenarios are already documented : you wrote them in Markdown, they will be nicely presented on github out of the box.
@@ -291,6 +291,20 @@ You just have to run
 bbt -o docs/tests_results.md docs/tests/*.md
 ```
 The title is kind of a provocation. Obviously, you need to run the tests somewhere and there will be residue. But as there is no input or output to keep in that directory (unless debugging the test himself), you can as well delete the execution dir after each run.
+
+### Removing File or directories
+
+`Given` lines role is to prepare the test.
+But what is the expected behavior of the line  
+``Given the directory `dir1` ``?
+
+bbt answers is to create a `dir1`directory if there is none.
+And to to avoid any unwanted (potentially) recursive deletion, there is a required "new" keyword when the intent is to start from a white page and erase an existing homonym.
+
+So, if you want to start with a potentially existing dir1, use :  
+``Given the directory `dir1` ``
+If you want to start with a brand new one, use :  
+``Given the new directory `dir1` ``
 
 
 ---------------------------------------------------------------------
