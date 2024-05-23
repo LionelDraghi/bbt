@@ -50,12 +50,9 @@ package body Text_Utilities is
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
-   function Create_File (File_Name    : String;
-                         With_Content : Text) return Boolean is
-   -- Return true if the file is created as expected,
-   -- false otherwise.
+   procedure Create_File (File_Name   : String;
+                         With_Content : Text) is
       Output : Ada.Text_IO.File_Type;
-
    begin
       Ada.Text_IO.Create (Output,
                           Ada.Text_IO.Out_File,
@@ -64,14 +61,17 @@ package body Text_Utilities is
          Ada.Text_IO.Put_Line (Output, Item => L);
       end loop;
       Ada.Text_IO.Close (Output);
-      return True;
-
    end Create_File;
 
    -- -----------------------------------------------------------------------
    function Create_File (File_Name    : Unbounded_String;
                          With_Content : Text) return Boolean is
-     (Create_File (To_String (File_Name), With_Content));
+   begin
+      Create_File (To_String (File_Name), With_Content);
+      return True;
+   exception
+      when others => return False;
+   end Create_File;
 
    -- --------------------------------------------------------------------------
    procedure Put_Text

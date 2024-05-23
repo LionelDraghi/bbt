@@ -1,0 +1,9 @@
+{
+    "plantuml.diagramsRoot": "docs",
+    "plantuml.exportFormat": "png",
+    "plantuml.exportIncludeFolderHeirarchy": false,
+    "plantuml.exportOutDir": "docs",
+    "plantuml.exportSubFolder": false,
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "https://www.plantuml.com/plantuml"
+}

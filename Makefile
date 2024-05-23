@@ -1,5 +1,5 @@
 .SILENT:
-all: build check
+all: build check doc
 
 build:
 	alr build
@@ -10,23 +10,27 @@ build:
 check: bbt
 	@ $(MAKE) check --directory=tests
 	# --------------------------------------------------------------------
-	echo
-	echo Coverage report: 
-	lcov --quiet --capture --directory obj -o obj/coverage.info
-	lcov --quiet --remove obj/coverage.info -o obj/coverage.info \
-		"*/adainclude/*" "*.ads" "*/obj/b__*.adb" 
-	# Ignoring :
-	# - spec (results are not consistent with current gcc version) 
-	# - the false main
-	# - libs (Standard)
+	# echo
+	# echo Coverage report: 
+	# lcov --quiet --capture --directory obj -o obj/coverage.info
+	# lcov --quiet --remove obj/coverage.info -o obj/coverage.info \
+	# 	"*/adainclude/*" "*.ads" "*/obj/b__*.adb" 
+	# # Ignoring :
+	# # - spec (results are not consistent with current gcc version) 
+	# # - the false main
+	# # - libs (Standard)
 
-	genhtml obj/coverage.info -o docs/lcov --title "bbt tests coverage" \
-		--prefix "/home/lionel/prj/bbt/src" --frames | tail -n 2 > cov_sum.txt
-	# --title  : Display TITLE in header of all pages
-	# --prefix : Remove PREFIX from all directory names
-	# --frame  : Use HTML frames for source code view
-	cat cov_sum.txt
-	echo
+	# genhtml obj/coverage.info -o docs/lcov --title "bbt tests coverage" \
+	# 	--prefix "/home/lionel/prj/bbt/src" --frames | tail -n 2 > cov_sum.txt
+	# # --title  : Display TITLE in header of all pages
+	# # --prefix : Remove PREFIX from all directory names
+	# # --frame  : Use HTML frames for source code view
+	# cat cov_sum.txt
+	# echo
+
+doc:
+	cp `find tests/pass_tests/*.md` docs/pass_tests
+	cp tests/pass_tests/pass_tests.md docs
 
 install: bbt
 	cp -p bbt ~/bin

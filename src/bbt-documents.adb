@@ -27,9 +27,8 @@ package body BBT.Documents is
       Output.Put (", Object_String = "  & S.Object_String'Image);
       Output.Put (", Subject_String = " & S.Subject_String'Image);
       Output.Put (", File_Type = "      & S.File_Type'Image);
-      if not S.File_Content.Is_Empty then
-         Output.Put (S.File_Content'Image);
-      end if;
+      Output.New_Line;
+      Output.Put ("File_Content = "  & S.File_Content'Image);
    end Put_Image;
 
    -- --------------------------------------------------------------------------

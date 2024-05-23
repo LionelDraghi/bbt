@@ -138,16 +138,19 @@ package body BBT.Tests.Actions is
    end Get_Expected;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Cmd (Cmd         : String;
-                      Output_Name : String;
-                      Spawn_OK    : out Boolean;
-                      Return_Code : out Integer) is
+   procedure Run_Cmd (Step         :     Step_Type;
+                      Cmd          :     String;
+                      Output_Name  :     String;
+                      Successfully :     Boolean;
+                      Spawn_OK     : out Boolean;
+                      Return_Code  : out Integer) is
       use GNAT.OS_Lib;
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
         := Argument_String_To_List (Cmd);
    begin
-      IO.Put_Line ("Run_Cmd " & Cmd, Verbosity => IO.Debug);
+      IO.Put_Line ("Run_Cmd " & Cmd & ", output file = "
+                   & Output_Name, Verbosity => IO.Debug);
       -- Set_Directory (Settings.Run_Dir_Name);
 
       --  for A of Spawn_Arg.all loop
@@ -161,6 +164,19 @@ package body BBT.Tests.Actions is
              Return_Code  => Return_Code,
              Err_To_Out   => True);
       -- Set_Directory (Initial_Dir);
+
+      Put_Step_Result (Step     => Step,
+                       Success  => Spawn_OK,
+                       Fail_Msg => "Couldn't run " & Cmd,
+                       Loc      => Step.Location);
+      if Spawn_OK and then Successfully then
+         Put_Step_Result (Step     => Step,
+                          Success  => Is_Success (Return_Code),
+                          Fail_Msg => "Unsuccessfully run " &
+                            Step.Object_String'Image,
+                          Loc      => Step.Location);
+      end if;
+
    end Run_Cmd;
 
    -- --------------------------------------------------------------------------
@@ -386,7 +402,7 @@ package body BBT.Tests.Actions is
       case Step.File_Type is
          when Ordinary_File =>
             Delete_File (File_Name);
-            Put_Text (Get_Expected (Step), File_Name);
+            Create_File (File_Name, With_Content => Get_Expected (Step));
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &

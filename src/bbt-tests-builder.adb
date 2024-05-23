@@ -215,22 +215,25 @@ package body BBT.Tests.Builder is
 
       end case;
 
-      --  case Current_Background is
-      --     when Doc     =>
-      --        Put_Line ("Add_Step back doc Last_Scenario_Ref = " &
-      --                    Scenario_Type'(Last_Scenario_Ref)'Image);
-      --        Append_Step (Last_Doc_Ref.Background);
-      --     when Feature =>
-      --        Put_Line ("Add_Step back feat Last_Scenario_Ref.Background = " &
-      --                    Scenario_Type'(Last_Scenario_Ref)'Image);
-      --        Append_Step (Last_Feature_Ref.Background);
-      --     when None    =>
-
-      --  Put_Line ("Add_Step back none Last_Scenario_Ref = " &
-      --              Scenario_Type'(Last_Scenario_Ref)'Image);
-      Last_Scenario_Ref.Element.Step_List.Append
-        ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
-      --  end case;
+      case Current_Background is
+         when Doc     =>
+            Put_Line ("Add_Step to Last_Doc_Ref.Background",
+                      Step.Location,
+                      Verbosity => IO.Debug);
+            Append_Step (Last_Doc_Ref.Background);
+         when Feature =>
+            Put_Line ("Add_Step to Last_Feature_Ref.Background",
+                      Step.Location,
+                      Verbosity => IO.Debug);
+            Append_Step (Last_Feature_Ref.Background);
+         when None    =>
+            Put_Line ("Add_Step to Last_Scenario_Ref" &
+                        Scenario_Type'(Last_Scenario_Ref)'Image,
+                      Step.Location,
+                      Verbosity => IO.Debug);
+            Last_Scenario_Ref.Element.Step_List.Append
+              ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
+      end case;
    end Add_Step;
 
    -- --------------------------------------------------------------------------
@@ -254,6 +257,9 @@ package body BBT.Tests.Builder is
          when In_File_Content =>
             -- Exiting code block
             Restore_Previous_State;
+            Put_Line ("Add_Code_Block, exiting code block. File_Content = "
+                      & Last_Step_Ref.File_Content'Image,
+                      Loc, Verbosity => IO.Debug);
 
          when In_Document =>
             Last_Doc_Ref.Comment.Append ("```");

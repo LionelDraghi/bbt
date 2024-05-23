@@ -12,13 +12,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Tests.Runner is
 
-   -- -----------------------------------------------------------------------
-   --  function Is_Success (I : Integer) return Boolean is
-   --    (I = Integer (Ada.Command_Line.Success));
-   -- Fixme: can I compare the return status of spawn with
-   --        Ada.Command_Line Success or Fail?
-
-   -- -----------------------------------------------------------------------
+  -- -----------------------------------------------------------------------
    function Output_File_Name (D : Document_Type) return String is
      (To_String (D.Name) & ".out");
 
@@ -38,39 +32,24 @@ package body BBT.Tests.Runner is
          begin
             case Step.Action is
             when Run_Cmd =>
-               Run_Cmd (Cmd         => To_String (Step.Object_String),
-                        Output_Name => Output_File_Name (The_Doc),
-                        Spawn_OK    => Spawn_OK,
-                        Return_Code => Return_Code);
-               Put_Step_Result (Step     => Step,
-                                Success  => Spawn_OK,
-                                Fail_Msg => "Couldn't run " &
-                                  Step.Object_String'Image,
-                                Loc      => Step.Location);
-               if not Spawn_OK then
-                  exit Step_Processing;
-               end if;
+               Run_Cmd (Step         => Step,
+                        Cmd          => To_String (Step.Object_String),
+                        Output_Name  => Output_File_Name (The_Doc),
+                        Successfully => False,
+                        Spawn_OK     => Spawn_OK,
+                        Return_Code  => Return_Code);
+               exit Step_Processing when not Spawn_OK;
 
             when Run_Without_Error =>
-               Run_Cmd (Cmd         => To_String (Step.Object_String),
-                        Output_Name => Output_File_Name (The_Doc),
-                        Spawn_OK    => Spawn_OK,
-                        Return_Code => Return_Code);
+               Run_Cmd (Step         => Step,
+                        Cmd          => To_String (Step.Object_String),
+                        Output_Name  => Output_File_Name (The_Doc),
+                        Successfully => True,
+                        Spawn_OK     => Spawn_OK,
+                        Return_Code  => Return_Code);
 
-               if Spawn_OK then
-                  Put_Step_Result (Step     => Step,
-                                   Success  => Is_Success (Return_Code),
-                                   Fail_Msg => "Unsuccessfully run " &
-                                     Step.Object_String'Image,
-                                   Loc      => Step.Location);
-               else
-                  Put_Step_Result (Step     => Step,
-                                   Success  => False,
-                                   Fail_Msg => "Couldn't run " &
-                                     Step.Object_String'Image,
-                                   Loc      => Step.Location);
-                  exit Step_Processing;
-               end if;
+               exit Step_Processing when not (Spawn_OK and
+                                                Is_Success (Return_Code));
 
             when Error_Return_Code =>
                Return_Error (Return_Code, Step);

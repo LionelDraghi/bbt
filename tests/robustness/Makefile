@@ -14,7 +14,7 @@ check: ${BBT} ../../uut
 	${BBT} no_feature.md > output.2
 	@ sdiff -sbB expected.2 output.2 || meld expected.2 output.2
 
-	${BBT} -v no_title.md > output.3
+	${BBT} no_title.md > output.3
 	@ sdiff -sbB expected.3 output.3 || meld expected.3 output.3
 
 .PHONY : clean

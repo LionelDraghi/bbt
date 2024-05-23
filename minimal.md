@@ -1,2 +1,4 @@
-## scenario: minimal
-- when I successfully run `uut -v`
+## Scenario : Command line version option
+
+- When I run `uut --version`
+- Then the output contains `version 1.0`

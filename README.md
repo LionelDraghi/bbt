@@ -125,7 +125,7 @@ Fenced code block are used to specify multiline output or file content, as in:
 
 ## Syntax
 
-### [Gerkhin language subset](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language)
+### [Gherkin language subset](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language)
 - *Feature*
 - *Scenario* or *Example*
 - *Given*
@@ -135,8 +135,8 @@ Fenced code block are used to specify multiline output or file content, as in:
 
 ### bbt own DSL 
 
-bbt keywords, including both the Gerkhin subset and bbt specifics keywords may be obtained with `bbt -lk` (`--list_keywords`).  
-But more interesting, the grammar can be obtained throught the `-lg` (`--list_grammar`) option. 
+bbt keywords, including both the Gherkin subset and bbt specifics keywords may be obtained with `bbt -lk` (`--list_keywords`).  
+But more interesting, the grammar can be obtained through the `-lg` (`--list_grammar`) option. 
 
 Each Step is a one line sentence, with a basic "subject verb object" structure, starting with the preposition/adverb/conjunction (*Given*, *When*, *And*, etc.). 
 Add some attribute adjectives (e.g. *empty*), and here we are.
@@ -158,7 +158,7 @@ or
 ```
 When I once more run the mighty `my_command -r`
 ```
-that's the same. (Just don't exagerate on either way!)  
+that's the same. (Just don't exaggerate on either way!)  
 
 ## Grammar 
 

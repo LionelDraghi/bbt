@@ -4,18 +4,20 @@ private package BBT.Tests.Actions is
 
    function Is_Success (I : Integer) return Boolean;
 
-   procedure Run_Cmd (Cmd         :     String;
-                      Output_Name :     String;
-                      Spawn_OK    : out Boolean;
-                      Return_Code : out Integer);
+   procedure Run_Cmd (Step         :     Step_Type;
+                      Cmd          :     String;
+                      Output_Name  :     String;
+                      Successfully :     Boolean;
+                      Spawn_OK     : out Boolean;
+                      Return_Code  : out Integer);
 
    procedure Create_If_None (Step : Step_Type);
 
    procedure Delete_File (Step : Step_Type);
    procedure Delete_Dir (Step : Step_Type);
-   --  Clean up, with interactive confirmation by user,
-   --  unless Settings.Assume_Yes is set.
-
+   --  --  Clean up, with interactive confirmation by user,
+   --  --  unless Settings.Assume_Yes is set.
+   --
    procedure Return_Error (Last_Returned_Code : Integer;
                            Step               : Step_Type);
    procedure Return_No_Error (Last_Returned_Code : Integer;

@@ -332,7 +332,7 @@ package body BBT.Scenarios.Step_Parser is
          G (Given, No_SA,  No_Subject,   Is_No,      Object_Dir)  := Delete_Dir;  -- Given there is no `dir1`       directory
          G (Given, No_SA,  No_Subject,   Is_V,       Object_File) := Check_File_Existence; -- Given there is a `config.ini` file
          G (Given, No_SA,  No_Subject,   Is_V,       Object_Dir)  := Check_Dir_Existence;  -- Given there is a `dir1` directory
-         G (Given, No_SA,  Subject_File, Containing, Object_Text) := File_Contains; -- Given the file `config.ini` containing `lang=it`
+         G (Given, New_SA, Subject_File, Containing, Object_Text) := Create_New; -- Given the new file `config.ini` containing `lang=it`
          G (Given, New_SA, Subject_File, No_Verb,    No_Object)   := Create_New; -- Given the new file `config.ini` followed by code fenced content
          G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Create_New; -- Given the new directory `dir1`
          G (Given, No_SA,  Subject_File, No_Verb,    No_Object)   := Create_If_None; -- Given the file `config.ini` followed by code fenced content
@@ -596,6 +596,13 @@ package body BBT.Scenarios.Step_Parser is
                   null;
 
                when Code_Span =>
+                  if In_Subject_Part then
+                     Subject_String := To_Unbounded_String (Tok);
+
+                  else
+                     Object_String := To_Unbounded_String (Tok);
+                  end if;
+
                   if Object = Command_List then
                      Cmd_List.Append (Tok);
 
@@ -605,7 +612,7 @@ package body BBT.Scenarios.Step_Parser is
                      else
                         Subject := Subject_File;
                      end if;
-                     Subject_String := To_Unbounded_String (Tok);
+                    -- Subject_String := To_Unbounded_String (Tok);
 
                   elsif In_Object_Part and then Object = No_Object then
                      case Verb is
@@ -617,7 +624,7 @@ package body BBT.Scenarios.Step_Parser is
                            else
                               Object := Object_File;
                            end if;
-                           Object_String := To_Unbounded_String (Tok);
+                           -- Object_String := To_Unbounded_String (Tok);
 
                         when Run            |
                              Successful_Run |
@@ -627,7 +634,7 @@ package body BBT.Scenarios.Step_Parser is
                              Containing     =>
                            -- Verbs always followed by a text
                            Object := Object_Text;
-                           Object_String := To_Unbounded_String (Tok);
+                           -- Object_String := To_Unbounded_String (Tok);
 
                         when Is_V =>
                            -- Complex case where it depends not only on the
@@ -639,7 +646,7 @@ package body BBT.Scenarios.Step_Parser is
                               else
                                  Object := Object_File;
                               end if;
-                              Object_String := To_Unbounded_String (Tok);
+                            --  Object_String := To_Unbounded_String (Tok);
 
                            else
                               -- Then output is xxxx
@@ -649,16 +656,9 @@ package body BBT.Scenarios.Step_Parser is
 
                            end if;
                      end case;
-
-                  else
-                     null;
-                     -- Subject or Object (depending if we are in the
-                     -- Subject_Part or in the Object_Part) is already known
-                     -- thaks to "file" or "directory" keyword.
-
                   end if;
 
-               when Empty =>
+                when Empty =>
                   null;
 
             end case;
