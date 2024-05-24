@@ -1,18 +1,7 @@
-with Ada.Text_IO;
 -- -----------------------------------------------------------------------------
--- bbt, the BlackBox tester (http://lionel.draghi.free.fr/bbt/)
--- Â© 2018, 2019 Lionel Draghi <lionel.draghi@free.fr>
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
 -- SPDX-License-Identifier: APSL-2.0
--- -----------------------------------------------------------------------------
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
--- http://www.apache.org/licenses/LICENSE-2.0
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
 -- -----------------------------------------------------------------------------
 
 with BBT.Documents; use BBT.Documents;
@@ -24,6 +13,9 @@ with BBT.Tests.Builder;
 with BBT.Tests.Runner;
 
 with Ada.Command_Line;
+with Ada.Calendar;
+with Ada.Calendar.Formatting;
+with Ada.Text_IO;
 
 procedure BBT.Main is
 
@@ -118,11 +110,20 @@ begin
       Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
    else
-      Tests.Runner.Run_All;
-      Put_Run_Summary;
-      -- "run" is the default action, so they should'nt be any other action
+      declare
+         use Ada.Calendar;
+         Start_Time : constant Time := Clock;
+         -- End_Time   : Time;
+      begin
+         Tests.Runner.Run_All;
+         -- End_Time := Clock;
+         IO.New_Line;
+         IO.Put_Line ("- Start Time = " & Ada.Calendar.Formatting.Image (Start_Time));
+         -- IO.Put_Line ("- End Time   = " & Ada.Calendar.Formatting.Image (End_Time));
+         Put_Run_Summary;
+      end;
+      -- "run" is the default action, so they shouldn't be any other action
       --  processed after that point. "run" apply
-
    end if;
 
    if IO.Some_Error and then not Settings.Ignore_Errors then

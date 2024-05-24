@@ -1,3 +1,9 @@
+-- -----------------------------------------------------------------------------
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- SPDX-License-Identifier: APSL-2.0
+-- -----------------------------------------------------------------------------
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with BBT.IO;

@@ -1,4 +1,8 @@
--- Header TBD
+-- -----------------------------------------------------------------------------
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- SPDX-License-Identifier: APSL-2.0
+-- -----------------------------------------------------------------------------
 
 with Ada.Characters.Latin_1;
 with Ada.Strings;       use Ada.Strings;

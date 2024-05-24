@@ -1,3 +1,9 @@
+-- -----------------------------------------------------------------------------
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- SPDX-License-Identifier: APSL-2.0
+-- -----------------------------------------------------------------------------
+
 with Text_Utilities; use Text_Utilities;
 
 private package BBT.Tests.Actions is
@@ -17,7 +23,7 @@ private package BBT.Tests.Actions is
    procedure Delete_Dir (Step : Step_Type);
    --  --  Clean up, with interactive confirmation by user,
    --  --  unless Settings.Assume_Yes is set.
-   --
+
    procedure Return_Error (Last_Returned_Code : Integer;
                            Step               : Step_Type);
    procedure Return_No_Error (Last_Returned_Code : Integer;

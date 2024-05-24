@@ -1,3 +1,9 @@
+-- -----------------------------------------------------------------------------
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- SPDX-License-Identifier: APSL-2.0
+-- -----------------------------------------------------------------------------
+
 with BBT.Tests.Builder;
 
 with Ada.Directories; use Ada.Directories;
@@ -140,14 +146,7 @@ package body BBT.Documents is
             -- Empty Doc should be reported
             Test_Result_Counts (Empty) := @ + 1;
          end if;
-         --
-         --  if D.Background /= null then
-         --     -- Background results are normally moved to the scenario after run,
-         --     -- but in case of a scenario where there is only the background...
-         --     -- Fixme: not sure this is usefull at all.
-         --     Get_Results (D.Background.all);
-         --  end if;
-         --
+
          for Scen of D.Scenario_List loop
             Get_Results (Scen);
          end loop;
@@ -158,14 +157,6 @@ package body BBT.Documents is
                -- Empty Feature should be reported
                Test_Result_Counts (Empty) := @ + 1;
             end if;
-
-            --  if F.Background /= null then
-            --     -- Background results are normally moved to the scenario after
-            --     -- run, but in case of a scenario where there is only the
-            --     -- background...
-            --     -- Fixme: not sure this is usefull at all.
-            --     Get_Results (F.Background.all);
-            --  end if;
 
             for Scen of F.Scenario_List loop
                Get_Results (Scen);

@@ -1,3 +1,9 @@
+-- -----------------------------------------------------------------------------
+-- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
+-- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- SPDX-License-Identifier: APSL-2.0
+-- -----------------------------------------------------------------------------
+
 with Text_Utilities; use Text_Utilities;
 
 with Ada.Characters.Latin_1;
@@ -384,18 +390,20 @@ package body BBT.Scenarios.Step_Parser is
          C : Positive_Count := Col;
       begin
          if Is_Authorized (Verbosity) then
-            Ada.Text_IO.Put (Image (P));  C := @ +  6; Set_Col (C);
-            Ada.Text_IO.Put (Image (SA)); C := @ +  4; Set_Col (C);
-            Ada.Text_IO.Put (Image (S));  C := @ + 12; Set_Col (C);
-            Ada.Text_IO.Put (Image (V));  C := @ + 17; Set_Col (C);
-            Ada.Text_IO.Put (Image (O));  C := @ + 11; Set_Col (C);
-            Ada.Text_IO.Put_Line (" --> " & A'Image);
+            Ada.Text_IO.Put  ("| " & Image (P));  C := @ + Prepositions'Width + 1; Set_Col (C);
+            Ada.Text_IO.Put (" | " & Image (SA)); C := @ + Subject_Attrib'Width; Set_Col (C);
+            Ada.Text_IO.Put (" | " & Image (S));  C := @ + Subjects'Width - 3; Set_Col (C);
+            Ada.Text_IO.Put (" | " & Image (V));  C := @ + Verbs'Width + 5; Set_Col (C);
+            Ada.Text_IO.Put (" | " & Image (O));  C := @ + Objects'Width + 8; Set_Col (C);
+            Ada.Text_IO.Put (" | " & A'Image);    C := @ + Actions'Width + 3; Set_Col (C);
+            Ada.Text_IO.Put_Line (" |");
          end if;
       end Put_Rule;
 
       -- -----------------------------------------------------------------------
       procedure Put_Grammar is
       begin
+         Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
          for P in The_Grammar'Range (1) loop -- A of G when A /= None loop
             for SA in The_Grammar'Range (2) loop -- A of G when A /= None loop
                for S in The_Grammar'Range (3) loop -- A of G when A /= None loop
@@ -410,6 +418,7 @@ package body BBT.Scenarios.Step_Parser is
                end loop;
             end loop;
          end loop;
+         Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
       end Put_Grammar;
 
    end Parser;
