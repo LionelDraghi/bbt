@@ -396,7 +396,7 @@ package body BBT.Scenarios.Step_Parser is
             Ada.Text_IO.Put (" | " & Image (V));  C := @ + Verbs'Width + 5; Set_Col (C);
             Ada.Text_IO.Put (" | " & Image (O));  C := @ + Objects'Width + 8; Set_Col (C);
             Ada.Text_IO.Put (" | " & A'Image);    C := @ + Actions'Width + 3; Set_Col (C);
-            Ada.Text_IO.Put_Line (" |");
+            Ada.Text_IO.Put_Line (" |  ");
          end if;
       end Put_Rule;
 

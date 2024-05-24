@@ -66,7 +66,7 @@ package body Text_Utilities is
       for L of With_Content loop
          Ada.Text_IO.Put_Line (Output, Item => L);
       end loop;
-      Ada.Text_IO.Close (Output);
+      -- Ada.Text_IO.Close (Output);
    end Create_File;
 
    -- -----------------------------------------------------------------------

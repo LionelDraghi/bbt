@@ -13,8 +13,8 @@ with BBT.Tests.Builder;
 with BBT.Tests.Runner;
 
 with Ada.Command_Line;
-with Ada.Calendar;
-with Ada.Calendar.Formatting;
+-- with Ada.Calendar;
+-- with Ada.Calendar.Formatting;
 with Ada.Text_IO;
 
 procedure BBT.Main is
@@ -111,15 +111,15 @@ begin
 
    else
       declare
-         use Ada.Calendar;
-         Start_Time : constant Time := Clock;
+         --  use Ada.Calendar;
+         --  Start_Time : constant Time := Clock;
          -- End_Time   : Time;
       begin
          Tests.Runner.Run_All;
          -- End_Time := Clock;
-         IO.New_Line;
-         IO.Put_Line ("- Start Time = " & Ada.Calendar.Formatting.Image (Start_Time));
-         -- IO.Put_Line ("- End Time   = " & Ada.Calendar.Formatting.Image (End_Time));
+         -- IO.New_Line;
+         -- IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
+         -- IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
          Put_Run_Summary;
       end;
       -- "run" is the default action, so they shouldn't be any other action
