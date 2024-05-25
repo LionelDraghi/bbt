@@ -163,9 +163,13 @@ When run `my_command -r`
 ```
 or 
 ```
-When I once more run the mighty `my_command -r`
+When I once more try to run something like `my_command -r`
 ```
-that's the same. (Just don't exaggerate on either way!)  
+that's the same.  
+
+Note : neither is recommended.  
+The former isn't easy to read, and the latter is misleading by introducing nuances that bbt ignore!
+This is specification, make short sentences and go straight to the point.
 
 ## Grammar 
 
@@ -267,11 +271,11 @@ that's the same. (Just don't exaggerate on either way!)
   - Then `config.ini` should contains `"size=80x40"`
 
 ### Scenario : the last command does not meet expectation (test should fail)
-  - When I run `uut -v` 
+  - When I run `uut append "lang=fr" config.ini` 
   - Then I should get no error
 ```
 
-Note that in this case, the second scenario will fail because of the background (the first create a `config.ini` file), and would not fail without the background. 
+In this case, the Background will erase the `config.ini` file created by the first scenario before executing the second. This should cause the scenario to fail, if uut is not able to add something to the `config.ini` file without creating it first.
 
 Background may appears at the beginning, at document level, or at feature level, or both.
 Before each scenario, the document background will be executed, and then the feature background.

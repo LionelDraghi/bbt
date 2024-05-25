@@ -403,7 +403,8 @@ package body BBT.Scenarios.Step_Parser is
       -- -----------------------------------------------------------------------
       procedure Put_Grammar is
       begin
-         Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
+         Ada.Text_IO.Put_Line ("| Prep  |     |Subject |       Verb       |      Object       |        Action        |  ");
+         Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|  ");
          for P in The_Grammar'Range (1) loop -- A of G when A /= None loop
             for SA in The_Grammar'Range (2) loop -- A of G when A /= None loop
                for S in The_Grammar'Range (3) loop -- A of G when A /= None loop
