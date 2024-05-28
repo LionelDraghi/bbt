@@ -5,8 +5,8 @@ check: ../bbt ../uut
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
 	@ - ln -fs ../uut .
-	@ rm pass_tests/pass_tests.md
-	../bbt -q -y -o pass_tests/pass_tests.md pass_tests/*.md && echo 1. features tests OK ========== || echo 1. features tests KO "******"
+	@ - rm pass_tests/pass_tests.md
+	../bbt -q -ad -o pass_tests/pass_tests.md pass_tests/*.md && echo 1. features tests OK ========== || echo 1. features tests KO "******"
 	@ echo
 
 	# We run one by one scenario with test that should fail

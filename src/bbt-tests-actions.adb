@@ -42,85 +42,6 @@ package body BBT.Tests.Actions is
       and then Exists (File_Name)
       and then Kind (File_Name) = Directory);
 
-   procedure Delete_Directory (Dir_Name, Prompt : String);
-
-   procedure Delete_File (File_Name, Prompt : String) is
-      C : Character;
-   begin
-      if Dir_Exists (File_Name) then
-         -- Error case : the dir is in fact a file
-         Delete_Directory (File_Name, Prompt);
-
-      elsif File_Exists (File_Name) then
-
-         if BBT.Settings.Assume_Yes then
-            Delete_File (File_Name);
-            Ada.Text_IO.Put_Line ("Deleting " & File_Name);
-         else
-            loop
-               if Prompt /= "" then
-                  Ada.Text_IO.Put_Line (Prompt);
-               end if;
-               Ada.Text_IO.Put_Line ("Delete existing " & File_Name & "? [yn]");
-               Ada.Text_IO.Get_Immediate (C);
-               Ada.Text_IO.Flush;
-               case C is
-               when 'y' =>
-                  Ada.Text_IO.Put_Line ("Deleting " & File_Name);
-                  Delete_File (File_Name);
-                  return;
-               when 'n'    => return;
-               when others => null;
-               end case;
-            end loop;
-         end if;
-
-      else
-         -- either there is no File_Name, or it is a special file
-         null;
-
-      end if;
-   end Delete_File;
-
-   procedure Delete_Directory (Dir_Name, Prompt : String) is
-      C : Character;
-   begin
-      if File_Exists (Dir_Name) then
-         -- Error case : the dir is in fact a file
-         Delete_File (Dir_Name, "");
-
-      elsif Dir_Exists (Dir_Name) then
-
-         if BBT.Settings.Assume_Yes then
-            Delete_Tree (Dir_Name);
-            Ada.Text_IO.Put_Line ("Deleting recursively " & Dir_Name);
-
-         else
-            loop
-               if Prompt /= "" then
-                  Ada.Text_IO.Put_Line (Prompt);
-               end if;
-               Ada.Text_IO.Put_Line ("Delete existing " & Dir_Name & "? [yn]");
-               Ada.Text_IO.Get_Immediate (C);
-               Ada.Text_IO.Flush;
-               case C is
-               when 'y' =>
-                  Ada.Text_IO.Put_Line ("Deleting recursively " & Dir_Name);
-                  Delete_Tree (Dir_Name);
-                  return;
-               when 'n'    => return;
-               when others => null;
-               end case;
-            end loop;
-
-         end if;
-      else
-         -- either there is no Dir_Name, or it is a special file
-         null;
-
-      end if;
-   end Delete_Directory;
-
    -- --------------------------------------------------------------------------
    function Get_Expected (Step : Step_Type) return Text is
       use type Text;
@@ -160,9 +81,9 @@ package body BBT.Tests.Actions is
       -- Set_Directory (Settings.Run_Dir_Name);
 
       --  for A of Spawn_Arg.all loop
-      --     --     Put_Line ("Arg >" & A.all & "<", Verbosity => Debug);
-      --     --                                    , Verbosity => Settings.Debug);
-      --     --  end loop;
+      --     Put_Line ("Arg >" & A.all & "<", Verbosity => Debug);
+      --                                    , Verbosity => Settings.Debug);
+      --  end loop;
       Spawn (Program_Name => Spawn_Arg.all (1).all,
              Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
              Success      => Spawn_OK,
@@ -206,7 +127,7 @@ package body BBT.Tests.Actions is
 
       elsif Step.File_Type = Directory then
          if not Entry_Exists (File_Name) then
-            Create_Directory (File_Name);
+            Create_Path (File_Name);
          end if;
          Put_Step_Result (Step     => Step,
                           Success  => Dir_Exists (File_Name),
@@ -223,6 +144,74 @@ package body BBT.Tests.Actions is
                        GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                      Step.Location);
    end Create_If_None;
+
+   -- --------------------------------------------------------------------------
+   procedure Erase_And_Create (Step : Step_Type) is
+      File_Name : constant String := To_String (Step.Subject_String);
+      File      : Ada.Text_IO.File_Type;
+   begin
+      IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
+      case Step.File_Type is
+         when Ordinary_File =>
+            if Exists (File_Name) and then BBT.Settings.Auto_Delete then
+               Delete_File (File_Name);
+            end if;
+            Ada.Text_IO.Create (File, Name => File_Name);
+            Put_Text (File, Get_Expected (Step));
+            Ada.Text_IO.Close (File);
+            Put_Step_Result (Step     => Step,
+                             Success  => File_Exists (File_Name),
+                             Fail_Msg => "File " & File_Name'Image &
+                               " creation failed",
+                             Loc      => Step.Location);
+         when Directory =>
+            if Exists (File_Name) and then Settings.Auto_Delete then
+               Delete_Tree (File_Name);
+            end if;
+            Create_Path (File_Name);
+            Put_Step_Result (Step     => Step,
+                             Success  => Dir_Exists (File_Name),
+                             Fail_Msg => "Couldn't create directory " &
+                               File_Name'Image,
+                             Loc      => Step.Location);
+         when others =>
+            -- don't mess around with special files!
+            null;
+      end case;
+   end Erase_And_Create;
+
+   -- --------------------------------------------------------------------------
+   procedure Create_New (Step : Step_Type) is
+      File_Name : constant String := To_String (Step.Subject_String);
+      File      : Ada.Text_IO.File_Type;
+   begin
+      IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
+      case Step.File_Type is
+         when Ordinary_File =>
+            if not Exists (File_Name) then
+               Ada.Text_IO.Create (File, Name => File_Name);
+               Put_Text (File, Get_Expected (Step));
+               Ada.Text_IO.Close (File);
+            end if;
+            Put_Step_Result (Step     => Step,
+                             Success  => File_Exists (File_Name),
+                             Fail_Msg => "File " & File_Name'Image &
+                               " creation failed",
+                             Loc      => Step.Location);
+         when Directory =>
+            if not Exists (File_Name) then
+               Create_Path (File_Name);
+            end if;
+            Put_Step_Result (Step     => Step,
+                             Success  => Dir_Exists (File_Name),
+                             Fail_Msg => "Couldn't create directory " &
+                               File_Name'Image,
+                             Loc      => Step.Location);
+         when others =>
+            -- don't mess around with special files!
+            null;
+      end case;
+   end Create_New;
 
    -- --------------------------------------------------------------------------
    procedure Return_Error (Last_Returned_Code : Integer;
@@ -314,39 +303,37 @@ package body BBT.Tests.Actions is
    end Check_No_Dir;
 
    -- --------------------------------------------------------------------------
-   procedure Delete_File (Step : Step_Type) is
+   procedure Setup_No_File (Step : Step_Type) is
       File_Name : constant String :=
                     +Step.Subject_String & (+Step.Object_String);
    begin
-      IO.Put_Line ("Delete_File " & File_Name, Verbosity => Debug);
-      Delete_File (File_Name,
-                   Prompt => "> " & Image
-                     (Step.Location) & (+Step.Step_String));
+      IO.Put_Line ("Setup_No_File " & File_Name, Verbosity => Debug);
+      if BBT.Settings.Auto_Delete and then Exists (File_Name) then
+         Delete_File (File_Name);
+      end if;
       Put_Step_Result (Step     => Step,
                        Success  => not File_Exists (File_Name),
-                       Fail_Msg => "file " & File_Name'Image &
-                         " not deleted",
+                       Fail_Msg => "file " & File_Name'Image & " not deleted",
                        Loc      => Step.Location);
-   end Delete_File;
+   end Setup_No_File;
 
    -- --------------------------------------------------------------------------
-   procedure Delete_Dir (Step : Step_Type) is
+   procedure Setup_No_Dir (Step : Step_Type) is
       Dir_Name : constant String :=
                    +Step.Subject_String & (+Step.Object_String);
    begin
-      IO.Put_Line ("Delete_Dir " & Dir_Name, Verbosity => Debug);
-      Delete_Directory (Dir_Name,
-                        Prompt => "> " & Image
-                          (Step.Location) & (+Step.Step_String));
+      IO.Put_Line ("Setup_No_Dir " & Dir_Name, Verbosity => Debug);
+      if BBT.Settings.Auto_Delete and then Exists (Dir_Name) then
+         Delete_Tree (Dir_Name);
+      end if;
       Put_Step_Result (Step     => Step,
                        Success  => not Dir_Exists (Dir_Name),
-                       Fail_Msg => "dir " & Dir_Name'Image &
-                         " not deleted",
+                       Fail_Msg => "dir " & Dir_Name'Image & " not deleted",
                        Loc      => Step.Location);
-   end Delete_Dir;
+   end Setup_No_Dir;
 
    -- --------------------------------------------------------------------------
-   procedure Output_Equal_To (Output : Text;
+   procedure Output_Is (Output : Text;
                               Step   : Step_Type) is
       use Texts;
       T2 : constant Text := Get_Expected (Step);
@@ -357,7 +344,7 @@ package body BBT.Tests.Actions is
                        Fail_Msg => "Output " & Output'Image &
                          "    not equal to expected  " & T2'Image,
                        Loc      => Step.Location);
-   end Output_Equal_To;
+   end Output_Is;
 
    -- --------------------------------------------------------------------------
    procedure Output_Contains (Output : Text;
@@ -399,35 +386,5 @@ package body BBT.Tests.Actions is
                          " does not contain  " & T2'Image,
                        Loc      => Step.Location);
    end File_Contains;
-
-   -- --------------------------------------------------------------------------
-   procedure Create_New (Step : Step_Type) is
-      File_Name : constant String := To_String (Step.Subject_String);
-   begin
-      IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
-      case Step.File_Type is
-         when Ordinary_File =>
-            Delete_File (File_Name);
-            Create_File (File_Name, With_Content => Get_Expected (Step));
-            Put_Step_Result (Step     => Step,
-                             Success  => File_Exists (File_Name),
-                             Fail_Msg => "File " & File_Name'Image &
-                               " creation failed",
-                             Loc      => Step.Location);
-         when Directory =>
-            Delete_Directory (File_Name,
-                              Prompt => "> " & Image
-                                (Step.Location) & (+Step.Step_String));
-            Create_Path (File_Name);
-            Put_Step_Result (Step     => Step,
-                             Success  => Dir_Exists (File_Name),
-                             Fail_Msg => "Couldn't create directory " &
-                               File_Name'Image,
-                             Loc      => Step.Location);
-         when others =>
-            -- don't mess around with special files!
-            null;
-      end case;
-   end Create_New;
 
 end BBT.Tests.Actions;

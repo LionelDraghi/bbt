@@ -29,8 +29,8 @@ check: bbt
 	# echo
 
 doc:
+	mv tests/pass_tests/pass_tests.md docs
 	cp `find tests/pass_tests/*.md` docs/pass_tests
-	cp tests/pass_tests/pass_tests.md docs
 	./bbt -lg > docs/grammar.md
 	./bbt -lk > docs/keywords.md
 

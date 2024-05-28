@@ -19,7 +19,6 @@ package body BBT.Scenarios.Step_Parser is
    -- --------------------------------------------------------------------------
    package Lexer is
 
-      -- -----------------------------------------------------------------------
       type Token_Type is (Keyword, Identifier, Code_Span, Empty);
       -- In Markdown, Code_Span denote a word or phrase enclosed in
       -- backticks (`).
@@ -40,7 +39,6 @@ package body BBT.Scenarios.Step_Parser is
                              First : Positive;
                              Last  : Natural := 0) return Boolean;
 
-      -- -----------------------------------------------------------------------
       procedure Put_Keywords;
 
    end Lexer;
@@ -56,7 +54,6 @@ package body BBT.Scenarios.Step_Parser is
 
       package String_Arrays is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                       String);
-      -- -----------------------------------------------------------------------
       Keywords : constant String_Arrays.Vector
         := ["given",
             "when",
@@ -100,7 +97,6 @@ package body BBT.Scenarios.Step_Parser is
          -- In the case of a code span, Last will designate a character before
          -- the closing backtick, and the cursor the character after.
 
-         -- --------------------------------------------------------------------
          procedure Finish_Line is
          begin
             Line_Finished := True;
@@ -225,7 +221,6 @@ package body BBT.Scenarios.Step_Parser is
    -- --------------------------------------------------------------------------
    package Parser is
 
-      -- -----------------------------------------------------------------------
       type Tokens is ( -- Prepositions -----------------------------------------
                        Given,
                        When_P,
@@ -324,7 +319,6 @@ package body BBT.Scenarios.Step_Parser is
          end case;
       end Image;
 
-      -- -----------------------------------------------------------------------
       type Grammar is array (Prepositions, Subject_Attrib,
                              Subjects, Verbs, Objects) of Actions;
       Null_Grammar : constant Grammar
@@ -334,15 +328,15 @@ package body BBT.Scenarios.Step_Parser is
       function Create_Grammar return Grammar is
          G : Grammar := Null_Grammar;
       begin
-         G (Given, No_SA,  No_Subject,   Is_No,      Object_File) := Delete_File; -- Given there is no `config.ini` file
-         G (Given, No_SA,  No_Subject,   Is_No,      Object_Dir)  := Delete_Dir;  -- Given there is no `dir1`       directory
+         G (Given, No_SA,  No_Subject,   Is_No,      Object_File) := Setup_No_File; -- Given there is no `config.ini` file
+         G (Given, No_SA,  No_Subject,   Is_No,      Object_Dir)  := Setup_No_Dir;  -- Given there is no `dir1`       directory
          G (Given, No_SA,  No_Subject,   Is_V,       Object_File) := Check_File_Existence; -- Given there is a `config.ini` file
          G (Given, No_SA,  No_Subject,   Is_V,       Object_Dir)  := Check_Dir_Existence;  -- Given there is a `dir1` directory
-         G (Given, New_SA, Subject_File, Containing, Object_Text) := Create_New; -- Given the new file `config.ini` containing `lang=it`
-         G (Given, New_SA, Subject_File, No_Verb,    No_Object)   := Create_New; -- Given the new file `config.ini` followed by code fenced content
-         G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Create_New; -- Given the new directory `dir1`
-         G (Given, No_SA,  Subject_File, No_Verb,    No_Object)   := Create_If_None; -- Given the file `config.ini` followed by code fenced content
-         G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)   := Create_If_None; -- Given the directory `dir1`
+         G (Given, New_SA, Subject_File, Containing, Object_Text) := Erase_And_Create; -- Given the new file `config.ini` containing `lang=it`
+         G (Given, New_SA, Subject_File, No_Verb,    No_Object)   := Erase_And_Create; -- Given the new file `config.ini` followed by code fenced content
+         G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Erase_And_Create; -- Given the new directory `dir1`
+         G (Given, No_SA,  Subject_File, No_Verb,    No_Object)   := Create_File;      -- Given the file `config.ini` followed by code fenced content
+         G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)   := Create_Directory; -- Given the directory `dir1`
 
          G (When_P, No_SA, No_Subject, Run,            Object_Text)  := Run_Cmd;           -- when I run `cmd`
          G (When_P, No_SA, No_Subject, Successful_Run, Object_Text)  := Run_Without_Error; -- when i successfully run `cmd`
@@ -378,6 +372,7 @@ package body BBT.Scenarios.Step_Parser is
                            O  : Objects) return Actions
       is (The_Grammar (P, SA, S, V, O));
 
+      -- -----------------------------------------------------------------------
       procedure Put_Rule (P         : Prepositions;
                           SA        : Subject_Attrib;
                           S         : Subjects;
@@ -419,7 +414,7 @@ package body BBT.Scenarios.Step_Parser is
                end loop;
             end loop;
          end loop;
-         Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
+         -- Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
       end Put_Grammar;
 
    end Parser;
@@ -476,8 +471,6 @@ package body BBT.Scenarios.Step_Parser is
          begin
             case TT is
                when Keyword =>
-                  -- Put_Line (Prefix & "   Keyword    : """ & Tok & """");
-                  -- Put_Line (Prefix & "   Previous   : """ & To_String (Previous_Token) & """");
                   declare
                      Lower_Keyword : constant String := Translate
                        (Source  => Tok,
@@ -511,7 +504,6 @@ package body BBT.Scenarios.Step_Parser is
                            IO.Put_Warning ("Keyword : " & Tok & " ignored", Loc);
 
                         end if;
-                        -- Put_Line (Prefix & "Prep = " & Prep'Image);
 
                      else
                         null;
@@ -522,10 +514,8 @@ package body BBT.Scenarios.Step_Parser is
                      if Lower_Keyword = "run" or Lower_Keyword = "running" then
                         if Successfully_Met then
                            Verb := Successful_Run;
-                           -- Put_Line (Prefix & "Verb = successfully run");
                         else
                            Verb := Run;
-                           -- Put_Line (Prefix & "Verb = run");
                         end if;
 
                      elsif Lower_Keyword = "or" then
@@ -536,15 +526,12 @@ package body BBT.Scenarios.Step_Parser is
                            Cmd_List.Append (+Object_String);
                            Object_String := Null_Unbounded_String;
                         end if;
-                        -- Put_Line ("--> Cmd list " & Cmd_List'Image);
 
                      elsif Lower_Keyword = "get" then
                         Verb := Get;
-                        -- Put_Line (Prefix & "Verb = get");
 
                      elsif Lower_Keyword = "is" then
                         Verb := Is_V;
-                        -- Put_Line (Prefix & "Verb = is");
 
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
@@ -560,7 +547,6 @@ package body BBT.Scenarios.Step_Parser is
                         Successfully_Met := True;
 
                      elsif Lower_Keyword = "error" then
-                        -- Put_Line (Prefix & "   error");
                         Object := Error;
 
                      elsif Lower_Keyword = "output" then
@@ -634,7 +620,6 @@ package body BBT.Scenarios.Step_Parser is
                            else
                               Object := Object_File;
                            end if;
-                           -- Object_String := To_Unbounded_String (Tok);
 
                         when Run            |
                              Successful_Run |
@@ -642,9 +627,8 @@ package body BBT.Scenarios.Step_Parser is
                              Get_No         |
                              Contains       |
                              Containing     =>
-                           -- Verbs always followed by a text
+                           -- Verbs are always followed by a text
                            Object := Object_Text;
-                           -- Object_String := To_Unbounded_String (Tok);
 
                         when Is_V =>
                            -- Complex case where it depends not only on the
@@ -656,7 +640,6 @@ package body BBT.Scenarios.Step_Parser is
                               else
                                  Object := Object_File;
                               end if;
-                            --  Object_String := To_Unbounded_String (Tok);
 
                            else
                               -- Then output is xxxx
@@ -679,7 +662,8 @@ package body BBT.Scenarios.Step_Parser is
       end loop Line_Processing;
 
       Action := Get_Action (Prep, Subject_Attr, Subject, Verb, Object);
-      IO.Put (Prefix & "Rule = ", Verbosity => IO.Debug);
+
+      IO.Put (Prefix & " Rule = ", Verbosity => IO.Debug);
       Put_Rule (Prep, Subject_Attr, Subject, Verb, Object, Action,
                 Verbosity => IO.Debug);
 
@@ -697,11 +681,13 @@ package body BBT.Scenarios.Step_Parser is
 
    end Parse;
 
+   -- --------------------------------------------------------------------------
    procedure Put_Keywords is
    begin
       Lexer.Put_Keywords;
    end Put_Keywords;
 
+   -- --------------------------------------------------------------------------
    procedure Put_Grammar is
    begin
       Parser.Put_Grammar;

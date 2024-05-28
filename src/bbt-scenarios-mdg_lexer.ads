@@ -5,7 +5,7 @@
 -- -----------------------------------------------------------------------------
 
 with Ada.Strings.Text_Buffers;
-with BBT.IO;             use BBT.IO;
+with BBT.IO;                use BBT.IO;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 

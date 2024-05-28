@@ -1,14 +1,14 @@
-| xxx   |     |||||
+| Prep  |     |Subject |       Verb       |      Object       |        Action        |  
 |-------|-----|--------|------------------|-------------------|----------------------|  
 | Given |     |        | is               | `file`            | CHECK_FILE_EXISTENCE |  
 | Given |     |        | is               | `dir`             | CHECK_DIR_EXISTENCE  |  
-| Given |     |        | is no            | `file`            | DELETE_FILE          |  
-| Given |     |        | is no            | `dir`             | DELETE_DIR           |  
-| Given |     | `dir`  |                  |                   | CREATE_IF_NONE       |  
-| Given |     | `file` |                  |                   | CREATE_IF_NONE       |  
-| Given | new | `dir`  |                  |                   | CREATE_NEW           |  
-| Given | new | `file` |                  |                   | CREATE_NEW           |  
-| Given | new | `file` | containing       | `text`            | CREATE_NEW           |  
+| Given |     |        | is no            | `file`            | SETUP_NO_FILE        |  
+| Given |     |        | is no            | `dir`             | SETUP_NO_DIR         |  
+| Given |     | `dir`  |                  |                   | CREATE_DIRECTORY     |  
+| Given |     | `file` |                  |                   | CREATE_FILE          |  
+| Given | new | `dir`  |                  |                   | ERASE_AND_CREATE     |  
+| Given | new | `file` |                  |                   | ERASE_AND_CREATE     |  
+| Given | new | `file` | containing       | `text`            | ERASE_AND_CREATE     |  
 | When  |     |        | run              | `text`            | RUN_CMD              |  
 | When  |     |        | run              | `cmd` [or `cmd`]* | RUN_CMD              |  
 | When  |     |        | successfully run | `text`            | RUN_WITHOUT_ERROR    |  
@@ -29,4 +29,3 @@
 | Then  |     | output | contains         | `text`            | OUTPUT_CONTAINS      |  
 | Then  |     | output | is               |                   | OUTPUT_IS            |  
 | Then  |     | output | is               | `text`            | OUTPUT_IS            |  
-|-------|-----|--------|------------------|-------------------|----------------------|

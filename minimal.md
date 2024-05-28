@@ -1,4 +1,8 @@
-## Scenario : Command line version option
+## Scenario: "containing" test
 
-- When I run `uut --version`
-- Then the output contains `version 1.0`
+- Given new file `rules.txt` containing `Interfaces use is forbidden`
+- When I successfully run `uut read rules.txt`
+- Then I get
+```
+Interfaces use is forbidden
+```

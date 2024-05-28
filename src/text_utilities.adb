@@ -56,20 +56,19 @@ package body Text_Utilities is
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
-   procedure Create_File (File_Name   : String;
-                         With_Content : Text) is
-      Output : Ada.Text_IO.File_Type;
+   procedure Create_File (File_Name    : String;
+                          With_Content : Text) is
+      Output : File_Type;
+      pragma Warnings (Off, Output);
    begin
-      Ada.Text_IO.Create (Output,
-                          Ada.Text_IO.Out_File,
-                          File_Name);
+      Create (Output, Out_File, File_Name);
       for L of With_Content loop
-         Ada.Text_IO.Put_Line (Output, Item => L);
+         Put_Line (Output, Item => L);
       end loop;
-      -- Ada.Text_IO.Close (Output);
+      Close (Output);
    end Create_File;
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Create_File (File_Name    : Unbounded_String;
                          With_Content : Text) return Boolean is
    begin
@@ -80,32 +79,28 @@ package body Text_Utilities is
    end Create_File;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text
-     (File : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-      Item : Text) is
+   procedure Put_Text (File : File_Type := Standard_Output;
+                       Item : Text) is
    begin
       for L of Item loop
          Put_Line (File, L);
       end loop;
    end Put_Text;
 
-   -- --------------------------------------------------------------------------
-   procedure Put_Text (Item      : Text;
-                       File_Name : String) is
-      File : File_Type;
-      pragma Warnings (Off, File);
-   begin
-      Open (File, Name => File_Name, Mode => In_File);
-      Put_Text (File, Item);
-      Close (File);
-   end Put_Text;
+   --  -- --------------------------------------------------------------------------
+   --  procedure Put_Text (Item      : Text;
+   --                      File_Name : String) is
+   --     File : File_Type;
+   --     pragma Warnings (Off, File);
+   --  begin
+   --     Put_Text (File, Item);
+   --     -- Close (File);
+   --  end Put_Text;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Head
-     (Item       : Text;
-      File       : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-      Line_Count : Positive)
-   is
+   procedure Put_Text_Head (Item       : Text;
+                            File       : File_Type := Standard_Output;
+                            Line_Count : Positive) is
       I : Positive := 1;
    begin
       for L of Item loop
@@ -116,23 +111,21 @@ package body Text_Utilities is
    end Put_Text_Head;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Head (Item       : Text;
-                            File_Name  : String;
-                            Line_Count : Positive) is
-      File : File_Type;
-      pragma Warnings (Off, File);
-   begin
-      Open (File, Name => File_Name, Mode => In_File);
-      Put_Text_Head (Item, File, Line_Count);
-      Close (File);
-   end Put_Text_Head;
+   --  procedure Put_Text_Head (Item       : Text;
+   --                           File_Name  : String;
+   --                           Line_Count : Positive) is
+   --     File : File_Type;
+   --     pragma Warnings (Off, File);
+   --  begin
+   --     Open (File, Name => File_Name, Mode => Out_File);
+   --     Put_Text_Head (Item, File, Line_Count);
+   --     Close (File);
+   --  end Put_Text_Head;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Tail
-     (Item       : Text;
-      File       : Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-      Line_Count : Positive)
-   is
+   procedure Put_Text_Tail (Item       : Text;
+                            File       : File_Type := Standard_Output;
+                            Line_Count : Positive) is
       I : Positive := 1;
    begin
       for L of reverse Item loop
@@ -143,16 +136,16 @@ package body Text_Utilities is
    end Put_Text_Tail;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text_Tail (Item       : Text;
-                            File_Name  : String;
-                            Line_Count : Positive) is
-      File : File_Type;
-      pragma Warnings (Off, File);
-   begin
-      Open (File, Name => File_Name, Mode => In_File);
-      Put_Text_Tail (Item, File, Line_Count);
-      Close (File);
-   end Put_Text_Tail;
+   --  procedure Put_Text_Tail (Item       : Text;
+   --                           File_Name  : String;
+   --                           Line_Count : Positive) is
+   --     File : File_Type;
+   --     pragma Warnings (Off, File);
+   --  begin
+   --     Open (File, Name => File_Name, Mode => Out_File);
+   --     Put_Text_Tail (Item, File, Line_Count);
+   --     Close (File);
+   --  end Put_Text_Tail;
 
    -- --------------------------------------------------------------------------
    function Get_Text (File : File_Type) return Text is
@@ -179,29 +172,29 @@ package body Text_Utilities is
    end Get_Text;
 
    -- --------------------------------------------------------------------------
-   function Get_Text (File_Name : Unbounded_String) return Text is
-     (Get_Text (To_String (File_Name)));
-
-   -- --------------------------------------------------------------------------
-   function Get_Text_Head (From       : Text;
-                           Line_Count : Positive) return Text is
-      use Ada.Containers;
-   begin
-      if From = Empty_Text then
-         return Empty_Text;
-      elsif From.Length < Count_Type (Line_Count) then
-         return From;
-      else
-         declare
-            Tmp : Text;
-         begin
-            for I in From.First_Index .. From.First_Index + Line_Count - 1 loop
-               Tmp.Append (From (From.First_Index + I - 1));
-            end loop;
-            return Tmp;
-         end;
-      end if;
-   end Get_Text_Head;
+   --  function Get_Text (File_Name : Unbounded_String) return Text is
+   --    (Get_Text (To_String (File_Name)));
+   --
+   --  -- --------------------------------------------------------------------------
+   --  function Get_Text_Head (From       : Text;
+   --                          Line_Count : Positive) return Text is
+   --     use Ada.Containers;
+   --  begin
+   --     if From = Empty_Text then
+   --        return Empty_Text;
+   --     elsif From.Length < Count_Type (Line_Count) then
+   --        return From;
+   --     else
+   --        declare
+   --           Tmp : Text;
+   --        begin
+   --           for I in From.First_Index .. From.First_Index + Line_Count - 1 loop
+   --              Tmp.Append (From (From.First_Index + I - 1));
+   --           end loop;
+   --           return Tmp;
+   --        end;
+   --     end if;
+   --  end Get_Text_Head;
 
    --  -- --------------------------------------------------------------------------
    --  function Get_Text_Tail (From       : Text;

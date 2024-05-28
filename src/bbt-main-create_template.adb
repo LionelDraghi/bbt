@@ -52,7 +52,7 @@ begin
       Put_Line ("lang=uk");
       Put_Line ("```");
       New_Line;
-      Put_Line ("-- More extensive explanations : http://lionel.draghi.free.fr/Archicheck/rules/");
+      Put_Line ("-- More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main");
       Put_Line ("-- ");
       Put_Line ("-- File generated with BBT " & Settings.BBT_Version);
 

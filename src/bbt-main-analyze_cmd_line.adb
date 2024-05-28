@@ -74,8 +74,8 @@ begin
          elsif Opt = "-k" or Opt = "--keep_going" then
             Settings.Keep_Going := True;
 
-         elsif Opt = "-y" or Opt = "--assume_yes" then
-            Settings.Assume_Yes := True;
+         elsif Opt = "-ad" or Opt = "--auto_delete" then
+            Settings.Auto_Delete := True;
 
          elsif Opt = "-v" or Opt = "--verbose" then
             Set_Verbosity  (Verbose);

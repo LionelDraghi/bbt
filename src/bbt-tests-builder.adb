@@ -70,7 +70,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
+      -- Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
       The_Doc_List.Append
         (Document_Type'(Name   => To_Unbounded_String (Name),
                         others => <>));
@@ -80,7 +80,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Feature (Name : String; Loc : Location_Type) is
    begin
-      Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
+      -- Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
       Last_Doc_Ref.Feature_List.Append
         (Feature_Type'(Name            => To_Unbounded_String (Name),
                        Parent_Document => Last_Doc_Ref.Element,
@@ -112,12 +112,8 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Background (Name : String; Loc : Location_Type) is
    begin
-      --  Put_Line ("Add_Background " & Name'Image, Verbosity => IO.Debug);
-
       case Current_State is
          when In_Document =>
-            -- There is no feature at thtat point
-            -- Add_Feature ("", Loc); -- no name feature
             Last_Doc_Ref.Background := new Scenario_Type'
               (Name            => To_Unbounded_String (Name),
                Parent_Document => Last_Doc_Ref.Element,
@@ -179,8 +175,7 @@ package body BBT.Tests.Builder is
       end Append_Step;
 
    begin
-      --  Put_Line ("Add_Step " & Step'Image,
-      --            Step.Location,
+      --  Put_Line ("Add_Step " & Step'Image, Step.Location,
       --            Verbosity => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
@@ -223,22 +218,22 @@ package body BBT.Tests.Builder is
 
       case Current_Background is
          when Doc     =>
+            Append_Step (Last_Doc_Ref.Background);
             Put_Line ("Add_Step to Last_Doc_Ref.Background",
                       Step.Location,
                       Verbosity => IO.Debug);
-            Append_Step (Last_Doc_Ref.Background);
          when Feature =>
+            Append_Step (Last_Feature_Ref.Background);
             Put_Line ("Add_Step to Last_Feature_Ref.Background",
                       Step.Location,
                       Verbosity => IO.Debug);
-            Append_Step (Last_Feature_Ref.Background);
          when None    =>
+            Last_Scenario_Ref.Element.Step_List.Append
+              ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
             Put_Line ("Add_Step to Last_Scenario_Ref" &
                         Scenario_Type'(Last_Scenario_Ref)'Image,
                       Step.Location,
                       Verbosity => IO.Debug);
-            Last_Scenario_Ref.Element.Step_List.Append
-              ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
       end case;
    end Add_Step;
 
@@ -249,9 +244,8 @@ package body BBT.Tests.Builder is
    -- comments at the right level.
    -- At the end of the code block section, the previous Step state
    -- is restored.
-   -- Post : constant String := Postfix (Loc);
    begin
-      Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
+      -- Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Step | In_Scenario | In_Background =>
             -- Entering code block
@@ -279,7 +273,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String; Loc : Location_Type) is
    begin
-      Put_Line ("Add_Line " & Line'Image, Loc, Verbosity => IO.Debug);
+      -- Put_Line ("Add_Line " & Line'Image, Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);

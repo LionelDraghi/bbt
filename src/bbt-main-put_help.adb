@@ -36,8 +36,7 @@ begin
    Put_Line ("                             This file will contains the normal bbt output,");
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
-   -- Put_Line ("   -p   | --prompt         : prompt before erasing file / directory");
-   Put_Line ("   -y   | --assume_yes     : no prompt if deletion is needed, yes is assumed");
+   Put_Line ("   -ad  | --auto_delete    : no prompt if deletion is needed in ""Given"" steps");
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

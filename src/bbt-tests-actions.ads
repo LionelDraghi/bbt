@@ -18,9 +18,11 @@ private package BBT.Tests.Actions is
                       Return_Code  : out Integer);
 
    procedure Create_If_None (Step : Step_Type);
+   procedure Create_New (Step : Step_Type);
+   procedure Erase_And_Create (Step : Step_Type);
 
-   procedure Delete_File (Step : Step_Type);
-   procedure Delete_Dir (Step : Step_Type);
+   procedure Setup_No_File (Step : Step_Type);
+   procedure Setup_No_Dir (Step : Step_Type);
    --  --  Clean up, with interactive confirmation by user,
    --  --  unless Settings.Assume_Yes is set.
 
@@ -38,13 +40,12 @@ private package BBT.Tests.Actions is
    procedure Check_No_Dir (Dir_Name : String;
                            Step     : Step_Type);
 
-   procedure Output_Equal_To (Output : Text;
+   procedure Output_Is (Output : Text;
                               Step   : Step_Type);
    procedure Output_Contains (Output : Text;
                               Step   : Step_Type);
 
    procedure Files_Is (Step : Step_Type);
    procedure File_Contains (Step : Step_Type);
-   procedure Create_New (Step : Step_Type);
 
 end BBT.Tests.Actions;

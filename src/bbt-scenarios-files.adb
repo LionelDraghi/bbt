@@ -166,8 +166,8 @@ package body BBT.Scenarios.Files is
             -- Put_Line ("State           = " & State'Image,  Verbosity => Verbose);
             -- Put_Line ("Attrib          = " & Attrib'Image, Verbosity => Debug);
             -- New_Line (Verbosity => Verbose);
-            Put_Line (Image (Loc)
-                      & "Parsed: " & Attrib'Image, Verbosity => IO.Debug);
+            --  Put_Line (Image (Loc)
+            --            & " Parsed: " & Attrib'Image, Verbosity => IO.Debug);
 
             case Attrib.Kind is
             when Feature_Line =>
@@ -181,7 +181,7 @@ package body BBT.Scenarios.Files is
 
             when Step_Line =>
                S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc, Cmd_List);
-               Put_Line ("sortie de parser : Step = " & S'Image, Verbosity => IO.Verbose);
+               -- Put_Line ("Parsed : " & S'Image, Verbosity => IO.Verbose);
                Tests.Builder.Add_Step (S, Cmd_List);
 
             when Code_Fence =>

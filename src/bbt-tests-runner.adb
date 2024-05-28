@@ -5,7 +5,6 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.Documents;         use BBT.Documents;
-
 with BBT.IO;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
@@ -64,7 +63,7 @@ package body BBT.Tests.Runner is
                Return_No_Error (Return_Code, Step);
 
             when Output_Is =>
-               Output_Equal_To (Get_Text (Output_File_Name (The_Doc)), Step);
+               Output_Is (Get_Text (Output_File_Name (The_Doc)), Step);
 
             when Output_Contains =>
                -- example : Then the output contains `--version`
@@ -88,17 +87,20 @@ package body BBT.Tests.Runner is
             when Check_Dir_Existence =>
                Check_Dir_Existence (Subject_Or_Object_String (Step), Step);
 
-            when Create_If_None =>
-               Create_If_None (Step);
-
-            when Create_New =>
+            when Create_File =>
                Create_New (Step);
 
-            when Delete_File =>
-               Delete_File (Step);
+            when Create_Directory =>
+               Create_New (Step);
 
-            when Delete_Dir =>
-               Delete_Dir (Step);
+            when Erase_And_Create =>
+               Erase_And_Create (Step);
+
+            when Setup_No_File =>
+               Setup_No_File (Step);
+
+            when Setup_No_Dir =>
+               Setup_No_Dir (Step);
 
             when None =>
                Add_Result (False, Scen);
@@ -155,6 +157,9 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
+      function Link_Image (Scen : Scenario_Type) return String is
+        ("[" & (+Scen.Name) & "](" & (+Parent_Doc (Scen).Name) & ")");
+
    begin
       for Scen of L loop
          IO.New_Line (Verbosity => IO.Normal);
@@ -175,12 +180,12 @@ package body BBT.Tests.Runner is
                -- Note the two spaces at the end of each line, to cause a
                -- new line in Markdown format when this line is followed
                -- by an error message.
-               Put_Line ("  - [ ] scenario " & Scen.Name'Image &
+               Put_Line ("  - [ ] scenario " & Link_Image (Scen) &
                            " is empty, nothing tested  ");
             when Successful =>
-               Put_Line ("  - [X] scenario " & Scen.Name'Image & " pass  ");
+               Put_Line ("  - [X] scenario " & Link_Image (Scen) & " pass  ");
             when Failed =>
-               Put_Line ("  - [ ] scenario " & Scen.Name'Image & " fails  ");
+               Put_Line ("  - [ ] scenario " & Link_Image (Scen) & " fails  ");
          end case;
       end loop;
    end Run_Scenario_List;
@@ -215,7 +220,6 @@ package body BBT.Tests.Runner is
             end if;
 
          end loop;
-         -- New_Line (Verbosity => IO.Normal);
       end loop;
 
    end Run_All;

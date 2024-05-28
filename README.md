@@ -7,8 +7,8 @@ bbt is a simple tool to black box check the behavior of an executable (hence the
 
 It is dedicated to line command, taking some standard or file input and producing some standard or file output.
 
-The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) *Given* / *When* / *Then* usual pattern, in a simple Markdown format. 
-
+The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern **Given** an initial context / **When** this event occurs / **Then** there is that outcomes, and using a Markdown syntax compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
+  
 It can be as simple as :
 ```md
 ## Scenario : Command line version option
@@ -57,6 +57,8 @@ The tests results file mainly a few info related to the run (time, platform, etc
 Each of them with a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
 
 To see what it looks like, refer to [bbt own test](docs/pass_tests.md).
+
+[[TOC]]
 
 ## Objective of the project and limitations
 
@@ -288,27 +290,45 @@ bbt -o docs/tests_results.md docs/tests/*.md
 ```
 The title is kind of a provocation. Obviously, you need to run the tests somewhere and there will be residue. But as there is no input or output to keep in that directory (unless debugging the test himself), you can as well delete the execution dir after each run.
 
-### Removing File or directories
+### Removing Files and directories
 
-`Given` lines role is to prepare the test. So there is an obvious difference between  
-``Then there is no `.config` file``  
-and  
-``Given there is no `.config` file``  
-In the first case, bbt check that there is no such file, in the later case it will make so that there is no such file.  
-Simply stated, it will erase it.
+#### using the negative form
+
+The two lines below looks very close :
+> ``Then  there is no `.config` file``  
+> ``Given there is no `.config` file``  
+ 
+And indeed, bbt default behavior will be the same : if there is a `.config` file, the assertion will fail.  
+
+But while in the former case, bbt is supposed to checks that there is no such file, in the later case it is supposed to make so that there is no such file.  
+Simply stated, it is supposed to erase the file.
+
+To get this more handy (and logical) behavior, just call bbt with the `--auto_delete` (or `-ad`) option.
+
+Same apply to directories. When using this options
+> ``Given there is no directory `./src` ``  
+
+will cause the whole tree rooted at ./src to be destroyed.
+
+>[!WARNING]
+>Use with caution : you could as well delete /home (provided you have the privilege)!
+
+#### using the positive form
+
+When using the *there is no* form, the meaning is pretty obvious.
 
 But what is the expected behavior of the line  
-``Given the directory `dir1` ``  
-if `dir1` exists?  
-The intent of the user to erase the directory is less explicit.
+``Given the directory `dir1`,`` if dir1 exists?  
+The intent of the user to erase the directory is less obvious.
 
-To avoid any unwanted (potentially recursive) deletion, in that case bbt will create a `dir1` directory only if there is none.
+To avoid any unwanted recursive deletion, in that case bbt will create a `dir1` directory only if there is none.
 If the intent is to start from a white page and erase an existing homonym, the "new" keyword should be used.
 
-So, if you want to start with a potentially existing dir1, use :  
+So, if you want to start with a possibly existing dir1, use :  
 ``Given the directory `dir1` ``  
 If you want to start with a brand new one whatever is the situation, use :  
 ``Given the new directory `dir1` ``  
+**and** uses the `-ad` option.
 
 
 ---------------------------------------------------------------------

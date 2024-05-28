@@ -27,7 +27,7 @@ private package BBT.Settings is
    List_Topics        : Boolean := False;
    List_Keywords      : Boolean := False;
    List_Grammar       : Boolean := False;
-   Assume_Yes         : Boolean := False;
+   Auto_Delete        : Boolean := False;
    Template_Name      : constant String := "./bbt_template.md";
 
    -- --------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
--- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- ï¿½ 2024 Lionel Draghi <lionel.draghi@free.fr>
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
@@ -37,10 +37,11 @@ private package BBT.Documents is
       Check_Dir_Existence,
       Check_No_File,
       Check_No_Dir,
-      Create_If_None,
-      Create_New,
-      Delete_File,
-      Delete_Dir,
+      Create_File,
+      Create_Directory,
+      Erase_And_Create,
+      Setup_No_File,
+      Setup_No_Dir,
       Error_Return_Code,
       File_Contains,
       File_Is,

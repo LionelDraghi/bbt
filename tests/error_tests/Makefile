@@ -18,7 +18,7 @@ check: ${BBT} ../../uut
 	@ sdiff -sbB expected.4 output.4 || meld expected.4 output.4
 
 	@ rm config.ini
-	${BBT} -y background.md > output.5
+	${BBT} --auto_delete background.md > output.5
 	@ sdiff -sbB expected.5 output.5 || meld expected.5 output.5
 
 	# ${BBT} run_or.md > output.6
