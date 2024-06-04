@@ -21,9 +21,8 @@ It is dedicated to line command, taking some standard or file input and producin
 
 The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern  
 **Given** an initial context / **When** that event occurs / **Then** there is that outcomes.   
-It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
-  
-It can be as simple as :
+
+It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal, and can be as simple as :
 ```md
 ## Scenario : Command line version option
 
@@ -38,7 +37,7 @@ Limiting bbt ambition provides substantial benefits :
 
 ### Specification is the test
 
-bbt most interesting feature is that the above scenario (that is specification) is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
+bbt most interesting feature is that the above scenario (that is *specification*) is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
 
 Just simple and readable English sentences, that may be written by non-coders.  
 
@@ -49,7 +48,7 @@ bbt understand a (very) limited english subset, with a vocabulary dedicated to t
 Although simple, you don't have to learn this language by heart, you may ask for a template file with :  
 > bbt -ct (or --create_template)  
 
-or ask for the grammar with :  
+or ask for the complete grammar with :  
 > bbt -lg (or --list_grammar)
 
 ### Tests are easy to run
@@ -57,7 +56,7 @@ or ask for the grammar with :
 To run the test :  
 > bbt my_test.md
 
-Or to run all the tests file in the `tests` tree :
+Or to run all the tests files in the `tests` tree :
 > bbt -r tests
 
 That's it : no cascading Makefile, no script.
@@ -72,22 +71,24 @@ As seen above, **tests scenarios** are already documented, using a simple Markdo
 And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions.  
 If you haven't yet experienced how easy it is to create graphics with a simple text description using [Mermaid](https://mermaid.js.org/intro/), give it a try.
 
-**Tests results** are generated run running `bbt`, by just using the `-o` option (--output). It's also a Markdown file. 
-The tests results file mainly a few info related to the run (time, platform, etc.), and the list of tests with the result.
-Each of them with a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
+**Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file. 
+The tests results file mainly contains... the tests results :-). 
+(It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).   
+Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
 To see what it looks like, there is an example in [bbt own tests](docs/pass_tests.md).
 
 ## Objective of the project and limitations
 
-bbt project aim at exploring how far can we push the "specification is the test" assertion, while maintaining the main feature : to be quick and easy. 
+bbt project aim at exploring how far we can push the "specification is the test" assertion, while maintaining the main feature : to be quick and easy. 
 > [!NOTE]
 > If a newbie is able to use it in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a success.    
 
-It is targeting command line programs, and aims at being an easy and obvious way to run 90% of the boring usual tests on simples input / output, command line error, environment variable effects, etc.  
+It is targeting command line programs, and aims at being an easy and obvious way to run 90% of the boring usual tests on simples input / output, command line error, environment variable, etc.  
 It is not meant for :
 - UI testing or Web interaction 
-- Complex file system stuff
-- White box testing (obviously :-)), checking internal states, or extensive API testing.  
+- Complex file system stuffs
+- White box testing (obviously :-)), checking internal states, or extensive API testing.
+
 As a consequence, implementing Gherkin *Scenario Outline*, with the table of inputs and corresponding expected outputs (*Examples*) isn't a priority at that point : this is probably useful for testing a mathematical function call, far less from a black box testing point of vue.  
 
 It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.
