@@ -24,7 +24,7 @@ Basic concepts of bbt files are illustrated in this basic example :
 - Then the output contains `version 1.0`
 ```
 
-1. **the BDD usual keywords** : `Scenario`, *When*, *Then*, etc.  
+1. **the BDD usual keywords** : *Scenario*, *When*, *Then*, etc.  
 bbt use a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
 
 2. [**bbt specifics  keywords**](#Keywords) : *run*, *output*, *contains*, etc.  
