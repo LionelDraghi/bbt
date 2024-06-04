@@ -56,7 +56,7 @@ or ask for the complete grammar with :
 ### Tests are easy to run
 
 To run the test :  
-> bbt my_test.md
+> bbt my_scenario.md
 
 Or to run all the tests files in the `tests` tree :
 > bbt -r tests
