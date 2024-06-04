@@ -1,13 +1,27 @@
-<!-- omit from toc -->
-# `bbt` README
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html)
 
- [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html)
+
+# `bbt` README <!-- omit from toc -->
+
+- [Overview](#overview)
+- [Main characteristics](#main-characteristics)
+  - [Specification is the test](#specification-is-the-test)
+  - [Tests are easy to write](#tests-are-easy-to-write)
+  - [Tests are easy to run](#tests-are-easy-to-run)
+  - [Tests are Self documented](#tests-are-self-documented)
+- [Objective of the project and limitations](#objective-of-the-project-and-limitations)
+- [Installation](#installation)
+- [Further reading](#further-reading)
+
+## Overview
 
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 
 It is dedicated to line command, taking some standard or file input and producing some standard or file output.
 
-The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern **Given** an initial context / **When** this event occurs / **Then** there is that outcomes, and using a Markdown syntax compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
+The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern  
+**Given** an initial context / **When** that event occurs / **Then** there is that outcomes,  
+and using a Markdown syntax compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
   
 It can be as simple as :
 ```md
@@ -17,11 +31,26 @@ It can be as simple as :
 - Then the output contains `version 1.0`
 ```
 
-### Specification is the code
+## Main characteristics
 
-bbt interesting feature is that the above specification is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
+bbt is by nature limited : it aims at providing a **simple** solution to **simple common cases**.  
+Limiting bbt ambition provides substantial benefits :
 
-Just simple and readable English sentences.
+### Specification is the test
+
+bbt most interesting feature is that the above scenario (that is specification) is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
+
+Just simple and readable English sentences, that may be written by non-coders.  
+
+### Tests are easy to write
+
+bbt understand a (very) limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
+
+Although simple, you don't have to learn this language by heart, you may ask for a template file with :  
+> bbt -ct (or --create_template)  
+
+or ask for the grammar with :  
+> bbt -lg (or --list_grammar)
 
 ### Tests are easy to run
 
@@ -31,34 +60,22 @@ To run the test :
 Or to run all the tests file in the `tests` tree :
 > bbt -r tests
 
-That's it.
+That's it : no cascading Makefile, no script.
 
-bbt as no dependencies on external lib or tools (diff, for example), and aims at reducing uses of other tools, Makefile complexity, and platform dependency.  
+bbt as no dependencies on external lib or tools (diff, for example), and aims at reducing uses of other tools, and platform dependency.  
+
 *Describe behavior once, verify everywhere!*
-
-### Tests are easy to write
-
-bbt understand an extremely limited english subset, with a vocabulary dedicated to test with  keywords like *run*, *output*, *contains*, etc.
-
-Although simple, you don't have to learn this language by heart :  
-ask for a template file with  
-> bbt -ct (or --create_template)  
-
-or ask for the grammar with  
-> bbt -lg (or --list_grammar)  
 
 ### Tests are Self documented
 
-1. As seen above, **tests scenarios** are already documented, with a semi-formal english vocabulary, within a usual TDD template.
-The Markdown format will be nicely presented on github out of the box.
+As seen above, **tests scenarios** are already documented, using a simple Markdown format that will be nicely presented on github or wherever out of the box.  
+And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions.  
+If you haven't yet experienced how easy it is to create graphics with a simple text description using [Mermaid](https://mermaid.js.org/intro/), give it a try.
 
-2. **Tests results** are generated by `bbt`, by just using the `-o` option (--output). It's also a Markdown file. 
+**Tests results** are generated run running `bbt`, by just using the `-o` option (--output). It's also a Markdown file. 
 The tests results file mainly a few info related to the run (time, platform, etc.), and the list of tests with the result.
 Each of them with a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
-
-To see what it looks like, refer to [bbt own test](docs/pass_tests.md).
-
-[[TOC]]
+To see what it looks like, there is an example in [bbt own tests](docs/pass_tests.md).
 
 ## Objective of the project and limitations
 
@@ -74,354 +91,21 @@ It is not meant for :
 As a consequence, implementing Gherkin *Scenario Outline*, with the table of inputs and corresponding expected outputs (*Examples*) isn't a priority at that point : this is probably useful for testing a mathematical function call, far less from a black box testing point of vue.  
 
 It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.
-Alternative tools exists, with more or less different objectives, (Refer TBD).  
+Alternative tools exists, with more or less different objectives (Refer TBD).  
 
----------------------------------------------------------------------
+## Installation
 
-## Basic Concepts
-
-Basic concepts of bbt files are illustrated in the previous example :
-
-```md
-## Scenario : Command line version option
-
-- When I run `uut --version`
-- Then the output contains `version 1.0`
-```
-
-1. **the BDD usual keywords** : `Scenario`, *When*, *Then*, etc.  
-bbt use a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
-
-2. [**bbt specifics  keywords**](#Keywords) : *run*, *output*, *contains*, etc.  
-Here is an example with keywords in bold :  
-**Given** there **is** **no** `.utt` **directory**  
-**When** I **run** `uut --init`  
-**Then** there **is** **no** **error**  
-**And** **file** `.uut/config.ini` **contains** `lang=de`  
-  
-4. **glue word** : *I*, *the*  
-As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/list_image.json)](https://alire.ada.dev/crates/list_image.html) is available thanks to the Alire package manager.  
+1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
    
-5. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `uut --version` ``, `` `version 1.0` ``  
-bbt uses code span to express a command, a file or directory name or some expected output.
-
-> [!WARNING]
-> Till now, there is no ambiguity in the grammar between file and string : bbt is always able to understand what it's about.  
-> To avoid ambiguity between file and directory, I had to take into account both `file` and `directory` keywords.  
-> It is not excluded in the future that the Markdown syntax for files becomes mandatory instead of code span for the same reason : backtick would then be reserved to command or other strings, and File or dir would be written ``[my_file](my_file.md)``.  
-> I'll try to avoid this evolution as it would be less natural to write, and this goes against project objectives.  
- 
-6. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ``` or ~~~  
-Fenced code block are used to specify multiline output or file content, as in: 
-
-    ~~~md
-    ## Scenario: Command line help
-
-    - When I run `uut -h`
-    - Then the output is
-    ```
-    uut [options] [-I directory]
-    options :
-    -h : help
-    -r : recurse
-    ```
-    ~~~
-
----------------------------------------------------------------------
-
-## Syntax
-
-### Gherkin language subset
-
-- *Feature*
-- *Scenario* or *Example*
-- *Given*
-- *When*
-- *Then*
-- *And* or *But*
-
-([Cf. Gherkin language reference](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language))
-
-### bbt own DSL 
-
-bbt keywords, including both the Gherkin subset and bbt specifics keywords may be obtained with `bbt -lk` (`--list_keywords`).  
-But more interesting, the grammar can be obtained through the `-lg` (`--list_grammar`) option. 
-
-Each Step is a one line sentence, with a basic "subject verb object" structure, starting with the preposition/adverb/conjunction (*Given*, *When*, *And*, etc.). 
-Add some attribute adjectives (e.g. *empty*), and here we are.
-
-Here is an excerpt from the grammar :
-```
-When             run              text|file --> RUN_CMD
-```
-- First, the keywords : here, `When` and `run`. 
-- Then, some text or file name, between backtick.
-- And, at the end, the resulting action.
-
-Note that all other tokens will be ignored.  
-You can write
-```
-When run `my_command -r`
-```
-or 
-```
-When I once more try to run something like `my_command -r`
-```
-that's the same.  
-
-Note : neither is recommended.  
-The former isn't easy to read, and the latter is misleading by introducing nuances that bbt ignore!
-This is specification, make short sentences and go straight to the point.
-
-## Grammar 
-
-**1. Given**  
-
-  *Given* is used to check or create initial conditions.
-
-  - ``Given the directory `dir1` ``  
-  - ``Given the file `file_name` ``  
-    ~~~
-    ```
-    line 1
-    line 2
-    line 3
-    ```
-    ~~~
-    Return *success* if bbt could create the dir1 file or the file *file_name* containing the text in the code fenced lines.
-
-    If there is already a *file_name*, the Step will fail. To get it overwritten with a new file or directory, add the `new` adverb :  
-    ``Given the new directory `dir1` ``  
-    `` Given the new file `file_name` ``
-    ~~~
-    ```
-    line 1
-    line 2
-    line 3
-    ```
-    ~~~
-    Note that unless using the --assume_yes option, user will be prompted to confirm deletions.
-
-  - ``Given there is no directory `dir1` ``  
-    Return *success* if there is no directory dir1, or if dir1 was successfully deleted.
-    
-   
-**2. When**  
-
-  *When* has two main functions : checking that a file with some contents is available before run, and running  a command.
-
-  - `` When I run `cmd` ``  
-    Return *success* if *cmd* was run.  
-    *failed* usually means that bbt couldn't find the cmd to run.
-
-  - `` When I successfully run `cmd` ``  
-    Return *success* if *cmd* was run **and** returned no error.  
-  (This is a shortcut to avoid the usual following line `Then I get no error`).
-
-**3. Then**  
-
-  Then express the check to be done. It's either the run return code, the run output or a file content. Like for the Given steps, 
-
-- `then I get error` or `no error`  
-  Return *success* if the previously run command returned an error or no error code. 
-
-- `` then output contains `text` ``  or `then error output contains ...`  
-  Return *success* if *cmd* output contains `text`, on standard or on error output. 
-
-- `` then output is `text` ``  or `then error output is ...`  
-  Return *success* if *cmd* output is only `text``, on standard or on error output.   
-
-- `` then I get `text` ``  
-  This is a synonym of ``then output is `text` ``  
-
-- `` then `file` contains `text` ``  
-  Return *success* if *file* contains `text`, but not necessarily only that text. 
-  
-- `` then `file` is `text` ``  
-
-  Return *success* if *file* contains **only** `text`.  
-  Note that both *is* and *contains* may be followed by a multiline text :
-  ~~~
-  When `file` contains 
-  ```
-    line 1
-    line 2
-    line 3
-  ```
-
-### References
-
-- [The grammar](docs/grammar.md) Extracted with `bbt -lg` (--list_grammar)
-- [Keywords](docs/keywords.md) Extracted with `bbt -lk` (--list_keywords)
-
-
-
----------------------------------------------------------------------
-
-## More advanced feature and cool stuff
-
-### Background
-*bbt* supports a Background scenario, that is a special scenario that will be executed before the start of each following scenario.
-
-```md
-### Background :
-  - Given there is no `config.ini` file
-
-### Scenario : normal use cas
-  - When I run `uut create config.ini` 
-  - When I run `uut append "size=80x40" config.ini` 
-  - Then `config.ini` should contains `"size=80x40"`
-
-### Scenario : the last command does not meet expectation (test should fail)
-  - When I run `uut append "lang=fr" config.ini` 
-  - Then I should get no error
-```
-
-In this case, the Background will erase the `config.ini` file created by the first scenario before executing the second. This should cause the scenario to fail, if uut is not able to add something to the `config.ini` file without creating it first.
-
-Background may appears at the beginning, at document level, or at feature level, or both.
-Before each scenario, the document background will be executed, and then the feature background.
-
-### No more tests directory?
-Think about it : tests description are in the docs/tests/ directory, and you want the result in the docs/ directory.  
-You just have to run 
-```
-bbt -o docs/tests_results.md docs/tests/*.md
-```
-The title is kind of a provocation. Obviously, you need to run the tests somewhere and there will be residue. But as there is no input or output to keep in that directory (unless debugging the test himself), you can as well delete the execution dir after each run.
-
-### Removing Files and directories
-
-#### using the negative form
-
-The two lines below looks very close :
-> ``Then  there is no `.config` file``  
-> ``Given there is no `.config` file``  
- 
-And indeed, bbt default behavior will be the same : if there is a `.config` file, the assertion will fail.  
-
-But while in the former case, bbt is supposed to checks that there is no such file, in the later case it is supposed to make so that there is no such file.  
-Simply stated, it is supposed to erase the file.
-
-To get this more handy (and logical) behavior, just call bbt with the `--auto_delete` (or `-ad`) option.
-
-Same apply to directories. When using this options
-> ``Given there is no directory `./src` ``  
-
-will cause the whole tree rooted at ./src to be destroyed.
-
->[!WARNING]
->Use with caution : you could as well delete /home (provided you have the privilege)!
-
-#### using the positive form
-
-When using the *there is no* form, the meaning is pretty obvious.
-
-But what is the expected behavior of the line  
-``Given the directory `dir1`,`` if dir1 exists?  
-The intent of the user to erase the directory is less obvious.
-
-To avoid any unwanted recursive deletion, in that case bbt will create a `dir1` directory only if there is none.
-If the intent is to start from a white page and erase an existing homonym, the "new" keyword should be used.
-
-So, if you want to start with a possibly existing dir1, use :  
-``Given the directory `dir1` ``  
-If you want to start with a brand new one whatever is the situation, use :  
-``Given the new directory `dir1` ``  
-**and** uses the `-ad` option.
-
-
----------------------------------------------------------------------
-
-## Behavior
-
-### Blank lines and Case sensitivity
-
-bbt ignore blank lines and casing when comparing actual with expected output.
-This is the expected behavior in most case, but not always. 
-Refer to the TDL.
-
-### Execution
-
-bbt is executed when you launch the command. All output files will be created here, and input file are expected here. 
-
-bbt scenarii are Markdown files. So if you don't specify the precise file names, bbt will try to execute all md file.  
-To see what files, use `bbt --list_files`, possibly with `--recurse`.  
-(or the short form `bbt -lf -r`).
-
-But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you which.
-
-As a special rule, two file will be ignored even if they are in the search path : the template file (bbt_template.md), and the output file if the -o option is used. The first is not supposed to be run, and the second is probably a consequence of a previous run. 
-
-### Scenario files format
-
-The BBT Markdown subset try to comply with [CommonMark Spec](https://spec.commonmark.org/), meaning that bbt always generate Common Mark compliant Markdown.
-On the other hand, restrictions apply when writing bbt scenario.
-
-#### Steps
-Because the lexer is not able to make a difference between bullet lines in steps definition or bullet lines in normal text, there is limitations on where you can use it.
-- *bbt* will consider bullet line starting with `-` as comment before the first "scenario" header. 
-- *bbt* will consider all lines starting with `-` as Step within a scenario. As a consequence, **Don't use `-` in comments within a Scenario.**
-- *bbt* will also consider line starting with the other official bullet markers (`*`and`+`) as comment, and **not steps line marker**, so that you can use those markers where you want without interfering with the lexer.  
-Our simple suggestion : uses `-` for Steps and `*` for all bullet list in comments.
-
-#### Headings
-Only [ATX headings](https://spec.commonmark.org/0.31.2/#atx-headings) are supported, not [Setext headings](https://spec.commonmark.org/0.31.2/#setext-headings), meaning that you can write :
-```
-## Feature: My_Feature
-```
-but
-```
-Feature: My_Feature
--------------------
-```
-won't be recognized as a Feature.
-
----------------------------------------------------------------------
-
-## Tips
-
-### Understanding what he doesn't understand
-
-Error messages provided by the lexer are not bullet proof (and it is likely that no special effort will be put on improving error messages in the future...).
-
-For example, if you forget backticks on dir1 in :  
-``- Given the directory dir1 ``  
-It wont tells you "didn't you forget to "code fence" dir1?".  
-It will just says :  
-`Unrecognized step "Given the directory dir1"`
-
-A good reflex in such a case is to ask *bbt* what did he understand from the test file, thanks to the -e (--explain) option.  
-It will tell you something like :  
-`GIVEN_STEP, UNKNOWN, Text = "Given the directory dir1"`  
-meaning that the only thing he was able to conclude is that it's "Given" step.  
-On the the adjusted version :  
-``GIVEN_STEP, FILE_CREATION, Text = "Given the directory `dir1`", File_Name = "dir1"``  
-you see that the (internal) action field has changed from UNKNOWN to FILE_CREATION, and that the File_Name field has now a value.
-
-  
-
----------------------------------------------------------------------
-
-## TDL
-
-**near future**
-  
-**distant future or low priority**
-- Given execution directory `dir1`  
-- interactive exec
-- environment
-- diff 
-- append 
-- implement "case insensitive" and "ignore blank lines" 
-- clean function : bbt delete all files created during execution
-- explore the possibility to run multiple exe asynchronously, while staying simple.
-  Maybe by using the AdaCore spawn lib.
-- "should be" as "is" synonym?
-    
----------------------------------------------------------------------
-
-## Help and comments
-
-Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
+2. Then to install bbt :
+    > cd bbt  
+    > alr build  
+
+3. Move the bbt exec somewhere in your PATH
+
+## Further reading
+- [User Guide](docs/UG.md) 
+- [References](docs/references.md) 
+- [Project objectives, design and status](docs/project.md)
 
