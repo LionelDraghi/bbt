@@ -20,8 +20,8 @@ bbt is a simple tool to black box check the behavior of an executable (hence the
 It is dedicated to line command, taking some standard or file input and producing some standard or file output.
 
 The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern  
-**Given** an initial context / **When** that event occurs / **Then** there is that outcomes,  
-and using a Markdown syntax compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
+**Given** an initial context / **When** that event occurs / **Then** there is that outcomes.   
+It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal.
   
 It can be as simple as :
 ```md
