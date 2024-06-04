@@ -73,25 +73,23 @@ As seen above, **tests scenarios** are already documented, using a simple Markdo
 And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions.  
 If you haven't yet experienced how easy it is to create graphics with a simple text description using [Mermaid](https://mermaid.js.org/intro/), give it a try.
 
-**Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file. 
-The tests results file mainly contains... the tests results :-). 
-(It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).   
+**Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file.  
+The tests results file mainly contains... the tests results :-).  
+(It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
 To see what it looks like, there is an example in [bbt own tests](docs/pass_tests.md).
 
 ## Objective of the project and limitations
 
-bbt project aim at exploring how far we can push the "specification is the test" assertion, while maintaining the main feature : to be quick and easy. 
+bbt project aim at exploring how far we can push the "specification is the test" assertion, while maintaining the main feature : ease of use. 
 > [!NOTE]
-> If a newbie is able to use it in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a success.    
+> If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.    
 
-It is targeting command line programs, and aims at being an easy and obvious way to run 90% of the boring usual tests on simples input / output, command line error, environment variable, etc.  
+bbt is targeting command line programs, and aims at being an easy and obvious way to run 90% of the boring usual tests on simples input / output, command line error, environment variable, etc.  
 It is not meant for :
 - UI testing or Web interaction 
 - Complex file system stuffs
 - White box testing (obviously :-)), checking internal states, or extensive API testing.
-
-As a consequence, implementing Gherkin *Scenario Outline*, with the table of inputs and corresponding expected outputs (*Examples*) isn't a priority at that point : this is probably useful for testing a mathematical function call, far less from a black box testing point of vue.  
 
 It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.
 Alternative tools exists, with more or less different objectives (Refer TBD).  
