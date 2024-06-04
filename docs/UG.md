@@ -25,10 +25,11 @@ Basic concepts of bbt files are illustrated in this basic example :
 ```
 
 1. **the BDD usual keywords** : *Scenario*, *When*, *Then*, etc.  
-bbt use a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
+bbt uses a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
 
-2. [**bbt specifics  keywords**](#Keywords) : *run*, *output*, *contains*, etc.  
+2. [**bbt specifics  keywords**](keywords.md) : *run*, *output*, *contains*, etc.  
 Here is an example with keywords in bold :  
+
 **Given** there **is** **no** `.utt` **directory**  
 **When** I **run** `uut --init`  
 **Then** there **is** **no** **error**  
@@ -74,19 +75,18 @@ TBD
 
 ```md
 ### Background :
-  - Given there is no `config.ini` file
+  - Given the new `config.ini` file
 
 ### Scenario : normal use cas
-  - When I run `uut create config.ini` 
   - When I run `uut append "size=80x40" config.ini` 
   - Then `config.ini` should contains `"size=80x40"`
 
-### Scenario : the last command does not meet expectation (test should fail)
-  - When I run `uut append "lang=fr" config.ini` 
-  - Then I should get no error
+### Scenario : same check, but after Backgroud execution
+  - Then `config.ini` should contains `"size=80x40"`
 ```
 
-In this case, the Background will erase the `config.ini` file created by the first scenario before executing the second. This should cause the scenario to fail, if uut is not able to add something to the `config.ini` file without creating it first.
+In this case, if the `--auto_delete` option is used, the Background will erase any existing `config.ini` file.
+Meaning that the second scenario should fail.
 
 Background may appears at the beginning, at document level, or at feature level, or both.
 Before each scenario, the document background will be executed, and then the feature background.
@@ -147,16 +147,17 @@ Error messages provided by the lexer are not bullet proof (and it is likely that
 
 For example, if you forget backticks on dir1 in :  
 ``- Given the directory dir1 ``  
-It wont tells you "didn't you forget to "code fence" dir1?".  
+It wont tells you *didn't you forget to "code fence" dir1?*.  
 It will just says :  
-`Unrecognized step "Given the directory dir1"`
+*Unrecognized step "Given the directory dir1"*
 
 A good reflex in such a case is to ask *bbt* what did he understand from the test file, thanks to the -e (--explain) option.  
 It will tell you something like :  
 `GIVEN_STEP, UNKNOWN, Text = "Given the directory dir1"`  
-meaning that the only thing he was able to conclude is that it's "Given" step.  
-On the the fixed version :  
+meaning that the only thing he was able to conclude from the Text is that it's "Given" step.
+
+But on the fixed version :  
 ``GIVEN_STEP, FILE_CREATION, Text = "Given the directory `dir1`", File_Name = "dir1"``  
-you see that the (internal) action field has changed from UNKNOWN to FILE_CREATION, and that the File_Name field has now a value.
+you'll see that the second field has changed from UNKNOWN to FILE_CREATION, and that there is a new field is displayed, the File_Name : bbt knows what to do.
 
 
