@@ -31,5 +31,6 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 - explore the possibility to run multiple exe asynchronously, while staying simple.
   Maybe by using the AdaCore spawn lib.
 - "should be" as "is" synonym?
-    
+- no new files feature
+
 

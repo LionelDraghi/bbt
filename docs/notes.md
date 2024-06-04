@@ -58,16 +58,6 @@ Not as easy to read as English, and not suitable for immediate insertion in docu
             [ "$result" -eq 4 ]
           }
 
-## TDL, What is not (yet) implemented :
-
-- Command line Interactive testing (if the command prompt Y/N before continuing…)
-- no new files feature
-- Functionnalité intéressante pour le futur sur les interactive command line interface a mettre dans la TDL
-- regexp
-
-     
-## What it is not mean for :
-
 
 
 ## Design
@@ -94,9 +84,6 @@ in the test file.
 https://github.com/briot/gnatbdd/tree/master
 https://github.com/dcurtis/markdown-mark
 
-
-I know that both `BDD` and `bbt`, maybe be confusing, therefor the method always appears in upper case, and the tool in lower case.
-And there is also MDG (for Markdown Gherkin)
 
 [Specification as a ubiquitous language](https://en.wikipedia.org/wiki/Behavior-driven_development#Specification_as_a_ubiquitous_language)
 *A ubiquitous language is a (semi-)formal language that is shared by all members of a software development team — both software developers and non-technical personnel.*
