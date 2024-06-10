@@ -21,8 +21,8 @@ It is dedicated to command line, taking some input and producing some output.
 
 The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern  
 - **Given** an initial context 
-- **When** that event occurs 
-- **Then** there is that outcomes.   
+- **When** some event occurs 
+- **Then** there is some outcomes.   
 
 It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal, and can be as simple as :
 ```md
