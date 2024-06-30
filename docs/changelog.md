@@ -8,10 +8,12 @@ and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2
 
 - [Unreleased] (actually means untagged)
 
-- [0.0.2]
+- [0.0.3]
   - [Added] automatically delete files and directories if needed in "Given" steps
   - [Added] text file creation
-  
+
+- [0.0.2] messed up in git, forget it.
+    
 - [0.0.1]
   - [Added] `background` feature
   - [Added] bbt `directory` keyword and related creation/check operations
