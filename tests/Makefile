@@ -6,7 +6,7 @@ check: ../bbt ../uut
 	# on the command line, and in a different directory
 	@ - ln -fs ../uut .
 	@ - rm pass_tests/pass_tests.md
-	../bbt -q -ad -o pass_tests/pass_tests.md pass_tests/*.md && echo 1. features tests OK ========== || echo 1. features tests KO "******"
+	@ ../bbt -q -ad -o pass_tests/pass_tests.md pass_tests/*.md && echo 1. features tests OK ========== || echo 1. features tests KO "******"
 	@ echo
 
 	# We run one by one scenario with test that should fail
@@ -21,5 +21,5 @@ check: ../bbt ../uut
 clean:
 	@ $(MAKE) -s clean --directory=error_tests
 	@ $(MAKE) -s clean --directory=robustness
-	@ - rm -f pass_tests/config.ini pass_tests/*.out gmon.out
+	@ - rm -f pass_tests/config.ini pass_tests/*.out gmon.out main main.c
 

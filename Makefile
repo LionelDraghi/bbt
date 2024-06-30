@@ -3,7 +3,7 @@ all: build check doc
 
 build:
 	alr build
-	cd tools && alr build --development
+	cd tools && alr build --release
 	# Alire profiles : --release --validation --development (default)
 
 

@@ -26,11 +26,33 @@ The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki
 
 It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal, and can be as simple as :
 ```md
-## Scenario : Command line version option
+## Scenario : I want to know uut version
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
 ```
+
+A more complete example, that is nothing less than a gcc sanity check.
+
+~~~md
+# Scenario: compiling and executing an hello word
+
+- Given the new file `main.c`
+```
+#include <stdio.h>
+int main() {
+printf("Hello, World!");
+return 0;
+}
+```
+- And there is no `main` file
+
+- When I run `/usr/bin/gcc main.c -o main`
+- And I run `main`
+
+- Then the output is `Hello, World!`
+~~~
+
 
 ## Main characteristics
 
@@ -91,8 +113,8 @@ It is not meant for :
 - Complex file system stuffs
 - White box testing (obviously :-)), checking internal states, or extensive API testing.
 
-It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.
-Alternative tools exists, with more or less different objectives (Refer TBD).  
+It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.  
+Alternative tools exists, with more or less different objectives (Refer to [My quick overview of some comparable tools](docs/comparable.md)).  
 
 ## Installation
 

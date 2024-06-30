@@ -17,6 +17,10 @@ Running file "pass_tests/file_test_and_creation.md"
 
   - [X] scenario ["Given there is no", but there is, should erase it](pass_tests/file_test_and_creation.md) pass  
 
+Running file "pass_tests/hello_word.md"  
+
+  - [X] scenario [compiling and executing an hello word](pass_tests/hello_word.md) pass  
+
 Running file "pass_tests/multiline.md"  
 
   - [X] scenario [asking for uut help](pass_tests/multiline.md) pass  
@@ -39,5 +43,5 @@ Running file "pass_tests/stdout.md"
 
 ------------------------------------------------
 - Failed     tests =  0
-- Successful tests =  13
+- Successful tests =  14
 - Empty      tests =  0

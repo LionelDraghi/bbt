@@ -3,24 +3,6 @@
 ## Manipulation du code de retour avec bash :
 https://debian-facile.org/doc:programmation:shells:script-bash-etat-de-sorie-et-les-tests
 
-## What make it different :
-
-  - Very simple : 
-
-  - Write once :
-        test cases are written in almost plain English
-        within a Gherkin classical frame (given … when … then)
-        using Markdown (or more precisely, [Markdown with Gherkin (MDG)]( https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md), that is a strict superset of GFM)
-        the test driver directly consume this file, no intermediate step
-
-        **“documentation is the code“**
-
-  - Run everywhere :
-        Language Independent (no fixture, stub, moq… )
-        It’s written in Ada, but you don’t care, could be whatever
-
-        Platform independent (run on Linux/Windows/MacOS) :
-        No more unreadable makefile, no more CI complex script
 
 ## What I don’t want :
 
@@ -29,34 +11,6 @@ https://debian-facile.org/doc:programmation:shells:script-bash-etat-de-sorie-et-
     I want something clear, as close as English as possible, with no cryptic signs.
     Same apply to output : when comparing the actual output with the expected one, I don’t care to have a classical [unified diff format](https://en.wikipedia.org/wiki/Diff#Unified_format) that could be used by some other tools.
     What a want is directly a clear side by side diff that is understandable by humans.
-
-    [Exactly ]( https://github.com/emilkarlen/exactly/tree/master) is doing the job, and actually much more than what I need, but with a specialized language :
-
-```
-[setup]
-stdin = -contents-of some-test-contacts.txt
-
-[act]
-my-contacts-program get-email --name 'Pablo Gauss'
-
-[assert]
-exit-code == 0
-
-stdout equals <<EOF
-pablo@gauss.org
-EOF
-
-stderr is-empty
-
-```
-Not as easy to read as English, and not suitable for immediate insertion in documentation.
-
-- [BATS]( https://github.com/bats-core/bats-core) example :
-
-          @test "addition using bc" {
-            result="$(echo 2+2 | bc)"
-            [ "$result" -eq 4 ]
-          }
 
 
 
