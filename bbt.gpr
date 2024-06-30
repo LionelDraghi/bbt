@@ -16,7 +16,7 @@ project BBT is
                                         "-gnata", 
                                         "-gnatVa", 
                                         "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
-                                        "-gnatyaCefhIknOprxtAbdilu");
+                                        "-gnatyaCefhIknOprxtAbilu");
    end Compiler;
 
    package Binder is
