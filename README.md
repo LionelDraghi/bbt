@@ -32,7 +32,7 @@ It uses a Markdown format, compliant with the existing [Markdown with Gherkin](h
 - Then the output contains `version 1.0`
 ```
 
-A more complete example, that is nothing less than a gcc sanity check.
+A more complete example, that is a simple gcc sanity check.
 
 ~~~md
 # Scenario: compiling and executing an hello word
