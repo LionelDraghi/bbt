@@ -25,17 +25,15 @@ The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki
 - **Then** there is some outcomes.   
 
 It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal, and can be as simple as :
-```md
-## Scenario : I want to know uut version
+
+### Scenario : I want to know uut version
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
-```
 
 A more complete example, that is a simple gcc sanity check.
 
-~~~md
-# Scenario: compiling and executing an hello word
+### Scenario: compiling and executing an hello word
 
 - Given the new file `main.c`
 ```
@@ -44,7 +42,7 @@ int main() {
 printf("Hello, World!");
 return 0;
 }
-```
+
 - And there is no `main` file
 
 - When I run `/usr/bin/gcc main.c -o main`
