@@ -1,16 +1,16 @@
-## Feature : testing that a file contains a line
+## Feature : testing that a file contains a line (or part of)
 
-### Scenario outline : test on a one line output
+### Scenario : test on a one line output
 
   - When I run `uut -v`
   - Then the output should contains `version`
 
-### Scenario outline : test on a multiline output
+### Scenario : test on a multiline output
 
   - When I run `uut -h`
   - Then the output should contains `--version`
 
-### Scenario outline : test on a file
+### Scenario : test on a file
 
   - When I run `uut create config.ini`
   - And I run `uut append mode=silent config.ini`
