@@ -31,12 +31,13 @@ It uses a Markdown format, compliant with the existing [Markdown with Gherkin](h
 - When I run `uut --version`
 - Then the output contains `version 1.0`
 ~~~
+
 A more complete example, that is a simple gcc sanity check.
+
 ~~~md
 ### Scenario: compiling and executing an hello word
 
 - Given the new file `main.c`
-```
 #include <stdio.h>
 int main() {
 printf("Hello, World!");
