@@ -13,8 +13,8 @@
 ### Scenario outline : test on a file
 
   - When I run `uut create config.ini`
-  - When I run `uut append mode=silent config.ini`
-  - When I run `uut append recurse=false config.ini`
+  - And I run `uut append mode=silent config.ini`
+  - And I run `uut append recurse=false config.ini`
   - Then `config.ini` contains `mode=silent`
 
  
