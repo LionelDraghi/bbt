@@ -38,7 +38,7 @@ A more complete example, that is a simple gcc sanity check.
 ### Scenario: compiling and executing an hello word
 
 - Given the new file `main.c`
-```
+```c
 #include <stdio.h>
 int main() {
 printf("Hello, World!");
