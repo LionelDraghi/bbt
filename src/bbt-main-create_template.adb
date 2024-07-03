@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
--- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- Â© 2024 Lionel Draghi <lionel.draghi@free.fr>
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
@@ -52,9 +52,9 @@ begin
       Put_Line ("lang=uk");
       Put_Line ("```");
       New_Line;
-      Put_Line ("-- More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main");
-      Put_Line ("-- ");
-      Put_Line ("-- File generated with BBT " & Settings.BBT_Version);
+      Put_Line ("More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main");
+      New_Line;
+      Put_Line ("File generated with BBT " & Settings.BBT_Version);
 
       Close (Template);
       Set_Output (Standard_Output);
