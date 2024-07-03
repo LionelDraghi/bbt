@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
--- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
--- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+-- Author : Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
@@ -35,6 +35,7 @@ package body BBT.Documents is
       Output.Put (", File_Type = "      & S.File_Type'Image);
       Output.New_Line;
       Output.Put ("File_Content = "  & S.File_Content'Image);
+      Output.New_Line;
    end Put_Image;
 
    -- --------------------------------------------------------------------------

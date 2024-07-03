@@ -1,7 +1,7 @@
 
 Running file "pass_tests/contains_line.md"  
 
-  - [X] scenario [test on a one line output](pass_tests/contains_line.md) pass  
+  - [X] scenario [test on a string output](pass_tests/contains_line.md) pass  
 
   - [X] scenario [test on a multiline output](pass_tests/contains_line.md) pass  
 
@@ -11,11 +11,9 @@ Running file "pass_tests/file_test_and_creation.md"
 
   - [X] scenario [a required file does not exist](pass_tests/file_test_and_creation.md) pass  
 
-  - [X] scenario [same as previous, but with the keyword file before the file name](pass_tests/file_test_and_creation.md) pass  
-
   - [X] scenario [the required file is created](pass_tests/file_test_and_creation.md) pass  
 
-  - [X] scenario ["Given there is no", but there is, should erase it](pass_tests/file_test_and_creation.md) pass  
+  - [X] scenario ["Given there is no", when there actually is, should erase the file](pass_tests/file_test_and_creation.md) pass  
 
 Running file "pass_tests/hello_word.md"  
 
@@ -43,5 +41,5 @@ Running file "pass_tests/stdout.md"
 
 ------------------------------------------------
 - Failed     tests =  0
-- Successful tests =  14
+- Successful tests =  13
 - Empty      tests =  0

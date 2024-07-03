@@ -114,7 +114,7 @@ It is not meant for :
 - White box testing (obviously :-)), checking internal states, or extensive API testing.
 
 It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.  
-Alternative tools exists, with more or less different objectives (Refer to [My quick overview of some comparable tools](docs/comparable.md)).  
+Alternative tools exists, with more or less different objectives (Refer to [My quick overview of some comparable tools](docs/comparables.md)).  
 
 ## Installation
 

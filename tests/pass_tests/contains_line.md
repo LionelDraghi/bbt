@@ -1,6 +1,8 @@
-## Feature : testing that a file contains a line (or part of)
+# "contains" feature tests
 
-### Scenario : test on a one line output
+## Feature : testing that a file contains a line
+
+### Scenario outline : test on a string output
 
   - When I run `uut -v`
   - Then the output should contains `version`
@@ -12,9 +14,11 @@
 
 ### Scenario : test on a file
 
-  - When I run `uut create config.ini`
-  - And I run `uut append mode=silent config.ini`
-  - And I run `uut append recurse=false config.ini`
+  - Given the file `config.ini` 
+  ```
+  mode=silent config.ini
+  recurse=false config.ini
+  ```
   - Then `config.ini` contains `mode=silent`
 
  

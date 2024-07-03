@@ -2,13 +2,13 @@
 all: build check doc
 
 build:
-	alr build
-	cd tools && alr build --release
+	alr build --development
+	cd tools && alr build --development
 	# Alire profiles : --release --validation --development (default)
 
 
 check: bbt
-	@ $(MAKE) check --directory=tests
+	@ $(MAKE) -s check --directory=tests
 	# --------------------------------------------------------------------
 	# echo
 	# echo Coverage report: 

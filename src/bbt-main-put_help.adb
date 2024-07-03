@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
--- bbt, the BlackBox tester (https://github.com/LionelDraghi/bbt)
--- © 2024 Lionel Draghi <lionel.draghi@free.fr>
+-- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+-- Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ begin
    New_Line;
    Put_Line ("Usage : bbt [Options]* [Command] [bbt_file]*");
    New_Line;
-   Put_Line ("If no file name provided, read *.bbt (recursively if ""-r"")");
+   Put_Line ("If no file name provided, read *.md (recursively if ""-r"")");
    New_Line;
    Put_Line ("Command :");
    Put_Line ("   run                    : the default command");
@@ -44,6 +44,7 @@ begin
    Put_Line ("Debug options:");
    Put_Line ("   -t topic               : activate log related to the topic");
    New_Line;
+   Put_Line ("bbt version " & Settings.BBT_Version'Image);
    Put_Line ("http://lionel.draghi.free.fr/bbt/");
    New_Line;
 end Put_Help;
