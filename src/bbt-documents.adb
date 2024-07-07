@@ -29,10 +29,10 @@ package body BBT.Documents is
    begin
       Output.Put (S.Cat'Image & ", ");
       Output.Put (S.Action'Image);
-      Output.Put (", Step_String = "    & S.Step_String'Image);
-      Output.Put (", Object_String = "  & S.Object_String'Image);
+      Output.Put (", Step_String    = " & S.Step_String'Image);
+      Output.Put (", Object_String  = " & S.Object_String'Image);
       Output.Put (", Subject_String = " & S.Subject_String'Image);
-      Output.Put (", File_Type = "      & S.File_Type'Image);
+      Output.Put (", File_Type      = " & S.File_Type'Image);
       Output.New_Line;
       Output.Put ("File_Content = "  & S.File_Content'Image);
       Output.New_Line;
@@ -133,19 +133,20 @@ package body BBT.Documents is
       end if;
    end Result;
 
+   Results : Test_Results_Count;
+
    -- --------------------------------------------------------------------------
-   procedure Put_Run_Summary is
-      Test_Result_Counts : array (Test_Result) of Natural := [others => 0];
+   procedure Compute_Overall_Tests_Results is
       procedure Get_Results (S : Scenario_Type) is
       begin
-         Test_Result_Counts (Result (S)) := @ + 1;
+         Results (Result (S)) := @ + 1;
       end Get_Results;
    begin
       for D of BBT.Tests.Builder.The_Tests_List.all loop
 
          if D.Feature_List.Is_Empty and D.Scenario_List.Is_Empty then
             -- Empty Doc should be reported
-            Test_Result_Counts (Empty) := @ + 1;
+            Results (Empty) := @ + 1;
          end if;
 
          for Scen of D.Scenario_List loop
@@ -156,7 +157,7 @@ package body BBT.Documents is
 
             if F.Scenario_List.Is_Empty then
                -- Empty Feature should be reported
-               Test_Result_Counts (Empty) := @ + 1;
+               Results (Empty) := @ + 1;
             end if;
 
             for Scen of F.Scenario_List loop
@@ -165,14 +166,20 @@ package body BBT.Documents is
 
          end loop;
       end loop;
+   end Compute_Overall_Tests_Results;
 
+   -- --------------------------------------------------------------------------
+   function Overall_Results return Test_Results_Count is (Results);
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Overall_Results is
+   begin
       New_Line;
       Put_Line ("------------------------------------------------");
-      Put_Line ("- Failed     tests = " & Test_Result_Counts (Failed)'Image);
-      Put_Line ("- Successful tests = " & Test_Result_Counts (Successful)'Image);
-      Put_Line ("- Empty      tests = " & Test_Result_Counts (Empty)'Image);
-
-   end Put_Run_Summary;
+      Put_Line ("- Failed     tests = " & Results (Failed)'Image);
+      Put_Line ("- Successful tests = " & Results (Successful)'Image);
+      Put_Line ("- Empty      tests = " & Results (Empty)'Image);
+   end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is

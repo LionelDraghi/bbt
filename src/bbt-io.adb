@@ -17,10 +17,10 @@ with Ada.Unchecked_Deallocation;
 package body BBT.IO is
 
    -- --------------------------------------------------------------------------
-   Errors_Count       : Natural         := 0;
-   Warnings_Count     : Natural         := 0;
-   Tee_Enabled        : Boolean         := False;
-   Tee_File_Verbosity : Verbosity_Levels;
+   Errors_Count       : Natural          := 0;
+   Warnings_Count     : Natural          := 0;
+   Tee_Enabled        : Boolean          := False;
+   Tee_File_Verbosity : Verbosity_Levels := Normal;
    Tee_File           : Ada.Text_IO.File_Type;
    Current_Level      : Verbosity_Levels := Normal;
 
@@ -146,11 +146,11 @@ package body BBT.IO is
    end Put_Exception;
 
    -- --------------------------------------------------------------------------
-   procedure Enable_Tee (File_Name     : String;
-                         Verbosity     : Verbosity_Levels := Normal) is
+   procedure Enable_Tee (File_Name : String;
+                         Verbosity : Verbosity_Levels := Normal) is
    begin
-      Tee_Enabled := True;
-      Tee_File_Verbosity   := Verbosity;
+      Tee_Enabled        := True;
+      Tee_File_Verbosity := Verbosity;
       Create (Tee_File, Name => File_Name, Mode => Out_File);
    end Enable_Tee;
 
@@ -234,19 +234,22 @@ package body BBT.IO is
    end Put;
 
    -- --------------------------------------------------------------------------
+   function Print_In_Tee_File (Verbosity : Verbosity_Levels;
+                               Topic     : Extended_Topics) return Boolean is
+     (Tee_Enabled and then
+        (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic)));
+
+   -- --------------------------------------------------------------------------
    procedure New_Line (Verbosity : Verbosity_Levels := Normal;
                        Topic     : Extended_Topics := None)
    is
       Print_On_Standard_Output : constant Boolean
-        := Verbosity <= Current_Verbosity or else Is_Enabled (Topic);
-      Print_In_Tee_File        : constant Boolean
-        := Tee_Enabled and then
-            (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic));
+        := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
    begin
       if Print_On_Standard_Output then
          Ada.Text_IO.New_Line;
       end if;
-      if Print_In_Tee_File then
+      if Print_In_Tee_File (Verbosity, Topic) then
          Ada.Text_IO.New_Line (Tee_File);
       end if;
    end New_Line;
@@ -257,18 +260,14 @@ package body BBT.IO is
                        Verbosity : Verbosity_Levels := Normal;
                        Topic     : Extended_Topics  := None) is
       Print_On_Standard_Output : constant Boolean
-        := Verbosity <= Current_Verbosity or else Is_Enabled (Topic);
-      Print_In_Tee_File        : constant Boolean
-        := Tee_Enabled and then
-            (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic));
-      Prefix                   : constant String :=
-                                   (if Location'Image = "" then ""
-                                    else Location'Image & " ");
+        := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
+      Prefix                   : constant String
+        := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
          Ada.Text_IO.Put_Line (Prefix & Item);
       end if;
-      if Print_In_Tee_File then
+      if Print_In_Tee_File  (Verbosity, Topic) then
          Ada.Text_IO.Put_Line (Tee_File, Prefix & Item);
       end if;
    end Put_Line;
@@ -279,17 +278,16 @@ package body BBT.IO is
                   Verbosity : Verbosity_Levels := Normal;
                   Topic     : Extended_Topics  := None) is
       Print_On_Standard_Output : constant Boolean
-        := Verbosity <= Current_Verbosity or else Is_Enabled (Topic);
-      Print_In_Tee_File        : constant Boolean := Tee_Enabled
-        and then (Verbosity <= Tee_File_Verbosity or else Is_Enabled (Topic));
-      Prefix                   : constant String :=
-                                   (if Location'Image = "" then ""
-                                    else Location'Image & " ");
+        := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
+      --  Print_In_Tee_File        : constant Boolean := Tee_Enabled
+      --    and then (Verbosity >= Tee_File_Verbosity or else Is_Enabled (Topic));
+      Prefix                   : constant String
+        := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
          Ada.Text_IO.Put (Prefix & Item);
       end if;
-      if Print_In_Tee_File then
+      if Print_In_Tee_File (Verbosity, Topic) then
          Ada.Text_IO.Put (Tee_File, Prefix & Item);
       end if;
    end Put;

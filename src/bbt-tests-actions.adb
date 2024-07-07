@@ -6,6 +6,7 @@
 
 with BBT.IO;
 with BBT.Settings;
+with BBT.Created_File_List; use BBT.Created_File_List;
 
 with GNAT.OS_Lib;
 
@@ -113,9 +114,10 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("Create_If_None " & File_Name, Verbosity => Debug);
       if Step.File_Type = Ordinary_File then
-         Success := Create_File
+         Success := Text_Utilities.Create_File
            (File_Name    => Step.Subject_String,
             With_Content => Step.File_Content);
+         Created_File_List.Add (File_Name);
          Put_Step_Result (Step     => Step,
                           Success  => File_Exists (File_Name),
                           Fail_Msg => "Unable To Create File " &
@@ -128,6 +130,7 @@ package body BBT.Tests.Actions is
       elsif Step.File_Type = Directory then
          if not Entry_Exists (File_Name) then
             Create_Path (File_Name);
+            Created_File_List.Add (File_Name);
          end if;
          Put_Step_Result (Step     => Step,
                           Success  => Dir_Exists (File_Name),
@@ -157,6 +160,7 @@ package body BBT.Tests.Actions is
                Delete_File (File_Name);
             end if;
             Ada.Text_IO.Create (File, Name => File_Name);
+            Created_File_List.Add (File_Name);
             Put_Text (File, Get_Expected (Step));
             Ada.Text_IO.Close (File);
             Put_Step_Result (Step     => Step,
@@ -169,6 +173,7 @@ package body BBT.Tests.Actions is
                Delete_Tree (File_Name);
             end if;
             Create_Path (File_Name);
+            Created_File_List.Add (File_Name);
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &
@@ -190,6 +195,7 @@ package body BBT.Tests.Actions is
          when Ordinary_File =>
             if not Exists (File_Name) then
                Ada.Text_IO.Create (File, Name => File_Name);
+               Created_File_List.Add (File_Name);
                Put_Text (File, Get_Expected (Step));
                Ada.Text_IO.Close (File);
             end if;
@@ -201,6 +207,7 @@ package body BBT.Tests.Actions is
          when Directory =>
             if not Exists (File_Name) then
                Create_Path (File_Name);
+               Created_File_List.Add (File_Name);
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
@@ -334,7 +341,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Is (Output : Text;
-                              Step   : Step_Type) is
+                        Step   : Step_Type) is
       use Texts;
       T2 : constant Text := Get_Expected (Step);
    begin

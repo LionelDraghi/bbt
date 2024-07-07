@@ -103,7 +103,7 @@ begin
                end if;
 
             elsif Opt = "-v" or Opt = "--version" then  ------------------------
-               Put_Line ("version 1.0");
+               Put_Line ("uut version 1.0");
                Set_Exit_Status (Success);
 
             elsif Opt = "-h" or Opt = "--help" then ----------------------------

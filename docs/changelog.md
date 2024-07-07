@@ -6,7 +6,9 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/)
 and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- [Unreleased] (actually means untagged)
+- [Head]
+  - [Changed] bbt now return an error status when one of the test fails
+  - [Added]   first `--cleanup` implementation, that removes files created during the test by bbt
 
 - [0.0.3]
   - [Added] text file creation

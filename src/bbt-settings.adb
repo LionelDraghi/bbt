@@ -16,7 +16,7 @@ package body BBT.Settings is
    -- Cmd_Line        : Unbounded_String := Null_Unbounded_String;
    WD : constant access String :=
           new String'(Ada.Directories.Current_Directory);
-   Outfile_Name      : access String := null;
+   Outfile_Name : access String := null;
 
    --  -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is

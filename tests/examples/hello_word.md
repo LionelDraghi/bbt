@@ -3,7 +3,7 @@
 ## Scenario: compiling and executing an hello word
 
 - Given the new file `main.c`
-```
+```c
 #include <stdio.h>
 int main() {
 printf("Hello, World!");

@@ -2,6 +2,7 @@ Project  <!-- omit from toc -->
 =======
 
 - [Development Status](#development-status)
+- [Tests](#tests)
 - [Help and comments](#help-and-comments)
 - [TDL](#tdl)
   - [Near future](#near-future)
@@ -9,9 +10,12 @@ Project  <!-- omit from toc -->
 
 ## Development Status
 - [Changelog](changelog.md)
-- [Features tests](pass_tests.md)
 - [Fixme](fixme.md)
 
+## Tests
+- [Examples](examples_results.md)
+- [Features](features_results.md): **this is where behavior is defined** 
+- *NB: Robustness tests and tests returning error are not yet reported here*
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)

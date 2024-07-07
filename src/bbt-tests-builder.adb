@@ -6,7 +6,9 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with BBT.Created_File_List;
 with BBT.IO;
+with BBT.Settings;
 
 with Text_Utilities; use Text_Utilities;
 
@@ -75,6 +77,10 @@ package body BBT.Tests.Builder is
         (Document_Type'(Name   => To_Unbounded_String (Name),
                         others => <>));
       Set_State (In_Document);
+      if BBT.Settings.Cleanup then
+         -- BBT.Created_File_List.Add (Documents.Output_File_Name (D));
+         BBT.Created_File_List.Initialize (Name & ".created_files");
+      end if;
    end Add_Document;
 
    -- --------------------------------------------------------------------------

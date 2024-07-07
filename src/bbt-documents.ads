@@ -134,6 +134,10 @@ private package BBT.Documents is
      (Positive, Document_Type);
    function Has_Background (D : Document_Type) return Boolean is
      (D.Background /= null and then not D.Background.Step_List.Is_Empty);
+   function Output_File_Name (D : Document_Type) return String is
+     (To_String (D.Name) & ".out");
+   --  function Created_Files_List_File_Name (D : Document_Type) return String is
+   --    (To_String (D.Name) & ".created_files");
 
    -- --------------------------------------------------------------------------
    procedure Put_Text          (The_Text : Text);
@@ -145,7 +149,13 @@ private package BBT.Documents is
 
    -- --------------------------------------------------------------------------
    function Result (Scenario : Scenario_Type) return Test_Result;
-   procedure Put_Run_Summary;
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type);
+
+   type Test_Results_Count is array (Test_Result) of Natural
+     with Default_Component_Value => 0;
+
+   procedure Compute_Overall_Tests_Results;
+   function Overall_Results return Test_Results_Count;
+   procedure Put_Overall_Results;
 
 end BBT.Documents;

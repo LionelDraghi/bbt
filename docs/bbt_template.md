@@ -29,6 +29,6 @@ verbose=false
 lang=uk
 ```
 
--- More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main
--- 
--- File generated with BBT 0.0.3
+More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main
+
+File generated with BBT 0.0.3

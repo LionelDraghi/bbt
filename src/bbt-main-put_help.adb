@@ -27,6 +27,8 @@ begin
    Put_Line ("   -h   | --help            : this message");
    New_Line;
    Put_Line ("Options :");
+   Put_Line ("   -c   | --cleanup        : after run, remove every file and dir");
+   Put_Line ("                             created by scenarios");
    Put_Line ("   -r   | --recursive      : search bbt files in subdir");
    Put_Line ("   -k   | --keep-going     : Do as much work as possible");
    Put_Line ("   -v   | --verbose");

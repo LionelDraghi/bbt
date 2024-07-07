@@ -77,6 +77,9 @@ begin
          elsif Opt = "-ad" or Opt = "--auto_delete" then
             Settings.Auto_Delete := True;
 
+         elsif Opt = "-c" or Opt = "--cleanup" then
+            Settings.Cleanup := True;
+
          elsif Opt = "-v" or Opt = "--verbose" then
             Set_Verbosity  (Verbose);
 
@@ -92,25 +95,26 @@ begin
             Settings.List_Settings := True;
 
          elsif Ada.Directories.Exists (Opt) then
-               -- if it's not an option, its a file name
-               case Kind (Opt) is
-                  when Directory =>
-                     Settings.No_File_Given := False;
-                     Scenarios.Files.Find_BBT_Files
-                       (Start_In  => Opt,
-                        Recursive => Settings.Recursive);
-                  when Ordinary_File =>
-                     Settings.No_File_Given := False;
-                     Scenarios.Files.Append_File (Opt);
+            -- if it's not an option, its a file name
+            case Kind (Opt) is
+               when Directory =>
+                  Settings.No_File_Given := False;
+                  Scenarios.Files.Find_BBT_Files
+                    (Start_In  => Opt,
+                     Recursive => Settings.Recursive);
 
-                  when Special_File =>
-                     IO.Put_Error ("Unknown file type """ & Opt & """");
-                     return;
+               when Ordinary_File =>
+                  Settings.No_File_Given := False;
+                  Scenarios.Files.Append_File (Opt);
 
-               end case;
+               when Special_File =>
+                  IO.Put_Error ("Unknown file type """ & Opt & """");
+                  return;
+
+            end case;
 
          else
-            IO.Put_Error ("Unknown option """ & Opt & """");
+            IO.Put_Error ("Unknown option or file """ & Opt & """");
 
          end if;
 

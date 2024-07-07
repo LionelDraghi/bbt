@@ -4,10 +4,12 @@
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
+with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
+with BBT.Settings;
 with Text_Utilities;        use Text_Utilities;
 
 with GNAT.Traceback.Symbolic;
@@ -18,9 +20,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package body BBT.Tests.Runner is
 
   -- -----------------------------------------------------------------------
-   function Output_File_Name (D : Document_Type) return String is
-     (To_String (D.Name) & ".out");
-
    function Subject_Or_Object_String (Step : Step_Type) return String is
      (To_String (if Step.Object_String = Null_Unbounded_String then
            Step.Subject_String else Step.Object_String));
@@ -220,6 +219,11 @@ package body BBT.Tests.Runner is
             end if;
 
          end loop;
+
+         if Settings.Cleanup then
+            Created_File_List.Delete_All;
+         end if;
+
       end loop;
 
    end Run_All;

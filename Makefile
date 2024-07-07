@@ -30,25 +30,23 @@ check: bbt
 
 doc:
 	echo --- doc:
-	cp tests/pass_tests/pass_tests.md docs
-	cp `find tests/pass_tests/*.md` docs/pass_tests
+	
+	mv tests/*results.md          docs/
+	cp `find tests/examples/*.md` docs/examples
+	cp `find tests/features/*.md` docs/features
+
 	./bbt -lg > docs/grammar.md
 	./bbt -lk > docs/keywords.md
 	./bbt -ct
 	mv bbt_template.md docs/
 	
-	>  docs/fixme.md
-	rgrep -ni "Fixme" docs/*.md | sed "s/:/|/2"	>> /tmp/fixme.md
-
-	echo 'Fixme in current version:'		>  docs/fixme.md
-	echo '-------------------------'		>> docs/fixme.md
-	echo                            		>> docs/fixme.md
-	echo 'Location | Text'             		>> docs/fixme.md
-	echo '---------|-----'             		>> docs/fixme.md
-	cat /tmp/fixme.md                       >> docs/fixme.md
-	rm /tmp/fixme.md
-	rgrep -n "Fixme:" src/*           | sed "s/:/|/2"	>> docs/fixme.md
-	rgrep -n "Fixme:" tests/*_tests/* | sed "s/:/|/2"	>> docs/fixme.md
+	echo 'Fixme in current version:'		    >  /tmp/fixme.md
+	echo '-------------------------'	    	>> /tmp/fixme.md
+	echo                                		>> /tmp/fixme.md
+	echo 'Location | Text'             		    >> /tmp/fixme.md
+	echo '---------|-----'             		    >> /tmp/fixme.md
+	rgrep -n "Fixme:" src/*     | sed "s/:/|/2"	>> /tmp/fixme.md
+	mv /tmp/fixme.md docs/fixme.md
 
 	echo OK
 	echo

@@ -4,6 +4,7 @@
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
+  - [Scenario : I want to know uut version](#scenario--i-want-to-know-uut-version)
 - [Main characteristics](#main-characteristics)
   - [Specification is the test](#specification-is-the-test)
   - [Tests are easy to write](#tests-are-easy-to-write)
@@ -24,35 +25,19 @@ The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki
 - **When** some event occurs 
 - **Then** there is some outcomes.   
 
-It uses a Markdown format, compliant with the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) proposal, and can be as simple as :
-~~~md
+It can be as simple as :
+
 ### Scenario : I want to know uut version
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
-~~~
 
-A more complete example, that is a simple gcc sanity check.
 
-~~~md
-### Scenario: compiling and executing an hello word
+The attentive reader will already have noticed that this is standard Markdown. Indeed, bbt uses the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format proposal.
 
-- Given the new file `main.c`
-```c
-#include <stdio.h>
-int main() {
-printf("Hello, World!");
-return 0;
-}
-```
-- And there is no `main` file
+**This is the beauty of btt : it make possible to directly uses your behavior documentation as a the test scenario.**
 
-- When I run `/usr/bin/gcc main.c -o main`
-- And I run `main`
-
-- Then the output is `Hello, World!`
-~~~
-
+More complete examples are available [here](examples_results.md)
 
 ## Main characteristics
 
@@ -99,7 +84,7 @@ If you haven't yet experienced how easy it is to create graphics with a simple t
 The tests results file mainly contains... the tests results :-).  
 (It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
-To see what it looks like, there is an example in [bbt own tests](docs/pass_tests.md).
+To see what it looks like, there is an example in [bbt own tests](docs/examples_results.md).
 
 ## Objective of the project and limitations
 

@@ -46,13 +46,14 @@ begin
       return;
    end if;
 
-   -- Command processing : "There can be only one" -----------------------------
-   -- if one is found, exit
-   -- (options are already processed in the analyze Cmd_Line procedure)
-
    if Settings.No_File_Given then
       Scenarios.Files.Find_BBT_Files (Settings.Recursive);
    end if;
+
+   -- Command processing :
+   --   Principle : "There can be only one". If one action is found, then
+   --               do the job and exit.
+   --   (options are already processed in the analyze Cmd_Line procedure)
 
    if Settings.List_Files then
       for File of Scenarios.Files.BBT_Files loop
@@ -110,23 +111,29 @@ begin
       Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
    else
-      declare
-         --  use Ada.Calendar;
-         --  Start_Time : constant Time := Clock;
-         -- End_Time   : Time;
-      begin
-         Tests.Runner.Run_All;
-         -- End_Time := Clock;
-         -- IO.New_Line;
-         -- IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
-         -- IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
-         Put_Run_Summary;
-      end;
+      -- Finally, the "normal" run situation:
+
+      --  declare
+      --     use Ada.Calendar;
+      --     Start_Time : constant Time := Clock;
+      --     End_Time   : Time;
+      --  begin
+      Tests.Runner.Run_All;
+      Documents.Compute_Overall_Tests_Results;
+      Documents.Put_Overall_Results;
+      --     End_Time := Clock;
+      --     IO.New_Line;
+      --     IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
+      --     IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
+      --  end;
+
       -- "run" is the default action, so they shouldn't be any other action
-      --  processed after that point. "run" apply
+      --  processed after that point.
    end if;
 
-   if IO.Some_Error and then not Settings.Ignore_Errors then
+   if (IO.Some_Error and then not Settings.Ignore_Errors)
+   or else Overall_Results (Failed) /= 0
+   then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;
 
