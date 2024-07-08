@@ -37,7 +37,7 @@ The attentive reader will already have noticed that this is standard Markdown. I
 
 **This is the beauty of btt : it make possible to directly uses your behavior documentation as a the test scenario.**
 
-More complete examples are available [here](examples_results.md)
+More complete examples are available [here](docs/examples_results.md)
 
 ## Main characteristics
 
