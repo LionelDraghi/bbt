@@ -84,7 +84,7 @@ If you haven't yet experienced how easy it is to create graphics with a simple t
 The tests results file mainly contains... the tests results :-).  
 (It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
-To see what it looks like, there is an example in [bbt own tests](docs/examples_results.md).
+To see what it looks like, there is an example in [bbt own tests](docs/features_results.md).
 
 ## Objective of the project and limitations
 
