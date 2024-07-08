@@ -15,7 +15,7 @@ Project  <!-- omit from toc -->
 ## Tests
 - [Examples](examples_results.md)
 - [Features](features_results.md): **this is where behavior is defined** 
-- *NB: Robustness tests and tests returning error are not yet reported here*
+- *NB: Robustness tests and tests returning errors are not yet reported here*
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
