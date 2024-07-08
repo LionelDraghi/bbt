@@ -23,7 +23,9 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 ## TDL
 
 ### Near future
-  
+  - clean function  
+  ask bbt to delete all files created during test run (ongoing effort)
+
 ### Distant future or low priority
 - ``Given execution directory `dir1` ``  
   Create a dir and move test run into that dir
@@ -39,9 +41,6 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 
 - implement "case insensitive" and "ignore blank lines" 
   
-- clean function  
-  ask bbt to delete all files created during test run
-  
 - explore the possibility to run multiple exe asynchronously, while staying simple.  
   Maybe by using the AdaCore spawn lib.
 
@@ -50,5 +49,5 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 - "no new files" and "no env change" check
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
-May imply to switch to Max more sophisticated MarkDown parser...
+May imply to switch to Max Reznik's more sophisticated MarkDown parser...
 
