@@ -4,63 +4,87 @@
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
-with Ada.Directories;       use Ada.Directories;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO;           use Ada.Text_IO;
+with BBT.IO;
+with BBT.Settings;
+
+with Ada.Containers.Indefinite_Doubly_Linked_Lists;
+with Ada.Directories; use Ada.Directories;
+with Ada.Text_IO;     use Ada.Text_IO;
 
 package body BBT.Created_File_List  is
 
    Is_Open : Boolean := False;
-   File : Ada.Text_IO.File_Type;
-   List_File_Name : Unbounded_String := Null_Unbounded_String;
+   File    : Ada.Text_IO.File_Type;
 
    -- --------------------------------------------------------------------------
-   procedure Initialize (File_Name : String) is
+   procedure Open (File_Name : String) is
    begin
-      List_File_Name := To_Unbounded_String (File_Name);
-   end Initialize;
+      if BBT.Settings.Cleanup then
+         -- Put_Line ("== Creating " & File_Name);
+         Create (File, Mode => Out_File, Name => File_Name);
+         Is_Open := True;
+      end if;
+   end Open;
 
    -- --------------------------------------------------------------------------
    procedure Add (Name : String) is
    begin
-      if not Is_Open then
-         Create (File, Mode => Out_File, Name => To_String (List_File_Name));
-         Is_Open := True;
+      if BBT.Settings.Cleanup then
+         -- Put_Line ("== Adding " & Name);
+         Put_Line (File, Name);
       end if;
-      Put_Line (File, Name);
    end Add;
 
    -- --------------------------------------------------------------------------
-   procedure Delete_All is
+   procedure Put is
    begin
-      -- First delete all files
-      Reset (File, Mode => In_File);
-      while not End_Of_File (File) loop
-         declare
-            Line : constant String := Get_Line (File);
-         begin
-            if Exists (Line) and then Kind (Line) = Ordinary_File then
-               -- Put_Line ("deleting " & Line);
-               Delete_File (Line);
-            end if;
-         end;
-      end loop;
+      if BBT.Settings.Cleanup then
+         if Is_Open then
+            Reset (File, Mode => In_File);
+            while not End_Of_File (File) loop
+               Put_Line (Get_Line (File));
+            end loop;
+         end if;
+      end if;
+   end Put;
 
-      -- Then delete all dir
-      Reset (File);
-      while not End_Of_File (File) loop
-         declare
-            Line : constant String := Get_Line (File);
-         begin
-            if Exists (Line) and then Kind (Line) = Directory then
-               -- Put_Line ("deleting " & Line);
-               Delete_Directory (Line);
-            end if;
-         end;
-      end loop;
+   -- --------------------------------------------------------------------------
+   procedure Delete_All is
+      package File_Lists is new Ada.Containers.Indefinite_Doubly_Linked_Lists
+        (String);
+      FL : File_Lists.List;
+   begin
+      Is_Open := False;
+      if BBT.Settings.Cleanup then
+         -- Put_Line ("== Delete_All ");
+         -- First delete all files
+         Reset (File, Mode => In_File);
+         while not End_Of_File (File) loop
+            FL.Append (Get_Line (File));
+         end loop;
 
-      -- Put_Line ("deleting " & Name (File));
-      Delete (File);
+         for F of reverse FL loop
+            -- We delete in the opposite order of creation, so that
+            -- dir1/f1 is deleted before dir1
+            begin
+               if Exists (F) then
+                  if Kind (F) = Ordinary_File then
+                     -- Put_Line ("deleting file " & F);
+                     Delete_File (F);
+                  elsif Kind (F) = Directory then
+                     -- Put_Line ("deleting dir " & F);
+                     Delete_Directory (F);
+                  end if;
+               end if;
+            exception
+               when others =>
+                  BBT.IO.Put_Exception ("Unable to erase " & F'Image);
+            end;
+         end loop;
+
+         -- Put_Line ("== Deleting " & Name (File));
+         Delete (File);
+      end if;
    end Delete_All;
 
 end BBT.Created_File_List;

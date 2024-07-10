@@ -9,7 +9,9 @@ and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2
 - [Head]
   - [Changed] bbt now return an error status when one of the test fails
   - [Added]   first `--cleanup` implementation, that removes files created during the test by bbt
-
+  - [Added]   in scenarios, `dir` is now a synonym of `directory`
+  - [Changed] bbt bootstraps! bbt now runs bbt tests that return error code.
+  
 - [0.0.3]
   - [Added] text file creation
 

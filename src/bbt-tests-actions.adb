@@ -6,15 +6,15 @@
 
 with BBT.IO;
 with BBT.Settings;
-with BBT.Created_File_List; use BBT.Created_File_List;
+with BBT.Created_File_List;             use BBT.Created_File_List;
+with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
+-- no direct with of Ada.Directories or Ada.Text_IO here
 
 with GNAT.OS_Lib;
 
 with Ada.Command_Line;
-with Ada.Directories;       use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO;
 
 with GNAT.Traceback.Symbolic;
 
@@ -23,6 +23,8 @@ package body BBT.Tests.Actions is
    --  function "+" (Name : File_Name) return String is (To_String (Name));
    --  function "+" (Name : String) return File_Name is
    --    (File_Name'(To_Unbounded_String (Name)));
+
+   use type BBT.Tests.Actions.File_Operations.File_Kind;
 
    -- --------------------------------------------------------------------------
    function Is_Success (I : Integer) return Boolean is
@@ -151,7 +153,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step : Step_Type) is
       File_Name : constant String := To_String (Step.Subject_String);
-      File      : Ada.Text_IO.File_Type;
+      File      : File_Type;
    begin
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
       case Step.File_Type is
@@ -159,10 +161,10 @@ package body BBT.Tests.Actions is
             if Exists (File_Name) and then BBT.Settings.Auto_Delete then
                Delete_File (File_Name);
             end if;
-            Ada.Text_IO.Create (File, Name => File_Name);
+            Create (File, Name => File_Name);
             Created_File_List.Add (File_Name);
             Put_Text (File, Get_Expected (Step));
-            Ada.Text_IO.Close (File);
+            Close (File);
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
@@ -188,16 +190,16 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Create_New (Step : Step_Type) is
       File_Name : constant String := To_String (Step.Subject_String);
-      File      : Ada.Text_IO.File_Type;
+      File      : File_Type;
    begin
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
       case Step.File_Type is
          when Ordinary_File =>
             if not Exists (File_Name) then
-               Ada.Text_IO.Create (File, Name => File_Name);
+               Create (File, Name => File_Name);
                Created_File_List.Add (File_Name);
                Put_Text (File, Get_Expected (Step));
-               Ada.Text_IO.Close (File);
+               Close (File);
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),

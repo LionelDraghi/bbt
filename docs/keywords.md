@@ -18,4 +18,5 @@
 - containing
 - successfully
 - file
+- dir
 - directory

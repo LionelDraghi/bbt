@@ -12,12 +12,12 @@ package BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Document   (Name : String);
-   procedure Add_Feature    (Name : String;    Loc : Location_Type);
-   procedure Add_Scenario   (Name : String;    Loc : Location_Type);
-   procedure Add_Background (Name : String;    Loc : Location_Type);
+   procedure Add_Feature    (Name : String; Loc : Location_Type);
+   procedure Add_Scenario   (Name : String; Loc : Location_Type);
+   procedure Add_Background (Name : String; Loc : Location_Type);
    procedure Add_Step       (Step     : Step_Type;
                              Cmd_List : Cmd_Lists.Vector);
-   procedure Add_Line       (Line : String;    Loc : Location_Type);
+   procedure Add_Line       (Line : String; Loc : Location_Type);
    procedure Add_Code_Block (Loc : Location_Type);
 
    -- --------------------------------------------------------------------------

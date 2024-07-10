@@ -5,13 +5,9 @@ Running file "examples/hello_word.md"
 
 Running file "examples/minimal.md"  
 
-*** NOK : Then I get  
-examples/minimal.md:5:Output 
-[]    not equal to expected  
-["Interfaces use is forbidden"]  
-  - [ ] scenario ["containing" test](examples/minimal.md) fails  
+  - [X] scenario ["containing" test](examples/minimal.md) pass  
 
 ------------------------------------------------
-- Failed     tests =  1
-- Successful tests =  1
+- Failed     tests =  0
+- Successful tests =  2
 - Empty      tests =  0

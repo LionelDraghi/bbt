@@ -20,8 +20,8 @@ package Text_Utilities is
    Empty_Text : Text renames Texts.Empty_Vector;
 
    -- --------------------------------------------------------------------------
-   procedure Create_File (File_Name    : String;
-                          With_Content : Text);
+   --  procedure Create_File (File_Name    : String;
+   --                         With_Content : Text);
    function Create_File (File_Name    : Unbounded_String;
                          With_Content : Text) return Boolean;
    -- Any existing files with the same name is overwritten.

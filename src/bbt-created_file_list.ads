@@ -6,11 +6,13 @@
 
 package BBT.Created_File_List is
 
-   procedure Initialize (File_Name : String);
+   procedure Open (File_Name : String);
    -- Create and open the file containing created files
 
    procedure Add (Name : String);
    -- Add a file name in the list
+
+   procedure Put;
 
    procedure Delete_All;
    -- Delete all files in the list, and also the file containing the list

@@ -121,6 +121,7 @@ begin
       Tests.Runner.Run_All;
       Documents.Compute_Overall_Tests_Results;
       Documents.Put_Overall_Results;
+
       --     End_Time := Clock;
       --     IO.New_Line;
       --     IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));

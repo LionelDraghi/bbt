@@ -6,6 +6,7 @@
 | Given |     |        | is no            | `dir`             | SETUP_NO_DIR         |  
 | Given |     | `dir`  |                  |                   | CREATE_DIRECTORY     |  
 | Given |     | `file` |                  |                   | CREATE_FILE          |  
+| Given |     | `file` | containing       | `text`            | CREATE_FILE          |  
 | Given | new | `dir`  |                  |                   | ERASE_AND_CREATE     |  
 | Given | new | `file` |                  |                   | ERASE_AND_CREATE     |  
 | Given | new | `file` | containing       | `text`            | ERASE_AND_CREATE     |  

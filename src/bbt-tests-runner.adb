@@ -9,7 +9,6 @@ with BBT.Documents;         use BBT.Documents;
 with BBT.IO;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
-with BBT.Settings;
 with Text_Utilities;        use Text_Utilities;
 
 with GNAT.Traceback.Symbolic;
@@ -194,6 +193,8 @@ package body BBT.Tests.Runner is
    begin
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
+         BBT.Created_File_List.Open (To_String (D.Name) & ".created_files");
+
          IO.New_Line (Verbosity => IO.Normal);
          Put_Line ("Running file " & D.Name'Image & "  ");
 
@@ -220,9 +221,7 @@ package body BBT.Tests.Runner is
 
          end loop;
 
-         if Settings.Cleanup then
-            Created_File_List.Delete_All;
-         end if;
+         Created_File_List.Delete_All;
 
       end loop;
 

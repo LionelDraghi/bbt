@@ -75,6 +75,7 @@ package body BBT.Scenarios.Step_Parser is
             "containing",
             "successfully",
             "file",
+            "dir",
             "directory"];
       -- NB : all keywords must be in lower case!
 
@@ -333,9 +334,10 @@ package body BBT.Scenarios.Step_Parser is
          G (Given, No_SA,  No_Subject,   Is_V,       Object_File) := Check_File_Existence; -- Given there is a `config.ini` file
          G (Given, No_SA,  No_Subject,   Is_V,       Object_Dir)  := Check_Dir_Existence;  -- Given there is a `dir1` directory
          G (Given, New_SA, Subject_File, Containing, Object_Text) := Erase_And_Create; -- Given the new file `config.ini` containing `lang=it`
+         G (Given, No_SA,  Subject_File, Containing, Object_Text) := Create_File;      -- Given the file `config.ini` containing `lang=it`
          G (Given, New_SA, Subject_File, No_Verb,    No_Object)   := Erase_And_Create; -- Given the new file `config.ini` followed by code fenced content
-         G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Erase_And_Create; -- Given the new directory `dir1`
          G (Given, No_SA,  Subject_File, No_Verb,    No_Object)   := Create_File;      -- Given the file `config.ini` followed by code fenced content
+         G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)   := Erase_And_Create; -- Given the new directory `dir1`
          G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)   := Create_Directory; -- Given the directory `dir1`
 
          G (When_P, No_SA, No_Subject, Run,            Object_Text)  := Run_Cmd;           -- when I run `cmd`
@@ -563,7 +565,8 @@ package body BBT.Scenarios.Step_Parser is
                         File_Type := Ordinary_File;
                         -- "file" keyword is not mandatory, this is the default.
 
-                     elsif Lower_Keyword = "directory" then
+                     elsif Lower_Keyword = "directory" or Lower_Keyword = "dir"
+                     then
                         File_Type := Directory;
 
                         if In_Subject_Part then
