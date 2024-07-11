@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Black box test runner"
-version = "0.0.3"
+version = "0.0.4"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
