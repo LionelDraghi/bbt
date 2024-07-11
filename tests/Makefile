@@ -18,13 +18,9 @@ check: ../bbt ../uut
 	@ - $(MAKE) check --directory=error_tests && echo 3. error tests OK ============= || echo 3. error tests KO "*********"
 	@ echo
 
-	@ - $(MAKE) check --directory=robustness && echo 4. robustness tests OK ======== || echo 4. robustness tests KO "****"
-	@ echo
-
 
 .PHONY : clean
 clean:
 	@ $(MAKE) -s clean --directory=error_tests
-	@ $(MAKE) -s clean --directory=robustness
 	@ - rm -f features/config.ini */*.out gmon.out main main.c rules.txt */*created_files examples/main
 

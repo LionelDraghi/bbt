@@ -5,6 +5,10 @@ Running file "features/multiline.md"
 
   - [X] scenario [causing an uut error with a long explanation](features/multiline.md) pass  
 
+Running file "features/missing_title.md"  
+
+  - [X] scenario [Missing tittle in scenario, background and feature](features/missing_title.md) pass  
+
 Running file "features/stderr.md"  
 
   - [X] scenario [unknown option](features/stderr.md) pass  
@@ -49,7 +53,13 @@ Running file "features/stdout.md"
 
   - [X] scenario [asking for uut version](features/stdout.md) pass  
 
+Running file "features/empty_scenarios.md"  
+
+  - [X] scenario [No step test](features/empty_scenarios.md) pass  
+
+  - [X] scenario [No scenario test](features/empty_scenarios.md) pass  
+
 ------------------------------------------------
 - Failed     tests =  0
-- Successful tests =  17
+- Successful tests =  20
 - Empty      tests =  0

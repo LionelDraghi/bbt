@@ -110,6 +110,6 @@ package Text_Utilities is
 
    function Text_Image is new List_Image.Image
      (Cursors => Text_Cursors,
-      Style   => List_Image.Unix_Predefined_Styles.Bulleted_List_Style);
+      Style   => List_Image.Unix_Predefined_Styles.Simple_One_Per_Line_Style);
 
 end Text_Utilities;

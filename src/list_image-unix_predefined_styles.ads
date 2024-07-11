@@ -52,6 +52,13 @@ package List_Image.Unix_Predefined_Styles is
    --
    -- --------------------------------------------------------------------------
 
+   package Simple_One_Per_Line_Style is new Image_Style
+     (Prefix           => "",
+      Separator        => EOL & "| ",
+      Postfix          => EOL & EOL,
+      Prefix_If_Empty  => "",
+      Postfix_If_Empty => "");
+
    package Bulleted_List_Style is new Image_Style
      (Prefix           => EOL & "- ",
       Separator        => EOL & "- ",

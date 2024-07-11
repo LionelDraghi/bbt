@@ -2,17 +2,17 @@
 
 ## Feature : testing that a file contains a line
 
-### Scenario outline : test on a string output
+### Scenario: test on a string output
 
   - When I run `uut -v`
   - Then the output should contains `version`
 
-### Scenario : test on a multiline output
+### Scenario: test on a multiline output
 
   - When I run `uut -h`
   - Then the output should contains `--version`
 
-### Scenario : test on a file
+### Scenario: test on a file
 
   - Given the file `config.ini` 
   ```

@@ -350,8 +350,8 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Equal_To ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (Output, T2),
-                       Fail_Msg => "Output " & Output'Image &
-                         "    not equal to expected  " & T2'Image,
+                       Fail_Msg => "Output :" & Text_Image (Output) &
+                         "not equal to expected :" & Text_Image (T2),
                        Loc      => Step.Location);
    end Output_Is;
 

@@ -281,9 +281,18 @@ package body BBT.Tests.Builder is
          when In_Feature =>
             Last_Feature_Ref.Comment.Append (Line);
 
-         when In_Scenario | In_Step | In_Background =>
+         when In_Scenario | In_Step =>
             Last_Scenario_Ref.Comment.Append (Line);
             -- There is no comment attached to Step
+
+         when In_Background =>
+            if Last_Feature_Ref.Background /= null then
+               Last_Feature_Ref.Comment.Append (Line);
+            elsif Last_Doc_Ref.Background /= null then
+               Last_Doc_Ref.Comment.Append (Line);
+            else
+               Put_Error ("No Doc or Feature Background??");
+            end if;
 
          when In_File_Content =>
             -- this is not a comment, we are in a file content description
