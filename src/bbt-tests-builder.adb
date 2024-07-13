@@ -57,15 +57,32 @@ package body BBT.Tests.Builder is
         (Last_Doc_Ref.Element.Feature_List.Last));
 
    function Last_Scenario_Ref return Scenario_Lists.Reference_Type is
-     (if Current_Doc_State = In_Feature
-      then Last_Feature_Ref.Element.Scenario_List.Reference
-        (Last_Feature_Ref.Scenario_List.Last)
-      else Last_Doc_Ref.    Element.Scenario_List.Reference
-        (Last_Doc_Ref.    Scenario_List.Last));
+   begin
+      case Current_Doc_State is
+         when In_Document =>
+            return Last_Doc_Ref.Element.Scenario_List.Reference
+              (Last_Doc_Ref.Scenario_List.Last);
+         when In_Feature =>
+            return Last_Feature_Ref.Element.Scenario_List.Reference
+              (Last_Feature_Ref.Scenario_List.Last);
+      end case;
+   end Last_Scenario_Ref;
 
+   -- --------------------------------------------------------------------------
    function Last_Step_Ref return Step_Lists.Reference_Type is
-     (Last_Scenario_Ref.Element.Step_List.Reference
-        (Last_Scenario_Ref.Step_List.Last));
+   begin
+      case Current_Background is
+         when None =>
+            return Last_Scenario_Ref.Element.Step_List.Reference
+              (Last_Scenario_Ref.Step_List.Last);
+         when Doc =>
+            return Last_Doc_Ref.Background.Step_List.Reference
+              (Last_Doc_Ref.Background.Step_List.Last);
+         when Feature =>
+            return Last_Feature_Ref.Background.Step_List.Reference
+              (Last_Feature_Ref.Background.Step_List.Last);
+      end case;
+   end Last_Step_Ref;
 
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
@@ -299,7 +316,7 @@ package body BBT.Tests.Builder is
             Put_Line ("File content = """ & Line & """", Loc,
                       Verbosity => IO.Debug);
             Last_Step_Ref.File_Content.Append (Line);
-
+       
       end case;
    end Add_Line;
 

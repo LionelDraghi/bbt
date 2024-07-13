@@ -39,6 +39,7 @@ begin
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
    Put_Line ("   -ad  | --auto_delete    : no prompt if deletion is needed in ""Given"" steps");
+   Put_Line ("   -ed  | --exec_dir       : run command in exec_dir instead of current dir");
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

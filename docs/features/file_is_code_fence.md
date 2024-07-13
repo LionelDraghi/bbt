@@ -1,0 +1,29 @@
+## Feature: testing the "file is" feature
+
+### Scenario: file is as expected
+
+- Given the `blaise_cendrars.txt` file
+```
+Seigneur rien n'a changé depuis que vous n'êtes plus Roi
+Le mal s'est fait une béquille de votre croix
+```
+
+- Then `blaise_cendrars.txt` is
+```
+Seigneur rien n'a changé depuis que vous n'êtes plus Roi
+Le mal s'est fait une béquille de votre croix
+```
+
+### Scenario: file is not as expected
+
+- Given the `file_is_code_fence.input` file
+```md
+# Scenario: 
+- Then `blaise_cendrars.txt` is `Un effroyable drôle m'a jeté un regard Aigu, puis a passé, mauvais, comme un poignard.`
+```
+Fixme: don't know how to have a true "code fenced" expected file definition, because bbt 
+does not recognize ~~~ as a code fence marker (and this is intentional).
+
+- When running `bbt file_is_code_fence.input`
+
+- Then I get an error

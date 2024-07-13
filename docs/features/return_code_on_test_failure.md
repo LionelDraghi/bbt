@@ -6,7 +6,7 @@ Therefore, the return status is set to fail not only when there is an internal e
 ### Scenario: return code on test success
 
 - Given the new `good_option.md` file
-```
+```md
 # Scenario: Good option
 - When I run `uut -v`
 - Then output contains `version 1.0`
@@ -22,7 +22,7 @@ uut version 1.0
 ### Scenario: return code when the test fail
 
 - Given the new `wrong_option.md` file
-```
+```md
 # Scenario: Wrong option
 - When I run `uut -wxz`
 - Then output contains `uut version`
@@ -36,7 +36,7 @@ uut version 1.0
 The first scenario hereafter fails and the second succeed, but bbt should still return an error code.
 
 - Given the new `wrong_and_good_option.md` file
-```
+```md
 # Scenario: Wrong option
 - When I run `uut -wxz`
 - Then output contains `uut version`

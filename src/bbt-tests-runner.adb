@@ -7,14 +7,16 @@
 with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;
+with BBT.Settings;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
 with Text_Utilities;        use Text_Utilities;
 
-with GNAT.Traceback.Symbolic;
-
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
+with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Runner is
 
@@ -191,12 +193,20 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_All is
    begin
+      -- First, let's move to a different exec dir, if any
+      if Settings.Exec_Dir /= "" then
+         Ada.Directories.Set_Directory (Settings.Exec_Dir);
+      end if;
+
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
-         BBT.Created_File_List.Open (To_String (D.Name) & ".created_files");
+         BBT.Created_File_List.Open
+           (Ada.Directories.Simple_Name (To_String (D.Name))
+            & ".created_files");
 
          IO.New_Line (Verbosity => IO.Normal);
-         Put_Line ("Running file " & D.Name'Image & "  ");
+         Put_Line ("## [" & (+D.Name)
+                   & "](" & (+D.Name) & ")  ");
 
          if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
          then

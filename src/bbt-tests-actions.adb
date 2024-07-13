@@ -8,14 +8,13 @@ with BBT.IO;
 with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
--- no direct with of Ada.Directories or Ada.Text_IO here
-
-with GNAT.OS_Lib;
 
 with Ada.Command_Line;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+-- no direct with of Ada.Directories or Ada.Text_IO here
 
+with GNAT.OS_Lib;
 with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Actions is
@@ -79,9 +78,9 @@ package body BBT.Tests.Actions is
       Spawn_Arg      : constant Argument_List_Access
         := Argument_String_To_List (Cmd);
    begin
-      IO.Put_Line ("Run_Cmd " & Cmd & ", output file = "
-                   & Output_Name, Verbosity => IO.Debug);
-      -- Set_Directory (Settings.Run_Dir_Name);
+      IO.Put_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
+                     ", output file = " & Output_Name,
+                   Verbosity => IO.Debug);
 
       --  for A of Spawn_Arg.all loop
       --     Put_Line ("Arg >" & A.all & "<", Verbosity => Debug);
@@ -93,7 +92,6 @@ package body BBT.Tests.Actions is
              Output_File  => Output_Name,
              Return_Code  => Return_Code,
              Err_To_Out   => True);
-      -- Set_Directory (Initial_Dir);
 
       Put_Step_Result (Step     => Step,
                        Success  => Spawn_OK,
@@ -350,8 +348,8 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Equal_To ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (Output, T2),
-                       Fail_Msg => "Output :" & Text_Image (Output) &
-                         "not equal to expected :" & Text_Image (T2),
+                       Fail_Msg => "Output:  " & Text_Image (Output) &
+                         "not equal to expected:  " & Text_Image (T2),
                        Loc      => Step.Location);
    end Output_Is;
 
@@ -363,8 +361,8 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Contains ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Contains (Output, T2),
-                       Fail_Msg => "Output " & Output'Image &
-                         "    does not contain expected  " & T2'Image,
+                       Fail_Msg => "Output:  " & Output'Image &
+                         "    does not contain expected:  " & T2'Image,
                        Loc      => Step.Location);
    end Output_Contains;
 
@@ -378,7 +376,7 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (T1, T2),
                        Fail_Msg => T1'Image &
-                         " not equal to expected  " & T2'Image,
+                         " not equal to expected:  " & T2'Image,
                        Loc      => Step.Location);
    end Files_Is;
 
@@ -392,7 +390,7 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => Contains (T1, T2),
                        Fail_Msg => "file " & To_String (Step.Subject_String) &
-                         " does not contain  " & T2'Image,
+                         " does not contain:  " & T2'Image,
                        Loc      => Step.Location);
    end File_Contains;
 

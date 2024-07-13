@@ -1,13 +1,13 @@
 ## Feature: tmp files and directories deletion
 
-Scenarios may create a lot of file and directory during run, and that's tedious to remove.
+Scenarios may create a lot of file and directory during run, and that's tedious to remove.  
 The --cleanup option is here to ensure that those files are removed after run.
 
 ### Scenario: run without --cleanup
 
 - Given the new `create_tree.md` file
 ```md
-  # Scenario: create tree
+# Scenario: create tree
   - Given the new dir `dir1`
   - Given the new dir `dir1/dir2`
   - Given the new file `dir1/dir2/f2` containing `text 2`

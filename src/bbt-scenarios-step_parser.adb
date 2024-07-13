@@ -236,7 +236,7 @@ package body BBT.Scenarios.Step_Parser is
                        Subject_Dir,  -- dir name
                        Subject_File, -- file name
                        Subject_Text, -- content of code span or following
-                       --                   code fenced lines, before verb
+                       --               code fenced lines, before verb
                        Output,
                        -- Verbs ------------------------------------------------
                        No_Verb,
@@ -352,6 +352,7 @@ package body BBT.Scenarios.Step_Parser is
          G (Then_P, No_SA, No_Subject,   Get,      Error)       := Error_Return_Code;    -- then I get error
          G (Then_P, No_SA, No_Subject,   Get_No,   Error)       := No_Error_Return_Code; -- then I get no error
          G (Then_P, No_SA, Output,       Is_V,     Object_Text) := Output_Is; -- then output is `msg`
+         G (Then_P, No_SA, Output,       Is_V,     Object_File) := Output_Is; -- then output is `expected.txt`
          G (Then_P, No_SA, Output,       Is_V,     No_Object)   := Output_Is; -- then output is followed by code fenced content
          G (Then_P, No_SA, No_Subject,   Get,      Object_Text) := Output_Is; -- then I get `msg`
          G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
@@ -466,9 +467,9 @@ package body BBT.Scenarios.Step_Parser is
       -- Put_Line ("Parsing """ & To_String (Line) & """", Verbosity => IO.Debug);
       Line_Processing : while More_Token loop
          declare
-            TT       : Token_Type;
-            Tmp      : aliased constant String := To_String (Line);
-            Tok      : constant String := Next_Token (Tmp'Access, TT);
+            TT  : Token_Type;
+            Tmp : aliased constant String := To_String (Line);
+            Tok : constant String := Next_Token (Tmp'Access, TT);
 
          begin
             case TT is
@@ -503,7 +504,8 @@ package body BBT.Scenarios.Step_Parser is
                               when Then_Step  => Prep := Then_P;
                            end case;
                         else
-                           IO.Put_Warning ("Keyword : " & Tok & " ignored", Loc);
+                           IO.Put_Warning
+                             ("Keyword : " & Tok & " ignored", Loc);
 
                         end if;
 

@@ -24,9 +24,10 @@ package body BBT.Tests is
          IO.Put_Line (Item      => Pre & (+Step.Step_String),
                       Verbosity => IO.Verbose);
       else
-         IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
+         IO.Put_Line (Item      => Pre & (+Step.Step_String)
+                      & " (" & Image (Loc) & ")  ",
                       Verbosity => IO.Normal);
-         IO.Put_Line (Image (Loc) & Fail_Msg & "  ",
+         IO.Put_Line (Fail_Msg & "  ",
                       Verbosity => IO.Normal);
       end if;
    end Put_Step_Result;

@@ -29,4 +29,5 @@
 | Then  |     | output | contains         |                   | OUTPUT_CONTAINS      |  
 | Then  |     | output | contains         | `text`            | OUTPUT_CONTAINS      |  
 | Then  |     | output | is               |                   | OUTPUT_IS            |  
+| Then  |     | output | is               | `file`            | OUTPUT_IS            |  
 | Then  |     | output | is               | `text`            | OUTPUT_IS            |  

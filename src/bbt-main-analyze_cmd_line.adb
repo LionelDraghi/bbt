@@ -63,7 +63,11 @@ begin
          elsif Opt = "-o" or Opt = "--output" then
             Next_Arg;
             Settings.Set_Output_File (Ada.Command_Line.Argument (Arg_Counter));
-            IO.Enable_Tee (Settings.Get_Output_File_Name);
+            IO.Enable_Tee (Settings.Output_File_Name);
+
+         elsif Opt = "-ed" or Opt = "--exec_dir" then
+            Next_Arg;
+            Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
             --  elsif Opt = "-n" or Opt = "--dry-run" then
             --     Settings.Dry_Run := True;

@@ -34,10 +34,13 @@ private package BBT.Settings is
    -- --------------------------------------------------------------------------
    function Initial_Directory return String;
    -- Returns Ada.Directories.Current_Directory at bbt launch.
-   -- function Run_Dir_Name return String;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Exec_Dir (Dir_Name : String);
+   function Exec_Dir return String;
 
    -- --------------------------------------------------------------------------
    procedure Set_Output_File (File_Name : String);
-   function Get_Output_File_Name return String;
+   function Output_File_Name return String;
 
 end BBT.Settings;

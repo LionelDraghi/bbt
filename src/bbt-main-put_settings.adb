@@ -26,9 +26,8 @@ begin
    Put_Line ("   Verbosity         : " & IO.Current_Verbosity'Image);
    Put_Line ("   bbt files         : " & Scenarios.Files.BBT_Files'Image);
    Put_Line ("   Initial directory : " & Initial_Directory);
-   if Get_Output_File_Name = "" then
-      Put_Line ("   Output file       : " & Get_Output_File_Name);
-   end if;
+   Put_Line ("   Exec    directory : " & Settings.Exec_Dir);
+   Put_Line ("   Output file       : " & Output_File_Name);
    Put_Line ("   Template_Name     : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Explain) & " Explain");

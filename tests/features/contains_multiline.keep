@@ -1,0 +1,9 @@
+# scenario:
+
+- then `config.ini` contains 
+```
+mode=silent
+lang=uk
+recurse=true
+autosave=true
+```

@@ -1,3 +1,9 @@
+## Feature : output is equal to a file
+
+### Scenario : test `output is equal` keyword
+
+- Given the file `help_message.txt`
+```
 uut simulate an "under test unit" that can create,
 read, or append a text to a file, with typical
 file and command line input / output / error situations.
@@ -19,4 +25,7 @@ Errors:
   To test it, call create or read without file_name
   When calling append with a file_name but without text to
   append, an unhandled exception is raised.
+```
+- When I run `uut -h`
 
+- Then output is equal to file `help_message.txt`

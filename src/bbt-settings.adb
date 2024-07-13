@@ -16,9 +16,9 @@ package body BBT.Settings is
    -- Cmd_Line        : Unbounded_String := Null_Unbounded_String;
    WD : constant access String :=
           new String'(Ada.Directories.Current_Directory);
-   Outfile_Name : access String := null;
+   Outfile_Name, Exec_Dir_Name : access String := null;
 
-   --  -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
    --     Compared_Length : constant Natural := (if Dir (Dir'Last) = '*'
    --                                            then Dir'Length - 1
@@ -36,12 +36,21 @@ package body BBT.Settings is
    function Initial_Directory return String is (WD.all);
 
    -- --------------------------------------------------------------------------
+   procedure Set_Exec_Dir (Dir_Name : String) is
+   begin
+      Exec_Dir_Name := new String'(Dir_Name);
+   end Set_Exec_Dir;
+
+   function Exec_Dir return String is
+     (if Exec_Dir_Name = null then "" else Exec_Dir_Name.all);
+
+   -- --------------------------------------------------------------------------
    procedure Set_Output_File (File_Name : String) is
    begin
       Outfile_Name := new String'(File_Name);
    end Set_Output_File;
 
-   function Get_Output_File_Name return String  is
+   function Output_File_Name return String  is
      (if Outfile_Name = null then "" else Outfile_Name.all);
 
 end BBT.Settings;

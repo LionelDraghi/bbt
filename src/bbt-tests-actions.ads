@@ -41,7 +41,7 @@ private package BBT.Tests.Actions is
                            Step     : Step_Type);
 
    procedure Output_Is (Output : Text;
-                              Step   : Step_Type);
+                        Step   : Step_Type);
    procedure Output_Contains (Output : Text;
                               Step   : Step_Type);
 
