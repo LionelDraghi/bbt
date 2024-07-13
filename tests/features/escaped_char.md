@@ -3,7 +3,7 @@
 Created file or dir may contain the space char.
 Those spaces need to be escaped with a backslash only in the `run` command, for now. 
 
-Issue #2
+[Issue #2](https://github.com/LionelDraghi/bbt/issues/2#issue-2406271975)
 
 ### Scenario: Directory with space in the name
 
