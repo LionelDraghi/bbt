@@ -10,7 +10,8 @@
   - [Tests are easy to write](#tests-are-easy-to-write)
   - [Tests are easy to run](#tests-are-easy-to-run)
   - [Tests are Self documented](#tests-are-self-documented)
-- [Objective of the project and limitations](#objective-of-the-project-and-limitations)
+- [Objective of the project](#objective-of-the-project)
+- [Limitations](#limitations)
 - [Installation](#installation)
 - [Further reading](#further-reading)
 
@@ -45,10 +46,6 @@ bbt own tests are based on feature descriptions available [here](docs/tests/feat
 
 ## Main characteristics
 
-bbt is by nature limited : it aims at providing a **simple** solution to **simple common cases**.  
-It is dedicated to command line, taking some input and producing some output.
-Limiting bbt ambitions provides substantial benefits :
-
 ### Specification is the test
 
 bbt most interesting feature is that the above scenario (that is *specification*) is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
@@ -82,11 +79,7 @@ bbt as no dependencies on external lib or tools (diff, for example), and aims at
 ### Tests are Self documented
 
 As seen above, **tests scenarios** are already documented, using a simple Markdown format that will be nicely presented on github or wherever out of the box.  
-And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions.  
-If you haven't yet experienced how easy it is to create graphics with a simple text description using [Mermaid](https://mermaid.js.org/intro/), give it a try.
-
-This is a fundamental difference with [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) : MDG files must use the `.feature.md` extension to prevent regular `.md` files from being parsed by Gherkin.  
-For bbt, there is no difference, and the objective is to limit as little as possible the burden on behavior description file creation. It is bbt job to pickup in those files the lines that are identified as the script.
+And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
 **Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file.  
 The tests results file mainly contains... the tests results :-).  
@@ -94,13 +87,15 @@ The tests results file mainly contains... the tests results :-).
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
 To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).
 
-## Objective of the project and limitations
+## Objective of the project 
 
 bbt project aim at exploring how far we can push the "specification is the test" assertion, while maintaining the main feature : ease of use. 
-> [!NOTE]
-> If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.    
 
-bbt is targeting command line programs, and aims at being an easy and obvious way to run 90% of the boring usual tests on simples input / output, command line error, environment variable, etc.  
+**If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
+
+## Limitations
+bbt is by nature limited : it aims at providing a **simple** solution to **simple common cases**.  
+It is dedicated to command line, taking some input and producing some output.
 It is not meant for :
 - UI testing or Web interaction 
 - Complex file system stuffs
