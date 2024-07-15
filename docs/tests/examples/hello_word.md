@@ -10,7 +10,7 @@ printf("Hello, World!");
 return 0;
 }
 ```
-- And there is no `main` file
+- And given there is no `main` file
 
 - When I run `/usr/bin/gcc main.c -o main`
 - And  I run `main`
