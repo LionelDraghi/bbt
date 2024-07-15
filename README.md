@@ -17,15 +17,19 @@
 ## Overview
 
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
+**The beauty of btt is that it directly uses your behavior documentation as a the test script.**
 
-It is dedicated to command line, taking some input and producing some output.
-
-The expected behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern  
-- **Given** an initial context 
-- **When** some event occurs 
-- **Then** there is some outcomes.   
+The behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) syntax.
 
 It can be as simple as :
+
+```md
+### Scenario : I want to know uut version
+
+- When I run `uut --version`
+- Then the output contains `version 1.0`
+```
+That will render this way in your documentation:
 
 ### Scenario : I want to know uut version
 
@@ -33,16 +37,17 @@ It can be as simple as :
 - Then the output contains `version 1.0`
 
 
-The attentive reader will already have noticed that this is standard Markdown. Indeed, bbt uses the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format proposal.
+Some more representative examples are available [here](docs/tests/examples_results.md).  
+(This is the results page, click on "hello_word.md" for example to see the scenario).
 
-**This is the beauty of btt : it make possible to directly uses your behavior documentation as a the test scenario.**
-
-More complete examples are available [here](docs/examples_results.md)
+Note that bbt is fully tested with bbt since 0.0.4 version.  
+bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).
 
 ## Main characteristics
 
 bbt is by nature limited : it aims at providing a **simple** solution to **simple common cases**.  
-Limiting bbt ambition provides substantial benefits :
+It is dedicated to command line, taking some input and producing some output.
+Limiting bbt ambitions provides substantial benefits :
 
 ### Specification is the test
 
@@ -52,7 +57,7 @@ Just simple and readable English sentences, that may be written by non-coders.
 
 ### Tests are easy to write
 
-bbt understand a (very) limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
+bbt uses a (very) limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
 Although simple, you don't have to learn this language by heart, you may ask for a template file with :  
 > bbt -ct (or --create_template)  
@@ -72,7 +77,7 @@ That's it : no cascading Makefile, no script.
 
 bbt as no dependencies on external lib or tools (diff, for example), and aims at reducing uses of other tools, and platform dependency.  
 
-*Describe behavior once, verify everywhere!*
+*Describe once, verify everywhere!*
 
 ### Tests are Self documented
 
@@ -80,11 +85,14 @@ As seen above, **tests scenarios** are already documented, using a simple Markdo
 And bbt is reading only specifics line in the file, meaning that the rest of the file is yours : you can give as much context as you want, using almost all Markdown possibilities (with very few limitations), and even Markdown extensions.  
 If you haven't yet experienced how easy it is to create graphics with a simple text description using [Mermaid](https://mermaid.js.org/intro/), give it a try.
 
+This is a fundamental difference with [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) : MDG files must use the `.feature.md` extension to prevent regular `.md` files from being parsed by Gherkin.  
+For bbt, there is no difference, and the objective is to limit as little as possible the burden on behavior description file creation. It is bbt job to pickup in those files the lines that are identified as the script.
+
 **Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file.  
 The tests results file mainly contains... the tests results :-).  
-(It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [here](https://github.com/LionelDraghi/bbt/discussions)).  
+(It could be handy to add also a few information like the date or platform. Not sure this is is needed, but feel free to say what could fit for you [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions)).  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
-To see what it looks like, there is an example in [bbt own tests](docs/features_results.md).
+To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).
 
 ## Objective of the project and limitations
 
@@ -113,7 +121,7 @@ Alternative tools exists, with more or less different objectives (Refer to [My q
 3. Move the bbt exec somewhere in your PATH
 
 ## Further reading
-- [User Guide](docs/UG.md) 
-- [References](docs/references.md) 
-- [Project objectives, design and status](docs/project.md)
+- [User Guide](docs/UG.md): concepts, command, line, features...
+- [References](docs/references.md) : syntax, grammar, and more details on non obvious behavior
+- [Project status](docs/project.md): changelog, tests, TDL...
 
