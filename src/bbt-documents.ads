@@ -4,8 +4,8 @@
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;             use BBT.IO;
-with Text_Utilities;        use Text_Utilities;
+with BBT.IO;         use BBT.IO;
+with Text_Utilities; use Text_Utilities;
 
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Directories;
@@ -48,6 +48,7 @@ private package BBT.Documents is
       No_Error_Return_Code,
       Output_Contains,
       Output_Is,
+      No_Output,
       Run_Cmd,
       Run_Without_Error);
 
@@ -134,8 +135,8 @@ private package BBT.Documents is
      (Positive, Document_Type);
    function Has_Background (D : Document_Type) return Boolean is
      (D.Background /= null and then not D.Background.Step_List.Is_Empty);
-   function Output_File_Name (D : Document_Type) return String is
-     (To_String (D.Name) & ".out");
+   function Output_File_Name (D : Document_Type) return String;
+
    --  function Created_Files_List_File_Name (D : Document_Type) return String is
    --    (To_String (D.Name) & ".created_files");
 

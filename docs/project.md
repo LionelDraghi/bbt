@@ -11,11 +11,11 @@ Project  <!-- omit from toc -->
 ## Development Status
 - [Changelog](changelog.md)
 - [Fixme](fixme.md)
+- [References to issue in code and tests](issues.md)
 
 ## Tests
-- [Examples](examples_results.md)
-- [Features](features_results.md): **this is where behavior is defined** 
-- *NB: Robustness tests and tests returning errors are not yet reported here*
+- [Examples](tests/examples_results.md)
+- [Features](tests/features_results.md): **this is where behavior is defined** 
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
@@ -23,8 +23,6 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 ## TDL
 
 ### Near future
-  - clean function  
-  ask bbt to delete all files created during test run (ongoing effort)
 
 ### Distant future or low priority
 - ``Given execution directory `dir1` ``  

@@ -4,7 +4,9 @@
 -- SPDX-License-Identifier: APSL-2.0
 -- -----------------------------------------------------------------------------
 
+with BBT.Settings;
 with BBT.Tests.Builder;
+with File_Utilities;
 
 with Ada.Directories; use Ada.Directories;
 
@@ -47,6 +49,21 @@ package body BBT.Documents is
          To.Failed_Step_Count := @ + 1;
       end if;
    end Add_Result;
+
+   -- --------------------------------------------------------------------------
+   function Output_File_Name (D : Document_Type) return String is
+      use BBT.Settings, File_Utilities;
+   begin
+      if Output_File_Dir (Output_File_Dir'Last) = Separator then
+         return Output_File_Dir &             To_String (D.Name) & ".out";
+      else
+         return Output_File_Dir & Separator & To_String (D.Name) & ".out";
+      end if;
+      --  (Ada.Directories.Compose
+      --     (Containing_Directory => BBT.Settings.Output_File_Dir,
+      --      Name                 => To_String (D.Name),
+      --      Extension            => ".out"));
+   end Output_File_Name;
 
    -- --------------------------------------------------------------------------
    procedure Put_Text (The_Text : Text) is

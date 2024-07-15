@@ -36,12 +36,15 @@ package body File_Utilities is
 
    begin
       -- -----------------------------------------------------------------------
-      if Dir = [1 => Separator] then return File; end if;
+      if (Dir = [1 => Separator] and File (1) = Separator)
+        or else Dir = "./"
+        or else Dir = "."
+      then return File; end if;
       -- This test is also the way to stop recursing until error
       -- when From_Dir and To_File have nothing in common.
 
       if Dir = File then return "./"; end if;
-      -- otherwise, the function returns the weird "../current_dir"
+      -- Otherwise, the function returns the weird "../current_dir"
 
       if Dir (Dir'First .. Dir'First + 1) /= File (File'First .. File'First + 1)
       then return File; end if;

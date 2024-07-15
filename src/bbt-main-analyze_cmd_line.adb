@@ -32,6 +32,12 @@ begin
    -- NB: command line, including arguments should comply with GNU Coding
    -- standards
    -- (https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
+
+   if Ada.Command_Line.Argument_Count = 0 then
+      Settings.Help_Needed := True;
+      return;
+   end if;
+
    Opt_Analysis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
 
       declare
@@ -62,8 +68,8 @@ begin
             -- Options ---------------------------------------------------------
          elsif Opt = "-o" or Opt = "--output" then
             Next_Arg;
-            Settings.Set_Output_File (Ada.Command_Line.Argument (Arg_Counter));
-            IO.Enable_Tee (Settings.Output_File_Name);
+            Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
+            IO.Enable_Tee (Settings.Result_File_Name);
 
          elsif Opt = "-ed" or Opt = "--exec_dir" then
             Next_Arg;

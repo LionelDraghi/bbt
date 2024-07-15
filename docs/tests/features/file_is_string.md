@@ -1,4 +1,4 @@
-## Feature: "file is" followed by a code fence
+## Feature: "file is" followed by a code span (a string)
 
 ### Scenario: test on a single line file
 

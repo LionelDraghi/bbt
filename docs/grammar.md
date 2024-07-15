@@ -17,11 +17,15 @@
 | Then  |     |        | get              |                   | OUTPUT_IS            |  
 | Then  |     |        | get              | `text`            | OUTPUT_IS            |  
 | Then  |     |        | get              | error             | ERROR_RETURN_CODE    |  
+| Then  |     |        | get no           | output            | NO_OUTPUT            |  
 | Then  |     |        | get no           | error             | NO_ERROR_RETURN_CODE |  
 | Then  |     |        | is               | `file`            | CHECK_FILE_EXISTENCE |  
 | Then  |     |        | is               | `dir`             | CHECK_DIR_EXISTENCE  |  
+| Then  |     |        | is               | error             | ERROR_RETURN_CODE    |  
+| Then  |     |        | is no            | output            | NO_OUTPUT            |  
 | Then  |     |        | is no            | `file`            | CHECK_NO_FILE        |  
 | Then  |     |        | is no            | `dir`             | CHECK_NO_DIR         |  
+| Then  |     |        | is no            | error             | NO_ERROR_RETURN_CODE |  
 | Then  |     | `file` | contains         |                   | FILE_CONTAINS        |  
 | Then  |     | `file` | contains         | `text`            | FILE_CONTAINS        |  
 | Then  |     | `file` | is               |                   | FILE_IS              |  

@@ -41,7 +41,7 @@ package body BBT.Scenarios.Files is
       use Ada.Directories;
    begin
       if Full_Name (File_Name) /= Full_Name (Settings.Template_Name)
-        and then Full_Name (File_Name) /= Output_File_Name
+        and then Full_Name (File_Name) /= Result_File_Name
       then
          --  Filters the md file created with --create-template, that is
          --  not supposed to be executed, and the output file if any.
@@ -57,7 +57,6 @@ package body BBT.Scenarios.Files is
 
    is
       use Ada.Directories;
-      -- Current : constant String := Current_Directory;
 
       -- -----------------------------------------------------------------------
       procedure Walk (Name : String) is

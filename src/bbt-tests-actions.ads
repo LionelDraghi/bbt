@@ -40,6 +40,8 @@ private package BBT.Tests.Actions is
    procedure Check_No_Dir (Dir_Name : String;
                            Step     : Step_Type);
 
+   procedure Check_No_Output (Output : Text;
+                              Step   : Step_Type);
    procedure Output_Is (Output : Text;
                         Step   : Step_Type);
    procedure Output_Contains (Output : Text;

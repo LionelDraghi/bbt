@@ -9,9 +9,10 @@ The --cleanup option is here to ensure that those files are removed after run.
 ```md
 # Scenario: create tree
   - Given the new dir `dir1`
-  - Given the new dir `dir1/dir2`
-  - Given the new file `dir1/dir2/f2` containing `text 2`
-  - Given the new file `f1` containing `text 1`
+  - And   the new dir `dir1/dir2`
+  - And   the new file `dir1/dir2/f2` containing `text 2`
+  - And   the new file `f1` containing `text 1`
+  - And   the new dir `dir3/dir4/dir5`
 
   - Then there is a `dir1/dir2/f2` file
   - And  there is a `f1` file
@@ -28,3 +29,5 @@ The --cleanup option is here to ensure that those files are removed after run.
 
 - Then there is no `dir1` directory
 - And  there is no `f1` file
+
+[Issue #3](https://github.com/LionelDraghi/bbt/issues/3) this tests fails : - Then there is no `dir3` directory

@@ -36,7 +36,7 @@ begin
    -- --------------------------------------------------------------------------
    Analyze_Cmd_Line;
    IO.Set_Reference_Directory (Settings.Initial_Directory);
-   --  To get the file name relative to ths start dir, and not
+   --  To get the file name relative to the start dir, and not
    --  absolute Path.
 
    if IO.Some_Error then
@@ -46,9 +46,14 @@ begin
       return;
    end if;
 
-   if Settings.No_File_Given then
-      Scenarios.Files.Find_BBT_Files (Settings.Recursive);
+   if Settings.Help_Needed then
+      Put_Help;
+      return;
    end if;
+
+   --  if Settings.No_File_Given then
+   --     Scenarios.Files.Find_BBT_Files (Settings.Recursive);
+   --  end if;
 
    -- Command processing :
    --   Principle : "There can be only one". If one action is found, then
@@ -64,11 +69,6 @@ begin
 
    if Settings.Create_Template then
       Create_Template;
-      return;
-   end if;
-
-   if Settings.Help_Needed then
-      Put_Help;
       return;
    end if;
 
@@ -95,7 +95,9 @@ begin
    if Scenarios.Files.No_BBT_File then
       -- No file given on cmd line, and no bbt file found
       IO.Put_Error ("No md file found", IO.No_Location);
+
    else
+      -- HERE we hare in the normal execution flow
       for File of Scenarios.Files.BBT_Files loop
          IO.Put_Line ("Loading " & File'Image, IO.No_Location, IO.Debug);
          Scenarios.Files.Analyze_MDG_File (File);
@@ -103,34 +105,38 @@ begin
       Tests.Builder.Duplicate_Multiple_Run;
       -- Process in all recorded scenario the
       -- duplication of the "run X or Y" steps.
+
+      if Settings.Explain then
+         -- Dry run --
+
+         -- Let's display our rebuild of the original test definition file
+         -- comment lines are filtered out
+         Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
+
+      else
+         -- Real run --
+
+         --  declare
+         --     use Ada.Calendar;
+         --     Start_Time : constant Time := Clock;
+         --     End_Time   : Time;
+         --  begin
+         Tests.Runner.Run_All;
+         Documents.Compute_Overall_Tests_Results;
+         Documents.Put_Overall_Results;
+
+         --     End_Time := Clock;
+         --     IO.New_Line;
+         --     IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
+         --     IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
+         --  end;
+      end if;
    end if;
 
-   if Settings.Explain then
-      -- let's display our rebuild of the original test definition file
-      -- comment lines are filtered out
-      Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
-
-   else
-      -- Finally, the "normal" run situation:
-
-      --  declare
-      --     use Ada.Calendar;
-      --     Start_Time : constant Time := Clock;
-      --     End_Time   : Time;
-      --  begin
-      Tests.Runner.Run_All;
-      Documents.Compute_Overall_Tests_Results;
-      Documents.Put_Overall_Results;
-
-      --     End_Time := Clock;
-      --     IO.New_Line;
-      --     IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
-      --     IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
-      --  end;
-
-      -- "run" is the default action, so they shouldn't be any other action
-      --  processed after that point.
-   end if;
+   -- --------------------------------------------------------------------
+   -- "run" is the default action, so they shouldn't be any other action
+   --  processed after that point.
+   -- --------------------------------------------------------------------
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
    or else Overall_Results (Failed) /= 0

@@ -237,7 +237,7 @@ package body BBT.Scenarios.Step_Parser is
                        Subject_File, -- file name
                        Subject_Text, -- content of code span or following
                        --               code fenced lines, before verb
-                       Output,
+                       Output_Subj,
                        -- Verbs ------------------------------------------------
                        No_Verb,
                        Run,
@@ -250,6 +250,7 @@ package body BBT.Scenarios.Step_Parser is
                        Is_No,
                        -- Objects ----------------------------------------------
                        No_Object,
+                       Output_Obj,
                        Object_File,
                        Object_Dir,  -- file or dir name
                        Object_Text, -- content of code span or following
@@ -298,7 +299,7 @@ package body BBT.Scenarios.Step_Parser is
             when No_SA            => return "";
             when New_SA           => return "new";
             when No_Subject       => return "";
-            when Output           => return "output";
+            when Output_Subj      => return "output";
             when Subject_File     => return "`file`";
             when Subject_Dir      => return "`dir`";
             when Subject_Text     => return "`text`";
@@ -312,6 +313,7 @@ package body BBT.Scenarios.Step_Parser is
             when Is_V             => return "is";
             when Is_No            => return "is no";
             when No_Object        => return "";
+            when Output_Obj       => return "output";
             when Object_File      => return "`file`";
             when Object_Dir       => return "`dir`";
             when Object_Text      => return "`text`";
@@ -351,17 +353,21 @@ package body BBT.Scenarios.Step_Parser is
          G (Then_P, No_SA, No_Subject,   Is_No,    Object_Dir)  := Check_No_Dir;        -- Then there is no `dir1` directory
          G (Then_P, No_SA, No_Subject,   Get,      Error)       := Error_Return_Code;    -- then I get error
          G (Then_P, No_SA, No_Subject,   Get_No,   Error)       := No_Error_Return_Code; -- then I get no error
-         G (Then_P, No_SA, Output,       Is_V,     Object_Text) := Output_Is; -- then output is `msg`
-         G (Then_P, No_SA, Output,       Is_V,     Object_File) := Output_Is; -- then output is `expected.txt`
-         G (Then_P, No_SA, Output,       Is_V,     No_Object)   := Output_Is; -- then output is followed by code fenced content
+         G (Then_P, No_SA, No_Subject,   Is_V,     Error)       := Error_Return_Code;    -- then there is an error
+         G (Then_P, No_SA, No_Subject,   Is_No,    Error)       := No_Error_Return_Code; -- then there is no error
+         G (Then_P, No_SA, Output_Subj,  Is_V,     Object_Text) := Output_Is; -- then output is `msg`
+         G (Then_P, No_SA, Output_Subj,  Is_V,     Object_File) := Output_Is; -- then output is `expected.txt`
+         G (Then_P, No_SA, Output_Subj,  Is_V,     No_Object)   := Output_Is; -- then output is followed by code fenced content
          G (Then_P, No_SA, No_Subject,   Get,      Object_Text) := Output_Is; -- then I get `msg`
          G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
-         G (Then_P, No_SA, Output,       Contains, Object_Text) := Output_Contains; -- then output contains `msg`
-         G (Then_P, No_SA, Output,       Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
+         G (Then_P, No_SA, Output_Subj,  Contains, Object_Text) := Output_Contains; -- then output contains `msg`
+         G (Then_P, No_SA, Output_Subj,  Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
          G (Then_P, No_SA, Subject_File, Is_V,     Object_Text) := File_Is; -- then `config.ini` is `mode=silent`
          G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
          G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
          G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content
+         G (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj)   := No_Output; -- then I get no output
+         G (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj)   := No_Output; -- then there is no output
          return G;
       end Create_Grammar;
 
@@ -554,7 +560,11 @@ package body BBT.Scenarios.Step_Parser is
                         Object := Error;
 
                      elsif Lower_Keyword = "output" then
-                        Subject := Output;
+                        if In_Subject_Part then
+                           Subject := Output_Subj;
+                        else
+                           Object := Output_Obj;
+                        end if;
 
                      elsif Lower_Keyword = "contains" then
                         Verb := Contains;

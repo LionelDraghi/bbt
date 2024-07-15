@@ -6,18 +6,25 @@
 
 package File_Utilities is
 
-   Separator : constant Character := '/'; -- OS dependent!
+   Separator : constant Character := '/'; -- Fixme: OS dependent!
 
    -- --------------------------------------------------------------------------
    function Short_Path (From_Dir : String;
                         To_File  : String;
                         Prefix   : String := "") return String
-     with Pre => From_Dir (From_Dir'First) = Separator;
-   --
-   -- Short_Path gives a relative Path from From_Dir to To_File.
+     ; -- with Pre => From_Dir (From_Dir'First) = To_File (To_File'First);
+
+   -- - Short_Path gives a relative Path from From_Dir to To_File.
    --   If  From_Dir => "/home/tests/",
    --   and To_File  => "/home/tests/mysite/site/idx.txt"
    --   then Short_Path returns     "mysite/site/idx.txt"
+   --
+   --   If  From_Dir => "../tests/",
+   --   and To_File  => "../tests/mysite/site/idx.txt"
+   --   then Short_Path returns  "mysite/site/idx.txt"
+   --
+   -- - NOTE that if both dir & file are not absolute path, then we assume that
+   --   both are rooted in the same directory.
    --
    -- - From_Dir must be an absolute Path, that is starting with a
    --   Separator.

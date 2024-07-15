@@ -316,7 +316,7 @@ package body BBT.Tests.Builder is
             Put_Line ("File content = """ & Line & """", Loc,
                       Verbosity => IO.Debug);
             Last_Step_Ref.File_Content.Append (Line);
-       
+
       end case;
    end Add_Line;
 

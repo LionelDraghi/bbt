@@ -12,6 +12,7 @@ and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2
   - [Added]   in scenarios, `dir` is now a synonym of `directory`
   - [Changed] bbt bootstraps! bbt now runs bbt tests that return error code.
   - [Added]   `--exec_dir` option to run scenario in a dir different from current
+  - [Added]   New `no output` syntax
   
 - [0.0.3]
   - [Added] text file creation

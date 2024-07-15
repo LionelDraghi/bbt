@@ -7,7 +7,7 @@ build:
 	# Alire profiles : --release --validation --development (default)
 
 
-check: bbt
+check: ./bbt
 	@ $(MAKE) -s check --directory=tests
 	# --------------------------------------------------------------------
 	# echo
@@ -28,13 +28,10 @@ check: bbt
 	# cat cov_sum.txt
 	# echo
 
-doc:
+doc: ./bbt
 	echo --- doc:
+	@ $(MAKE) doc --directory=tests
 	
-	mv tests/*results.md          docs/
-	cp `find tests/examples/*.md` docs/examples
-	cp `find tests/features/*.md` docs/features
-
 	./bbt -lg > docs/grammar.md
 	./bbt -lk > docs/keywords.md
 	./bbt -ct
@@ -47,6 +44,14 @@ doc:
 	echo '---------|-----'             		    >> /tmp/fixme.md
 	rgrep -n "Fixme:" src/*     | sed "s/:/|/2"	>> /tmp/fixme.md
 	mv /tmp/fixme.md docs/fixme.md
+
+	echo 'Issue references in current version:'	>  /tmp/issue.md
+	echo '------------------------------------'	>> /tmp/issue.md
+	echo                                		>> /tmp/issue.md
+	echo 'Location | Text'             		    >> /tmp/issue.md
+	echo '---------|-----'             		    >> /tmp/issue.md
+	rgrep -n "Issue #" src/ docs/tests/ | sed "s/:/|/2"	>> /tmp/issue.md
+	mv /tmp/issue.md docs/issue.md
 
 	echo OK
 	echo
@@ -63,6 +68,6 @@ clean:
 	alr clean
 	cd tools && alr clean
 	@ $(MAKE) clean --directory=tests
-	@ - rm -rf config.ini *.out dir1
+	@ - rm -rf config.ini *.out dir1 docs/tests/*/*.out
 	echo OK
 	echo

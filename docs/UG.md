@@ -2,8 +2,9 @@ User Guide  <!-- omit from toc -->
 ==========
 
 - [Basic Concepts](#basic-concepts)
-- [Basic Features](#basic-features)
-- [More advanced feature and cool stuff](#more-advanced-feature-and-cool-stuff)
+- [Command line examples](#command-line-examples)
+- [Features](#features)
+  - [Cleanup](#cleanup)
   - [Background](#background)
   - [No more tests directory?](#no-more-tests-directory)
   - [Removing Files and directories](#removing-files-and-directories)
@@ -63,12 +64,27 @@ Fenced code block are used to specify multiline output or file content, as in:
     ```
     ~~~
 
+## Command line examples
 
-## Basic Features
+> bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
 
-TBD
+  This example illustrate the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third.
 
-## More advanced feature and cool stuff
+> bbt --auto_delete tests/scenario.md 
+ 
+  When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
+
+## Features
+
+### Cleanup
+
+For test purpose, scenarios may create multiples files and dir, and it is tedious to cleanup all those files.  
+bbt provides two solutions to help :
+1. for the files created by bbt, the `--cleanup` option  
+   bbt records all files it creates and try to delete them.  
+   Note that this is done document per document (file per file), meaning that if a scenario in *y.md* rely on things created in *x.md* (bad practice), it will fail, because they will be deleted at the end of *x.md* run, before *y.md* start. 
+2. for the files created by the software under test, the `--exec_dir` option  
+   You can specify a directory where the scenario will be run. If your scenario is not creating files somewhere else, then you will have only one dir to remove.
 
 ### Background
 *bbt* supports a Background scenario, that is a special scenario that will be executed before the start of each following scenario.
@@ -81,7 +97,7 @@ TBD
   - When I run `uut append "size=80x40" config.ini` 
   - Then `config.ini` should contains `"size=80x40"`
 
-### Scenario : same check, but after Backgroud execution
+### Scenario : same check, but after Background execution (should fail)
   - Then `config.ini` should contains `"size=80x40"`
 ```
 
@@ -92,14 +108,30 @@ Background may appears at the beginning, at document level, or at feature level,
 Before each scenario, the document background will be executed, and then the feature background.
 
 ### No more tests directory?
-Think about it : tests description are in the docs/tests/ directory, and you want the result in the docs/ directory.  
-You just have to run 
-```
-bbt -o docs/tests_results.md docs/tests/*.md
-```
-The title is kind of a provocation. Obviously, you need to run the tests somewhere and there will be residue. But as there is no input or output to keep in that directory (unless debugging the test himself), you can as well delete the execution dir after each run.
+It's a common practice to have a dev tree structured like that:
+- src/
+- docs/
+- obj/
+- tests/  
+etc.
+
+And usually the tests directory contains the tests definition, is the place to run them, and the place where results are produced.
+
+But bbt goals is to have a specification, that normally reside in docs/, directly executable.  
+Test results are also part of the documentation. 
+And execution may be done in /tmp, why not, thanks to the --exec_dir option.
+The title sounds kind of a provocation, it is not, unless you have other kind of tests to put there. 
 
 ### Removing Files and directories
+
+When setting up a test, we often need to check that there is no pre-existing file or directory.  
+To avoid the burden of deleting those files in a Makefile or a script, bbt interpret a line like :
+> ``Given there is no `.config` file``  
+
+*if there is, delete it*  
+To avoid any unwanted deletion, it is important to understand the following behavior.
+
+> [!WARNING] Note that I consider the current implementation of this feature far too complex, with a combination of scenario syntax and bbt option. A simplification in future version is very likely, with the introduction of interactive confirm.
 
 #### using the negative form
 

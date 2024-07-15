@@ -29,7 +29,7 @@ private package BBT.Settings is
    List_Grammar       : Boolean := False;
    Auto_Delete        : Boolean := False;
    Cleanup            : Boolean := False;
-   Template_Name      : constant String := "./bbt_template.md";
+   Template_Name      : constant String := "bbt_template.md";
 
    -- --------------------------------------------------------------------------
    function Initial_Directory return String;
@@ -40,7 +40,12 @@ private package BBT.Settings is
    function Exec_Dir return String;
 
    -- --------------------------------------------------------------------------
-   procedure Set_Output_File (File_Name : String);
-   function Output_File_Name return String;
+   function Output_File_Dir return String;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Result_File (File_Name : String);
+   function Result_File_Name return String;
+   function Result_Dir       return String;
+   -- returns the containing directory of the file_name
 
 end BBT.Settings;

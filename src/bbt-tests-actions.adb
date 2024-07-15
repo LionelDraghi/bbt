@@ -47,6 +47,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    function Get_Expected (Step : Step_Type) return Text is
       use type Text;
+      No_File_Or_String_Given : exception;
    begin
       if Step.File_Content /= Empty_Text then
          -- File content provided in code fenced lines
@@ -62,6 +63,7 @@ package body BBT.Tests.Actions is
          end if;
       else
          IO.Put_Error ("No file or string given", Step.Location);
+         raise No_File_Or_String_Given;
          return Empty_Text;
       end if;
    end Get_Expected;
@@ -308,6 +310,17 @@ package body BBT.Tests.Actions is
                          Dir_Name'Image & " shouldn't exists",
                        Loc      => Step.Location);
    end Check_No_Dir;
+
+   -- --------------------------------------------------------------------------
+   procedure Check_No_Output (Output : Text;
+                              Step   : Step_Type) is
+      use Texts;
+   begin
+      Put_Step_Result (Step     => Step,
+                       Success  => Output = Empty_Text,
+                       Fail_Msg => "output not null : " & Output'Image,
+                       Loc      => Step.Location);
+   end Check_No_Output;
 
    -- --------------------------------------------------------------------------
    procedure Setup_No_File (Step : Step_Type) is

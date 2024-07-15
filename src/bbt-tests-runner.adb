@@ -10,6 +10,7 @@ with BBT.IO;
 with BBT.Settings;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
+with File_Utilities;
 with Text_Utilities;        use Text_Utilities;
 
 with Ada.Directories;
@@ -64,6 +65,9 @@ package body BBT.Tests.Runner is
 
             when Output_Is =>
                Output_Is (Get_Text (Output_File_Name (The_Doc)), Step);
+
+            when No_Output =>
+               Check_No_Output (Get_Text (Output_File_Name (The_Doc)), Step);
 
             when Output_Contains =>
                -- example : Then the output contains `--version`
@@ -156,9 +160,8 @@ package body BBT.Tests.Runner is
    end Run_Feature_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
-      function Link_Image (Scen : Scenario_Type) return String is
-        ("[" & (+Scen.Name) & "](" & (+Parent_Doc (Scen).Name) & ")");
+   procedure Run_Scenario_List (L            : in out Scenario_Lists.Vector;
+                                Path_To_Scen :        String) is
 
    begin
       for Scen of L loop
@@ -175,28 +178,35 @@ package body BBT.Tests.Runner is
          -- And finally run the scenario
          Run_Scenario (Scen);
 
-         case Documents.Result (Scen) is
-            when Empty =>
-               -- Note the two spaces at the end of each line, to cause a
-               -- new line in Markdown format when this line is followed
-               -- by an error message.
-               Put_Line ("  - [ ] scenario " & Link_Image (Scen) &
-                           " is empty, nothing tested  ");
-            when Successful =>
-               Put_Line ("  - [X] scenario " & Link_Image (Scen) & " pass  ");
-            when Failed =>
-               Put_Line ("  - [ ] scenario " & Link_Image (Scen) & " fails  ");
-         end case;
+         declare
+            Link_Image : constant String
+              := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+         begin
+            case Documents.Result (Scen) is
+               when Empty =>
+                  -- Note the two spaces at the end of each line, to cause a
+                  -- new line in Markdown format when this line is followed
+                  -- by an error message.
+                  Put_Line ("  - [ ] scenario " & Link_Image &
+                              " is empty, nothing tested  ");
+               when Successful =>
+                  Put_Line ("  - [X] scenario " & Link_Image & " pass  ");
+               when Failed =>
+                  Put_Line ("  - [ ] scenario " & Link_Image & " fails  ");
+            end case;
+         end;
+
       end loop;
    end Run_Scenario_List;
 
    -- --------------------------------------------------------------------------
    procedure Run_All is
+      use File_Utilities;
    begin
       -- First, let's move to a different exec dir, if any
-      if Settings.Exec_Dir /= "" then
+      -- if Settings.Exec_Dir /= "" then
          Ada.Directories.Set_Directory (Settings.Exec_Dir);
-      end if;
+      -- end if;
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
@@ -205,32 +215,49 @@ package body BBT.Tests.Runner is
             & ".created_files");
 
          IO.New_Line (Verbosity => IO.Normal);
-         Put_Line ("## [" & (+D.Name)
-                   & "](" & (+D.Name) & ")  ");
+         begin
+            declare
+               Path_To_Scen  : constant String
+                 := Short_Path (From_Dir => Settings.Result_Dir,
+                                To_File  => (+D.Name));
+            begin
+               --  IO.Put_Line ("From_Dir   => " & Settings.Output_Dir);
+               --  IO.Put_Line ("To_File    => " & (+D.Name));
+               --  IO.Put_Line ("Short_Path => " & Path_To_Scen);
+               Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
+                         & "](" & (Path_To_Scen) & ")  ");
+               if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
+               then
+                  Put_Warning ("No scenario in document " & D.Name'Image & "  ",
+                               D.Location);
+               end if;
 
-         if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
-         then
-            Put_Warning ("No scenario in document " & D.Name'Image & "  ",
-                         D.Location);
-         end if;
+               -- Run scenarios directly attached to the document (not in a Feature)
+               Run_Scenario_List (D.Scenario_List, Path_To_Scen);
 
-         -- Run scenarios directly attached to the document (not in a Feature)
-         Run_Scenario_List (D.Scenario_List);
+               for F of D.Feature_List loop
+                  -- Then run scenarios attached to each Feature
+                  IO.Put_Line ("Running feature " & F.Name'Image & "  ",
+                               Verbosity => Verbose);
 
-         for F of D.Feature_List loop
-            -- Then run scenarios attached to each Feature
-            IO.Put_Line ("Running feature " & F.Name'Image & "  ",
-                         Verbosity => Verbose);
+                  if F.Scenario_List.Is_Empty then
+                     Put_Warning ("No scenario in feature " & F.Name'Image & "  ",
+                                  F.Location);
+                  else
+                     Run_Scenario_List (F.Scenario_List, Path_To_Scen);
+                  end if;
 
-            if F.Scenario_List.Is_Empty then
-               Put_Warning ("No scenario in feature " & F.Name'Image & "  ",
-                            F.Location);
-            else
-               Run_Scenario_List (F.Scenario_List);
-            end if;
+               end loop;
 
-         end loop;
-
+            end;
+         exception
+            when E : others =>
+               Put_Exception (Ada.Exceptions.Exception_Message (E)
+                              & GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
+               IO.Put_Line ("From_Dir   => " & Settings.Result_Dir);
+               IO.Put_Line ("To_File    => " & (+D.Name));
+               -- IO.Put_Line ("Short_Path => " & Path_To_Scen);
+         end;
          Created_File_List.Delete_All;
 
       end loop;

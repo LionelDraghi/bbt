@@ -42,15 +42,24 @@ package body BBT.Settings is
    end Set_Exec_Dir;
 
    function Exec_Dir return String is
-     (if Exec_Dir_Name = null then "" else Exec_Dir_Name.all);
+     (if Exec_Dir_Name = null then Ada.Directories.Current_Directory
+      else Exec_Dir_Name.all);
 
    -- --------------------------------------------------------------------------
-   procedure Set_Output_File (File_Name : String) is
+   function Output_File_Dir return String is (Exec_Dir);
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Result_File (File_Name : String) is
    begin
       Outfile_Name := new String'(File_Name);
-   end Set_Output_File;
+   end Set_Result_File;
 
-   function Output_File_Name return String  is
-     (if Outfile_Name = null then "" else Outfile_Name.all);
+   function Result_File_Name return String  is
+     (if Outfile_Name = null then ""
+      else Outfile_Name.all);
+
+   function Result_Dir return String is
+     (if Outfile_Name = null then Ada.Directories.Current_Directory
+      else Ada.Directories.Containing_Directory (Outfile_Name.all));
 
 end BBT.Settings;
