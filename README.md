@@ -87,7 +87,7 @@ This is why bbt will probably not be the only test tool of your project, **and d
 ## Status of the project
 
 As of version 0.0.4, bbt is in an early stage, meaning that his behavior is subject to changes.  
-Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions)). 
+Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
 The code has grown fast in three months, and is far from being clean.  
 And there is yet no design description. 
