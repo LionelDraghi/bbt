@@ -92,7 +92,7 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 The code has grown fast in three months, and is far from being clean.  
 And there is yet no design description. 
 
-Nevertheless, bbt is working. It has as a [test base](docs/tests/features_results.md).
+Nevertheless, bbt is working. It has as a [test base](docs/tests/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project started the migration of its large tests base to bbt.  
 
 ## Limitations
