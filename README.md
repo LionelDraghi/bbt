@@ -9,7 +9,6 @@
   - [Specification is the test](#specification-is-the-test)
   - [Tests are easy to write](#tests-are-easy-to-write)
   - [Tests are easy to run](#tests-are-easy-to-run)
-  - [Tests are Self documented](#tests-are-self-documented)
 - [Objective of the project](#objective-of-the-project)
 - [Limitations](#limitations)
 - [Installation](#installation)
