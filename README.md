@@ -75,8 +75,6 @@ That's it, no cascading Makefile, no scripting.
 
 bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on all platforms without further complications.  
 
-*Describe once, verify everywhere!*
-
 ## Objective of the project 
 
 bbt project aim at exploring how far we can push the "specification in natural language is the single source of truth" assertion, while maintaining the main feature : ease of use. 
