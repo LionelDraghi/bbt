@@ -62,25 +62,17 @@ To see what it looks like, there is an example in [bbt own tests](docs/tests/fea
 
 ### Tests are easy to write
 
-bbt uses a (very) limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
+bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
-Although simple, you don't have to learn this language by heart, you may ask for a template file with :  
-> bbt -ct (or --create_template)  
-
-or ask for the complete grammar with :  
-> bbt -lg (or --list_grammar)
+Although simple, you don't have to learn this language by heart, you may ask for a template by running `bbt -ct (or --create_template)`, and ask for the complete grammar with `bbt -lg (or --list_grammar)`.
 
 ### Tests are easy to run
 
-To run the test :  
-> bbt my_scenario.md
-
-Or to run all the tests files in the `tests` tree :
-> bbt -r tests
-
+To run a scenario : `bbt my_scenario.md`  
+Or to run all the md files in the `tests` tree `bbt -r tests`
 That's it : no cascading Makefile, no script.
 
-bbt as no dependencies on external lib or tools (diff, for example), and aims at reducing uses of other tools, and platform dependency.  
+bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on all platforms without further complications.  
 
 *Describe once, verify everywhere!*
 
@@ -90,10 +82,10 @@ bbt project aim at exploring how far we can push the "specification in natural l
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
-bbt is by nature limited to command line, taking some input and producing some output.
-It is not meant for UI testing, complex systems, unit testing, API testing, etc., because it is unlikely that a natural language description is the easiet way to go for those kind of tests.  
-It probably won't be the only test tool of your project, **and do not aim at that!** .  
-
+bbt may be by nature limited. It is dedicated to in line command, taking some input and producing some output.
+It is not meant for specifying or testing UI, complex systems, unit testing, API, etc..  
+Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.  
+This is why bbt will probably not be the only test tool of your project, **and do not aim at that!** .  
 
 ## Status of the project
 
