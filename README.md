@@ -30,12 +30,12 @@ It can be as simple as :
 - Then the output contains `version 1.0`
 ```
 That will render this way in your documentation:
-
+---
 ### Scenario : I want to know uut version <!-- omit from toc -->
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
-
+---
 
 Some more representative examples are available [here](docs/tests/examples_results.md).  
 (This is the results page, click on "hello_word.md" for example to see the scenario).
