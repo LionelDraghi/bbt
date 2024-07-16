@@ -74,14 +74,14 @@ bbt as no dependencies on external lib or tools (diff, for example), to ensure t
 
 ## Objective of the project 
 
-bbt project aim at exploring how far we can push the "specification in natural language is the single source of truth" assertion, while maintaining the main feature : ease of use. 
+bbt project aim at exploring how far we can push the "specification in natural language is the single source of truth" motto, while maintaining the main feature : ease of use. 
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
-bbt may be by nature limited: it is dedicated to in line command, taking some input and producing some output.
-It is not meant for specifying or testing UI, complex systems, unit testing, API, etc..  
-Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
-To make it short: **bbt do not aim at being your only test tool**.   
+bbt as a precise scope: it is dedicated to in line command, taking some input and producing some output.
+Keep in mind that it is not meant for specifying or testing UI, complex systems, unit testing, API, etc. Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
+
+As a consequence, bbt will probably not be the only test tool of your project.   
 
 ## Status of the project
 
