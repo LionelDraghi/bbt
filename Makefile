@@ -2,8 +2,8 @@
 all: build check doc
 
 build:
-	alr build --development
-	cd tools && alr build --development
+	alr build --release
+	cd tools && alr build --release
 	# Alire profiles : --release --validation --development (default)
 
 

@@ -11,40 +11,14 @@ abstract project Bbt_Config is
    Ada_Compiler_Switches := External_As_List ("ADAFLAGS", " ");
    Ada_Compiler_Switches := Ada_Compiler_Switches &
           (
-            "-Og" -- Optimize for debug
+            "-O3" -- Optimize for performance
+           ,"-gnatn" -- Enable inlining
            ,"-ffunction-sections" -- Separate ELF section for each function
            ,"-fdata-sections" -- Separate ELF section for each variable
-           ,"-g" -- Generate debug info
-           ,"-gnatwa" -- Enable all warnings
-           ,"-gnatw.X" -- Disable warnings for No_Exception_Propagation
-           ,"-gnatVa" -- All validity checks
-           ,"-gnaty3" -- Specify indentation level of 3
-           ,"-gnatya" -- Check attribute casing
-           ,"-gnatyA" -- Use of array index numbers in array attributes
-           ,"-gnatyB" -- Check Boolean operators
-           ,"-gnatyb" -- Blanks not allowed at statement end
-           ,"-gnatyc" -- Check comments
-           ,"-gnaty-d" -- Disable check no DOS line terminators present
-           ,"-gnatye" -- Check end/exit labels
-           ,"-gnatyf" -- No form feeds or vertical tabs
-           ,"-gnatyh" -- No horizontal tabs
-           ,"-gnatyi" -- Check if-then layout
-           ,"-gnatyI" -- check mode IN keywords
-           ,"-gnatyk" -- Check keyword casing
-           ,"-gnatyl" -- Check layout
-           ,"-gnatym" -- Check maximum line length
-           ,"-gnatyn" -- Check casing of entities in Standard
-           ,"-gnatyO" -- Check that overriding subprograms are explicitly marked as such
-           ,"-gnatyp" -- Check pragma casing
-           ,"-gnatyr" -- Check identifier references casing
-           ,"-gnatyS" -- Check no statements after THEN/ELSE
-           ,"-gnatyt" -- Check token spacing
-           ,"-gnatyu" -- Check unnecessary blank lines
-           ,"-gnatyx" -- Check extra parentheses
            ,"-gnatW8" -- UTF-8 encoding for wide characters
           );
 
    type Build_Profile_Kind is ("release", "validation", "development");
-   Build_Profile : Build_Profile_Kind := "development";
+   Build_Profile : Build_Profile_Kind := "release";
 
 end Bbt_Config;

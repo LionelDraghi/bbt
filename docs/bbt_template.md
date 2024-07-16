@@ -5,11 +5,11 @@ No special marks for comments, it's just normal markdown text.
 ### Scenario : version message
   - When I run `uut -v` or `uut --version`
   - Then I get no error
-  - And  I get `uut v0.1.0`
+  - And I get 'uut v0.1.0'
 
 ### Scenario : Help message
   - When I run `uut -h` or `uut --help`
-  - Then I get
+  - Then I get no error
 ```
 uut usage :
 uut file_name create|read|append [-with text]
