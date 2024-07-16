@@ -64,13 +64,13 @@ To see what it looks like, there is an example in [bbt own tests](docs/tests/fea
 
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
-Although simple, you don't have to learn this language by heart, you may ask for a template by running `bbt -ct (or --create_template)`, and ask for the complete grammar with `bbt -lg (or --list_grammar)`.
+Although simple, you don't have to learn this language by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
 
 ### Tests are easy to run
 
 To run a scenario : `bbt my_scenario.md`  
-Or to run all the md files in the `tests` tree `bbt -r tests`
-That's it : no cascading Makefile, no script.
+Or to run all the md files in the *./tests* tree `bbt -r tests`  
+That's it : no cascading Makefile, no scripting.
 
 bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on all platforms without further complications.  
 
@@ -96,7 +96,7 @@ The code has grown fast in three months, and is far from being clean.
 And there is yet no design description. 
 
 Nevertheless, bbt is working. It has as a [test base](docs/tests/features_results.md).
-My own project [acc](https://github.com/LionelDraghi/ArchiCheck) started the migration of its large tests base to bbt.  
+In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project started the migration of its large tests base to bbt.  
 
 ## Limitations
 
