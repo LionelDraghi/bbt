@@ -52,7 +52,7 @@ bbt most interesting feature is that the above scenario (that is *specification*
 
 Just simple and readable English sentences, that may be written by non-coders.  
 
-bbt is reading only specifics line in the specification, meaning that the rest of the file is yours : you can give as much context as you want, using all Markdown possibilities with very few limitations, and even Markdown extensions, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
+bbt is reading only specifics line in the specification, meaning that the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
 Alternative tools exists, refer to [My quick overview of some comparable tools](docs/comparables.md), but as far as i know, bbt is none of them provide such a direct "run the doc" approach.
 
