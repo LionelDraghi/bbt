@@ -30,6 +30,7 @@ It can be as simple as :
 - Then the output contains `version 1.0`
 ```
 That will render this way in your documentation:
+
 ---
 ### Scenario : I want to know uut version <!-- omit from toc -->
 
