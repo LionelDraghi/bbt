@@ -70,7 +70,7 @@ Fenced code block are used to specify multiline output or file content, as in:
 
   This example illustrate the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third.
 
-> bbt --auto_delete tests/scenario.md 
+> bbt --yes tests/scenario.md 
  
   When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
 
@@ -101,7 +101,7 @@ bbt provides two solutions to help :
   - Then `config.ini` should contains `"size=80x40"`
 ```
 
-In this case, if the `--auto_delete` option is used, the Background will erase any existing `config.ini` file.
+In this case, the Background will prompt (unless `--yes` option) to erase any existing `config.ini` file .
 Meaning that the second scenario should fail.
 
 Background may appears at the beginning, at document level, or at feature level, or both.
@@ -144,9 +144,9 @@ And indeed, bbt default behavior will be the same : if there is a `.config` file
 But while in the former case, bbt is supposed to checks that there is no such file, in the later case it is supposed to make so that there is no such file.  
 Simply stated, it is supposed to erase the file.
 
-To get this more handy (and logical) behavior, just call bbt with the `--auto_delete` (or `-ad`) option.
+To get this more handy (and logical) behavior, just call bbt with the `--yes` option.
 
-Same apply to directories. When using `-ad` options
+Same apply to directories. When using `--yes` options
 > ``Given there is no directory `./src` ``  
 
 will cause the whole tree rooted at ./src to be destroyed.
@@ -168,7 +168,7 @@ If the intent is to start from a white page and erase an existing homonym, the "
 So, if you want to start with a possibly existing dir1, use :  
 ``Given the directory `dir1` ``  
 If you want to start with a brand new one whatever is the situation, use :  
-``Given the new directory `dir1` `` **and** uses the `-ad` option.
+``Given the new directory `dir1` `` **and** confirm deletion when prompted, or use the `--yes` option.
 
 
 ## Tips

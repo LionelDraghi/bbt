@@ -1,4 +1,11 @@
-# gcc simple compilation test
+# gcc simple tests
+
+## Scenario: gcc version?
+
+- When I run `/usr/bin/gcc -v`
+
+- Then the output contains `gcc version`
+
 
 ## Scenario: compiling and executing an hello word
 

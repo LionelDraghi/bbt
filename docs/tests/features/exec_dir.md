@@ -1,4 +1,3 @@
-
 ## Feature: **Exec Dir** 
 
 bbt is able to run a scenario in a specific directory, provided on the command line.  
@@ -28,7 +27,7 @@ bbt is able to run a scenario in a specific directory, provided on the command l
 
 - Given the new `dir2` directory
 
-- When I run `bbt create_tree.md --auto_delete --exec_dir dir2`
+- When I run `bbt create_tree.md --exec_dir dir2`
 
 - Then there is a `dir2/dir1` dir
 - And there is a `dir2/dir1/file1` file

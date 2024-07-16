@@ -10,7 +10,7 @@
 
 ### Scenario: adding a second line to the file, so the same test should fail
 
-- Given the `tmp.md` file
+- Given the new `tmp.md` file
 ```
 # scenario:
 - Then file `config.ini` is equal to `mode=silent`

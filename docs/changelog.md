@@ -13,6 +13,9 @@ and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2
   - [Changed] bbt bootstraps! bbt now runs bbt tests that return error code.
   - [Added]   `--exec_dir` option to run scenario in a dir different from current
   - [Added]   New `no output` syntax
+  - [Added]   Interactive prompting added to delete file or dir in Given steps
+  - [Added]   `--yes` option to avoid interactive prompting
+  - [Removed] due to the new `--yes` option, `--auto_delete` is removed
   
 - [0.0.3]
   - [Added] text file creation

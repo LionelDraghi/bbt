@@ -22,13 +22,15 @@ begin
    Put_Line ("   -lk  | --list_keywords   : list bbt keywords");
    Put_Line ("   -lg  | --list_grammar    : list rules for Step analysis");
    Put_Line ("   -e   | --explain         : explain what bbt understand from Scenarios files");
+   Put_Line ("                              (do not run the scenarios)");
    Put_Line ("   -ct  | --create-template : create a commented example of rules file");
-   Put_Line ("   -d   | --dry-run         : print the commands that would be");
    Put_Line ("   -h   | --help            : this message");
    New_Line;
    Put_Line ("Options :");
+   Put_Line ("          --yes            : do not prompt if deletion is needed in");
+   Put_Line ("                             ""Given"" steps, silently answer yes");
    Put_Line ("   -c   | --cleanup        : after run, remove every file and dir");
-   Put_Line ("                             created by scenarios");
+   Put_Line ("                             created by bbt in ""Given"" steps");
    Put_Line ("   -r   | --recursive      : search bbt files in subdir");
    Put_Line ("   -k   | --keep-going     : Do as much work as possible");
    Put_Line ("   -v   | --verbose");
@@ -38,7 +40,6 @@ begin
    Put_Line ("                             This file will contains the normal bbt output,");
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
-   Put_Line ("   -ad  | --auto_delete    : no prompt if deletion is needed in ""Given"" steps");
    Put_Line ("   -ed  | --exec_dir       : run command in exec_dir instead of current dir");
    New_Line;
    Put_Line ("Debug command:");

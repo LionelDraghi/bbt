@@ -75,20 +75,17 @@ begin
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
-            --  elsif Opt = "-n" or Opt = "--dry-run" then
-            --     Settings.Dry_Run := True;
-
          elsif Opt = "-r" or Opt = "--recursive" then
             Settings.Recursive := True;
 
          elsif Opt = "-k" or Opt = "--keep_going" then
             Settings.Keep_Going := True;
 
-         elsif Opt = "-ad" or Opt = "--auto_delete" then
-            Settings.Auto_Delete := True;
-
          elsif Opt = "-c" or Opt = "--cleanup" then
             Settings.Cleanup := True;
+
+         elsif Opt = "--yes" then
+            Settings.Yes := True;
 
          elsif Opt = "-v" or Opt = "--verbose" then
             Set_Verbosity  (Verbose);

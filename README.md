@@ -4,12 +4,12 @@
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
-  - [Scenario : I want to know uut version](#scenario--i-want-to-know-uut-version)
 - [Main characteristics](#main-characteristics)
   - [Specification is the only source of truth](#specification-is-the-only-source-of-truth)
   - [Tests are easy to write](#tests-are-easy-to-write)
   - [Tests are easy to run](#tests-are-easy-to-run)
 - [Objective of the project](#objective-of-the-project)
+- [Status of the project](#status-of-the-project)
 - [Limitations](#limitations)
 - [Installation](#installation)
 - [Further reading](#further-reading)
@@ -31,7 +31,7 @@ It can be as simple as :
 ```
 That will render this way in your documentation:
 
-### Scenario : I want to know uut version
+### Scenario : I want to know uut version <!-- omit from toc -->
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
@@ -79,7 +79,8 @@ bbt project aim at exploring how far we can push the "specification in natural l
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
 bbt as a precise scope: it is dedicated to in line command, taking some input and producing some output.
-Keep in mind that it is not meant for specifying or testing UI, complex systems, unit testing, API, etc. Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
+Keep in mind that it is not meant for specifying or testing UI, complex systems, unit testing, API, etc.  
+Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
 
 As a consequence, bbt will probably not be the only test tool of your project.   
 
@@ -91,7 +92,7 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 The code has grown fast in three months, and is far from being clean.  
 And there is yet no design description. 
 
-Nevertheless, bbt is working. It has as a [test base](docs/tests/features_results.md).  
+Nevertheless, bbt is working. It has as a serious [test base](docs/tests/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project started the migration of its large tests base to bbt.  
 
 ## Limitations

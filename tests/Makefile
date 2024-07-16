@@ -7,11 +7,11 @@ check: ../bbt ../uut
 	@ - ln -fs ../uut .
 
 	@ - rm examples_results.md
-	@ ../bbt -c -ad -o ../docs/tests/examples_results.md ../docs/tests/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
+	@ ../bbt --yes -c -o ../docs/tests/examples_results.md ../docs/tests/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
 	@ echo
 
 	@ - rm features_results.md
-	@ ../bbt -c -ad -o ../docs/tests/features_results.md ../docs/tests/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ ../bbt --yes --cleanup --output ../docs/tests/features_results.md ../docs/tests/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
 doc:

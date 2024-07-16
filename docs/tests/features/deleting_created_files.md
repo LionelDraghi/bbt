@@ -18,14 +18,14 @@ The --cleanup option is here to ensure that those files are removed after run.
   - And  there is a `f1` file
 ```
 
-- When I run `bbt -ad create_tree.md`
+- When I run `bbt --yes create_tree.md`
 
 - Then there is a `dir1/dir2/f2` file
 - And  there is a `f1` file
 
 ### Scenario: run with --cleanup
 
-- When I run `bbt -ad --cleanup create_tree.md`
+- When I run `bbt --yes --cleanup create_tree.md`
 
 - Then there is no `dir1` directory
 - And  there is no `f1` file

@@ -32,7 +32,7 @@ begin
    Put_Line ("   Template_Name         : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Explain) & " Explain");
-   Put_Line ("   " & Checkbox (Dry_Run) & " Dry_Run");
+   Put_Line ("   " & Checkbox (Yes) & " Yes");
    Put_Line ("   " & Checkbox (No_File_Given) & " No_File_Given");
    Put_Line ("   " & Checkbox (Keep_Going) & " Keep_Going");
    Put_Line ("   " & Checkbox (List_Topics) & " List_Topics");

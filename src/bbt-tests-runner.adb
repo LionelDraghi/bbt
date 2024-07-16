@@ -165,7 +165,6 @@ package body BBT.Tests.Runner is
 
    begin
       for Scen of L loop
-         IO.New_Line (Verbosity => IO.Normal);
          --  Put_Line ("  Scenario " & Scen.Name'Image & "  ",
          --            IO.No_Location, IO.Verbose);
 
@@ -194,6 +193,7 @@ package body BBT.Tests.Runner is
                when Failed =>
                   Put_Line ("  - [ ] scenario " & Link_Image & " fails  ");
             end case;
+            IO.New_Line (Verbosity => IO.Normal);
          end;
 
       end loop;
@@ -204,9 +204,7 @@ package body BBT.Tests.Runner is
       use File_Utilities;
    begin
       -- First, let's move to a different exec dir, if any
-      -- if Settings.Exec_Dir /= "" then
-         Ada.Directories.Set_Directory (Settings.Exec_Dir);
-      -- end if;
+      Ada.Directories.Set_Directory (Settings.Exec_Dir);
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
@@ -226,6 +224,8 @@ package body BBT.Tests.Runner is
                --  IO.Put_Line ("Short_Path => " & Path_To_Scen);
                Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
                          & "](" & (Path_To_Scen) & ")  ");
+               IO.New_Line (Verbosity => IO.Normal);
+
                if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
                then
                   Put_Warning ("No scenario in document " & D.Name'Image & "  ",
@@ -237,8 +237,9 @@ package body BBT.Tests.Runner is
 
                for F of D.Feature_List loop
                   -- Then run scenarios attached to each Feature
-                  IO.Put_Line ("Running feature " & F.Name'Image & "  ",
-                               Verbosity => Verbose);
+                  IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ",
+                               Verbosity => Normal);
+                  IO.New_Line (Verbosity => IO.Normal);
 
                   if F.Scenario_List.Is_Empty then
                      Put_Warning ("No scenario in feature " & F.Name'Image & "  ",

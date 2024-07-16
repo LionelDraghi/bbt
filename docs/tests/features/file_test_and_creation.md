@@ -25,7 +25,7 @@ Alias l="ls -tla"
 
  ### Scenario : "Given there is no", when there actually is, should erase the file 
 
-Note that the expected behavior depends on the --auto_delete option on command line.  
+Note that the expected behavior depends on the --yes option on command line, or "yes" choice when prompted for deletion.  
 This test will pass when bbt is called with this option, and fail otherwise.  
 Refer to the doc regarding auto erase. 
 

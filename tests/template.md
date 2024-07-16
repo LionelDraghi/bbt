@@ -1,43 +1,74 @@
-## Feature : Command line
+# gcc simple tests
 
-No special marks for comments, it's just normal markdown text.
+## Background:
+- Given there is no `main` file
 
-### Scenario : version message
-  - When I run `uut -v` or `uut --version`
-  - Then I get no error
-  - And I get `uut version 1.0`
+## Scenario: gcc version?
+- When I run `/usr/bin/gcc -v`
 
-### Scenario : Help message
-  - When I run `uut -h` or `uut --help`
-  - Then I get no error
-  - And output contains
+- Then the output contains `gcc version`
+
+
+## Scenario: compiling and executing an hello word
+- Given the new file `main.c`
+```c
+#include <stdio.h>
+int main() {
+printf("Hello, World!");
+return 0;
+}
 ```
-Usage:  
+- And given there is no `main` file
+
+- When I run `/usr/bin/gcc main.c -o main`
+- And  I run `main`
+
+- Then the output is `Hello, World!`
+- And I get no error
+  
+---
+### Structure
+
+Each file is composed of:
++ an optional *Background* section, that is a special Scenario that will be run before each following scenario
++ one or more optional *Feature* section
++ each Feature may contain one or more Scenarios
++ Scenarios may appear without Feature (as in the example above)
+
+### Step Examples:
+   
+**1. Given**
+   
++ Given there is no `dir1`       directory  
++ Given there is a  `config.ini` file  
++ Given the new file `config.ini` containing `lang=it`  
+`new` specify that I want a brand new one, meaning delete the existing one  
++ Given the new `config.ini` file 
 ```
-
-
-
-
-### Scenario : Unknow option
-  - When I run `uut -xyz`
-  - Then I get an error
-  - And output contains `unknown option -xyz`
-
-## Feature : File manipulation
-
-### Scenario : append
-  - Given the `config.ini` file
+line 1 
+line 2
 ```
-verbose=false
-```
-  - When I successfully run `uut append lang=uk config.ini`
-  - When I successfully run `uut read config.ini`
-  - Then I get
-```
-verbose=false
-lang=uk
-```
++ Given the new `dir1` directory
 
-More extensive explanations : https://github.com/LionelDraghi/bbt/tree/main
+**2. When**
+   
++ when I run `cmd`
++ when I successfully run `cmd`  
+`Successfully` add a check on the return code (equivalent to `Then I get no error`)  
 
-File generated with BBT 0.0.4
+**3. Then**
+ 
++ Then there is a  `config.ini` file
++ Then there is no `dir1` directory
++ Then I get some error
++ Then there is no error
++ Then I get no output
++ Then output is
+```
+line 1
+line 2
+```
++ Then output contains `msg`
++ Then `config.ini` contains `mode=verbose`
+
+  

@@ -158,7 +158,7 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
       case Step.File_Type is
          when Ordinary_File =>
-            if Exists (File_Name) and then BBT.Settings.Auto_Delete then
+            if Exists (File_Name) then
                Delete_File (File_Name);
             end if;
             Create (File, Name => File_Name);
@@ -171,9 +171,7 @@ package body BBT.Tests.Actions is
                                " creation failed",
                              Loc      => Step.Location);
          when Directory =>
-            if Exists (File_Name) and then Settings.Auto_Delete then
-               Delete_Tree (File_Name);
-            end if;
+            Delete_Tree (File_Name);
             Create_Path (File_Name);
             Created_File_List.Add (File_Name);
             Put_Step_Result (Step     => Step,
@@ -328,9 +326,7 @@ package body BBT.Tests.Actions is
                     +Step.Subject_String & (+Step.Object_String);
    begin
       IO.Put_Line ("Setup_No_File " & File_Name, Verbosity => Debug);
-      if BBT.Settings.Auto_Delete and then Exists (File_Name) then
-         Delete_File (File_Name);
-      end if;
+      Delete_File (File_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not File_Exists (File_Name),
                        Fail_Msg => "file " & File_Name'Image & " not deleted",
@@ -343,9 +339,7 @@ package body BBT.Tests.Actions is
                    +Step.Subject_String & (+Step.Object_String);
    begin
       IO.Put_Line ("Setup_No_Dir " & Dir_Name, Verbosity => Debug);
-      if BBT.Settings.Auto_Delete and then Exists (Dir_Name) then
-         Delete_Tree (Dir_Name);
-      end if;
+      Delete_Tree (Dir_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not Dir_Exists (Dir_Name),
                        Fail_Msg => "dir " & Dir_Name'Image & " not deleted",

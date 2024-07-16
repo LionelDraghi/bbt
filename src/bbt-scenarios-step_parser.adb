@@ -366,8 +366,8 @@ package body BBT.Scenarios.Step_Parser is
          G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
          G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
          G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content
-         G (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj)   := No_Output; -- then I get no output
-         G (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj)   := No_Output; -- then there is no output
+         G (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj)  := No_Output; -- then I get no output
+         G (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj)  := No_Output; -- then there is no output
          return G;
       end Create_Grammar;
 

@@ -192,7 +192,7 @@ package body BBT.Documents is
    procedure Put_Overall_Results is
    begin
       New_Line;
-      Put_Line ("------------------------------------------------");
+      Put_Line ("-----------------------");
       Put_Line ("- Failed     tests = " & Results (Failed)'Image);
       Put_Line ("- Successful tests = " & Results (Successful)'Image);
       Put_Line ("- Empty      tests = " & Results (Empty)'Image);

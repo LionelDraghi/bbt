@@ -14,7 +14,6 @@ private package BBT.Settings is
 
    -- --------------------------------------------------------------------------
    Explain            : Boolean := False;
-   Dry_Run            : Boolean := False;
    Keep_Going         : Boolean := False;
    Ignore_Errors      : Boolean := False;
    Warnings_As_Errors : Boolean := False;
@@ -27,7 +26,7 @@ private package BBT.Settings is
    List_Topics        : Boolean := False;
    List_Keywords      : Boolean := False;
    List_Grammar       : Boolean := False;
-   Auto_Delete        : Boolean := False;
+   Yes                : Boolean := False;
    Cleanup            : Boolean := False;
    Template_Name      : constant String := "bbt_template.md";
 

@@ -384,17 +384,21 @@ package body Text_Utilities is
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
-   function Search (String1,
-                    String2          : String;
+   function Search (Source,
+                    Pattern          : String;
                     Case_Insensitive : Boolean := True) return Boolean is
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      Src : constant String := Trim (Source, Both);
+      Pat : constant String := Trim (Pattern, Both);
    begin
-      return (Ada.Strings.Fixed.Index (Source  => String1,
-                                       Pattern => String2,
-                                       From    => String1'First) /= 0)
-        or else (Case_Insensitive and Ada.Strings.Fixed.Index
-                 (Source  => Ada.Characters.Handling.To_Lower (String1),
-                  Pattern => Ada.Characters.Handling.To_Lower (String2),
-                  From    => String1'First) /= 0);
+      return (Index (Source  => Src,
+                     Pattern => Pat,
+                     From    => Src'First) /= 0)
+        or else (Case_Insensitive and
+                   Index (Source  => Ada.Characters.Handling.To_Lower (Src),
+                          Pattern => Ada.Characters.Handling.To_Lower (Pat),
+                          From    => Src'First) /= 0);
    end Search;
 
    -- --------------------------------------------------------------------------

@@ -22,7 +22,7 @@ package BBT.Tests.Actions.File_Operations is
    procedure Create_Path (New_Directory : String;
                           Form          : String := "");
    procedure Delete_File (Name : String);
-   procedure Delete_Tree (Directory : String);
+   procedure Delete_Tree (Dir_Name : String);
 
    -- --------------------------------------------------------------------------
    subtype File_Type is Ada.Text_IO.File_Type;
