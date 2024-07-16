@@ -47,7 +47,7 @@ bbt own tests are based on feature descriptions available [here](docs/tests/feat
 
 ### Specification is the only source of truth
 
-bbt most interesting feature is that the above scenario (that is *specification*) is directly executable : there is no intermediate code generation, no use of a shell"ish" language, no glue code, no configuration file.  
+bbt most interesting feature is that the above scenario (that is *specification*) is directly executable : there is no intermediate representation, no more or less complete translation into code, no use of a shell"ish" language, no duplication of the original source at all.  
 
 Just simple and readable English sentences, that may be written by non-coders.  
 
