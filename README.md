@@ -54,7 +54,7 @@ Just simple and readable English sentences, that may be written by non-coders.
 
 bbt is reading only specifics line in the specification, meaning that the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
-Alternative tools exists, refer to [My quick overview of some comparable tools](docs/comparables.md), but as far as i know, bbt is none of them provide such a direct "run the doc" approach.
+Alternative tools exists, refer to [My quick overview of some comparable tools](docs/comparables.md), but as far as i know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
 **Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file.  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
