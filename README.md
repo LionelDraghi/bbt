@@ -54,6 +54,8 @@ Just simple and readable English sentences, that may be written by non-coders.
 
 bbt is reading only specifics line in the specification, meaning that the rest of the file is yours : you can give as much context as you want, using all Markdown possibilities with very few limitations, and even Markdown extensions, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
+Note also alternative tools exists, refer to [My quick overview of some comparable tools](docs/comparables.md), but as far as i know, none of them provide such a direct "run the doc" approach.
+
 **Tests results** are generated when running `bbt`, by just using the `-o` option (--output). It's also a Markdown file.  
 Each result has a link to the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
 To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).
@@ -88,6 +90,12 @@ bbt project aim at exploring how far we can push the "specification is the test"
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
+bbt is by nature limited : it is dedicated to command line, taking some input and producing some output.
+It is not meant for UI testing or Web interaction, Complex file system stuffs, White box testing (obviously), checking internal states, or extensive API testing. 
+
+It probably won't be the only test tool of your project, **and do not aim at that!** .  
+
+
 ## Status of the project
 
 As of version 0.0.4, bbt is in an early stage, meaning that his behavior is subject to changes.  
@@ -96,19 +104,12 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 The code has grown fast in three months, and is far from being clean.  
 And there is yet no design description. 
 
-Nevertheless, bbt is working, has as a [test base](docs/tests/features_results.md), and my own project [acc](https://github.com/LionelDraghi/ArchiCheck) started the migration of its large tests base to bbt.
+Nevertheless, bbt is working. It has as a [test base](docs/tests/features_results.md).
+My own project [acc](https://github.com/LionelDraghi/ArchiCheck) started the migration of its large tests base to bbt.  
 
 ## Limitations
-bbt is by nature limited : it aims at providing a **simple** solution to **simple common cases**.  
-It is dedicated to command line, taking some input and producing some output.
-It is not meant for :
-- UI testing or Web interaction 
-- Complex file system stuffs
-- White box testing (obviously), checking internal states, or extensive API testing.
 
-It probably won't be the only test tool of your project, but that's highly dependant on the nature of your application.  
-
-Note also that alternative tools exists, refer to [My quick overview of some comparable tools](docs/comparables.md), but as far as i know, none of them provide such a direct "run the doc" approach.
+btt is currently tested only on my Linux amd64 platform.
 
 ## Installation
 
