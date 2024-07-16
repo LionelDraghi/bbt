@@ -85,7 +85,7 @@ bbt project aim at exploring how far we can push the "specification in natural l
 bbt may be by nature limited. It is dedicated to in line command, taking some input and producing some output.
 It is not meant for specifying or testing UI, complex systems, unit testing, API, etc..  
 Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.  
-This is why bbt will probably not be the only test tool of your project, **and do not aim at that!** .  
+This is why bbt will probably not be the only test tool of your project, **and do not aim at that!**   
 
 ## Status of the project
 
