@@ -86,13 +86,12 @@ bbt as no dependencies on external lib or tools (diff, for example), and aims at
 
 ## Objective of the project 
 
-bbt project aim at exploring how far we can push the "specification is the test" assertion, while maintaining the main feature : ease of use. 
+bbt project aim at exploring how far we can push the "specification in natural language is the single source of truth" assertion, while maintaining the main feature : ease of use. 
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
-bbt is by nature limited : it is dedicated to command line, taking some input and producing some output.
-It is not meant for UI testing or Web interaction, Complex file system stuffs, White box testing (obviously), checking internal states, or extensive API testing. 
-
+bbt is by nature limited to command line, taking some input and producing some output.
+It is not meant for UI testing, complex systems, unit testing, API testing, etc., because it is unlikely that a natural language description is the easiet way to go for those kind of tests.  
 It probably won't be the only test tool of your project, **and do not aim at that!** .  
 
 
