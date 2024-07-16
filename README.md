@@ -6,7 +6,7 @@
 - [Overview](#overview)
   - [Scenario : I want to know uut version](#scenario--i-want-to-know-uut-version)
 - [Main characteristics](#main-characteristics)
-  - [Specification is the test](#specification-is-the-test)
+  - [Specification is the only source of truth](#specification-is-the-only-source-of-truth)
   - [Tests are easy to write](#tests-are-easy-to-write)
   - [Tests are easy to run](#tests-are-easy-to-run)
 - [Objective of the project](#objective-of-the-project)
