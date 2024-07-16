@@ -69,8 +69,9 @@ Although simple, you don't have to learn this language by heart, you may ask for
 ### Tests are easy to run
 
 To run a scenario : `bbt my_scenario.md`  
-Or to run all the md files in the *./tests* tree `bbt -r tests`  
-That's it : no cascading Makefile, no scripting.
+Or to run all the md files in the *tests* tree `bbt -r tests`  
+
+That's it, no cascading Makefile, no scripting.
 
 bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on all platforms without further complications.  
 
