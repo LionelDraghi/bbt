@@ -373,7 +373,7 @@ package body Text_Utilities is
                       Case_Insensitive   : Boolean := True) return Boolean
    is
       Identical  : Boolean;
-      Diff_Index : Natural; pragma Unreferenced (Diff_Index);
+      Diff_Index : Natural;
    begin
       Compare (Text1, Text2,
                Ignore_Blanks      => Ignore_Blank_Lines,

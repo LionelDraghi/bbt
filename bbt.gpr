@@ -9,13 +9,14 @@ project BBT is
    for Main use ("bbt-main.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ( -- "--coverage", 
+      for Default_Switches ("ada") use --Bbt_Config.Ada_Compiler_Switches & "-gnat2022";
+                                       ( -- "--coverage", 
                                         "-gnat2022", 
                                         "-g", 
                                         "-pg", 
                                         "-gnata", 
                                         "-gnatVa", 
-                                        "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
+                                        -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
                                         "-gnatyaCefhIknOprxtAbilu");
    end Compiler;
 
