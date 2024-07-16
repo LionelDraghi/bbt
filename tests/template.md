@@ -5,15 +5,23 @@ No special marks for comments, it's just normal markdown text.
 ### Scenario : version message
   - When I run `uut -v` or `uut --version`
   - Then I get no error
-  - And  I get `uut v0.1.0`
+  - And I get `uut version 1.0`
 
 ### Scenario : Help message
   - When I run `uut -h` or `uut --help`
-  - Then I get
+  - Then I get no error
+  - And output contains
 ```
-uut usage :
-uut file_name create|read|append [-with text]
+Usage:  
 ```
+
+
+
+
+### Scenario : Unknow option
+  - When I run `uut -xyz`
+  - Then I get an error
+  - And output contains `unknown option -xyz`
 
 ## Feature : File manipulation
 
@@ -23,6 +31,7 @@ uut file_name create|read|append [-with text]
 verbose=false
 ```
   - When I successfully run `uut append lang=uk config.ini`
+  - When I successfully run `uut read config.ini`
   - Then I get
 ```
 verbose=false
