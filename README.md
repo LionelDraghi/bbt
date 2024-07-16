@@ -78,10 +78,10 @@ bbt project aim at exploring how far we can push the "specification in natural l
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
-bbt may be by nature limited. It is dedicated to in line command, taking some input and producing some output.
+bbt may be by nature limited: it is dedicated to in line command, taking some input and producing some output.
 It is not meant for specifying or testing UI, complex systems, unit testing, API, etc..  
-Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.  
-This is why bbt will probably not be the only test tool of your project, **and do not aim at that!**   
+Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
+To make it short: **bbt do not aim at being your only test tool**.   
 
 ## Status of the project
 
