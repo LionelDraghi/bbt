@@ -24,6 +24,9 @@ The behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior
 It can be as simple as :
 
 ```md
+In order to report a bug
+I need to get the version of the exe
+
 ### Scenario : I want to know uut version
 
 - When I run `uut --version`
@@ -32,6 +35,9 @@ It can be as simple as :
 That will render this way in your documentation:
 
 ---
+In order to report a bug
+I need to get the version of the exe
+
 ### Scenario : I want to know uut version <!-- omit from toc -->
 
 - When I run `uut --version`
