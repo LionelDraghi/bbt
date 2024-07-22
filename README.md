@@ -34,6 +34,7 @@ The Markdown format used is a subset of the existing [Markdown with Gherkin](htt
 It can be as simple as :
 
 ```md
+## Example feature:
 In order to report a bug  
 I need to get the version of the exe
 
@@ -45,6 +46,7 @@ I need to get the version of the exe
 That will render this way in your documentation:
 
 ---
+## Example feature:
 In order to report a bug  
 I need to get the version of the exe
 
