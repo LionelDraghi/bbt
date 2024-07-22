@@ -19,7 +19,7 @@
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 **The beauty of btt is that it directly uses your behavior documentation as a the test script.**
 
-The behavior is described in almost natural english using within the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, sentences like "when I run `this command`, then I get no error, and the file``foo.ini` is created".  
+The behavior is described in almost natural english using within the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 A distinctive feature of bbt is that you dont have to comply with a precise DSL or programming language syntax. bbt will understand (and consider equivalent) both :  
 - then I get no error
 - then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
@@ -29,7 +29,7 @@ This is achieved thanks to a partial parser : it means that bbt take into accoun
 
 This feature gives a lot of freedom when writing scenarios. 
 
-The format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), so that the file is nice enough to be included "as is" in the documentation, without post processing. 
+The Markdown format used is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), so that the file is nice enough to be included "as is" in the documentation, without post processing. 
 
 It can be as simple as :
 
