@@ -19,13 +19,14 @@
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 **The beauty of btt is that it directly uses your behavior documentation as a the test script.**
 
-The behavior is described in almost natural english using within the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
-A distinctive feature of bbt is that you dont have to comply with a precise DSL or programming language syntax. bbt will understand (and consider equivalent) both :  
-- then I get no error
-- then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
+The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
-This is achieved thanks to a partial parser : it means that bbt take into account only some keywords to recognize the structure and the meaning of the sentence, and is not going to fail because of an unexpected word.  
-(In the previous example, bbt only recognize "then get no error").
+A distinctive feature of bbt is that it directly undestand those sentences. You dont have to comply with a precise DSL or programming language syntax.  
+This is achieved thanks to a partial parser. It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
+As a example, bbt will consider equivalent both:  
+- then get no error
+- then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
+(the first beeing the minimal skeleton)
 
 This feature gives a lot of freedom when writing scenarios. 
 
