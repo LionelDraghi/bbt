@@ -19,7 +19,17 @@
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 **The beauty of btt is that it directly uses your behavior documentation as a the test script.**
 
-The behavior is described using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) syntax.
+The behavior is described in almost natural english using within the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, sentences like "when I run `this command`, then I get no error, and the file``foo.ini` is created".  
+A distinctive feature of bbt is that you dont have to comply with a precise DSL or programming language syntax. bbt will understand (and consider equivalent) both :  
+- then I get no error
+- then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
+
+This is achieved thanks to a partial parser : it means that bbt take into account only some keywords to recognize the structure and the meaning of the sentence, and is not going to fail because of an unexpected word.  
+(In the previous example, bbt only recognize "then get no error").
+
+This feature gives a lot of freedom when writing scenarios. 
+
+The format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), so that the file is nice enough to be included "as is" in the documentation, without post processing. 
 
 It can be as simple as :
 
@@ -27,7 +37,7 @@ It can be as simple as :
 In order to report a bug  
 I need to get the version of the exe
 
-### Scenario : I want to know uut version
+### Scenario: I want to know uut version
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
@@ -38,11 +48,12 @@ That will render this way in your documentation:
 In order to report a bug  
 I need to get the version of the exe
 
-### Scenario : I want to know uut version <!-- omit from toc -->
+### Scenario: I want to know uut version <!-- omit from toc -->
 
 - When I run `uut --version`
 - Then the output contains `version 1.0`
 ---
+
 
 Some more representative examples are available [here](docs/tests/examples_results.md).  
 (This is the results page, click on "hello_word.md" for example to see the scenario).
