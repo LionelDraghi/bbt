@@ -26,6 +26,7 @@ This is achieved thanks to a partial parser. It means that bbt take into account
 As a example, bbt will consider equivalent both:  
 - then get no error
 - then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
+
 (the first beeing the minimal skeleton)
 
 This feature gives a lot of freedom when writing scenarios. 
