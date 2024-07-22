@@ -35,6 +35,7 @@ It can be as simple as :
 
 ```md
 ## Example feature:
+
 In order to report a bug  
 I need to get the version of the exe
 
