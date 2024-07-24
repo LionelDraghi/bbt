@@ -56,7 +56,7 @@ dir1/scen1.md
 
 ### Scenario: running multiple scenarios given on command line
 
-- When I run `bbt -lf dir1/scen3.scen dir1/scen4.scen`
+- When I run `bbt -lf dir1/scen3.scen dir1/scen4.scen`  
 Note that this command line is the result of shell expansion of 
 `bbt -lf dir1/*.scen`
 
@@ -70,8 +70,8 @@ dir1/scen4.scen
 
 - Given the `dir1/dir2/` dir
 - Given the `dir1/dir3/dir4` dir
-- Given the `dir1/dir2/scen5.md` file containing `truc`
-- Given the `dir1/dir3/dir4/scen6.md` file containing `machin`
+- Given the `dir1/dir2/scen5.md` file containing `foo`
+- Given the `dir1/dir3/dir4/scen6.md` file containing `bar`
 ```
 # scenario:
 - Given the `dir1/res1` file containing `res1`
