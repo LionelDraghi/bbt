@@ -4,6 +4,10 @@
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
+  - [A domain specific language? yes, english! :-)](#a-domain-specific-language-yes-english--)
+  - [First example](#first-example)
+  - [There is only one format](#there-is-only-one-format)
+  - [More examples](#more-examples)
 - [Main characteristics](#main-characteristics)
   - [Specification is the only source of truth](#specification-is-the-only-source-of-truth)
   - [Tests are easy to write](#tests-are-easy-to-write)
@@ -19,24 +23,25 @@
 bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
 **The beauty of btt is that it directly uses your behavior documentation as a the test script.**
 
+### A domain specific language? yes, english! :-)
+
 The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
-A distinctive feature of bbt is that it directly undestand those sentences. You dont have to comply with a precise DSL or programming language syntax.  
-This is achieved thanks to a partial parser. It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
-As a example, bbt will consider equivalent both:  
-- then get no error
-- then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)
+A distinctive feature of bbt is that it directly understand those sentences. You dont have to comply with a precise DSL or programming language syntax.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
 
-(the first beeing the minimal skeleton)
+As an example, bbt will consider equivalent both:  
+- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
+- *then get no error*  
+  
+(the later being the minimal skeleton)
 
-This feature gives a lot of freedom when writing scenarios. 
+That feature gives a lot of freedom when writing scenarios. 
 
-The Markdown format used is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), so that the file is nice enough to be included "as is" in the documentation, without post processing. 
-
-It can be as simple as :
+### First example 
 
 ```md
-## Example feature:
+## Example:
 
 In order to report a bug  
 I need to get the version of the exe
@@ -46,10 +51,19 @@ I need to get the version of the exe
 - When I run `uut --version`
 - Then the output contains `version 1.0`
 ```
-That will render this way in your documentation:
+Here we have:
+1. Some description, ignored by bbt
+2. A "scenario" header, that starts a steps sequence
+3. Steps, starting with Given/When/Then and followed by sentences
+
+### There is only one format
+
+The Markdown format used is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), so that the file is nice enough to be included "as is" in the documentation, without post processing. 
+
+The previous example will render this way:
 
 ---
-## Example feature:
+## Example: <!-- omit from toc -->
 In order to report a bug  
 I need to get the version of the exe
 
@@ -59,7 +73,7 @@ I need to get the version of the exe
 - Then the output contains `version 1.0`
 ---
 
-
+### More examples
 Some more representative examples are available [here](docs/tests/examples_results.md).  
 (This is the results page, click on "hello_word.md" for example to see the scenario).
 
