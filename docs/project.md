@@ -49,3 +49,9 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...
 
+- Add a strategy pattern to be able to process files according to their extension :
+
+  - Markdown : .md (.markdown .mkd .mdown)
+  - AsciiDoc : .adoc (.asciidoc .ad .asc)
+  - reStructuredText : .rst (.rest) 
+  and separate presentation vs semantic in the code, with a strategy pattern for presentation.

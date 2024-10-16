@@ -5,7 +5,7 @@ pragma Style_Checks (Off);
 package Bbt_Config is
    pragma Pure;
 
-   Crate_Version : constant String := "0.0.4";
+   Crate_Version : constant String := "0.0.5";
    Crate_Name : constant String := "bbt";
 
    Alire_Host_OS : constant String := "linux";
@@ -15,6 +15,6 @@ package Bbt_Config is
    Alire_Host_Distro : constant String := "debian";
 
    type Build_Profile_Kind is (release, validation, development);
-   Build_Profile : constant Build_Profile_Kind := development;
+   Build_Profile : constant Build_Profile_Kind := release;
 
 end Bbt_Config;

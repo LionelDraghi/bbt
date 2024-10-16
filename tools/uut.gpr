@@ -51,7 +51,7 @@ project UUT is
    end Compiler;
 
    package Linker is
-      for Switches ("ada") use ("-g", "-lgcov");
+      for Switches ("ada") use ("-g");
       -- lgcov = -fprofile-arcs for coverage
    end Linker;
 

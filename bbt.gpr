@@ -13,7 +13,7 @@ project BBT is
                                        ( -- "--coverage", 
                                         "-gnat2022", 
                                         "-g", 
-                                        "-pg", 
+                                        -- "-pg", 
                                         "-gnata", 
                                         "-gnatVa", 
                                         -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
@@ -30,9 +30,11 @@ project BBT is
    end Builder;
 
    package Linker is
-      for Switches ("ada") use ("-g", 
-                                -- "-lgcov", 
-                                "-fprofile-arcs");
+      for Switches ("ada") use ("-g" 
+                                -- , "-pg"
+                                -- , "-lgcov"
+                                -- , "-fprofile-arcs"
+                                );
    end Linker;
 
    package Pretty_Printer is
