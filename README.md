@@ -138,7 +138,7 @@ btt is currently tested only on my Linux amd64 platform.
 
 ## Installation
 
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/list_image.json)](https://alire.ada.dev/crates/list_image.html) is available thanks to the Alire package manager.  
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
 1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
    
 2. Then to install bbt :
