@@ -31,7 +31,7 @@ A distinctive feature of bbt is that it directly understand those sentences. You
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
 
 As an example, bbt will consider equivalent :  
-- *then I get no error (close #2398)
+- *then I get no error (close #2398)*
 - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
 - *then get no error*  
 because those four words are the only it actually take into account.  

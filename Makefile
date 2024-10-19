@@ -45,13 +45,13 @@ doc: ./bbt
 	rgrep -n "Fixme:" src/*     | sed "s/:/|/2"	>> /tmp/fixme.md
 	mv /tmp/fixme.md docs/fixme.md
 
-	echo 'Issue references in current version:'	>  /tmp/issue.md
-	echo '------------------------------------'	>> /tmp/issue.md
-	echo                                		>> /tmp/issue.md
-	echo 'Location | Text'             		    >> /tmp/issue.md
-	echo '---------|-----'             		    >> /tmp/issue.md
-	rgrep -n "Issue #" src/ docs/tests/ | sed "s/:/|/2"	>> /tmp/issue.md
-	mv /tmp/issue.md docs/issue.md
+	echo 'Issue references in current version:'	>  /tmp/issues.md
+	echo '------------------------------------'	>> /tmp/issues.md
+	echo                                		>> /tmp/issues.md
+	echo 'Location | Text'             		    >> /tmp/issues.md
+	echo '---------|-----'             		    >> /tmp/issues.md
+	rgrep -n "Issue #" src/ docs/tests/ | sed "s/:/|/2"	>> /tmp/issues.md
+	mv /tmp/issues.md docs/issues.md
 
 	echo OK
 	echo
