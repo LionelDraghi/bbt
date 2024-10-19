@@ -6,11 +6,11 @@ check: ../bbt ../uut
 	# on the command line, and in a different directory
 	@ - ln -fs ../uut .
 
-	@ - rm examples_results.md
+	@ - rm ../docs/tests/examples_results.md
 	@ ../bbt --yes -c -o ../docs/tests/examples_results.md ../docs/tests/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
 	@ echo
 
-	@ - rm features_results.md
+	@ - rm ../docs/tests/features_results.md
 	@ ../bbt --yes --cleanup --output ../docs/tests/features_results.md ../docs/tests/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 

@@ -4,7 +4,7 @@
 
 is a shortcut to :
 
-`When I run 'X'`
+`When I run 'X'`  
 `Then I get no error`
 
 ### Scenario : *when I successfully run* a command with successful run
