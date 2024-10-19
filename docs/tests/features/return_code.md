@@ -6,7 +6,7 @@ Test an app returning non OK status
   - When I run `uut -qsdqsd`
   - Then I get an error
 
-### Scenario : OK return code
+### Example : OK return code
 
 Test the return code of a normal run
 

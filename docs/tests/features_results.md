@@ -48,6 +48,15 @@
   - [X] scenario [test `output is equal` keyword](features/output_equal_to_file.md) pass  
 
 
+## [example_keyword.md](features/example_keyword.md)  
+
+  ### Feature: The keyword Example is a synonym of the keyword Scenario.  
+
+  - [X] scenario [NOK return code](features/example_keyword.md) pass  
+
+  - [X] scenario [NOK return code](features/example_keyword.md) pass  
+
+
 ## [missing_title.md](features/missing_title.md)  
 
   - [X] scenario [Missing tittle in scenario, background and feature](features/missing_title.md) pass  
@@ -189,5 +198,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  45
+- Successful tests =  47
 - Empty      tests =  0

@@ -16,6 +16,7 @@
 - [Status of the project](#status-of-the-project)
 - [Limitations](#limitations)
 - [Installation](#installation)
+- [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
 
 ## Overview
@@ -57,7 +58,7 @@ Here we have:
    Exceptions are in fact in the two following bullets.
    
 2. A "scenario" header that starts a steps sequence
-   Titles starting with some Gherkin keywords will wake up btt : *# Scenario*, *# Features*, *# Background*  
+   Titles starting with those Gherkin keywords will wake up btt : *# Features*, *# Background*, and *# Scenario* or *# Example*.  
    The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
 
 3. Steps
@@ -100,7 +101,7 @@ bbt as no dependencies on external lib or tools (diff, for example), to ensure t
 
 ### Test Results are immediately publishable 
 
-**Tests results** are also in Markdown files, and cross-references the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
+**Tests results** are also in Markdown files, and cross-referencing the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
 You can push on github without further processing.  
 To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).  
 
@@ -142,6 +143,9 @@ btt compile on Windows and Mac OS, but is currently tested only on my Linux amd6
     > alr run  
 
 4. Move the bbt exec somewhere in your PATH
+
+## Help and comments
+Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 
 ## Further reading
 - [User Guide](docs/UG.md): concepts, command, line, features...

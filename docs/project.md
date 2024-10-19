@@ -3,7 +3,7 @@ Project  <!-- omit from toc -->
 
 - [Development Status](#development-status)
 - [Tests](#tests)
-- [Help and comments](#help-and-comments)
+- [Help, comments, feedback...](#help-comments-feedback)
 - [TDL](#tdl)
   - [Near future](#near-future)
   - [Distant future or low priority](#distant-future-or-low-priority)
@@ -17,8 +17,9 @@ Project  <!-- omit from toc -->
 - [Examples](tests/examples_results.md)
 - [Features](tests/features_results.md): **this is where behavior is defined** 
 
-## Help and comments
-Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
+## Help, comments, feedback...
+- [Discussions](https://github.com/LionelDraghi/bbt/discussions)
+- [Issues](https://github.com/LionelDraghi/bbt/issues)
 
 ## TDL
 

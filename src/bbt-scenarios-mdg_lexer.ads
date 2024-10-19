@@ -14,7 +14,8 @@ package BBT.Scenarios.MDG_Lexer is
 --  Minimal lexer to parse a subset of a [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md)
 --  file.
 --
---  Keywords actually processed are a subset of [standard Cucumber](https://cucumber.io/docs/gherkin/reference/) :
+--  Keywords actually processed are a subset of
+--  [standard Cucumber](https://cucumber.io/docs/gherkin/reference/) :
 --  ## Feature:
 --  ## Example: (or Scenario)
 --  ## Background:
@@ -24,7 +25,7 @@ package BBT.Scenarios.MDG_Lexer is
 --  - And
 --  - But
 --
---  The level fo Headind (the number of '#') is indifferent, but the colon
+--  The level of the Heading (the number of '#') is indifferent, but the colon
 --  is needed.
 --
 --  Step lines start with '-'.
