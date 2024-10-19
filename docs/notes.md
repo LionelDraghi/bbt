@@ -1,4 +1,4 @@
-# Why, existing tools and design decision and references
+# Notes
 
 ## Manipulation du code de retour avec bash :
 https://debian-facile.org/doc:programmation:shells:script-bash-etat-de-sorie-et-les-tests
@@ -6,13 +6,12 @@ https://debian-facile.org/doc:programmation:shells:script-bash-etat-de-sorie-et-
 
 ## What I don’t want :
 
-  - Cram uses snippets of interactive shell sessions. This is not portable, unless providing a complete “bash like” environment in Windows, for example.
-    And it’s using a “shell like” syntax, with meaningful indentation (horror), a $ sign at the beginning of the command, and a > sign for continuation line.
-    I want something clear, as close as English as possible, with no cryptic signs.
-    Same apply to output : when comparing the actual output with the expected one, I don’t care to have a classical [unified diff format](https://en.wikipedia.org/wiki/Diff#Unified_format) that could be used by some other tools.
+  - Cram uses snippets of interactive shell sessions.
+    This is not portable, unless providing a complete “bash like” environment in Windows, for example.
+    And it’s using a “shell like” syntax, with meaningful indentation (horror), a $ sign at the beginning of the command, and a > sign for continuation line.  
+    I want something clear, as close as English as possible, with no cryptic signs.  
+    Same apply to output : when comparing the actual output with the expected one, I don’t care to have a classical [unified diff format](https://en.wikipedia.org/wiki/Diff#Unified_format) that could be used by some other tools.  
     What a want is directly a clear side by side diff that is understandable by humans.
-
-
 
 ## Design
 
