@@ -355,7 +355,8 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("Output_Equal_To ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
-                       Success  => Is_Equal (Output, T2),
+                       Success  => Is_Equal (Output, T2,
+                         Sort_Texts => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Text_Image (Output) &
                          "not equal to expected:  " & Text_Image (T2),
                        Loc      => Step.Location);
@@ -368,9 +369,10 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("Output_Contains ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
-                       Success  => Contains (Output, T2),
-                       Fail_Msg => "Output:  " & Output'Image &
-                         "    does not contain expected:  " & T2'Image,
+                       Success  => Contains (Output, T2,
+                         Sort_Texts => Step.Ignore_Order),
+                       Fail_Msg => "Output:  " & Text_Image (Output) &
+                         "does not contain expected:  " & Text_Image (T2),
                        Loc      => Step.Location);
    end Output_Contains;
 
@@ -382,9 +384,10 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("Files_Is " & File_Name, Verbosity => Debug);
       Put_Step_Result (Step     => Step,
-                       Success  => Is_Equal (T1, T2),
-                       Fail_Msg => T1'Image &
-                         " not equal to expected:  " & T2'Image,
+                       Success  => Is_Equal (T1, T2,
+                         Sort_Texts => Step.Ignore_Order),
+                       Fail_Msg => Text_Image (T1) &
+                         "not equal to expected:  " & Text_Image (T2),
                        Loc      => Step.Location);
    end Files_Is;
 
@@ -396,9 +399,10 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("File_Contains " & File_Name, Verbosity => Debug);
       Put_Step_Result (Step     => Step,
-                       Success  => Contains (T1, T2),
+                       Success  => Contains (T1, T2,
+                         Sort_Texts => Step.Ignore_Order),
                        Fail_Msg => "file " & To_String (Step.Subject_String) &
-                         " does not contain:  " & T2'Image,
+                         " does not contain:  " & Text_Image (T2),
                        Loc      => Step.Location);
    end File_Contains;
 

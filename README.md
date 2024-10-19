@@ -53,15 +53,14 @@ I need to get the version of the exe
 - Then the output contains `version 1.0`
 ```
 Here we have:
-1. Some description
-   You can use almost all markdown nice features, including extensions, this is mostly ignored by bbt.
-   Exceptions are in fact in the two following bullets.
+1. Some description  
+   You can use almost all markdown nice features, including extensions, this is ignored by bbt.
    
-2. A "scenario" header that starts a steps sequence
+2. A "scenario" header that starts a steps sequence  
    Titles starting with those Gherkin keywords will wake up btt : *# Features*, *# Background*, and *# Scenario* or *# Example*.  
    The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
 
-3. Steps
+3. Steps  
    Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
    Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
 
@@ -130,7 +129,7 @@ In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project star
 
 ## Limitations
 
-btt compile on Windows and Mac OS, but is currently tested only on my Linux amd64 platform.
+btt compile on Windows and Mac OS, but is currently tested only on my Linux amd64 box.
 
 ## Installation
 

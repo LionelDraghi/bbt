@@ -51,7 +51,7 @@ package body BBT.Scenarios.Step_Parser is
       Line_Finished  : Boolean := False;
       Backtick       : constant Character := '`';
       The_Delimiters : constant Ada.Strings.Maps.Character_Set
-        := Ada.Strings.Maps.To_Set (" _*" & Ada.Characters.Latin_1.HT);
+        := Ada.Strings.Maps.To_Set (" _*()" & Ada.Characters.Latin_1.HT);
 
       package String_Arrays is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                       String);
@@ -77,8 +77,9 @@ package body BBT.Scenarios.Step_Parser is
             "successfully",
             "file",
             "dir",
-            "directory"];
-      -- NB : all keywords must be in lower case!
+            "directory",
+            "unordered"];
+      -- NB : all keywords must be here in lower case!
 
       -- -----------------------------------------------------------------------
       procedure Initialize_Lexer is begin
@@ -257,9 +258,12 @@ package body BBT.Scenarios.Step_Parser is
                        Object_Text, -- content of code span or following
                        --              code fenced lines, before verb
                        Command_List,
-                       Error);
+                       Error,
+                       -- Adjectives
+                       Unordered);
 
-      subtype Objects        is Tokens range No_Object    .. Tokens'Last;
+      subtype Adjectives     is Tokens range Unordered    .. Tokens'Last;
+      subtype Objects        is Tokens range No_Object    .. Tokens'Pred (Adjectives'First);
       subtype Verbs          is Tokens range No_Verb      .. Tokens'Pred (Objects'First);
       subtype Subjects       is Tokens range No_Subject   .. Tokens'Pred (Verbs'First);
       subtype Subject_Attrib is Tokens range No_SA        .. Tokens'Pred (Subjects'First);
@@ -294,32 +298,33 @@ package body BBT.Scenarios.Step_Parser is
       function Image (T : Tokens) return String is
       begin
          case T is
-            when Given            => return "Given";
-            when When_P           => return "When";
-            when Then_P           => return "Then";
-            when No_SA            => return "";
-            when New_SA           => return "new";
-            when No_Subject       => return "";
-            when Output_Subj      => return "output";
-            when Subject_File     => return "`file`";
-            when Subject_Dir      => return "`dir`";
-            when Subject_Text     => return "`text`";
-            when No_Verb          => return "";
-            when Run              => return "run";
-            when Successful_Run   => return "successfully run";
-            when Get              => return "get";
-            when Get_No           => return "get no";
-            when Contains         => return "contains";
-            when Containing       => return "containing";
-            when Is_V             => return "is";
-            when Is_No            => return "is no";
-            when No_Object        => return "";
-            when Output_Obj       => return "output";
-            when Object_File      => return "`file`";
-            when Object_Dir       => return "`dir`";
-            when Object_Text      => return "`text`";
-            when Command_List     => return "`cmd` [or `cmd`]*";
-            when Error            => return "error";
+            when Given          => return "Given";
+            when When_P         => return "When";
+            when Then_P         => return "Then";
+            when No_SA          => return "";
+            when New_SA         => return "new";
+            when No_Subject     => return "";
+            when Output_Subj    => return "output";
+            when Subject_File   => return "`file`";
+            when Subject_Dir    => return "`dir`";
+            when Subject_Text   => return "`text`";
+            when No_Verb        => return "";
+            when Run            => return "run";
+            when Successful_Run => return "successfully run";
+            when Get            => return "get";
+            when Get_No         => return "get no";
+            when Contains       => return "contains";
+            when Containing     => return "containing";
+            when Is_V           => return "is";
+            when Is_No          => return "is no";
+            when No_Object      => return "";
+            when Output_Obj     => return "output";
+            when Object_File    => return "`file`";
+            when Object_Dir     => return "`dir`";
+            when Object_Text    => return "`text`";
+            when Command_List   => return "`cmd` [or `cmd`]*";
+            when Error          => return "error";
+            when Unordered      => return "unordered";
          end case;
       end Image;
 
@@ -457,6 +462,8 @@ package body BBT.Scenarios.Step_Parser is
       Step_String      : Unbounded_String         := Null_Unbounded_String;
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
       Object_String    : Unbounded_String         := Null_Unbounded_String;
+      Ignore_Order     : Boolean                  := False;
+      -- by default, order of expected output is significant
 
       File_Type        : File_Kind                := Ordinary_File;
 
@@ -479,6 +486,7 @@ package body BBT.Scenarios.Step_Parser is
             Tok : constant String := Next_Token (Tmp'Access, TT);
 
          begin
+            -- Put_Line ("Token = " & TT'Image & " " & Tok'Image);
             case TT is
                when Keyword =>
                   declare
@@ -600,6 +608,10 @@ package body BBT.Scenarios.Step_Parser is
                            Object := Object_File;
 
                         end if;
+
+                     elsif Lower_Keyword = "unordered" then
+                        Ignore_Order := True;
+
                      end if;
                   end;
 
@@ -692,6 +704,7 @@ package body BBT.Scenarios.Step_Parser is
               Subject_String,
               Object_String,
               File_Type,
+              Ignore_Order,
               File_Content    => Empty_Text,
               Parent_Scenario => null);
 

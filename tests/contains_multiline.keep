@@ -7,3 +7,5 @@ lang=uk
 recurse=true
 autosave=true
 ```
+
+(the lang=uk line is wrong)

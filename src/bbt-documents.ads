@@ -68,7 +68,8 @@ private package BBT.Documents is
       Location        : Location_Type;
       Subject_String  : Unbounded_String          := Null_Unbounded_String;
       Object_String   : Unbounded_String          := Null_Unbounded_String;
-      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File; -- ** essayer Special_File
+      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      Ignore_Order    : Boolean                   := True;
       File_Content    : Text                      := Empty_Text;
       Parent_Scenario : access Scenario_Type;
    end record with Put_Image => Put_Image;

@@ -50,7 +50,7 @@
 
 ## [example_keyword.md](features/example_keyword.md)  
 
-  ### Feature: The keyword Example is a synonym of the keyword Scenario.  
+  ### Feature: The keyword `Example` is a synonym of the keyword `Scenario`.  
 
   - [X] scenario [NOK return code](features/example_keyword.md) pass  
 
@@ -91,6 +91,15 @@
   ### Feature: stderr test  
 
   - [X] scenario [unknown option](features/stderr.md) pass  
+
+
+## [unordered.md](features/unordered.md)  
+
+  ### Feature: when the modifyer `unordered` is given after `get`, order of line is ignored  
+
+  - [X] scenario ["I get" without the modifyer](features/unordered.md) pass  
+
+  - [X] scenario [same "I get" with the modifyer](features/unordered.md) pass  
 
 
 ## [contains_multiline.md](features/contains_multiline.md)  
@@ -198,5 +207,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  47
+- Successful tests =  49
 - Empty      tests =  0

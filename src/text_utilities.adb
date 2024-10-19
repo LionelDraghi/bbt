@@ -254,13 +254,17 @@ package body Text_Utilities is
    --     end if;
    --  end Shrink;
 
+   procedure Sort (The_Text : in out Text) renames Texts_Sorting.Sort;
+
    -- --------------------------------------------------------------------------
    procedure Compare (Text1, Text2     : Text;
                       Ignore_Blanks    : Boolean := True;
                       Case_Insensitive : Boolean := True;
+                      Sort_Texts       : Boolean := False;
                       Identical        : out Boolean;
                       Diff_Index       : out Natural) is
       Idx1, Idx2 : Natural := 1;
+      T1, T2     : Text;
 
       -- Fixme: uggly code!!
    begin
@@ -269,17 +273,24 @@ package body Text_Utilities is
       --  Put_Line ("Text1 = " & Text1'Image);
       --  Put_Line ("Text2 = " & Text2'Image);
 
-      -- If Test1 = Text2, return Identical = True and Diff_Index = 0
-      -- Otherwise, return False and Index of the first different line in Text2
-      if Text1 = Text2 then
+      T1 := Text1;
+      T2 := Text2;
+      if Sort_Texts then
+         Sort (T1);
+         Sort (T2);
+      end if;
+
+      -- If T1 = T2, return Identical = True and Diff_Index = 0
+      -- Otherwise, return False and Index of the first different line in T2
+      if T1 = T2 then
          Identical := True;
          Diff_Index := 0;
-         -- Put_Line ("Text1 = Text2");
+         -- Put_Line ("T1 = T2");
 
       elsif Ignore_Blanks then
 
-         Idx1 := First_Non_Blank_Line (Text1, @);
-         Idx2 := First_Non_Blank_Line (Text2, @);
+         Idx1 := First_Non_Blank_Line (T1, @);
+         Idx2 := First_Non_Blank_Line (T2, @);
 
          if Idx1 = 0 and Idx2 = 0 then
             -- Put_Line ("Idx1 = Idx2 = 0");
@@ -289,8 +300,8 @@ package body Text_Utilities is
             return;
          end if;
 
-         --  Put_Line ("Init Idx1 = " & Idx1'Image & "/" & Text1.Last_Index'Image);
-         --  Put_Line ("Init Idx2 = " & Idx2'Image & "/" & Text2.Last_Index'Image);
+         --  Put_Line ("Init Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
+         --  Put_Line ("Init Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
 
          loop
             if Idx1 = 0 xor Idx2 = 0 then
@@ -306,38 +317,38 @@ package body Text_Utilities is
                return;
             end if;
 
-            if not Is_Equal (Text1 (Idx1), Text2 (Idx2),
+            if not Is_Equal (T1 (Idx1), T2 (Idx2),
                              Case_Insensitive => Case_Insensitive,
                              Ignore_Blanks    => Ignore_Blanks)
             then
-               -- Put_Line ("Text1 /= Text2");
+               -- Put_Line ("T1 /= T2");
                Identical := False;
                Diff_Index := Idx2;
                return;
                --  else
-               --     Put_Line (" Text1 (" & Idx1'Image
-               --               & ") " & String'(Text1 (Idx1))'Image
-               --               & " = Text2 (" & Idx2'Image & ") "
-               --              & String'(Text2 (Idx2))'Image);
-               -- Put_Line (String'(Text1 (Idx1))'Image & " = " & String'(Text2 (Idx2))'Image);
+               --     Put_Line (" T1 (" & Idx1'Image
+               --               & ") " & String'(T1 (Idx1))'Image
+               --               & " = T2 (" & Idx2'Image & ") "
+               --              & String'(T2 (Idx2))'Image);
+               -- Put_Line (String'(T1 (Idx1))'Image & " = " & String'(T2 (Idx2))'Image);
 
             end if;
 
             Diff_Index := Idx2; -- store the last non blank index
 
-            -- Put_Line ("Idx1 = " & Idx1'Image & "/" & Text1.Last_Index'Image);
-            -- Put_Line ("Idx2 = " & Idx2'Image & "/" & Text2.Last_Index'Image);
-            exit when Idx1 = Text1.Last_Index and Idx2 = Text2.Last_Index;
+            -- Put_Line ("Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
+            -- Put_Line ("Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
+            exit when Idx1 = T1.Last_Index and Idx2 = T2.Last_Index;
 
             declare
-               I1 : Natural := Text1.Last_Index;
-               I2 : Natural := Text2.Last_Index;
+               I1 : Natural := T1.Last_Index;
+               I2 : Natural := T2.Last_Index;
             begin
-               if Idx1 /= Text1.Last_Index then
-                  I1 := First_Non_Blank_Line (Text1, From => Idx1 + 1);
+               if Idx1 /= T1.Last_Index then
+                  I1 := First_Non_Blank_Line (T1, From => Idx1 + 1);
                end if;
-               if Idx2 /= Text2.Last_Index then
-                  I2 := First_Non_Blank_Line (Text2, From => Idx2 + 1);
+               if Idx2 /= T2.Last_Index then
+                  I2 := First_Non_Blank_Line (T2, From => Idx2 + 1);
                end if;
                -- Idx should not return to zero, so let's use tmp index :
                -- Put_Line ("I1 = " & I1'Image);
@@ -350,19 +361,19 @@ package body Text_Utilities is
                end if;
             end;
 
-            --  Put_Line ("Idx1 = " & Idx1'Image & "/" & Text1.Last_Index'Image);
-            --  Put_Line ("Idx2 = " & Idx2'Image & "/" & Text2.Last_Index'Image);
+            --  Put_Line ("Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
+            --  Put_Line ("Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
 
          end loop;
 
-         -- Put_Line ("Text1 = Text2");
+         -- Put_Line ("T1 = T2");
          Identical := True;
          Diff_Index := 0;
 
       else
          -- Brut compare
-         for Diff_Index in Text1.Iterate loop
-            exit when Texts."/=" (Text1 (Diff_Index), Text2 (Diff_Index));
+         for Diff_Index in T1.Iterate loop
+            exit when Texts."/=" (T1 (Diff_Index), T2 (Diff_Index));
          end loop;
       end if;
 
@@ -370,6 +381,7 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Is_Equal (Text1, Text2       : Text;
+                      Sort_Texts         : Boolean := False;
                       Ignore_Blank_Lines : Boolean := True;
                       Case_Insensitive   : Boolean := True) return Boolean
    is
@@ -379,6 +391,7 @@ package body Text_Utilities is
       Compare (Text1, Text2,
                Ignore_Blanks      => Ignore_Blank_Lines,
                Case_Insensitive   => Case_Insensitive,
+               Sort_Texts         => Sort_Texts,
                Identical          => Identical,
                Diff_Index         => Diff_Index);
       return Identical;
@@ -404,6 +417,7 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2     : Text;
+                      Sort_Texts       : Boolean;
                       Case_Insensitive : Boolean := True) return Boolean is
    -- After eliminating easy cases T1 = T2 and T2 is longer than T1, the
    -- comparison algorithm is :
@@ -425,18 +439,27 @@ package body Text_Utilities is
 
       else
          declare
+            T1, T2  : Text;
             Last_I1 : constant Positive
               := Text1.Last_Index - Positive (Text2.Length) + 1;
             I1      : Positive;
 
          begin
-            for Start in Text1.First_Index .. Last_I1 loop
+            T1 := Text1;
+            T2 := Text2;
+            if Sort_Texts then
+               Sort (T1);
+               Sort (T2);
+            end if;
+
+            -- if
+            for Start in T1.First_Index .. Last_I1 loop
                I1 := Start;
-               Inner : for I2 in Text2.First_Index .. Text2.Last_Index loop
+               Inner : for I2 in T2.First_Index .. T2.Last_Index loop
                   -- We look for a first match between texts.
-                  if Search (Text1 (I1), Text2 (I2), Case_Insensitive) then
+                  if Search (T1 (I1), T2 (I2), Case_Insensitive) then
                      -- Lines match
-                     if I2 = Text2.Last_Index then
+                     if I2 = T2.Last_Index then
                         -- It was the last line of T2
                         -- => Text match
                         return True;

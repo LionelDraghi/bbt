@@ -9,8 +9,8 @@ with List_Image;
 with List_Image.Unix_Predefined_Styles;
 
 with Ada.Containers.Indefinite_Vectors;
-with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
-with Ada.Text_IO;                       use Ada.Text_IO;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO;           use Ada.Text_IO;
 
 package Text_Utilities is
 
@@ -19,6 +19,8 @@ package Text_Utilities is
                                                            String);
    subtype Text is Texts.Vector;
    Empty_Text : Text renames Texts.Empty_Vector;
+
+   package Texts_Sorting is new Texts.Generic_Sorting;
 
    -- --------------------------------------------------------------------------
    --  procedure Create_File (File_Name    : String;
@@ -67,20 +69,26 @@ package Text_Utilities is
    -- obviously without Cut_Mark.
 
    -- --------------------------------------------------------------------------
+   procedure Sort (The_Text : in out Text);
+
+   -- --------------------------------------------------------------------------
    procedure Compare (Text1, Text2     : Text;
                       Ignore_Blanks    : Boolean := True;
                       Case_Insensitive : Boolean := True;
+                      Sort_Texts       : Boolean := False;
                       Identical        : out Boolean;
                       Diff_Index       : out Natural);
    -- If Test1 = Text2, return Identical = True and Diff_Index = 0
    -- Otherwise, return False and Index of the first different line in Text2
 
    function Is_Equal (Text1, Text2       : Text;
+                      Sort_Texts         : Boolean := False;
                       Ignore_Blank_Lines : Boolean := True;
                       Case_Insensitive   : Boolean := True) return Boolean;
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2     : Text;
+                      Sort_Texts       : Boolean;
                       Case_Insensitive : Boolean := True) return Boolean;
    -- Return True if Text1 contains Text2.
    function Contains_Line (The_Text         : Text;
