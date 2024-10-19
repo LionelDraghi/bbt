@@ -8,7 +8,7 @@ and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2
 
 - [Head]
 
-- [0.0.4]
+- [0.0.5]
   - [Changed] bbt now return an error status when one of the test fails
   - [Added]   first `--cleanup` implementation, that removes files created during the test by bbt
   - [Added]   in scenarios, `dir` is now a synonym of `directory`

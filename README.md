@@ -57,8 +57,8 @@ Here we have:
    Exceptions are in fact in the two following bullets.
    
 2. A "scenario" header that starts a steps sequence
-   Titles starting with some Gherkin keywords will wake up btt : *# Scenario*, *# Features*, *# Background* 
-   The header level is ignored (*#### Scenario*, is equal *# Scenario*), you're free to structure the file as you want. 
+   Titles starting with some Gherkin keywords will wake up btt : *# Scenario*, *# Features*, *# Background*  
+   The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
 
 3. Steps
    Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
@@ -100,10 +100,11 @@ bbt as no dependencies on external lib or tools (diff, for example), to ensure t
 
 ### Test Results are immediately publishable 
 
-**Tests results** are also in Markdown files, and cross-reference the matching scenario file : if a test fail, just click on the link and you are in the scenario.  
-You can push it on github without further processing.  
-To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).
-Tests results are generated when running `bbt`, by just using the `-o` option (--output).  
+**Tests results** are also in Markdown files, and cross-references the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
+You can push on github without further processing.  
+To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).  
+
+Tests results are generated when running `bbt`, by just using the `-o` option (--output).
 
 ## Objective of the project 
 
@@ -136,7 +137,7 @@ btt compile on Windows and Mac OS, but is currently tested only on my Linux amd6
 1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
    
 2. Then to install bbt :
-    > alr get bbt
+    > alr get bbt  
     > cd bbt  
     > alr run  
 
