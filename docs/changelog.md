@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/)
 and version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [Head]
+  - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
 
 - [0.0.5]
   - [Changed] bbt now return an error status when one of the test fails
