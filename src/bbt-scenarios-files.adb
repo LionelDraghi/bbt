@@ -54,7 +54,7 @@ package body BBT.Scenarios.Files is
    procedure Find_BBT_Files
      (Recursive   : Boolean;
       Start_In    : String := "./";
-      Remove_Root : String := Settings.Initial_Directory)
+      Remove_Root : String := Settings.Launch_Directory)
 
    is
       use Ada.Directories;

@@ -31,7 +31,7 @@ package BBT.Scenarios.Files is
    procedure Find_BBT_Files
      (Recursive   : Boolean;
       Start_In    : String := "./";
-      Remove_Root : String := Settings.Initial_Directory);
+      Remove_Root : String := Settings.Launch_Directory);
    function No_BBT_File return Boolean;
    function BBT_Files return File_List.Vector;
 

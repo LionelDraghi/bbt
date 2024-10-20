@@ -5,19 +5,20 @@ check: ../bbt ../uut
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
 	@ - ln -fs ../uut .
+	@ - ln -fs ../bbt .
 
-	@ - rm ../docs/tests/examples_results.md
-	@ ../bbt --yes -c -o ../docs/tests/examples_results.md ../docs/tests/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
+	@ ./bbt --yes -c -o ./examples_results.md -ed ./ ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
 	@ echo
 
-	@ - rm ../docs/tests/features_results.md
-	@ ../bbt --yes --cleanup --output ../docs/tests/features_results.md ../docs/tests/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ ./bbt --yes --cleanup --output ./features_results.md --exec_dir ./ ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
 doc:
+	@ - mv examples_results.md ../docs/tests/
+	@ - mv features_results.md ../docs/tests/
 	
 .PHONY : clean
 clean:
-	@ - rm -f *.out main
+	@ - rm -f *.out main bbt uut ../docs/features/*.out ../docs/examples/*.out
 	@ - rm -rf dir*
 

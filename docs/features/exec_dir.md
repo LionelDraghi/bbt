@@ -7,10 +7,6 @@ bbt is able to run a scenario in a specific directory, provided on the command l
 
 - Given there is no `dir1` directory
 - Given there is no `dir2` directory
-
-
-### Scenario: Lets run `create_tree` in the current dir
-
 - Given the new `create_tree.md` file
 ```
 # Scenario:
@@ -18,7 +14,9 @@ bbt is able to run a scenario in a specific directory, provided on the command l
 - Given the file `dir1/file1` 
 ```
 
-- When I run `bbt create_tree.md`
+### Scenario: Lets run `create_tree` in the current dir
+
+- When I run `./bbt create_tree.md`
 
 - Then there is a `dir1` dir
 - And there is a `dir1/file1` file
@@ -27,7 +25,7 @@ bbt is able to run a scenario in a specific directory, provided on the command l
 
 - Given the new `dir2` directory
 
-- When I run `bbt create_tree.md --exec_dir dir2`
+- When I run `./bbt create_tree.md --exec_dir dir2`
 
 - Then there is a `dir2/dir1` dir
 - And there is a `dir2/dir1/file1` file

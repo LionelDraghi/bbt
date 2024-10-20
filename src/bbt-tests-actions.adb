@@ -11,6 +11,7 @@ with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- no direct with of Ada.Directories or Ada.Text_IO here
@@ -281,7 +282,8 @@ package body BBT.Tests.Actions is
          Put_Step_Result (Step     => Step,
                           Success  => False,
                           Fail_Msg => "Expected dir " &
-                            Dir_Name'Image & " doesn't exists",
+                            Dir_Name'Image & " doesn't exists in Exec_Dir "
+                            & Settings.Exec_Dir,
                           Loc      => Step.Location);
       end if;
    end Check_Dir_Existence;

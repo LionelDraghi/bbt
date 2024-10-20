@@ -15,8 +15,8 @@ package body BBT.Settings is
    -- they are implemented as access to String
    -- Runfl_Name      : access String := null;
    -- Cmd_Line        : Unbounded_String := Null_Unbounded_String;
-   WD : constant access String :=
-          new String'(Ada.Directories.Current_Directory);
+   Launch_Dir                  : constant access String :=
+     new String'(Ada.Directories.Current_Directory);
    Outfile_Name, Exec_Dir_Name : access String := null;
 
    -- --------------------------------------------------------------------------
@@ -34,7 +34,8 @@ package body BBT.Settings is
    --  end Is_File_In;
 
    -- --------------------------------------------------------------------------
-   function Initial_Directory return String is (WD.all);
+   function Launch_Directory return String
+   is (Launch_Dir.all);
 
    -- --------------------------------------------------------------------------
    procedure Set_Exec_Dir (Dir_Name : String) is
@@ -43,8 +44,8 @@ package body BBT.Settings is
    end Set_Exec_Dir;
 
    function Exec_Dir return String is
-     (if Exec_Dir_Name = null then Ada.Directories.Current_Directory
-      else Exec_Dir_Name.all);
+    (if Exec_Dir_Name = null then Ada.Directories.Current_Directory
+       else Exec_Dir_Name.all);
 
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String is (Exec_Dir);
@@ -55,12 +56,11 @@ package body BBT.Settings is
       Outfile_Name := new String'(File_Name);
    end Set_Result_File;
 
-   function Result_File_Name return String  is
-     (if Outfile_Name = null then ""
-      else Outfile_Name.all);
+   function Result_File_Name return String is
+    (if Outfile_Name = null then "" else Outfile_Name.all);
 
    function Result_Dir return String is
-     (if Outfile_Name = null then Ada.Directories.Current_Directory
-      else Ada.Directories.Containing_Directory (Outfile_Name.all));
+    (if Outfile_Name = null then Ada.Directories.Current_Directory
+       else Ada.Directories.Containing_Directory (Outfile_Name.all));
 
 end BBT.Settings;

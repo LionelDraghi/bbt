@@ -32,12 +32,13 @@ private package BBT.Settings is
    Template_Name      : constant String := "bbt_template.md";
 
    -- --------------------------------------------------------------------------
-   function Initial_Directory return String;
+   function Launch_Directory return String;
    -- Returns Ada.Directories.Current_Directory at bbt launch.
 
    -- --------------------------------------------------------------------------
    procedure Set_Exec_Dir (Dir_Name : String);
    function Exec_Dir return String;
+   -- Dir where the tests will be run, the temp file created, etc.
 
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String;

@@ -50,7 +50,7 @@ doc: ./bbt
 	echo                                		>> /tmp/issues.md
 	echo 'Location | Text'             		    >> /tmp/issues.md
 	echo '---------|-----'             		    >> /tmp/issues.md
-	rgrep -n "Issue #" src/ docs/tests/ | sed "s/:/|/2"	>> /tmp/issues.md
+	rgrep -n "Issue #" src/ docs/features/ | sed "s/:/|/2"	>> /tmp/issues.md
 	mv /tmp/issues.md docs/issues.md
 
 	echo OK

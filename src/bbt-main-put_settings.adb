@@ -26,7 +26,7 @@ begin
    New_Line;
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
    Put_Line ("   bbt files             : " & Scenarios.Files.BBT_Files'Image);
-   Put_Line ("   Initial directory     : " & Initial_Directory);
+   Put_Line ("   Initial directory     : " & Launch_Directory);
    Put_Line ("   Exec    directory     : " & Settings.Exec_Dir);
    Put_Line ("   Output file directory : " & Settings.Output_File_Dir);
    Put_Line ("   Result file           : " & Result_File_Name);

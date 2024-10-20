@@ -36,7 +36,7 @@ procedure BBT.Main is
 begin
    -- --------------------------------------------------------------------------
    Analyze_Cmd_Line;
-   IO.Set_Reference_Directory (Settings.Initial_Directory);
+   IO.Set_Reference_Directory (Settings.Launch_Directory);
    --  To get the file name relative to the start dir, and not
    --  absolute Path.
 

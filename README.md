@@ -137,11 +137,20 @@ btt compile on Windows and Mac OS, but is currently tested only on my Linux amd6
 1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
    
 2. Then to install bbt :
-    > alr get bbt  
-    > cd bbt  
-    > alr run  
+   ```sh
+   alr get bbt  
+   cd bbt  
+   alr build  
+   ```
 
 4. Move the bbt exec somewhere in your PATH
+
+Or, without Alire (and for the latest version) :
+```sh
+git clone https://github.com/LionelDraghi/bbt  
+cd bbt  
+gprbuild  
+``` 
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
