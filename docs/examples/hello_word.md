@@ -1,14 +1,16 @@
 # gcc simple sanity tests
 
 ## Scenario: gcc version?
+  
+Let start with something easy :
 
 - When I run `/usr/bin/gcc -v`
 
-- Then the output contains `gcc version`
-  
-  (we don't test here the actual version number)
+- Then the output contains `14.2.0`
 
 ## Scenario: compiling and executing an hello word
+
+Sanity check of a complete compile / link / run sequence :
 
 - Given the new file `main.c`
 ```c
