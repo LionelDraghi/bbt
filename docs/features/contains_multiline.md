@@ -1,5 +1,7 @@
 ## Feature : "contains" a string feature
 
+No surprise, `contains` is the to keyword to use when checking that the output or a file contain a sequence of line.
+
 ### Scenario: test the standard output
 
 - Given `config.ini` file

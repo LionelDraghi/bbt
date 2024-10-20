@@ -1,6 +1,6 @@
 ## Feature : checking an expected multiline output
 
-Test an app returning a long text
+Test an expected multi-lines output.
 
 ### Scenario : asking for uut help
 

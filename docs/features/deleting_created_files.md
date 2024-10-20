@@ -3,6 +3,9 @@
 Scenarios may create a lot of file and directory during run, and that's tedious to remove.  
 The --cleanup option is here to ensure that those files are removed after run.
 
+> [!NOTE] bbt will remove file that he created, but not files created by the run external commands. 
+> This is mostly feasible, by taking a snapshot of the file system before and after the run, but is it desirable?
+
 ### Scenario: run without --cleanup
 
 - Given the new `create_tree.md` file

@@ -1,5 +1,9 @@
 # Feature: when the modifyer `unordered` is given after `get`, order of line is ignored
 
+Comparing the expected output with a predefined list may be tedious, if, for example, the tested command list the file in access time order.  
+Our intent in that case is to verify that each expected line and only those lines are output.  
+bbt provide the `unordered` modifyer (that is an adjective) to be mentioned near the file name, that will cause the compare to ignore the order.  
+
 # Background:
 
 - Given the file `flowers.txt`

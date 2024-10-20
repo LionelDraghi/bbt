@@ -1,5 +1,7 @@
 ## Feature: testing the "file is" feature
 
+Basic bbt feature : checking a file content.  
+
 ### Scenario: file is as expected
 
 - Given the `blaise_cendrars.txt` file

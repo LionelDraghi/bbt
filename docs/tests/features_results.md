@@ -137,6 +137,9 @@
 
   - [X] scenario [test on a string output](../docs/features/contains_line.md) pass  
 
+../docs/features/contains_line.md:15: Error : Unrecognized step "Then the error output contains `unknown option -qsd`"
+  - [ ] scenario [test on the error output](../docs/features/contains_line.md) fails  
+
   - [X] scenario [test on a multiline output](../docs/features/contains_line.md) pass  
 
   - [X] scenario [test on a file](../docs/features/contains_line.md) pass  
@@ -206,6 +209,6 @@
 
 
 -----------------------
-- Failed     tests =  0
+- Failed     tests =  1
 - Successful tests =  49
 - Empty      tests =  0

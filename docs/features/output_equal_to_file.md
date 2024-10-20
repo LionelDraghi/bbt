@@ -1,5 +1,8 @@
 ## Feature : output is equal to a file
 
+Expected results may be very long.  
+It's handy to be able to keep the expected output in an external file.  
+
 ### Scenario : test `output is equal` keyword
 
 - Given the file `help_message.txt`

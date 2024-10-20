@@ -4,7 +4,7 @@ bbt is able to run multiple files, according to the command line.
 It is possible to specify one or more directories. When file names are not specified, bbt will consider every .md file as a scenario.  
 
 It is also possible to use globing character and to run, for example, `bbt tests/*.scen`  
-Note that this is not really tested here, as the globbing expansion is done by the shell. bbt will actually be called with `bbt tests/file1.scen tests/file2.scen` etc. (but this one is tested)
+Note that this is not really tested here, as the globbing expansion is done by the shell. bbt will actually be called with `bbt tests/file1.scen tests/file2.scen` etc. (but this case is tested)
 
 ### Background:
 - Given the new `dir1` directory

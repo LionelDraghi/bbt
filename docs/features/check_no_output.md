@@ -1,6 +1,6 @@
 ## Feature: Check that there is no output
 
-Checking that there is sometime useful.
+Checking that there is no output is sometime useful.
 
 ### Scenario: silent operation
 - Given the new file `file.txt` containing `text1`

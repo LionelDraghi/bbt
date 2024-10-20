@@ -1,6 +1,6 @@
 ## Feature : checking a message line on stdout
 
-Test an app returning a single line message
+First thing to test, a single line message on standard output!
 
 ### Scenario : asking for uut version
 

@@ -1,6 +1,6 @@
 ## Feature : The keyword `Example` is a synonym of the keyword `Scenario`.
 
-Both should run the same way.
+To comply with Gherkin habits, both `Example` and `Scenario` are interchangeable.
 
 ### Scenario : NOK return code
 

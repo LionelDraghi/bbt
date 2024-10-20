@@ -6,6 +6,13 @@ In that case, the background content will be executed before
 all scenarios in the file;
 2. or at the beginning of a feature, and will then apply to all scenarios in the feature.
 
+Note that in pure Gherkin (https://cucumber.io/docs/gherkin/reference/) :
+- a Background is placed before the first Scenario/Example;
+- The first primary keyword in a Gherkin document must always be Feature
+
+bbt has no such constraints : a bbt file may start with a Scenario keyword, without Feature, and a Background may appear before a Feature, and apply to several Features.
+
+
 ### Background: Background1 
 - Given the new dir `dir1`
 - Given the file `dir1/file1`

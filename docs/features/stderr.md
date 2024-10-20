@@ -1,6 +1,6 @@
 ## Feature : stderr test
 
-Test an app returning an error message on stderr
+Test expected msg on the error output.  
 
 ### Scenario : unknown option
 
