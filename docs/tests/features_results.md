@@ -1,211 +1,211 @@
 
-## [multiline.md](../docs/features/multiline.md)  
+## [multiline.md](../features/multiline.md)  
 
   ### Feature: checking an expected multiline output  
 
-  - [X] scenario [asking for uut help](../docs/features/multiline.md) pass  
+  - [X] scenario [asking for uut help](../features/multiline.md) pass  
 
-  - [X] scenario [causing an uut error with a long explanation](../docs/features/multiline.md) pass  
+  - [X] scenario [causing an uut error with a long explanation](../features/multiline.md) pass  
 
 
-## [find_scenarios.md](../docs/features/find_scenarios.md)  
+## [find_scenarios.md](../features/find_scenarios.md)  
 
   ### Feature: multiples scenarios given in command line  
 
-  - [X] scenario [no file or dir on the command line](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [no file or dir on the command line](../features/find_scenarios.md) pass  
 
-  - [X] scenario [running all scenarios in dir1](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [running all scenarios in dir1](../features/find_scenarios.md) pass  
 
-  - [X] scenario [running multiple scenarios given on command line](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [running multiple scenarios given on command line](../features/find_scenarios.md) pass  
 
-  - [X] scenario [running scenarios in a tree thanks to `-r`](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [running scenarios in a tree thanks to `-r`](../features/find_scenarios.md) pass  
 
-  - [X] scenario [error msg when trying to run scenarios, but none found in given directories](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [error msg when trying to run scenarios, but none found in given directories](../features/find_scenarios.md) pass  
 
-  - [X] scenario [empty list file on -lf if there is no scenario in given directories](../docs/features/find_scenarios.md) pass  
+  - [X] scenario [empty list file on -lf if there is no scenario in given directories](../features/find_scenarios.md) pass  
 
 
-## [escaped_char.md](../docs/features/escaped_char.md)  
+## [escaped_char.md](../features/escaped_char.md)  
 
   ### Feature: Space in names  
 
-  - [X] scenario [Directory with space in the name](../docs/features/escaped_char.md) pass  
+  - [X] scenario [Directory with space in the name](../features/escaped_char.md) pass  
 
 
-## [file_is_code_fence.md](../docs/features/file_is_code_fence.md)  
+## [file_is_code_fence.md](../features/file_is_code_fence.md)  
 
   ### Feature: testing the "file is" feature  
 
-  - [X] scenario [file is as expected](../docs/features/file_is_code_fence.md) pass  
+  - [X] scenario [file is as expected](../features/file_is_code_fence.md) pass  
 
-  - [X] scenario [file is not as expected](../docs/features/file_is_code_fence.md) pass  
+  - [X] scenario [file is not as expected](../features/file_is_code_fence.md) pass  
 
 
-## [output_equal_to_file.md](../docs/features/output_equal_to_file.md)  
+## [output_equal_to_file.md](../features/output_equal_to_file.md)  
 
   ### Feature: output is equal to a file  
 
-  - [X] scenario [test `output is equal` keyword](../docs/features/output_equal_to_file.md) pass  
+  - [X] scenario [test `output is equal` keyword](../features/output_equal_to_file.md) pass  
 
 
-## [example_keyword.md](../docs/features/example_keyword.md)  
+## [example_keyword.md](../features/example_keyword.md)  
 
   ### Feature: The keyword `Example` is a synonym of the keyword `Scenario`.  
 
-  - [X] scenario [NOK return code](../docs/features/example_keyword.md) pass  
+  - [X] scenario [NOK return code](../features/example_keyword.md) pass  
 
-  - [X] scenario [NOK return code](../docs/features/example_keyword.md) pass  
-
-
-## [missing_title.md](../docs/features/missing_title.md)  
-
-  - [X] scenario [Missing tittle in scenario, background and feature](../docs/features/missing_title.md) pass  
+  - [X] scenario [NOK return code](../features/example_keyword.md) pass  
 
 
-## [background.md](../docs/features/background.md)  
+## [missing_title.md](../features/missing_title.md)  
+
+  - [X] scenario [Missing tittle in scenario, background and feature](../features/missing_title.md) pass  
+
+
+## [background.md](../features/background.md)  
 
   ### Feature: Feature 1  
 
-  - [X] scenario [lets erase what was created by previous background runs](../docs/features/background.md) pass  
+  - [X] scenario [lets erase what was created by previous background runs](../features/background.md) pass  
 
-  - [X] scenario [Two Background executed](../docs/features/background.md) pass  
+  - [X] scenario [Two Background executed](../features/background.md) pass  
 
   ### Feature: Feature 2  
 
-  - [X] scenario [lets erase once more what was created by previous background runs](../docs/features/background.md) pass  
+  - [X] scenario [lets erase once more what was created by previous background runs](../features/background.md) pass  
 
-  - [X] scenario [only first background should apply](../docs/features/background.md) pass  
+  - [X] scenario [only first background should apply](../features/background.md) pass  
 
 
-## [exec_dir.md](../docs/features/exec_dir.md)  
+## [exec_dir.md](../features/exec_dir.md)  
 
   ### Feature: **Exec Dir**  
 
-  - [X] scenario [Lets run `create_tree` in the current dir](../docs/features/exec_dir.md) pass  
+  - [X] scenario [Lets run `create_tree` in the current dir](../features/exec_dir.md) pass  
 
-  - [X] scenario [Lets run `create_tree` in ./dir2](../docs/features/exec_dir.md) pass  
+  - [X] scenario [Lets run `create_tree` in ./dir2](../features/exec_dir.md) pass  
 
 
-## [stderr.md](../docs/features/stderr.md)  
+## [stderr.md](../features/stderr.md)  
 
   ### Feature: stderr test  
 
-  - [X] scenario [unknown option](../docs/features/stderr.md) pass  
+  - [X] scenario [unknown option](../features/stderr.md) pass  
 
 
-## [unordered.md](../docs/features/unordered.md)  
+## [unordered.md](../features/unordered.md)  
 
   ### Feature: when the modifyer `unordered` is given after `get`, order of line is ignored  
 
-  - [X] scenario ["I get" without the modifyer](../docs/features/unordered.md) pass  
+  - [X] scenario ["I get" without the modifyer](../features/unordered.md) pass  
 
-  - [X] scenario [same "I get" with the modifyer](../docs/features/unordered.md) pass  
+  - [X] scenario [same "I get" with the modifyer](../features/unordered.md) pass  
 
 
-## [contains_multiline.md](../docs/features/contains_multiline.md)  
+## [contains_multiline.md](../features/contains_multiline.md)  
 
   ### Feature: "contains" a string feature  
 
-  - [X] scenario [test the standard output](../docs/features/contains_multiline.md) pass  
+  - [X] scenario [test the standard output](../features/contains_multiline.md) pass  
 
-  - [X] scenario [should fail](../docs/features/contains_multiline.md) pass  
+  - [X] scenario [should fail](../features/contains_multiline.md) pass  
 
 
-## [return_code_on_test_failure.md](../docs/features/return_code_on_test_failure.md)  
+## [return_code_on_test_failure.md](../features/return_code_on_test_failure.md)  
 
   ### Feature: return code on test failure  
 
-  - [X] scenario [return code on test success](../docs/features/return_code_on_test_failure.md) pass  
+  - [X] scenario [return code on test success](../features/return_code_on_test_failure.md) pass  
 
-  - [X] scenario [return code when the test fail](../docs/features/return_code_on_test_failure.md) pass  
+  - [X] scenario [return code when the test fail](../features/return_code_on_test_failure.md) pass  
 
-  - [X] scenario [return code when one fail and the other succeed](../docs/features/return_code_on_test_failure.md) pass  
+  - [X] scenario [return code when one fail and the other succeed](../features/return_code_on_test_failure.md) pass  
 
 
-## [file_is_string.md](../docs/features/file_is_string.md)  
+## [file_is_string.md](../features/file_is_string.md)  
 
   ### Feature: "file is" followed by a code span (a string)  
 
-  - [X] scenario [test on a single line file](../docs/features/file_is_string.md) pass  
+  - [X] scenario [test on a single line file](../features/file_is_string.md) pass  
 
-  - [X] scenario [adding a second line to the file, so the same test should fail](../docs/features/file_is_string.md) pass  
+  - [X] scenario [adding a second line to the file, so the same test should fail](../features/file_is_string.md) pass  
 
 
-## [contains_line.md](../docs/features/contains_line.md)  
+## [contains_line.md](../features/contains_line.md)  
 
   ### Feature: testing that a file contains a line  
 
-  - [X] scenario [test on a string output](../docs/features/contains_line.md) pass  
+  - [X] scenario [test on a string output](../features/contains_line.md) pass  
 
 ../docs/features/contains_line.md:15: Error : Unrecognized step "Then the error output contains `unknown option -qsd`"
-  - [ ] scenario [test on the error output](../docs/features/contains_line.md) fails  
+  - [ ] scenario [test on the error output](../features/contains_line.md) fails  
 
-  - [X] scenario [test on a multiline output](../docs/features/contains_line.md) pass  
+  - [X] scenario [test on a multiline output](../features/contains_line.md) pass  
 
-  - [X] scenario [test on a file](../docs/features/contains_line.md) pass  
+  - [X] scenario [test on a file](../features/contains_line.md) pass  
 
 
-## [return_code.md](../docs/features/return_code.md)  
+## [return_code.md](../features/return_code.md)  
 
   ### Feature: return code test  
 
-  - [X] scenario [NOK return code](../docs/features/return_code.md) pass  
+  - [X] scenario [NOK return code](../features/return_code.md) pass  
 
-  - [X] scenario [OK return code](../docs/features/return_code.md) pass  
+  - [X] scenario [OK return code](../features/return_code.md) pass  
 
 
-## [check_no_output.md](../docs/features/check_no_output.md)  
+## [check_no_output.md](../features/check_no_output.md)  
 
   ### Feature: Check that there is no output  
 
-  - [X] scenario [silent operation](../docs/features/check_no_output.md) pass  
+  - [X] scenario [silent operation](../features/check_no_output.md) pass  
 
-  - [X] scenario [silent operation expected, but there is an output](../docs/features/check_no_output.md) pass  
+  - [X] scenario [silent operation expected, but there is an output](../features/check_no_output.md) pass  
 
 
-## [deleting_created_files.md](../docs/features/deleting_created_files.md)  
+## [deleting_created_files.md](../features/deleting_created_files.md)  
 
   ### Feature: tmp files and directories deletion  
 
-  - [X] scenario [run without --cleanup](../docs/features/deleting_created_files.md) pass  
+  - [X] scenario [run without --cleanup](../features/deleting_created_files.md) pass  
 
-  - [X] scenario [run with --cleanup](../docs/features/deleting_created_files.md) pass  
+  - [X] scenario [run with --cleanup](../features/deleting_created_files.md) pass  
 
 
-## [file_test_and_creation.md](../docs/features/file_test_and_creation.md)  
+## [file_test_and_creation.md](../features/file_test_and_creation.md)  
 
   ### Feature: testing the existence of a file  
 
-  - [X] scenario [a required file does not exist](../docs/features/file_test_and_creation.md) pass  
+  - [X] scenario [a required file does not exist](../features/file_test_and_creation.md) pass  
 
-  - [X] scenario [the required file is created](../docs/features/file_test_and_creation.md) pass  
+  - [X] scenario [the required file is created](../features/file_test_and_creation.md) pass  
 
-  - [X] scenario ["Given there is no", when there actually is, should erase the file](../docs/features/file_test_and_creation.md) pass  
+  - [X] scenario ["Given there is no", when there actually is, should erase the file](../features/file_test_and_creation.md) pass  
 
 
-## [stdout.md](../docs/features/stdout.md)  
+## [stdout.md](../features/stdout.md)  
 
   ### Feature: checking a message line on stdout  
 
-  - [X] scenario [asking for uut version](../docs/features/stdout.md) pass  
+  - [X] scenario [asking for uut version](../features/stdout.md) pass  
 
 
-## [empty_scenarios.md](../docs/features/empty_scenarios.md)  
+## [empty_scenarios.md](../features/empty_scenarios.md)  
 
-  - [X] scenario [No step test](../docs/features/empty_scenarios.md) pass  
+  - [X] scenario [No step test](../features/empty_scenarios.md) pass  
 
-  - [X] scenario [No scenario test](../docs/features/empty_scenarios.md) pass  
+  - [X] scenario [No scenario test](../features/empty_scenarios.md) pass  
 
 
-## [successfully.md](../docs/features/successfully.md)  
+## [successfully.md](../features/successfully.md)  
 
   ### Feature: The “successfully” shortcut  
 
-  - [X] scenario [*when I successfully run* a command with successful run](../docs/features/successfully.md) pass  
+  - [X] scenario [*when I successfully run* a command with successful run](../features/successfully.md) pass  
 
-  - [X] scenario [*when I successfully run* a command with a wrong command line, returns an error status](../docs/features/successfully.md) pass  
+  - [X] scenario [*when I successfully run* a command with a wrong command line, returns an error status](../features/successfully.md) pass  
 
-  - [X] scenario [*when I run* a command with a wrong command line](../docs/features/successfully.md) pass  
+  - [X] scenario [*when I run* a command with a wrong command line](../features/successfully.md) pass  
 
 
 -----------------------
