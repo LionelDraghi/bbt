@@ -198,7 +198,7 @@ Be aware of that if you move the file in another dir after the run : move both s
 Or use the following best pratice : produce results files directly where you expect them, run the scenarios directly from the doc directory, and just use the "--exec_dir" to run the tests somewhere else to avoid producing crap within the docs tree.
 
 For example, if you have : 
-````
+```
 ├── docs
 │   ├── test_run
 │   │   └── results.md
@@ -208,6 +208,7 @@ For example, if you have :
 │       └── feature_3.md
 ├── tests
 ```
+
 the command could be :
 > cd tests
 > bbt --output ../docs/test_run/results.md ../docs/features/*.md
