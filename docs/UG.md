@@ -127,9 +127,9 @@ The title sounds kind of a provocation, it is not, unless you have other kind of
 When setting up a test, we often need to check that there is no pre-existing file or directory.  
 To avoid the burden of deleting those files in a Makefile or a script, bbt interpret a line like :
 > ``Given there is no `.config` file``  
-
+as :
 *if there is, delete it*  
-To avoid any unwanted deletion, it is important to understand the following behavior.
+and offer to delete it, or even delete it automatcaly. To avoid any unwanted deletion, it is important to understand the following behavior.
 
 #### using the negative form
 
@@ -137,20 +137,17 @@ The two lines below looks very close :
 > ``Then  there is no `.config` file``  
 > ``Given there is no `.config` file``  
  
-And indeed, bbt default behavior will be the same : if there is a `.config` file, the assertion will fail.  
+But while in the "Then" step, bbt is supposed to checks that there is no such file, in the "Given" step it is supposed to make so that there is no such file.  
+This is why the default behavior is not the same :
+- When Step : if there is a `.config` file, the assertion will fail.  
+- Given Step : if there is a `.config`file, bbt will prompt the user to confirm the deletion. If the user deny the deletion, or if the deletion fail, the assertion will fail.
 
-But while in the former case, bbt is supposed to checks that there is no such file, in the later case it is supposed to make so that there is no such file.  
-Simply stated, it is supposed to erase the file.
-
-To get this more handy (and logical) behavior, just call bbt with the `--yes` option.
-
-Same apply to directories. When using `--yes` options
-> ``Given there is no directory `./src` ``  
-
-will cause the whole tree rooted at ./src to be destroyed.
+Note that the usual `--yes` option is available, for batch running.
 
 >[!WARNING]
->Use with caution : you could as well delete /home (provided you have the privilege)!
+> Use `--yes`option with caution : 
+> ``Given there is no directory `./src` ``  
+> will cause the whole tree rooted at ./src to be silently destroyed when used with `--yes`.
 
 #### using the positive form
 
@@ -168,6 +165,8 @@ So, if you want to start with a possibly existing dir1, use :
 If you want to start with a brand new one whatever is the situation, use :  
 ``Given the new directory `dir1` `` **and** confirm deletion when prompted, or use the `--yes` option.
 
+Fixme: as of 0.0.5, bbt is not able to simulate interactive behavior, and so there no test of this behavior implemented yet.
+If there is no test, don't trust the doc :-)
 
 ## Tips
 
