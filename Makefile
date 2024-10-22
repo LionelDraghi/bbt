@@ -49,7 +49,7 @@ doc: ./bbt
 	echo                                		>> /tmp/fixme.md
 	echo 'Location | Text'             		    >> /tmp/fixme.md
 	echo '---------|-----'             		    >> /tmp/fixme.md
-	rgrep -n "Fixme:" src/*     | sed "s/:/|/2"	>> /tmp/fixme.md
+	rgrep -n "Fixme:" src/  docs/   | sed "s/:/|/2;s/Fixme://"	>> /tmp/fixme.md
 	mv /tmp/fixme.md docs/fixme.md
 
 	echo 'Issue references in current version:'	>  /tmp/issues.md
@@ -57,7 +57,7 @@ doc: ./bbt
 	echo                                		>> /tmp/issues.md
 	echo 'Location | Text'             		    >> /tmp/issues.md
 	echo '---------|-----'             		    >> /tmp/issues.md
-	rgrep -n "Issue #" src/ docs/features/ | sed "s/:/|/2"	>> /tmp/issues.md
+	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/"	>> /tmp/issues.md
 	mv /tmp/issues.md docs/issues.md
 
 	echo OK
