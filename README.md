@@ -156,7 +156,7 @@ gprbuild
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 
 ## Further reading
-- [User Guide](docs/UG.md): concepts, command, line, features...
+- [User Guide](docs/UG.md): concepts, command, features...
 - [References](docs/references.md) : syntax, grammar, and more details on non obvious behavior
 - [Project status](docs/project.md): changelog, tests, TDL...
-
+- [Command line help](docs/bbt_help.md)

@@ -1,6 +1,5 @@
 
-References  <!-- omit from toc -->
-==========
+# References  <!-- omit from toc -->
 
 - [Syntax](#syntax)
   - [Gherkin language subset](#gherkin-language-subset)
@@ -184,3 +183,4 @@ Feature: My_Feature
 -------------------
 ```
 won't be recognized as a Feature.
+

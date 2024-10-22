@@ -437,7 +437,7 @@ package body BBT.Scenarios.Step_Parser is
    Context : Extended_Step_Categories;
    -- Some line are hard to interpret without the context:
    -- line that starts with "And" for example will inherit their type from
-   -- the previouly analyzed lines.
+   -- the previously analyzed lines.
    -- This variable keep the memory of where we are between call Parse.
 
    -- --------------------------------------------------------------------------

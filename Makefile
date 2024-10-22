@@ -34,8 +34,15 @@ doc: ./bbt
 	
 	./bbt -lg > docs/grammar.md
 	./bbt -lk > docs/keywords.md
+
 	./bbt -ct
 	mv bbt_template.md docs/
+
+	> docs/bbt_help.md
+	echo "# Command line help" >> docs/bbt_help.md
+	echo '```'            >> docs/bbt_help.md
+	./bbt --help          >> docs/bbt_help.md
+	echo '```'            >> docs/bbt_help.md
 	
 	echo 'Fixme in current version:'		    >  /tmp/fixme.md
 	echo '-------------------------'	    	>> /tmp/fixme.md

@@ -47,7 +47,7 @@ begin
 
       begin
          -- Commands -----------------------------------------------------------
-         if  Opt = "-h" or Opt = "help" then
+         if  Opt = "-h" or Opt = "--help" then
             Settings.Help_Needed := True;
             return;
 
