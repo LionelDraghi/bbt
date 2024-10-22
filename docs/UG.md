@@ -189,4 +189,27 @@ But on the fixed version :
 ``GIVEN_STEP, FILE_CREATION, Text = "Given the directory `dir1`", File_Name = "dir1"``  
 you'll see that the second field has changed from UNKNOWN to FILE_CREATION, and that there is a new field is displayed, the File_Name : bbt knows what to do.
 
+### Test in place
+
+The `--output` create a test results file, in Markdown format, that cross-references all executed files.
+Meaning that if the result file is in the `web` sub-directory, and the scenarios in the `tests` sub-directory, link will be for example `../tests/scenrio_1.md`. 
+Be aware of that if you move the file in another dir after the run : move both scenarios and results file in a coherent way.
+
+Or use the following best pratice : produce results files directly where you expect them, run the scenarios directly from the doc directory, and just use the "--exec_dir" to run the tests somewhere else to avoid producing crap within the docs tree.
+
+For example, if you have : 
+````
+├── docs
+│   ├── test_run
+│   │   └── results.md
+│   └── features
+│       ├── feature_1.md
+│       ├── feature_2.md
+│       └── feature_3.md
+├── tests
+```
+the command could be :
+> cd tests
+> bbt --output ../docs/test_run/results.md ../docs/features/*.md
+
 
