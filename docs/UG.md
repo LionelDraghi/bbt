@@ -131,8 +131,6 @@ To avoid the burden of deleting those files in a Makefile or a script, bbt inter
 *if there is, delete it*  
 To avoid any unwanted deletion, it is important to understand the following behavior.
 
-> [!WARNING] Note that I consider the current implementation of this feature far too complex, with a combination of scenario syntax and bbt option. A simplification in future version is very likely, with the introduction of interactive confirm.
-
 #### using the negative form
 
 The two lines below looks very close :
