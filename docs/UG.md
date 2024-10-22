@@ -210,7 +210,7 @@ For example, if you have :
 ```
 
 the command could be :
-> cd tests
+> cd tests  
 > bbt --output ../docs/test_run/results.md ../docs/features/*.md
 
 
