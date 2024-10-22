@@ -22,21 +22,10 @@ Gerkhin file data model :  https://github.com/cucumber/gherkin?tab=readme-ov-fil
 ### Markdown compliance and vocabulary
 The BBT Markdown subset try to comply with [CommonMark Spec](https://spec.commonmark.org/)
 
-Only [ATX Heading](https://spec.commonmark.org/0.31.2/#atx-headings) are supported, not [Setext](https://spec.commonmark.org/0.31.2/#setext-headings), meaning that you can write :
-```
-## Feature
-```
-but not
-```
-Feature
--------
-```
-in the test file.
 
 ### References
 https://github.com/briot/gnatbdd/tree/master
 https://github.com/dcurtis/markdown-mark
-
 
 [Specification as a ubiquitous language](https://en.wikipedia.org/wiki/Behavior-driven_development#Specification_as_a_ubiquitous_language)
 *A ubiquitous language is a (semi-)formal language that is shared by all members of a software development team — both software developers and non-technical personnel.*
