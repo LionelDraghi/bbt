@@ -15,8 +15,8 @@ private package BBT.Settings is
 
    -- --------------------------------------------------------------------------
    Explain            : Boolean := False;
-   Keep_Going         : Boolean := False;
-   Ignore_Errors      : Boolean := False;
+   Keep_Going         : Boolean := False; -- if set, do not exit on assertion failure
+   Ignore_Errors      : Boolean := False; -- if set, return no error code when a test fails
    Warnings_As_Errors : Boolean := False;
    No_File_Given      : Boolean := True;
    Recursive          : Boolean := False;

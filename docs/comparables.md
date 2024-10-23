@@ -1,4 +1,10 @@
-# Existing comparables
+# Existing comparables <!-- omit from toc -->
+
+- [Expect](#expect)
+- [Aruba](#aruba)
+- [JetBlack](#jetblack)
+- [Exactly ](#exactly-)
+- [BATS](#bats)
 
 ## [Expect](https://en.wikipedia.org/wiki/Expect)
 

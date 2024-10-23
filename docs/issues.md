@@ -1,5 +1,5 @@
-Issue references in current version:
-------------------------------------
+Issue references in current version
+-----------------------------------
 
 Location | Text
 ---------|-----

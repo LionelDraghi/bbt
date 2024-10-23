@@ -44,20 +44,20 @@ doc: ./bbt
 	./bbt --help          >> docs/bbt_help.md
 	echo '```'            >> docs/bbt_help.md
 	
-	echo 'Fixme in current version:'		    >  /tmp/fixme.md
-	echo '-------------------------'	    	>> /tmp/fixme.md
-	echo                                		>> /tmp/fixme.md
-	echo 'Location | Text'             		    >> /tmp/fixme.md
-	echo '---------|-----'             		    >> /tmp/fixme.md
-	rgrep -n "Fixme:" src/  docs/   | sed "s/:/|/2;s/Fixme://"	>> /tmp/fixme.md
+	echo 'Fixme in current version'	>  /tmp/fixme.md
+	echo '------------------------'	>> /tmp/fixme.md
+	echo                            >> /tmp/fixme.md
+	echo 'Location | Text'          >> /tmp/fixme.md
+	echo '---------|-----'          >> /tmp/fixme.md
+	rgrep -n "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme.md
 	mv /tmp/fixme.md docs/fixme.md
 
-	echo 'Issue references in current version:'	>  /tmp/issues.md
-	echo '------------------------------------'	>> /tmp/issues.md
+	echo 'Issue references in current version'	>  /tmp/issues.md
+	echo '-----------------------------------'	>> /tmp/issues.md
 	echo                                		>> /tmp/issues.md
 	echo 'Location | Text'             		    >> /tmp/issues.md
 	echo '---------|-----'             		    >> /tmp/issues.md
-	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/"	>> /tmp/issues.md
+	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues.md
 	mv /tmp/issues.md docs/issues.md
 
 	echo OK

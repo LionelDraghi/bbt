@@ -10,8 +10,6 @@ Project  <!-- omit from toc -->
 
 ## Development Status
 - [Changelog](changelog.md)
-- [Fixme](fixme.md)
-- [References to issue in code and tests](issues.md)
 
 ## Tests
 - [Examples](tests/examples_results.md)
@@ -56,3 +54,9 @@ May imply to switch to Max Reznik's more sophisticated MarkDown parser...
   - AsciiDoc : .adoc (.asciidoc .ad .asc)
   - reStructuredText : .rst (.rest) 
   and separate presentation vs semantic in the code, with a strategy pattern for presentation.
+
+- Synonymes : 
+
+  Stderr = error output  
+  Stdout = output
+
