@@ -7,6 +7,13 @@ bbt may be used to check that the output or a file contains a single line, thank
   - When I run `uut -v`
   - Then the output should contains `version`
 
+### Scenario : test on the error output
+
+Fixme: not yet implemented.
+
+  - When I run `uut -qsd`
+  - Then the error output contains `unknown option -qsd`
+
 ### Scenario: test on a multiline output
 
   - When I run `uut -h`

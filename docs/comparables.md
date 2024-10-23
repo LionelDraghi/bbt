@@ -5,6 +5,7 @@
 - [JetBlack](#jetblack)
 - [Exactly ](#exactly-)
 - [BATS](#bats)
+- [Specflow](#specflow)
 
 ## [Expect](https://en.wikipedia.org/wiki/Expect)
 
@@ -127,4 +128,11 @@ example :
           }
 
 
+## Specflow
 
+https://specflow.org/benefits/testers/
+
+> Make maintaining and extending existing automated tests easy
+> SpecFlow enables you to separate the test cases from your automation, reducing the effort needed to maintain your tests.
+
+Interestingly, it's pretty much the opposite of bbt objective : bbt will try hard to just suppress the automation part, and to keep only the documented test case definition.

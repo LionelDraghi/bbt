@@ -7,6 +7,7 @@ Notes <!-- omit from toc -->
 - [Markdown compliance and vocabulary](#markdown-compliance-and-vocabulary)
 - [References](#references)
 - [GNAT.Expect](#gnatexpect)
+- [ATDD vs BDD](#atdd-vs-bdd)
 
 
 ## Manipulation du code de retour avec bash
@@ -51,3 +52,33 @@ Provides a set of subprograms similar to what is available with the standard Tcl
 12.70. GNAT.Expect.TTY (g-exptty.ads)
 
 As GNAT.Expect but using pseudo-terminal. Currently GNAT.Expect.TTY is implemented on all native GNAT ports. It is not implemented for cross ports, and in particular is not implemented for VxWorks or LynxOS.
+
+
+## ATDD vs BDD
+
+ATDD : spec -> test case
+
+BDD  : test case -> spec, et en fait spec (émergente) = test case
+
+Context-Action-Outcome :
+
+Scenario: Some description of the scenario
+- Given some context
+- When some event
+- Then outcome
+
+
+-- commentaire décrivant la user story au format traditionnel BBD
+
+Feature: Product basket
+
+  In order to buy products  
+  As a customer  
+  I need to be able to put interesting products into a basket  
+
+  Rules:
+  - VAT is 20%
+  - Delivery for basket under £10 is £3
+  - Delivery for basket over £10 is £2
+
+

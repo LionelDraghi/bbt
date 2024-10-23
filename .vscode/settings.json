@@ -5,5 +5,6 @@
     "plantuml.exportOutDir": "docs",
     "plantuml.exportSubFolder": false,
     "plantuml.render": "PlantUMLServer",
-    "plantuml.server": "https://www.plantuml.com/plantuml"
+    "plantuml.server": "https://www.plantuml.com/plantuml",
+    "sarif-viewer.connectToGithubCodeScanning": "off"
 }
