@@ -157,7 +157,7 @@ private package BBT.IO is
    --    it will be useful in future version, or on other OSes.
    -- 2. Time_Zone             => Ada.Calendar.Time_Zones.UTC_Time_Offset
    --    to get the same file time tag printed in local time that the user
-   --     would see by making a simple ls -l
+   --    would see by making a simple ls -l
 
    -- --------------------------------------------------------------------------
    use Ada.Strings.Unbounded;
