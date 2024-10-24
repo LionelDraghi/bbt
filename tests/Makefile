@@ -14,11 +14,9 @@ check: ../bbt ../uut
 	@ echo
 
 doc:
-	@ - mv examples_results.md ../docs/tests/
-	@ - mv features_results.md ../docs/tests/
 	
 .PHONY : clean
 clean:
-	@ - rm -f *.out main bbt uut ../docs/features/*.out ../docs/examples/*.out
+	@ - rm -f *.out main bbt uut
 	@ - rm -rf dir*
 

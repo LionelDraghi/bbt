@@ -220,7 +220,7 @@ package body BBT.Tests.Runner is
                  := Short_Path (From_Dir => Settings.Result_Dir,
                                 To_File  => (+D.Name));
             begin
-               --  IO.Put_Line ("From_Dir   => " & Settings.Output_Dir);
+               --  IO.Put_Line ("From_Dir   => " & Settings.Result_Dir);
                --  IO.Put_Line ("To_File    => " & (+D.Name));
                --  IO.Put_Line ("Short_Path => " & Path_To_Scen);
                Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
