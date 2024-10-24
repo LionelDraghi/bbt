@@ -124,7 +124,9 @@ package body BBT.Tests.Runner is
                               Step.Location);
          end;
 
-         if IO.Some_Error and not Settings.Keep_Going then exit Step_Processing;  
+         if IO.Some_Error and not Settings.Keep_Going then
+            exit Step_Processing;
+         end if;
       end loop Step_Processing;
 
    end Run_Scenario;
@@ -198,7 +200,9 @@ package body BBT.Tests.Runner is
             IO.New_Line (Verbosity => IO.Normal);
          end;
 
-         if IO.Some_Error and not Settings.Keep_Going then exit;  
+         if IO.Some_Error and not Settings.Keep_Going then
+            exit;
+         end if;
 
       end loop;
    end Run_Scenario_List;
@@ -251,11 +255,14 @@ package body BBT.Tests.Runner is
                   else
                      Run_Scenario_List (F.Scenario_List, Path_To_Scen);
 
-                     if IO.Some_Error and not Settings.Keep_Going then exit;  
-
+                     if IO.Some_Error and not Settings.Keep_Going then
+                        exit;
+                     end if;
                   end if;
 
-                  if IO.Some_Error and not Settings.Keep_Going then exit;  
+                  if IO.Some_Error and not Settings.Keep_Going then
+                     exit;
+                  end if;
 
                end loop;
 
