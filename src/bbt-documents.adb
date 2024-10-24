@@ -56,9 +56,9 @@ package body BBT.Documents is
       use BBT.Settings, File_Utilities;
    begin
       if Output_File_Dir (Output_File_Dir'Last) = Separator then
-         return Output_File_Dir &             To_String (D.Name) & ".out";
+         return Output_File_Dir &             Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
       else
-         return Output_File_Dir & Separator & To_String (D.Name) & ".out";
+         return Output_File_Dir & Separator & Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
       end if;
       --  (Ada.Directories.Compose
       --     (Containing_Directory => BBT.Settings.Output_File_Dir,
