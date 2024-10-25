@@ -21,12 +21,34 @@
 
 ## Overview
 
-bbt is a simple tool to black box check the behavior of an executable (hence the name, bbt stands for *Black Box Tester*).  
+bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface](https://en.wikipedia.org/wiki/Command-line_interface).
+Hence the name : bbt stands for *Black Box Tester*.  
 **The beauty of btt is that it directly uses your behavior documentation as a the test script.**
+There is no other file to write than this test description.
 
-### A domain specific language? yes, english! :-)
+### What does the description lokks like?
 
 The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
+
+Here is a simple example of such a description :
+~~~md
+Feature : Case insensitivity
+
+`rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
+
+Scenario: 
+-	Given the file `config.ini` :
+  ```
+  lang=fr
+  keyboard=FR
+  ```
+-	When I run `rpl –ignore-case FR UK config.ini`
+-	Then the `config.ini` file contains 
+  ```
+  lang=uk
+  keyboard=UK
+  ```
+~~~
 
 A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
@@ -39,13 +61,15 @@ because those four words are the only it actually take into account.
 
 That feature gives a lot of freedom when writing scenarios. 
 
-### First example 
+### Structure of the description 
+
+Let's consider another simple example : 
 
 ```md
 ## Example:
 
-In order to report a bug  
-I need to get the version of the exe
+In order to report a bug of my `uut` App
+I need to get the version of the exe.
 
 ### Scenario: I want to know uut version
 
@@ -75,21 +99,28 @@ bbt own tests are based on feature descriptions available [here](docs/tests/feat
 
 ## Main characteristics
 
-### Specification is the only source of truth
+### Write once
 
-bbt most interesting feature is that the above scenario (that is *specification*) is directly executable : there is no intermediate representation, no more or less complete translation into code, no use of a shell"ish" language, no duplication of the original source at all.  
+Specification is the only source of truth, and you won't have to re-write it.
+This is bbt most interesting feature : there is no intermediate representation, no translation into code, no use of a shell"ish" language, no duplication of the original source at all.  
 
-Just simple and readable English sentences, that may be written by non-coders.  
+With two main consequences : 
+1. writing those tests is a matter of minutes,
+2. there is no more place for a discrepancy between documentation and tests.
 
-As bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
+Alternative tools exists, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md), but as far as i know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
-Alternative tools exists, refer to [my quick overview of some comparable tools](docs/comparables.md), but as far as i know, **bbt is the only one to provide such a direct "run the doc" approach**.
-
-### Tests are easy to write
+### Tests are easy to write... and read
 
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
-Although simple, you don't have to learn this language by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
+But this limited english subset do not come at the cost of readability or expressiveness : 
+- you can write real, readable English sentences, so that it's impossible to guess that the text is contrained by rules ;
+- and as bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
+
+Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
+
+Another consequence of that simple model is that the scenarios may be written by non-coders
 
 ### Tests are easy to run
 
@@ -122,7 +153,6 @@ As of version 0.0.x, bbt is in an early stage, meaning that his behavior is subj
 Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
 The code has grown fast in the first three months, and is far from being clean.  
-And there is yet no design description. 
 
 Nevertheless, bbt is working. It has as a serious [test base](docs/tests/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project started the migration of its large tests base to bbt.  
