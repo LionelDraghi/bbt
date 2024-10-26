@@ -4,12 +4,12 @@
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
-  - [A domain specific language? yes, english! :-)](#a-domain-specific-language-yes-english--)
-  - [First example](#first-example)
-  - [Hello Word example](#hello-word-example)
+  - [What does the description looks like?](#what-does-the-description-looks-like)
+  - [Structure of the description](#structure-of-the-description)
+  - [One more example](#one-more-example)
 - [Main characteristics](#main-characteristics)
-  - [Specification is the only source of truth](#specification-is-the-only-source-of-truth)
-  - [Tests are easy to write](#tests-are-easy-to-write)
+  - [Write once](#write-once)
+  - [Tests are easy to read and easy to write](#tests-are-easy-to-read-and-easy-to-write)
   - [Tests are easy to run](#tests-are-easy-to-run)
   - [Test Results are immediately publishable](#test-results-are-immediately-publishable)
 - [Objective of the project](#objective-of-the-project)
@@ -23,26 +23,29 @@
 
 bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface](https://en.wikipedia.org/wiki/Command-line_interface).
 Hence the name : bbt stands for *Black Box Tester*.  
-**The beauty of btt is that it directly uses your behavior documentation as a the test script.**
+**The outstanding feature of btt is that it directly uses your behavior documentation as a the test script.**
 There is no other file to write than this test description.
 
-### What does the description lokks like?
+### What does the description looks like?
 
 The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
 Here is a simple example of such a description :
 ~~~md
-Feature : Case insensitivity
+# Feature : Case insensitivity
 
 `rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
 
-Scenario: 
+## Scenario: 
+
 -	Given the file `config.ini` :
   ```
   lang=fr
   keyboard=FR
   ```
--	When I run `rpl –ignore-case FR UK config.ini`
+
+-	When I run `rpl --ignore-case FR UK config.ini`
+
 -	Then the `config.ini` file contains 
   ```
   lang=uk
@@ -56,9 +59,8 @@ This is achieved thanks to a [partial parser](https://devopedia.org/natural-lang
 As an example, bbt will consider equivalent :  
 - *then I get no error (close #2398)*
 - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
-- *then get no error*  
-because those four words are the only it actually take into account.  
-
+because it actually only take into account the four keywords : *then* *get* *no* *error*  
+  
 That feature gives a lot of freedom when writing scenarios. 
 
 ### Structure of the description 
@@ -66,10 +68,9 @@ That feature gives a lot of freedom when writing scenarios.
 Let's consider another simple example : 
 
 ```md
-## Example:
+## Overview:
 
-In order to report a bug of my `uut` App
-I need to get the version of the exe.
+In order to report a bug of my `uut` App, I need to get the version of the exe.
 
 ### Scenario: I want to know uut version
 
@@ -77,7 +78,7 @@ I need to get the version of the exe.
 - Then the output contains `version 1.0`
 ```
 Here we have:
-1. Some description  
+1. Some description in the `Overview` chapter  
    You can use almost all markdown nice features, including extensions, this is ignored by bbt.
    
 2. A "scenario" header that starts a steps sequence  
@@ -90,9 +91,9 @@ Here we have:
 
 This format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin). 
 
-### Hello Word example
+### One more example
 
-The following [example](docs/tests/examples/hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run an *Hello Word*.
+The following [example](docs/tests/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run an *Hello Word*.
 
 Note that bbt is fully tested with bbt since 0.0.4 version.  
 bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).
@@ -102,7 +103,7 @@ bbt own tests are based on feature descriptions available [here](docs/tests/feat
 ### Write once
 
 Specification is the only source of truth, and you won't have to re-write it.
-This is bbt most interesting feature : there is no intermediate representation, no translation into code, no use of a shell"ish" language, no duplication of the original source at all.  
+This is bbt most interesting feature, there is nothing else : no intermediate representation, no glue code, no scripting language, no duplication of the original source at all.  
 
 With two main consequences : 
 1. writing those tests is a matter of minutes,
@@ -110,12 +111,12 @@ With two main consequences :
 
 Alternative tools exists, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md), but as far as i know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
-### Tests are easy to write... and read
+### Tests are easy to read and easy to write
 
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
-But this limited english subset do not come at the cost of readability or expressiveness : 
-- you can write real, readable English sentences, so that it's impossible to guess that the text is contrained by rules ;
+But this limited english subset does not come at the cost of readability or expressiveness: 
+- you can write real, readable English sentences, so that it's almost impossible to guess that the text is also the real script;
 - and as bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
 Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
@@ -131,9 +132,9 @@ bbt as no dependencies on external lib or tools (diff, for example), to ensure t
 
 ### Test Results are immediately publishable 
 
-**Tests results** are also in Markdown files, and cross-referencing the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
+**Tests results** are also in a Markdown files, and cross-referencing the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
 You can push on github without further processing.  
-To see what it looks like, there is an example in [bbt own tests](docs/tests/features_results.md).  
+To see what it looks like, consider [bbt own tests](docs/tests/features_results.md).  
 
 Tests results are generated when running `bbt`, by just using the `-o` option (--output).
 
@@ -149,13 +150,13 @@ Using a natural language description for those kind of tests is a very tempting 
 
 ## Status of the project
 
-As of version 0.0.x, bbt is in an early stage, meaning that his behavior is subject to changes.  
+bbt is in an early stage, meaning that his behavior is subject to changes.  
 Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
 The code has grown fast in the first three months, and is far from being clean.  
-
-Nevertheless, bbt is working. It has as a serious [test base](docs/tests/features_results.md).  
-In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project started the migration of its large tests base to bbt.  
+Nevertheless, bbt is working. 
+It has as a serious [test base](docs/tests/features_results.md).  
+In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
 
 ## Limitations
 
@@ -175,7 +176,7 @@ btt compile on Windows and Mac OS, but is currently tested only on my Linux amd6
 
 4. Move the bbt exec somewhere in your PATH
 
-Or, without Alire (and for the latest version) :
+Or, to get the latest version :
 ```sh
 git clone https://github.com/LionelDraghi/bbt  
 cd bbt  

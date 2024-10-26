@@ -44,4 +44,4 @@ autosave=true
 
 - When I run `bbt contains_multiline.keep`
 - Then I get an error
-- And output contains `file config.ini does not contain`
+- And output contains `file config.ini does not contain expected`

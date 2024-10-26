@@ -162,6 +162,7 @@ package body BBT.Tests.Actions is
          when Ordinary_File =>
             if Exists (File_Name) then
                Delete_File (File_Name);
+               -- Ada.Directories.Delete_File (File_Name); -- fixme: should be encapsulated into File_Operations
             end if;
             Create (File, Name => File_Name);
             Created_File_List.Add (File_Name);
@@ -174,6 +175,7 @@ package body BBT.Tests.Actions is
                              Loc      => Step.Location);
          when Directory =>
             Delete_Tree (File_Name);
+            -- Ada.Directories.Delete_Tree (File_Name); -- fixme: should be encapsulated into File_Operations
             Create_Path (File_Name);
             Created_File_List.Add (File_Name);
             Put_Step_Result (Step     => Step,
@@ -195,22 +197,26 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
       case Step.File_Type is
          when Ordinary_File =>
-            if not Exists (File_Name) then
-               Create (File, Name => File_Name);
-               Created_File_List.Add (File_Name);
-               Put_Text (File, Get_Expected (Step));
-               Close (File);
+            if Exists (File_Name) then
+               Delete_File (File_Name);
             end if;
+            Create (File, Name => File_Name);
+            Created_File_List.Add (File_Name);
+            Put_Text (File, Get_Expected (Step));
+            Close (File);
+
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
                                " creation failed",
                              Loc      => Step.Location);
          when Directory =>
-            if not Exists (File_Name) then
-               Create_Path (File_Name);
-               Created_File_List.Add (File_Name);
+            if Exists (File_Name) then
+               Delete_Tree (File_Name);
             end if;
+            Create_Path (File_Name);
+            Created_File_List.Add (File_Name);
+
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &
@@ -404,7 +410,8 @@ package body BBT.Tests.Actions is
                        Success  => Contains (T1, T2,
                          Sort_Texts => Step.Ignore_Order),
                        Fail_Msg => "file " & To_String (Step.Subject_String) &
-                         " does not contain:  " & Text_Image (T2),
+                         " does not contain expected:  " & Text_Image (T2) &
+                         "but: " & Text_Image (T1),
                        Loc      => Step.Location);
    end File_Contains;
 

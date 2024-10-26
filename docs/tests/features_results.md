@@ -25,6 +25,11 @@
   - [X] scenario [empty list file on -lf if there is no scenario in given directories](../features/find_scenarios.md) pass  
 
 
+## [mandatory_new_bug.md](../features/mandatory_new_bug.md)  
+
+  - [X] scenario [](../features/mandatory_new_bug.md) pass  
+
+
 ## [escaped_char.md](../features/escaped_char.md)  
 
   ### Feature: Space in names  
@@ -205,7 +210,14 @@
   - [X] scenario [*when I run* a command with a wrong command line](../features/successfully.md) pass  
 
 
+## [step_marker.md](../features/step_marker.md)  
+
+  ### Feature:   
+
+  - [X] scenario [](../features/step_marker.md) pass  
+
+
 -----------------------
 - Failed     tests =  0
-- Successful tests =  49
+- Successful tests =  51
 - Empty      tests =  0
