@@ -1,10 +1,8 @@
 # Developer Guide <!-- omit from toc -->
 
-- [Design overview](#design-overview)
 - [Issues and discussions](#issues-and-discussions)
 - [Development Status](#development-status)
-
-## Design overview 
+- [Development environment](#development-environment)
 
 ==== DRAFT ====
 
@@ -58,3 +56,16 @@ One of the component of the scenario file will be further analyzed, it’s the s
 - [Fixme](fixme.md)
 - [References to issue in code and tests](issues.md)
 
+## Development environment
+Some external tools are required to fully run the Makefile, and 
+I don't know whether they are available on Windows, Mac-OS or even on all Linux distribution.  
+I try to minimise the number of those dependencies, and also try to choose widely available tools.
+
+No external tools is required to compile and run all tests (within docs/features), except the gnat compiler and Alire.
+To avoid external dependencies, a false exe named `uut` (that means unit under test) is used for `bbt` tests own needs.  
+Sources of `uut` are in the `tools` sub-directory.
+
+External dependencies:
+1. To run the examples (within docs/examples), you will need the exe "tested", that is `gcc`, `rpl`, etc.  
+
+2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.

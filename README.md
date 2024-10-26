@@ -93,7 +93,7 @@ This format is a subset of the existing [Markdown with Gherkin](https://github.c
 
 ### One more example
 
-The following [example](docs/tests/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run an *Hello Word*.
+The following [example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run an *Hello Word*.
 
 Note that bbt is fully tested with bbt since 0.0.4 version.  
 bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).

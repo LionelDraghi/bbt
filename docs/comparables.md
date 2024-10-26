@@ -1,4 +1,4 @@
-# Existing comparables <!-- omit from toc -->
+# Existing comparables and inspiring references <!-- omit from toc -->
 
 - [Expect](#expect)
 - [Aruba](#aruba)
