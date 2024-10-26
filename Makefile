@@ -62,6 +62,10 @@ doc: ./bbt
 
 	echo OK
 	echo
+	echo Checking links in md files
+	- mlc  | grep '\[Err' && echo OK 
+	# much faster than markdown-link-check and no false positive yet
+	echo
 
 install: bbt
 	echo --- install:
