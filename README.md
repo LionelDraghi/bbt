@@ -21,45 +21,45 @@
 
 ## Overview
 
-bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface](https://en.wikipedia.org/wiki/Command-line_interface).
+bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).
 Hence the name : bbt stands for *Black Box Tester*.  
 **The outstanding feature of btt is that it directly uses your behavior documentation as a the test script.**
-There is no other file to write than this test description.
+There is no other file to write.
 
 ### What does the description looks like?
 
-The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
+The behavior is described in Markdown, using almost natural english, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
 Here is a simple example of such a description :
 ~~~md
-# Feature : Case insensitivity
+# Feature : Case insensitive replace
 
 `rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
 
 ## Scenario: 
 
 -	Given the file `config.ini` :
-  ```
-  lang=fr
-  keyboard=FR
-  ```
+```
+lang=fr
+keyboard=FR
+```
 
 -	When I run `rpl --ignore-case FR UK config.ini`
 
 -	Then the `config.ini` file contains 
-  ```
-  lang=uk
-  keyboard=UK
-  ```
+```
+lang=uk
+keyboard=UK
+```
 ~~~
 
 A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
 
-As an example, bbt will consider equivalent :  
+Let's consider those two steps :  
 - *then I get no error (close #2398)*
 - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
-because it actually only take into account the four keywords : *then* *get* *no* *error*  
+bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*  
   
 That feature gives a lot of freedom when writing scenarios. 
 
@@ -93,17 +93,15 @@ This format is a subset of the existing [Markdown with Gherkin](https://github.c
 
 ### One more example
 
-The following [example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run an *Hello Word*.
+[This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run the ubiquitous *Hello Word*.
 
-Note that bbt is fully tested with bbt since 0.0.4 version.  
-bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).
+Note that bbt is fully tested with bbt since 0.0.4 version, and that bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).
 
 ## Main characteristics
 
 ### Write once
 
-Specification is the only source of truth, and you won't have to re-write it.
-This is bbt most interesting feature, there is nothing else : no intermediate representation, no glue code, no scripting language, no duplication of the original source at all.  
+Specification is the only source of truth. This is bbt most interesting feature, there is nothing else : no intermediate representation, no glue code, no scripting language, no duplication of the original source at all.  
 
 With two main consequences : 
 1. writing those tests is a matter of minutes,
@@ -116,7 +114,7 @@ Alternative tools exists, some are mentioned in [my quick overview of some compa
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 
 But this limited english subset does not come at the cost of readability or expressiveness: 
-- you can write real, readable English sentences, so that it's almost impossible to guess that the text is also the real script;
+- you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
 - and as bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
 Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
@@ -128,7 +126,7 @@ Another consequence of that simple model is that the scenarios may be written by
 To run a scenario : `bbt my_scenario.md`  
 Or to run all the md files in the *tests* tree `bbt -r tests`  
 
-bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on all platforms without further complications.  
+bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
 
 ### Test Results are immediately publishable 
 
@@ -144,13 +142,13 @@ bbt project aim at exploring how far we can push the "specification in natural l
 
 **If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
 
-bbt has a precise scope: it is dedicated to in line command, taking some input and producing some output.
+bbt has a precise scope: it is dedicated to Command Line Interface, taking some input and producing some output.
 Keep in mind that it is not meant for specifying or testing UI, complex systems, unit testing, API, etc.  
-Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex than for bbt current scope.   
+Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex, and this is out of bbt current scope.   
 
 ## Status of the project
 
-bbt is in an early stage, meaning that his behavior is subject to changes.  
+bbt is in an early stage, meaning that interface and behavior are subject to changes.  
 Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
 The code has grown fast in the first three months, and is far from being clean.  
@@ -180,8 +178,9 @@ Or, to get the latest version :
 ```sh
 git clone https://github.com/LionelDraghi/bbt  
 cd bbt  
-gprbuild  
-``` 
+alr build 
+```
+(if you don't want to install alr, just run `gprbuild` instead of `alr build`) 
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
