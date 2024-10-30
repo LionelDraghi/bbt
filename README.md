@@ -30,7 +30,39 @@ There is no other file to write.
 
 The behavior is described in Markdown, using almost natural english, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
+A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
+
 Here is a simple example of such a description :
+```md
+## Overview:
+
+In order to report a bug of my `uut` App, I need to get the version of the exe.
+
+### Scenario: I want to know uut version
+
+- When I run `uut --version`
+- Then the output contains `version 1.0`
+```
+
+Here we have:
+1. Some description in the `Overview` chapter  
+   You can use almost all markdown nice features, including extensions, this is ignored by bbt.
+   
+2. A "scenario" header that starts a steps sequence  
+   Titles starting with those Gherkin keywords will wake up btt : *# Features*, *# Background*, and *# Scenario* or *# Example*.  
+   The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
+
+3. Steps  
+   Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
+   Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
+
+This format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin). 
+
+### Structure of the description 
+
+Let's consider another simple example : 
+
 ~~~md
 # Feature : Case insensitive replace
 
@@ -53,43 +85,6 @@ keyboard=UK
 ```
 ~~~
 
-A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
-This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
-
-Let's consider those two steps :  
-- *then I get no error (close #2398)*
-- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
-bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*  
-  
-That feature gives a lot of freedom when writing scenarios. 
-
-### Structure of the description 
-
-Let's consider another simple example : 
-
-```md
-## Overview:
-
-In order to report a bug of my `uut` App, I need to get the version of the exe.
-
-### Scenario: I want to know uut version
-
-- When I run `uut --version`
-- Then the output contains `version 1.0`
-```
-Here we have:
-1. Some description in the `Overview` chapter  
-   You can use almost all markdown nice features, including extensions, this is ignored by bbt.
-   
-2. A "scenario" header that starts a steps sequence  
-   Titles starting with those Gherkin keywords will wake up btt : *# Features*, *# Background*, and *# Scenario* or *# Example*.  
-   The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
-
-3. Steps  
-   Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
-   Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
-
-This format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin). 
 
 ### One more example
 
@@ -112,14 +107,19 @@ Alternative tools exists, some are mentioned in [my quick overview of some compa
 ### Tests are easy to read and easy to write
 
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
-
 But this limited english subset does not come at the cost of readability or expressiveness: 
-- you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
-- and as bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
-Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).
+- First, bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
-Another consequence of that simple model is that the scenarios may be written by non-coders
+- Second, even within the lines taken into account, bbt is not going to read all words. Let's consider those two steps :  
+  - *then I get no error*
+  - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
+  bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*.  
+  This is why you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
+
+A direct consequence of that simple model is that the specifications / scenarios may be written by non-coders
+
+Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or --create_template), and ask for the complete grammar with `bbt -lg` (or --list_grammar).  
 
 ### Tests are easy to run
 
