@@ -62,6 +62,13 @@
   - [X] scenario [NOK return code](../features/example_keyword.md) pass  
 
 
+## [ill_formated_file.md](../features/ill_formated_file.md)  
+
+  ### Feature: Ill formatted file detection  
+
+  - [X] scenario [Missing scenario](../features/ill_formated_file.md) pass  
+
+
 ## [missing_title.md](../features/missing_title.md)  
 
   - [X] scenario [Missing tittle in scenario, background and feature](../features/missing_title.md) pass  
@@ -113,7 +120,7 @@
 
   - [X] scenario [test the standard output](../features/contains_multiline.md) pass  
 
-  - [X] scenario [should fail](../features/contains_multiline.md) pass  
+  - [X] scenario [compare with a different file](../features/contains_multiline.md) pass  
 
 
 ## [return_code_on_test_failure.md](../features/return_code_on_test_failure.md)  
@@ -219,5 +226,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  51
+- Successful tests =  52
 - Empty      tests =  0

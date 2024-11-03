@@ -93,19 +93,20 @@ private package BBT.Documents is
       Failed_Step_Count     : Natural := 0;
       Successful_Step_Count : Natural := 0;
       Cmd_List              : Cmd_Lists.Vector;
-      -- Cmd_List is fulfilled in the parser.
+      -- Cmd_List is filled in the parser, when an `or` keyword is detected.
       -- Then, in the the builder, the scenario is expanded in one scenario
       -- by Cmd, and the Cmd_List is emptied.
       -- Each scenario will be identical, except for the run command, that will
       -- be in Object_String, one by Cmd_List item.
-      Cmd_List_Step_Index   : Natural := 0;
+      Cmd_List_Step_Index   : Step_Lists.Cursor;
       -- store the index in Step_List where the cmd_list was found
    end record;
    -- with Type_Invariant => Parent_Feature /= null xor Parent_Document /= null;
    function Parent_Doc (Scen : Scenario_Type) return access Document_Type;
    function Is_In_Feature (Scen : Scenario_Type) return Boolean;
+   use type Step_Lists.Cursor;
    function Has_Cmd_List (Scen : Scenario_Type) return Boolean is
-     (Scen.Cmd_List_Step_Index /= 0);
+     (Scen.Cmd_List_Step_Index /= Step_Lists.No_Element);
    procedure Add_Result  (Success : Boolean; To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Scenario_Type);

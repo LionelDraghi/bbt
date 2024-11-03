@@ -114,7 +114,7 @@ package body BBT.Scenarios.MDG_Lexer is
    -- --------------------------------------------------------------------------
    function Code_Fence_Line (Line : String) return Boolean is
      (Index (Trim (Line, Left), "```") = 1 or else
-      Index (Trim (Line, Left), "~~~") = 1);
+     Index (Trim (Line, Left), "~~~") = 1);
    -- refer to https://spec.commonmark.org/0.31.2/#fenced-code-block
    -- for specification
 
@@ -145,9 +145,9 @@ package body BBT.Scenarios.MDG_Lexer is
                         return Line_Attributes is
       First, Last, Title_First : Natural;
    begin
-      IO.Put_Line ("Line  = """ & Line.all & """",
-                   Location  => Loc,
-                   Verbosity => IO.Debug);
+      --  IO.Put_Line ("Line  = """ & Line.all & """",
+      --               Location  => Loc,
+      --               Verbosity => IO.Debug);
       Find_Token (Source => Line.all,
                   Set    => Blanks,
                   Test   => Ada.Strings.Outside,

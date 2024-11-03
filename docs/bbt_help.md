@@ -37,7 +37,7 @@ Debug command:
 Debug options:
    -t topic               : activate log related to the topic
 
-bbt version "0.0.5"
+bbt version "0.0.6"
 http://lionel.draghi.free.fr/bbt/
 
 ```

@@ -161,7 +161,7 @@ package body BBT.IO is
    function Some_Error return Boolean is
      (Error_Count /= 0 or (Settings.Warnings_As_Errors and Warning_Count /= 0));
 
-    -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    type String_Access is access String;
    procedure Dealloc_String is new Ada.Unchecked_Deallocation
      (Object => String, Name => String_Access);

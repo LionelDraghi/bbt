@@ -14,8 +14,8 @@ with Ada.Directories; use Ada.Directories;
 package body BBT.Documents is
 
    -- type Indent_Level is range 0 .. 3;
-   Prefix : constant Texts.Vector := [1 => "",
-                                      2 => "  "];
+   Prefix               : constant Texts.Vector := [1 => "",
+                                                    2 => "  "];
    Current_Indent_Level : Positive := 1;
 
    -- --------------------------------------------------------------------------
@@ -23,12 +23,12 @@ package body BBT.Documents is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type)
    is
-      --  procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
-      --  begin
-      --     if S /= Null_Unbounded_String then
-      --        Output.Put (Prefix & " " & S'Image);
-      --     end if;
-      --  end Put_If_Not_Null;
+   --  procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
+   --  begin
+   --     if S /= Null_Unbounded_String then
+   --        Output.Put (Prefix & " " & S'Image);
+   --     end if;
+   --  end Put_If_Not_Null;
    begin
       Output.Put (S.Cat'Image & ", ");
       Output.Put (S.Action'Image);

@@ -124,9 +124,9 @@ package body BBT.Tests.Runner is
                               Step.Location);
          end;
 
-         if IO.Some_Error and not Settings.Keep_Going then
-            exit Step_Processing;
-         end if;
+         --  if IO.Some_Error and not Settings.Keep_Going then
+         --     exit Step_Processing;
+         --  end if;
       end loop Step_Processing;
 
    end Run_Scenario;
@@ -169,22 +169,24 @@ package body BBT.Tests.Runner is
 
    begin
       for Scen of L loop
-         --  Put_Line ("  Scenario " & Scen.Name'Image & "  ",
-         --            IO.No_Location, IO.Verbose);
-
-         -- Run background scenarios
-         Run_Doc_Background (Scen);
-         if Is_In_Feature (Scen) then
-            Run_Feature_Background (Scen);
-         end if;
-
-         -- And finally run the scenario
-         Run_Scenario (Scen);
-
          declare
             Link_Image : constant String
               := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+
          begin
+            -- Put_Line ("  - scenario " & Link_Image & ":");
+            --  Put_Line ("  Scenario " & Scen.Name'Image & "  ",
+            --            IO.No_Location, IO.Verbose);
+
+            -- Run background scenarios
+            Run_Doc_Background (Scen);
+            if Is_In_Feature (Scen) then
+               Run_Feature_Background (Scen);
+            end if;
+
+            -- And finally run the scenario
+            Run_Scenario (Scen);
+
             case Documents.Result (Scen) is
                when Empty =>
                   -- Note the two spaces at the end of each line, to cause a
@@ -200,9 +202,9 @@ package body BBT.Tests.Runner is
             IO.New_Line (Verbosity => IO.Normal);
          end;
 
-         if IO.Some_Error and not Settings.Keep_Going then
-            exit;
-         end if;
+         --  if IO.Some_Error and not Settings.Keep_Going then
+         --     exit;
+         --  end if;
 
       end loop;
    end Run_Scenario_List;
@@ -255,14 +257,14 @@ package body BBT.Tests.Runner is
                   else
                      Run_Scenario_List (F.Scenario_List, Path_To_Scen);
 
-                     if IO.Some_Error and not Settings.Keep_Going then
-                        exit;
-                     end if;
+                     --  if IO.Some_Error and not Settings.Keep_Going then
+                     --     exit;
+                     --  end if;
                   end if;
 
-                  if IO.Some_Error and not Settings.Keep_Going then
-                     exit;
-                  end if;
+                  --  if IO.Some_Error and not Settings.Keep_Going then
+                  --     exit;
+                  --  end if;
 
                end loop;
 

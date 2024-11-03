@@ -27,8 +27,13 @@ The second assertion is False.
 ## Scenario: default behavior
 The scenario is run without the --keep_going option`, bbt should exit after the second assertion.
 
+- Given the file `out1`
+```
+OK  : Then file `flowers.txt` contains `Orchids`
+```
+
 - When I run `bbt -v scenario1.md`
-- Then output should contain "OK  : Then file `flowers.txt` contains `Orchids`"
+- Then output should contain `out1`
 - Then output should contain "NOK : Then file `flowers.txt` contains `Petunia`"
 - Then output should not contain "OK  : Then file `flowers.txt` contains `Tulip`"
 

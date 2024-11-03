@@ -185,7 +185,7 @@ package body BBT.Scenarios.Files is
                Tests.Builder.Add_Step (S, Cmd_List);
 
             when Code_Fence =>
-               Tests.Builder.Add_Code_Block (Loc);
+               Tests.Builder.Add_Code_Fence (Loc);
 
             when Text_Line =>
                Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);

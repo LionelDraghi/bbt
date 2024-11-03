@@ -172,7 +172,7 @@ package body BBT.Tests.Builder is
             --  end;
 
          else
-            -- "or" case, we will duplicate the whome scenario, except the
+            -- "or" case, we will duplicate the whole scenario, except the
             -- cmd
 
             -- the existing scenario will receive the first cmd
@@ -256,7 +256,7 @@ package body BBT.Tests.Builder is
    end Add_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Code_Block (Loc : Location_Type) is
+   procedure Add_Code_Fence (Loc : Location_Type) is
    -- Code block outside of Steps definition is considered as a comment.
    -- There is no state change, the code block mark is just recorded in
    -- comments at the right level.
@@ -269,7 +269,7 @@ package body BBT.Tests.Builder is
             -- Entering code block
             -- note that In_Scenario is included, so that if a comment is
             -- inserted between the step and the code fenced file content,
-            -- it will work.
+            -- it will work. Fixme: WTF comment
             Set_State (In_File_Content);
 
          when In_File_Content =>
@@ -285,8 +285,23 @@ package body BBT.Tests.Builder is
          when In_Feature =>
             Last_Feature_Ref.Comment.Append ("```");
 
+         --  when In_Scenario =>
+         --     Last_Scenario_Ref.Comment.Append ("```");
+         --
+         --  when In_Background =>
+         --     null;
+            --  case Current_Background is
+            --  when None =>
+            --     Last_Scenario_Ref.Comment.Append ("```");
+            --     -- Fixme: unreachable code?
+            --  when Doc =>
+            --     Last_Doc_Ref.Background.Comment.Append ("```");
+            --  when Feature =>
+            --     Last_Feature_Ref.Background.Comment.Append ("```");
+            --  end case;
+
       end case;
-   end Add_Code_Block;
+   end Add_Code_Fence;
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String; Loc : Location_Type) is
@@ -326,14 +341,19 @@ package body BBT.Tests.Builder is
       procedure Duplicate (Scen : in out Scenario_Type) is
       begin
          if Has_Cmd_List (Scen) then
+            -- Put_Line ("Has_Cmd_List = true =============");
             for Cmd of Scen.Cmd_List loop
-               Put_Line ("Cmd list item = " & Cmd'Image,
-                         Verbosity => IO.Verbose);
+               Put_Line
+                 ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
             end loop;
+         --  else
+         --     Put_Line ("Has_Cmd_List = false =============");
          end if;
       end Duplicate;
 
    begin
+      --  Put_Line ("Duplicate_Multiple_Run =============");
+
       for D of The_Doc_List loop
          for S of D.Scenario_List loop
             Duplicate (S);

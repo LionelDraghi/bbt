@@ -5,7 +5,7 @@ pragma Style_Checks (Off);
 package Bbt_Config is
    pragma Pure;
 
-   Crate_Version : constant String := "0.0.5";
+   Crate_Version : constant String := "0.0.6";
    Crate_Name : constant String := "bbt";
 
    Alire_Host_OS : constant String := "linux";

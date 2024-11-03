@@ -5,7 +5,8 @@
 
 - [Overview](#overview)
   - [What does the description looks like?](#what-does-the-description-looks-like)
-  - [Structure of the description](#structure-of-the-description)
+  - [Partial parsing](#partial-parsing)
+  - [Step arguments](#step-arguments)
   - [One more example](#one-more-example)
 - [Main characteristics](#main-characteristics)
   - [Write once](#write-once)
@@ -28,10 +29,7 @@ There is no other file to write.
 
 ### What does the description looks like?
 
-The behavior is described in Markdown, using almost natural english, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
-
-A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
-This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, and is not going to fail because of an unexpected word.  
+The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
 
 Here is a simple example of such a description :
 ```md
@@ -46,45 +44,73 @@ In order to report a bug of my `uut` App, I need to get the version of the exe.
 ```
 
 Here we have:
-1. Some description in the `Overview` chapter  
-   You can use almost all markdown nice features, including extensions, this is ignored by bbt.
+1. Some description in the `Overview` chapter.  
+   bbt process only Gherkin headers : *# Features*, *# Background*, and *# Scenario* or *# Example*.     
+   And thus this `Overview` is ignored. You are free to use all markdown nice features to draft a nice documentation, bbt will stay out of the way. 
    
 2. A "scenario" header that starts a steps sequence  
-   Titles starting with those Gherkin keywords will wake up btt : *# Features*, *# Background*, and *# Scenario* or *# Example*.  
-   The header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
+   bbt is now awake, and waiting for step lines.  
+   Note that the header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
 
 3. Steps  
    Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
    Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
 
-This format is a subset of the existing [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin). 
+This format is a subset of the existing [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin).  
 
-### Structure of the description 
+### Partial parsing 
 
+A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, it does not understand the whole sentence!  
+
+As an example, bbt will consider equivalent :  
+- *then I get no error (close #2398)*
+- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
+because it actually only take into account the four keywords : *then* *get* *no* *error*  
+  
+That feature gives a lot of freedom when writing scenarios. 
+
+### Step arguments
+
+Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) to describe a multiline text (expected output, file content, etc).
+(For Gherkin users : this is the `Doc strings`). 
+
+But unlike MDG, bbt uses also Markdown [Code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text, like file name or command to run.  
+Otherwise, it would be impossible to distinguish arguments from the free text. But anyway, as it is in the documentation interest to have a nice and coherent formatting for arguments, this is a good way to go.  
+ 
 Let's consider another simple example : 
-
 ~~~md
-# Feature : Case insensitive replace
+# Feature : Case insensitivity
 
 `rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
 
 ## Scenario: 
 
 -	Given the file `config.ini` :
-```
-lang=fr
-keyboard=FR
-```
+  ```
+  lang=fr
+  keyboard=FR
+  ```
 
 -	When I run `rpl --ignore-case FR UK config.ini`
 
 -	Then the `config.ini` file contains 
-```
-lang=uk
-keyboard=UK
-```
+  ```
+  lang=uk
+  keyboard=UK
+  ```
 ~~~
 
+The config.ini file content is given in a fenced code block, and the command line is given in a code span.
+
+Note that step accepting a multiline text parameter, like  :  
+` - Then the output contains `  
+`   ``` `  
+`   20 files processed `  
+`   ``` `   
+
+also accept the code span shortcut when there is only one line.  
+`` - Then the output contains `20 files processed` ``  
 
 ### One more example
 

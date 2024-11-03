@@ -40,7 +40,7 @@ recurse=true
 autosave=true
 ```
 
-### Scenario : should fail
+### Scenario : compare with a different file
 
 - When I run `bbt contains_multiline.keep`
 - Then I get an error
