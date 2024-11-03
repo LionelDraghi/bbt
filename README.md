@@ -43,7 +43,10 @@ In order to report a bug of my `uut` App, I need to get the version of the exe.
 - Then the output contains `version 1.0`
 ```
 
-Here we have:
+First, you may have noticed, this is Markdown [¹]. This is documentation, we need a reasonably powerful format. 
+
+Now regarding the content, we have :
+
 1. Some description in the `Overview` chapter.  
    bbt process only Gherkin headers : *# Features*, *# Background*, and *# Scenario* or *# Example*.     
    And thus this `Overview` is ignored. You are free to use all markdown nice features to draft a nice documentation, bbt will stay out of the way. 
@@ -56,7 +59,6 @@ Here we have:
    Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
    Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
 
-This format is a subset of the existing [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin).  
 
 ### Partial parsing 
 
@@ -217,3 +219,6 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 - [References](docs/references.md) : syntax, grammar, and more details on non obvious behavior
 - [Project status](docs/project.md): changelog, tests, TDL...
 - [Command line help](docs/bbt_help.md)
+
+[¹]: More precisely, this is a subset of the existing [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.  
+
