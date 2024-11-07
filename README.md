@@ -38,7 +38,7 @@ Here is a minimal example :
 - Then the output contains `14.2.0`
 
 
-The actual Markdown giving this rendering is:  
+It is written in Markdown:  
 ```md
 ### Scenario: I want to know gcc version
 
@@ -50,18 +50,19 @@ bbt is about documentation and simplicity, Markdown[¹] is a perfect fit.
 
 Lets consider a slightly more complete example :
 ![simple example](image-2.png)
+
 (Markdown source [here](docs/examples/rpl_case_insensitivity.md))
 
 We have :
 
-1. An `Overview` header and a first text   
+1. An "Overview" header and a first text   
    All this is ignored, because : 
    - bbt processes **only** Gherkin headers *# Features*, *# Background*, and *# Scenario* or *# Example*.   
    
-   - bbt considers all lines as comment, except Step lines. So the following  
+   - bbt considers all lines as comment, except Step lines. So line  
      > `rpl` is a utility...  
 
-     will be ignored too.
+     is ignored too.
    
    bbt staying out of the way, you're free to use almost without constraints markdown to draft nice documentations. 
    
@@ -75,21 +76,21 @@ We have :
 ### Partial parsing 
 
 A distinctive feature of bbt is that it directly understand those step sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
-This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, it does not understand the whole sentence.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, but does not understand the whole sentence.  
 
 As an example, bbt will consider equivalent :  
 - *then I get no error (close #2398)*
-- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
-because it actually only take into account the four keywords : *then* *get* *no* *error*  
+- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*  
+because it actually only take into account the four keywords : *then*, *get*, *no* and *error*  
   
-This feature gives the possibility to write scenarios in natural language. 
+And this is what gives the possibility to write scenarios in natural language. 
 
 ### Step arguments
 
 Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) to describe a multiline text (expected output, file content, etc).
 
 bbt uses also Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text, like file name or command to run.  
-Otherwise, it would be impossible to distinguish arguments from the free text. But anyway, as it is in the documentation interest to have a nice and coherent formatting for arguments, this is a good way to go.  
+It's not only because it makes the doc nicer, but also because otherwise it would be impossible to distinguish arguments from free text.  
  
 In the previous example, the config.ini file content is given in a fenced code block, and the command line is given in a code span.
 
@@ -129,7 +130,7 @@ But this limited english subset does not come at the cost of readability or expr
 
 - Second, even within the lines taken into account, bbt is not going to read all words. Let's consider those two steps :  
   - *then I get no error*
-  - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
+  - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*  
   bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*.  
   This is why you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
 
