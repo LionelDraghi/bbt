@@ -58,11 +58,7 @@ We have :
 1. An "Overview" header and a first text   
    All this is ignored, because : 
    - bbt processes **only** Gherkin headers *# Features*, *# Background*, and *# Scenario* or *# Example*.   
-   
-   - bbt considers all lines as comment, except Step lines. So line  
-     > `rpl` is a utility...  
-
-     is ignored too.
+   - bbt considers all lines as comment, except Step lines.  
    
    bbt staying out of the way, you're free to use almost without constraints markdown to draft nice documentations. 
    
