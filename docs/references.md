@@ -144,9 +144,18 @@ This is specification, make short sentences and go straight to the point.
 
 ### Blank lines and Case sensitivity
 
-bbt ignore blank lines and casing when comparing actual with expected output.
-This is the expected behavior in most case, but not always. 
-Refer to the TDL.
+bbt is designed for human, and is not going to trap users with blank line, white space or casing differences, meaning that :
+- keyword are case insensitive, `- When` or `- when`, it's as you want.
+- blank lines and casing are ignored when comparing actual with expected output. I suppose that if you expect `version 1.0` and the actual output is `Version 1.0` the test is OK.
+
+This is not always the expected behavior, you may want to check the exact output.  
+This is in the TDL, not yet implemented.  
+The preferred implementation is an explicit mention in the scenario, it will not be an option on command line.
+
+On the other hand, the order of lines in files is generally meaningful.
+But here the alternative behavior is already implemented through the `unordered` keyword.  
+(cf. [feature `unordered`](features/unordered.md) for an example).
+
 
 ### Execution
 

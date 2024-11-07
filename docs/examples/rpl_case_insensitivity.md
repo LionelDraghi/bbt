@@ -1,8 +1,12 @@
-# Feature : Case insensitivity
+# Overview 
+[`rpl`](https://manpages.debian.org/bookworm/rpl/rpl.1.en.html) is a utility to replace multiple strings in multiple files. 
+
+
+## Feature 1 : Case insensitivity
 
 `rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
 
-## Scenario: 
+### Scenario 1.1 : simple use (single file, no globbing)
 
 - Given the new file `config.ini` :
   ```

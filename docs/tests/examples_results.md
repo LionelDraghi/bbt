@@ -3,12 +3,10 @@
 
   ### Feature: Case insensitivity  
 
-  - [X] scenario [](../examples/rpl_case_insensitivity.md) pass  
+  - [X] scenario [simple use (single file, no globbing)](../examples/rpl_case_insensitivity.md) pass  
 
 
 ## [uut_version.md](../examples/uut_version.md)  
-
-  ### Feature:   
 
   - [X] scenario [I want to know uut version](../examples/uut_version.md) pass  
 

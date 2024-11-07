@@ -24,88 +24,76 @@
 
 bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).
 Hence the name : bbt stands for *Black Box Tester*.  
-**The outstanding feature of btt is that it directly uses your behavior documentation as a the test script.**
+**The outstanding feature of btt is that it directly uses your behavior documentation as a the test script.**  
 There is no other file to write.
 
 ### What does the description looks like?
 
-The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*, and sentences like "when I run `this command`, then I get no error, and the file `foo.ini` is created".  
+The behavior is described in almost natural english using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) usual pattern *Given / When / Then*.  
+Here is a minimal example :  
 
-Here is a simple example of such a description :
+### Scenario: I want to know gcc version  <!-- omit from toc -->
+
+- When I run `gcc --version`
+- Then the output contains `14.2.0`
+
+
+The actual Markdown giving this rendering is:  
 ```md
-## Overview:
+### Scenario: I want to know gcc version
 
-In order to report a bug of my `uut` App, I need to get the version of the exe.
+- When I run `gcc --version`
+- Then the output contains `14.2.0`
+```  
 
-### Scenario: I want to know uut version
+bbt is about documentation and simplicity, Markdown[¹] is a perfect fit.  
 
-- When I run `uut --version`
-- Then the output contains `version 1.0`
-```
+Lets consider a slightly more complete example :
+![simple example](image-2.png)
+(Markdown source [here](docs/examples/rpl_case_insensitivity.md))
 
-First, you may have noticed, this is Markdown [¹]. This is documentation, we need a reasonably powerful format. 
+We have :
 
-Now regarding the content, we have :
-
-1. Some description in the `Overview` chapter.  
-   bbt process only Gherkin headers : *# Features*, *# Background*, and *# Scenario* or *# Example*.     
-   And thus this `Overview` is ignored. You are free to use all markdown nice features to draft a nice documentation, bbt will stay out of the way. 
+1. An `Overview` header and a first text   
+   All this is ignored, because : 
+   - bbt processes **only** Gherkin headers *# Features*, *# Background*, and *# Scenario* or *# Example*.   
    
-2. A "scenario" header that starts a steps sequence  
+   - bbt considers all lines as comment, except Step lines. So the following  
+     > `rpl` is a utility...  
+
+     will be ignored too.
+   
+   bbt staying out of the way, you're free to use almost without constraints markdown to draft nice documentations. 
+   
+1. A "Feature" and a "Scenario" header (followed by the feature/scenario name)  
    bbt is now awake, and waiting for step lines.  
-   Note that the header level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
+   Note that header's level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
 
-3. Steps  
+2. Steps  
    Steps are line starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contains the things to check or do.
-   Note that bbt is case insensitive, and that other [Markdown bullet list marker](https://spec.commonmark.org/0.31.2/#bullet-list-marker) ('*' or '+') are not considered as steps, and can be used for comments.
-
 
 ### Partial parsing 
 
-A distinctive feature of bbt is that it directly understand those sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
-This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, it does not understand the whole sentence!  
+A distinctive feature of bbt is that it directly understand those step sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, it does not understand the whole sentence.  
 
 As an example, bbt will consider equivalent :  
 - *then I get no error (close #2398)*
 - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*
 because it actually only take into account the four keywords : *then* *get* *no* *error*  
   
-That feature gives a lot of freedom when writing scenarios. 
+This feature gives the possibility to write scenarios in natural language. 
 
 ### Step arguments
 
 Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) to describe a multiline text (expected output, file content, etc).
-(For Gherkin users : this is the `Doc strings`). 
 
-But unlike MDG, bbt uses also Markdown [Code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text, like file name or command to run.  
+bbt uses also Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text, like file name or command to run.  
 Otherwise, it would be impossible to distinguish arguments from the free text. But anyway, as it is in the documentation interest to have a nice and coherent formatting for arguments, this is a good way to go.  
  
-Let's consider another simple example : 
-~~~md
-# Feature : Case insensitivity
+In the previous example, the config.ini file content is given in a fenced code block, and the command line is given in a code span.
 
-`rpl` is able to replace different occurrences of the same string with different casing thanks to the `--ignore-case` option.
-
-## Scenario: 
-
--	Given the file `config.ini` :
-  ```
-  lang=fr
-  keyboard=FR
-  ```
-
--	When I run `rpl --ignore-case FR UK config.ini`
-
--	Then the `config.ini` file contains 
-  ```
-  lang=uk
-  keyboard=UK
-  ```
-~~~
-
-The config.ini file content is given in a fenced code block, and the command line is given in a code span.
-
-Note that step accepting a multiline text parameter, like  :  
+Note that steps accepting a multiline text parameter, like  :  
 ` - Then the output contains `  
 `   ``` `  
 `   20 files processed `  

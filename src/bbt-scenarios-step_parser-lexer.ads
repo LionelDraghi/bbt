@@ -25,17 +25,23 @@ private package BBT.Scenarios.Step_Parser.Lexer is
    -- In BBT, backticks enclose the command to run, or a file name,
    -- or an expected output.
 
+   --  type Token is record
+   --     Tok_Type    : Token_Type;
+   --     Token_Image : String;
+   --  end record;
+   --  package Token_List is new Ada.Containers.List (Element_Type => Token);
+
    procedure Initialize_Lexer;
 
-   function Next_Token (Line     : access constant String;
-                        Tok_Type : out Token_Type)
-                           return String;
+   function Next_Token
+     (Line    : access constant String;
+     Tok_Type : out Token_Type) return String;
 
    function More_Token return Boolean;
 
-   function Is_A_Keyword (S     : access constant String;
-                          First : Positive;
-                          Last  : Natural := 0) return Boolean;
+   --  function Is_A_Keyword
+   --    (S : access constant String; First : Positive; Last : Natural := 0)
+   --     return Boolean;
 
    procedure Put_Keywords;
 

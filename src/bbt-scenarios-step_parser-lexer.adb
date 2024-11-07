@@ -52,6 +52,27 @@ package body BBT.Scenarios.Step_Parser.Lexer is
    -- NB : all keywords must be here in lower case!
 
    -- -----------------------------------------------------------------------
+   function Is_A_Keyword (S      : access constant String;
+                          First  : Positive;
+                          Last   : Natural := 0)
+                             return Boolean
+   is
+   -- We first remove potential emphasis on keyword
+   -- [](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)
+      Emphasis  : constant Ada.Strings.Maps.Character_Set
+        := Ada.Strings.Maps.To_Set ("*_");
+      Trimmed   : constant String := Trim (S.all (First .. Last),
+                                           Left  => Emphasis,
+                                           Right => Emphasis);
+      Lower     : constant String := Translate
+        (Source  => Trimmed,
+         Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map);
+   begin
+      -- Put_Line ("K = " & S.all (First .. Last) & ", Trimmed = " & Trimmed);
+      return Keywords.Contains (Lower);
+   end Is_A_Keyword;
+
+   -- -----------------------------------------------------------------------
    procedure Initialize_Lexer is begin
       Cursor := 1;
       Line_Finished := False;
@@ -159,27 +180,6 @@ package body BBT.Scenarios.Step_Parser.Lexer is
    begin
       return not Line_Finished;
    end More_Token;
-
-   -- -----------------------------------------------------------------------
-   function Is_A_Keyword (S      : access constant String;
-                          First  : Positive;
-                          Last   : Natural := 0)
-                             return Boolean
-   is
-   -- We first remove potential emphasis on keyword
-   -- [](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)
-      Emphasis  : constant Ada.Strings.Maps.Character_Set
-        := Ada.Strings.Maps.To_Set ("*_");
-      Trimmed   : constant String := Trim (S.all (First .. Last),
-                                           Left  => Emphasis,
-                                           Right => Emphasis);
-      Lower     : constant String := Translate
-        (Source  => Trimmed,
-         Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map);
-   begin
-      -- Put_Line ("K = " & S.all (First .. Last) & ", Trimmed = " & Trimmed);
-      return Keywords.Contains (Lower);
-   end Is_A_Keyword;
 
    -- -----------------------------------------------------------------------
    procedure Put_Keywords is
