@@ -11,6 +11,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 - [Unreleased]
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
+  - [Fixed]   .out files not removed when using --cleanup
 
 - [0.0.5] - 2024-10-17
   - [Removed] `-pg` compilation option that prevented Alire integration. 

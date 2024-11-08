@@ -12,7 +12,7 @@ Therefore, the return status is set to fail not only when there is an internal e
 - Then output contains `version 1.0`
 ```
 
-- When I run `bbt --cleanup good_option.md`
+- When I run `bbt good_option.md`
 - Then I get no error 
 - and `good_option.md.out` is 
 ```

@@ -8,7 +8,7 @@ If no file name provided, read *.md (recursively if "-r")
 Command :
    run                    : the default command
    -lf  | --list_files      : list Scenario files found
-   -lk  | --list_keywords   : list bbt keywords
+   -lk  | --list_keywords   : list Step keywords
    -lg  | --list_grammar    : list rules for Step analysis
    -e   | --explain         : explain what bbt understand from Scenarios files
                               (do not run the scenarios)

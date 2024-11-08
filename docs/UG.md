@@ -12,6 +12,7 @@ User Guide  <!-- omit from toc -->
     - [using the positive form](#using-the-positive-form)
 - [Tips](#tips)
   - [Understanding what bbt doesn't understand](#understanding-what-bbt-doesnt-understand)
+  - [Test in place](#test-in-place)
 
 
 ## Basic Concepts
@@ -165,7 +166,7 @@ So, if you want to start with a possibly existing dir1, use :
 If you want to start with a brand new one whatever is the situation, use :  
 ``Given the new directory `dir1` `` **and** confirm deletion when prompted, or use the `--yes` option.
 
-Fixme: as of 0.0.5, bbt is not able to simulate interactive behavior, and so there no test of this behavior implemented yet.
+Fixme: as of 0.0.5, bbt is not able to simulate interactive behavior, and so there is no test of this behavior implemented yet.
 If there is no test, don't trust the doc :-)
 
 ## Tips

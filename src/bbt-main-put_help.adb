@@ -20,7 +20,7 @@ begin
    Put_Line ("Command :");
    Put_Line ("   run                    : the default command");
    Put_Line ("   -lf  | --list_files      : list Scenario files found");
-   Put_Line ("   -lk  | --list_keywords   : list bbt keywords");
+   Put_Line ("   -lk  | --list_keywords   : list Step keywords");
    Put_Line ("   -lg  | --list_grammar    : list rules for Step analysis");
    Put_Line ("   -e   | --explain         : explain what bbt understand from Scenarios files");
    Put_Line ("                              (do not run the scenarios)");

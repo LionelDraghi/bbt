@@ -39,6 +39,7 @@ package body BBT.Tests.Runner is
          begin
             case Step.Action is
             when Run_Cmd =>
+               Created_File_List.Add (Output_File_Name (The_Doc));
                Run_Cmd (Step         => Step,
                         Cmd          => To_String (Step.Object_String),
                         Output_Name  => Output_File_Name (The_Doc),
@@ -48,6 +49,7 @@ package body BBT.Tests.Runner is
                exit Step_Processing when not Spawn_OK;
 
             when Run_Without_Error =>
+               Created_File_List.Add (Output_File_Name (The_Doc));
                Run_Cmd (Step         => Step,
                         Cmd          => To_String (Step.Object_String),
                         Output_Name  => Output_File_Name (The_Doc),
