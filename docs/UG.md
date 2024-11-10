@@ -49,7 +49,8 @@ bbt uses code span to express a command, a file or directory name or some expect
 > It is not excluded in the future that the Markdown syntax for files becomes mandatory instead of code span for the same reason : backtick would then be reserved to command or other strings, and File or dir would be written ``[my_file](my_file.md)``.  
 > I'll try to avoid this evolution as it would be less natural to write, and this goes against project objectives.  
  
-5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ``` or ~~~  
+5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ```  
+  
 Fenced code block are used to specify multiline output or file content, as in: 
 
     ~~~md
@@ -64,6 +65,9 @@ Fenced code block are used to specify multiline output or file content, as in:
     -r : recurse
     ```
     ~~~
+
+> [!NOTE] The other legal fenced code blocks marker, "~~~", is ignored by bbt, so that it can be used for documentation purpose without interfering. 
+
 
 ## Command line examples
 
@@ -92,7 +96,7 @@ bbt provides two solutions to help :
 
 ```md
 ### Background :
-  - Given the new `config.ini` file
+  - Given there is no `config.ini` file
 
 ### Scenario : normal use cas
   - When I run `uut append "size=80x40" config.ini` 
@@ -107,6 +111,10 @@ Meaning that the second scenario should fail.
 
 Background may appears at the beginning, at document level, or at feature level, or both.
 Before each scenario, the document background will be executed, and then the feature background.
+
+Background, like Scenarios, may contain Given, When and Then Steps. 
+
+Note that bbt is more flexible than Cucumber for example, where Background should contain only Given Steps, and where there is only one Background per file.
 
 ### No more tests directory?
 It's a common practice to have a dev tree structured like that:
@@ -130,7 +138,7 @@ To avoid the burden of deleting those files in a Makefile or a script, bbt inter
 > ``Given there is no `.config` file``  
 as :
 *if there is, delete it*  
-and offer to delete it, or even delete it automatcaly. To avoid any unwanted deletion, it is important to understand the following behavior.
+and offer to delete it, or even delete it automatically. To avoid any unwanted deletion, it is important to understand the following behavior.
 
 #### using the negative form
 
@@ -143,7 +151,7 @@ This is why the default behavior is not the same :
 - When Step : if there is a `.config` file, the assertion will fail.  
 - Given Step : if there is a `.config`file, bbt will prompt the user to confirm the deletion. If the user deny the deletion, or if the deletion fail, the assertion will fail.
 
-Note that the usual `--yes` option is available, for batch running.
+Note that the usual `--yes` option is available, for batch run.
 
 >[!WARNING]
 > Use `--yes`option with caution : 
@@ -166,14 +174,15 @@ So, if you want to start with a possibly existing dir1, use :
 If you want to start with a brand new one whatever is the situation, use :  
 ``Given the new directory `dir1` `` **and** confirm deletion when prompted, or use the `--yes` option.
 
-Fixme: as of 0.0.5, bbt is not able to simulate interactive behavior, and so there is no test of this behavior implemented yet.
-If there is no test, don't trust the doc :-)
+> [!WARNING] 
+> Fixme: as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
+> And if there is no test, don't trust the doc :-)
 
 ## Tips
 
 ### Understanding what bbt doesn't understand
 
-Error messages provided by the lexer are not bullet proof (and it is likely that no special effort will be put on improving error messages in the future...).
+Error and warning messages provided by the lexer are not bullet proof.
 
 For example, if you forget backticks on dir1 in :  
 ``- Given the directory dir1 ``  
@@ -193,10 +202,10 @@ you'll see that the second field has changed from UNKNOWN to FILE_CREATION, and 
 ### Test in place
 
 The `--output` create a test results file, in Markdown format, that cross-references all executed files.
-Meaning that if the result file is in the `web` sub-directory, and the scenarios in the `tests` sub-directory, link will be for example `../tests/scenrio_1.md`. 
-Be aware of that if you move the file in another dir after the run : move both scenarios and results file in a coherent way.
+Meaning that if the result file is in the `web` sub-directory, and the scenarios in the `tests` sub-directory, link will be for example `../tests/scenario_1.md`. 
+Be aware of that if you move the files in another dir after the run : move both scenarios and results files in a coherent way.
 
-Or use the following best pratice : produce results files directly where you expect them, run the scenarios directly from the doc directory, and just use the "--exec_dir" to run the tests somewhere else to avoid producing crap within the docs tree.
+Or use the following best practice : produce results files directly where you expect them, run the scenarios directly from the doc directory, and just use the "--exec_dir" to run the tests somewhere else to avoid producing crap within the docs tree.
 
 For example, if you have : 
 ```

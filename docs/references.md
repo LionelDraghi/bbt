@@ -12,6 +12,7 @@
   - [Scenario files format](#scenario-files-format)
     - [Steps](#steps)
     - [Headings](#headings)
+    - [Fenced Code blocks](#fenced-code-blocks)
 
 ## Syntax
 
@@ -54,7 +55,7 @@ When I once more try to run something like `my_command -r`
 that's the same.  
 
 Note : neither is recommended.  
-The former isn't easy to read, and the latter is misleading by introducing nuances that bbt ignore!
+The former isn't easy to read, and the latter is misleading by introducing nuances that bbt ignore!  
 This is specification, make short sentences and go straight to the point.
 
 ## Grammar 
@@ -159,7 +160,7 @@ But here the alternative behavior is already implemented through the `unordered`
 
 ### Execution
 
-bbt is executed when you launch the command. All output files will be created here, and input file are expected here. 
+bbt is executed where you launch the command. All output files will be created here, and input file are expected here. 
 
 bbt scenarii are Markdown files. So if you don't specify the precise file names, bbt will try to execute all md file.  
 To see what files, use `bbt --list_files`, possibly with `--recurse`.  
@@ -193,3 +194,6 @@ Feature: My_Feature
 ```
 won't be recognized as a Feature.
 
+####  Fenced Code blocks
+
+Only ``` code fence mark is recognized by bbt, meaning that ~~~ can be used within the documentation without interfering with bbt. 

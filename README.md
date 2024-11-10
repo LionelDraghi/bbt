@@ -15,7 +15,6 @@
   - [Test Results are immediately publishable](#test-results-are-immediately-publishable)
 - [Objective of the project](#objective-of-the-project)
 - [Status of the project](#status-of-the-project)
-- [Limitations](#limitations)
 - [Installation](#installation)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
@@ -128,6 +127,7 @@ But this limited english subset does not come at the cost of readability or expr
   - *then I get no error*
   - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*  
   bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*.  
+
   This is why you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
 
 A direct consequence of that simple model is that the specifications / scenarios may be written by non-coders
@@ -169,9 +169,7 @@ Nevertheless, bbt is working.
 It has as a serious [test base](docs/tests/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
 
-## Limitations
-
-btt compile on Windows and Mac OS, but is currently tested only on my Linux amd64 box.
+btt compile on Windows and Mac OS (at least the Alire version), but is currently tested only on my Linux amd64 box.
 
 ## Installation
 
