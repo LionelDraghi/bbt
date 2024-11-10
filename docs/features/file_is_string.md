@@ -22,6 +22,6 @@ In the rare case where the expected file content is a single line, it could for 
 - When I run `uut append mode=silent config.ini`
 - When I run `uut append recurse=false config.ini`
 
-- When I run `bbt tmp.md`
+- When I run `./bbt tmp.md`
 - then I get an error
  

@@ -30,6 +30,7 @@ Options :
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
    -ed  | --exec_dir       : run command in exec_dir instead of current dir
+          --strict         : warning on steps not following the Given/When/Then order.
 
 Debug command:
    -lt                    : list log topics

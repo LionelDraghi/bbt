@@ -6,12 +6,20 @@ bbt provide the `unordered` modifyer (that is an adjective) to be mentioned near
 
 # Background:
 
-- Given the file `flowers.txt`
+- Given the file `flowers1.txt`
 ```
 Rose
 Tulip
 Orchids
 Petunia
+```
+
+- Given the file `flowers2.txt`
+```
+Tulip
+Petunia
+Rose
+Orchids
 ```
 
 # Scenario: "I get" without the modifyer
@@ -19,25 +27,13 @@ Petunia
 - Given the file `scenario1.md`
 ```
 # Scenario: Scenario1
-- When I run `uut read flowers.txt`
-- Then I get 
-~~~
-Orchids
-Tulip
-Petunia
-Rose
-~~~
+- When I run `uut read flowers1.txt`
+- Then I get `flowers2.txt`
 ```
 
-- When I run `bbt scenario1.md`
+- When I run `./bbt scenario1.md`
 - Then I get an error
 
 # Scenario: same "I get" with the modifyer
-- When I run `uut read flowers.txt`
-- Then I get (unordered)
-~~~
-Orchids
-Tulip
-Petunia
-Rose
-~~~
+- When I run `uut read flowers1.txt`
+- Then I get (unordered) `flowers2.txt`

@@ -1,9 +1,9 @@
 
 ## [rpl_case_insensitivity.md](../examples/rpl_case_insensitivity.md)  
 
-  ### Feature: Case insensitivity  
+  ### Feature: 1 : Case insensitivity  
 
-  - [X] scenario [simple use (single file, no globbing)](../examples/rpl_case_insensitivity.md) pass  
+  - [X] scenario [1.1 : simple use (single file, no globbing)](../examples/rpl_case_insensitivity.md) pass  
 
 
 ## [uut_version.md](../examples/uut_version.md)  

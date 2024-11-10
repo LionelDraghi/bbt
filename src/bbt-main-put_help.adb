@@ -42,6 +42,7 @@ begin
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
    Put_Line ("   -ed  | --exec_dir       : run command in exec_dir instead of current dir");
+   Put_Line ("          --strict         : warning on steps not following the Given/When/Then order.");
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

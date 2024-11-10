@@ -34,11 +34,11 @@ Note that this is not really tested here, as the globbing expansion is done by t
 
 ### Scenario: no file or dir on the command line
 
-This is a change in the v0.04 respect to previous versions.
+This is a change in the 0.0.4 respect to previous versions.
 Default behavior was to search and run every .md file in the current dir.  
 This behavior was retained dangerous, and moreover, unexpected : most command just print the help when called with an empty command line.
 
-- When I run `bbt`
+- When I run `./bbt`
 - Then the output contains
 ```
 Usage : bbt [Options]* [Command] [bbt_file]*
@@ -47,7 +47,7 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 
 
 ### Scenario: running all scenarios in dir1
-- When I run `bbt -lf dir1`
+- When I run `./bbt -lf dir1`
 - Then the output is
 ```
 dir1/scen2.md
@@ -56,7 +56,7 @@ dir1/scen1.md
 
 ### Scenario: running multiple scenarios given on command line
 
-- When I run `bbt -lf dir1/scen3.scen dir1/scen4.scen`  
+- When I run `./bbt -lf dir1/scen3.scen dir1/scen4.scen`  
 Note that this command line is the result of shell expansion of 
 `bbt -lf dir1/*.scen`
 
@@ -76,7 +76,7 @@ dir1/scen4.scen
 # scenario:
 - Given the `dir1/res1` file containing `res1`
 ``` 
-- When I run `bbt -r -lf dir1`
+- When I run `./bbt -r -lf dir1`
 - Then the output is
 ```
 dir1/scen2.md
@@ -91,7 +91,7 @@ dir1/dir2/scen5.md
 - Given the `dir6` dir
 - Given the `dir6/dir7` dir
 
-- When I run `bbt dir5 dir6`
+- When I run `./bbt dir5 dir6`
 - Then the output contains
 ```
 Error : No md file found
@@ -100,6 +100,6 @@ Error : No md file found
 
 ### Scenario: empty list file on -lf if there is no scenario in given directories
 
-- When I run `bbt -lf dir5 dir6`
+- When I run `./bbt -lf dir5 dir6`
 - Then I get no output
 - And I get no error

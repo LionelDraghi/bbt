@@ -20,7 +20,7 @@ Checking that there is no output is sometime useful.
 - Then there is no output
 ```
 
-- When I run `bbt no_output.input`
+- When I run `./bbt no_output.input`
 
 - Then I get an error
 - And output contains `NOK : Then there is no output`

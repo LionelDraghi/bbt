@@ -24,7 +24,7 @@ This should fail, even if the post condition is satisfied, because of "successfu
 - When I successfully run `uut -vza`
 - Then I get `unknown option -vza`
 ```
-- When I run `bbt vza.input`
+- When I run `./bbt vza.input`
 - Then I get an error
 
 ### Scenario : *when I run* a command with a wrong command line

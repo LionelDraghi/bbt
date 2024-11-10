@@ -40,7 +40,8 @@ package BBT.Scenarios.MDG_Lexer is
 --  Fenced code block starts and ends with a code fence,
 --  that is a sequence of at least three consecutive backtick characters (`)
 --  or tildes (~)
---  Within BBT, Fenced code block contains text, and are used to specify
+--  Within BBT, only backtick fenced code are used, so that tildes fence code may be used freely in the file.
+--  Background_Line code block contains text, and are used to specify
 --  an expected output or an expected part of a file.
 
    type Line_Kind is (Feature_Line,
@@ -54,7 +55,7 @@ package BBT.Scenarios.MDG_Lexer is
    type Line_Attributes (Kind : Line_Kind) is record
       case Kind is
          when Feature_Line | Scenario_Line | Background_Line =>
-            -- For Feature or Scenario, the line is divided in
+            -- The line is divided in
             --   ### Kind : Name
             -- For example, for
             --   # Feature: Staying alive
@@ -64,7 +65,7 @@ package BBT.Scenarios.MDG_Lexer is
          when Step_Line =>
             -- Step_Ln, contains the part after the list marker `-`
             -- Note that other "legal" Markdown list maker ('+' and '*') are
-            -- volontary ignored so that it will be possible to use it in
+            -- intentionally ignored so that it will be possible to use it in
             -- comments without interfering with step line parsing.
             -- As a consequence, line starting with '+' and '*' will be
             -- considered here as Text_Line.

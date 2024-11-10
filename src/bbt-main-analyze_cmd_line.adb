@@ -102,6 +102,9 @@ begin
             -- undocumented option, list settings
             Settings.List_Settings := True;
 
+         elsif Opt = "--strict" then
+            Settings.Strict_Gherkin := True;
+
          elsif Ada.Directories.Exists (Opt) then
             -- if it's not an option, its a file name
             case Kind (Opt) is

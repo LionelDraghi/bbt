@@ -15,7 +15,7 @@ And we don't want that to be unnoticed, so :
 ## Scenario: My_Scenario
 ```
 
-- When I run `bbt no_step_in_scenario.input` 
+- When I run `./bbt no_step_in_scenario.input` 
 
 - Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`
 - And  the output contains `Empty      tests =  1`
@@ -28,7 +28,7 @@ And we don't want that to be unnoticed, so :
 ## Feature: My_Feature
 ```
 
-- When I run `bbt no_step_or_scenario_in_feature.input` 
+- When I run `./bbt no_step_or_scenario_in_feature.input` 
 
 - Then the output contains `Warning : No scenario in feature "My_Feature"`
 - And  the output contains `Empty      tests =  1`

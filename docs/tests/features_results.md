@@ -46,6 +46,13 @@
   - [X] scenario [file is not as expected](../features/file_is_code_fence.md) pass  
 
 
+## [markdown_syntax.md](../features/markdown_syntax.md)  
+
+  ### Feature:   
+
+  - [X] scenario [Heading variations](../features/markdown_syntax.md) pass  
+
+
 ## [output_equal_to_file.md](../features/output_equal_to_file.md)  
 
   ### Feature: output is equal to a file  
@@ -226,5 +233,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  52
+- Successful tests =  53
 - Empty      tests =  0

@@ -1,4 +1,4 @@
-## Background feature
+## Overview
 
 Background are special scenario, that may be used :
 1. at the beginning of the file, that is before any feature or scenario.  

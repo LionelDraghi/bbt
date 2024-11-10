@@ -29,6 +29,7 @@ private package BBT.Settings is
    List_Grammar       : Boolean := False;
    Yes                : Boolean := False;
    Cleanup            : Boolean := False;
+   Strict_Gherkin     : Boolean := False;
    Template_Name      : constant String := "bbt_template.md";
 
    -- --------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO;
+with BBT.Settings;
 
 with Text_Utilities; use Text_Utilities;
 
@@ -210,22 +211,31 @@ package body BBT.Tests.Builder is
             end if;
 
          when Given_Step =>
-            if Current_Step_State = In_When_Step then
-               IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""When""",
-                               Step.Location);
-            elsif Current_Step_State = In_Then_Step then
-               IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""Then""",
-                               Step.Location);
+            if Settings.Strict_Gherkin then
+               if Current_Step_State = In_When_Step then
+                  IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
+                                    """ appears after a ""When""",
+                                  Step.Location);
+               elsif Current_Step_State = In_Then_Step then
+                  IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
+                                    """ appears after a ""Then""",
+                                  Step.Location);
+               end if;
             end if;
             Set_Step_State (In_Given_Step);
 
          when When_Step  =>
-            if Current_Step_State = In_Then_Step then
-               IO.Put_Warning ("When step """ & To_String (Step.Step_String) &
-                                 """ appears to late, after a ""Then""",
-                               Step.Location);
+            if Settings.Strict_Gherkin then
+               if Current_Step_State = In_Then_Step then
+                  IO.Put_Warning ("When step """
+                                  & To_String (Step.Step_String)
+                                  & """ appears after a ""Then""",
+                                  Step.Location);
+               elsif Current_Step_State = In_When_Step then
+                  IO.Put_Warning ("Multiple When in the same Scenario """
+                                  & To_String (Step.Step_String),
+                                 Step.Location);
+               end if;
             end if;
             Set_Step_State (In_When_Step);
 
