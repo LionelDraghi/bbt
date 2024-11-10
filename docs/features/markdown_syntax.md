@@ -11,20 +11,21 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
    are recognized as a Scenario, but not:  
    + "#Scenario"
 
-   As a specific bbt rule (not sure it is true also for MDG), Gherkin keywords must be followed by a colon, and the colon is not part of the title.  
+   As a specific bbt rule (not sure it is true also for MDG), Gherkin keywords may be followed by a colon, and the colon is not part of the title.  
    This gives the user the ability to use Heading starting with a Gherkin keyword, but not equal to this Keyword.  
-   For example :  
-   * "# Scenario overview" 
-   * "# Scenario 1.1 :"
-   will not be considered by bbt, but
-   - "# Scenario: overview"  
-   - "# Scenario : 1.1" 
-   will be.  
-  
-   [!Note] this is a discutable position, because users are likely to forget the colon when drafting the scenario. A warning would be welcomed. #Fixme
-
    Although not recommended, Features Scenarios, etc. without title are OK.
 
+   For example :  
+   * "# Scenario overview" 
+   * "# Scenario 1.1 : overview"
+   * "# Scenario: overview"  
+   * "# Scenario" 
+   are legal, and the matching titles will be :
+   + "overview"
+   + "1.1 : overview"
+   + "overview"
+   + ""
+  
 ## Scenario: Heading variations
 
 - Given the new file `1.md` containing `# Scenario: S1`
