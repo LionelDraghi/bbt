@@ -19,8 +19,10 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
    * "# Scenario overview" 
    * "# Scenario 1.1 : overview"
    * "# Scenario: overview"  
-   * "# Scenario" 
+   * "# Scenario"
+    
    are legal, and the matching titles will be :
+  
    + "overview"
    + "1.1 : overview"
    + "overview"
