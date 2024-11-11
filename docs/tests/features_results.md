@@ -52,6 +52,8 @@
 
   - [X] scenario [Heading variations](../features/markdown_syntax.md) pass  
 
+  - [X] scenario [Missing heading marker](../features/markdown_syntax.md) pass  
+
 
 ## [output_equal_to_file.md](../features/output_equal_to_file.md)  
 
@@ -170,6 +172,13 @@
   - [X] scenario [OK return code](../features/return_code.md) pass  
 
 
+## [strict_gherkin.md](../features/strict_gherkin.md)  
+
+  ### Feature: Strict Gherkin rules  
+
+  - [X] scenario [Multiple When in a scenario](../features/strict_gherkin.md) pass  
+
+
 ## [check_no_output.md](../features/check_no_output.md)  
 
   ### Feature: Check that there is no output  
@@ -206,6 +215,17 @@
   - [X] scenario [asking for uut version](../features/stdout.md) pass  
 
 
+## [does_not_contain.md](../features/does_not_contain.md)  
+
+  ### Feature: checking that some string is not present in output or file  
+
+  - [X] scenario [Successful checks](../features/does_not_contain.md) pass  
+
+  - [X] scenario [Failed "output doesnt contain"](../features/does_not_contain.md) pass  
+
+  - [X] scenario [Failed "file doesn't contain"](../features/does_not_contain.md) pass  
+
+
 ## [empty_scenarios.md](../features/empty_scenarios.md)  
 
   - [X] scenario [No step test](../features/empty_scenarios.md) pass  
@@ -233,5 +253,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  53
+- Successful tests =  58
 - Empty      tests =  0

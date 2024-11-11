@@ -76,11 +76,17 @@ package body BBT.Tests.Runner is
                -- example : Then the output contains `--version`
                Output_Contains (Get_Text (Output_File_Name (The_Doc)), Step);
 
+            when Output_Does_Not_Contain =>
+               Output_Does_Not_Contain (Get_Text (Output_File_Name (The_Doc)), Step);
+
             when File_Is =>
                Files_Is (Step);
 
             when File_Contains =>
                File_Contains (Step);
+
+            when File_Does_Not_Contain =>
+               File_Does_Not_Contain (Step);
 
             when Check_No_File =>
                Check_No_File (Subject_Or_Object_String (Step), Step);

@@ -12,7 +12,8 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   .out files not removed when using --cleanup
   - [Added]   --strict implemented to get warning on steps not in GWT order
   - [Fixed]   incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
-  
+  - [Added]   "output | file doesn't contain" form added
+
 - [0.0.5] - 2024-10-17
   - [Removed] `-pg` compilation option that prevented Alire integration. 
   - `bbt` version 0.0.5 is in Alire. First public announce on Reddit and ada-lang.io!

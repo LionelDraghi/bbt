@@ -385,6 +385,20 @@ package body BBT.Tests.Actions is
    end Output_Contains;
 
    -- --------------------------------------------------------------------------
+   procedure Output_Does_Not_Contain (Output : Text;
+                                      Step   : Step_Type) is
+      T2  : constant Text := Get_Expected (Step);
+   begin
+      IO.Put_Line ("Output_Does_Not_Contain ", Verbosity => Debug);
+      Put_Step_Result (Step     => Step,
+                       Success  => not Contains (Output, T2,
+                         Sort_Texts => Step.Ignore_Order),
+                       Fail_Msg => "Output:  " & Text_Image (Output) &
+                         "contains unexpected:  " & Text_Image (T2),
+                       Loc      => Step.Location);
+   end Output_Does_Not_Contain;
+
+   -- --------------------------------------------------------------------------
    procedure Files_Is (Step : Step_Type) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);
@@ -414,5 +428,21 @@ package body BBT.Tests.Actions is
                          "but: " & Text_Image (T1),
                        Loc      => Step.Location);
    end File_Contains;
+
+   -- --------------------------------------------------------------------------
+   procedure File_Does_Not_Contain (Step : Step_Type) is
+      File_Name : constant String := +Step.Subject_String;
+      T1        : constant Text   := Get_Text (File_Name);
+      T2        : constant Text   := Get_Expected (Step);
+   begin
+      IO.Put_Line ("File_Does_Not_Contain " & File_Name, Verbosity => Debug);
+      Put_Step_Result (Step     => Step,
+                       Success  => not Contains (T1, T2,
+                         Sort_Texts => Step.Ignore_Order),
+                       Fail_Msg => "file " & To_String (Step.Subject_String)  &
+                                   Text_Image (T1) &
+                                   "contain unexpected:  " & Text_Image (T2),
+                       Loc      => Step.Location);
+   end File_Does_Not_Contain;
 
 end BBT.Tests.Actions;

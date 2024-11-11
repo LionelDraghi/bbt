@@ -38,10 +38,13 @@ package body BBT.Scenarios.Step_Parser.Lexer is
          "no",       -- "no" = "not" = "dont"
          "not",
          "dont",
+         "doesnt",
+         "doesn't",
          "error",
          "is",
          "or",
          "output",
+         "contain",
          "contains",
          "containing",
          "successfully",

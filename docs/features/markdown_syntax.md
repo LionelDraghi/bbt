@@ -38,6 +38,7 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
 - Given the new file `6.md` containing `# Scenario`
 - Given the new file `7.md` containing `# Scenario:`
 - Given the new file `8.md` containing `# Scenario #################`
+- Given the new file `9.md` containing `  # Scenario`
 
 - When I successfully run `./bbt 1.md`
 - Then output contains `scenario [S1](1.md) is empty, nothing tested`
@@ -64,3 +65,24 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
 
 - When I successfully run `./bbt 8.md`
 - Then output contains `scenario [](8.md) is empty, nothing tested`
+
+- When I successfully run `./bbt 9.md`
+- Then output contains `scenario [](9.md) is empty, nothing tested`
+
+
+## Scenario: Missing heading marker
+
+A classic error is to forget the heading marker `#` 
+There is no explicit message for now, but at least there is a message if there is no scenario at all...
+
+- Given the new file `no_heading_marker.input`
+```md
+Background: 
+- When I successfully run `uut --version`
+```
+
+- When I run `./bbt -d no_heading_marker.input`
+```
+- Then output contain `Warning : No scenario in document "no_heading_marker.input`
+- ANd  output contain `Empty      tests =  1`
+```

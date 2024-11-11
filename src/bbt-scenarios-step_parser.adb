@@ -43,6 +43,7 @@ package body BBT.Scenarios.Step_Parser is
                     Successful_Run,
                     Get,
                     Get_No,
+                    Does_Not_Contain,
                     Contains,
                     Containing,
                     Is_V,
@@ -70,33 +71,34 @@ package body BBT.Scenarios.Step_Parser is
    function Image (T : Tokens) return String is
    begin
       case T is
-         when Given          => return "Given";
-         when When_P         => return "When";
-         when Then_P         => return "Then";
-         when No_SA          => return "";
-         when New_SA         => return "new";
-         when No_Subject     => return "";
-         when Output_Subj    => return "output";
-         when Subject_File   => return "`file`";
-         when Subject_Dir    => return "`dir`";
-         when Subject_Text   => return "`text`";
-         when No_Verb        => return "";
-         when Run            => return "run";
-         when Successful_Run => return "successfully run";
-         when Get            => return "get";
-         when Get_No         => return "get no";
-         when Contains       => return "contains";
-         when Containing     => return "containing";
-         when Is_V           => return "is";
-         when Is_No          => return "is no";
-         when No_Object      => return "";
-         when Output_Obj     => return "output";
-         when Object_File    => return "`file`";
-         when Object_Dir     => return "`dir`";
-         when Object_Text    => return "`text`";
-         when Command_List   => return "`cmd` [or `cmd`]*";
-         when Error          => return "error";
-         when Unordered      => return "unordered";
+         when Given            => return "Given";
+         when When_P           => return "When";
+         when Then_P           => return "Then";
+         when No_SA            => return "";
+         when New_SA           => return "new";
+         when No_Subject       => return "";
+         when Output_Subj      => return "output";
+         when Subject_File     => return "`file`";
+         when Subject_Dir      => return "`dir`";
+         when Subject_Text     => return "`text`";
+         when No_Verb          => return "";
+         when Run              => return "run";
+         when Successful_Run   => return "successfully run";
+         when Get              => return "get";
+         when Get_No           => return "get no";
+         when Contains         => return "contains";
+         when Containing       => return "containing";
+         when Does_Not_Contain => return "does not contain";
+         when Is_V             => return "is";
+         when Is_No            => return "is no";
+         when No_Object        => return "";
+         when Output_Obj       => return "output";
+         when Object_File      => return "`file`";
+         when Object_Dir       => return "`dir`";
+         when Object_Text      => return "`text`";
+         when Command_List     => return "`cmd` [or `cmd`]*";
+         when Error            => return "error";
+         when Unordered        => return "unordered";
       end case;
    end Image;
 
@@ -140,10 +142,14 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
       G (Then_P, No_SA, Output_Subj,  Contains, Object_Text) := Output_Contains; -- then output contains `msg`
       G (Then_P, No_SA, Output_Subj,  Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
+      G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, Object_Text) := Output_Does_Not_Contain; -- then output does not contain `msg`
+      G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, No_Object)   := Output_Does_Not_Contain; -- then output does not contain followed by code fenced content
       G (Then_P, No_SA, Subject_File, Is_V,     Object_Text) := File_Is; -- then `config.ini` is `mode=silent`
       G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
       G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
       G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content
+      G (Then_P, No_SA, Subject_File, Does_Not_Contain, Object_Text) := File_Does_Not_Contain; -- Then `config.ini` contains `--version`
+      G (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object)   := File_Does_Not_Contain; -- Then `config.ini` contains followed by code fenced content
       G (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj)  := No_Output; -- then I get no output
       G (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj)  := No_Output; -- then there is no output
       return G;
@@ -198,6 +204,7 @@ package body BBT.Scenarios.Step_Parser is
       First_Token      : Boolean        := True;
       Successfully_Met : Boolean        := False;
       Or_Met           : Natural        := 0;
+      Not_Met          : Boolean        := False;
       Prep             : Prepositions;
       Subject_Attr     : Subject_Attrib := No_SA;
       Subject          : Subjects       := No_Subject;
@@ -304,7 +311,10 @@ package body BBT.Scenarios.Step_Parser is
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
                        or Lower_Keyword = "dont"
+                       or Lower_Keyword = "doesnt"
+                       or Lower_Keyword = "doesn't"
                      then
+                        Not_Met := True;
                         if Verb = Is_V then
                            Verb := Is_No;
                         elsif Verb = Get  then
@@ -324,8 +334,14 @@ package body BBT.Scenarios.Step_Parser is
                            Object := Output_Obj;
                         end if;
 
-                     elsif Lower_Keyword = "contains" then
-                        Verb := Contains;
+                     elsif Lower_Keyword = "contains" or
+                       Lower_Keyword = "contain"
+                     then
+                        if Not_Met then
+                           Verb := Does_Not_Contain;
+                        else
+                           Verb := Contains;
+                        end if;
 
                      elsif Lower_Keyword = "containing" then
                         Verb := Containing;
@@ -398,12 +414,13 @@ package body BBT.Scenarios.Step_Parser is
                               Object := Object_File;
                            end if;
 
-                        when Run            |
-                             Successful_Run |
-                             Get            |
-                             Get_No         |
-                             Contains       |
-                             Containing     =>
+                        when Run              |
+                             Successful_Run   |
+                             Get              |
+                             Get_No           |
+                             Contains         |
+                             Does_Not_Contain |
+                             Containing       =>
                            -- Verbs are always followed by a text
                            Object := Object_Text;
 
