@@ -22,7 +22,7 @@ Basic concepts of bbt files are illustrated in this basic example :
 ```md
 ## Scenario : Command line version option
 
-- When I run `uut --version`
+- When I run `sut --version`
 - Then the output contains `version 1.0`
 ```
 
@@ -33,14 +33,14 @@ bbt uses a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumb
 Here is an example with keywords in bold :  
 
 **Given** there **is** **no** `.utt` **directory**  
-**When** I **run** `uut --init`  
+**When** I **run** `sut --init`  
 **Then** there **is** **no** **error**  
-**And** **file** `.uut/config.ini` **contains** `lang=de`  
+**And** **file** `.sut/config.ini` **contains** `lang=de`  
   
 3. **glue word** : *I*, *the*  
 As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
    
-4. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `uut --version` ``, `` `version 1.0` ``  
+4. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks : `` `sut --version` ``, `` `version 1.0` ``  
 bbt uses code span to express a command, a file or directory name or some expected output.
 
 > [!WARNING]
@@ -56,10 +56,10 @@ Fenced code block are used to specify multiline output or file content, as in:
     ~~~md
     ## Scenario: Command line help
 
-    - When I run `uut -h`
+    - When I run `sut -h`
     - Then the output is
     ```
-    uut [options] [-I directory]
+    sut [options] [-I directory]
     options :
     -h : help
     -r : recurse
@@ -99,7 +99,7 @@ bbt provides two solutions to help :
   - Given there is no `config.ini` file
 
 ### Scenario : normal use cas
-  - When I run `uut append "size=80x40" config.ini` 
+  - When I run `sut append "size=80x40" config.ini` 
   - Then `config.ini` should contains `"size=80x40"`
 
 ### Scenario : same check, but after Background execution (should fail)

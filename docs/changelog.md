@@ -6,13 +6,15 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- [Unreleased 0.0.6]
+- [master]
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
   - [Fixed]   .out files not removed when using --cleanup
   - [Added]   --strict implemented to get warning on steps not in GWT order
   - [Fixed]   incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
-  - [Added]   "output | file doesn't contain" form added
+  - [Added]   "output|file doesn't contain" form added
+  - [Changed] "uut" renamed "sut", because bbt is precisely not about Unit Under Test, but Software Under Test.
+  - [Added]   "sut" augmented to be able to check future feature about Environment variable and user prompting.
 
 - [0.0.5] - 2024-10-17
   - [Removed] `-pg` compilation option that prevented Alire integration. 

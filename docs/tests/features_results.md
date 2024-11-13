@@ -3,9 +3,9 @@
 
   ### Feature: checking an expected multiline output  
 
-  - [X] scenario [asking for uut help](../features/multiline.md) pass  
+  - [X] scenario [asking for sut help](../features/multiline.md) pass  
 
-  - [X] scenario [causing an uut error with a long explanation](../features/multiline.md) pass  
+  - [X] scenario [causing an sut error with a long explanation](../features/multiline.md) pass  
 
 
 ## [find_scenarios.md](../features/find_scenarios.md)  
@@ -69,13 +69,6 @@
   - [X] scenario [NOK return code](../features/example_keyword.md) pass  
 
   - [X] scenario [NOK return code](../features/example_keyword.md) pass  
-
-
-## [ill_formated_file.md](../features/ill_formated_file.md)  
-
-  ### Feature: Ill formatted file detection  
-
-  - [X] scenario [Missing scenario](../features/ill_formated_file.md) pass  
 
 
 ## [missing_title.md](../features/missing_title.md)  
@@ -212,7 +205,7 @@
 
   ### Feature: checking a message line on stdout  
 
-  - [X] scenario [asking for uut version](../features/stdout.md) pass  
+  - [X] scenario [asking for sut version](../features/stdout.md) pass  
 
 
 ## [does_not_contain.md](../features/does_not_contain.md)  
@@ -253,5 +246,5 @@
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  58
+- Successful tests =  57
 - Empty      tests =  0

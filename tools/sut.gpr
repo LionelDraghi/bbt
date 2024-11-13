@@ -1,12 +1,12 @@
-project UUT is
+project sut is
 
    for Source_Dirs use ("./");
    for Object_Dir use "obj/";
    for Exec_Dir use "../";
-   for Main use ("uut.adb");
+   for Main use ("sut.adb");
 
    package Builder is
-      for Executable ("uut.adb") use "uut";
+      for Executable ("sut.adb") use "sut";
       for Default_Switches ("ada") use ("-j2");
    end Builder;
 
@@ -60,4 +60,4 @@ project UUT is
       -- -Es : store symbolic tracebacks
    end Binder;
 
-end UUT;
+end sut;

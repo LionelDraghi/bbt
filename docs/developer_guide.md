@@ -62,8 +62,8 @@ I don't know whether they are available on Windows, Mac-OS or even on all Linux 
 I try to minimise the number of those dependencies, and also try to choose widely available tools.
 
 No external tools is required to compile and run all tests (within docs/features), except the gnat compiler and Alire.
-To avoid external dependencies, a false exe named `uut` (that means unit under test) is used for `bbt` tests own needs.  
-Sources of `uut` are in the `tools` sub-directory.
+To avoid external dependencies, a false exe named `sut` (that means Software Under Test) is used for `bbt` tests own needs.  
+Sources of `sut` are in the `tools` sub-directory.
 
 External dependencies:
 1. To run the examples (within docs/examples), you will need the exe "tested", that is `gcc`, `rpl`, etc.  

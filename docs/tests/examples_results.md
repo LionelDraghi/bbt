@@ -8,7 +8,7 @@
 
 ## [uut_version.md](../examples/uut_version.md)  
 
-  - [X] scenario [I want to know uut version](../examples/uut_version.md) pass  
+  - [X] scenario [I want to know sut version](../examples/uut_version.md) pass  
 
 
 ## [gcc_hello_word.md](../examples/gcc_hello_word.md)  

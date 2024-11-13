@@ -1,4 +1,4 @@
-### Scenario: I want to know uut version
+### Scenario: I want to know sut version
 
-- When I run `uut --version`
+- When I run `sut --version`
 - Then the output contains `version 1.0`

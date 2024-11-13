@@ -13,7 +13,7 @@ Rose
 Tulip
 ```
 
-- When I run `./uut read flowers.txt`
+- When I run `./sut read flowers.txt`
 - Then output contains `Rose`
 - But output doesn't contain `Cactus`
 
@@ -25,7 +25,7 @@ Tulip
 - Given the file `failed_doesnt_1.md`
 ```
 # Scenario :
-- When I run `./uut read flowers.txt`
+- When I run `./sut read flowers.txt`
 - Then output doesn't contain `Rose`
 ```
 - When I run `./bbt failed_doesnt_1.md`
@@ -48,7 +48,7 @@ contains unexpected:
 - Given the file `failed_doesnt_2.md`
 ```
 # Scenario :
-- When I run `./uut read flowers.txt`
+- When I run `./sut read flowers.txt`
 - Then file `flowers.txt` do not contain `Tulip`
 ```
 - When I run `./bbt failed_doesnt_2.md`

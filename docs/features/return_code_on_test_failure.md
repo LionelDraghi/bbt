@@ -8,7 +8,7 @@ Therefore, the return status is set to fail not only when there is an internal e
 - Given the new `good_option.md` file
 ```md
 # Scenario: Good option
-- When I run `uut -v`
+- When I run `sut -v`
 - Then output contains `version 1.0`
 ```
 
@@ -16,7 +16,7 @@ Therefore, the return status is set to fail not only when there is an internal e
 - Then I get no error 
 - and `good_option.md.out` is 
 ```
-uut version 1.0
+sut version 1.0
 ```
 
 ### Scenario: return code when the test fail
@@ -24,8 +24,8 @@ uut version 1.0
 - Given the new `wrong_option.md` file
 ```md
 # Scenario: Wrong option
-- When I run `uut -wxz`
-- Then output contains `uut version`
+- When I run `sut -wxz`
+- Then output contains `sut version`
 ```
 
 - When I run `./bbt --cleanup wrong_option.md`
@@ -38,12 +38,12 @@ The first scenario hereafter fails and the second succeed, but bbt should still 
 - Given the new `wrong_and_good_option.md` file
 ```md
 # Scenario: Wrong option
-- When I run `uut -wxz`
-- Then output contains `uut version`
+- When I run `sut -wxz`
+- Then output contains `sut version`
 
 # Scenario: Good option
-- When I run `uut -v`
-- Then output contains `uut version`
+- When I run `sut -v`
+- Then output contains `sut version`
 ```
 
 - When I run `./bbt --cleanup wrong_and_good_option.md`

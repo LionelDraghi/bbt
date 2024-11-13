@@ -22,7 +22,7 @@ If run in interactive mode, the expected behavior depends on the user answer :
 ### Scenario : a required file does not exist 
 
 - Given there is no file `config.ini`
-- When I run `uut read config.ini`
+- When I run `sut read config.ini`
 - Then I get error
 
 ### Scenario : the required file is created

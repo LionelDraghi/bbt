@@ -2,7 +2,7 @@
 
 First thing to test, a single line message on standard output!
 
-### Scenario : asking for uut version
+### Scenario : asking for sut version
 
-  - When I run `uut -v`
-  - Then I get `uut version 1.0`
+  - When I run `sut -v`
+  - Then I get `sut version 1.0`

@@ -1,4 +1,4 @@
-name = "uut"
+name = "sut"
 description = ""
 version = "0.1.0-dev"
 
@@ -9,7 +9,7 @@ licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
 website = ""
 tags = []
 
-executables = ["uut"]
+executables = ["sut"]
 
 [configuration]
 generate_C   = false

@@ -27,7 +27,7 @@ Orchids
 - Given the file `scenario1.md`
 ```
 # Scenario: Scenario1
-- When I run `uut read flowers1.txt`
+- When I run `sut read flowers1.txt`
 - Then I get `flowers2.txt`
 ```
 
@@ -35,5 +35,5 @@ Orchids
 - Then I get an error
 
 # Scenario: same "I get" with the modifyer
-- When I run `uut read flowers1.txt`
+- When I run `sut read flowers1.txt`
 - Then I get (unordered) `flowers2.txt`

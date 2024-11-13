@@ -1,10 +1,10 @@
 all: clean check
 
-check: ../bbt ../uut
+check: ../bbt ../sut
 	# Then we run all scenarii that should pass
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
-	@ - ln -fs ../uut .
+	@ - ln -fs ../sut .
 	@ - ln -fs ../bbt .
 
 	@ ./bbt --yes -c -o ../docs/tests/examples_results.md -ed ./ ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
@@ -17,6 +17,6 @@ doc:
 	
 .PHONY : clean
 clean:
-	@ - rm -f *.out main bbt uut
+	@ - rm -f *.out main bbt sut
 	@ - rm -rf dir*
 

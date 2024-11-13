@@ -78,7 +78,7 @@ There is no explicit message for now, but at least there is a message if there i
 - Given the new file `no_heading_marker.input`
 ```md
 Background: 
-- When I successfully run `uut --version`
+- When I successfully run `sut --version`
 ```
 
 - When I run `./bbt -d no_heading_marker.input`

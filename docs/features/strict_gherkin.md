@@ -22,9 +22,9 @@ Never the less, a `--strict` option is provided that emit Warnings on (some) of 
 - Given the file `t1.md`
   ```
   # Scenario
-  - When I run `./uut create tmp.txt`
-  - When I run `./uut append fillet  tmp.txt`
-  - When I run `./uut append chamfer tmp.txt`
+  - When I run `./sut create tmp.txt`
+  - When I run `./sut append fillet  tmp.txt`
+  - When I run `./sut append chamfer tmp.txt`
   ```
 
 - When I successfully run `./bbt --strict t1.md`
@@ -32,7 +32,7 @@ Never the less, a `--strict` option is provided that emit Warnings on (some) of 
   ```
   t1.md:3: Warning : Multiple When in the same Scenario
   ```
-- And `tmp.txt`contains 
+- And `tmp.txt` contains 
   ```
 fillet
 chamfer
@@ -40,7 +40,7 @@ chamfer
 
 - When I successfully run `./bbt t1.md`
 - Then the output do not contain `Warning`
-- And `tmp.txt`contains 
+- And `tmp.txt` contains 
   ```
 fillet
 chamfer

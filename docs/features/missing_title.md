@@ -9,11 +9,11 @@ Report will obviously be less readable, but it should not prevent to run the tes
 
 ### Background: 
 No Tittle Background
-- When I successfully run `uut --version`
+- When I successfully run `sut --version`
 
 ### Scenario:
 No Tittle Scenario
-- When I successfully run `uut -v`
+- When I successfully run `sut -v`
 
 ```
 

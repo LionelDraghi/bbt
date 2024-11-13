@@ -22,7 +22,7 @@ Here are some detected problem.
 - Given the new file `scen1.md`
 ```
 # Scenario:
-- When I run `./uut -h` or xyz
+- When I run `./sut -h` or xyz
 ```
 
 - When I run `./bbt scen1.md`

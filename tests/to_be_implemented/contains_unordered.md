@@ -15,7 +15,7 @@ Petunia
 - Given the file `scenario1.md`
 ```
 # Scenario: Scenario1
-- When I run `uut read flowers.txt`
+- When I run `sut read flowers.txt`
 - Then output contains 
 ~~~
 Rose
@@ -29,7 +29,7 @@ Orchids
 
 # Scenario: same "contains" but with the "unordered" modifyer
 
-- When I run `uut read flowers.txt`
+- When I run `sut read flowers.txt`
 - Then output contains (unordered)
 ~~~
 Rose

@@ -11,8 +11,8 @@ Credit : I don't know who invented this, but I borrowed the idea to [Aruba](http
 
 ### Scenario : *when I successfully run* a command with successful run
 
-- When I successfully run `uut --version`
-- Then I get `uut version 1.0`
+- When I successfully run `sut --version`
+- Then I get `sut version 1.0`
 
 ### Scenario : *when I successfully run* a command with a wrong command line, returns an error status
 
@@ -21,7 +21,7 @@ This should fail, even if the post condition is satisfied, because of "successfu
 - Given the `vza.input` file
 ```md
 # Scenario: Wrong command line
-- When I successfully run `uut -vza`
+- When I successfully run `sut -vza`
 - Then I get `unknown option -vza`
 ```
 - When I run `./bbt vza.input`
@@ -31,7 +31,7 @@ This should fail, even if the post condition is satisfied, because of "successfu
 
 Same test without "successfully" should pass
 
-- When I run `uut -vza`
+- When I run `sut -vza`
 - Then I get `unknown option -vza`
 
 

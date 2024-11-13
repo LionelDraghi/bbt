@@ -2,21 +2,23 @@
 
 Test an expected multi-lines output.
 
-### Scenario : asking for uut help
+### Scenario : asking for sut help
 
-  - When I run `uut -h`
+  - When I run `sut -h`
   - Then I get 
 
 ```
-uut simulate an "under test unit" that can create,
+sut simulate an "under test unit" that can create,
 read, or append a text to a file, with typical
 file and command line input / output / error situations.
 
 Usage:
-   uut create|read        file_name
-   uut append      "Text" file_name
-   uut -h | --help or no command line : display this message
-   uut -v | --version                 : display a version string
+   sut create|read        file_name
+   sut append      "Text" file_name
+   sut delete             file_name   : prompt user to confirm deletion
+   sut read_env           var_name    : display environment variable
+   sut -h | --help or no command line : display this message
+   sut -v | --version                 : display a version string
 
 Return code:
   Return code is set to 1 when :
@@ -31,9 +33,9 @@ Errors:
   append, an unhandled exception is raised.
 ```
 
-### Scenario : causing an uut error with a long explanation
+### Scenario : causing an sut error with a long explanation
 
-  - When I run `uut -e append `
+  - When I run `sut -e append `
   - Then I get on stderr
 
 ```
