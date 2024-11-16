@@ -13,7 +13,13 @@ Project  <!-- omit from toc -->
 
 ## Tests
 - [Examples](tests/examples_results.md)
-- [Features](tests/features_results.md): **this is where behavior is defined** 
+- [Features](tests/features_results.md): **this is where behavior is defined**
+  Features file are prefixed with a category letter and index number.
+  Categories are :
+  A. Features related to the language (both Gherkin framework and bbt steps) : for example, the test of the `output does not contain` form.
+  B. Features of bbt overall behavior : for example, test of the --cleanup feature;
+  C. Robustness and compliance test : for example, test of bbt tolerance to weird formatted markdown files.
+  The index number is not significant, but lowest number are supposed to be more basic features.  
 
 ## Help, comments, feedback...
 - [Discussions](https://github.com/LionelDraghi/bbt/discussions)

@@ -295,21 +295,6 @@ package body BBT.Tests.Builder is
          when In_Feature =>
             Last_Feature_Ref.Comment.Append ("```");
 
-         --  when In_Scenario =>
-         --     Last_Scenario_Ref.Comment.Append ("```");
-         --
-         --  when In_Background =>
-         --     null;
-            --  case Current_Background is
-            --  when None =>
-            --     Last_Scenario_Ref.Comment.Append ("```");
-            --     -- Fixme: unreachable code?
-            --  when Doc =>
-            --     Last_Doc_Ref.Background.Comment.Append ("```");
-            --  when Feature =>
-            --     Last_Feature_Ref.Background.Comment.Append ("```");
-            --  end case;
-
       end case;
    end Add_Code_Fence;
 

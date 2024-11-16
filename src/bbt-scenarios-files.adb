@@ -36,6 +36,7 @@ package body BBT.Scenarios.Files is
    --  end Is_Dir;
 
    The_List : File_List.Vector;
+   package File_List_Sorting is new File_List.Generic_Sorting;
 
    -- --------------------------------------------------------------------------
    procedure Append_File (File_Name : String) is
@@ -113,6 +114,7 @@ package body BBT.Scenarios.Files is
 
    begin
       Walk (Start_In);
+      File_List_Sorting.Sort (The_List);
       IO.Put_Line ("Found " & The_List'Image,
                    Location  => IO.No_Location,
                    Verbosity => IO.Debug);

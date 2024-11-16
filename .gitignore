@@ -4,3 +4,5 @@
 /config/
 alire.lock
 /tools/alire/
+/tests/spawn_test/
+/tests/expect_test/

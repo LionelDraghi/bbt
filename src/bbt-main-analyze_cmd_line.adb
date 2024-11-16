@@ -70,7 +70,10 @@ begin
          elsif Opt = "-o" or Opt = "--output" then
             Next_Arg;
             Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
-            IO.Enable_Tee (Settings.Result_File_Name);
+            IO.Enable_Tee (Settings.Result_File_Name,
+                           Verbosity => Verbose);
+            -- Verbose is the right detail level for the Markdown output file,
+            -- even if --quiet or -- verbose is set.
 
          elsif Opt = "-ed" or Opt = "--exec_dir" then
             Next_Arg;

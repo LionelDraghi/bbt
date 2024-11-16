@@ -48,7 +48,7 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 
 ### Scenario: running all scenarios in dir1
 - When I run `./bbt -lf dir1`
-- Then the output is
+- Then the output is (unordered)
 ```
 dir1/scen2.md
 dir1/scen1.md
@@ -77,7 +77,7 @@ dir1/scen4.scen
 - Given the `dir1/res1` file containing `res1`
 ``` 
 - When I run `./bbt -r -lf dir1`
-- Then the output is
+- Then the output is (unordered)
 ```
 dir1/scen2.md
 dir1/scen1.md

@@ -182,10 +182,6 @@ package body BBT.Tests.Runner is
               := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
 
          begin
-            -- Put_Line ("  - scenario " & Link_Image & ":");
-            --  Put_Line ("  Scenario " & Scen.Name'Image & "  ",
-            --            IO.No_Location, IO.Verbose);
-
             -- Run background scenarios
             Run_Doc_Background (Scen);
             if Is_In_Feature (Scen) then
@@ -201,13 +197,18 @@ package body BBT.Tests.Runner is
                   -- new line in Markdown format when this line is followed
                   -- by an error message.
                   Put_Line ("  - [ ] scenario " & Link_Image &
-                              " is empty, nothing tested  ");
+                              " is empty, nothing tested  ",
+                            Verbosity => Normal);
+                  IO.New_Line (Verbosity => Normal);
                when Successful =>
-                  Put_Line ("  - [X] scenario " & Link_Image & " pass  ");
+                  Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
+                            Verbosity => Verbose);
+                  IO.New_Line (Verbosity => Verbose);
                when Failed =>
-                  Put_Line ("  - [ ] scenario " & Link_Image & " fails  ");
+                  Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+                            Verbosity => Quiet);
+                  IO.New_Line (Verbosity => Quiet);
             end case;
-            IO.New_Line (Verbosity => IO.Normal);
          end;
 
          --  if IO.Some_Error and not Settings.Keep_Going then
@@ -241,8 +242,9 @@ package body BBT.Tests.Runner is
                --  IO.Put_Line ("To_File    => " & (+D.Name));
                --  IO.Put_Line ("Short_Path => " & Path_To_Scen);
                Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
-                         & "](" & (Path_To_Scen) & ")  ");
-               IO.New_Line (Verbosity => IO.Normal);
+                         & "](" & (Path_To_Scen) & ")  ",
+                         Verbosity => Normal);
+               IO.New_Line (Verbosity => Verbose);
 
                if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
                then
@@ -256,8 +258,8 @@ package body BBT.Tests.Runner is
                for F of D.Feature_List loop
                   -- Then run scenarios attached to each Feature
                   IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ",
-                               Verbosity => Normal);
-                  IO.New_Line (Verbosity => IO.Normal);
+                               Verbosity => Verbose);
+                  IO.New_Line (Verbosity => Verbose);
 
                   if F.Scenario_List.Is_Empty then
                      Put_Warning ("No scenario in feature " & F.Name'Image & "  ",

@@ -8,13 +8,16 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - [master]
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
+  - [Added]   --strict implemented to get warning on steps not in GWT order
+  - [Added]   "output|file doesn't contain" form added
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
   - [Fixed]   .out files not removed when using --cleanup
-  - [Added]   --strict implemented to get warning on steps not in GWT order
-  - [Fixed]   incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
-  - [Added]   "output|file doesn't contain" form added
+  - [Fixed]   Incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
+  - [Fixed]   Normal output verbosity is now more balanced (it was pretty much identical to --verbose)  
   - [Changed] "uut" renamed "sut", because bbt is precisely not about Unit Under Test, but Software Under Test.
   - [Added]   "sut" augmented to be able to check future feature about Environment variable and user prompting.
+  - [Changed] Files are now processed in alphabetic order, and displayed accordingly by --list_file
+  - [Changed] Big Features renaming and reorg
 
 - [0.0.5] - 2024-10-17
   - [Removed] `-pg` compilation option that prevented Alire integration. 

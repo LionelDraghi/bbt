@@ -21,6 +21,7 @@ package body BBT.IO is
    Errors_Count       : Natural          := 0;
    Warnings_Count     : Natural          := 0;
    Tee_Enabled        : Boolean          := False;
+   Was_Tee_Enabled    : Boolean          := False;
    Tee_File_Verbosity : Verbosity_Levels := Normal;
    Tee_File           : Ada.Text_IO.File_Type;
    Current_Level      : Verbosity_Levels := Normal;
@@ -154,6 +155,19 @@ package body BBT.IO is
       Tee_File_Verbosity := Verbosity;
       Create (Tee_File, Name => File_Name, Mode => Out_File);
    end Enable_Tee;
+
+   -- --------------------------------------------------------------------------
+   procedure Pause_Tee is
+   begin
+      Was_Tee_Enabled := Tee_Enabled;
+      Tee_Enabled := False;
+   end Pause_Tee;
+
+   -- --------------------------------------------------------------------------
+   procedure Restore_Tee is
+   begin
+      Tee_Enabled := Was_Tee_Enabled;
+   end Restore_Tee;
 
    -- --------------------------------------------------------------------------
    function Error_Count   return Natural is (Errors_Count);

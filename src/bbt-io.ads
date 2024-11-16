@@ -136,6 +136,10 @@ private package BBT.IO is
    -- The Verbosity may be different for standard output and for the file.
    -- This is a simple way to have (for example) a terse standard output,
    -- and a verbose log file.
+   procedure Pause_Tee;
+   -- Store the current state and pause Tee.
+   procedure Restore_Tee;
+   -- Restore the state before last Pause_Tee call.
 
    -- --------------------------------------------------------------------------
    -- Error_Count and Warning_Count return the number of call to Put_Error

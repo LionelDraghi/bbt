@@ -22,8 +22,11 @@ package body BBT.Tests is
       --  Put_Line ("Step.Parent     = " & Step.Parent_Scenario'Image);
       Add_Result (Success, Step.Parent_Scenario.all);
       if Success then
+         IO.Pause_Tee; --  We don't want this level of detail in the
+                       --  generated test index.
          IO.Put_Line (Item      => Pre & (+Step.Step_String),
                       Verbosity => IO.Verbose);
+         IO.Restore_Tee;
       else
          IO.Put_Line (Item      => Pre & (+Step.Step_String)
                       & " (" & Image (Loc) & ")  ",
