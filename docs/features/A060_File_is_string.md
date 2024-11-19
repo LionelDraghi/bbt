@@ -1,6 +1,6 @@
 ## Feature: "file is" followed by a code span (a string)
 
-In the rare case where the expected file content is a single line, it could for convenience and readability be given on the same line between backticks, and not in successive lines in a code fence. 
+In the rare case where the expected file content is a single line, it can for convenience and readability be given on the same line between backticks, and not in successive lines in a code fence. 
 
 ### Scenario: test on a single line file
 
