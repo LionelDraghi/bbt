@@ -1,7 +1,8 @@
 ## Feature: **Exec Dir** 
 
 bbt is able to run a scenario in a specific directory, provided on the command line.  
-> [!WARNING] Note that if the scenario depends on an external file, it must be placed in the exec dir.
+> [!WARNING]
+> Note that if the scenario depends on an external file, it must be placed in the exec dir.
 
 ### Background: create some dir and file
 
