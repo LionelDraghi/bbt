@@ -30,6 +30,8 @@ private package BBT.Settings is
    Yes                : Boolean := False;
    Cleanup            : Boolean := False;
    Strict_Gherkin     : Boolean := False;
+   Status_Bar         : Boolean := False;
+
    Template_Name      : constant String := "bbt_template.md";
 
    -- --------------------------------------------------------------------------

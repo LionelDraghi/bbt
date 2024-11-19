@@ -108,6 +108,9 @@ begin
          elsif Opt = "--strict" then
             Settings.Strict_Gherkin := True;
 
+         elsif Opt = "-sb" or Opt = "--status_bar" then
+            Settings.Status_Bar := True;
+
          elsif Ada.Directories.Exists (Opt) then
             -- if it's not an option, its a file name
             case Kind (Opt) is

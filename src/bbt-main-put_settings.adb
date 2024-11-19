@@ -49,6 +49,7 @@ begin
    Put_Line ("   " & Checkbox (Yes) & " Yes");
    Put_Line ("   " & Checkbox (Settings.Cleanup) & " Cleanup");
    Put_Line ("   " & Checkbox (Settings.Strict_Gherkin) & " Strict_Gherkin");
+   Put_Line ("   " & Checkbox (Settings.Status_Bar) & " Status_Bar");
    --  Put_Line ("   Trace enabled for topics:");
    --  for T in IO.Extended_Topics loop
    --     Put_Line ("       " & Checkbox (IO.Is_Enabled (T))

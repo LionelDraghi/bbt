@@ -18,4 +18,5 @@ generate_C = false
 [[depends-on]]
 # markdown = "^24.0.0"
 
-
+[[depends-on]]
+ansiada = "^1.0.0"

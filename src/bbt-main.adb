@@ -10,6 +10,7 @@ with BBT.IO;
 with BBT.Scenarios.Files;
 with BBT.Scenarios.Step_Parser;
 with BBT.Settings;
+with BBT.Status_Bar;
 with BBT.Tests.Builder;
 with BBT.Tests.Runner;
 
@@ -36,6 +37,11 @@ procedure BBT.Main is
 begin
    -- --------------------------------------------------------------------------
    Analyze_Cmd_Line;
+
+   if Settings.Status_Bar then
+      Status_Bar.Enable;
+   end if;
+
    IO.Set_Reference_Directory (Settings.Launch_Directory);
    --  To get the file name relative to the start dir, and not
    --  absolute Path.
@@ -62,6 +68,7 @@ begin
    --   (options are already processed in the analyze Cmd_Line procedure)
 
    if Settings.List_Files then
+      Status_Bar.Put_Activity ("Listing files");
       for File of Scenarios.Files.BBT_Files loop
          Ada.Text_IO.Put_Line (File);
       end loop;
@@ -69,26 +76,31 @@ begin
    end if;
 
    if Settings.Create_Template then
+      Status_Bar.Put_Activity ("Creating template");
       Create_Template;
       return;
    end if;
 
    if Settings.List_Topics then
+      Status_Bar.Put_Activity ("Listing topics");
       Put_Topics;
       return;
    end if;
 
    if Settings.List_Settings then
+      Status_Bar.Put_Activity ("Listing settings");
       Put_Settings;
       return;
    end if;
 
    if Settings.List_Keywords then
+      Status_Bar.Put_Activity ("Listing keywords");
       BBT.Scenarios.Step_Parser.Put_Keywords;
       return;
    end if;
 
    if Settings.List_Grammar then
+      Status_Bar.Put_Activity ("Listing grammar");
       BBT.Scenarios.Step_Parser.Put_Grammar;
       return;
    end if;
@@ -99,6 +111,8 @@ begin
 
    else
       -- HERE we hare in the normal execution flow
+      Status_Bar.Put_Activity ("Loading files");
+
       for File of Scenarios.Files.BBT_Files loop
          IO.Put_Line ("Loading " & File'Image, IO.No_Location, IO.Debug);
          Scenarios.Files.Analyze_MDG_File (File);
@@ -112,25 +126,16 @@ begin
 
          -- Let's display our rebuild of the original test definition file
          -- comment lines are filtered out
+         Status_Bar.Put_Activity ("Display loaded scenarios");
          Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
       else
          -- Real run --
-
-         --  declare
-         --     use Ada.Calendar;
-         --     Start_Time : constant Time := Clock;
-         --     End_Time   : Time;
-         --  begin
+         Status_Bar.Put_Activity ("Running scenarios");
          Tests.Runner.Run_All;
          Documents.Compute_Overall_Tests_Results;
          Documents.Put_Overall_Results;
 
-         --     End_Time := Clock;
-         --     IO.New_Line;
-         --     IO.Put_Line ("- Start Time = " & IO.Image (Start_Time));
-         --     IO.Put_Line ("- End Time   = " & IO.Image (End_Time));
-         --  end;
       end if;
    end if;
 

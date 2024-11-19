@@ -1,3 +1,0 @@
-bbt-settings.ads:22:06: error: file "bbt_config.ads" not found
-bbt-settings.ads:22:06: error: "bbt.settings (body)" depends on "bbt.settings (spec)"
-bbt-settings.ads:22:06: error: "bbt.settings (spec)" depends on "bbt_config (spec)"

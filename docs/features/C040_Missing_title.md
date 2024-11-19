@@ -18,7 +18,7 @@ No Tittle Scenario
 ```
 
 - When I run `./bbt no_title.input`
-- Then I get 
+- Then output contains 
 ```
 ## [no_title.input](no_title.input)  
 

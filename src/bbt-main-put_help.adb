@@ -43,6 +43,8 @@ begin
    Put_Line ("                             for standard output.");
    Put_Line ("   -ed  | --exec_dir       : run command in exec_dir instead of current dir");
    Put_Line ("          --strict         : warning on steps not following the Given/When/Then order.");
+   Put_Line ("   -sb  | --status_bar     : enable a progress bar in the terminal");
+
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

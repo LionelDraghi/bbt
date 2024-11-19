@@ -31,6 +31,7 @@ Options :
                              for standard output.
    -ed  | --exec_dir       : run command in exec_dir instead of current dir
           --strict         : warning on steps not following the Given/When/Then order.
+   -sb  | --status_bar     : enable a progress bar in the terminal
 
 Debug command:
    -lt                    : list log topics

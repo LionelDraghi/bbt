@@ -9,6 +9,7 @@ with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;
 with BBT.Settings;
+with BBT.Status_Bar;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
 with File_Utilities;
@@ -221,9 +222,14 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_All is
       use File_Utilities;
+      use Status_Bar;
+      File_Count : Natural := Natural (BBT.Tests.Builder.The_Tests_List.Length);
+
    begin
       -- First, let's move to a different exec dir, if any
       Ada.Directories.Set_Directory (Settings.Exec_Dir);
+
+      Status_Bar.Initialize_Progress_Bar (File_Count);
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
@@ -245,6 +251,8 @@ package body BBT.Tests.Runner is
                          & "](" & (Path_To_Scen) & ")  ",
                          Verbosity => Normal);
                IO.New_Line (Verbosity => Verbose);
+
+               Status_Bar.Progress_Bar_Next_Step (Path_To_Scen); delay (0.1);
 
                if D.Scenario_List.Is_Empty and then D.Feature_List.Is_Empty
                then

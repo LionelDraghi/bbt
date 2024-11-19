@@ -251,7 +251,25 @@
 
 ## [C040_Missing_title.md](../features/C040_Missing_title.md)  
 
-  - [X] scenario [Missing tittle in scenario, background and feature](../features/C040_Missing_title.md) pass  
+*** NOK : Then output contains  (../docs/features/C040_Missing_title.md:21:)  
+Output:  
+|   
+| ## [no_title.input](no_title.input)    
+|   
+| -----------------------  
+| - Failed     tests =  0  
+| - Successful tests =  1  
+| - Empty      tests =  0  
+
+does not contain expected:  
+| ## [no_title.input](no_title.input)    
+| -----------------------  
+| - Failed     tests =  0  
+| - Successful tests =  1  
+| - Empty      tests =  0  
+
+  
+  - [ ] scenario [Missing tittle in scenario, background and feature](../features/C040_Missing_title.md) fails  
 
 
 ## [C050_Step_marker.md](../features/C050_Step_marker.md)  
@@ -262,6 +280,6 @@
 
 
 -----------------------
-- Failed     tests =  0
-- Successful tests =  57
+- Failed     tests =  1
+- Successful tests =  56
 - Empty      tests =  0
