@@ -125,12 +125,7 @@ But this limited english subset does not come at the cost of readability or expr
 
 - First, bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
-- Second, even within the lines taken into account, bbt is not going to read all words. Let's consider those two steps :  
-  - *then I get no error*
-  - *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*  
-  bbt will consider both equivalent, because it actually only take into account the four keywords : *then* *get* *no* *error*.  
-
-  This is why you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
+- Second, thanks to the partial parser, you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
 
 A direct consequence of that simple model is that the specifications / scenarios may be written by non-coders
 
@@ -145,8 +140,9 @@ bbt as no dependencies on external lib or tools (diff, for example), to ensure t
 
 ### Test Results are immediately publishable 
 
-**Tests results** are also in a Markdown files, and cross-referencing the matching scenario files : if a test fail, just click on the link and you are in the scenario.  
-You can push on github without further processing.  
+bbt can output a **Tests results index** Markdown file, that cross-references the executed scenario files : if a test fail, just click on the link and you are in the scenario.  
+You can push it on github without further processing.  
+
 To see what it looks like, consider [bbt own tests](docs/tests/features_results.md).  
 
 Tests results are generated when running `bbt`, by just using the `-o` option (--output).
