@@ -1,4 +1,4 @@
-# Feature: 
+## Feature: Tolerance to formatting variations
 
 bbt aims at being as tolerant as possible to formatting imprecisions, while still respecting [the CommonMark](https://spec.commonmark.org/) specification, and 
 Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md)
@@ -28,7 +28,7 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
    + "1.1 : overview"
    + ""
   
-## Scenario: Heading variations
+### Scenario: Heading variations
 
 - Given the new file `1.md` containing `# Scenario: S1`
 - Given the new file `2.md` containing `#Scenario: S2`
@@ -70,7 +70,7 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
 - Then output contains `scenario [](9.md) is empty, nothing tested`
 
 
-## Scenario: Missing heading marker
+### Scenario: Missing heading marker
 
 A classic error is to forget the heading marker `#` 
 There is no explicit message for now, but at least there is a message if there is no scenario at all...
