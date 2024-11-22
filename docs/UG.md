@@ -53,7 +53,7 @@ bbt uses code span to express a command, a file or directory name or some expect
   
 Fenced code block are used to specify multiline output or file content, as in: 
 
-    ~~~md
+~~~md
     ## Scenario: Command line help
 
     - When I run `sut -h`
@@ -64,7 +64,7 @@ Fenced code block are used to specify multiline output or file content, as in:
     -h : help
     -r : recurse
     ```
-    ~~~
+~~~
 
 > [!NOTE]
 > The other legal fenced code blocks marker, "~~~", is ignored by bbt, so that it can be used for documentation purpose without interfering. 
