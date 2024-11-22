@@ -1,11 +1,11 @@
-# Feature : checking that some string is not present in output or file
+## Feature : checking that some string is not present in output or file
 
 All "doesnt", "doesn't" and "do not" are accepted in  
 "output doesn't contain" and  
 "file `x` doesn't contain". 
 
 
-# Scenario : Successful checks
+## Scenario : Successful checks
 
 - Given file `flowers.txt`
 ```
@@ -20,7 +20,7 @@ Tulip
 - Then file `flowers.txt` contains `Tulip`
 - But file `flowers.txt` do not contain `Eucalyptus`
 
-# Scenario : Failed "output doesnt contain"
+## Scenario : Failed "output doesnt contain"
 
 - Given the file `failed_doesnt_1.md`
 ```
