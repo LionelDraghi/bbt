@@ -66,7 +66,8 @@ Fenced code block are used to specify multiline output or file content, as in:
     ```
     ~~~
 
-> [!NOTE] The other legal fenced code blocks marker, "~~~", is ignored by bbt, so that it can be used for documentation purpose without interfering. 
+> [!NOTE]
+> The other legal fenced code blocks marker, "~~~", is ignored by bbt, so that it can be used for documentation purpose without interfering. 
 
 
 ## Command line examples
