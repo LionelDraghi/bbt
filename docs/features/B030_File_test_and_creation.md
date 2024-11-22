@@ -1,8 +1,3 @@
-
-- [Scenario : a required file does not exist](#scenario--a-required-file-does-not-exist)
-- [Scenario : the required file is created](#scenario--the-required-file-is-created)
-- [Scenario : "Given there is no", when there actually is, should erase the file](#scenario--given-there-is-no-when-there-actually-is-should-erase-the-file)
-
 <!-- omit from toc -->
 ## Feature : testing the existence of a file
 
@@ -15,9 +10,13 @@ If run in interactive mode, the expected behavior depends on the user answer :
 - If it answer "yes", the test will be OK.
 - And logically, if it answer "no", the test will fail.
 
-> [!NOTE] This last case is not yet tested because bbt doesn't support for now prompt interaction. (Fixme:)  
+> [!NOTE]
+> This last case is not yet tested because bbt doesn't support for now prompt interaction. (Fixme:)  
 > Meaning that this test can not be run in a test suite.
 
+- [Scenario : a required file does not exist](#scenario--a-required-file-does-not-exist)
+- [Scenario : the required file is created](#scenario--the-required-file-is-created)
+- [Scenario : "Given there is no", when there actually is, should erase the file](#scenario--given-there-is-no-when-there-actually-is-should-erase-the-file)
 
 ### Scenario : a required file does not exist 
 
