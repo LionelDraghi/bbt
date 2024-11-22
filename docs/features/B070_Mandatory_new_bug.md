@@ -2,14 +2,14 @@ Bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `
 
 This test should be replace in the future by the complete test of `Given the file` / `Given the new file` with prompting.
 
-# Background:
+### Background:
 
 - Given the file `whatever.txt`
 ```
 Cactus
 ```
 
-# Scenario: 
+### Scenario: 
 
 - Given the file `whatever.txt`
 ```
