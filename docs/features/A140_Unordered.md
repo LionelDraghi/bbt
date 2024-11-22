@@ -1,10 +1,10 @@
-# Feature: when the modifyer `unordered` is given after `get`, order of line is ignored
+## Feature: when the modifyer `unordered` is given after `get`, order of line is ignored
 
 Comparing the expected output with a predefined list may be tedious, if, for example, the tested command list the file in access time order.  
 Our intent in that case is to verify that each expected line and only those lines are output.  
 bbt provide the `unordered` modifyer (that is an adjective) to be mentioned near the file name, that will cause the compare to ignore the order.  
 
-# Background:
+### Background:
 
 - Given the file `flowers1.txt`
 ```
@@ -22,7 +22,7 @@ Rose
 Orchids
 ```
 
-# Scenario: "I get" without the modifyer
+### Scenario: "I get" without the modifyer
 
 - Given the file `scenario1.md`
 ```
@@ -34,6 +34,6 @@ Orchids
 - When I run `./bbt scenario1.md`
 - Then I get an error
 
-# Scenario: same "I get" with the modifyer
+### Scenario: same "I get" with the modifyer
 - When I run `sut read flowers1.txt`
 - Then I get (unordered) `flowers2.txt`
