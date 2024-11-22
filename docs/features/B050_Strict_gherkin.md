@@ -1,4 +1,4 @@
-# Feature : Strict Gherkin rules 
+## Feature : Strict Gherkin rules 
 
 Gherkin is typically used in a BDD context, where it is advised for example to:
 - avoid multiples When steps in the same scenario,
@@ -16,7 +16,7 @@ By default, bbt is much more flexible than Gherkin, allowing to uses Steps in wh
 Never the less, a `--strict` option is provided that emit Warnings on (some) of those rules. 
 
 
-# Scenario : Multiple When in a scenario
+### Scenario : Multiple When in a scenario
 
 - Given there is no file `tmp.txt`
 - Given the file `t1.md`
