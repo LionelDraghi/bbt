@@ -32,7 +32,7 @@ bbt uses a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumb
 2. [**bbt specifics  keywords**](keywords.md) : *run*, *output*, *contains*, etc.  
 Here is an example with keywords in bold :  
 
-**Given** there **is** **no** `.utt` **directory**  
+**Given** there **is** **no** `.sut` **directory**  
 **When** I **run** `sut --init`  
 **Then** there **is** **no** **error**  
 **And** **file** `.sut/config.ini` **contains** `lang=de`  
