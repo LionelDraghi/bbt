@@ -1,4 +1,4 @@
-# Empty scenarios
+## Empty scenarios
 
 A scenario without any step may be a work in progress, in which case this is not an error.
 
@@ -8,7 +8,7 @@ And we don't want that to be unnoticed, so :
 2. When there is a scenario, it will be displayed like a fail scenario, with a non checked box.
 3. when there is no step **and** no scenario, there is a specific warning.
 
-## Scenario: No step test
+### Scenario: No step test
 
 - Given the `no_step_in_scenario.input` file
 ```md
@@ -21,7 +21,7 @@ And we don't want that to be unnoticed, so :
 - And  the output contains `Empty      tests =  1`
 - And I get no error
   
-## Scenario: No scenario test
+### Scenario: No scenario test
 
 - Given the `no_step_or_scenario_in_feature.input` file
 ```md
