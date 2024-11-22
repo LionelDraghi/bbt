@@ -72,12 +72,17 @@ We have :
 
 ### Partial parsing 
 
-A distinctive feature of bbt is that it directly understand those step sentences. You dont have to learn a specific DSL syntax, nor to use a scripting language.  
+A distinctive feature of bbt is that it directly understand those almost normal english sentences :  
+```
+- When I run `sut --quiet input.txt`
+- Then I have no output
+```
+You dont have to learn a specific DSL syntax, nor to use a scripting language.  
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, but does not understand the whole sentence.  
 
 As an example, bbt will consider equivalent :  
 - *then I get no error (close #2398)*
-- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402 (mea culpa)*  
+- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402*  
 because it actually only take into account the four keywords : *then*, *get*, *no* and *error*  
   
 And this is what gives the possibility to write scenarios in natural language. 
