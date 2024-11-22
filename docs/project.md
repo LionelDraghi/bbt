@@ -31,9 +31,6 @@ Project  <!-- omit from toc -->
 ### Near future
 
 ### Distant future or low priority
-- ``Given execution directory `dir1` ``  
-  Create a dir and move test run into that dir
-
 - interactive exec
   Test of command waiting for user input
 
@@ -48,8 +45,6 @@ Project  <!-- omit from toc -->
 - explore the possibility to run multiple exe asynchronously, while staying simple.  
   Maybe by using the AdaCore spawn lib.
 
-- "should be" as "is" synonym?
-  
 - "no new files" and "no env change" check
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
@@ -62,7 +57,7 @@ May imply to switch to Max Reznik's more sophisticated MarkDown parser...
   - reStructuredText : .rst (.rest) 
   and separate presentation vs semantic in the code, with a strategy pattern for presentation.
 
-- Synonymes : 
+- Synonyms : 
 
   Stderr = error output  
   Stdout = output
