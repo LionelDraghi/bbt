@@ -91,7 +91,7 @@ And this is what gives the possibility to write scenarios in natural language.
 
 Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) to describe a multiline text (expected output, file content, etc).
 
-bbt uses also Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text, like file name or command to run.  
+bbt also uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text like file name or command to run.  
 It's not only because it makes the doc nicer, but also because otherwise it would be impossible to distinguish arguments from free text.  
  
 In the previous example, the config.ini file content is given in a fenced code block, and the command line is given in a code span.
