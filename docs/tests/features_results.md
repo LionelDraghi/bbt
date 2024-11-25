@@ -1,4 +1,3 @@
-Time: 2024-11-25 22:16:08.51
 
 ## [A010_Contains_line.md](../features/A010_Contains_line.md)  
 
@@ -51,7 +50,7 @@ Time: 2024-11-25 22:16:08.51
 
 ## [A060_File_is_string.md](../features/A060_File_is_string.md)  
 
-  ### Feature: "file is file" followed by the file name  
+  ### Feature: "file is" followed by a code span (a string)  
 
   - [X] scenario [test on a single line file](../features/A060_File_is_string.md) pass  
 
@@ -63,6 +62,8 @@ Time: 2024-11-25 22:16:08.51
   ### Feature: file is equal to a file  
 
   - [X] scenario [test `is equal to file` form](../features/A065_File_is_file.md) pass  
+
+  - [X] scenario [test `is not equal to file` form](../features/A065_File_is_file.md) pass  
 
 
 ## [A070_Multiline.md](../features/A070_Multiline.md)  
@@ -250,7 +251,7 @@ Time: 2024-11-25 22:16:08.51
 
 ## [C030_Markdown_syntax.md](../features/C030_Markdown_syntax.md)  
 
-  ### Feature:   
+  ### Feature: Tolerance to formatting variations  
 
   - [X] scenario [Heading variations](../features/C030_Markdown_syntax.md) pass  
 
@@ -271,5 +272,5 @@ Time: 2024-11-25 22:16:08.51
 
 -----------------------
 - Failed     tests =  0
-- Successful tests =  58
+- Successful tests =  59
 - Empty      tests =  0

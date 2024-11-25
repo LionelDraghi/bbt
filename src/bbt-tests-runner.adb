@@ -235,9 +235,10 @@ package body BBT.Tests.Runner is
 
       Status_Bar.Initialize_Progress_Bar (File_Count);
 
-      Put_Line ("Time: " & Ada.Calendar.Formatting.Image
-                (Date                  => Ada.Calendar.Clock,
-                 Include_Time_Fraction => True));
+      --  Put_Line ("Time: " & Ada.Calendar.Formatting.Image
+      -- -- or BBT.IO.Image??
+      --            (Date                  => Ada.Calendar.Clock,
+      --             Include_Time_Fraction => True));
       -- Put_Line ("GNAT version: " & CVer.Version);
 
       -- let's run the test

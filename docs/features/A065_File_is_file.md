@@ -15,3 +15,23 @@ I’ve been trying this out a bit on Windows, and it seems like a great fit to t
 ```
 
 - Then `tmp.1` is equal to file `tmp.2`
+
+### Scenario : test `is not equal to file` form
+
+- Given the file `tmp.3`
+```
+I’ve been trying thissssssssssssssssss out a bit on Windows, and it seems like a great fit to test something that I’m working on.
+```
+- And the file `test_that_should_fail.md`
+```
+### Scenario
+- Then `tmp.1` is equal to file `tmp.3`
+```
+
+- When I run `./bbt test_that_should_fail.md`
+- Then output contains `- Failed     tests =  1`
+- And I get an error
+
+
+
+

@@ -1,4 +1,3 @@
-Time: 2024-11-25 22:16:08.05
 
 ## [gcc_hello_word.md](../examples/gcc_hello_word.md)  
 
