@@ -29,7 +29,7 @@ begin
       Put_Line ("### Scenario : version message");
       Put_Line ("  - When I run `sut --version`");
       Put_Line ("  - Then I get no error");
-      Put_Line ("  - And I get 'sut v0.1.0'");
+      Put_Line ("  - And I get `sut v0.1.0`");
       New_Line;
       Put_Line ("### Scenario : Help message");
       Put_Line ("  - When I run `sut --help`");
