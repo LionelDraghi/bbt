@@ -1,3 +1,4 @@
+Time: 2024-11-25 22:16:08.51
 
 ## [A010_Contains_line.md](../features/A010_Contains_line.md)  
 
@@ -50,11 +51,18 @@
 
 ## [A060_File_is_string.md](../features/A060_File_is_string.md)  
 
-  ### Feature: "file is" followed by a code span (a string)  
+  ### Feature: "file is file" followed by the file name  
 
   - [X] scenario [test on a single line file](../features/A060_File_is_string.md) pass  
 
   - [X] scenario [adding a second line to the file, so the same test should fail](../features/A060_File_is_string.md) pass  
+
+
+## [A065_File_is_file.md](../features/A065_File_is_file.md)  
+
+  ### Feature: file is equal to a file  
+
+  - [X] scenario [test `is equal to file` form](../features/A065_File_is_file.md) pass  
 
 
 ## [A070_Multiline.md](../features/A070_Multiline.md)  
@@ -251,25 +259,7 @@
 
 ## [C040_Missing_title.md](../features/C040_Missing_title.md)  
 
-*** NOK : Then output contains  (../docs/features/C040_Missing_title.md:21:)  
-Output:  
-|   
-| ## [no_title.input](no_title.input)    
-|   
-| -----------------------  
-| - Failed     tests =  0  
-| - Successful tests =  1  
-| - Empty      tests =  0  
-
-does not contain expected:  
-| ## [no_title.input](no_title.input)    
-| -----------------------  
-| - Failed     tests =  0  
-| - Successful tests =  1  
-| - Empty      tests =  0  
-
-  
-  - [ ] scenario [Missing tittle in scenario, background and feature](../features/C040_Missing_title.md) fails  
+  - [X] scenario [Missing tittle in scenario, background and feature](../features/C040_Missing_title.md) pass  
 
 
 ## [C050_Step_marker.md](../features/C050_Step_marker.md)  
@@ -280,6 +270,6 @@ does not contain expected:
 
 
 -----------------------
-- Failed     tests =  1
-- Successful tests =  56
+- Failed     tests =  0
+- Successful tests =  58
 - Empty      tests =  0

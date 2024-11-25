@@ -13,7 +13,6 @@ with Ada.Directories; use Ada.Directories;
 
 package body BBT.Documents is
 
-   -- type Indent_Level is range 0 .. 3;
    Prefix               : constant Texts.Vector := [1 => "",
                                                     2 => "  "];
    Current_Indent_Level : Positive := 1;
@@ -21,14 +20,7 @@ package body BBT.Documents is
    -- --------------------------------------------------------------------------
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      S      :        Step_Type)
-   is
-   --  procedure Put_If_Not_Null (Prefix : String; S : Unbounded_String) is
-   --  begin
-   --     if S /= Null_Unbounded_String then
-   --        Output.Put (Prefix & " " & S'Image);
-   --     end if;
-   --  end Put_If_Not_Null;
+      S      :        Step_Type) is
    begin
       Output.Put (S.Cat'Image & ", ");
       Output.Put (S.Action'Image);
@@ -56,14 +48,12 @@ package body BBT.Documents is
       use BBT.Settings, File_Utilities;
    begin
       if Output_File_Dir (Output_File_Dir'Last) = Separator then
-         return Output_File_Dir &             Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
+         return Output_File_Dir &
+           Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
       else
-         return Output_File_Dir & Separator & Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
+         return Output_File_Dir & Separator &
+           Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
       end if;
-      --  (Ada.Directories.Compose
-      --     (Containing_Directory => BBT.Settings.Output_File_Dir,
-      --      Name                 => To_String (D.Name),
-      --      Extension            => ".out"));
    end Output_File_Name;
 
    -- --------------------------------------------------------------------------
@@ -172,7 +162,6 @@ package body BBT.Documents is
          end loop;
 
          for F of D.Feature_List loop
-
             if F.Scenario_List.Is_Empty then
                -- Empty Feature should be reported
                Results (Empty) := @ + 1;

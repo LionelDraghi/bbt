@@ -416,9 +416,10 @@ package body Text_Utilities is
    end Search;
 
    -- --------------------------------------------------------------------------
-   function Contains (Text1, Text2     : Text;
-                      Sort_Texts       : Boolean;
-                      Case_Insensitive : Boolean := True) return Boolean is
+   function Contains (Text1, Text2       : Text;
+                      Sort_Texts         : Boolean;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True) return Boolean is
    -- After eliminating easy cases T1 = T2 and T2 is longer than T1, the
    -- comparison algorithm is :
    -- I1 and I2 (in the loop below) are the two cursor respectively
@@ -429,24 +430,27 @@ package body Text_Utilities is
    -- text matches also.
    -- If it matches until T2 last lines, return True, false otherwise.
       use type Ada.Containers.Count_Type;
+      T1 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text1)
+                    else Text1);
+      T2 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text2)
+                    else Text2);
 
    begin
-      if Text1.Length < Text2.Length then
+      --  Put_Line ("T1 = " & T1'Image);
+      --  Put_Line ("T2 = " & T2'Image);
+      if T1.Length < T2.Length then
          return False;
 
-      elsif Text1 = Text2 then
+      elsif T1 = T2 then
          return True;
 
       else
          declare
-            T1, T2  : Text;
             Last_I1 : constant Positive
-              := Text1.Last_Index - Positive (Text2.Length) + 1;
+              := T1.Last_Index - Positive (T2.Length) + 1;
             I1      : Positive;
 
          begin
-            T1 := Text1;
-            T2 := Text2;
             if Sort_Texts then
                Sort (T1);
                Sort (T2);
@@ -457,6 +461,10 @@ package body Text_Utilities is
                I1 := Start;
                Inner : for I2 in T2.First_Index .. T2.Last_Index loop
                   -- We look for a first match between texts.
+                  --  Put_Line ("T1 [" & T1.First_Index'Image & " .. " & T1.Last_Index'Image & "]");
+                  --  Put_Line ("T2 [" & T2.First_Index'Image & " .. " & T2.Last_Index'Image & "]");
+                  --  Put_Line ("I1 = " & I1'Image);
+                  --  Put_Line ("I2 = " & I2'Image);
                   if Search (T1 (I1), T2 (I2), Case_Insensitive) then
                      -- Lines match
                      if I2 = T2.Last_Index then
@@ -555,5 +563,17 @@ package body Text_Utilities is
       end if;
       return 0;
    end First_Non_Blank_Line;
+
+   -- --------------------------------------------------------------------------
+   function Remove_Blank_Lines (From_Text : Text) return Text is
+      T : Text := Empty_Text;
+   begin
+      for L of From_Text loop
+         if Ada.Strings.Fixed.Index_Non_Blank (L) /= 0 then
+            T.Append (L);
+         end if;
+      end loop;
+      return T;
+   end Remove_Blank_Lines;
 
 end Text_Utilities;

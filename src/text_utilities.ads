@@ -87,9 +87,10 @@ package Text_Utilities is
                       Case_Insensitive   : Boolean := True) return Boolean;
 
    -- --------------------------------------------------------------------------
-   function Contains (Text1, Text2     : Text;
-                      Sort_Texts       : Boolean;
-                      Case_Insensitive : Boolean := True) return Boolean;
+   function Contains (Text1, Text2       : Text;
+                      Sort_Texts         : Boolean;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True) return Boolean;
    -- Return True if Text1 contains Text2.
    function Contains_Line (The_Text         : Text;
                            The_Line         : String;
@@ -109,6 +110,9 @@ package Text_Utilities is
                                   From    : Positive := 1) return Natural;
    -- Start looking at index From
    -- Returns the index of the first non blank line if any, 0 otherwise
+
+   -- --------------------------------------------------------------------------
+   function Remove_Blank_Lines (From_Text : Text) return Text;
 
    use Texts;
    package Text_Cursors is new List_Image.Cursors_Signature

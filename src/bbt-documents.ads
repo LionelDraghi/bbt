@@ -142,8 +142,8 @@ private package BBT.Documents is
      (D.Background /= null and then not D.Background.Step_List.Is_Empty);
    function Output_File_Name (D : Document_Type) return String;
 
-   --  function Created_Files_List_File_Name (D : Document_Type) return String is
-   --    (To_String (D.Name) & ".created_files");
+   --  function Created_Files_List_File_Name (D : Document_Type) return String
+   --    is (To_String (D.Name) & ".created_files");
 
    -- --------------------------------------------------------------------------
    procedure Put_Text          (The_Text : Text);

@@ -75,6 +75,10 @@ begin
             -- Verbose is the right detail level for the Markdown output file,
             -- even if --quiet or -- verbose is set.
 
+         elsif Opt = "-ot" or Opt = "--output_tag" then
+            Next_Arg;
+            -- Fixme: opt -ot / --output_tag not yet coded
+
          elsif Opt = "-ed" or Opt = "--exec_dir" then
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));

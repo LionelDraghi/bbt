@@ -37,13 +37,15 @@ begin
    Put_Line ("   -v   | --verbose");
    Put_Line ("   -q   | --quiet          : no message unless error,");
    Put_Line ("                             Warning are also ignored");
-   Put_Line ("   -o   | --output file.md : create a Markdown file with tests results");
+   Put_Line ("   -o   | --output file.md : create an md file with tests results");
+   Put_Line ("                             that index all scenarios run.");
    Put_Line ("                             This file will contains the normal bbt output,");
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
-   Put_Line ("   -ed  | --exec_dir       : run command in exec_dir instead of current dir");
-   Put_Line ("          --strict         : warning on steps not following the Given/When/Then order.");
-   Put_Line ("   -sb  | --status_bar     : enable a progress bar in the terminal");
+   Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
+   Put_Line ("   -ed  | --exec_dir         : run command in exec_dir instead of current dir");
+   Put_Line ("          --strict           : warning on steps not following the Given/When/Then order.");
+   Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
 
    New_Line;
    Put_Line ("Debug command:");

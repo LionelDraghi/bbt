@@ -25,13 +25,15 @@ Options :
    -v   | --verbose
    -q   | --quiet          : no message unless error,
                              Warning are also ignored
-   -o   | --output file.md : create a Markdown file with tests results
+   -o   | --output file.md : create an md file with tests results
+                             that index all scenarios run.
                              This file will contains the normal bbt output,
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
-   -ed  | --exec_dir       : run command in exec_dir instead of current dir
-          --strict         : warning on steps not following the Given/When/Then order.
-   -sb  | --status_bar     : enable a progress bar in the terminal
+   -ot  | --output_tag 'tag' : include a specific tag in the results file
+   -ed  | --exec_dir         : run command in exec_dir instead of current dir
+          --strict           : warning on steps not following the Given/When/Then order.
+   -sb  | --status_bar       : enable a progress bar in the terminal
 
 Debug command:
    -lt                    : list log topics

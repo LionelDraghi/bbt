@@ -15,10 +15,13 @@ with BBT.Tests.Actions;     use BBT.Tests.Actions;
 with File_Utilities;
 with Text_Utilities;        use Text_Utilities;
 
+with Ada.Calendar.Formatting;
 with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+-- with GNAT.Compiler_Version;
+with GNAT.OS_Lib;
 with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Runner is
@@ -224,12 +227,18 @@ package body BBT.Tests.Runner is
       use File_Utilities;
       use Status_Bar;
       File_Count : Natural := Natural (BBT.Tests.Builder.The_Tests_List.Length);
+      -- package CVer is new GNAT.Compiler_Version;
 
    begin
       -- First, let's move to a different exec dir, if any
       Ada.Directories.Set_Directory (Settings.Exec_Dir);
 
       Status_Bar.Initialize_Progress_Bar (File_Count);
+
+      Put_Line ("Time: " & Ada.Calendar.Formatting.Image
+                (Date                  => Ada.Calendar.Clock,
+                 Include_Time_Fraction => True));
+      -- Put_Line ("GNAT version: " & CVer.Version);
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
