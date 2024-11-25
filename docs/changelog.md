@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [Added]   "file is equal to file" form added (thanks to [Paul](https://forum.ada-lang.io/u/pyj))
   - [Added]   first implementation of a progress bar, `-sb` option
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Added]   --strict implemented to get warning on steps not in GWT order
