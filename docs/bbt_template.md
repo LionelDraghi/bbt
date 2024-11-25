@@ -5,7 +5,7 @@ No special marks for comments, it's just normal markdown text.
 ### Scenario : version message
   - When I run `sut --version`
   - Then I get no error
-  - And I get 'sut v0.1.0'
+  - And I get `sut v0.1.0`
 
 ### Scenario : Help message
   - When I run `sut --help`
