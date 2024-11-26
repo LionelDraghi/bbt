@@ -16,7 +16,7 @@ I’ve been trying this out a bit on Windows, and it seems like a great fit to t
 
 - Then `tmp.1` is equal to file `tmp.2`
 
-### Scenario : test `is equal to file` when files are **not** equal
+### Scenario : test `is equal to file` when files are *not* equal
 
 - Given the file `tmp.3`
 ```
