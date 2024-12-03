@@ -23,7 +23,7 @@ private package BBT.Documents is
 -- vocabulary.
 
    -- --------------------------------------------------------------------------
-   type Test_Result is (Failed, Empty, Successful);
+   type Test_Result is (Not_Run, Failed, Empty, Successful);
 
    type Extended_Step_Categories is (Unknown,
                                      Given_Step, -- Precond, -- Given
@@ -92,6 +92,7 @@ private package BBT.Documents is
       Step_List             : aliased Step_Lists.Vector;
       Parent_Feature        : access Feature_Type;
       Parent_Document       : access Document_Type;
+      Has_Run               : Boolean := False;
       Failed_Step_Count     : Natural := 0;
       Successful_Step_Count : Natural := 0;
       Cmd_List              : Cmd_Lists.Vector;

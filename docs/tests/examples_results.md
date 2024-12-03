@@ -18,7 +18,7 @@
   - [X] scenario [I want to know sut version](../examples/uut_version.md) pass  
 
 
------------------------
-- Failed     tests =  0
-- Successful tests =  4
-- Empty      tests =  0
+------------------
+- Failed     =  0
+- Successful =  4
+- Empty      =  0

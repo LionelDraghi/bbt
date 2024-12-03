@@ -128,9 +128,6 @@ package body BBT.Scenarios.Files is
    -- --------------------------------------------------------------------------
    procedure Analyze_MDG_File (File_Name : String) is
 
-      --  Output : Text_IO.File_Type;
-      --  Base_Name : String := Ada.Directories.Base_Name (File_Name);
-      --  Dir_Name  : String := Ada.Directories.Containing_Directory (File_Name);
       Input : Ada.Text_IO.File_Type;
       use BBT.IO;
 
@@ -141,8 +138,6 @@ package body BBT.Scenarios.Files is
       Loc               : Location_Type   := Location (Input);
 
    begin
-      -- Put_Line ("Analyzing file " & File_Name, Verbosity => IO.Debug);
-
       Open (Input,
             Mode => In_File,
             Name => File_Name);
@@ -163,14 +158,6 @@ package body BBT.Scenarios.Files is
             Cmd_List : Cmd_Lists.Vector;
 
          begin
-            --  Put_Line (File_Name & Ada.Text_IO.Line (Input)'Image & " : """
-            --            & Line & """", Verbosity => Verbose);
-            -- Put_Line ("State           = " & State'Image,  Verbosity => Verbose);
-            -- Put_Line ("Attrib          = " & Attrib'Image, Verbosity => Debug);
-            -- New_Line (Verbosity => Verbose);
-            --  Put_Line (Image (Loc)
-            --            & " Parsed: " & Attrib'Image, Verbosity => IO.Debug);
-
             case Attrib.Kind is
             when Feature_Line =>
                Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
@@ -183,7 +170,6 @@ package body BBT.Scenarios.Files is
 
             when Step_Line =>
                S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc, Cmd_List);
-               -- Put_Line ("Parsed : " & S'Image, Verbosity => IO.Verbose);
                Tests.Builder.Add_Step (S, Cmd_List);
 
             when Code_Fence =>
@@ -192,7 +178,8 @@ package body BBT.Scenarios.Files is
             when Text_Line =>
                Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);
 
-            when Empty_Line => null;
+            when Empty_Line =>
+               Tests.Builder.Add_Line (Line, Loc);
 
             end case;
 

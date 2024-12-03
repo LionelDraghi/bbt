@@ -6,3 +6,4 @@ alire.lock
 /tools/alire/
 /tests/spawn_test/
 /tests/expect_test/
+/tests/utilada_test/

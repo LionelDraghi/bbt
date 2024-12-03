@@ -301,8 +301,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String; Loc : Location_Type) is
    begin
-      -- Put_Line ("Add_Line " & Line'Image, Loc, Verbosity => IO.Debug);
-      case Current_State is
+       case Current_State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);
 
@@ -314,16 +313,17 @@ package body BBT.Tests.Builder is
             -- There is no comment attached to Step
 
          when In_Background =>
-            if Last_Feature_Ref.Background /= null then
-               Last_Feature_Ref.Comment.Append (Line);
-            elsif Last_Doc_Ref.Background /= null then
-               Last_Doc_Ref.Comment.Append (Line);
-            else
-               Put_Error ("No Doc or Feature Background??");
-            end if;
+            case Current_Background is
+               when None =>
+                  Put_Error ("No Doc or Feature Background??");
+               when Doc =>
+                  Last_Doc_Ref.Comment.Append (Line);
+               when Feature =>
+                  Last_Feature_Ref.Comment.Append (Line);
+            end case;
 
          when In_File_Content =>
-            -- this is not a comment, we are in a file content description
+            -- Not a comment, we are in a file content description
             Put_Line ("File content = """ & Line & """", Loc,
                       Verbosity => IO.Debug);
             Last_Step_Ref.File_Content.Append (Line);

@@ -85,11 +85,6 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
                      ", output file = " & Output_Name,
                    Verbosity => IO.Debug);
-
-      --  for A of Spawn_Arg.all loop
-      --     Put_Line ("Arg >" & A.all & "<", Verbosity => Debug);
-      --                                    , Verbosity => Settings.Debug);
-      --  end loop;
       Spawn (Program_Name => Spawn_Arg.all (1).all,
              Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
              Success      => Spawn_OK,
@@ -162,7 +157,6 @@ package body BBT.Tests.Actions is
          when Ordinary_File =>
             if Exists (File_Name) then
                Delete_File (File_Name);
-               -- Ada.Directories.Delete_File (File_Name); -- fixme: should be encapsulated into File_Operations
             end if;
             Create (File, Name => File_Name);
             Created_File_List.Add (File_Name);
@@ -175,7 +169,6 @@ package body BBT.Tests.Actions is
                              Loc      => Step.Location);
          when Directory =>
             Delete_Tree (File_Name);
-            -- Ada.Directories.Delete_Tree (File_Name); -- fixme: should be encapsulated into File_Operations
             Create_Path (File_Name);
             Created_File_List.Add (File_Name);
             Put_Step_Result (Step     => Step,
@@ -204,7 +197,6 @@ package body BBT.Tests.Actions is
             Created_File_List.Add (File_Name);
             Put_Text (File, Get_Expected (Step));
             Close (File);
-
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
@@ -216,7 +208,6 @@ package body BBT.Tests.Actions is
             end if;
             Create_Path (File_Name);
             Created_File_List.Add (File_Name);
-
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &

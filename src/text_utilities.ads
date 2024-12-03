@@ -9,6 +9,7 @@ with List_Image;
 with List_Image.Unix_Predefined_Styles;
 
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;           use Ada.Text_IO;
 
@@ -72,38 +73,45 @@ package Text_Utilities is
    procedure Sort (The_Text : in out Text);
 
    -- --------------------------------------------------------------------------
-   procedure Compare (Text1, Text2     : Text;
-                      Ignore_Blanks    : Boolean := True;
-                      Case_Insensitive : Boolean := True;
-                      Sort_Texts       : Boolean := False;
-                      Identical        : out Boolean;
-                      Diff_Index       : out Natural);
+   procedure Compare (Text1, Text2       : Text;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True;
+                      Sort_Texts         : Boolean := False;
+                      Identical          : out Boolean;
+                      Diff_Index         : out Natural);
    -- If Test1 = Text2, return Identical = True and Diff_Index = 0
    -- Otherwise, return False and Index of the first different line in Text2
 
    function Is_Equal (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean := False;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True;
-                      Case_Insensitive   : Boolean := True) return Boolean;
+                      Sort_Texts         : Boolean := False) return Boolean;
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean;
+                      Sort_Texts         : Boolean := False;
                       Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True) return Boolean;
    -- Return True if Text1 contains Text2.
    function Contains_Line (The_Text         : Text;
                            The_Line         : String;
-                           Case_Insensitive : Boolean := True) return Boolean;
+                           Case_Insensitive : Boolean := True;
+                           Ignore_Blanks    : Boolean := True) return Boolean;
    function Contains_String (The_Text         : Text;
                              The_String       : String;
-                             Case_Insensitive : Boolean := True) return Boolean;
+                             Case_Insensitive : Boolean := True;
+                             Ignore_Blanks    : Boolean := True) return Boolean;
    function Contains_Line (File_Name        : String;
                            The_Line         : String;
-                           Case_Insensitive : Boolean := True) return Boolean;
+                           Case_Insensitive : Boolean := True;
+                           Ignore_Blanks    : Boolean := True) return Boolean;
    function Contains_String (File_Name        : String;
                              The_String       : String;
-                             Case_Insensitive : Boolean := True) return Boolean;
+                             Case_Insensitive : Boolean := True;
+                             Ignore_Blanks    : Boolean := True) return Boolean;
 
    -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;
@@ -113,6 +121,10 @@ package Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Remove_Blank_Lines (From_Text : Text) return Text;
+   function Join_Spaces (From : String) return String;
+   -- Reduce multiple consecutive blanks to a single space character
+   function Is_Blank (S : String) return Boolean is
+      (Ada.Strings.Fixed.Index_Non_Blank (S) = 0);
 
    use Texts;
    package Text_Cursors is new List_Image.Cursors_Signature

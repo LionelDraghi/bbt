@@ -75,36 +75,23 @@ package body BBT.Scenarios.MDG_Lexer is
          IO.Put_Warning ("Markdown expect space in Headings after last '#'", Location);
       end if;
 
-      --  Put_Line ("before Find_Token """ & Line &
-      --               """, First = " & First'Image);
       Find_Token (Source => Line,
                   Set    => Separators,
                   From   => First,
                   Test   => Ada.Strings.Outside,
                   First  => First,
                   Last   => Last);
-      --  Put_Line ("after Find_Token """ & Line &
-      --               """, First = " & First'Image &
-      --               ", Line [" & First'Image & "] = " & Line (First) &
-      --               ", Last  = " & Last'Image &
-      --               ", Token = """ & Line (First .. Last) & """");
 
       -- Last is set, and should not be overwritten from now on
 
       if Line'Last = Last then
       -- There is noting after "# Scenario" (for example)
-         -- Put_Line ("noting after # Scenario");
          Title_First := 1;
          Title_Last  := 0;
          return True;
       end if;
 
       -- Now we hare in the Title
-
-      --  Put_Line ("before Find Title, Token = " & Line (First .. Last) &
-      --               ", Title = " & Line (Title_First .. Title_Last)
-      --               );
-
       Title_First := Index (Source => Line,
                             Set    => Separators or Decorators,
                             Test   => Ada.Strings.Outside,
@@ -192,9 +179,6 @@ package body BBT.Scenarios.MDG_Lexer is
                         return Line_Attributes is
       First, Last, Title_First, Title_Last : Natural;
    begin
-      --  IO.Put_Line ("Line  = """ & Line.all & """",
-      --               Location  => Loc,
-      --               Verbosity => IO.Debug);
       Find_Token (Source => Line.all,
                   Set    => Blanks,
                   Test   => Ada.Strings.Outside,
@@ -203,8 +187,6 @@ package body BBT.Scenarios.MDG_Lexer is
 
       if Last = 0 then
          -- Null line ----------------------------------------------------------
-         --  Put_Line ("null line ",
-         --               Level => IO.Debug);
          return (Kind => Empty_Line);
 
       elsif Code_Fence_Line (Line.all) then

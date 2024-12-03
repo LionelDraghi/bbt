@@ -53,8 +53,8 @@ One of the component of the scenario file will be further analyzed, it’s the s
 
 ## Development Status
 - [Changelog](changelog.md)
-- [Fixme](fixme.md)
-- [References to issue in code and tests](issues.md)
+- [Fixme](fixme_index.md)
+- [References to issue in code and tests](issues_index.md)
 
 ## Development environment
 Some external tools are required to fully run the Makefile, and 

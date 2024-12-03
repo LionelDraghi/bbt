@@ -9,15 +9,7 @@ project BBT is
    for Main use ("bbt-main.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use --Bbt_Config.Ada_Compiler_Switches & "-gnat2022";
-                                       ( -- "--coverage", 
-                                        "-gnat2022", 
-                                        "-g", 
-                                        -- "-pg", 
-                                        "-gnata", 
-                                        "-gnatVa", 
-                                        -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
-                                        "-gnatyaCefhIknOprxtAbilu");
+      for Default_Switches ("ada") use ("-gnat2022", "-g", "-gnata", "-gnatVa", "-gnatyaCefhIknOprxtAbilu");
    end Compiler;
 
    package Binder is
@@ -30,16 +22,16 @@ project BBT is
    end Builder;
 
    package Linker is
-      for Switches ("ada") use ("-g" 
-                                -- , "-pg"
-                                -- , "-lgcov"
-                                -- , "-fprofile-arcs"
-                                );
+      for Switches ("ada") use ("-g");
    end Linker;
 
    package Pretty_Printer is
       for Default_Switches ("ada") use ("-A0", "-M80", "-W8", "--no-separate-loop-then", "-l2", "-c2");
    end Pretty_Printer;
+
+   package Coverage is
+      for Switches ("*") use ("--level=stmt");
+   end Coverage;
 
 end BBT;
 

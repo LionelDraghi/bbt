@@ -7,13 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
-  - [Added]   "file is equal to file" form added (thanks to [Paul](https://forum.ada-lang.io/u/pyj))
+  - [Added]   `-k` | `--keep_going` implemented. Without, bbt stop when a test fails.
+  - [Added]   *file is equal to file* form added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
   - [Added]   first implementation of a progress bar, `-sb` option
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
-  - [Added]   --strict implemented to get warning on steps not in GWT order
-  - [Added]   "output|file doesn't contain" form added
+  - [Added]   `--strict` implemented to get warning on steps not in GWT order
+  - [Added]   *output|file doesn't contain* form added
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
-  - [Fixed]   .out files not removed when using --cleanup
+  - [Fixed]   .out files not removed when using `--cleanup`
   - [Fixed]   Incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
   - [Fixed]   Normal output verbosity is now more balanced (it was pretty much identical to --verbose)  
   - [Changed] "uut" renamed "sut", because bbt is precisely not about Unit Under Test, but Software Under Test.

@@ -1,8 +1,13 @@
+<!-- omit from toc -->
 ## Feature: **Exec Dir** 
 
 bbt is able to run a scenario in a specific directory, provided on the command line.  
 > [!WARNING]
 > Note that if the scenario depends on an external file, it must be placed in the exec dir.
+
+- [Background: create some dir and file](#background-create-some-dir-and-file)
+- [Scenario: Lets run `create_tree` in the current dir](#scenario-lets-run-create_tree-in-the-current-dir)
+- [Scenario: Lets run `create_tree` in ./dir2](#scenario-lets-run-create_tree-in-dir2)
 
 ### Background: create some dir and file
 

@@ -63,7 +63,7 @@
 
   - [X] scenario [test `is equal to file` form](../features/A065_File_is_file.md) pass  
 
-  - [X] scenario [test `is not equal to file` form](../features/A065_File_is_file.md) pass  
+  - [X] scenario [test `is equal to file` when files are *not* equal](../features/A065_File_is_file.md) pass  
 
 
 ## [A070_Multiline.md](../features/A070_Multiline.md)  
@@ -235,6 +235,17 @@
   - [X] scenario [](../features/B070_Mandatory_new_bug.md) pass  
 
 
+## [B080_Keep_Going.md](../features/B080_Keep_Going.md)  
+
+  ### Feature: on error, Keep going or stop  
+
+  Feature background   
+  - [X] scenario [with `-k`](../features/B080_Keep_Going.md) pass  
+
+  Feature background   
+  - [X] scenario [without `-k`](../features/B080_Keep_Going.md) pass  
+
+
 ## [C010_Empty_scenarios.md](../features/C010_Empty_scenarios.md)  
 
   - [X] scenario [No step test](../features/C010_Empty_scenarios.md) pass  
@@ -270,7 +281,7 @@
   - [X] scenario [](../features/C050_Step_marker.md) pass  
 
 
------------------------
-- Failed     tests =  0
-- Successful tests =  59
-- Empty      tests =  0
+------------------
+- Failed     =  0
+- Successful =  61
+- Empty      =  0

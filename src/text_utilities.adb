@@ -21,37 +21,12 @@ package body Text_Utilities is
    function Is_Equal (S1, S2           : String;
                       Case_Insensitive : Boolean := True;
                       Ignore_Blanks    : Boolean := True) return Boolean is
-   -- Fixme: blanks in the middle not taken into account
    begin
       if Ignore_Blanks then
-         declare
-            -- I1   : Natural := S1'First;
-            -- I2   : Natural := S2'First;
-            use Ada.Strings;
-            use Ada.Strings.Fixed;
-            Tmp1 : constant String := Trim (S1, Side => Both);
-            Tmp2 : constant String := Trim (S2, Side => Both);
-         begin
-            return Is_Eq (Tmp1, Tmp2, Case_Insensitive);
-         end;
+         return Is_Eq (Join_Spaces (S1), Join_Spaces (S2), Case_Insensitive);
 
       else
          return Is_Eq (S1, S2, Case_Insensitive);
-         --  while I1 /= Tmp1'Last and I2 /= Tmp2'Last loop
-         --
-         --     while Index_Non_Blank (Tmp1, From => I1) > I1 loop
-         --        I1 := @ + 1;
-         --     end loop;
-         --     while Index_Non_Blank (Tmp2, From => I2) > I2 loop
-         --        I2 := @ + 1;
-         --     end loop;
-         --
-         --     if not Is_Eq (Tmp1 (I1), Tmp2 (I2), Case_Insensitive) then
-         --        return False;
-         --     end if;
-         --
-         --  end loop;
-         --  return True;
 
       end if;
    end Is_Equal;
@@ -257,21 +232,18 @@ package body Text_Utilities is
    procedure Sort (The_Text : in out Text) renames Texts_Sorting.Sort;
 
    -- --------------------------------------------------------------------------
-   procedure Compare (Text1, Text2     : Text;
-                      Ignore_Blanks    : Boolean := True;
-                      Case_Insensitive : Boolean := True;
-                      Sort_Texts       : Boolean := False;
-                      Identical        : out Boolean;
-                      Diff_Index       : out Natural) is
+   procedure Compare (Text1, Text2       : Text;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True;
+                      Sort_Texts         : Boolean := False;
+                      Identical          : out Boolean;
+                      Diff_Index         : out Natural) is
       Idx1, Idx2 : Natural := 1;
       T1, T2     : Text;
 
-      -- Fixme: uggly code!!
    begin
       Identical := False;
-
-      --  Put_Line ("Text1 = " & Text1'Image);
-      --  Put_Line ("Text2 = " & Text2'Image);
 
       T1 := Text1;
       T2 := Text2;
@@ -285,23 +257,18 @@ package body Text_Utilities is
       if T1 = T2 then
          Identical := True;
          Diff_Index := 0;
-         -- Put_Line ("T1 = T2");
 
-      elsif Ignore_Blanks then
+      elsif Ignore_Blank_Lines then
 
          Idx1 := First_Non_Blank_Line (T1, @);
          Idx2 := First_Non_Blank_Line (T2, @);
 
          if Idx1 = 0 and Idx2 = 0 then
-            -- Put_Line ("Idx1 = Idx2 = 0");
             -- both file are blank
             Identical  := True;
             Diff_Index := 0;
             return;
          end if;
-
-         --  Put_Line ("Init Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
-         --  Put_Line ("Init Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
 
          loop
             if Idx1 = 0 xor Idx2 = 0 then
@@ -309,9 +276,6 @@ package body Text_Utilities is
                if Idx2 /= 0 then
                   Diff_Index := Idx2;
                   -- otherwise, Diff_Index is already set to the last non blank
-                  --  Put_Line ("Idx1 = 0");
-                  --  else
-                  --     Put_Line ("Idx2 = 0");
                end if;
                Identical := False;
                return;
@@ -321,23 +285,14 @@ package body Text_Utilities is
                              Case_Insensitive => Case_Insensitive,
                              Ignore_Blanks    => Ignore_Blanks)
             then
-               -- Put_Line ("T1 /= T2");
                Identical := False;
                Diff_Index := Idx2;
                return;
-               --  else
-               --     Put_Line (" T1 (" & Idx1'Image
-               --               & ") " & String'(T1 (Idx1))'Image
-               --               & " = T2 (" & Idx2'Image & ") "
-               --              & String'(T2 (Idx2))'Image);
-               -- Put_Line (String'(T1 (Idx1))'Image & " = " & String'(T2 (Idx2))'Image);
 
             end if;
 
             Diff_Index := Idx2; -- store the last non blank index
 
-            -- Put_Line ("Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
-            -- Put_Line ("Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
             exit when Idx1 = T1.Last_Index and Idx2 = T2.Last_Index;
 
             declare
@@ -351,8 +306,6 @@ package body Text_Utilities is
                   I2 := First_Non_Blank_Line (T2, From => Idx2 + 1);
                end if;
                -- Idx should not return to zero, so let's use tmp index :
-               -- Put_Line ("I1 = " & I1'Image);
-               -- Put_Line ("I2 = " & I2'Image);
                if I1 /= 0 then
                   Idx1 := I1;
                end if;
@@ -361,12 +314,8 @@ package body Text_Utilities is
                end if;
             end;
 
-            --  Put_Line ("Idx1 = " & Idx1'Image & "/" & T1.Last_Index'Image);
-            --  Put_Line ("Idx2 = " & Idx2'Image & "/" & T2.Last_Index'Image);
-
          end loop;
 
-         -- Put_Line ("T1 = T2");
          Identical := True;
          Diff_Index := 0;
 
@@ -381,15 +330,16 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Is_Equal (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean := False;
+                      Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True;
-                      Case_Insensitive   : Boolean := True) return Boolean
+                      Sort_Texts         : Boolean := False) return Boolean
    is
       Identical  : Boolean;
       Diff_Index : Natural;
    begin
       Compare (Text1, Text2,
-               Ignore_Blanks      => Ignore_Blank_Lines,
+               Ignore_Blank_Lines      => Ignore_Blank_Lines,
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
                Identical          => Identical,
@@ -400,11 +350,14 @@ package body Text_Utilities is
    -- --------------------------------------------------------------------------
    function Search (Source,
                     Pattern          : String;
-                    Case_Insensitive : Boolean := True) return Boolean is
+                    Case_Insensitive : Boolean := True;
+                    Ignore_Blanks    : Boolean := True) return Boolean is
       use Ada.Strings;
       use Ada.Strings.Fixed;
-      Src : constant String := Trim (Source, Both);
-      Pat : constant String := Trim (Pattern, Both);
+      Src : constant String := (if Ignore_Blanks then Join_Spaces (Source)
+                                  else Source);
+      Pat : constant String := (if Ignore_Blanks then Join_Spaces (Pattern)
+                                else Pattern);
    begin
       return (Index (Source  => Src,
                      Pattern => Pat,
@@ -417,8 +370,9 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean;
+                      Sort_Texts         : Boolean := False;
                       Case_Insensitive   : Boolean := True;
+                      Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True) return Boolean is
    -- After eliminating easy cases T1 = T2 and T2 is longer than T1, the
    -- comparison algorithm is :
@@ -436,8 +390,6 @@ package body Text_Utilities is
                     else Text2);
 
    begin
-      --  Put_Line ("T1 = " & T1'Image);
-      --  Put_Line ("T2 = " & T2'Image);
       if T1.Length < T2.Length then
          return False;
 
@@ -456,16 +408,14 @@ package body Text_Utilities is
                Sort (T2);
             end if;
 
-            -- if
             for Start in T1.First_Index .. Last_I1 loop
                I1 := Start;
                Inner : for I2 in T2.First_Index .. T2.Last_Index loop
                   -- We look for a first match between texts.
-                  --  Put_Line ("T1 [" & T1.First_Index'Image & " .. " & T1.Last_Index'Image & "]");
-                  --  Put_Line ("T2 [" & T2.First_Index'Image & " .. " & T2.Last_Index'Image & "]");
-                  --  Put_Line ("I1 = " & I1'Image);
-                  --  Put_Line ("I2 = " & I2'Image);
-                  if Search (T1 (I1), T2 (I2), Case_Insensitive) then
+                  if Search (T1 (I1), T2 (I2),
+                             Case_Insensitive,
+                             Ignore_Blanks)
+                  then
                      -- Lines match
                      if I2 = T2.Last_Index then
                         -- It was the last line of T2
@@ -491,10 +441,14 @@ package body Text_Utilities is
    -- --------------------------------------------------------------------------
    function Contains_Line (The_Text         : Text;
                            The_Line         : String;
-                           Case_Insensitive : Boolean := True) return Boolean is
+                           Case_Insensitive : Boolean := True;
+                           Ignore_Blanks    : Boolean := True) return Boolean is
    begin
       for L of The_Text loop
-         if Is_Equal (L, The_Line, Case_Insensitive) then
+         if Is_Equal (L, The_Line,
+                      Case_Insensitive => Case_Insensitive,
+                      Ignore_Blanks    => Ignore_Blanks)
+         then
             return True;
          end if;
       end loop;
@@ -505,10 +459,14 @@ package body Text_Utilities is
    function Contains_String
      (The_Text         : Text;
       The_String       : String;
-      Case_Insensitive : Boolean := True) return Boolean is
+      Case_Insensitive : Boolean := True;
+      Ignore_Blanks    : Boolean := True) return Boolean is
    begin
       for L of The_Text loop
-         if Search (L, The_String, Case_Insensitive) then
+         if Search (L, The_String,
+                    Case_Insensitive => Case_Insensitive,
+                    Ignore_Blanks    => Ignore_Blanks)
+         then
             return True;
          end if;
       end loop;
@@ -519,22 +477,26 @@ package body Text_Utilities is
    function Contains_Line
      (File_Name        : String;
       The_Line         : String;
-      Case_Insensitive : Boolean := True) return Boolean is
+      Case_Insensitive : Boolean := True;
+      Ignore_Blanks    : Boolean := True) return Boolean is
    begin
       return Contains_Line (Get_Text (File_Name),
                             The_Line,
-                            Case_Insensitive);
+                            Case_Insensitive => Case_Insensitive,
+                            Ignore_Blanks    => Ignore_Blanks);
    end Contains_Line;
 
    -- --------------------------------------------------------------------------
    function Contains_String
      (File_Name          : String;
       The_String         : String;
-      Case_Insensitive   : Boolean := True) return Boolean is
+      Case_Insensitive   : Boolean := True;
+      Ignore_Blanks      : Boolean := True) return Boolean is
    begin
       return Contains_String (Get_Text (File_Name),
                               The_String,
-                              Case_Insensitive);
+                              Case_Insensitive => Case_Insensitive,
+                              Ignore_Blanks    => Ignore_Blanks);
    end Contains_String;
 
    -- --------------------------------------------------------------------------
@@ -575,5 +537,18 @@ package body Text_Utilities is
       end loop;
       return T;
    end Remove_Blank_Lines;
+
+   function Join_Spaces (From : String) return String is
+      Tmp : String (From'Range);
+      I   : Natural := Tmp'First;
+   begin
+      for J in From'Range loop
+         if From (J) /= ' ' then
+            Tmp (I) := From (J);
+            I := @ + 1;
+         end if;
+      end loop;
+      return Tmp (From'First .. I - 1);
+   end Join_Spaces;
 
 end Text_Utilities;

@@ -2,34 +2,30 @@
 all: build check doc
 
 build:
+	echo
+	echo === build #=# and instrument bbt
 	alr build --development
-	cd tools && alr build --release
 	# Alire profiles : --release --validation --development (default)
+	
+	#=# alr gnatcov instrument --level=stmt --dump-trigger=atexit --projects=bbt.gpr --ignore-source-files=bbt-main*.ad? 
+	#=# # can't prevent gnatcov to instrument bbt-main.adb with non legal Ada
+	#=# rm obj/development/bbt-gnatcov-instr/bbt-main*ad[sb]
+	#=# alr build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full.gpr
 
+	echo === build tools
+	cd tools && alr build --release
 
-check: ./bbt
-	@ $(MAKE) -s check --directory=tests
+check:
 	# --------------------------------------------------------------------
-	# echo
-	# echo Coverage report: 
-	# lcov --quiet --capture --directory obj -o obj/coverage.info
-	# lcov --quiet --remove obj/coverage.info -o obj/coverage.info \
-	# 	"*/adainclude/*" "*.ads" "*/obj/b__*.adb" 
-	# # Ignoring :
-	# # - spec (results are not consistent with current gcc version) 
-	# # - the false main
-	# # - libs (Standard)
+	echo === run tests
+	@ $(MAKE) -s check --directory=tests
 
-	# genhtml obj/coverage.info -o docs/lcov --title "bbt tests coverage" \
-	# 	--prefix "/home/lionel/prj/bbt/src" --frames | tail -n 2 > cov_sum.txt
-	# # --title  : Display TITLE in header of all pages
-	# # --prefix : Remove PREFIX from all directory names
-	# # --frame  : Use HTML frames for source code view
-	# cat cov_sum.txt
-	# echo
+	#=# echo
+	#=# echo === coverage report
+	#=# alr gnatcov coverage --annotate=html --output-dir gnatcov_out --level=stmt --projects bbt.gpr *.srctrace
 
 doc: ./bbt
-	echo --- doc:
+	echo === doc prod
 	@ $(MAKE) doc --directory=tests
 	
 	./bbt -lg > docs/grammar.md
@@ -44,30 +40,31 @@ doc: ./bbt
 	./bbt --help          >> docs/bbt_help.md
 	echo '```'            >> docs/bbt_help.md
 	
-	echo 'Fixme in current version'	>  /tmp/fixme.md
-	echo '------------------------'	>> /tmp/fixme.md
-	echo                            >> /tmp/fixme.md
-	echo 'Location | Text'          >> /tmp/fixme.md
-	echo '---------|-----'          >> /tmp/fixme.md
-	rgrep -n "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme.md
-	mv /tmp/fixme.md docs/fixme.md
+	echo 'Fixme in current version'	>  /tmp/fixme_index.md
+	echo '------------------------'	>> /tmp/fixme_index.md
+	echo                            >> /tmp/fixme_index.md
+	echo 'Location | Text'          >> /tmp/fixme_index.md
+	echo '---------|-----'          >> /tmp/fixme_index.md
+	rgrep -n "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme_index.md
+	mv /tmp/fixme_index.md docs/fixme_index.md
 
-	echo 'Issue references in current version'	>  /tmp/issues.md
-	echo '-----------------------------------'	>> /tmp/issues.md
-	echo                                		>> /tmp/issues.md
-	echo 'Location | Text'             		    >> /tmp/issues.md
-	echo '---------|-----'             		    >> /tmp/issues.md
-	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues.md
-	mv /tmp/issues.md docs/issues.md
+	echo 'Issue references in current version'	>  /tmp/issues_index.md
+	echo '-----------------------------------'	>> /tmp/issues_index.md
+	echo                                		>> /tmp/issues_index.md
+	echo 'Location | Text'             		    >> /tmp/issues_index.md
+	echo '---------|-----'             		    >> /tmp/issues_index.md
+	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues_index.md
+	mv /tmp/issues_index.md docs/issues_index.md
 
-	echo OK
-	echo
 	echo Checking links in md files
 	- mlc  | grep '\[Err' && echo OK 
 	# much faster than markdown-link-check and no false positive yet
+	# > apt install cargo
+	# > cargo install mlc
+	# > fish_add_path ~/.cargo/bin/
 	echo
 
-install: bbt
+install: ./bbt
 	echo --- install:
 	cp -p bbt ~/bin
 	echo OK
@@ -79,6 +76,6 @@ clean:
 	alr clean
 	cd tools && alr clean
 	@ $(MAKE) clean --directory=tests
-	@ - rm -rf config.ini *.out dir1 docs/tests/*/*.out
+	@ - rm -rf config.ini *.out dir1 docs/tests/*/*.out obj/*
 	echo OK
 	echo

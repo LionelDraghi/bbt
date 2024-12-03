@@ -84,5 +84,5 @@ Background:
 - When I run `./bbt -d no_heading_marker.input`
 ```
 - Then output contain `Warning : No scenario in document "no_heading_marker.input`
-- ANd  output contain `Empty      tests =  1`
+- ANd  output contain `Empty       =  1`
 ```

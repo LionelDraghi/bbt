@@ -38,6 +38,7 @@ package body BBT.Tests.Runner is
       Spawn_OK : Boolean := False;
       The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
    begin
+      Scen.Has_Run := True;
       Step_Processing : for Step of Scen.Step_List loop
          Spawn_OK := False;
          begin
@@ -208,16 +209,16 @@ package body BBT.Tests.Runner is
                   Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
                             Verbosity => Verbose);
                   IO.New_Line (Verbosity => Verbose);
-               when Failed =>
+               when Not_Run | Failed =>
                   Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
                             Verbosity => Quiet);
                   IO.New_Line (Verbosity => Quiet);
             end case;
          end;
 
-         --  if IO.Some_Error and not Settings.Keep_Going then
-         --     exit;
-         --  end if;
+         if IO.Some_Error and not Settings.Keep_Going then
+            exit;
+         end if;
 
       end loop;
    end Run_Scenario_List;
@@ -254,9 +255,6 @@ package body BBT.Tests.Runner is
                  := Short_Path (From_Dir => Settings.Result_Dir,
                                 To_File  => (+D.Name));
             begin
-               --  IO.Put_Line ("From_Dir   => " & Settings.Result_Dir);
-               --  IO.Put_Line ("To_File    => " & (+D.Name));
-               --  IO.Put_Line ("Short_Path => " & Path_To_Scen);
                Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
                          & "](" & (Path_To_Scen) & ")  ",
                          Verbosity => Normal);
@@ -270,8 +268,12 @@ package body BBT.Tests.Runner is
                                D.Location);
                end if;
 
-               -- Run scenarios directly attached to the document (not in a Feature)
+               -- Run scenarios directly attached to the document
+               -- (that is not in a Feature)
                Run_Scenario_List (D.Scenario_List, Path_To_Scen);
+               if IO.Some_Error and not Settings.Keep_Going then
+                  return;
+               end if;
 
                for F of D.Feature_List loop
                   -- Then run scenarios attached to each Feature
@@ -285,14 +287,10 @@ package body BBT.Tests.Runner is
                   else
                      Run_Scenario_List (F.Scenario_List, Path_To_Scen);
 
-                     --  if IO.Some_Error and not Settings.Keep_Going then
-                     --     exit;
-                     --  end if;
+                     if IO.Some_Error and not Settings.Keep_Going then
+                        return;
+                     end if;
                   end if;
-
-                  --  if IO.Some_Error and not Settings.Keep_Going then
-                  --     exit;
-                  --  end if;
 
                end loop;
 
@@ -305,6 +303,7 @@ package body BBT.Tests.Runner is
                IO.Put_Line ("To_File    => " & (+D.Name));
                -- IO.Put_Line ("Short_Path => " & Path_To_Scen);
          end;
+
          Created_File_List.Delete_All;
 
       end loop;

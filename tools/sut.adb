@@ -115,6 +115,8 @@ begin
                               when 'N' | 'n' =>
                                  exit Get_Answer;
                               when 'Y' | 'y' =>
+                                 Ada.Text_IO.Put_Line
+                                   ("Deleting " & To_String (File_Name));
                                  Delete_File (To_String (File_Name));
                                  Set_Exit_Status (Success);
                                  exit Get_Answer;

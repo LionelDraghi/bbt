@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature: multiples scenarios given in command line
 
 bbt is able to run multiple files, according to the command line.    
@@ -5,6 +6,14 @@ It is possible to specify one or more directories. When file names are not speci
 
 It is also possible to use globing character and to run, for example, `bbt tests/*.scen`  
 Note that this is not really tested here, as the globbing expansion is done by the shell. bbt will actually be called with `bbt tests/file1.scen tests/file2.scen` etc. (but this case is tested)
+
+- [Background:](#background)
+- [Scenario: no file or dir on the command line](#scenario-no-file-or-dir-on-the-command-line)
+- [Scenario: running all scenarios in dir1](#scenario-running-all-scenarios-in-dir1)
+- [Scenario: running multiple scenarios given on command line](#scenario-running-multiple-scenarios-given-on-command-line)
+- [Scenario: running scenarios in a tree thanks to `-r`](#scenario-running-scenarios-in-a-tree-thanks-to--r)
+- [Scenario: error msg when trying to run scenarios, but none found in given directories](#scenario-error-msg-when-trying-to-run-scenarios-but-none-found-in-given-directories)
+- [Scenario: empty list file on -lf if there is no scenario in given directories](#scenario-empty-list-file-on--lf-if-there-is-no-scenario-in-given-directories)
 
 ### Background:
 - Given the new `dir1` directory

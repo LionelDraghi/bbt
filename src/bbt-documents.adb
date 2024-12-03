@@ -136,6 +136,8 @@ package body BBT.Documents is
          return Failed;
       elsif Scenario.Successful_Step_Count > 0 then
          return Successful;
+      elsif not Scenario.Has_Run then
+         return Not_Run;
       else
          return Empty;
       end if;
@@ -182,10 +184,13 @@ package body BBT.Documents is
    procedure Put_Overall_Results is
    begin
       New_Line;
-      Put_Line ("-----------------------");
-      Put_Line ("- Failed     tests = " & Results (Failed)'Image);
-      Put_Line ("- Successful tests = " & Results (Successful)'Image);
-      Put_Line ("- Empty      tests = " & Results (Empty)'Image);
+      Put_Line ("------------------");
+      Put_Line ("- Failed     = " & Results (Failed)'Image);
+      Put_Line ("- Successful = " & Results (Successful)'Image);
+      Put_Line ("- Empty      = " & Results (Empty)'Image);
+      if Results (Failed) /= 0 then
+         Put_Line ("- Not run    = " & Results (Not_Run)'Image);
+      end if;
    end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
