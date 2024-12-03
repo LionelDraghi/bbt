@@ -25,7 +25,7 @@ bbt is a simple tool to black box check the behavior of an executable through [C
 Hence the name : bbt stands for *Black Box Tester*.  
 bbt targets both *specification of the behavior* and *test automation*.  
 
-**The outstanding feature of btt is that it directly uses your behavior documentation as a the test script.**  
+**The outstanding feature of btt is that it directly uses your behavior documentation as the test script.**  
 There is no other file to write.
 
 ### What does the description looks like?
