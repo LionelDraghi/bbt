@@ -110,7 +110,8 @@ also accept the code span shortcut when there is only one line.
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run the ubiquitous *Hello Word*.
 
 > [!NOTE]
-> Note that bbt is fully tested with bbt since 0.0.4 version, and that bbt own tests are based on feature descriptions available [here](docs/tests/features_results.md).
+> bbt is fully tested with bbt since 0.0.4 version.
+> bbt own tests are based on features descriptions indexed [here](docs/tests/features_results.md).
 
 ## Main characteristics
 
