@@ -1,3 +1,4 @@
+
 with "src/Alire_config/bbt_config.gpr";
 
 project BBT is
@@ -9,7 +10,52 @@ project BBT is
    for Main use ("bbt-main.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnat2022", "-g", "-gnata", "-gnatVa", "-gnatyaCefhIknOprxtAbilu");
+      for Switches ("ada") use ("-gnat2022",
+                                "-g",
+                                "-O0",
+                                "-gnatQ",
+                                "-gnatf",
+                                "-gnato",
+                                "-fstack-check",
+                                "-gnata",
+                                "-gnateE",
+                                "-gnatVa",
+                                "-gnatwa",
+                                "-gnatyabefhiklnprtx");
+      -- -gnatQ : Don't quit
+      -- -gnatf : Full errors
+      -- -gnato : Intermediate overflows to be handled in strict mode.
+      -- -fstack-check : stack checking
+      -- -gnata : assertions
+      -- -gnateE : extra infos in exception messages
+      -- -gnatVa : all validity checks
+      -- -gnatwa : activate most optional warning messages
+      --
+      -- Style checking :
+      -- a : Check attribute casing
+      -- b : Blanks not allowed at statement end
+      -- e : Check end/exit labels
+      -- f : No form feeds or vertical tabs
+      -- h : No horizontal tabs
+      -- i : Check if-then layout
+      -- k : Check keyword casing
+      -- l : Check layout
+      -- n : Check casing of entities in Standard
+      -- p : Check pragma casing
+      -- r : Check references
+      -- t : Check token spacing
+      --removed  M100 : Set maximum line length
+      -- x : Check extra parentheses.
+
+      -- for Default_Switches ("ada") use --Bbt_Config.Ada_Compiler_Switches & "-gnat2022";
+      --                                  ( -- "--coverage", 
+      --                                   "-gnat2022", 
+      --                                   "-g", 
+      --                                   -- "-pg", 
+      --                                   "-gnata", 
+                                       --  "-gnatVa", 
+                                       --  -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa", 
+                                       --  "-gnatyaCefhIknOprxtAbilu");
    end Compiler;
 
    package Binder is
@@ -18,7 +64,7 @@ project BBT is
 
    package Builder is
       for Executable ("bbt-main.adb") use "bbt";
-      for Default_Switches ("ada") use ("-g", "-k", "-j2", "-s");
+      for Default_Switches ("ada") use ("-j2");
    end Builder;
 
    package Linker is

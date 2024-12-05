@@ -4,9 +4,9 @@
   
 Let start with something easy :
 
-- When I run `/usr/bin/gcc -v`
+- When I run `gcc -v`
 
-- Then the output contains `14.2.0`
+- Then the output contains `gcc version `
 
 ## Scenario: compiling and executing an hello word
 
@@ -23,7 +23,7 @@ return 0;
 - And given there is no `main` file
   
 
-- When I run `/usr/bin/gcc main.c -o main`
+- When I run `gcc main.c -o main`
 - And  I run `main`
 
 - Then the output is `Hello, World!`

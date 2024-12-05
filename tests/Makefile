@@ -1,10 +1,18 @@
 all: clean check
 check: ../bbt ../sut
+
 	# Then we run all scenarii that should pass
 	# This is also a way to test multiple test files 
 	# on the command line, and in a different directory
-	@ - ln -fs ../sut .
-	@ - ln -fs ../bbt .
+ifeq ($(OS), Windows_NT)
+	echo $(OS)
+
+	@ - ln -fs ../sut sut.exe
+	@ - ln -fs ../bbt bbt.exe 
+else
+	@ - ln -fs ../sut
+	@ - ln -fs ../bbt 
+endif
 
 	@ ./bbt --yes -k -c -o ../docs/tests/examples_results.md -ed ./ ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
 	@ echo

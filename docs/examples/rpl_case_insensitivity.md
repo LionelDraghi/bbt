@@ -14,8 +14,10 @@
   keyboard=FR
   ```
 
-- When I run `/usr/bin/rpl --ignore-case FR UK config.ini`
-  
+- When I run `rpl -i FR UK config.ini`
+  -i = --ignore-case
+  On Windows, I found rpl 1.4.1 by Joe Laffey, but not xx with long options equivalence
+
 - Then the `config.ini` file contains 
   ```
   lang=UK
