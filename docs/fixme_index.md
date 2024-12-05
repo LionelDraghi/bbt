@@ -3,7 +3,7 @@ Fixme in current version
 
 Location | Text
 ---------|-----
-src/bbt-tests-actions.adb:33|   --  can I compare the return status of spawn with
+src/bbt-tests-actions.adb:32|   --  can I compare the return status of spawn with
 src/bbt-main-analyze_cmd_line.adb:80|            --  opt -ot / --output_tag not yet coded
 src/file_utilities.ads:10|   Separator : constant Character := '/'; --  OS dependent!
 src/file_utilities.ads:67|   --  this function is not portable!

@@ -11,7 +11,7 @@ with Ada.Characters.Latin_1,
      Ada.Strings.Maps.Constants,
      Ada.Strings.Maps,
      Ada.Text_IO;
-     
+
 use Ada.Strings.Fixed;
 
 package body BBT.Scenarios.Step_Parser.Lexer is
