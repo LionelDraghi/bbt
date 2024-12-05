@@ -17,7 +17,6 @@ procedure Put_Settings is
 
    use Settings;
    use Ada.Text_IO;
-   use Ada.Characters.Handling;
 
 begin
    New_Line;

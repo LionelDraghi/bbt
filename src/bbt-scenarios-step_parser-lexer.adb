@@ -5,15 +5,14 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Text_Utilities; use Text_Utilities;
-
-with Ada.Characters.Latin_1;
-with Ada.Containers.Indefinite_Vectors;
-with Ada.Directories;                   use Ada.Directories;
-with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
-with Ada.Strings.Maps.Constants;
-with Ada.Text_IO;
-with Ada.Strings.Maps;
+with Ada.Characters.Latin_1,
+     Ada.Containers.Indefinite_Vectors,
+     Ada.Strings.Fixed,
+     Ada.Strings.Maps.Constants,
+     Ada.Strings.Maps,
+     Ada.Text_IO;
+     
+use Ada.Strings.Fixed;
 
 package body BBT.Scenarios.Step_Parser.Lexer is
 

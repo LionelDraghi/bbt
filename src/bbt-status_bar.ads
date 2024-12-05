@@ -1,5 +1,3 @@
-with BBT.Documents;
-
 private package BBT.Status_Bar is
 
    --  -------------------------------------------------------------------------
@@ -11,9 +9,6 @@ private package BBT.Status_Bar is
 
    --  -------------------------------------------------------------------------
    procedure Progress_Bar_Next_Step (File_Name : String);
-
-   --  -------------------------------------------------------------------------
-   -- procedure Put_Results (Results : Documents.Test_Results_Count);
 
    --  -------------------------------------------------------------------------
    procedure Put_Activity (S : String);

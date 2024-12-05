@@ -27,8 +27,8 @@ package body BBT.Status_Bar is
    --  File_Name_Field  : String (1 .. 40);
    --  File_Name_Column : constant Positive := Activity_Column +
    --                      Activity_Field'Length + 2;
-   Max_Event_Count  : Positive := 1;
-   Event_Count      : Natural  := 0;
+   -- Max_Event_Count  : Positive := 1;
+   -- Event_Count      : Natural  := 0;
 
    Is_Enabled : Boolean := False;
 
@@ -46,25 +46,24 @@ package body BBT.Status_Bar is
    --  -------------------------------------------------------------------------
    procedure Initialize_Progress_Bar (Max_Event : Positive) is
    begin
-      Max_Event_Count := Max_Event;
+      null; -- Max_Event_Count := Max_Event;
    end Initialize_Progress_Bar;
 
    --  -------------------------------------------------------------------------
-   function String_Part (Current_Idx : Natural) return Natural is
-     (Current_Idx * (File_Name_Last_Row - File_Name_First_Row + 1) /
-          Max_Event_Count);
+   --  function String_Part (Current_Idx : Natural) return Natural is
+   --    (Current_Idx * (File_Name_Last_Row - File_Name_First_Row + 1) /
+   --         Max_Event_Count);
    --  Return Idx of the Current/Max percent of the string
 
    --  -------------------------------------------------------------------------
    procedure Progress_Bar_Next_Step (File_Name : String) is
-      use AnsiAda;
       use Ada.Strings;
-      Progression_Idx : Positive;
+      -- Progression_Idx : Positive;
    begin
-      Event_Count := @ + 1;
+      -- Event_Count := @ + 1;
 
       if Is_Enabled then
-         Progression_Idx := String_Part (Event_Count);
+         -- Progression_Idx := String_Part (Event_Count);
          Ada.Strings.Fixed.Move ("   " & File_Name,
                                  Target  => Status_Line (File_Name_First_Row ..
                                    File_Name_Last_Row),
@@ -86,14 +85,13 @@ package body BBT.Status_Bar is
    end Progress_Bar_Next_Step;
 
    --  -------------------------------------------------------------------------
-   procedure Put_Results (Results : Documents.Test_Results_Count) is
-   begin
-      null;
-   end Put_Results;
+   --  procedure Put_Results (Results : Documents.Test_Results_Count) is
+   --  begin
+   --     null;
+   --  end Put_Results;
 
    --  -------------------------------------------------------------------------
    procedure Put_Activity (S : String) is
-      use AnsiAda;
       use Ada.Strings;
    begin
       if Is_Enabled then

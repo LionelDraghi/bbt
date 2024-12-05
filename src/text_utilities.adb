@@ -7,7 +7,6 @@
 
 with Ada.Characters.Handling;
 with Ada.Strings.Equal_Case_Insensitive;
-with Ada.Strings.Fixed;
 
 package body Text_Utilities is
 

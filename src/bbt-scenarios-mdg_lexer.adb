@@ -17,11 +17,11 @@ package body BBT.Scenarios.MDG_Lexer is
    Blanks  : constant Character_Set := To_Set (" " & Ada.Characters.Latin_1.HT);
    -- cf. https://spec.commonmark.org/0.31.2/#blank-line
 
-   Bold_And_Blanks : constant Character_Set := To_Set ('*') or Blanks;
+   -- Bold_And_Blanks : constant Character_Set := To_Set ('*') or Blanks;
 
    Separators : constant Character_Set := To_Set (':') or Blanks;
 
-   Markdown_Emphasis : constant Character_Set := To_Set ("*_");
+   -- Markdown_Emphasis : constant Character_Set := To_Set ("*_");
    -- Markdown treats asterisks (*) and underscores (_) as indicators of emphasis
 
    Decorators : constant Character_Set := To_Set ('#'); -- or Markdown_Emphasis
@@ -42,7 +42,6 @@ package body BBT.Scenarios.MDG_Lexer is
       --
       -- refer to https://spec.commonmark.org/0.31.2/#atx-heading
       -- for specification
-      Colon : Natural;
    begin
       -- First point to the first  #
       First := Index_Non_Blank (Source => Line, From => Line'First);

@@ -15,13 +15,10 @@ with BBT.Tests.Actions;     use BBT.Tests.Actions;
 with File_Utilities;
 with Text_Utilities;        use Text_Utilities;
 
-with Ada.Calendar.Formatting;
 with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
--- with GNAT.Compiler_Version;
-with GNAT.OS_Lib;
 with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Runner is
@@ -226,8 +223,7 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_All is
       use File_Utilities;
-      use Status_Bar;
-      File_Count : Natural := Natural (BBT.Tests.Builder.The_Tests_List.Length);
+      File_Count : constant Natural := Natural (BBT.Tests.Builder.The_Tests_List.Length);
       -- package CVer is new GNAT.Compiler_Version;
 
    begin

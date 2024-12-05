@@ -11,7 +11,6 @@ with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
-with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- no direct with of Ada.Directories or Ada.Text_IO here

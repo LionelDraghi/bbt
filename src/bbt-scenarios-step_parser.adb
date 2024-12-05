@@ -9,8 +9,7 @@ with BBT.Scenarios.Step_Parser.Lexer;
 
 with Text_Utilities; use Text_Utilities;
 
-with Ada.Characters.Latin_1;
-with Ada.Containers.Indefinite_Vectors;
+with Ada.Containers;
 with Ada.Directories;                   use Ada.Directories;
 with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
@@ -200,8 +199,6 @@ package body BBT.Scenarios.Step_Parser is
                    Loc      :     Location_Type;
                    Cmd_List : out Cmd_Lists.Vector) return Step_Type
    is
-      use Lexer;
-
       First_Token      : Boolean        := True;
       Successfully_Met : Boolean        := False;
       Or_Met           : Natural        := 0;

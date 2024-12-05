@@ -130,6 +130,7 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Background (Name : String; Loc : Location_Type) is
+      pragma Warnings (Off, "use of an anonymous access type allocator");
    begin
       case Current_State is
          when In_Document =>
@@ -301,7 +302,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String; Loc : Location_Type) is
    begin
-       case Current_State is
+      case Current_State is
          when In_Document =>
             Last_Doc_Ref.Comment.Append (Line);
 

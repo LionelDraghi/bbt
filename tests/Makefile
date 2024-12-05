@@ -11,7 +11,9 @@ ifeq ($(OS), Windows_NT)
 	@ - ln -fs ../bbt bbt.exe 
 else
 	@ - ln -fs ../sut
-	@ - ln -fs ../bbt 
+	@ - ln -fs ../bbt
+	@ - ln -fs /usr/bin/gcc 
+	@ - ln -fs /usr/bin/rpl
 endif
 
 	@ ./bbt --yes -k -c -o ../docs/tests/examples_results.md -ed ./ ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO "******"
@@ -24,6 +26,6 @@ doc:
 	
 .PHONY : clean
 clean:
-	@ - rm -f *.out main bbt sut
+	@ - rm -f *.out main bbt sut gcc rpl
 	@ - rm -rf dir*
 
