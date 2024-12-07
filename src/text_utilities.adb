@@ -31,6 +31,28 @@ package body Text_Utilities is
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
+   function Is_Equal (Text1, Text2           : Text;
+                      Case_Insensitive : Boolean := True;
+                      Ignore_Blanks    : Boolean := True) return Boolean
+   is
+      use type Ada.Containers.Count_Type;
+   begin
+      if Text1.Length /= Text2.Length then
+         return False;
+      end if;
+
+      for I in Text2.First_Index .. Text2.Last_Index loop
+         if not Is_Equal (Text1 (I), Text2 (I),
+                          Case_Insensitive => Case_Insensitive,
+                          Ignore_Blanks    => Ignore_Blanks)
+         then
+            return False;
+         end if;
+      end loop;
+      return True;
+   end Is_Equal;
+
+   -- --------------------------------------------------------------------------
    procedure Create_File (File_Name    : String;
                           With_Content : Text) is
       Output : File_Type;
@@ -237,92 +259,32 @@ package body Text_Utilities is
                       Ignore_Blank_Lines : Boolean := True;
                       Sort_Texts         : Boolean := False;
                       Identical          : out Boolean;
-                      Diff_Index         : out Natural) is
-      Idx1, Idx2 : Natural := 1;
-      T1, T2     : Text;
+                      Diff_Index         : out Natural)
+   is
+      T1 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text1)
+                    else Text1);
+      T2 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text2)
+                    else Text2);
 
    begin
       Identical := False;
 
-      T1 := Text1;
-      T2 := Text2;
       if Sort_Texts then
          Sort (T1);
          Sort (T2);
       end if;
 
-      -- If T1 = T2, return Identical = True and Diff_Index = 0
-      -- Otherwise, return False and Index of the first different line in T2
-      if T1 = T2 then
-         Identical := True;
+      -- Brut compare
+      for Diff_Index in T1.First_Index .. T1.Last_Index loop
+         Identical := Is_Equal (T1 (Diff_Index),
+                                T2 (Diff_Index),
+                                Case_Insensitive => Case_Insensitive,
+                                Ignore_Blanks    => Ignore_Blanks);
+         exit when not Identical;
+      end loop;
+
+      if Identical then
          Diff_Index := 0;
-
-      elsif Ignore_Blank_Lines then
-
-         Idx1 := First_Non_Blank_Line (T1, @);
-         Idx2 := First_Non_Blank_Line (T2, @);
-
-         if Idx1 = 0 and Idx2 = 0 then
-            -- both file are blank
-            Identical  := True;
-            Diff_Index := 0;
-            return;
-         end if;
-
-         loop
-            if Idx1 = 0 xor Idx2 = 0 then
-               -- no more line to compare for one of the files
-               if Idx2 /= 0 then
-                  Diff_Index := Idx2;
-                  -- otherwise, Diff_Index is already set to the last non blank
-               end if;
-               Identical := False;
-               return;
-            end if;
-
-            if not Is_Equal (T1 (Idx1), T2 (Idx2),
-                             Case_Insensitive => Case_Insensitive,
-                             Ignore_Blanks    => Ignore_Blanks)
-            then
-               Identical := False;
-               Diff_Index := Idx2;
-               return;
-
-            end if;
-
-            Diff_Index := Idx2; -- store the last non blank index
-
-            exit when Idx1 = T1.Last_Index and Idx2 = T2.Last_Index;
-
-            declare
-               I1 : Natural := T1.Last_Index;
-               I2 : Natural := T2.Last_Index;
-            begin
-               if Idx1 /= T1.Last_Index then
-                  I1 := First_Non_Blank_Line (T1, From => Idx1 + 1);
-               end if;
-               if Idx2 /= T2.Last_Index then
-                  I2 := First_Non_Blank_Line (T2, From => Idx2 + 1);
-               end if;
-               -- Idx should not return to zero, so let's use tmp index :
-               if I1 /= 0 then
-                  Idx1 := I1;
-               end if;
-               if I2 /= 0 then
-                  Idx2 := I2;
-               end if;
-            end;
-
-         end loop;
-
-         Identical := True;
-         Diff_Index := 0;
-
-      else
-         -- Brut compare
-         for Diff_Index in T1.Iterate loop
-            exit when Texts."/=" (T1 (Diff_Index), T2 (Diff_Index));
-         end loop;
       end if;
 
    end Compare;
@@ -338,7 +300,7 @@ package body Text_Utilities is
       Diff_Index : Natural;
    begin
       Compare (Text1, Text2,
-               Ignore_Blank_Lines      => Ignore_Blank_Lines,
+               Ignore_Blank_Lines => Ignore_Blank_Lines,
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
                Identical          => Identical,

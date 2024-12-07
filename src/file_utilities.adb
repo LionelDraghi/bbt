@@ -5,14 +5,16 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Directories;   use Ada.Directories;
-with Ada.Strings;
-with Ada.Strings.Fixed;
-with Ada.Strings.Maps;
+with Ada.Directories.Hierarchical_File_Names,
+     Ada.Strings,
+     Ada.Strings.Fixed,
+     Ada.Strings.Maps;
+
+use Ada.Directories.Hierarchical_File_Names;
 
 package body File_Utilities is
 
-   Upper_Dir : constant String := ".." & Separator;
+   Parent_Dir : constant String := ".." & Separator;
 
    -- --------------------------------------------------------------------------
    function Short_Path (From_Dir : String;
@@ -37,12 +39,16 @@ package body File_Utilities is
 
    begin
       -- -----------------------------------------------------------------------
-      if (Dir = [1 => Separator] and File (1) = Separator)
-        or else Dir = "./"
-        or else Dir = "."
-      then return File; end if;
-      -- This test is also the way to stop recursing until error
-      -- when From_Dir and To_File have nothing in common.
+      if (Is_Root_Directory_Name (Dir) and Is_Full_Name (File))
+      -- From_Dir = "/" (or "c:\" on Windows) and File starts
+      -- also with "/" or c:\"
+          or else Is_Current_Directory_Name (Dir)
+      then
+         return File;
+         -- This test is also the way to stop recursing until error
+         -- when From_Dir and To_File have nothing in common.
+      end if;
+
 
       if Dir = File then return "./"; end if;
       -- Otherwise, the function returns the weird "../current_dir"
@@ -53,11 +59,9 @@ package body File_Utilities is
       -- Dir and File, so we return immediately File
 
       declare
-         Length : constant Natural := (if   Dir'Length > File'Length
-                                       then File'Length
-                                       else Dir'Length);
-         Right  : constant String  :=
-                    File (File'First .. File'First + Length - 1);
+         Length : constant Natural := Natural'Min (Dir'Length, File'Length);
+         Right  : constant String  := File (File'First ..
+                                              File'First + Length - 1);
       begin
          if Dir'Length <= File'Length and then Right = Dir then
             -- The left part of both string is identical
@@ -78,7 +82,7 @@ package body File_Utilities is
             -- recursive call:
             return Short_Path (From_Dir => Containing_Directory (Dir),
                                To_File  => File,
-                               Prefix   => Prefix & Upper_Dir);
+                               Prefix   => Prefix & Parent_Dir);
          end if;
       end;
 
@@ -100,22 +104,11 @@ package body File_Utilities is
         := Ada.Strings.Fixed.Count (Text, Set => To_Be_Escaped);
       Out_Str       : String (Text'First .. Text'Last + Blank_Count);
    begin
-      -- IO.Put_Line ("Blank_Count    =" & Natural'Image (Blank_Count));
-      -- IO.Put_Line ("Out_Str'length =" & Natural'Image (Out_Str'Length));
-      -- IO.Put_Line ("Text'length    =" & Natural'Image (Text'Length));
-
       Out_Str (Text'First .. Text'Last) := Text;
 
       for I in 1 .. Blank_Count loop
-         -- IO.Put_Line (Integer'Image (I) & ": S >" & Text    & "<");
-         -- IO.Put_Line (Integer'Image (I) & ": T >" & Out_Str & "<");
-         -- IO.Put_Line (Integer'Image (I) & ": Src_Idx before search ="
-         --             & Natural'Image (Src_Idx));
-
          Src_Idx := Ada.Strings.Fixed.Index (Out_Str (Src_Idx .. Out_Str'Last),
                                              To_Be_Escaped);
-         -- IO.Put_Line (Integer'Image (I) & ": Src_Idx after search ="
-         --             & Natural'Image (Src_Idx));
          Ada.Strings.Fixed.Insert (Out_Str,
                                    Before   => Src_Idx,
                                    New_Item => "\",

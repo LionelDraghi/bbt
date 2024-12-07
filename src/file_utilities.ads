@@ -5,17 +5,19 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with GNAT.Directory_Operations;
+
 package File_Utilities is
 
-   Separator : constant Character := '/'; -- Fixme: OS dependent!
+   Separator : constant Character := GNAT.Directory_Operations.Dir_Separator;
+   -- To remove the dependency to GNAT, set it explicitly to '\' or '/'
 
    -- --------------------------------------------------------------------------
    function Short_Path (From_Dir : String;
                         To_File  : String;
-                        Prefix   : String := "") return String
-     ; -- with Pre => From_Dir (From_Dir'First) = To_File (To_File'First);
+                        Prefix   : String := "") return String;
 
-   -- - Short_Path gives a relative Path from From_Dir to To_File.
+   -- Short_Path gives a relative Path from From_Dir to To_File.
    --   If  From_Dir => "/home/tests/",
    --   and To_File  => "/home/tests/mysite/site/idx.txt"
    --   then Short_Path returns     "mysite/site/idx.txt"
@@ -24,12 +26,10 @@ package File_Utilities is
    --   and To_File  => "../tests/mysite/site/idx.txt"
    --   then Short_Path returns  "mysite/site/idx.txt"
    --
-   -- - NOTE that if both dir & file are not absolute path, then we assume that
-   --   both are rooted in the same directory.
+   -- - NOTE that if both dir & file are not absolute path, then we assume
+   --   that both are rooted in the same directory.
    --
-   -- - From_Dir must be an absolute Path, that is starting with a
-   --   Separator.
-   --   From_Dir may ends with a Separator or not, meaning that
+   -- - From_Dir may ends with a Separator or not, meaning that
    --   both "/usr" and "/usr/" are OK.
    --   NB : Devices like "C:" in "C:\Users" are not permitted.
    --
@@ -51,8 +51,8 @@ package File_Utilities is
    --
 
    -- --------------------------------------------------------------------------
-   function Escape (Text : String) return String;
-   -- Linux/bash specific function that escape characters
+   function Escape (Text : in String) return String;
+   -- bash specific function that escape characters
    -- ' '
    -- & '"' & '#' & '$'
    -- & '&' & ''' & '('
@@ -61,9 +61,8 @@ package File_Utilities is
    -- & '?' & '[' & '\'
    -- & ']' & '^' & '`'
    -- & '{' & '|' & '}'
-   -- in command lines pushed to bash.
+   -- in command lines pushed to the shell.
    -- Refer to the "Which characters need to be escaped when using Bash?"
    -- discussion on stackoverflow.com
-   -- Fixme: this function is not portable!
 
 end File_Utilities;

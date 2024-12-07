@@ -81,7 +81,12 @@ package Text_Utilities is
                       Identical          : out Boolean;
                       Diff_Index         : out Natural);
    -- If Test1 = Text2, return Identical = True and Diff_Index = 0
-   -- Otherwise, return False and Index of the first different line in Text2
+   -- Otherwise, return False and Index of the first different line in Text1
+
+   -- --------------------------------------------------------------------------
+   function Is_Equal (Text1, Text2     : Text;
+                      Case_Insensitive : Boolean := True;
+                      Ignore_Blanks    : Boolean := True) return Boolean;
 
    function Is_Equal (Text1, Text2       : Text;
                       Case_Insensitive   : Boolean := True;

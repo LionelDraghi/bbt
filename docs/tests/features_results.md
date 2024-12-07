@@ -1,160 +1,165 @@
 
-## [A010_Contains_line.md](../features/A010_Contains_line.md)  
+## [A010_Then_Contains_String.md](../features/A010_Then_Contains_String.md)  
 
   ### Feature: testing that a file contains a line  
 
-  - [X] scenario [test on a string output](../features/A010_Contains_line.md) pass  
+  - [X] scenario [test on a string output](../features/A010_Then_Contains_String.md) pass  
 
-  - [X] scenario [test on a multiline output](../features/A010_Contains_line.md) pass  
+  - [X] scenario [test on a multiline output](../features/A010_Then_Contains_String.md) pass  
 
-  - [X] scenario [test on a file](../features/A010_Contains_line.md) pass  
+  - [X] scenario [test on a file](../features/A010_Then_Contains_String.md) pass  
 
 
-## [A020_Contains_multiline.md](../features/A020_Contains_multiline.md)  
+## [A020_Then_Contains.md](../features/A020_Then_Contains.md)  
 
   ### Feature: "contains" a string feature  
 
-  - [X] scenario [test the standard output](../features/A020_Contains_multiline.md) pass  
+  - [X] scenario [test the standard output](../features/A020_Then_Contains.md) pass  
 
-  - [X] scenario [compare with a different file](../features/A020_Contains_multiline.md) pass  
+  - [X] scenario [compare with a different file](../features/A020_Then_Contains.md) pass  
 
 
-## [A030_Does_not_contain.md](../features/A030_Does_not_contain.md)  
+## [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md)  
 
   ### Feature: checking that some string is not present in output or file  
 
-  - [X] scenario [Successful checks](../features/A030_Does_not_contain.md) pass  
+  - [X] scenario [Successful checks](../features/A030_Then_Does_Not_Contain.md) pass  
 
-  - [X] scenario [Failed "output doesnt contain"](../features/A030_Does_not_contain.md) pass  
+  - [X] scenario [Failed "output doesnt contain"](../features/A030_Then_Does_Not_Contain.md) pass  
 
-  - [X] scenario [Failed "file doesn't contain"](../features/A030_Does_not_contain.md) pass  
+  - [X] scenario [Failed "file doesn't contain"](../features/A030_Then_Does_Not_Contain.md) pass  
 
 
-## [A040_Example_keyword.md](../features/A040_Example_keyword.md)  
+## [A040_Example_Keyword.md](../features/A040_Example_Keyword.md)  
 
   ### Feature: The keyword `Example` is a synonym of the keyword `Scenario`.  
 
-  - [X] scenario [NOK return code](../features/A040_Example_keyword.md) pass  
+  - [X] scenario [NOK return code](../features/A040_Example_Keyword.md) pass  
 
-  - [X] scenario [NOK return code](../features/A040_Example_keyword.md) pass  
+  - [X] scenario [NOK return code](../features/A040_Example_Keyword.md) pass  
 
 
-## [A050_File_is_code_fence.md](../features/A050_File_is_code_fence.md)  
+## [A050_Then_File_Is_Code_Fence.md](../features/A050_Then_File_Is_Code_Fence.md)  
 
   ### Feature: testing the "file is" feature  
 
-  - [X] scenario [file is as expected](../features/A050_File_is_code_fence.md) pass  
+  - [X] scenario [file is as expected](../features/A050_Then_File_Is_Code_Fence.md) pass  
 
-  - [X] scenario [file is not as expected](../features/A050_File_is_code_fence.md) pass  
+  - [X] scenario [file is not as expected](../features/A050_Then_File_Is_Code_Fence.md) pass  
 
 
-## [A060_File_is_string.md](../features/A060_File_is_string.md)  
+## [A060_Then_File_Equal_File_String.md](../features/A060_Then_File_Equal_File_String.md)  
 
   ### Feature: "file is" followed by a code span (a string)  
 
-  - [X] scenario [test on a single line file](../features/A060_File_is_string.md) pass  
+  - [X] scenario [test on a single line file](../features/A060_Then_File_Equal_File_String.md) pass  
 
-  - [X] scenario [adding a second line to the file, so the same test should fail](../features/A060_File_is_string.md) pass  
+  - [X] scenario [adding a second line to the file, so the same test should fail](../features/A060_Then_File_Equal_File_String.md) pass  
 
 
-## [A065_File_is_file.md](../features/A065_File_is_file.md)  
+## [A065_Then_File_Equal_File_Code_Fence.md](../features/A065_Then_File_Equal_File_Code_Fence.md)  
 
   ### Feature: file is equal to a file  
 
-  - [X] scenario [test `is equal to file` form](../features/A065_File_is_file.md) pass  
+  - [X] scenario [test `is equal to file` form](../features/A065_Then_File_Equal_File_Code_Fence.md) pass  
 
-  - [X] scenario [test `is equal to file` when files are *not* equal](../features/A065_File_is_file.md) pass  
+  - [X] scenario [test `is equal to file` when files are *not* equal](../features/A065_Then_File_Equal_File_Code_Fence.md) pass  
 
 
-## [A070_Multiline.md](../features/A070_Multiline.md)  
+## [A070_Then_Get_Code_Span.md](../features/A070_Then_Get_Code_Span.md)  
 
   ### Feature: checking an expected multiline output  
 
-  - [X] scenario [asking for sut help](../features/A070_Multiline.md) pass  
+  - [X] scenario [asking for sut help](../features/A070_Then_Get_Code_Span.md) pass  
 
-  - [X] scenario [causing an sut error with a long explanation](../features/A070_Multiline.md) pass  
+  - [X] scenario [causing an sut error with a long explanation](../features/A070_Then_Get_Code_Span.md) pass  
 
 
-## [A080_Output_equal_to_file.md](../features/A080_Output_equal_to_file.md)  
+## [A080_Then_Output_Equal_To_File.md](../features/A080_Then_Output_Equal_To_File.md)  
 
   ### Feature: output is equal to a file  
 
-  - [X] scenario [test `output is equal` keyword](../features/A080_Output_equal_to_file.md) pass  
+  - [X] scenario [test `output is equal` keyword](../features/A080_Then_Output_Equal_To_File.md) pass  
 
 
-## [A090_Return_code.md](../features/A090_Return_code.md)  
+## [A090_Then_Get_Error.md](../features/A090_Then_Get_Error.md)  
 
   ### Feature: return code test  
 
-  - [X] scenario [NOK return code](../features/A090_Return_code.md) pass  
+  - [X] scenario [NOK return code](../features/A090_Then_Get_Error.md) pass  
 
-  - [X] scenario [OK return code](../features/A090_Return_code.md) pass  
+  - [X] scenario [OK return code](../features/A090_Then_Get_Error.md) pass  
 
 
-## [A100_Stderr.md](../features/A100_Stderr.md)  
+## [A100_Then_Get_Stderr.md](../features/A100_Then_Get_Stderr.md)  
 
   ### Feature: stderr test  
 
-  - [X] scenario [unknown option](../features/A100_Stderr.md) pass  
+  - [X] scenario [unknown option](../features/A100_Then_Get_Stderr.md) pass  
 
 
-## [A110_Check_no_output.md](../features/A110_Check_no_output.md)  
+## [A110_Then_No_Output.md](../features/A110_Then_No_Output.md)  
 
   ### Feature: Check that there is no output  
 
-  - [X] scenario [silent operation](../features/A110_Check_no_output.md) pass  
+  - [X] scenario [silent operation](../features/A110_Then_No_Output.md) pass  
 
-  - [X] scenario [silent operation expected, but there is an output](../features/A110_Check_no_output.md) pass  
+  - [X] scenario [silent operation expected, but there is an output](../features/A110_Then_No_Output.md) pass  
 
 
-## [A120_stdout.md](../features/A120_stdout.md)  
+## [A120_Then_Get_String.md](../features/A120_Then_Get_String.md)  
 
   ### Feature: checking a message line on stdout  
 
-  - [X] scenario [asking for sut version](../features/A120_stdout.md) pass  
+  - [X] scenario [asking for sut version](../features/A120_Then_Get_String.md) pass  
 
 
-## [A130_Successfully.md](../features/A130_Successfully.md)  
+## [A130_Successfully_Keyword.md](../features/A130_Successfully_Keyword.md)  
 
   ### Feature: The “successfully” shortcut  
 
-  - [X] scenario [*when I successfully run* a command with successful run](../features/A130_Successfully.md) pass  
+  - [X] scenario [*when I successfully run* a command with successful run](../features/A130_Successfully_Keyword.md) pass  
 
-  - [X] scenario [*when I successfully run* a command with a wrong command line, returns an error status](../features/A130_Successfully.md) pass  
+  - [X] scenario [*when I successfully run* a command with a wrong command line, returns an error status](../features/A130_Successfully_Keyword.md) pass  
 
-  - [X] scenario [*when I run* a command with a wrong command line](../features/A130_Successfully.md) pass  
+  - [X] scenario [*when I run* a command with a wrong command line](../features/A130_Successfully_Keyword.md) pass  
 
 
-## [A140_Unordered.md](../features/A140_Unordered.md)  
+## [A140_Unordered_Keyword.md](../features/A140_Unordered_Keyword.md)  
 
   ### Feature: when the modifyer `unordered` is given after `get`, order of line is ignored  
 
   Feature background   
-  - [X] scenario ["I get" without the modifyer](../features/A140_Unordered.md) pass  
+  - [X] scenario ["I get" without the modifyer](../features/A140_Unordered_Keyword.md) pass  
 
   Feature background   
-  - [X] scenario [same "I get" with the modifyer](../features/A140_Unordered.md) pass  
+  - [X] scenario [same "I get" with the modifyer](../features/A140_Unordered_Keyword.md) pass  
 
 
-## [A150_Background.md](../features/A150_Background.md)  
+## [A150_Background_Keyword.md](../features/A150_Background_Keyword.md)  
 
   ### Feature: Feature 1  
 
   Document Background Background1  
   Feature background Background2 in feature 1  
-  - [X] scenario [lets erase what was created by previous background runs](../features/A150_Background.md) pass  
+  - [X] scenario [lets erase what was created by previous background runs](../features/A150_Background_Keyword.md) pass  
 
   Document Background Background1  
   Feature background Background2 in feature 1  
-  - [X] scenario [Two Background executed](../features/A150_Background.md) pass  
+  - [X] scenario [Two Background executed](../features/A150_Background_Keyword.md) pass  
 
   ### Feature: Feature 2  
 
   Document Background Background1  
-  - [X] scenario [lets erase once more what was created by previous background runs](../features/A150_Background.md) pass  
+  - [X] scenario [lets erase once more what was created by previous background runs](../features/A150_Background_Keyword.md) pass  
 
   Document Background Background1  
-  - [X] scenario [only first background should apply](../features/A150_Background.md) pass  
+  - [X] scenario [only first background should apply](../features/A150_Background_Keyword.md) pass  
+
+
+## [A160_Ignoring_Blank_Lines.md](../features/A160_Ignoring_Blank_Lines.md)  
+
+  - [X] scenario [Comparing ignoring blank lines](../features/A160_Ignoring_Blank_Lines.md) pass  
 
 
 ## [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md)  
@@ -283,5 +288,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  61
+- Successful =  62
 - Empty      =  0
