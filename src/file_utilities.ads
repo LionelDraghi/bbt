@@ -31,7 +31,10 @@ package File_Utilities is
    --
    -- - From_Dir may ends with a Separator or not, meaning that
    --   both "/usr" and "/usr/" are OK.
-   --   NB : Devices like "C:" in "C:\Users" are not permitted.
+   --
+   --   On Windows, DOS path like "C:" in "C:\Users" are supported,
+   --   but UNC path (like \\host\server\path) are only tested for the simple
+   --   case where both From_Dir and To_File starts the same.
    --
    -- - Prefix may be used if you want a specific current directory prefix.
    --   For instance, it may be set to '.' & Separator if you want a "./"
@@ -42,6 +45,11 @@ package File_Utilities is
    --   and To_File  => "/home/tests/idx.txt"
    --   then Short_Path returns "../../idx.txt"
    --
+   -- - WARNING : this function strongly rely on the fact that both parameter
+   --             are straight path. It's not going to work with path
+   --             embedding for example "../lionel/../lionel/../lionel/"
+   --             instead of "../lionel".
+   --
    -- Exceptions:
    --   If From_Dir is not a To_File's parent, function
    --   Ada.Directories.Containing_Directory is used, and so Name_Error
@@ -49,6 +57,52 @@ package File_Utilities is
    --   an external file, and Use_Error is raised if From_Dir
    --   does not have a containing Directory.
    --
+   -- Interesting reference on DOS / Windows PATH:
+   -- https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+   --
+   -- It's for .Net, but starts with a short explanation on DOS and UNC
+   -- Path format.
+   -- Summary :
+   -- - on DOS : C:\Documents\Newsletters\Summer2018.pdf
+   --                                     ^^^^^^^^^^^^^^ : file name
+   --              ^^^^^^^^^^^^^^^^^^^^^^^               : path
+   --            ^^                                      : Volume (or Drive),
+   --                                                      one character
+   --   Note that path may be relative, even if the Volume is specified :
+   --   C:Documents  : relative path (relative name in Ada parlance)
+   --   C:\Documents : absolute path (full name     in Ada parlance)
+   --
+   -- - UNC :
+   --   \\Server2\Share\Test\Foo.txt
+   --                  ^^^^^^^^^^^^^ : path
+   --             ^^^^^              : share name
+   --     ^^^^^^^                    : server (or host) name
+   --   ^^^^^^^^^^^^^^^              : volume
+   --   UNC expression are always "fully qualified", meaning that the path is
+   --   independent of the current directory and does not change when the
+   --   current directory changes (you always have a '\' between the volume and
+   --   the path.
+   --   Another example :
+   --   \\system07\C$\ designate the root of the C drive
+   --
+   -- On legal character :
+   --   From https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
+   --   I understand that :
+   --     < (less than)
+   --     > (greater than)
+   --     : (colon - sometimes works, but is actually NTFS Alternate Data Streams)
+   --     " (double quote)
+   --     / (forward slash)
+   --     \ (backslash)
+   --     | (vertical bar or pipe)
+   --     ? (question mark)
+   --     * (asterisk)
+   --   are illegal character in Windows filenames, and only '/' is illegal on
+   --   Linux/Unix.
+   --
+   --   Meaning that "C:\Foo\Bar" could be a legal file name on Linux.
+   --   Because of this, '/' is the only separator considered on Unix, instead
+   --   of both '/' and '\' on Windows.
 
    -- --------------------------------------------------------------------------
    function Escape (Text : in String) return String;

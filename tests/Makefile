@@ -24,6 +24,9 @@ endif
 	@ ./bbt --yes --keep_going --cleanup --output ../docs/tests/features_results.md --exec_dir ./ ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
+	# Unit testing
+	cd file_utilities_tests && alr build && alr run -a -q
+
 doc:
 	
 .PHONY : clean

@@ -8,3 +8,5 @@ alire.lock
 /tests/expect_test/
 /tests/utilada_test/
 /src/Alire_config
+tests/file_utilities_tests/alire/
+tests/file_utilities_tests/config/

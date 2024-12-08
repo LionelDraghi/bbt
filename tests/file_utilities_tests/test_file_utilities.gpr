@@ -1,0 +1,67 @@
+project Test_File_Utilities is
+
+   for Source_Dirs use ("../../src", "./src");
+   for Object_Dir use "../../obj";
+   for Main use ("test_file_utilities.adb");
+   for Exec_Dir use ".";
+
+   package Ide is
+      for Vcs_Kind use "Git";
+   end Ide;
+
+   package Builder is
+      for Default_Switches ("ada") use ("-g");
+   end Builder;
+
+   package Compiler is
+      Common_Switches := ("-gnat2022");
+      Common_Debug_Switches := Common_Switches &
+      ("-g", "-O0",  "-gnatQ", "-gnatf",
+       "-gnato", "-fstack-check", "-gnata",
+       "-gnateE", "-gnatVa", "-gnatyaefhiklnprtx");
+      -- -gnatQ   : Don't quit
+      -- -gnatf   : Full errors
+      -- -gnato   : Intermediate overflows to be handled in strict mode.
+      -- -fstack-check : stack checking
+      -- -gnata   : assertions
+      -- -gnateE  : extra infos in exception messages
+      -- -gnatVa  : all validity checks
+      -- removed -gnatwae : activate most optional warning messages, and treat warnings as errors
+      --
+      -- Style checking :
+      -- a : Check attribute casing
+      -- removed b : Blanks not allowed at statement end
+      --         (Because of Markdown processing for comments : double
+      --          final blank is used in MD to force a newline)
+      -- e : Check end/exit labels
+      -- f : No form feeds or vertical tabs
+      -- h : No horizontal tabs
+      -- i : Check if-then layout
+      -- k : Check keyword casing
+      -- l : Check layout
+      -- n : Check casing of entities in Standard
+      -- p : Check pragma casing
+      -- r : Check references
+      -- t : Check token spacing
+      -- removed M : Set maximum line length
+      -- x : Check extra parentheses.
+
+     for Switches ("ada") use Common_Debug_Switches; --  & "--coverage";
+      -- --coverage = -fprofile-arcs and -ftest-coverage
+
+   end Compiler;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-Es");
+            -- -Es : store symbolic tracebacks
+   end Binder;
+
+   package Linker is
+      for Default_Switches ("ada") use ("-g"); --, "-lgcov", "-fprofile-arcs");
+   end Linker;
+
+   package Pretty_Printer is
+      for Switches ("ada") use ("-M100", "-l2", "-A1", "-A2", "-A3", "-A4");
+   end Pretty_Printer;
+
+end Test_File_Utilities;
