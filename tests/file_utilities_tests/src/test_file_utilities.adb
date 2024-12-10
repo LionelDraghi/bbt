@@ -24,6 +24,7 @@ procedure Test_File_Utilities is
       end if;
    end Put_Line;
 
+   -- --------------------------------------------------------------------------
    procedure New_Line (Spacing : Ada.Text_IO.Positive_Count := 1) is
    begin
       if not Quiet then Ada.Text_IO.New_Line (Spacing);
@@ -31,18 +32,23 @@ procedure Test_File_Utilities is
    end New_Line;
 
    -- --------------------------------------------------------------------------
+   function On_Windows return Boolean is (File_Utilities.Separator = '\');
+
+   -- --------------------------------------------------------------------------
    procedure Check (Title    : String;
                     From_Dir : String;
                     To_File  : String;
                     Prefix   : String := "";
-                    -- Result   : String;
-                    Expected : String) is
+                    Expected : String)
+
+     is
       Tmp    : constant String := Positive'Image (Check_Idx);
       Idx    : constant String := Tmp (2 .. Tmp'Last);
       use File_Utilities;
       Result : constant String := Short_Path (From_Dir => From_Dir,
                                               To_File  => To_File,
                                               Prefix   => Prefix);
+
    begin
       Put (Idx & ". " & Title);
       Check_Idx := Check_Idx + 1;
@@ -72,6 +78,23 @@ procedure Test_File_Utilities is
       New_Line;
    end Check;
 
+   -- --------------------------------------------------------------------------
+   procedure Check (Title               : String;
+                    From_Dir            : String;
+                    To_File             : String;
+                    Prefix              : String := "";
+                    Expected_On_Unix    : String;
+                    Expected_On_Windows : String) is
+      Expected : constant String := (if On_Windows then Expected_On_Windows
+                                     else Expected_On_Unix);
+   begin
+      Check (Title               => Title,
+             From_Dir            => From_Dir,
+             To_File             => To_File,
+             Prefix              => Prefix,
+             Expected            => Expected);
+   end Check;
+
 begin
    -- --------------------------------------------------------------------------
    if Ada.Command_Line.Argument_Count /= 0 then
@@ -91,78 +114,138 @@ begin
    New_Line;
 
    -- --------------------------------------------------------------------------
-   Check (Title    => "Subdir with default Prefix",
-          From_Dir => "/home/tests",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Expected => "mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "Subdir with default Prefix",
+             From_Dir => "c:\home\tests",
+             To_File  => "c:\home\tests\mysite\site\d1\idx.txt",
+             Expected => "mysite\site\d1\idx.txt");
+   else
+      Check (Title    => "Subdir with default Prefix",
+             From_Dir => "/home/tests",
+             To_File  => "/home/tests/mysite/site/d1/idx.txt",
+             Expected => "mysite/site/d1/idx.txt");
+   end if;
 
    Check (Title    => "Dir with final /",
           From_Dir => "/home/tests/",
           To_File  => "/home/tests/mysite/site/d1/idx.txt",
           Expected => "mysite/site/d1/idx.txt");
 
-   Check (Title    => "subdir with Prefix",
-          From_Dir => "/home/tests",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Prefix   => "." & File_Utilities.Separator,
-          Expected => "./mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "subdir with Prefix",
+             From_Dir => "\home\tests",
+             To_File  => "\home\tests\mysite\site\d1\idx.txt",
+             Prefix   => "." & File_Utilities.Separator,
+             Expected => ".\mysite\site\d1\idx.txt");
+   else
+      Check (Title    => "subdir with Prefix",
+             From_Dir => "/home/tests",
+             To_File  => "/home/tests/mysite/site/d1/idx.txt",
+             Prefix   => "." & File_Utilities.Separator,
+             Expected => "./mysite/site/d1/idx.txt");
+   end if;
 
-   Check (Title    => "Sibling subdir",
-          From_Dir => "/home/tests/12/34",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Expected => "../../mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "Sibling subdir",
+             From_Dir => "\home\tests\12\34",
+             To_File  => "\home\tests\mysite\site\d1\idx.txt",
+             Expected => "..\..\mysite\site\d1\idx.txt");
+   else
+      Check (Title               => "Sibling subdir",
+             From_Dir            => "/home/tests/12/34",
+             To_File             => "/home/tests/mysite/site/d1/idx.txt",
+             Expected            => "../../mysite/site/d1/idx.txt");
 
-   Check (Title    => "Parent dir",
-          From_Dir => "/home/tests/12/34",
-          To_File  => "/home/tests/idx.txt",
-          Expected => "../../idx.txt");
+   end if;
 
-   Check (Title    => "Other Prefix",
-          From_Dir => "/home/tests/12/",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Prefix   => "$PWD/",
-          Expected => "$PWD/../mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "Parent dir",
+             From_Dir => "\home\tests\12\34",
+             To_File  => "\home\tests\idx.txt",
+             Expected => "..\..\idx.txt");
+   else
+      Check (Title    => "Parent dir",
+             From_Dir => "/home/tests/12/34",
+             To_File  => "/home/tests/idx.txt",
+             Expected => "../../idx.txt");
+   end if;
 
-   Check (Title    => "Root dir",
-          From_Dir => "/",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Expected => "/home/tests/mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "Other Prefix",
+             From_Dir => "\home\tests\12\",
+             To_File  => "\home\tests\mysite\site\d1\idx.txt",
+             Prefix   => "$PWD\",
+             Expected => "$PWD\..\mysite\site\d1\idx.txt");
+   else
+      Check (Title    => "Other Prefix",
+             From_Dir => "/home/tests/12/",
+             To_File  => "/home/tests/mysite/site/d1/idx.txt",
+             Prefix   => "$PWD/",
+             Expected => "$PWD/../mysite/site/d1/idx.txt");
+   end if;
+
+   if On_Windows then
+      Check (Title    => "Root dir",
+             From_Dir => "d:",
+             To_File  => "d:\home\tests\mysite\site\d1\idx.txt",
+             Expected => "\home\tests\mysite\site\d1\idx.txt");
+   else
+      Check (Title    => "Root dir",
+             From_Dir => "/",
+             To_File  => "/home/tests/mysite/site/d1/idx.txt",
+             Expected => "/home/tests/mysite/site/d1/idx.txt");
+   end if;
 
    Check (Title    => "File is over dir",
           From_Dir => "/home/tests/mysite/site/d1",
           To_File  => "/home/readme.txt",
-          Expected => "../../../../readme.txt");
+          Expected_On_Unix => "../../../../readme.txt",
+          Expected_On_Windows => "..\..\..\..\readme.txt");
 
    Check (Title    => "File is over Dir, Dir with final /",
           From_Dir => "/home/tests/mysite/site/d1/",
           To_File  => "/home/readme.txt",
-          Expected => "../../../../readme.txt");
+          Expected_On_Unix =>  "../../../../readme.txt",
+          Expected_On_Windows => "..\..\..\..\readme.txt");
 
    Check (Title    => "File is the current dir",
           From_Dir => "/home/tests/",
           To_File  => "/home/tests",
-          Expected => "./");
+          Expected_On_Unix => "./",
+          Expected_On_Windows => ".\");
 
    Check (Title    => "File is over Dir, Dir and File with final /",
           From_Dir => "/home/tests/",
           To_File  => "/home/tests/",
-          Expected => "./");
+          Expected_On_Unix => "./",
+          Expected_On_Windows => ".\");
 
-   Check (Title    => "No common part",
-          From_Dir => "/home/toto/src/tests/",
-          To_File  => "/opt/GNAT/2018/lib64/libgcc_s.so",
-          Expected => "/opt/GNAT/2018/lib64/libgcc_s.so");
+   if On_Windows then
+      Check (Title    => "No common part",
+             From_Dir => "\home\toto\src\tests\",
+             To_File  => "\opt\GNAT\2018\lib64\libgcc_s.so",
+             Expected => "\opt\GNAT\2018\lib64\libgcc_s.so");
+   else
+      Check (Title    => "No common part",
+             From_Dir => "/home/toto/src/tests/",
+             To_File  => "/opt/GNAT/2018/lib64/libgcc_s.so",
+             Expected => "/opt/GNAT/2018/lib64/libgcc_s.so");
+   end if;
 
-   if File_Utilities.Separator = '\' then
+   if On_Windows then
       -- lets run Windows specific tests
       Check (Title    => "Windows Path",
              From_Dir => "c:\Users\Lionel\",
              To_File  => "c:\Users\Xavier\Proj",
              Expected => "..\Xavier\Proj");
+      Check (Title    => "Windows Path, not on the same drive",
+             From_Dir => "c:\Users\Lionel\",
+             To_File  => "d:\Users\Xavier\Proj",
+             Expected => "d:\Users\Xavier\Proj");
       Check (Title    => "Windows Path, case sensitivity",
              From_Dir => "c:\Users\Lionel\",
-             To_File  => "c:\USERS\Xavier\Proj",
-             Expected => "..\Xavier\Proj");
+             To_File  => "c:\USERS\Xavier\PrOJ",
+             Expected => "..\Xavier\PrOJ");
       Check (Title    => "UNC Path",
              From_Dir => "\\Volume\Server\Users\Lionel\",
              To_File  => "\\Volume\Server\USERS\Xavier\Proj",
