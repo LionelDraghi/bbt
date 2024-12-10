@@ -33,8 +33,16 @@ package body BBT.Tests.Actions.File_Operations is
    end Confirm_Delete;
 
    -- --------------------------------------------------------------------------
-   function Exists (Name : String) return Boolean
-                    renames Ada.Directories.Exists;
+   function Exists (Name : String) return Boolean is
+   begin
+      return Ada.Directories.Exists (Name);
+   exception
+      when Ada.Directories.Name_Error =>
+         Put_Warning ("Illegal file name : " & Name);
+         raise;
+         -- return False;
+   end Exists;
+
    function Kind (Name : String) return File_Kind
                   renames Ada.Directories.Kind;
    procedure Create_Path (New_Directory : String;
