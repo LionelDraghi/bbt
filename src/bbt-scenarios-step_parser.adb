@@ -141,12 +141,14 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, No_Subject,   Get,      Object_File) := Output_Is; -- Then I get file `flowers2.txt`
       G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
       G (Then_P, No_SA, Output_Subj,  Contains, Object_Text) := Output_Contains; -- then output contains `msg`
+      G (Then_P, No_SA, Output_Subj,  Contains, Object_File) := Output_Contains; -- Then output contains `snippet.txt` file
       G (Then_P, No_SA, Output_Subj,  Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, Object_Text) := Output_Does_Not_Contain; -- then output does not contain `msg`
+      G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, Object_File) := Output_Does_Not_Contain; -- Then output does not contain file `snippet.txt`
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, No_Object)   := Output_Does_Not_Contain; -- then output does not contain followed by code fenced content
       G (Then_P, No_SA, Subject_File, Is_V,     Object_Text) := File_Is; -- then `config.ini` is `mode=silent`
-      G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
       G (Then_P, No_SA, Subject_File, Is_V,     Object_File) := File_Is; -- then `config.ini` is equal to file `expected/config.ini`
+      G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
       G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
       G (Then_P, No_SA, Subject_File, Contains, Object_File) := File_Contains; -- Then `config.ini` contains `snippet.txt` file
       G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content

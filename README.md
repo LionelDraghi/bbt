@@ -72,31 +72,31 @@ We have :
 
 ### Partial parsing 
 
-A distinctive feature of bbt is that it directly understand those almost normal english sentences :  
+A distinctive feature of bbt is that it directly understand those almost normal english sentences like :  
 ```
 - When I run `sut --quiet input.txt`
 - Then I have no output
 ```
-You dont have to learn a specific DSL syntax, nor to use a scripting language.  
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, but does not understand the whole sentence.  
 
-As an example, bbt will consider equivalent :  
-- *then I get no error (close #2398)*
-- *then I no more get this stupid error that was reported and closed already twice in issues #2398 and #2402*  
-because it actually only take into account the four keywords : *then*, *get*, *no* and *error*  
+So when you write :  
+> *- When I run `gcc --version` *  
+> *- Then I get `version 15.0.0` (Fix #2398 and #2402)*    
+
+bbt actually reads :  
+> *- when run `gcc --version` *  
+> *- then get `version 15.0.0` *    
   
-And this is what gives the possibility to write scenarios in natural language. 
+And this is what gives the ability to write steps in natural language. 
 
 ### Step arguments
 
-Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) to describe a multiline text (expected output, file content, etc).
+Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines, to describe a multiline text (expected output, file content, etc).
 
 bbt also uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks, to identify one line text like file name or command to run.  
 It's not only because it makes the doc nicer, but also because otherwise it would be impossible to distinguish arguments from free text.  
  
-In the previous example, the config.ini file content is given in a fenced code block, and the command line is given in a code span.
-
-Note that steps accepting a multiline text parameter, like  :  
+Note that steps accepting a fenced code block, like  :  
 ` - Then the output contains `  
 `   ``` `  
 `   20 files processed `  
@@ -128,7 +128,7 @@ Alternative tools exists, some are mentioned in [my quick overview of some compa
 ### Tests are easy to read and easy to write
 
 bbt uses a limited english subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
-But this limited english subset does not come at the cost of readability or expressiveness: 
+But this limited english subset does not come at the cost of limited readability or expressiveness: 
 
 - First, bbt is reading only specifics line in the specification, the rest of the file is yours : you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
 
@@ -143,7 +143,7 @@ Although simple, you don't have to learn this subset by heart, you may ask for a
 To run a scenario : `bbt my_scenario.md`  
 Or to run all the md files in the *tests* tree `bbt -r tests`  
 
-bbt as no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
+bbt has no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
 
 ### Test Results are immediately publishable 
 

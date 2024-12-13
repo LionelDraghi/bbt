@@ -162,6 +162,17 @@
   - [X] scenario [Comparing ignoring blank lines](../features/A160_Ignoring_Blank_Lines.md) pass  
 
 
+## [A170_File_vs_File_Name.md](../features/A170_File_vs_File_Name.md)  
+
+  ### Feature: expected content in a file  
+
+  - [X] scenario ["Then I get file" form](../features/A170_File_vs_File_Name.md) pass  
+
+  - [X] scenario ["Then output is | contains | does not contain file" form](../features/A170_File_vs_File_Name.md) pass  
+
+  - [X] scenario ["Then file is | contains | does not contain file" form](../features/A170_File_vs_File_Name.md) pass  
+
+
 ## [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md)  
 
   ### Feature: tmp files and directories deletion  
@@ -288,5 +299,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  62
+- Successful =  65
 - Empty      =  0
