@@ -13,23 +13,50 @@ with Ada.Directories; use Ada.Directories;
 
 package body BBT.Documents is
 
-   Prefix               : constant Texts.Vector := [1 => "",
-                                                    2 => "  "];
-   Current_Indent_Level : Positive := 1;
+   --  -- --------------------------------------------------------------------------
+   --  procedure Put_Image
+   --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+   --     S      :        Object_Text_Type) is
+   --  begin
+   --     Output.Put ("Text source = " & S.Source'Image & " : ");
+   --     case S.Source is
+   --        when Code_Span =>
+   --           Output.Put (S.Object_String'Image);
+   --        when Code_Block =>
+   --           Output.New_Line;
+   --           Output.Increase_Indent;
+   --           Output.Put (S.File_Content'Image);
+   --           Output.Decrease_Indent;
+   --        when File =>
+   --           Output.Put (S.File_Type'Image & S.File_Name'Image);
+   --     end case;
+   --     Output.New_Line;
+   --  end Put_Image;
 
    -- --------------------------------------------------------------------------
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type) is
    begin
-      Output.Put (S.Cat'Image & ", ");
-      Output.Put (S.Action'Image);
-      Output.Put (", Step_String    = " & S.Step_String'Image);
-      Output.Put (", Object_String  = " & S.Object_String'Image);
-      Output.Put (", Subject_String = " & S.Subject_String'Image);
-      Output.Put (", File_Type      = " & S.File_Type'Image);
+      Output.Put ("   Step type        = " & S.Cat'Image & ", ");
       Output.New_Line;
-      Output.Put ("File_Content = "  & S.File_Content'Image);
+      Output.Put ("   Action           = " & S.Action'Image);
+      Output.New_Line;
+      Output.Put ("   Step string      = " & S.Step_String'Image);
+      Output.New_Line;
+      Output.Put ("   Location         = " & Image (S.Location));
+      Output.New_Line;
+      Output.Put ("   Subject string   = " & S.Subject_String'Image);
+      Output.New_Line;
+      Output.Put ("   Object_String    = " & S.Object_String'Image);
+      Output.New_Line;
+      Output.Put ("   Object_File_Name = " & S.Object_File_Name'Image);
+      Output.New_Line;
+      Output.Put ("   File_Type        = " & S.File_Type'Image);
+      Output.New_Line;
+      Output.Put ("   Ignore order     = " & S.Ignore_Order'Image);
+      Output.New_Line;
+      Output.Put ("   File_Content     = " & Text_Image (S.File_Content));
       Output.New_Line;
    end Put_Image;
 
@@ -45,7 +72,8 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    function Output_File_Name (D : Document_Type) return String is
-      use BBT.Settings, File_Utilities;
+      use BBT.Settings,
+          File_Utilities;
    begin
       if Output_File_Dir (Output_File_Dir'Last) = Separator then
          return Output_File_Dir &
@@ -58,34 +86,29 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Text (The_Text : Text) is
-      Pref : constant String := Prefix (Current_Indent_Level);
    begin
       for L of The_Text loop
-         Put_Line (Pref & L);
+         Put_Line (L);
       end loop;
    end Put_Text;
 
    -- --------------------------------------------------------------------------
    procedure Put_Step (Step : Step_Type) is
-      Pref : constant String := Prefix (1);
    begin
-      Put_Line (Pref & Step'Image);
+      Put_Line (Line (Step.Location)'Image & ": Step """ &
+                (+Step.Step_String) & """");
+      Put_Line (Step'Image);
    end Put_Step;
 
    -- --------------------------------------------------------------------------
    procedure Put_Scenario (Scenario : Scenario_Type) is
    begin
-      Current_Indent_Level := 1;
-      declare
-         Pref : constant String := Prefix (Current_Indent_Level) & "### ";
-      begin
-         New_Line;
-         Put_Line (Pref & "Scenario " & To_String ((Scenario.Name)));
-         New_Line;
-         for Step of Scenario.Step_List loop
-            Put_Step (Step);
-         end loop;
-      end;
+      Put_Line (Line (Scenario.Location)'Image & ": Scenario """ &
+                  To_String ((Scenario.Name)) & """");
+      for Step of Scenario.Step_List loop
+         Put_Step (Step);
+      end loop;
+      -- New_Line;
    end Put_Scenario;
 
    function Parent_Doc (Scen : Scenario_Type) return access Document_Type is
@@ -97,21 +120,35 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Feature (Feature : Feature_Type) is
-      Pref : constant String := "## ";
+      -- Pref : constant String := "## ";
    begin
-      Current_Indent_Level := 1;
-      Put_Line (Pref & "Feature" & ": " & To_String (Feature.Name));
+      -- Current_Indent_Level := 1;
+      Put_Line (Line (Feature.Location)'Image & ": Feature """ &
+                  To_String (Feature.Name) & """");
+
+      if Feature.Background /= null then
+         Put_Scenario (Feature.Background.all);
+      end if;
+
       for Scenario of Feature.Scenario_List loop
          Put_Scenario (Scenario);
       end loop;
+      New_Line;
    end Put_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Put_Document (Doc : Document_Type) is
    begin
-      Current_Indent_Level := 1;
-      Put_Line ("# " & To_String (Doc.Name));
+      Put_Line ("Document Name : " & To_String (Doc.Name));
       New_Line;
+      if Doc.Background /= null then
+       Put_Scenario (Doc.Background.all);
+      end if;
+
+      for S of Doc.Scenario_List loop
+         Put_Scenario (S);
+      end loop;
+
       for Feature of Doc.Feature_List loop
          Put_Feature (Feature);
       end loop;
@@ -120,10 +157,6 @@ package body BBT.Documents is
    -- --------------------------------------------------------------------------
    procedure Put_Document_List (Doc_List : Documents_Lists.Vector) is
    begin
-      Put_Line ("**Document list:**");
-      New_Line;
-      Put_Line ("[[TOC]]");
-      New_Line;
       for Doc of Doc_List loop
          Put_Document (Doc);
       end loop;

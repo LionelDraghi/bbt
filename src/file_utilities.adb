@@ -54,7 +54,7 @@ package body File_Utilities is
          if On_Windows then
             return Ada.Strings.Fixed.Equal_Case_Insensitive (S1, S2);
          else
-            return S1 = S2;
+            return Standard."=" (S1, S2);
          end if;
       end "=";
 

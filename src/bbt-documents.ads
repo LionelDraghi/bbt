@@ -62,18 +62,51 @@ private package BBT.Documents is
    package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, String);
 
+   --  type Text_Sources is (Code_Span, Code_Block, File);
+   --  -- Most steps accepts a text as object, that is either :
+   --  -- - provided on the same line within backquote (Code Span in Markdown parlance)
+   --  --   > - Then I get `result=10
+   --  -- - provided after the step on multiple lines between code fence line "```"
+   --  --   > - Then I get
+   --  --   >   ``
+   --  --   >   Provided under
+   --  --   >   LGPL licence
+   --  --   >   ``
+   --  -- - to be read in a file
+   --  --   > - Then I get file `expected.txt`
+
+   --  type Object_Text_Type (Source : Text_Sources := Code_Span) is record
+   --     File_Name : Unbounded_String := Null_Unbounded_String;
+   --     -- File_Name is common to Code_Block and File
+   --     case Source is
+   --        when Code_Span =>
+   --           Object_String : Unbounded_String := Null_Unbounded_String;
+   --        when Code_Block =>
+   --           File_Content  : Text             := Empty_Text;
+   --           -- On A Pas Le Nom Du Code Block!
+   --        when File =>
+   --           File_Type : Ada.Directories.File_Kind
+   --             := Ada.Directories.Ordinary_File;
+   --     end case;
+   --  end record;
+   --  procedure Put_Image
+   --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+   --     S      :        Object_Text_Type);
+
    -- --------------------------------------------------------------------------
    type Step_Type is record
-      Cat             : Extended_Step_Categories  := Unknown;
-      Action          : Actions                   := None;
-      Step_String     : Unbounded_String          := Null_Unbounded_String;
-      Location        : Location_Type;
-      Subject_String  : Unbounded_String          := Null_Unbounded_String;
-      Object_String   : Unbounded_String          := Null_Unbounded_String;
-      File_Type       : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
-      Ignore_Order    : Boolean                   := True;
-      File_Content    : Text                      := Empty_Text;
-      Parent_Scenario : access Scenario_Type;
+      Cat              : Extended_Step_Categories  := Unknown;
+      Action           : Actions                   := None;
+      Step_String      : Unbounded_String          := Null_Unbounded_String;
+      Location         : Location_Type;
+      Subject_String   : Unbounded_String          := Null_Unbounded_String;
+      -- Object           : Object_Text_Type;
+      Object_String    : Unbounded_String          := Null_Unbounded_String;
+      Object_File_Name : Unbounded_String          := Null_Unbounded_String;
+      File_Type        : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      Ignore_Order     : Boolean                   := True;
+      File_Content     : Text                      := Empty_Text;
+      Parent_Scenario  : access Scenario_Type;
    end record with Put_Image => Put_Image;
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

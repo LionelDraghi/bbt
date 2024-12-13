@@ -15,6 +15,7 @@
 | When  |     |        | successfully run   | `text`            | RUN_WITHOUT_ERROR       |  
 | When  |     |        | successfully run   | `cmd` [or `cmd`]* | RUN_WITHOUT_ERROR       |  
 | Then  |     |        | get                |                   | OUTPUT_IS               |  
+| Then  |     |        | get                | `file`            | OUTPUT_IS               |  
 | Then  |     |        | get                | `text`            | OUTPUT_IS               |  
 | Then  |     |        | get                | error             | ERROR_RETURN_CODE       |  
 | Then  |     |        | get no             | output            | NO_OUTPUT               |  
@@ -27,8 +28,10 @@
 | Then  |     |        | is no              | `dir`             | CHECK_NO_DIR            |  
 | Then  |     |        | is no              | error             | NO_ERROR_RETURN_CODE    |  
 | Then  |     | `file` | does not contain   |                   | FILE_DOES_NOT_CONTAIN   |  
+| Then  |     | `file` | does not contain   | `file`            | FILE_DOES_NOT_CONTAIN   |  
 | Then  |     | `file` | does not contain   | `text`            | FILE_DOES_NOT_CONTAIN   |  
 | Then  |     | `file` | contains           |                   | FILE_CONTAINS           |  
+| Then  |     | `file` | contains           | `file`            | FILE_CONTAINS           |  
 | Then  |     | `file` | contains           | `text`            | FILE_CONTAINS           |  
 | Then  |     | `file` | is                 |                   | FILE_IS                 |  
 | Then  |     | `file` | is                 | `file`            | FILE_IS                 |  

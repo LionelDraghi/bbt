@@ -13,9 +13,9 @@
   - [X] scenario [1.1 : simple use (single file, no globbing)](../examples/rpl_case_insensitivity.md) pass  
 
 
-## [uut_version.md](../examples/uut_version.md)  
+## [sut_version.md](../examples/sut_version.md)  
 
-  - [X] scenario [I want to know sut version](../examples/uut_version.md) pass  
+  - [X] scenario [I want to know sut version](../examples/sut_version.md) pass  
 
 
 ------------------

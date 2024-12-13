@@ -127,13 +127,13 @@
 
 ## [A140_Unordered_Keyword.md](../features/A140_Unordered_Keyword.md)  
 
-  ### Feature: when the modifyer `unordered` is given after `get`, order of line is ignored  
+  ### Feature: when the modifier `unordered` is given after `get`, order of line is ignored  
 
   Feature background   
-  - [X] scenario ["I get" without the modifyer](../features/A140_Unordered_Keyword.md) pass  
+  - [X] scenario ["I get" without the modifier](../features/A140_Unordered_Keyword.md) pass  
 
   Feature background   
-  - [X] scenario [same "I get" with the modifyer](../features/A140_Unordered_Keyword.md) pass  
+  - [X] scenario [same "I get" with the modifier](../features/A140_Unordered_Keyword.md) pass  
 
 
 ## [A150_Background_Keyword.md](../features/A150_Background_Keyword.md)  

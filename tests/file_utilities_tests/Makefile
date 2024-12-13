@@ -24,9 +24,8 @@ test_file_utilities:
 	alr build
 
 check: test_file_utilities
-	./test_file_utilities >> test_file_utilities.md
+	@ ./test_file_utilities > ../../docs/tests/test_file_utilities.md && echo 3. File_Utilities unit tests OK ========== || echo 3. File_Utilities unit tests KO "******"
 	@ echo
-	@ echo Tests [Successful]
 	
 doc:
 

@@ -1,4 +1,4 @@
-# Feature: when the modifyer `unordered` is given after `contains`, order of line is ignored
+# Feature: when the modifier `unordered` is given after `contains`, order of line is ignored
 
 # Background:
 
@@ -10,7 +10,7 @@ Orchids
 Petunia
 ```
 
-# Scenario: "contains" without the modifyer
+# Scenario: "contains" without the modifier
 
 - Given the file `scenario1.md`
 ```
@@ -27,7 +27,7 @@ Orchids
 - Then I get an error
 (because Rose stands after Orchids in the original file)
 
-# Scenario: same "contains" but with the "unordered" modifyer
+# Scenario: same "contains" but with the "unordered" modifier
 
 - When I run `sut read flowers.txt`
 - Then output contains (unordered)

@@ -151,10 +151,10 @@ package body BBT.Scenarios.Files is
          -- next one.
 
          Line_Processing : declare
-            Line   : aliased constant String  := Get_Line (Input);
-            Attrib : constant Line_Attributes := Parse_Line
+            Line     : aliased constant String  := Get_Line (Input);
+            Attrib   : constant Line_Attributes := Parse_Line
               (Line'Access, MDG_Lexer_Context, Loc);
-            S      : Step_Type;
+            S        : Step_Type;
             Cmd_List : Cmd_Lists.Vector;
 
          begin

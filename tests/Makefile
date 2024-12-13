@@ -4,7 +4,7 @@ check: ../bbt ../sut
 	# - rpl : on windows, you'll find one in the GnuWin32 package
 	#         On my Debian, it' not the same rpl, but fortunately command lines are similar  
 	# - gcc
-	#
+
 ifeq ($(OS), Windows_NT)
 	echo $(OS)
 	@ - ln -fs ../sut sut.exe
@@ -33,4 +33,5 @@ doc:
 clean:
 	@ - rm -f *.out main bbt sut gcc rpl
 	@ - rm -rf dir*
+	@ $(MAKE) clean --directory=file_utilities_tests
 

@@ -55,6 +55,10 @@ private package BBT.IO is
       Value  : Location_Type);
    No_Location : constant Location_Type;
 
+   function File   (Loc : Location_Type) return String;
+   function Line   (Loc : Location_Type) return Ada.Text_IO.Count;
+   function Column (Loc : Location_Type) return Ada.Text_IO.Count;
+
    -- --------------------------------------------------------------------------
    function Image (Loc : Location_Type) return String;
    --  Purpose:

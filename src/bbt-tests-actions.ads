@@ -24,8 +24,8 @@ private package BBT.Tests.Actions is
 
    procedure Setup_No_File (Step : Step_Type);
    procedure Setup_No_Dir (Step : Step_Type);
-   --  --  Clean up, with interactive confirmation by user,
-   --  --  unless Settings.Assume_Yes is set.
+   -- Clean up, with interactive confirmation by user,
+   -- unless Settings.Assume_Yes is set.
 
    procedure Return_Error (Last_Returned_Code : Integer;
                            Step               : Step_Type);

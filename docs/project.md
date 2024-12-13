@@ -40,7 +40,7 @@ Project  <!-- omit from toc -->
 - append / remove  
   To append / remove text to an existing text file
 
-- implement "case insensitive" and "ignore blank lines" modifyers
+- implement "case insensitive" and "ignore blank lines" modifiers
   
 - explore the possibility to run multiple exe asynchronously, while staying simple.  
   Maybe by using the AdaCore spawn lib.

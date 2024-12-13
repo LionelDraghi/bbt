@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [Fixed]   Ambiguity in all steps with a `string` object : if there is the `file` keyword in the object
+              part of the step, then the expected output is in the file, otherwise, it's the string.
+  - [Fixed]   `explain` output is now readable!
   - [Added]   `-k` | `--keep_going` implemented. Without, bbt stop when a test fails.
   - [Added]   *file is equal to file* form added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
   - [Added]   first implementation of a progress bar, `-sb` option

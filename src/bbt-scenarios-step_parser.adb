@@ -135,9 +135,10 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, No_Subject,   Is_V,     Error)       := Error_Return_Code;    -- then there is an error
       G (Then_P, No_SA, No_Subject,   Is_No,    Error)       := No_Error_Return_Code; -- then there is no error
       G (Then_P, No_SA, Output_Subj,  Is_V,     Object_Text) := Output_Is; -- then output is `msg`
-      G (Then_P, No_SA, Output_Subj,  Is_V,     Object_File) := Output_Is; -- then output is `expected.txt`
+      G (Then_P, No_SA, Output_Subj,  Is_V,     Object_File) := Output_Is; -- then output is file `expected.txt`
       G (Then_P, No_SA, Output_Subj,  Is_V,     No_Object)   := Output_Is; -- then output is followed by code fenced content
       G (Then_P, No_SA, No_Subject,   Get,      Object_Text) := Output_Is; -- then I get `msg`
+      G (Then_P, No_SA, No_Subject,   Get,      Object_File) := Output_Is; -- Then I get file `flowers2.txt`
       G (Then_P, No_SA, No_Subject,   Get,      No_Object)   := Output_Is; -- then I get followed by code fenced content
       G (Then_P, No_SA, Output_Subj,  Contains, Object_Text) := Output_Contains; -- then output contains `msg`
       G (Then_P, No_SA, Output_Subj,  Contains, No_Object)   := Output_Contains; -- then output contains followed by code fenced content
@@ -147,9 +148,11 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
       G (Then_P, No_SA, Subject_File, Is_V,     Object_File) := File_Is; -- then `config.ini` is equal to file `expected/config.ini`
       G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
+      G (Then_P, No_SA, Subject_File, Contains, Object_File) := File_Contains; -- Then `config.ini` contains `snippet.txt` file
       G (Then_P, No_SA, Subject_File, Contains, No_Object)   := File_Contains; -- Then `config.ini` contains followed by code fenced content
-      G (Then_P, No_SA, Subject_File, Does_Not_Contain, Object_Text) := File_Does_Not_Contain; -- Then `config.ini` contains `--version`
-      G (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object)   := File_Does_Not_Contain; -- Then `config.ini` contains followed by code fenced content
+      G (Then_P, No_SA, Subject_File, Does_Not_Contain, Object_Text) := File_Does_Not_Contain; -- Then `config.ini` does not contain `--version`
+      G (Then_P, No_SA, Subject_File, Does_Not_Contain, Object_File) := File_Does_Not_Contain; -- Then `config.ini` does not contain `snippet.txt` file
+      G (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object)   := File_Does_Not_Contain; -- Then `config.ini` does not contain followed by code fenced content
       G (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj)  := No_Output; -- then I get no output
       G (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj)  := No_Output; -- then there is no output
       return G;
@@ -215,6 +218,9 @@ package body BBT.Scenarios.Step_Parser is
       Step_String      : Unbounded_String         := Null_Unbounded_String;
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
       Object_String    : Unbounded_String         := Null_Unbounded_String;
+      Object_File_Name : Unbounded_String         := Null_Unbounded_String;
+      --  -- Object_Text      : Object_Text_Type;
+      --  Text_Source      : Text_Sources := Code_Span;
       Ignore_Order     : Boolean                  := False;
       -- by default, order of expected output is significant
 
@@ -224,6 +230,26 @@ package body BBT.Scenarios.Step_Parser is
 
       function In_Subject_Part return Boolean is (Verb  = No_Verb);
       function In_Object_Part  return Boolean is (Verb /= No_Verb);
+
+      --  -- -----------------------------------------------------------------------
+      --  function Build_Object_Text (Source        : Text_Sources;
+      --                              Object_String : Unbounded_String;
+      --                              File_Name     : Unbounded_String;
+      --                              File_Type     : File_Kind)
+      --                              return Object_Text_Type is
+      --  begin
+      --     case Source is
+      --        when Code_Span =>
+      --           return (Code_Span,
+      --                   File_Name     => File_Name,
+      --                   Object_String => Object_String);
+      --        when Code_Block =>
+      --           return (Code_Block, File_Name, Empty_Text);
+      --        when File =>
+      --           return (File, File_Name, File_Type);
+      --     end case;
+      --  end Build_Object_Text;
+
 
    begin
       Step_String := Line;
@@ -359,6 +385,10 @@ package body BBT.Scenarios.Step_Parser is
                         elsif In_Object_Part then
                            Object := Object_Dir;
 
+                           Object_File_Name := Object_String;
+                           Object_String    := Null_Unbounded_String;
+                           --  Text_Source      := File;
+                           --  File_Type        := Directory;
                         end if;
 
                      elsif Lower_Keyword = "file" then
@@ -370,6 +400,12 @@ package body BBT.Scenarios.Step_Parser is
                         elsif In_Object_Part then
                            Object := Object_File;
 
+                           -- If file name was given before keyword "file",
+                           -- then the file name is in Object_String
+                           Object_File_Name := Object_String;
+                           Object_String    := Null_Unbounded_String;
+                           --  Text_Source      := File;
+                           --  File_Type        := Ordinary_File;
                         end if;
 
                      elsif Lower_Keyword = "unordered" then
@@ -387,7 +423,15 @@ package body BBT.Scenarios.Step_Parser is
                      Subject_String := To_Unbounded_String (Tok);
 
                   else
-                     Object_String := To_Unbounded_String (Tok);
+                     if Object = Object_File or Object = Object_Dir then
+                        -- "file" or "dir" keyword already meet
+                        Object_File_Name := To_Unbounded_String (Tok);
+                     else
+                        -- Otherwise, we don't know yet if the Code_Span is
+                        -- a simple string or a file name.
+                        Object_String := To_Unbounded_String (Tok);
+                        -- Text_Source   := Code_Span;
+                     end if;
                   end if;
 
                   if Object = Command_List then
@@ -426,7 +470,7 @@ package body BBT.Scenarios.Step_Parser is
                            -- Complex case where it depends not only on the
                            -- verb...
                            if Subject = No_Subject then
-                              -- Given there is a `config.ini` file
+                              -- Example : Given there is a `config.ini` file
                               if File_Type = Directory then
                                  Object := Object_Dir;
                               else
@@ -454,7 +498,7 @@ package body BBT.Scenarios.Step_Parser is
       end loop Line_Processing;
 
       -- Some coherency tests to give to the user a more helpful
-      -- message than "Unrecogniezd Step"
+      -- message than "Unrecognized Step"
       declare
          use Ada.Containers;
       begin
@@ -478,16 +522,17 @@ package body BBT.Scenarios.Step_Parser is
 
       Context := Cat;
 
-      return (Cat,
-              Action,
-              Step_String,
-              Loc,
-              Subject_String,
-              Object_String,
-              File_Type,
-              Ignore_Order,
-              File_Content    => Empty_Text,
-              Parent_Scenario => null);
+      return (Cat              => Cat,
+              Action           => Action,
+              Step_String      => Step_String,
+              Location         => Loc,
+              Subject_String   => Subject_String,
+              Object_String    => Object_String,
+              Object_File_Name => Object_File_Name,
+              File_Type        => File_Type,
+              Ignore_Order     => Ignore_Order,
+              File_Content     => Empty_Text,
+              Parent_Scenario  => null);
 
    end Parse;
 

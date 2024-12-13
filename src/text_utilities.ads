@@ -138,6 +138,8 @@ package Text_Utilities is
 
    function Image (C : Cursor) return String is (Element (C));
 
+   -- To get a normal image, and not all lines concatenated
+   -- on the same line as when using 'Image
    function Text_Image is new List_Image.Image
      (Cursors => Text_Cursors,
       Style   => List_Image.Unix_Predefined_Styles.Simple_One_Per_Line_Style);

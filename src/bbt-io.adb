@@ -49,6 +49,20 @@ package body BBT.IO is
      (Topic in Topics and then Enabled_Topics (Topic));
 
    -- --------------------------------------------------------------------------
+   function File   (Loc : Location_Type) return String is
+   begin
+      return +Loc.File;
+   end File;
+   function Line   (Loc : Location_Type) return Ada.Text_IO.Count is
+   begin
+      return Loc.Line;
+   end Line;
+   function Column (Loc : Location_Type) return Ada.Text_IO.Count is
+   begin
+      return Loc.Column;
+   end Column;
+
+   -- --------------------------------------------------------------------------
    -- Function: GNU_Prefix
    --
    -- Purpose:
@@ -211,7 +225,6 @@ package body BBT.IO is
       if Is_Open (File) then
          return (File   => +Short_Path (From_Dir => Ref_Dir.all,
                                         To_File  => Name (File)),
-                 --                     Prefix   => "./"),
                  Line   => Line (File),
                  Column => Col  (File));
       else

@@ -25,8 +25,9 @@ package body BBT.Tests.Runner is
 
   -- -----------------------------------------------------------------------
    function Subject_Or_Object_String (Step : Step_Type) return String is
-     (To_String (if Step.Object_String = Null_Unbounded_String then
-           Step.Subject_String else Step.Object_String));
+     (To_String (if Step.Object_File_Name = Null_Unbounded_String then
+           Step.Subject_String else Step.Object_File_Name));
+   -- Fixme: Clearly not confortable with that function, it's magic.
 
    Return_Code : Integer := 0;
 
@@ -79,7 +80,8 @@ package body BBT.Tests.Runner is
                Output_Contains (Get_Text (Output_File_Name (The_Doc)), Step);
 
             when Output_Does_Not_Contain =>
-               Output_Does_Not_Contain (Get_Text (Output_File_Name (The_Doc)), Step);
+               Output_Does_Not_Contain (Get_Text (Output_File_Name (The_Doc)),
+                                        Step);
 
             when File_Is =>
                Files_Is (Step);
@@ -134,9 +136,9 @@ package body BBT.Tests.Runner is
                               Step.Location);
          end;
 
-         --  if IO.Some_Error and not Settings.Keep_Going then
-         --     exit Step_Processing;
-         --  end if;
+         if IO.Some_Error and not Settings.Keep_Going then
+            exit Step_Processing;
+         end if;
       end loop Step_Processing;
 
    end Run_Scenario;
@@ -278,7 +280,8 @@ package body BBT.Tests.Runner is
                   IO.New_Line (Verbosity => Verbose);
 
                   if F.Scenario_List.Is_Empty then
-                     Put_Warning ("No scenario in feature " & F.Name'Image & "  ",
+                     Put_Warning ("No scenario in feature " &
+                                    F.Name'Image & "  ",
                                   F.Location);
                   else
                      Run_Scenario_List (F.Scenario_List, Path_To_Scen);
@@ -301,6 +304,10 @@ package body BBT.Tests.Runner is
          end;
 
          Created_File_List.Delete_All;
+
+         if IO.Some_Error and not Settings.Keep_Going then
+            exit;
+         end if;
 
       end loop;
 

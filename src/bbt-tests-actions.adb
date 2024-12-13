@@ -54,14 +54,16 @@ package body BBT.Tests.Actions is
          -- File content provided in code fenced lines
          return Step.File_Content;
 
+      elsif Step.Object_File_Name /= Null_Unbounded_String and then
+        File_Exists (+Step.Object_File_Name)
+      then
+         -- The string denotes a file
+         return Get_Text (+Step.Object_File_Name);
+
       elsif Step.Object_String /= Null_Unbounded_String then
-         if File_Exists (+Step.Object_String) then
-            -- The string denotes a file
-            return Get_Text (+Step.Object_String);
-         else
-            -- The string is the content
-            return [1 => +Step.Object_String];
-         end if;
+         -- The string is the content
+         return [1 => +Step.Object_String];
+
       else
          IO.Put_Error ("No file or string given", Step.Location);
          raise No_File_Or_String_Given;
@@ -108,7 +110,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Create_If_None (Step : Step_Type) is
       Success   : Boolean;
-      File_Name : constant String := To_String (Step.Subject_String);
+      File_Name : constant String := +Step.Object_File_Name;
    begin
       IO.Put_Line ("Create_If_None " & File_Name, Verbosity => Debug);
       if Step.File_Type = Ordinary_File then
@@ -118,8 +120,7 @@ package body BBT.Tests.Actions is
          Created_File_List.Add (File_Name);
          Put_Step_Result (Step     => Step,
                           Success  => File_Exists (File_Name),
-                          Fail_Msg => "Unable To Create File " &
-                            File_Name'Image,
+                          Fail_Msg => "Unable To Create File " & File_Name,
                           Loc      => Step.Location);
          if Success and IO.Is_Authorized (IO.Verbose) then
             Put_Text (Step.File_Content);
@@ -322,7 +323,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Setup_No_File (Step : Step_Type) is
       File_Name : constant String :=
-                    +Step.Subject_String & (+Step.Object_String);
+                    +Step.Subject_String & (+Step.Object_File_Name);
    begin
       IO.Put_Line ("Setup_No_File " & File_Name, Verbosity => Debug);
       Delete_File (File_Name);
@@ -335,7 +336,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Setup_No_Dir (Step : Step_Type) is
       Dir_Name : constant String :=
-                   +Step.Subject_String & (+Step.Object_String);
+                   +Step.Subject_String & (+Step.Object_File_Name);
    begin
       IO.Put_Line ("Setup_No_Dir " & Dir_Name, Verbosity => Debug);
       Delete_Tree (Dir_Name);
