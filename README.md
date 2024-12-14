@@ -97,10 +97,10 @@ bbt also uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-span
 It's not only because it makes the doc nicer, but also because otherwise it would be impossible to distinguish arguments from free text.  
  
 Note that steps accepting a fenced code block, like  :  
-` - Then the output contains `  
-`   ``` `  
-`   20 files processed `  
-`   ``` `   
+> - Then the output contains  
+>   ```   
+>   20 files processed   
+>   ```    
 
 also accept the code span shortcut when there is only one line.  
 `` - Then the output contains `20 files processed` ``  
