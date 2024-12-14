@@ -12,6 +12,9 @@ package File_Utilities is
    Separator : constant Character := GNAT.Directory_Operations.Dir_Separator;
    -- To remove the dependency to GNAT, set it explicitly to '\' or '/'
 
+   -- -----------------------------------------------------------------------
+   function On_Windows return Boolean is (Separator = '\');
+
    -- --------------------------------------------------------------------------
    function Short_Path (From_Dir : String;
                         To_File  : String;

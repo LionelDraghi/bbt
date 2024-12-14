@@ -34,9 +34,6 @@ package body File_Utilities is
       -- and '/' or '\' on Windows
 
       -- -----------------------------------------------------------------------
-      function On_Windows return Boolean is (File_Utilities.Separator = '\');
-
-      -- -----------------------------------------------------------------------
       function Remove_Heading_Separator (From : String) return String is
         (if Is_In (From (From'First), Separators)
          then (From (From'First + 1 .. From'Last))
