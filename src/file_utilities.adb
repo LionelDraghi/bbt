@@ -34,6 +34,9 @@ package body File_Utilities is
       -- and '/' or '\' on Windows
 
       -- -----------------------------------------------------------------------
+      function On_Windows return Boolean is (File_Utilities.Separator = '\');
+
+      -- -----------------------------------------------------------------------
       function Remove_Heading_Separator (From : String) return String is
         (if Is_In (From (From'First), Separators)
          then (From (From'First + 1 .. From'Last))
@@ -42,11 +45,6 @@ package body File_Utilities is
       -- Dir and File are From_Dir and To_File without final Separator:
       Dir  : constant String := Remove_Final_Separator (From_Dir);
       File : constant String := Remove_Final_Separator (To_File);
-
-      -- B1, B2 : Boolean;
-
-      -- -----------------------------------------------------------------------
-      function On_Windows return Boolean is (File_Utilities.Separator = '\');
 
       -- -----------------------------------------------------------------------
       function "=" (S1, S2 : String) return Boolean is
@@ -58,16 +56,20 @@ package body File_Utilities is
          end if;
       end "=";
 
-   begin
-      --  B1 := Is_Root_Directory_Name (Dir);
-      --  B2 := Is_Full_Name (File);
+      -- -----------------------------------------------------------------------
+      function "=" (C1, C2 : Character) return Boolean is
+        ([1 => C1] = [1 => C2]);
+        -- call the "=" equal function above that is case insensitive on Windows 
 
+   begin
       -- -----------------------------------------------------------------------
       if (Is_Root_Directory_Name (Dir) and then -- Is_Full_Name (File))
           Dir = File (File'First .. File'First + Dir'Length - 1))
-          -- From_Dir = "/"  and File = "/usr/foo"
-          --  (or "c:\" and "c:\foo" on Windows)
-          or else Is_Current_Directory_Name (Dir)
+        -- Dir = "/"  and File = "/usr/foo"
+        --  (or "c:\" and "c:\foo" on Windows)
+        or else Is_Current_Directory_Name (Dir)
+        -- Dir = "."
+
       then
          -- On Windows, if on the same drive, returns File without the drive
          if (On_Windows and File'Length > 1 and Dir'Length > 1) and then

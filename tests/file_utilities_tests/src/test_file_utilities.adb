@@ -126,6 +126,18 @@ begin
              Expected => "mysite/site/d1/idx.txt");
    end if;
 
+   if On_Windows then
+      Check (Title    => "Case sensitivity",
+          From_Dir => "c:\Users\Lionel\",
+          To_File  => "C:\USERS\Xavier\PrOJ",
+          Expected => "..\Xavier\PrOJ");
+   else
+      Check (Title    => "Case sensitivity",
+             From_Dir => "/home/tests",
+             To_File  => "/home/Tests/mysite/site/d1/idx.txt",
+             Expected => "../Tests/mysite/site/d1/idx.txt");
+   end if;
+
    Check (Title    => "Dir with final /",
           From_Dir => "/home/tests/",
           To_File  => "/home/tests/mysite/site/d1/idx.txt",
@@ -244,7 +256,7 @@ begin
              Expected => "d:\Users\Xavier\Proj");
       Check (Title    => "Windows Path, case sensitivity",
              From_Dir => "c:\Users\Lionel\",
-             To_File  => "c:\USERS\Xavier\PrOJ",
+             To_File  => "C:\USERS\Xavier\PrOJ",
              Expected => "..\Xavier\PrOJ");
       Check (Title    => "UNC Path",
              From_Dir => "\\Volume\Server\Users\Lionel\",
