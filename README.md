@@ -80,12 +80,12 @@ A distinctive feature of bbt is that it directly understand those almost normal 
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt take into account only some keywords to recognize the skeleton of the sentence, but does not understand the whole sentence.  
 
 So when you write :  
-> *- When I run `gcc --version` *  
-> *- Then I get `version 15.0.0` (Fix #2398 and #2402)*    
+> - When I run `gcc --version`  
+> - Then I get `version 15.0.0` (Fix #2398 and #2402)    
 
 bbt actually reads :  
-> *- when run `gcc --version` *  
-> *- then get `version 15.0.0` *    
+> - when run `gcc --version`   
+> - then get `version 15.0.0`     
   
 And this is what gives the ability to write steps in natural language. 
 
