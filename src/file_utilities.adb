@@ -59,7 +59,7 @@ package body File_Utilities is
       -- -----------------------------------------------------------------------
       function "=" (C1, C2 : Character) return Boolean is
         ([1 => C1] = [1 => C2]);
-        -- call the "=" equal function above that is case insensitive on Windows 
+        -- call the "=" equal function above that is case insensitive on Windows
 
    begin
       -- -----------------------------------------------------------------------
@@ -88,10 +88,13 @@ package body File_Utilities is
       if Dir = File then return '.' & Separator; end if;
       -- Otherwise, the function returns the weird "../current_dir"
 
-      -- if Dir (Dir'First .. Dir'First + 1) /= File (File'First .. File'First + 1)
-      if Dir (Dir'First) /= File (File'First) then return File; end if;
+      if Dir (Dir'First .. Dir'First + 1) /= File (File'First .. File'First + 1)
+        -- if Dir (Dir'First) /= File (File'First)
+      then return File; end if;
       -- Optimization for a frequent case: there is no common path between
       -- Dir and File, so we return immediately File
+      -- Need to be done on 2 chars, because on Windows dir may be "C:"
+      -- and the file name start with "c".
 
       declare
          Length : constant Natural := Natural'Min (Dir'Length, File'Length);

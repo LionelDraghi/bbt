@@ -250,6 +250,10 @@ begin
              From_Dir => "c:\Users\Lionel\",
              To_File  => "c:\Users\Xavier\Proj",
              Expected => "..\Xavier\Proj");
+      Check (Title    => "Windows Path",
+             From_Dir => "x:",
+             To_File  => "Xavier\Proj",
+             Expected => "Xavier\Proj");
       Check (Title    => "Windows Path, not on the same drive",
              From_Dir => "c:\Users\Lionel\",
              To_File  => "d:\Users\Xavier\Proj",
