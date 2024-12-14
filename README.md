@@ -174,7 +174,11 @@ Nevertheless, bbt is working.
 It has as a serious [test base](docs/tests/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
 
-btt compile on Windows and Mac OS (at least the Alire version), but is currently tested only on my Linux amd64 box.
+btt compile on Linux, Windows and Mac OS (at least the Alire version), but is currently tested only on Linux (my dev. platform) and Windows.
+
+On Windows, 3 tests fail (3 out of 65 on version 0.0.6), 2 because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
+I'm not yet able to specify per platform expected results, so this is not going to be fixed quickly. 
+That said, I'm not aware of any Windows specific bug.
 
 ## Installation
 
