@@ -45,7 +45,7 @@ begin
    Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
    Put_Line ("   -ed  | --exec_dir         : run command in exec_dir instead of current dir");
    Put_Line ("          --strict           : warning on steps not following the Given/When/Then order.");
-   Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
+   -- Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
 
    New_Line;
    Put_Line ("Debug command:");
