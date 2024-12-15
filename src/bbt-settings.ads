@@ -43,6 +43,10 @@ private package BBT.Settings is
    function Exec_Dir return String;
    -- Dir where the tests will be run, the temp file created, etc.
 
+   procedure Set_Tmp_Dir (Dir_Name : String);
+   function Tmp_Dir return String;
+   -- Dir where bbt created tmp files are stored.
+
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String;
 

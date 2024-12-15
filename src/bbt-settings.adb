@@ -12,12 +12,13 @@ package body BBT.Settings is
    -- --------------------------------------------------------------------------
    -- Most of the variable here are "write once, read more".
    -- To avoid the cost of Unbounded strings manipulation,
-   -- they are implemented as access to String
-   -- Runfl_Name      : access String := null;
-   -- Cmd_Line        : Unbounded_String := Null_Unbounded_String;
-   Launch_Dir                  : constant access String :=
-     new String'(Ada.Directories.Current_Directory);
-   Outfile_Name, Exec_Dir_Name : access String := null;
+   -- they are implemented as access to String, allocated once and
+   -- never deallocated.
+   Launch_Dir   : constant access String :=
+     new String'(Ada.Directories.Current_Directory);  
+   Outfile_Name,
+   Exec_Dir_Name,
+   Tmp_Dir_Name : access String := null;
 
    -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
@@ -48,7 +49,17 @@ package body BBT.Settings is
        else Exec_Dir_Name.all);
 
    -- --------------------------------------------------------------------------
-   function Output_File_Dir return String is (Exec_Dir);
+   procedure Set_Tmp_Dir (Dir_Name : String) is
+   begin
+      Tmp_Dir_Name := new String'(Dir_Name);
+   end Set_Tmp_Dir;
+
+   function Tmp_Dir return String is
+     (if Tmp_Dir_Name = null then Ada.Directories.Current_Directory
+      else Tmp_Dir_Name.all);
+
+   -- --------------------------------------------------------------------------
+   function Output_File_Dir return String renames Tmp_Dir;
 
    -- --------------------------------------------------------------------------
    procedure Set_Result_File (File_Name : String) is

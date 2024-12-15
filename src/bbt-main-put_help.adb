@@ -18,14 +18,14 @@ begin
    Put_Line ("If no file name provided, read *.md (recursively if ""-r"")");
    New_Line;
    Put_Line ("Command :");
-   Put_Line ("   run                    : the default command");
-   Put_Line ("   -lf  | --list_files      : list Scenario files found");
-   Put_Line ("   -lk  | --list_keywords   : list Step keywords");
-   Put_Line ("   -lg  | --list_grammar    : list rules for Step analysis");
-   Put_Line ("   -e   | --explain         : explain what bbt understand from Scenarios files");
+   -- Put_Line ("   run                   : the default command");
+   Put_Line ("   lf  | list_files      : list Scenario files found");
+   Put_Line ("   lk  | list_keywords   : list Step keywords");
+   Put_Line ("   lg  | list_grammar    : list rules for Step analysis");
+   Put_Line ("   ex  | explain         : explain what bbt understand from Scenarios files");
    Put_Line ("                              (do not run the scenarios)");
-   Put_Line ("   -ct  | --create-template : create a commented example of rules file");
-   Put_Line ("   -h   | --help            : this message");
+   Put_Line ("   ct  | create-template : create a commented example of rules file");
+   Put_Line ("   he  | help            : this message");
    New_Line;
    Put_Line ("Options :");
    Put_Line ("          --yes            : do not prompt if deletion is needed in");
@@ -43,7 +43,8 @@ begin
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
    Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
-   Put_Line ("   -ed  | --exec_dir         : run command in exec_dir instead of current dir");
+   Put_Line ("   -ed  | --exec_dir 'dir'   : run command in dir instead of current dir");
+   Put_Line ("   -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir");
    Put_Line ("          --strict           : warning on steps not following the Given/When/Then order.");
    -- Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
 

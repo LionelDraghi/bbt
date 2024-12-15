@@ -8,7 +8,7 @@
 with BBT.IO; use BBT.IO;
 with BBT.Settings;
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+-- with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Directories;
 with Ada.Text_IO;
@@ -47,23 +47,24 @@ begin
 
       begin
          -- Commands -----------------------------------------------------------
-         if  Opt = "-h" or Opt = "--help" then
+         -- Note that after v0.0.6, commands starting with '-' are deprecated
+         if  Opt in "-h" | "--help" | "he" | "help" then
             Settings.Help_Needed := True;
             return;
 
-         elsif Opt = "-e" or Opt = "--explain" then
+         elsif Opt in "-e" | "--explain" | "ex" | "explain" then
             Settings.Explain := True;
 
-         elsif Opt = "-lf" or Opt = "--list_files" then
+         elsif Opt in "-lf" | "--list_files" | "lf" | "list_files" then
             Settings.List_Files := True;
 
-         elsif Opt = "-lk" or Opt = "--list_keywords" then
+         elsif Opt in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
             Settings.List_Keywords := True;
 
-         elsif Opt = "-lg" or Opt = "--list_grammar" then
+         elsif Opt in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
             Settings.List_Grammar := True;
 
-         elsif Opt = "-ct" or Opt = "--create_template" then
+         elsif Opt in "-ct" | "--create_template" | "ct" | "create_template" then
             Settings.Create_Template := True;
 
             -- Options ---------------------------------------------------------
@@ -82,6 +83,10 @@ begin
          elsif Opt = "-ed" or Opt = "--exec_dir" then
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
+
+         elsif Opt = "-td" or Opt = "--tmp_dir" then
+            Next_Arg;
+            Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
          elsif Opt = "-r" or Opt = "--recursive" then
             Settings.Recursive := True;

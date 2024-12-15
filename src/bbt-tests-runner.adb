@@ -232,6 +232,15 @@ package body BBT.Tests.Runner is
       -- First, let's move to a different exec dir, if any
       Ada.Directories.Set_Directory (Settings.Exec_Dir);
 
+      -- Put_Line ("+++++++++++++ tmp dir = " & Settings.Tmp_Dir);
+      if not Ada.Directories.Exists (Settings.Tmp_Dir)
+        -- and
+        -- then Kind (Settings.Tmp_Dir) = Directory)
+      then
+         -- Put_Line ("*************** tmp dir = " & Settings.Tmp_Dir);
+         Ada.Directories.Create_Path (Settings.Tmp_Dir);
+      end if;
+
       Status_Bar.Initialize_Progress_Bar (File_Count);
 
       --  Put_Line ("Time: " & Ada.Calendar.Formatting.Image
