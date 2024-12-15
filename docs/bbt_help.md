@@ -6,14 +6,13 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 If no file name provided, read *.md (recursively if "-r")
 
 Command :
-   run                    : the default command
-   -lf  | --list_files      : list Scenario files found
-   -lk  | --list_keywords   : list Step keywords
-   -lg  | --list_grammar    : list rules for Step analysis
-   -e   | --explain         : explain what bbt understand from Scenarios files
+   lf  | list_files      : list Scenario files found
+   lk  | list_keywords   : list Step keywords
+   lg  | list_grammar    : list rules for Step analysis
+   ex  | explain         : explain what bbt understand from Scenarios files
                               (do not run the scenarios)
-   -ct  | --create-template : create a commented example of rules file
-   -h   | --help            : this message
+   ct  | create-template : create a commented example of rules file
+   he  | help            : this message
 
 Options :
           --yes            : do not prompt if deletion is needed in
@@ -31,9 +30,9 @@ Options :
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
    -ot  | --output_tag 'tag' : include a specific tag in the results file
-   -ed  | --exec_dir         : run command in exec_dir instead of current dir
+   -ed  | --exec_dir 'dir'   : run command in dir instead of current dir
+   -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir
           --strict           : warning on steps not following the Given/When/Then order.
-   -sb  | --status_bar       : enable a progress bar in the terminal
 
 Debug command:
    -lt                    : list log topics
