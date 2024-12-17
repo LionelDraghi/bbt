@@ -78,9 +78,10 @@ package Text_Utilities is
                       Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True;
                       Sort_Texts         : Boolean := False;
-                      Identical          : out Boolean;
-                      Diff_Index         : out Natural);
-   -- If Test1 = Text2, return Identical = True and Diff_Index = 0
+                      Identical          : out Boolean);
+                      -- Diff_Index         : out Natural);
+   -- If Test1 = Text2, return Identical = True
+                      --  and Diff_Index = 0
    -- Otherwise, return False and Index of the first different line in Text1
 
    -- --------------------------------------------------------------------------

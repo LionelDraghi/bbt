@@ -65,6 +65,8 @@
 
   - [X] scenario [test `is equal to file` when files are *not* equal](../features/A065_Then_File_Equal_File_Code_Fence.md) pass  
 
+  - [X] scenario [test the negative form `is not equal to file`](../features/A065_Then_File_Equal_File_Code_Fence.md) pass  
+
 
 ## [A070_Then_Get_Code_Span.md](../features/A070_Then_Get_Code_Span.md)  
 
@@ -299,5 +301,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  65
+- Successful =  66
 - Empty      =  0

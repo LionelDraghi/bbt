@@ -42,33 +42,33 @@ begin
    Opt_Analysis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
 
       declare
-         Opt : constant String := Ada.Command_Line.Argument (Arg_Counter);
+         Arg : constant String := Ada.Command_Line.Argument (Arg_Counter);
          use Settings;
 
       begin
          -- Commands -----------------------------------------------------------
          -- Note that after v0.0.6, commands starting with '-' are deprecated
-         if  Opt in "-h" | "--help" | "he" | "help" then
+         if  Arg in "-h" | "--help" | "he" | "help" then
             Settings.Help_Needed := True;
             return;
 
-         elsif Opt in "-e" | "--explain" | "ex" | "explain" then
+         elsif Arg in "-e" | "--explain" | "ex" | "explain" then
             Settings.Explain := True;
 
-         elsif Opt in "-lf" | "--list_files" | "lf" | "list_files" then
+         elsif Arg in "-lf" | "--list_files" | "lf" | "list_files" then
             Settings.List_Files := True;
 
-         elsif Opt in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
+         elsif Arg in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
             Settings.List_Keywords := True;
 
-         elsif Opt in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
+         elsif Arg in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
             Settings.List_Grammar := True;
 
-         elsif Opt in "-ct" | "--create_template" | "ct" | "create_template" then
+         elsif Arg in "-ct" | "--create_template" | "ct" | "create_template" then
             Settings.Create_Template := True;
 
             -- Options ---------------------------------------------------------
-         elsif Opt = "-o" or Opt = "--output" then
+         elsif Arg = "-o" or Arg = "--output" then
             Next_Arg;
             Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
             IO.Enable_Tee (Settings.Result_File_Name,
@@ -76,71 +76,71 @@ begin
             -- Verbose is the right detail level for the Markdown output file,
             -- even if --quiet or -- verbose is set.
 
-         elsif Opt = "-ot" or Opt = "--output_tag" then
+         elsif Arg = "-ot" or Arg = "--output_tag" then
             Next_Arg;
             -- Fixme: opt -ot / --output_tag not yet coded
 
-         elsif Opt = "-ed" or Opt = "--exec_dir" then
+         elsif Arg = "-ed" or Arg = "--exec_dir" then
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
-         elsif Opt = "-td" or Opt = "--tmp_dir" then
+         elsif Arg = "-td" or Arg = "--tmp_dir" then
             Next_Arg;
             Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
-         elsif Opt = "-r" or Opt = "--recursive" then
+         elsif Arg = "-r" or Arg = "--recursive" then
             Settings.Recursive := True;
 
-         elsif Opt = "-k" or Opt = "--keep_going" then
+         elsif Arg = "-k" or Arg = "--keep_going" then
             Settings.Keep_Going := True;
 
-         elsif Opt = "-c" or Opt = "--cleanup" then
+         elsif Arg = "-c" or Arg = "--cleanup" then
             Settings.Cleanup := True;
 
-         elsif Opt = "--yes" then
+         elsif Arg = "--yes" then
             Settings.Yes := True;
 
-         elsif Opt = "-v" or Opt = "--verbose" then
+         elsif Arg = "-v" or Arg = "--verbose" then
             Set_Verbosity  (Verbose);
 
-         elsif Opt = "-q" or Opt = "--quiet" then
+         elsif Arg = "-q" or Arg = "--quiet" then
             Set_Verbosity  (Quiet);
 
-         elsif Opt = "-d" then
+         elsif Arg = "-d" then
             -- undocumented option
             Set_Verbosity  (Debug);
 
-         elsif Opt = "-ls" then
+         elsif Arg = "-ls" then
             -- undocumented option, list settings
             Settings.List_Settings := True;
 
-         elsif Opt = "--strict" then
+         elsif Arg = "--strict" then
             Settings.Strict_Gherkin := True;
 
-         elsif Opt = "-sb" or Opt = "--status_bar" then
+         elsif Arg = "-sb" or Arg = "--status_bar" then
             Settings.Status_Bar := True;
 
-         elsif Ada.Directories.Exists (Opt) then
+         elsif Ada.Directories.Exists (Arg) then
             -- if it's not an option, its a file name
-            case Kind (Opt) is
+            case Kind (Arg) is
                when Directory =>
                   Settings.No_File_Given := False;
                   Scenarios.Files.Find_BBT_Files
-                    (Start_In  => Opt,
+                    (Start_In  => Arg,
                      Recursive => Settings.Recursive);
 
                when Ordinary_File =>
                   Settings.No_File_Given := False;
-                  Scenarios.Files.Append_File (Opt);
+                  Scenarios.Files.Append_File (Arg);
 
                when Special_File =>
-                  IO.Put_Error ("Unknown file type """ & Opt & """");
+                  IO.Put_Error ("Unknown file type """ & Arg & """");
                   return;
 
             end case;
 
          else
-            IO.Put_Error ("Unknown option or file """ & Opt & """");
+            IO.Put_Error ("Unknown option or file """ & Arg & """");
 
          end if;
 

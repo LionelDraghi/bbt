@@ -36,6 +36,7 @@
 | Then  |     | `file` | is                 |                   | FILE_IS                 |  
 | Then  |     | `file` | is                 | `file`            | FILE_IS                 |  
 | Then  |     | `file` | is                 | `text`            | FILE_IS                 |  
+| Then  |     | `file` | is no              | `file`            | FILE_IS_NOT             |  
 | Then  |     | output | does not contain   |                   | OUTPUT_DOES_NOT_CONTAIN |  
 | Then  |     | output | does not contain   | `file`            | OUTPUT_DOES_NOT_CONTAIN |  
 | Then  |     | output | does not contain   | `text`            | OUTPUT_DOES_NOT_CONTAIN |  

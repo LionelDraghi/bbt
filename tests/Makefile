@@ -17,11 +17,16 @@ else
 	@ - ln -fs /usr/bin/rpl
 endif
 
-	@ ./bbt --yes -k -c -o ../docs/tests/examples_results.md -ed ./ ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO, check the availability of gcc and rpl on your platform "******"
+	# Check examples
+	@ ./bbt --yes -k -c -o ../docs/tests/examples_results.md ../docs/examples && echo 1. examples tests OK ========== || echo 1. examples tests KO, check the availability of gcc and rpl on your platform "******"
 	@ echo
 
 	# Then test all the features
-	@ ./bbt --yes --keep_going --cleanup --output ../docs/tests/features_results.md --exec_dir ./ ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ ./bbt --yes --keep_going --cleanup --output ../docs/tests/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ echo
+
+	# Then run non reg tests
+	@ ./bbt --yes --keep_going --cleanup --output ../docs/tests/non_reg_tests.md ../docs/non_reg_tests && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
 	# Unit testing

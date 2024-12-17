@@ -47,6 +47,7 @@ private package BBT.Documents is
       File_Contains,
       File_Does_Not_Contain,
       File_Is,
+      File_Is_Not,
       No_Error_Return_Code,
       Output_Contains,
       Output_Does_Not_Contain,

@@ -8,7 +8,9 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - [master]
   - [Added]   first implementation of a progress bar, `-sb` option
-  - [Changed] On the command line, commands no more start with '-' or '--'
+  - [Changed] On the command line, commands no more start with '-' or '--' (previous form still taken into account for now)
+  - [Fixed]   Closes #7
+  - [Added]   "not equal to file" form added
 
 - [0.0.6] - 2024-14-12
   - [Fixed]   Ambiguity in all steps with a `string` object : if there is the `file` keyword in the object

@@ -11,7 +11,7 @@ Command :
    lg  | list_grammar    : list rules for Step analysis
    ex  | explain         : explain what bbt understand from Scenarios files
                               (do not run the scenarios)
-   ct  | create-template : create a commented example of rules file
+   ct  | create_template : create a commented example of rules file
    he  | help            : this message
 
 Options :
@@ -20,7 +20,7 @@ Options :
    -c   | --cleanup        : after run, remove every file and dir
                              created by bbt in "Given" steps
    -r   | --recursive      : search bbt files in subdir
-   -k   | --keep-going     : Do as much work as possible
+   -k   | --keep_going     : Do as much work as possible
    -v   | --verbose
    -q   | --quiet          : no message unless error,
                              Warning are also ignored

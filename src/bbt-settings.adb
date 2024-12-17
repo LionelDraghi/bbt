@@ -15,7 +15,7 @@ package body BBT.Settings is
    -- they are implemented as access to String, allocated once and
    -- never deallocated.
    Launch_Dir   : constant access String :=
-     new String'(Ada.Directories.Current_Directory);  
+     new String'(Ada.Directories.Current_Directory);
    Outfile_Name,
    Exec_Dir_Name,
    Tmp_Dir_Name : access String := null;

@@ -32,6 +32,21 @@ I’ve been trying thissssssssssssssssss out a bit on Windows, and it seems like
 - Then output contains `- Failed     =  1`
 - And I get an error
 
+### Scenario : test the negative form `is not equal to file` 
+
+Test the negative form ("not equal to file")
+
+- Given the file `tmp.4`
+```
+I’ve been trying this out a bit on Windows, and it seems like a great fit to test something that I’m working on.
+One more line.
+```
+
+** Interesting case of a scenario without "When"! **
+
+- Then `tmp.1` is not equal to file `tmp.4`
+- Then `tmp.4` is not equal to file `tmp.1`
+
 
 
 

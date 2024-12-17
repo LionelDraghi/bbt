@@ -148,6 +148,7 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, No_Object)   := Output_Does_Not_Contain; -- then output does not contain followed by code fenced content
       G (Then_P, No_SA, Subject_File, Is_V,     Object_Text) := File_Is; -- then `config.ini` is `mode=silent`
       G (Then_P, No_SA, Subject_File, Is_V,     Object_File) := File_Is; -- then `config.ini` is equal to file `expected/config.ini`
+      G (Then_P, No_SA, Subject_File, Is_No,    Object_File) := File_Is_Not; -- then `config.ini` is no more equal to file `previous_config.ini`
       G (Then_P, No_SA, Subject_File, Is_V,     No_Object)   := File_Is; -- Then `config.ini` is followed by code fenced content
       G (Then_P, No_SA, Subject_File, Contains, Object_Text) := File_Contains; -- Then `config.ini` contains `--version`
       G (Then_P, No_SA, Subject_File, Contains, Object_File) := File_Contains; -- Then `config.ini` contains `snippet.txt` file
@@ -343,7 +344,7 @@ package body BBT.Scenarios.Step_Parser is
                         Not_Met := True;
                         if Verb = Is_V then
                            Verb := Is_No;
-                        elsif Verb = Get  then
+                        elsif Verb = Get then
                            Verb := Get_No;
                         end if;
 
@@ -389,8 +390,6 @@ package body BBT.Scenarios.Step_Parser is
 
                            Object_File_Name := Object_String;
                            Object_String    := Null_Unbounded_String;
-                           --  Text_Source      := File;
-                           --  File_Type        := Directory;
                         end if;
 
                      elsif Lower_Keyword = "file" then
@@ -406,8 +405,6 @@ package body BBT.Scenarios.Step_Parser is
                            -- then the file name is in Object_String
                            Object_File_Name := Object_String;
                            Object_String    := Null_Unbounded_String;
-                           --  Text_Source      := File;
-                           --  File_Type        := Ordinary_File;
                         end if;
 
                      elsif Lower_Keyword = "unordered" then

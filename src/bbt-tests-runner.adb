@@ -46,7 +46,7 @@ package body BBT.Tests.Runner is
                Run_Cmd (Step         => Step,
                         Cmd          => To_String (Step.Object_String),
                         Output_Name  => Output_File_Name (The_Doc),
-                        Successfully => False,
+                        Check_Result => False,
                         Spawn_OK     => Spawn_OK,
                         Return_Code  => Return_Code);
                exit Step_Processing when not Spawn_OK;
@@ -56,7 +56,7 @@ package body BBT.Tests.Runner is
                Run_Cmd (Step         => Step,
                         Cmd          => To_String (Step.Object_String),
                         Output_Name  => Output_File_Name (The_Doc),
-                        Successfully => True,
+                        Check_Result => True,
                         Spawn_OK     => Spawn_OK,
                         Return_Code  => Return_Code);
 
@@ -85,6 +85,9 @@ package body BBT.Tests.Runner is
 
             when File_Is =>
                Files_Is (Step);
+
+            when File_Is_Not =>
+               Files_Is_Not (Step);
 
             when File_Contains =>
                File_Contains (Step);
@@ -149,8 +152,7 @@ package body BBT.Tests.Runner is
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
       if Has_Background (Doc) then
-         Put_Line ("  Document Background "
-                   & (+Doc.Background.Name)
+         Put_Line ("  Document Background " & (+Doc.Background.Name)
                    & "  ", IO.No_Location, IO.Verbose);
          Run_Scenario (Doc.Background.all);
          Move_Results (From_Scen => Doc.Background.all,

@@ -258,34 +258,44 @@ package body Text_Utilities is
                       Ignore_Blanks      : Boolean := True;
                       Ignore_Blank_Lines : Boolean := True;
                       Sort_Texts         : Boolean := False;
-                      Identical          : out Boolean;
-                      Diff_Index         : out Natural)
+                      Identical          : out Boolean)
+                      -- Diff_Index         : out Natural)
    is
       T1 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text1)
                     else Text1);
       T2 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text2)
                     else Text2);
+      -- Diff_Index : Natural;
+      use type Ada.Containers.Count_Type;
+      Same_Size : Boolean;
 
    begin
-      Identical := False;
-
       if Sort_Texts then
          Sort (T1);
          Sort (T2);
       end if;
 
-      -- Brut compare
-      for Diff_Index in T1.First_Index .. T1.Last_Index loop
-         Identical := Is_Equal (T1 (Diff_Index),
-                                T2 (Diff_Index),
-                                Case_Insensitive => Case_Insensitive,
-                                Ignore_Blanks    => Ignore_Blanks);
-         exit when not Identical;
-      end loop;
+      Same_Size := T1.Length = T2.Length;
+      if not Same_Size then
+         Identical := False;
 
-      if Identical then
-         Diff_Index := 0;
+      elsif T1.Length = 0 then
+         Identical := True;
+
+      else
+         -- Brut compare
+         for Diff_Index in T1.First_Index .. T1.Last_Index loop
+            Identical := Is_Equal (T1 (Diff_Index),
+                                   T2 (Diff_Index),
+                                   Case_Insensitive => Case_Insensitive,
+                                   Ignore_Blanks    => Ignore_Blanks);
+            exit when not Identical;
+         end loop;
       end if;
+
+      --  if Identical then
+      --     Diff_Index := 0;
+      --  end if;
 
    end Compare;
 
@@ -297,14 +307,14 @@ package body Text_Utilities is
                       Sort_Texts         : Boolean := False) return Boolean
    is
       Identical  : Boolean;
-      Diff_Index : Natural;
+      -- Diff_Index : Natural;
    begin
       Compare (Text1, Text2,
                Ignore_Blank_Lines => Ignore_Blank_Lines,
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
-               Identical          => Identical,
-               Diff_Index         => Diff_Index);
+               Identical          => Identical);
+               -- Diff_Index         => Diff_Index);
       return Identical;
    end Is_Equal;
 

@@ -24,7 +24,7 @@ begin
    Put_Line ("   lg  | list_grammar    : list rules for Step analysis");
    Put_Line ("   ex  | explain         : explain what bbt understand from Scenarios files");
    Put_Line ("                              (do not run the scenarios)");
-   Put_Line ("   ct  | create-template : create a commented example of rules file");
+   Put_Line ("   ct  | create_template : create a commented example of rules file");
    Put_Line ("   he  | help            : this message");
    New_Line;
    Put_Line ("Options :");
@@ -33,7 +33,7 @@ begin
    Put_Line ("   -c   | --cleanup        : after run, remove every file and dir");
    Put_Line ("                             created by bbt in ""Given"" steps");
    Put_Line ("   -r   | --recursive      : search bbt files in subdir");
-   Put_Line ("   -k   | --keep-going     : Do as much work as possible");
+   Put_Line ("   -k   | --keep_going     : Do as much work as possible");
    Put_Line ("   -v   | --verbose");
    Put_Line ("   -q   | --quiet          : no message unless error,");
    Put_Line ("                             Warning are also ignored");

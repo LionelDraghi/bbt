@@ -14,7 +14,7 @@ private package BBT.Tests.Actions is
    procedure Run_Cmd (Step         :     Step_Type;
                       Cmd          :     String;
                       Output_Name  :     String;
-                      Successfully :     Boolean;
+                      Check_Result :     Boolean;
                       Spawn_OK     : out Boolean;
                       Return_Code  : out Integer);
 
@@ -51,6 +51,7 @@ private package BBT.Tests.Actions is
                                       Step   : Step_Type);
 
    procedure Files_Is (Step : Step_Type);
+   procedure Files_Is_Not (Step : Step_Type);
    procedure File_Contains (Step : Step_Type);
    procedure File_Does_Not_Contain (Step : Step_Type);
 

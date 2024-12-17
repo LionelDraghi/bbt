@@ -10,7 +10,7 @@ with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
-with Ada.Command_Line;
+-- with Ada.Command_Line;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- no direct with of Ada.Directories or Ada.Text_IO here
@@ -28,7 +28,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    function Is_Success (I : Integer) return Boolean is
-     (I = Integer (Ada.Command_Line.Success));
+     (I = 0); -- Integer (Ada.Command_Line.Success));
    -- Fixme: can I compare the return status of spawn with
    --        Ada.Command_Line Success or Fail?
 
@@ -75,7 +75,7 @@ package body BBT.Tests.Actions is
    procedure Run_Cmd (Step         :     Step_Type;
                       Cmd          :     String;
                       Output_Name  :     String;
-                      Successfully :     Boolean;
+                      Check_Result :     Boolean;
                       Spawn_OK     : out Boolean;
                       Return_Code  : out Integer) is
       use GNAT.OS_Lib;
@@ -92,12 +92,15 @@ package body BBT.Tests.Actions is
              Output_File  => Output_Name,
              Return_Code  => Return_Code,
              Err_To_Out   => True);
-
+      --  Put_Line ("Spawn_OK    = " & Spawn_OK'Image);
+      --  Put_Line ("return code = " & Return_Code'Image);
       Put_Step_Result (Step     => Step,
                        Success  => Spawn_OK,
                        Fail_Msg => "Couldn't run " & Cmd,
                        Loc      => Step.Location);
-      if Spawn_OK and then Successfully then
+      -- If Successfully is set, then we test the return code immediatly
+      -- in the run Step.
+      if Spawn_OK and then Check_Result then
          Put_Step_Result (Step     => Step,
                           Success  => Is_Success (Return_Code),
                           Fail_Msg => "Unsuccessfully run " &
@@ -403,6 +406,21 @@ package body BBT.Tests.Actions is
                          "not equal to expected:  " & Text_Image (T2),
                        Loc      => Step.Location);
    end Files_Is;
+
+   -- --------------------------------------------------------------------------
+   procedure Files_Is_Not (Step : Step_Type) is
+      File_Name : constant String := +Step.Subject_String;
+      T1        : constant Text   := Get_Text (File_Name);
+      T2        : constant Text   := Get_Expected (Step);
+   begin
+      IO.Put_Line ("Files_Is_Not " & File_Name, Verbosity => Debug);
+      Put_Step_Result (Step     => Step,
+                       Success  => not Is_Equal (T1, T2,
+                         Sort_Texts => Step.Ignore_Order),
+                       Fail_Msg => "file is equal to expected " &
+                         Text_Image (T1),
+                       Loc      => Step.Location);
+   end Files_Is_Not;
 
    -- --------------------------------------------------------------------------
    procedure File_Contains (Step : Step_Type) is
