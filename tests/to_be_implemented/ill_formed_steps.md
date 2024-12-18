@@ -1,7 +1,7 @@
 # Feature: Ill Formed Steps detection
 
 Partial formater are very tolerant to alternate wording. 
-The downside is more difficult to identify grammar problem.
+The downside being that it is more difficult to identify grammar problem.
 Here are some detected problem.
 
 ## Scenario: `run` not followed by a command
