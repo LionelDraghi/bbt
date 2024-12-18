@@ -137,6 +137,12 @@
   Feature background   
   - [X] scenario [same "I get" with the modifier](../features/A140_Unordered_Keyword.md) pass  
 
+  Feature background   
+  - [X] scenario ["contains" without the modifier](../features/A140_Unordered_Keyword.md) pass  
+
+  Feature background   
+  - [X] scenario [same "contains" but with the "unordered" modifier](../features/A140_Unordered_Keyword.md) pass  
+
 
 ## [A150_Background_Keyword.md](../features/A150_Background_Keyword.md)  
 
@@ -301,5 +307,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  66
+- Successful =  68
 - Empty      =  0

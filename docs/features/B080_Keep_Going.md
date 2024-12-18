@@ -1,9 +1,10 @@
 <!-- omit from toc -->
 ## Feature: on error, Keep going or stop
 
-`bbt`default behavior is to stop when there is an error.
-But in some circumstances, we want a complete overview and want to run all the tests.
-This is what the `-k`/ `--keep_going`option is for.
+During debug, bbt helps the developer focusing on the first problem by just stopping the run.  
+This is the default behavior.  
+On the other hand, in a batch run, one usually wants to run all tests even if some fails.  
+btt allows this second behavior through the `--keep_going` (or `-k`) option.  
 
 Here we run a test with 3 scenarios.  
 The second fails.  
@@ -32,7 +33,7 @@ Without, the run ends with 1 fail, 1 success and 1 not run.
 - When I run `./bbt -k feature1.md`
 - then output contains
 ```
-- Failed    =  1  
+- Failed     =  1  
 - Successful =  2  
 - Empty      =  0  
 - Not run    =  0  
@@ -42,7 +43,7 @@ Without, the run ends with 1 fail, 1 success and 1 not run.
 - When I run `./bbt feature1.md`
 - then output contains
 ```
-- Failed    =  1
+- Failed     =  1
 - Successful =  1
 - Empty      =  0
 - Not run    =  1

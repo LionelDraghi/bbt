@@ -1,8 +1,12 @@
 # Developer Guide <!-- omit from toc -->
 
+- [Design overview](#design-overview)
 - [Issues and discussions](#issues-and-discussions)
 - [Development Status](#development-status)
 - [Development environment](#development-environment)
+
+
+## Design overview
 
 ==== DRAFT ====
 
@@ -66,6 +70,6 @@ To avoid external dependencies, a false exe named `sut` (that means Software Und
 Sources of `sut` are in the `tools` sub-directory.
 
 External dependencies:
-1. To run the examples (within docs/examples), you will need the exe "tested", that is `gcc`, `rpl`, etc.  
 
+1. To run the examples (within docs/examples), you will need the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.

@@ -95,7 +95,7 @@ package body BBT.Scenarios.Step_Parser is
          when Object_File      => return "`file`";
          when Object_Dir       => return "`dir`";
          when Object_Text      => return "`text`";
-         when Command_List     => return "`cmd` [or `cmd`]*";
+         when Command_List     => return "`cmd`"; -- [or `cmd`]*";
          when Error            => return "error";
          when Unordered        => return "unordered";
       end case;

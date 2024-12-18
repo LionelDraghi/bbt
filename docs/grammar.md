@@ -11,9 +11,9 @@
 | Given | new | `file` |                    |                   | ERASE_AND_CREATE        |  
 | Given | new | `file` | containing         | `text`            | ERASE_AND_CREATE        |  
 | When  |     |        | run                | `text`            | RUN_CMD                 |  
-| When  |     |        | run                | `cmd` [or `cmd`]* | RUN_CMD                 |  
+| When  |     |        | run                | `cmd`             | RUN_CMD                 |  
 | When  |     |        | successfully run   | `text`            | RUN_WITHOUT_ERROR       |  
-| When  |     |        | successfully run   | `cmd` [or `cmd`]* | RUN_WITHOUT_ERROR       |  
+| When  |     |        | successfully run   | `cmd`             | RUN_WITHOUT_ERROR       |  
 | Then  |     |        | get                |                   | OUTPUT_IS               |  
 | Then  |     |        | get                | `file`            | OUTPUT_IS               |  
 | Then  |     |        | get                | `text`            | OUTPUT_IS               |  

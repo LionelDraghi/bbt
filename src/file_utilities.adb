@@ -54,8 +54,8 @@ package body File_Utilities is
       end "=";
 
       -- -----------------------------------------------------------------------
-      function "=" (C1, C2 : Character) return Boolean is
-        ([1 => C1] = [1 => C2]);
+      --  function "=" (C1, C2 : Character) return Boolean is
+      --    ([1 => C1] = [1 => C2]);
         -- call the "=" equal function above that is case insensitive on Windows
 
    begin

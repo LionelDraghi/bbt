@@ -32,4 +32,3 @@ doc:
 clean:
 	## - gprclean -q -P test_file_utilities.gpr
 	- alr clean
-	- rm testrec.md 
