@@ -138,10 +138,17 @@ begin
              Expected => "../Tests/mysite/site/d1/idx.txt");
    end if;
 
-   Check (Title    => "Dir with final /",
-          From_Dir => "/home/tests/",
-          To_File  => "/home/tests/mysite/site/d1/idx.txt",
-          Expected => "mysite/site/d1/idx.txt");
+   if On_Windows then
+      Check (Title    => "Dir with final /",
+            From_Dir => "/home/tests/",
+            To_File  => "/home/tests/mysite/site/d1/idx.txt",
+            Expected => "mysite\site\d1\idx.txt");
+   else
+      Check (Title    => "Dir with final /",
+            From_Dir => "/home/tests/",
+            To_File  => "/home/tests/mysite/site/d1/idx.txt",
+            Expected => "mysite/site/d1/idx.txt");
+   end if;
 
    if On_Windows then
       Check (Title    => "subdir with Prefix",
@@ -266,6 +273,10 @@ begin
              From_Dir => "\\Volume\Server\Users\Lionel\",
              To_File  => "\\Volume\Server\USERS\Xavier\Proj",
              Expected => "..\Xavier\Proj");
+      Check (Title    => "Mixing both separator uses",
+             From_Dir => "c:/Users/Lionel/tmp",
+             To_File  => "c:\Users\Lionel\Proj\truc",
+             Expected => "..\Proj\truc");
    end if;
 
    -- --------------------------------------------------------------------------

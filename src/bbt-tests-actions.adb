@@ -10,7 +10,7 @@ with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
--- with Ada.Command_Line;
+with Ada.Command_Line;
 with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- no direct with of Ada.Directories or Ada.Text_IO here
@@ -28,7 +28,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    function Is_Success (I : Integer) return Boolean is
-     (I = 0); -- Integer (Ada.Command_Line.Success));
+     (I = Integer (Ada.Command_Line.Success));
    -- Fixme: can I compare the return status of spawn with
    --        Ada.Command_Line Success or Fail?
 
@@ -54,8 +54,8 @@ package body BBT.Tests.Actions is
          -- File content provided in code fenced lines
          return Step.File_Content;
 
-      elsif Step.Object_File_Name /= Null_Unbounded_String and then
-        File_Exists (+Step.Object_File_Name)
+      elsif Step.Object_File_Name /= Null_Unbounded_String
+        and then File_Exists (+Step.Object_File_Name)
       then
          -- The string denotes a file
          return Get_Text (+Step.Object_File_Name);
@@ -92,14 +92,11 @@ package body BBT.Tests.Actions is
              Output_File  => Output_Name,
              Return_Code  => Return_Code,
              Err_To_Out   => True);
-      --  Put_Line ("Spawn_OK    = " & Spawn_OK'Image);
-      --  Put_Line ("return code = " & Return_Code'Image);
+
       Put_Step_Result (Step     => Step,
                        Success  => Spawn_OK,
                        Fail_Msg => "Couldn't run " & Cmd,
                        Loc      => Step.Location);
-      -- If Successfully is set, then we test the return code immediatly
-      -- in the run Step.
       if Spawn_OK and then Check_Result then
          Put_Step_Result (Step     => Step,
                           Success  => Is_Success (Return_Code),

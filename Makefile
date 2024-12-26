@@ -46,7 +46,7 @@ doc: ./bbt
 	echo                            >> /tmp/fixme_index.md
 	echo 'Location | Text'          >> /tmp/fixme_index.md
 	echo '---------|-----'          >> /tmp/fixme_index.md
-	rgrep -n "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme_index.md
+	grep -rn "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme_index.md
 	mv /tmp/fixme_index.md docs/fixme_index.md
 
 	echo 'Issue references in current version'	>  /tmp/issues_index.md
@@ -54,7 +54,7 @@ doc: ./bbt
 	echo                                		>> /tmp/issues_index.md
 	echo 'Location | Text'             		    >> /tmp/issues_index.md
 	echo '---------|-----'             		    >> /tmp/issues_index.md
-	rgrep -n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues_index.md
+	grep -r	n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues_index.md
 	mv /tmp/issues_index.md docs/issues_index.md
 
 	echo Checking links in md files

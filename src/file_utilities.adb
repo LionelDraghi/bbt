@@ -39,9 +39,24 @@ package body File_Utilities is
          then (From (From'First + 1 .. From'Last))
          else From);
 
+      Separator_Mapping : constant Character_Mapping :=
+          To_Mapping (From => "/", To   => "\");
+
+      function To_Windows_Separator
+        (S       : String;
+         Mapping : Character_Mapping := Separator_Mapping) return String
+        renames Ada.Strings.Fixed.Translate;
+
       -- Dir and File are From_Dir and To_File without final Separator:
-      Dir  : constant String := Remove_Final_Separator (From_Dir);
-      File : constant String := Remove_Final_Separator (To_File);
+      Dir : constant String :=
+         (if On_Windows
+          then Remove_Final_Separator (To_Windows_Separator (From_Dir))
+          else Remove_Final_Separator (From_Dir));
+
+      File : constant String :=
+               (if On_Windows
+                then Remove_Final_Separator (To_Windows_Separator (To_File))
+                else Remove_Final_Separator (To_File));
 
       -- -----------------------------------------------------------------------
       function "=" (S1, S2 : String) return Boolean is

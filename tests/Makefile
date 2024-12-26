@@ -2,12 +2,10 @@
 
 # Test results are produced locally, and moved to the doc tree when "make doc" is called, 
 # in a directory matching the platform.
-OS          := $(shell uname)
-RESULTS_DIR := ../../docs/tests_results/$(OS)
-$(RESULTS_DIR): 
-	mkdir -p $(RESULTS_DIR)
+RESULTS_DIR := ../docs/tests_results/$(OS)
 
 setup:
+	mkdir -p $(RESULTS_DIR)
 # Manage differences between Windows and Unix
 ifeq ($(OS), Windows_NT)
 	@ln -fs ../sut sut.exe
