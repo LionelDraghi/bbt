@@ -189,9 +189,6 @@ package body BBT.Scenarios.MDG_Lexer is
          return (Kind => Empty_Line);
 
       elsif Code_Fence_Line (Line.all) then
-         -- Code_Block Mark ----------------------------------------------------
-         --  Put_Line ("BlockCode mark = " & Line.all,
-         --               Level => IO.Debug);
          Context.In_Code_Fence := not @;
          return (Kind => Code_Fence);
 
@@ -231,27 +228,17 @@ package body BBT.Scenarios.MDG_Lexer is
             --  Put_Line ("Header = """ & Header & """, Title = """ & Title & """",
             --            Level => IO.Debug);
             if Ada.Strings.Equal_Case_Insensitive (Header, "Feature") then
-               -- Feature line -------------------------------------------------
-               --  IO.Put ("Feature line = " & Line.all (First .. Last),
-               --          Level => IO.Debug);
                return (Kind => Feature_Line,
                        Name => To_Unbounded_String (Title));
 
             elsif Ada.Strings.Equal_Case_Insensitive (Header, "Scenario")
               or else Ada.Strings.Equal_Case_Insensitive (Header, "Example")
             then
-               -- Scenario line ------------------------------------------------
-               --  Put_Line ("Scenarios.line = " & Line.all (First .. Last),
-               --               Level => IO.Debug);
                Context.In_Scenario := True;
                return (Kind => Scenario_Line,
                        Name => To_Unbounded_String (Title));
 
             elsif Ada.Strings.Equal_Case_Insensitive (Header, "Background") then
-               -- Background Scenario line -------------------------------------
-               --  Put_Line ("Background scenario line = "
-               --            & Line.all (First .. Last),
-               --               Level => IO.Debug);
                Context.In_Scenario := True;
                return (Kind => Background_Line,
                        Name => To_Unbounded_String (Title));

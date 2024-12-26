@@ -253,6 +253,9 @@ package body BBT.Tests.Runner is
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
+         IO.New_Line (IO.Debug);
+         IO.Put_Line ("==== Running " & D.Name'Image, IO.No_Location, IO.Debug);
+
          BBT.Created_File_List.Open
            (Ada.Directories.Simple_Name (To_String (D.Name))
             & ".created_files");

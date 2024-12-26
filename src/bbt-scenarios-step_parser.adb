@@ -222,37 +222,13 @@ package body BBT.Scenarios.Step_Parser is
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
       Object_String    : Unbounded_String         := Null_Unbounded_String;
       Object_File_Name : Unbounded_String         := Null_Unbounded_String;
-      --  -- Object_Text      : Object_Text_Type;
-      --  Text_Source      : Text_Sources := Code_Span;
       Ignore_Order     : Boolean                  := False;
       -- by default, order of expected output is significant
 
       File_Type        : File_Kind                := Ordinary_File;
 
-      Prefix : constant String := Image (Loc);
-
       function In_Subject_Part return Boolean is (Verb  = No_Verb);
       function In_Object_Part  return Boolean is (Verb /= No_Verb);
-
-      --  -- -----------------------------------------------------------------------
-      --  function Build_Object_Text (Source        : Text_Sources;
-      --                              Object_String : Unbounded_String;
-      --                              File_Name     : Unbounded_String;
-      --                              File_Type     : File_Kind)
-      --                              return Object_Text_Type is
-      --  begin
-      --     case Source is
-      --        when Code_Span =>
-      --           return (Code_Span,
-      --                   File_Name     => File_Name,
-      --                   Object_String => Object_String);
-      --        when Code_Block =>
-      --           return (Code_Block, File_Name, Empty_Text);
-      --        when File =>
-      --           return (File, File_Name, File_Type);
-      --     end case;
-      --  end Build_Object_Text;
-
 
    begin
       Step_String := Line;
@@ -514,10 +490,6 @@ package body BBT.Scenarios.Step_Parser is
       end;
 
       Action := Get_Action (Prep, Subject_Attr, Subject, Verb, Object);
-
-      IO.Put (Prefix & " Rule = ", Verbosity => IO.Debug);
-      Put_Rule (Prep, Subject_Attr, Subject, Verb, Object, Action,
-                Verbosity => IO.Debug);
 
       Context := Cat;
 

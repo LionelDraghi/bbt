@@ -60,6 +60,29 @@ package body BBT.Documents is
       Output.New_Line;
    end Put_Image;
 
+   function Short_Line_Image (Step : Step_Type) return String is
+   begin
+      return
+        ("Action = " & Step.Action'Image
+         & (if Step.Subject_String /= Null_Unbounded_String
+           then (", Subject = """ & (+Step.Subject_String) & """")
+           else "")
+         & (if Step.Object_String /= Null_Unbounded_String
+           then (", Object = """ & (+Step.Object_String) & """")
+           else "")
+         & (if Step.Object_File_Name /= Null_Unbounded_String
+           then (if Step.File_Type = Directory
+             then ", dir = """ & (+Step.Object_File_Name) & """"
+             else ", File = """ & (+Step.Object_File_Name) & """")
+           else "")
+         & (if Step.Ignore_Order
+           then ", Ignore_Order = True"
+           else "")
+         & (if Is_Empty (Step.File_Content)
+           then ""
+           else (", File content = """ & (Step.File_Content'Image) & """")));
+   end Short_Line_Image;
+
    -- --------------------------------------------------------------------------
    procedure Add_Result (Success : Boolean; To : in out Scenario_Type) is
    begin

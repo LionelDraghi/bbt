@@ -114,7 +114,6 @@ begin
       Status_Bar.Put_Activity ("Loading files");
 
       for File of Scenarios.Files.BBT_Files loop
-         IO.Put_Line ("Loading " & File'Image, IO.No_Location, IO.Debug);
          Scenarios.Files.Analyze_MDG_File (File);
       end loop;
       Tests.Builder.Duplicate_Multiple_Run;

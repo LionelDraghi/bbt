@@ -105,17 +105,14 @@ package body BBT.Scenarios.Step_Parser.Lexer is
                   Test   => Ada.Strings.Outside,
                   First  => First,
                   Last   => Last);
-      --  Put_Line ("processing token = """ & Line.all (First .. Last) &
-      --              """ in " & Line.all,
+      --  Put_Line ("processing token = """ & Filler & Line.all (First .. Last) &
+      --              """ in " & Filler & Line.all,
       --            Verbosity => IO.Debug);
       Cursor := (Natural'Min (Line.all'Length, Last + 1));
       -- Jump to next char unless already on the last
       if Is_A_Keyword (Line, First, Last) then
          -- Keyword ---------------------------------------------------------
          Tok_Type := Keyword;
-         --  Put_Line ("Found Keyword """ & Line.all (First .. Last) &
-         --              """ in " & Line.all,
-         --            Verbosity => IO.Debug);
 
       elsif Line (First) = Backtick then
          if Line'Last > First and then Line (First + 1) /= Backtick then
@@ -137,9 +134,6 @@ package body BBT.Scenarios.Step_Parser.Lexer is
                First := @ + 1; -- remove first backtick
                Last  := @ - 1; -- remove final backtick
 
-               --  Put_Line ("Found code span = """ & Line.all (First .. Last) &
-               --              """ in " & Line.all,
-               --            Verbosity => IO.Debug);
                Tok_Type := Code_Span;
             end if;
 

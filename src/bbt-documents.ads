@@ -112,6 +112,9 @@ private package BBT.Documents is
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type);
+   -- Put_Image returns the full image
+   function Short_Line_Image (Step : Step_Type) return String;
+   -- Short_Line_Image returns a single line image with main non null fields.
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type);
    function "+" (Name : Unbounded_String) return String is (To_String (Name));

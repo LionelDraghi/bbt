@@ -30,7 +30,7 @@ The index number is not significant, but lowest number are supposed to be more b
 
 Tests are run in the tests directory, so that docs will not be polluted with possibly remaining files.
 
-All tests results are then available in docs/tests_results
+All test results are then available in docs/tests_results
 
 
 ## Help, comments, suggestions, feedback...

@@ -147,12 +147,12 @@ bbt has no dependencies on external lib or tools (diff, for example), to ensure 
 
 ### Test Results are immediately publishable 
 
-bbt can output a **Tests results index** Markdown file, that cross-references the executed scenario files : if a test fail, just click on the link and you are in the scenario.  
+bbt can output a **Test results index** Markdown file, that cross-references the executed scenario files : if a test fail, just click on the link and you are in the scenario.  
 You can push it on github without further processing.  
 
 To see what it looks like, consider [bbt own tests](docs/tests_results/features_results.md).  
 
-Tests results are generated when running `bbt`, by just using the `-o` option (--output).
+Test results are generated when running `bbt`, by just using the `-o` option (--output).
 
 ## Objective of the project 
 

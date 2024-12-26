@@ -14,6 +14,7 @@ build:
 
 	echo === build tools
 	cd tools && alr build --release
+	@ $(MAKE) -s build --directory=tests
 
 check:
 	# --------------------------------------------------------------------

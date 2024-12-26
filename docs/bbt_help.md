@@ -24,7 +24,7 @@ Options :
    -v   | --verbose
    -q   | --quiet          : no message unless error,
                              Warning are also ignored
-   -o   | --output file.md : create an md file with tests results
+   -o   | --output file.md : create an md file with test results
                              that index all scenarios run.
                              This file will contains the normal bbt output,
                              whatever are the verbosity settings (-q, -v, etc.)

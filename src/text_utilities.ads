@@ -20,6 +20,8 @@ package Text_Utilities is
                                                            String);
    subtype Text is Texts.Vector;
    Empty_Text : Text renames Texts.Empty_Vector;
+   use type Texts.Vector;
+   function Is_Empty (Item : Text) return Boolean is (Item = Empty_Text);
 
    package Texts_Sorting is new Texts.Generic_Sorting;
 

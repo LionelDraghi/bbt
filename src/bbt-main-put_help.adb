@@ -37,7 +37,7 @@ begin
    Put_Line ("   -v   | --verbose");
    Put_Line ("   -q   | --quiet          : no message unless error,");
    Put_Line ("                             Warning are also ignored");
-   Put_Line ("   -o   | --output file.md : create an md file with tests results");
+   Put_Line ("   -o   | --output file.md : create an md file with test results");
    Put_Line ("                             that index all scenarios run.");
    Put_Line ("                             This file will contains the normal bbt output,");
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");

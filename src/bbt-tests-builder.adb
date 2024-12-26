@@ -248,21 +248,12 @@ package body BBT.Tests.Builder is
       case Current_Background is
          when Doc     =>
             Append_Step (Last_Doc_Ref.Background);
-            Put_Line ("Add_Step to Last_Doc_Ref.Background",
-                      Step.Location,
-                      Verbosity => IO.Debug);
          when Feature =>
             Append_Step (Last_Feature_Ref.Background);
-            Put_Line ("Add_Step to Last_Feature_Ref.Background",
-                      Step.Location,
-                      Verbosity => IO.Debug);
          when None    =>
             Last_Scenario_Ref.Element.Step_List.Append
               ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
-            Put_Line ("Add_Step to Last_Scenario_Ref" &
-                        Scenario_Type'(Last_Scenario_Ref)'Image,
-                      Step.Location,
-                      Verbosity => IO.Debug);
+
       end case;
    end Add_Step;
 
@@ -273,6 +264,7 @@ package body BBT.Tests.Builder is
    -- comments at the right level.
    -- At the end of the code block section, the previous Step state
    -- is restored.
+      pragma Warnings (Off, Loc);
    begin
       -- Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
@@ -286,9 +278,9 @@ package body BBT.Tests.Builder is
          when In_File_Content =>
             -- Exiting code block
             Restore_Previous_State;
-            Put_Line ("Add_Code_Block, exiting code block. File_Content = "
-                      & Last_Step_Ref.File_Content'Image,
-                      Loc, Verbosity => IO.Debug);
+            --  Put_Line ("Add_Code_Block, exiting code block. File_Content = "
+            --            & Last_Step_Ref.File_Content'Image,
+            --            Loc, Verbosity => IO.Debug);
 
          when In_Document =>
             Last_Doc_Ref.Comment.Append ("```");
@@ -300,7 +292,10 @@ package body BBT.Tests.Builder is
    end Add_Code_Fence;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Line (Line : String; Loc : Location_Type) is
+   function In_File_Content return Boolean is (Current_State = In_File_Content);
+
+   -- --------------------------------------------------------------------------
+   procedure Add_Line (Line : String) is
    begin
       case Current_State is
          when In_Document =>
@@ -325,8 +320,6 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Not a comment, we are in a file content description
-            Put_Line ("File content = """ & Line & """", Loc,
-                      Verbosity => IO.Debug);
             Last_Step_Ref.File_Content.Append (Line);
 
       end case;

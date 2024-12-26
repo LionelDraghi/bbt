@@ -5,6 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Text_IO;
@@ -18,7 +19,7 @@ with BBT.Tests.Builder; use BBT.Tests.Builder;
 
 with GNAT.Traceback.Symbolic;
 
-with Ada.Directories;
+with List_Image;
 
 package body BBT.Scenarios.Files is
 
@@ -125,6 +126,20 @@ package body BBT.Scenarios.Files is
    function No_bbt_File return Boolean is (The_List.Is_Empty);
    function bbt_Files return File_List.Vector is (The_List);
 
+   use File_List;
+   package File_List_Cursors is new List_Image.Cursors_Signature
+     (Container => File_List.Vector,
+      Cursor    => File_List.Cursor);
+
+   function Image (C : Cursor) return String is (Element (C));
+
+   function Id_Set_Image is new List_Image.Image
+     (Cursors => File_List_Cursors,
+      Style   => List_Image.Bracketed_List_Style);
+
+   function One_Line_Image (Files : File_List.Vector) return String renames
+     Id_Set_Image;
+
    -- --------------------------------------------------------------------------
    procedure Analyze_MDG_File (File_Name : String) is
 
@@ -138,6 +153,8 @@ package body BBT.Scenarios.Files is
       Loc               : Location_Type   := Location (Input);
 
    begin
+      IO.Put_Line ("==== Loading " & File_Name, IO.No_Location, IO.Debug);
+
       Open (Input,
             Mode => In_File,
             Name => File_Name);
@@ -156,30 +173,65 @@ package body BBT.Scenarios.Files is
               (Line'Access, MDG_Lexer_Context, Loc);
             S        : Step_Type;
             Cmd_List : Cmd_Lists.Vector;
+            Filler   : constant String := (if BBT.IO.Line (Loc) in 1 .. 9
+                                           then "  | "
+                                           elsif BBT.IO.Line (Loc) in 10 .. 99
+                                           then " | "
+                                           else "| ");
 
          begin
+
             case Attrib.Kind is
             when Feature_Line =>
                Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
+               IO.Put_Line ("Feature     " & Filler & Line,
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
 
             when Scenario_Line =>
+               IO.Put_Line ("Scenario    " & Filler & Line,
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
                Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
 
             when Background_Line =>
+               IO.Put_Line ("Background  " & Filler & Line,
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
                Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
 
             when Step_Line =>
+               IO.Put_Line ("Step        " & Filler & Line,
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
                S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc, Cmd_List);
+               IO.Put_Line ("            " & Filler & "  "
+                            & Short_Line_Image (S),
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
+
                Tests.Builder.Add_Step (S, Cmd_List);
 
             when Code_Fence =>
+               IO.Put_Line ("Code fence  " & Filler & Line,
+                            Location  => Loc,
+                            Verbosity => IO.Debug);
                Tests.Builder.Add_Code_Fence (Loc);
 
             when Text_Line =>
-               Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);
+               if Tests.Builder.In_File_Content then
+                  IO.Put_Line ("File content" & Filler & Line,
+                               Location  => Loc,
+                               Verbosity => IO.Debug);
+               else
+                  IO.Put_Line ("Ignored     " & Filler & Line,
+                               Location  => Loc,
+                               Verbosity => IO.Debug);
+               end if;
+               Tests.Builder.Add_Line (To_String (Attrib.Line));
 
             when Empty_Line =>
-               Tests.Builder.Add_Line (Line, Loc);
+               Tests.Builder.Add_Line (Line);
 
             end case;
 
@@ -189,8 +241,8 @@ package body BBT.Scenarios.Files is
 
       -- and finally, let's record the document
       Close (Input);
-      Put_Line ("Doc_List = " & Tests.Builder.The_Tests_List.all'Image,
-                Verbosity => IO.Debug);
+      --  Put_Line ("Doc_List = " & Tests.Builder.The_Tests_List.all'Image,
+      --            Verbosity => IO.Debug);
 
    exception
       when E : others =>
