@@ -11,16 +11,19 @@ all: check
 # versa. (and mlc command line is not flexible enough to run  
 # "--ignore *_Windows.md")
 
-PLATFORM := $(shell uname -s)
+PLATFORM := $(OS)
+## PLATFORM := $(shell uname -s)
 # should be Linux, Windows or Darwin
+# but is MSYS_NT-10.0-26100 on Windows, and I don't want the DIR name
+# to change with the MSYS orWindows version number.
 ### ARCH := $(shell uname -m)
-### PROC := $(shell uname -)
+### PROC := $(shell uname -p)
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 
 setup:
 # Manage differences between Windows and Unix
-ifeq ($(PLATFORM), Windows)
+ifeq ($(PLATFORM), Windows_NT)
 	@ln -fs ../sut sut.exe
 	@ln -fs ../bbt bbt.exe
 else
@@ -69,7 +72,7 @@ check: setup ./bbt ./sut
 doc: $(RESULTS_DIR)
 
 clean:
-	@ - rm -f *.out main bbt sut gcc rpl tmp.txt
+	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl tmp.txt
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	
