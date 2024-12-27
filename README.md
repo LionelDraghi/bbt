@@ -111,7 +111,7 @@ also accept the code span shortcut when there is only one line.
 
 > [!NOTE]
 > bbt is fully tested with bbt since 0.0.4 version.
-> bbt own tests are based on features descriptions indexed [here](docs/tests_results/features_results.md).
+> bbt own tests are based on features descriptions indexed [here](docs/tests_results/Linux/features_results.md).
 
 ## Main characteristics
 
@@ -150,7 +150,7 @@ bbt has no dependencies on external lib or tools (diff, for example), to ensure 
 bbt can output a **Test results index** Markdown file, that cross-references the executed scenario files : if a test fail, just click on the link and you are in the scenario.  
 You can push it on github without further processing.  
 
-To see what it looks like, consider [bbt own tests](docs/tests_results/features_results.md).  
+To see what it looks like, consider [bbt own tests](docs/tests_results/Linux/features_results.md).  
 
 Test results are generated when running `bbt`, by just using the `-o` option (--output).
 
@@ -171,7 +171,7 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 
 The code has grown fast in the first three months, and is far from being clean.  
 Nevertheless, bbt is working. 
-It has as a serious [test base](docs/tests_results/features_results.md).  
+It has as a serious [test base](docs/tests_results/Linux/features_results.md).  
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
 
 btt compile on Linux, Windows and Mac OS (at least the Alire version), but is currently tested only on Linux (my dev. platform) and Windows.

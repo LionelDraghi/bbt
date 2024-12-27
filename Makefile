@@ -46,7 +46,7 @@ doc: ./bbt
 	echo                            >> /tmp/fixme_index.md
 	echo 'Location | Text'          >> /tmp/fixme_index.md
 	echo '---------|-----'          >> /tmp/fixme_index.md
-	grep -rn "Fixme:" src/  docs/ | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme_index.md
+	grep -rn "Fixme:" src/*  docs/* | sed "s/:/|/2;s/Fixme://" >> /tmp/fixme_index.md
 	mv /tmp/fixme_index.md docs/fixme_index.md
 
 	echo 'Issue references in current version'	>  /tmp/issues_index.md
@@ -54,12 +54,16 @@ doc: ./bbt
 	echo                                		>> /tmp/issues_index.md
 	echo 'Location | Text'             		    >> /tmp/issues_index.md
 	echo '---------|-----'             		    >> /tmp/issues_index.md
-	grep -r	n "Issue #" src/ docs/ | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues_index.md
+	grep -rn "Issue #" src/* docs/* | sed "s/:/|/2;s/Issue #/#/" >> /tmp/issues_index.md
 	mv /tmp/issues_index.md docs/issues_index.md
 
 	echo Checking links in md files
-	- mlc  | grep '\[Err' && echo OK 
-	# much faster than markdown-link-check and no false positive yet
+ifeq ($(OS), Windows_NT)
+	- mlc --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
+else
+	- mlc --ignore-path docs/tests_results/Windows | grep '\[Err' && echo OK 
+endif
+	# mlc is much faster than markdown-link-check and gives no false positive yet
 	# > apt install cargo
 	# > cargo install mlc
 	# > fish_add_path ~/.cargo/bin/
