@@ -16,7 +16,7 @@
 
   - [X] scenario [test the standard output](../../features/A020_Then_Contains.md) pass  
 
-  - [X] scenario [compare with a different file](../../features/A020_Then_Contains.md) pass  
+  - [X] scenario [compare with an existing file](../../features/A020_Then_Contains.md) pass  
 
 
 ## [A030_Then_Does_Not_Contain.md](../../features/A030_Then_Does_Not_Contain.md)  

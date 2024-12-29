@@ -11,6 +11,21 @@ lang=fr
 recurse=true 
 autosave=true
 ```
+- And the `contains_multiline.md` file
+~~~
+# scenario:
+
+- then `config.ini` contains 
+```
+mode=silent
+lang=uk
+recurse=true
+autosave=true
+```
+
+(the lang=uk line is wrong)
+~~~
+
 
 - Then `config.ini` contains
 ```
@@ -40,8 +55,21 @@ recurse=true
 autosave=true
 ```
 
-### Scenario : compare with a different file
+### Scenario : compare with an existing file
 
-- When I run `./bbt contains_multiline.keep`
+- When I run `./bbt contains_multiline.md`
 - Then I get an error
-- And output contains `file config.ini does not contain expected`
+- And output contains 
+```
+file config.ini does not contain expected
+| mode=silent    
+| lang=uk    
+| recurse=true    
+| autosave=true    
+  
+but:   
+| mode=silent    
+| lang=fr      
+| recurse=true     
+| autosave=true 
+```
