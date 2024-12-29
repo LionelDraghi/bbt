@@ -305,7 +305,12 @@
   - [X] scenario [](../../features/C050_Step_marker.md) pass  
 
 
+## [C060_code_block.md](../../features/C060_code_block.md)  
+
+  - [X] scenario [Code fenced blocks](../../features/C060_code_block.md) pass  
+
+
 ------------------
 - Failed     =  0
-- Successful =  68
+- Successful =  69
 - Empty      =  0

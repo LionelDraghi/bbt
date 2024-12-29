@@ -72,6 +72,9 @@ package body BBT.Scenarios.MDG_Lexer is
                          Going  => Forward);
       else
          IO.Put_Warning ("Markdown expect space in Headings after last '#'", Location);
+         --  IO.Put_Warning ("First = " & First'Image);
+         --  IO.Put_Warning ("Line  = " & Line);
+         --  IO.Put_Warning ("Line (First) = " & """" & Line (First)'Image & """");
       end if;
 
       Find_Token (Source => Line,
@@ -146,10 +149,42 @@ package body BBT.Scenarios.MDG_Lexer is
       end if;
    end Bullet_List_Marker;
 
+
    -- --------------------------------------------------------------------------
+   subtype Marker_String is String (1 .. 3);
+   Tilda_Fence_Marker    : constant Marker_String := "~~~";
+   Backtick_Fence_Marker : constant Marker_String := "```";
+   No_Marker             : constant Marker_String := "   ";
+   Current_Fence_Marker  : Marker_String := No_Marker;
+   -- Stores what marker was used to open the block
+   -- This allows to ignore code block inserted with the other marker
    function Code_Fence_Line (Line : String) return Boolean is
-     (Index (Trim (Line, Left), "```") = 1);
-   -- We intentionally ignore "~~~"
+   begin
+      if Current_Fence_Marker = No_Marker then
+         -- looking for the opening marker
+         if Index (Trim (Line, Left), Tilda_Fence_Marker) = 1 then
+            -- this is the closing marker, let's reset
+            Current_Fence_Marker := Tilda_Fence_Marker;
+            return True;
+         elsif Index (Trim (Line, Left), Backtick_Fence_Marker) = 1 then
+            -- this is the closing marker, let's reset
+            Current_Fence_Marker := Backtick_Fence_Marker;
+            return True;
+         else
+            return False;
+         end if;
+
+      else -- looking for the closing marker
+         if Index (Trim (Line, Left), Current_Fence_Marker) = 1 then
+            -- this is the closing marker, let's reset
+            Current_Fence_Marker := No_Marker;
+            return True;
+         else
+            return False;
+         end if;
+
+      end if;
+   end Code_Fence_Line;
 
    -- --------------------------------------------------------------------------
    function Initialize_Context return Parsing_Context is
@@ -189,7 +224,8 @@ package body BBT.Scenarios.MDG_Lexer is
          return (Kind => Empty_Line);
 
       elsif Code_Fence_Line (Line.all) then
-         Context.In_Code_Fence := not @;
+         Context.In_Code_Fence := not @; -- Fixme : In_Code_Fence is not used in
+                                         --  Code_Fence_Line
          return (Kind => Code_Fence);
 
       elsif Context.In_Code_Fence then

@@ -1,3 +1,18 @@
+PLATFORM = $(shell uname -s)
+# Not used yet:
+# ARCH := $(shell uname -m)
+# PROC := $(shell uname -p)
+
+ifeq ($(OS), Windows_NT)
+	# PLATFORM := $(shell uname -s) -> should be Linux, Windows or Darwin
+	# But is MSYS_NT-10.0-26100 on Windows, and I don't want the DIR name
+	# to change with the MSYS or Windows version number.
+	# This is why I override it on Windows:
+	PLATFORM := Windows
+endif
+
+RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
+
 all: check
 
 .PHONY : clean setup check
@@ -11,15 +26,8 @@ all: check
 # versa. (and mlc command line is not flexible enough to run  
 # "--ignore *_Windows.md")
 
-PLATFORM := $(OS)
-## PLATFORM := $(shell uname -s)
-# should be Linux, Windows or Darwin
-# but is MSYS_NT-10.0-26100 on Windows, and I don't want the DIR name
-# to change with the MSYS orWindows version number.
-### ARCH := $(shell uname -m)
-### PROC := $(shell uname -p)
-
-RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
+build:
+	@ $(MAKE) -s build --directory=file_utilities_tests
 
 setup:
 # Manage differences between Windows and Unix
@@ -29,15 +37,13 @@ ifeq ($(PLATFORM), Windows_NT)
 else
 	@ln -fs ../sut sut
 	@ln -fs ../bbt bbt
+	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 	@ln -fs /usr/bin/rpl rpl
 endif
 
-build:
-	@ $(MAKE) -s build --directory=file_utilities_tests
-
 check: setup ./bbt ./sut
-	@ mkdir -p $(RESULTS_DIR)
+	mkdir -p $(RESULTS_DIR)
     
 	@ # Some examples rely on external exe : 
 	@ # - rpl : on windows, you'll find one in the GnuWin32 package

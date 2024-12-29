@@ -71,5 +71,5 @@ Sources of `sut` are in the `tools` sub-directory.
 
 External dependencies:
 
-1. To run the examples (within docs/examples), you will need the exe "tested", that is `gcc`, `rpl`, etc.  
+1. For the sake of clarity, the examples (within docs/examples) uses real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.

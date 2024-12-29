@@ -10,14 +10,14 @@ separate (BBT.Tests.Builder)
 -- -----------------------------------------------------------------------------
 package body FSM is
 
-   Internal_State          : States := In_Document;
+   Internal_State          : States      := In_Document;
    Internal_Previous_State : States;
-
    Internal_Step_State     : Step_States;
-
    Internal_Background     : Backgrounds := Doc;
-
-   Internal_Doc_State      : Doc_States := In_Document;
+   Internal_Doc_State      : Doc_States  := In_Document;
+   Code_Block_Set          : Boolean     := False;
+   -- We store the count instead of simply a Boolean, so that we can put a
+   -- warning message only on the first  ``` in excess.
 
    -- --------------------------------------------------------------------------
    function Current_State  return States is (Internal_State);
@@ -29,14 +29,19 @@ package body FSM is
 
    procedure Set_State (To_State : States) is
    begin
-      --  if To_State = Internal_State then
-      --     -- If we are already in this state, ignore the call
-      --     null;
-      --
-      --  else
       -- Stack new state
       Internal_Previous_State := Internal_State;
       Internal_State          := To_State;
+
+      Put_Line ("State : " & Internal_Previous_State'Image & " --> " &
+                  Internal_State'Image,
+                Verbosity => Debug);
+
+      case To_State is
+         when In_Step         => Code_Block_Set := False;
+         when In_File_Content => Code_Block_Set := True;
+         when others => null;
+      end case;
 
       case To_State is
          when In_Document   |
@@ -61,8 +66,6 @@ package body FSM is
          when others      => null;
       end case;
 
-      --  end if;
-
    end Set_State;
 
    -- --------------------------------------------------------------------------
@@ -74,6 +77,10 @@ package body FSM is
    procedure Set_Step_State (To_State : Step_States) is
    begin
       Internal_Step_State := To_State;
+      Set_State (In_Step);
    end Set_Step_State;
+
+   -- --------------------------------------------------------------------------
+   function Code_Block_Already_Set return Boolean is (Code_Block_Set);
 
 end FSM;

@@ -31,10 +31,6 @@ private package BBT.Scenarios.Step_Parser.Lexer is
 
    function More_Token return Boolean;
 
-   --  function Is_A_Keyword
-   --    (S : access constant String; First : Positive; Last : Natural := 0)
-   --     return Boolean;
-
    procedure Put_Keywords;
 
 end BBT.Scenarios.Step_Parser.Lexer;

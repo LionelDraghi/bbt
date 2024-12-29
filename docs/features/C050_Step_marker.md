@@ -14,10 +14,10 @@ I can even use `+ When`, it won't be recognized as a step.
   This first step should succeed
 
 + Then `config.ini` contains `whatever`  
-  This comment line, if considered erroneously as a step, should cause the test to fail
+  (this comment line, if considered erroneously as a step, should cause the test to fail)
 + other list item
   
 * first list item
 * Then `config.ini` contains `whatever`  
-  This comment line, if considered erroneously as a step, should cause the test to fail
+  (this comment line, if considered erroneously as a step, should cause the test to fail)
 * other list item

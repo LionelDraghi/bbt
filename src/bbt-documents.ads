@@ -100,8 +100,8 @@ private package BBT.Documents is
       Action           : Actions                   := None;
       Step_String      : Unbounded_String          := Null_Unbounded_String;
       Location         : Location_Type;
+      Comment          : Text                      := Empty_Text;
       Subject_String   : Unbounded_String          := Null_Unbounded_String;
-      -- Object           : Object_Text_Type;
       Object_String    : Unbounded_String          := Null_Unbounded_String;
       Object_File_Name : Unbounded_String          := Null_Unbounded_String;
       File_Type        : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
@@ -125,7 +125,7 @@ private package BBT.Documents is
    type Scenario_Type is record
       Name                  : Unbounded_String;
       Location              : Location_Type; -- record only the keyword line
-      Comment               : Text;
+      Comment               : Text    := Empty_Text;
       Step_List             : aliased Step_Lists.Vector;
       Parent_Feature        : access Feature_Type;
       Parent_Document       : access Document_Type;
@@ -155,7 +155,7 @@ private package BBT.Documents is
    type Feature_Type is record
       Name            : Unbounded_String;
       Location        : Location_Type; -- only record the keyword line
-      Comment         : Text;
+      Comment         : Text := Empty_Text;
       Scenario_List   : Scenario_Lists.Vector;
       Background      : access Scenario_Type;
       Parent_Document : access Document_Type;
@@ -169,7 +169,7 @@ private package BBT.Documents is
    type Document_Type is record
       Name          : Unbounded_String;
       Location      : Location_Type; -- record only location of the keyword line
-      Comment       : Text;
+      Comment       : Text := Empty_Text;
       Scenario_List : Scenario_Lists.Vector;
       Feature_List  : Feature_Lists.Vector;
       Background    : access Scenario_Type;

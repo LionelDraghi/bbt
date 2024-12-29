@@ -44,6 +44,11 @@ package body BBT.Tests.Builder is
 
       procedure Set_Step_State (To_State : Step_States);
 
+      function Code_Block_Already_Set return Boolean;
+      -- Tell if a code block has already been provided in that step.
+      -- Reset when calling Set_State (In_Step),
+      -- that is when a new step starts.
+
    end FSM;
 
    package body FSM is separate;
@@ -264,29 +269,44 @@ package body BBT.Tests.Builder is
    -- comments at the right level.
    -- At the end of the code block section, the previous Step state
    -- is restored.
-      pragma Warnings (Off, Loc);
    begin
       -- Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
-         when In_Step | In_Scenario | In_Background =>
-            -- Entering code block
-            -- note that In_Scenario is included, so that if a comment is
-            -- inserted between the step and the code fenced file content,
-            -- it will work. Fixme: WTF comment
-            Set_State (In_File_Content);
+         when In_Step =>
+            if Code_Block_Already_Set then
+               Put_Warning
+                 ("File content already provided, ignoring this code fence",
+                  Loc);
+               Last_Step_Ref.Comment.Append ("```");
+            else
+               Set_State (In_File_Content);
+            end if;
 
          when In_File_Content =>
             -- Exiting code block
             Restore_Previous_State;
-            --  Put_Line ("Add_Code_Block, exiting code block. File_Content = "
-            --            & Last_Step_Ref.File_Content'Image,
-            --            Loc, Verbosity => IO.Debug);
+            Put_Line ("Add_Code_Block, exiting code block. File_Content = "
+                      & Last_Step_Ref.File_Content'Image,
+                      Loc, Verbosity => IO.Debug);
 
          when In_Document =>
             Last_Doc_Ref.Comment.Append ("```");
 
          when In_Feature =>
             Last_Feature_Ref.Comment.Append ("```");
+
+         when In_Scenario =>
+            Last_Scenario_Ref.Comment.Append ("```");
+
+         when In_Background =>
+            case Current_Background is
+               when None =>
+                  Put_Error ("No Doc or Feature Background??");
+               when Doc =>
+                  Last_Doc_Ref.Comment.Append ("```");
+               when Feature =>
+                  Last_Feature_Ref.Comment.Append ("```");
+            end case;
 
       end case;
    end Add_Code_Fence;
@@ -304,9 +324,11 @@ package body BBT.Tests.Builder is
          when In_Feature =>
             Last_Feature_Ref.Comment.Append (Line);
 
-         when In_Scenario | In_Step =>
+         when In_Scenario =>
             Last_Scenario_Ref.Comment.Append (Line);
-            -- There is no comment attached to Step
+
+         when In_Step =>
+            Last_Step_Ref.Comment.Append (Line);
 
          when In_Background =>
             case Current_Background is

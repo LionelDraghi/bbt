@@ -497,6 +497,7 @@ package body BBT.Scenarios.Step_Parser is
               Action           => Action,
               Step_String      => Step_String,
               Location         => Loc,
+              Comment          => Empty_Text,
               Subject_String   => Subject_String,
               Object_String    => Object_String,
               Object_File_Name => Object_File_Name,

@@ -34,7 +34,7 @@ begin
       Put_Line ("  - When I run `sut --version`");
       Put_Line ("  - Then I get no error");
       Put_Line ("  - And I get `sut v0.1.0`");
-      Put_Line ("  (or ""- And Output is `sut v0.1.0`""");
+      Put_Line ("  (or ""- And Output is `sut v0.1.0`"")");
       New_Line;
       Put_Line ("  Both above form test that the output is exactly `sut v0.1.0`");
       Put_Line ("  If what you want is just test that the output contains that string, then use:");

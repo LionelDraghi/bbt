@@ -196,4 +196,18 @@ won't be recognized as a Feature.
 
 ####  Fenced Code blocks
 
-Only ``` code fence mark is recognized by bbt, meaning that ~~~ can be used within the documentation without interfering with bbt. 
+Both ``` and ~~~ code fence mark are recognized by bbt, but only in steps, and only the first block.
+Meaning that code blocks can be used within the documentation without interfering with bbt.
+
+And, as per Markdown rules, the closing mark should the same as the opening one.
+So that code blocks may include code block marks of the other type.  
+For example, you can have :
+> - Given the file `foo.md` 
+> ```md
+>
+> This md file contains a code fenced block :
+> ~~~
+> here it is
+> ~~~
+> 
+> ```

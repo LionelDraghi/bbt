@@ -10,7 +10,7 @@ Your comments here : it's just normal markdown text.
   - When I run `sut --version`
   - Then I get no error
   - And I get `sut v0.1.0`
-  (or "- And Output is `sut v0.1.0`"
+  (or "- And Output is `sut v0.1.0`")
 
   Both above form test that the output is exactly `sut v0.1.0`
   If what you want is just test that the output contains that string, then use:

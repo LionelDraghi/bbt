@@ -49,7 +49,7 @@ bbt uses code span to express a command, a file or directory name or some expect
 > It is not excluded in the future that the Markdown syntax for files becomes mandatory instead of code span for the same reason : backtick would then be reserved to command or other strings, and File or dir would be written ``[my_file](my_file.md)``.  
 > I'll try to avoid this evolution as it would be less natural to write, and this goes against project objectives.  
  
-5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ```  
+5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is lines between ``` or ~~~ 
   
 Fenced code block are used to specify multiline output or file content, as in: 
 
@@ -65,10 +65,6 @@ Fenced code block are used to specify multiline output or file content, as in:
     -r : recurse
     ```
 ~~~
-
-> [!NOTE]
-> The other legal fenced code blocks marker, "~~~", is ignored by bbt, so that it can be used for documentation purpose without interfering. 
-
 
 ## Command line examples
 
