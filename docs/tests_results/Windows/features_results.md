@@ -16,7 +16,7 @@
 
   - [X] scenario [test the standard output](..\..\features\A020_Then_Contains.md) pass  
 
-  - [X] scenario [compare with a different file](..\..\features\A020_Then_Contains.md) pass  
+  - [X] scenario [compare with an existing file](..\..\features\A020_Then_Contains.md) pass  
 
 
 ## [A030_Then_Does_Not_Contain.md](..\..\features\A030_Then_Does_Not_Contain.md)  
@@ -333,8 +333,13 @@ Expected file "dir 1/file 1" doesn't exists
   - [X] scenario [](..\..\features\C050_Step_marker.md) pass  
 
 
+## [C060_code_block.md](..\..\features\C060_code_block.md)  
+
+  - [X] scenario [Code fenced blocks](..\..\features\C060_code_block.md) pass  
+
+
 ------------------
 - Failed     =  3
-- Successful =  65
+- Successful =  66
 - Empty      =  0
 - Not run    =  0

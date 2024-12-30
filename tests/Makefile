@@ -31,7 +31,7 @@ build:
 
 setup:
 # Manage differences between Windows and Unix
-ifeq ($(PLATFORM), Windows_NT)
+ifeq ($(PLATFORM), Windows)
 	@ln -fs ../sut sut.exe
 	@ln -fs ../bbt bbt.exe
 else
