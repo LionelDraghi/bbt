@@ -149,33 +149,23 @@ package body BBT.Scenarios.MDG_Lexer is
       end if;
    end Bullet_List_Marker;
 
-
    -- --------------------------------------------------------------------------
    subtype Marker_String is String (1 .. 3);
-   Tilda_Fence_Marker    : constant Marker_String := "~~~";
-   Backtick_Fence_Marker : constant Marker_String := "```";
-   No_Marker             : constant Marker_String := "   ";
+   Tilda_Fence_Marker    : constant Marker_String := 3 * '~';
+   Backtick_Fence_Marker : constant Marker_String := 3 * '`';
+   No_Marker             : constant Marker_String := 3 * ' ';
    Current_Fence_Marker  : Marker_String := No_Marker;
    -- Stores what marker was used to open the block
    -- This allows to ignore code block inserted with the other marker
-   function Code_Fence_Line (Line : String) return Boolean is
+   function Code_Fence_Line (Line             : String;
+                             Look_For_Closing : Boolean) return Boolean is
    begin
-      if Current_Fence_Marker = No_Marker then
-         -- looking for the opening marker
-         if Index (Trim (Line, Left), Tilda_Fence_Marker) = 1 then
-            -- this is the closing marker, let's reset
-            Current_Fence_Marker := Tilda_Fence_Marker;
-            return True;
-         elsif Index (Trim (Line, Left), Backtick_Fence_Marker) = 1 then
-            -- this is the closing marker, let's reset
-            Current_Fence_Marker := Backtick_Fence_Marker;
-            return True;
-         else
-            return False;
-         end if;
-
-      else -- looking for the closing marker
-         if Index (Trim (Line, Left), Current_Fence_Marker) = 1 then
+      if Look_For_Closing then
+         -- Looking for the closing marker
+         -- The closing marker must be equal to the opening one
+         if Index (Trim (Line, Left),
+                   Current_Fence_Marker) = 1
+         then
             -- this is the closing marker, let's reset
             Current_Fence_Marker := No_Marker;
             return True;
@@ -183,7 +173,20 @@ package body BBT.Scenarios.MDG_Lexer is
             return False;
          end if;
 
+      else
+         -- The opening marker is of one of the two possibility
+         if Index (Trim (Line, Left), Tilda_Fence_Marker) = 1 then
+            Current_Fence_Marker := Tilda_Fence_Marker;
+            return True;
+         elsif Index (Trim (Line, Left), Backtick_Fence_Marker) = 1 then
+            Current_Fence_Marker := Backtick_Fence_Marker;
+            return True;
+         else
+            return False;
+         end if;
+
       end if;
+
    end Code_Fence_Line;
 
    -- --------------------------------------------------------------------------
@@ -223,9 +226,10 @@ package body BBT.Scenarios.MDG_Lexer is
          -- Null line ----------------------------------------------------------
          return (Kind => Empty_Line);
 
-      elsif Code_Fence_Line (Line.all) then
-         Context.In_Code_Fence := not @; -- Fixme : In_Code_Fence is not used in
-                                         --  Code_Fence_Line
+      elsif Code_Fence_Line (Line             => Line.all,
+                             Look_For_Closing => Context.In_Code_Fence)
+      then
+         Context.In_Code_Fence := not @;
          return (Kind => Code_Fence);
 
       elsif Context.In_Code_Fence then

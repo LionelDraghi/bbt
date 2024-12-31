@@ -7,8 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
-  - [Changed] it's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
-  - [Added]   first implementation of a progress bar, `-sb` option
+  - [Changed] The template file (produce with -ct) is now more complete, so that a user could start with it without reading the doc.
+  - [Added]   Added robustness tests on missing code block marks in scenario files.
+  - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
+  - [Added]   First implementation of a progress bar, `-sb` option
   - [Changed] On the command line, commands no more start with '-' or '--' (previous form still taken into account for now)
   - [Fixed]   Closes #7
   - [Added]   "not equal to file" form added

@@ -178,7 +178,7 @@ package body BBT.Scenarios.Files is
                                            elsif BBT.IO.Line (Loc) in 10 .. 99
                                            then " | "
                                            else "| ");
-
+            Code_Block_Expected : Boolean;
          begin
 
             case Attrib.Kind is
@@ -204,13 +204,16 @@ package body BBT.Scenarios.Files is
                IO.Put_Line ("Step        " & Filler & Line,
                             Location  => Loc,
                             Verbosity => IO.Debug);
-               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln, Loc, Cmd_List);
+               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
+                                                 Loc,
+                                                 Code_Block_Expected,
+                                                 Cmd_List);
                IO.Put_Line ("            " & Filler & "  "
                             & Short_Line_Image (S),
                             Location  => Loc,
                             Verbosity => IO.Debug);
 
-               Tests.Builder.Add_Step (S, Cmd_List);
+               Tests.Builder.Add_Step (S, Code_Block_Expected, Cmd_List);
 
             when Code_Fence =>
                IO.Put_Line ("Code fence  " & Filler & Line,
@@ -237,7 +240,11 @@ package body BBT.Scenarios.Files is
 
          end Line_Processing;
 
+         if Some_Error then exit; end if;
+
       end loop;
+
+      Tests.Builder.End_Of_Scenario (Loc);
 
       -- and finally, let's record the document
       Close (Input);

@@ -48,7 +48,6 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    function Get_Expected (Step : Step_Type) return Text is
       use type Text;
-      No_File_Or_String_Given : exception;
    begin
       if Step.File_Content /= Empty_Text then
          -- File content provided in code fenced lines
@@ -66,7 +65,9 @@ package body BBT.Tests.Actions is
 
       else
          IO.Put_Error ("No file or string given", Step.Location);
-         raise No_File_Or_String_Given;
+         -- Ill formatted scenarios should cause an error and interrupt bbt,
+         -- so this should never append, unless run with "--keep_going".
+         -- Fixme: should be checked
          return Empty_Text;
       end if;
    end Get_Expected;

@@ -310,7 +310,16 @@
   - [X] scenario [Code fenced blocks](../../features/C060_code_block.md) pass  
 
 
+## [C070_missing_code_block.md](../../features/C070_missing_code_block.md)  
+
+  ### Feature: missing or erroneous code blocks  
+
+  - [X] scenario [Code block missing at the end of the file](../../features/C070_missing_code_block.md) pass  
+
+  - [X] scenario [closing code block mark missing](../../features/C070_missing_code_block.md) pass  
+
+
 ------------------
 - Failed     =  0
-- Successful =  69
+- Successful =  71
 - Empty      =  0

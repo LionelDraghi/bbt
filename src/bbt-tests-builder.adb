@@ -10,11 +10,11 @@ with BBT.Settings;
 
 with Text_Utilities; use Text_Utilities;
 
+with Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Tests.Builder is
 
-   The_Doc_List : aliased Documents_Lists.Vector;
 
    type States is (In_Document,
                    In_Feature,
@@ -35,25 +35,43 @@ package body BBT.Tests.Builder is
    package FSM is
 
       function Current_State return States;
-      procedure Set_State (To_State : States);
+      procedure Set_State (To_State    : States;
+                           CB_Expected : Boolean := False);
       procedure Restore_Previous_State;
 
       function Current_Doc_State return Doc_States;
       function Current_Background return Backgrounds;
       function Current_Step_State return Step_States;
 
-      procedure Set_Step_State (To_State : Step_States);
+      procedure Set_Step_State (To_State            : Step_States;
+                                Code_Block_Expected : Boolean);
 
       function Code_Block_Already_Set return Boolean;
       -- Tell if a code block has already been provided in that step.
       -- Reset when calling Set_State (In_Step),
       -- that is when a new step starts.
 
+      function Code_Block_Missing return Boolean;
+      -- Tell if a code block is missing in a Step needing one.
+      -- WARNING : this function has side effect, to avoid multiple
+      -- error reporting, it will return True only once;
+
    end FSM;
 
    package body FSM is separate;
 
+   The_Doc_List        : aliased Documents_Lists.Vector;
+   Opening_Marker_Line : Ada.Text_IO.Count := 0;
+
    use FSM;
+
+   -- --------------------------------------------------------------------------
+   procedure Check_Missing_Code_Block (Loc : Location_Type) is
+   begin
+      if Code_Block_Missing then
+         Put_Error ("missing expected Code Block", Loc);
+      end if;
+   end Check_Missing_Code_Block;
 
    -- --------------------------------------------------------------------------
    function Last_Doc_Ref return Documents_Lists.Reference_Type is
@@ -111,6 +129,7 @@ package body BBT.Tests.Builder is
                        Location        => Loc,
                        others          => <>));
       Set_State (In_Feature);
+      Check_Missing_Code_Block (Loc);
    end Add_Feature;
 
    -- --------------------------------------------------------------------------
@@ -131,6 +150,7 @@ package body BBT.Tests.Builder is
                               others         => <>));
       end case;
       Set_State (In_Scenario);
+      Check_Missing_Code_Block (Loc);
    end Add_Scenario;
 
    -- --------------------------------------------------------------------------
@@ -157,11 +177,14 @@ package body BBT.Tests.Builder is
       end case;
 
       Set_State (In_Background);
+      Check_Missing_Code_Block (Loc);
+
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step     : Step_Type;
-                       Cmd_List : Cmd_Lists.Vector) is
+   procedure Add_Step (Step                : Step_Type;
+                       Code_Block_Expected : Boolean;
+                       Cmd_List            : Cmd_Lists.Vector) is
 
       -- -----------------------------------------------------------------------
       procedure Append_Step (Scen : not null access Scenario_Type) is
@@ -205,7 +228,7 @@ package body BBT.Tests.Builder is
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
            To_String (Step.Step_String)
-           & """ declaration, should be in Scenarios or Background";
+           & """ declaration, should be in Scenario or Background";
       end if;
 
       case Step.Cat is
@@ -228,7 +251,7 @@ package body BBT.Tests.Builder is
                                   Step.Location);
                end if;
             end if;
-            Set_Step_State (In_Given_Step);
+            Set_Step_State (In_Given_Step, Code_Block_Expected);
 
          when When_Step  =>
             if Settings.Strict_Gherkin then
@@ -243,10 +266,10 @@ package body BBT.Tests.Builder is
                                  Step.Location);
                end if;
             end if;
-            Set_Step_State (In_When_Step);
+            Set_Step_State (In_When_Step, Code_Block_Expected);
 
          when Then_Step  =>
-            Set_Step_State (In_Then_Step);
+            Set_Step_State (In_Then_Step, Code_Block_Expected);
 
       end case;
 
@@ -260,6 +283,7 @@ package body BBT.Tests.Builder is
               ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
 
       end case;
+      Check_Missing_Code_Block (Step.Location);
    end Add_Step;
 
    -- --------------------------------------------------------------------------
@@ -273,6 +297,7 @@ package body BBT.Tests.Builder is
       -- Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Step =>
+            Opening_Marker_Line := Line (Loc);
             if Code_Block_Already_Set then
                Put_Warning
                  ("File content already provided, ignoring this code fence",
@@ -284,6 +309,7 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Exiting code block
+            Opening_Marker_Line := 0;
             Restore_Previous_State;
             Put_Line ("Add_Code_Block, exiting code block. File_Content = "
                       & Last_Step_Ref.File_Content'Image,
@@ -313,6 +339,17 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    function In_File_Content return Boolean is (Current_State = In_File_Content);
+
+   -- --------------------------------------------------------------------------
+   procedure End_Of_Scenario (Loc : Location_Type) is
+   begin
+      Check_Missing_Code_Block (Loc);
+      if Current_State = In_File_Content then
+         Put_Error ("Code fenced block opened line"
+                    & Opening_Marker_Line'Image &
+                      ", but not not closed", Loc);
+      end if;
+   end End_Of_Scenario;
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String) is

@@ -41,7 +41,7 @@ package body BBT.Scenarios.Step_Parser.Lexer is
          "doesn't",
          "error",
          "is",
-         "or",
+         -- "or",
          "output",
          "contain",
          "contains",
@@ -57,7 +57,7 @@ package body BBT.Scenarios.Step_Parser.Lexer is
    function Is_A_Keyword (S      : access constant String;
                           First  : Positive;
                           Last   : Natural := 0)
-                             return Boolean
+                          return Boolean
    is
    -- We first remove potential emphasis on keyword
    -- [](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)

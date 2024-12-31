@@ -115,23 +115,26 @@ begin
 
       for File of Scenarios.Files.BBT_Files loop
          Scenarios.Files.Analyze_MDG_File (File);
+         exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
+
       Tests.Builder.Duplicate_Multiple_Run;
       -- Process in all recorded scenario the
       -- duplication of the "run X or Y" steps.
 
       if Settings.Explain then
          -- Dry run --
-
          -- Let's display our rebuild of the original test definition file
          -- comment lines are filtered out
          Status_Bar.Put_Activity ("Display loaded scenarios");
          Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
       else
-         -- Real run --
-         Status_Bar.Put_Activity ("Running scenarios");
-         Tests.Runner.Run_All;
+         if IO.No_Error or Settings.Keep_Going then
+            -- Real run --
+            Status_Bar.Put_Activity ("Running scenarios");
+            Tests.Runner.Run_All;
+         end if;
          Documents.Compute_Overall_Tests_Results;
          Documents.Put_Overall_Results;
 

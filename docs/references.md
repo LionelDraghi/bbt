@@ -20,6 +20,7 @@
 
 - *Feature*
 - *Scenario* or *Example*
+- *Background*
 - *Given*
 - *When*
 - *Then*

@@ -155,6 +155,7 @@ private package BBT.IO is
    -- Some_Error return True if some error occurred, or if some Warning
    -- occurred and option to treat warning as error is set.
    function Some_Error return Boolean;
+   function No_Error return Boolean is (not Some_Error);
 
    -- --------------------------------------------------------------------------
    function Image (Time : Ada.Calendar.Time) return String;
