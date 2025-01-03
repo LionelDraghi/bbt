@@ -42,7 +42,7 @@ I’ve been trying this out a bit on Windows, and it seems like a great fit to t
 One more line.
 ```
 
-** Interesting case of a scenario without "When"! **
+Interesting case of a scenario without "When"!, but very unlikely outside of bbt tests.
 
 - Then `tmp.1` is not equal to file `tmp.4`
 - Then `tmp.4` is not equal to file `tmp.1`
