@@ -109,10 +109,6 @@ also accept the code span shortcut when there is only one line.
 
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compile and run the ubiquitous *Hello Word*.
 
-> [!NOTE]
-> bbt is fully tested with bbt since 0.0.4 version.
-> bbt own tests are based on features descriptions indexed [here](docs/tests_results/Linux/features_results.md).
-
 ## Main characteristics
 
 ### Write once
@@ -172,7 +168,15 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 The code has grown fast in the first three months, and is far from being clean.  
 Nevertheless, bbt is working. 
 It has as a serious [test base](docs/tests_results/Linux/features_results.md).  
+
+> [!NOTE]
+> bbt is fully tested with bbt since 0.0.4 version.
+> bbt own tests are based on features descriptions indexed [here](docs/tests_results/Linux/features_results.md).
+
 In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
+
+A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
+Tests where easy and fast to setup, allowing to stay 99% of the time focus on the code.
 
 btt compile on Linux, Windows and Mac OS (at least the Alire version), but is currently tested only on Linux (my dev. platform) and Windows.
 
