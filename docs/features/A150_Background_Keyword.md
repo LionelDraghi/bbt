@@ -1,6 +1,6 @@
 ## Overview
 
-Background are special scenario, that may be used :
+A Background is a special scenario, that may be used :
 1. at the beginning of the file, that is before any feature or scenario.  
 In that case, the background content will be executed before  
 all scenarios in the file;
