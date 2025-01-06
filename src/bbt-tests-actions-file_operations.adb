@@ -38,7 +38,7 @@ package body BBT.Tests.Actions.File_Operations is
       return Ada.Directories.Exists (Name);
    exception
       when Ada.Directories.Name_Error =>
-         Put_Warning ("Illegal file name : " & Name);
+         Put_Error ("Illegal file name : """ & Name & """");
          raise;
          -- return False;
    end Exists;
