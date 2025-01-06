@@ -319,7 +319,14 @@
   - [X] scenario [closing code block mark missing](../../features/C070_missing_code_block.md) pass  
 
 
+## [C080_missing_scenario.md](../../features/C080_missing_scenario.md)  
+
+  ### Feature:   
+
+  - [X] scenario [No scenario](../../features/C080_missing_scenario.md) pass  
+
+
 ------------------
 - Failed     =  0
-- Successful =  71
+- Successful =  72
 - Empty      =  0
