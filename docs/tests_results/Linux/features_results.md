@@ -270,6 +270,13 @@
   - [X] scenario [without `-k`](../../features/B080_Keep_Going.md) pass  
 
 
+## [B090_tmp_dir.md](../../features/B090_tmp_dir.md)  
+
+  ### Feature: Tmp dir  
+
+  - [X] scenario [](../../features/B090_tmp_dir.md) pass  
+
+
 ## [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
 
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
@@ -328,5 +335,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  72
+- Successful =  73
 - Empty      =  0

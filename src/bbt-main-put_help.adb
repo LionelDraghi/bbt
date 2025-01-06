@@ -42,7 +42,7 @@ begin
    Put_Line ("                             This file will contains the normal bbt output,");
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
-   Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
+   -- Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
    Put_Line ("   -ed  | --exec_dir 'dir'   : run command in dir instead of current dir");
    Put_Line ("   -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir");
    Put_Line ("          --strict           : warning on steps not following the Given/When/Then order.");

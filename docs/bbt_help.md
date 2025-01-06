@@ -29,7 +29,6 @@ Options :
                              This file will contains the normal bbt output,
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
-   -ot  | --output_tag 'tag' : include a specific tag in the results file
    -ed  | --exec_dir 'dir'   : run command in dir instead of current dir
    -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir
           --strict           : warning on steps not following the Given/When/Then order.

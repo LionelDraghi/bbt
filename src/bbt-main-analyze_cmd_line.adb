@@ -76,9 +76,9 @@ begin
             -- Verbose is the right detail level for the Markdown output file,
             -- even if --quiet or -- verbose is set.
 
-         elsif Arg = "-ot" or Arg = "--output_tag" then
-            Next_Arg;
-            -- Fixme: opt -ot / --output_tag not yet coded
+         --  elsif Arg = "-ot" or Arg = "--output_tag" then
+         --     Next_Arg;
+         --     -- Fixme: opt -ot / --output_tag not yet coded
 
          elsif Arg = "-ed" or Arg = "--exec_dir" then
             Next_Arg;

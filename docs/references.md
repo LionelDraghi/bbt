@@ -38,7 +38,7 @@ Add some attribute adjectives (e.g. *empty*), and here we are.
 
 Here is an excerpt from the grammar :
 ```
-When             run              text|file --> RUN_CMD
+| When  |     |        | run              | `text` | RUN_CMD                 |
 ```
 - First, the keywords : here, `When` and `run`. 
 - Then, some text or file name, between backtick.
@@ -86,7 +86,7 @@ This is specification, make short sentences and go straight to the point.
     line 3
     ```
     ~~~
-    Note that unless using the --assume_yes option, user will be prompted to confirm deletions.
+    Note that unless using the --yes option, user will be prompted to confirm deletions.
 
   - ``Given there is no directory `dir1` ``  
     Return *success* if there is no directory dir1, or if dir1 was successfully deleted.
