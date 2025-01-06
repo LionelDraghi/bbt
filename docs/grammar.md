@@ -1,5 +1,4 @@
 | Prep  |     |Subject |       Verb       | Object |         Action          | Code block expected |  
-|       |     |        |                  |        |                         |            |  
 |-------|-----|--------|------------------|--------|-------------------------|------------|  
 | Given |     |        | run              | `text` | RUN_CMD                 |            |  
 | Given |     |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |  
