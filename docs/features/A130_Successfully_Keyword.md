@@ -7,7 +7,7 @@ is a handy shortcut to :
 `When I run 'X'`  
 `Then I get no error`
 
-Credit : I don't know who invented this, but I borrowed the idea to [Aruba](https://github.com/cucumber/aruba/tree/main/features/).
+Credit : I don't know who invented this, but I borrowed the idea from [Aruba](https://github.com/cucumber/aruba/tree/main/features/).
 
 ### Scenario : *when I successfully run* a command with successful run
 
