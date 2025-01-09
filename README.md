@@ -72,7 +72,7 @@ We have :
 
 ### Partial parsing 
 
-A distinctive feature of bbt is that it directly understand those almost normal english sentences like :  
+A distinctive feature of bbt is that it seems to directly understand those almost normal english sentences like :  
 ```
 - When I run `sut --quiet input.txt`
 - Then I have no output
