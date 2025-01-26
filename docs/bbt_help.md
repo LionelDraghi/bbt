@@ -5,16 +5,16 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 
 If no file name provided, read *.md (recursively if "-r")
 
-Command :
+Commands:
    lf  | list_files      : list Scenario files found
    lk  | list_keywords   : list Step keywords
    lg  | list_grammar    : list rules for Step analysis
-   ex  | explain         : explain what bbt understand from Scenarios files
+   ex  | explain         : explain what bbt understands from Scenarios files
                               (do not run the scenarios)
    ct  | create_template : create a commented example of rules file
    he  | help            : this message
 
-Options :
+Options:
           --yes            : do not prompt if deletion is needed in
                              "Given" steps, silently answer yes
    -c   | --cleanup        : after run, remove every file and dir
@@ -23,10 +23,10 @@ Options :
    -k   | --keep_going     : Do as much work as possible
    -v   | --verbose
    -q   | --quiet          : no message unless error,
-                             Warning are also ignored
+                             Warnings are also ignored
    -o   | --output file.md : create an md file with test results
-                             that index all scenarios run.
-                             This file will contains the normal bbt output,
+                             that indexes all scenarios run.
+                             This file will contain the normal bbt output,
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
    -ed  | --exec_dir 'dir'   : run command in dir instead of current dir
@@ -40,6 +40,6 @@ Debug options:
    -t topic               : activate log related to the topic
 
 bbt version "0.0.6"
-http://lionel.draghi.free.fr/bbt/
+https://github.com/LionelDraghi/bbt/
 
 ```
