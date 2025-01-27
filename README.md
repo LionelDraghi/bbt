@@ -165,9 +165,8 @@ Using a natural language description for those kind of tests is a very tempting 
 bbt is in an early stage, meaning that interface and behavior are subject to changes.  
 Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
-The code has grown fast in the first three months, and is far from being clean.  
-Nevertheless, bbt is working. 
-It has as a serious [test base](docs/tests_results/Linux/features_results.md).  
+The code has grown fast in the second half of 2024, and is far from being clean.  
+Nevertheless, bbt is working, and has as a serious [test base](docs/tests_results/Linux/features_results.md).  
 
 > [!NOTE]
 > bbt is fully tested with bbt since 0.0.4 version.
