@@ -10,13 +10,13 @@
 
 ==== DRAFT ====
 
-bbt processing implement essentially a sequential process:
+bbt processing implements essentially a sequential process:
 
 1. First step is the command line analysis.
 
 It’s implemented in BBT.Main procedure and child packages.  
    
-The list of scenario file matching the pattern on command line is stored in BBT.Scenario.Files.BBT_Files during this step.  
+The list of scenario files matching the pattern on command line is stored in BBT.Scenario.Files.BBT_Files during this step.  
 Options resulting from that analysis are store in the BBT.Settings package, and may be displayed thanks to `bbt -ls` (that stands for list settings).
 
 2. Second step is the parsing of the documentation files.
@@ -28,10 +28,10 @@ It’s goal is to extract the Gherkin structure from the scenario files, that is
 For example, in a Markdown file, a scenario may be declared this way:  
 > ## Scenario: My_Scenario
 
-But in a Asciidoc text it will be:  
+But in a Asciidoc text, it will be:  
 > == Scenario: My_Scenario
 
-In both case, this first lexer will return a Scenario called My_Scenario, and the location in the file for error message purpose.
+In both cases, this first lexer will return a Scenario called My_Scenario, and the location in the file for error message purpose.
  
 
 3. Building the scenario
@@ -42,7 +42,7 @@ The scenario builder is implemented in BBT.Tests.Builder package and child packa
 It is in charge of building the internal representation of analyzed scenarios, that is a list of documents (files), containing a list of feature and background and scenarios.  
 Coherency tests on the scenario structure are done here: for example, if a step is declared before any background or scenario declaration, it will be an error.  
 
-The internal representation of the scenarios is stored in the BBT. Documentation package
+The internal representation of the scenarios is stored in the BBT documentation package.
 
 4. Parsing of the steps
 
@@ -62,14 +62,14 @@ One of the component of the scenario file will be further analyzed, it’s the s
 
 ## Development environment
 Some external tools are required to fully run the Makefile, and 
-I don't know whether they are available on Windows, Mac-OS or even on all Linux distribution.  
+I don't know whether they are available on Windows, Mac-OS or even on all Linux distributions.  
 I try to minimise the number of those dependencies, and also try to choose widely available tools.
 
-No external tools is required to compile and run all tests (within docs/features), except the gnat compiler and Alire.
+No external tools are required to compile and run all tests (within docs/features), except the gnat compiler and Alire.
 To avoid external dependencies, a false exe named `sut` (that means Software Under Test) is used for `bbt` tests own needs.  
 Sources of `sut` are in the `tools` sub-directory.
 
 External dependencies:
 
-1. For the sake of clarity, the examples (within docs/examples) uses real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
+1. For the sake of clarity, the examples (within docs/examples) use a real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.
