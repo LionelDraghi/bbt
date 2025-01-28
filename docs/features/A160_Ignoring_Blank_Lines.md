@@ -1,7 +1,7 @@
 ### Scenario: Comparing ignoring blank lines
 
 bbt default behavior is to ignore blank lines.
-There is not keyword to change this setting right now.
+There is no keyword to change this setting right now.
 When implemented, another scenario will be added here, and the file renamed `A160_xxx_keyword.md`.
 
 - Given the file `le Cid.txt`
