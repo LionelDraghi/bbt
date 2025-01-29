@@ -3,7 +3,7 @@
 bbt aims at being as tolerant as possible to formatting imprecisions, while still respecting [the CommonMark](https://spec.commonmark.org/) specification, and 
 Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md)
 
-1. Header and Title
+1. Header and Title  
    An [ATX Heading](https://spec.commonmark.org/0.31.2/#atx-heading) is a sequence of # (up to 6) followed by a sequence of spaces, tab or EOL, and possibly concluded with a sequence of #.  
    So, for bbt : 
    + "# Scenario" 
