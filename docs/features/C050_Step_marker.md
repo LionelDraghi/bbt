@@ -1,7 +1,7 @@
 ## Feature:
 
-bbt only recognize `-` as a step marker.
-Meaning that I can use other Markdown list marker `*` or `+` in the middle of the steps to build lists.
+bbt only recognize `-` as a step marker.  
+Meaning that I can use other Markdown list marker `*` or `+` in the middle of the steps to build lists.  
 I can even use `+ When`, it won't be recognized as a step.
 
 ### Scenario:
