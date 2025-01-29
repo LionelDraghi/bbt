@@ -28,7 +28,7 @@ code_block_missing_at_EOF.md:4: Error : missing expected Code Block
 - Then output is
 ```
 Whatever
-- Then there is no output
+- And there is no output
 ~~~
 
 - When I run `./bbt -c code_block_not_closed.md`
