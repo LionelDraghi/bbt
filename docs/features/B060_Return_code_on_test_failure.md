@@ -29,8 +29,8 @@ sut version 1.0
 - Given the new `wrong_option.md` file
 ```md
 # Scenario: Wrong option
-- When I run `sut -wxz`
-- Then output contains `sut version`
+- When I run `sut -v -wxz`
+- Then output contains `version 1.0`
 ```
 
 - When I run `./bbt --cleanup wrong_option.md`
