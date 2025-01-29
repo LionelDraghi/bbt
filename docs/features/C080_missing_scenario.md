@@ -8,7 +8,8 @@ When there is none, it deserve a clear error message!
 ~~~
 - When I run `./sut --version`
 - Then I get `God save the Queen`
-Should raise an error if executed. But should not be, unless -k is used.
+Raise an error if executed.
+But should not be executed, unless -k is used.
 ~~~
 
 - When I run `./bbt No_Scenario.md`
