@@ -10,7 +10,7 @@ use Ada.Text_IO;
 
 procedure sut is
    -- sut (Unit under Test) is a fake exe that just interact with the system,
-   -- by, as an example, creating or modifying file, to test bbt.
+   -- by, as an example, creating or modifying a file, to test bbt.
 
    -- -------------------------------------------------------------------------
    procedure Put_Usage is
