@@ -90,6 +90,23 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
                      ", output file = " & Output_Name,
                    Verbosity => IO.Debug);
+
+      for I in Spawn_Arg.all'Range loop
+         IO.Put_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
+         declare
+            Tmp : String := Spawn_Arg.all (I).all;
+            I1  : constant Positive := (if Tmp (Tmp'First) = '"' then Tmp'First + 1
+                                        else Tmp'First);
+            I2  : constant Positive := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
+                                        else Tmp'Last);
+            -- uggly and buggy
+         begin
+            Free (Spawn_Arg.all (I));
+            Spawn_Arg.all (I) := new String'(Tmp (I1 .. I2));
+         end;
+         IO.Put_Line ("===========" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
+      end loop;
+
       Spawn (Program_Name => Spawn_Arg.all (1).all,
              Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
              Success      => Spawn_OK,
