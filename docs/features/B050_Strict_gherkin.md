@@ -33,15 +33,15 @@ Never the less, a `--strict` option is provided that emit Warnings on (some) of 
   t1.md:3: Warning : Multiple When in the same Scenario
   ```
 - And `tmp.txt` contains 
-```
-fillet
-chamfer
-```
+  ```
+  fillet
+  chamfer
+  ```
 
 - When I successfully run `./bbt t1.md`
 - Then the output do not contain `Warning`
 - And `tmp.txt` contains 
   ```
-fillet
-chamfer
+  fillet
+  chamfer
   ```
