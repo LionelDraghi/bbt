@@ -2,7 +2,7 @@
 ## Feature : testing the existence of a file
 
 bbt aims at facilitating the developer's life!  
-So when the precondition (the `Given` step) says that there should no `config.ini` file, bbt will not only check that a file does not exist, but he will also propose to erase it if there's one.  
+So when the precondition (the `Given` step) says that there should be no `config.ini` file, bbt will not only check that a file does not exist, but he will also propose to erase it if there's one.  
 
 When in a test suite, this test should be run with the --yes option, otherwise it will stop and prompt the user to confirm the erasing of the file.
 
