@@ -1,11 +1,15 @@
 <!-- omit from toc -->
 ## Feature: multiples scenarios given in command line
 
-bbt is able to run multiple files, according to the command line.    
+bbt is able to run multiple scenario files, according to the command line.    
 It is possible to specify one or more directories.  
 
 It is also possible to use globing character and to run, for example, `bbt tests/*.scen`  
 Note that this is not really tested here, as the globbing expansion is done by the shell. bbt will actually be called with `bbt tests/file1.scen tests/file2.scen` etc. (but this case is tested)
+
+> [!NOTE]
+> If search directories are specified, but no scenario file name, bbt will consider every .md file found as a scenario.  
+> This behavior is subject to discussion, and could be modified in the future.  
 
 - [Background:](#background)
 - [Scenario: no file or dir on the command line](#scenario-no-file-or-dir-on-the-command-line)
