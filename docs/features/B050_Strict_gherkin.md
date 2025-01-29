@@ -44,4 +44,5 @@ Never the less, a `--strict` option is provided that emit Warnings on (some) of 
   ```
   fillet
   chamfer
-  ```
+  ```  
+  (We check that the result is the same with or without the Warning)
