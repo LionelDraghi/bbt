@@ -41,7 +41,7 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
 - Given the new file `9.md` containing `  # Scenario`
 
 - When I successfully run `./bbt 1.md`
-- Then output contains `scenario [S1](1.md) is empty, nothing tested`
+- Then output contains `scenario [S1](1.md) is empty, nothing tested`  
 (We don't care that the test is empty, what we are testing is that the scenario is recognized.)
   
 - When I successfully run `./bbt 2.md`
@@ -84,5 +84,5 @@ Background:
 - When I run `./bbt -d no_heading_marker.input`
 ```
 - Then output contain `Warning : No scenario in document "no_heading_marker.input`
-- ANd  output contain `Empty       =  1`
+- And  output contain `Empty       =  1`
 ```
