@@ -14,6 +14,7 @@ One more line.
 ```
 ### Scenario
 - Then `tmp.1` is equal to file `tmp.2`
+- Then `tmp.2` is equal to file `tmp.1`
 ```
 
 - When I run `./bbt test_that_should_fail.md`
