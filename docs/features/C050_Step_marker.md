@@ -5,6 +5,9 @@ Meaning that I can use other Markdown list marker `*` or `+` in the middle of th
 I can even use `+ When`, it won't be recognized as a step.
 
 ### Scenario:
+- Given the file `step_markers.md`
+~~~
+# Scenario:
 - Given the `config.ini` file
   ```
   ignore_hidden=true
@@ -21,3 +24,8 @@ I can even use `+ When`, it won't be recognized as a step.
 * Then `config.ini` contains `whatever`  
   (this comment line, if considered erroneously as a step, should cause the test to fail)
 * other list item
+~~~
+
+- When I run `./bbt -c step_markers.md`
+- Then I get no error
+- And the output contains `Successful =  1` 

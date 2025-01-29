@@ -121,7 +121,9 @@ package body BBT.Scenarios.Step_Parser is
       G (Given, No_SA,  No_Subject,   Is_V,       Obj_File_Name)       := (Check_File_Existence, False); -- Given there is a `config.ini` file
       G (Given, No_SA,  No_Subject,   Is_V,       Obj_Dir_Name)        := (Check_Dir_Existence, False);  -- Given there is a `dir1` directory
       G (Given, New_SA, Subject_File, Containing, Obj_Text)            := (Erase_And_Create, False); -- Given the new file `config.ini` containing `lang=it`
-      G (Given, No_SA,  Subject_File, Containing, Obj_Text)            := (Create_File, False);      -- Given the file `config.ini` containing `lang=it`
+      G (Given, New_SA, Subject_File, Containing, No_Object)           := (Create_File, True);       -- Given the new file `config.ini` followed by code fenced content
+      G (Given, No_SA,  Subject_File, Containing, Obj_Text)            := (Erase_And_Create, False); -- Given the file `config.ini` containing `lang=it`
+      G (Given, No_SA,  Subject_File, Containing, No_Object)           := (Create_File, True);       -- Given the file `config.ini` followed by code fenced content
       G (Given, New_SA, Subject_File, No_Verb,    No_Object)           := (Erase_And_Create, True); -- Given the new file `config.ini` followed by code fenced content
       G (Given, No_SA,  Subject_File, No_Verb,    No_Object)           := (Create_File, True);      -- Given the file `config.ini` followed by code fenced content
       G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)           := (Erase_And_Create, False); -- Given the new directory `dir1`

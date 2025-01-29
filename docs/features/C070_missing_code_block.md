@@ -37,3 +37,20 @@ Whatever
 ```
 code_block_not_closed.md:6: Error : Code fenced block opened line 4, but not not closed
 ```
+
+- Given the file `code_block_not_closed2.md`
+~~~
+# Scenario
+- When I run `./sut --version`
+
+- Then output is
+```
+Whatever
+~~~
+
+- When I run `./bbt -c code_block_not_closed2.md`
+- Then there is an error 
+- And  the output contains 
+```
+code_block_not_closed2.md:6: Error : Code fenced block opened line 5, but not not closed
+```

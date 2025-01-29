@@ -118,26 +118,30 @@ begin
          exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
 
-      Tests.Builder.Duplicate_Multiple_Run;
-      -- Process in all recorded scenario the
-      -- duplication of the "run X or Y" steps.
+      if not IO.Some_Error or Settings.Keep_Going then
+      -- If there is some error during the file analysis, we don't go further
+      -- except if the Keep_Going option is set.
+         Tests.Builder.Duplicate_Multiple_Run;
+         -- Process in all recorded scenario the
+         -- duplication of the "run X or Y" steps.
 
-      if Settings.Explain then
-         -- Dry run --
-         -- Let's display our rebuild of the original test definition file
-         -- comment lines are filtered out
-         Status_Bar.Put_Activity ("Display loaded scenarios");
-         Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
+         if Settings.Explain then
+            -- Dry run --
+            -- Let's display our rebuild of the original test definition file
+            -- comment lines are filtered out
+            Status_Bar.Put_Activity ("Display loaded scenarios");
+            Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
-      else
-         if IO.No_Error or Settings.Keep_Going then
-            -- Real run --
-            Status_Bar.Put_Activity ("Running scenarios");
-            Tests.Runner.Run_All;
+         else
+            if IO.No_Error or Settings.Keep_Going then
+               -- Real run --
+               Status_Bar.Put_Activity ("Running scenarios");
+               Tests.Runner.Run_All;
+            end if;
+            Documents.Compute_Overall_Tests_Results;
+            Documents.Put_Overall_Results;
+
          end if;
-         Documents.Compute_Overall_Tests_Results;
-         Documents.Put_Overall_Results;
-
       end if;
    end if;
 

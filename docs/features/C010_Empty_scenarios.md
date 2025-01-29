@@ -21,7 +21,7 @@ And we don't want that to be unnoticed, so :
 - And  the output contains `Empty      =  1`
 - And I get no error
   
-### Scenario: No scenario test
+### Scenario: No scenario in Feature
 
 - Given the `no_step_or_scenario_in_feature.input` file
 ```md

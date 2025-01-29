@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
+  - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
+  - [Added]   `Given the file containing` now accept code fenced block content .
   - [Changed] The template file (produce with -ct) is now more complete, so that a user could start with it without reading the doc.
   - [Added]   Added robustness tests on missing code block marks in scenario files.
   - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.

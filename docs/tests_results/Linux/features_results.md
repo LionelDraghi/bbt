@@ -1,4 +1,17 @@
 
+## [A005_Given.md](../../features/A005_Given.md)  
+
+  ### Feature:   
+
+  - [X] scenario [Checking that there is no file or dir](../../features/A005_Given.md) pass  
+
+  - [X] scenario [Checking that there is some dir](../../features/A005_Given.md) pass  
+
+  - [X] scenario [Checking that there is a file with some content](../../features/A005_Given.md) pass  
+
+  - [X] scenario [Creating a file with some content](../../features/A005_Given.md) pass  
+
+
 ## [A010_Then_Contains_String.md](../../features/A010_Then_Contains_String.md)  
 
   ### Feature: testing that a file contains a line  
@@ -281,7 +294,7 @@
 
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
 
-  - [X] scenario [No scenario test](../../features/C010_Empty_scenarios.md) pass  
+  - [X] scenario [No scenario in Feature](../../features/C010_Empty_scenarios.md) pass  
 
 
 ## [C020_Escaped_char.md](../../features/C020_Escaped_char.md)  
@@ -330,10 +343,12 @@
 
   ### Feature:   
 
-  - [X] scenario [No scenario](../../features/C080_missing_scenario.md) pass  
+  - [X] scenario [Steps without scenario header](../../features/C080_missing_scenario.md) pass  
+
+  - [X] scenario [Empty file](../../features/C080_missing_scenario.md) pass  
 
 
 ------------------
 - Failed     =  0
-- Successful =  73
+- Successful =  78
 - Empty      =  0

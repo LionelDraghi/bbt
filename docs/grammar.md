@@ -8,9 +8,11 @@
 | Given |     |        | is no            | `dir`  | SETUP_NO_DIR            |            |  
 | Given |     | `dir`  |                  |        | CREATE_DIRECTORY        |            |  
 | Given |     | `file` |                  |        | CREATE_FILE             |     X      |  
-| Given |     | `file` | containing       | `text` | CREATE_FILE             |            |  
+| Given |     | `file` | containing       |        | CREATE_FILE             |     X      |  
+| Given |     | `file` | containing       | `text` | ERASE_AND_CREATE        |            |  
 | Given | new | `dir`  |                  |        | ERASE_AND_CREATE        |            |  
 | Given | new | `file` |                  |        | ERASE_AND_CREATE        |     X      |  
+| Given | new | `file` | containing       |        | CREATE_FILE             |     X      |  
 | Given | new | `file` | containing       | `text` | ERASE_AND_CREATE        |            |  
 | When  |     |        | run              | `text` | RUN_CMD                 |            |  
 | When  |     |        | run              | `cmd`  | RUN_CMD                 |            |  

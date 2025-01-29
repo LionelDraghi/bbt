@@ -18,11 +18,26 @@ It is meant to check and setup the execution environment, by:
 - Then there is a dir `dir2`
 
 ### Scenario: Checking that there is a file with some content
-- Given there is no `file3`
+- Given there is no file `file3`
 - Given the file `file3`
 ~~~
 Hello world!
 ~~~
 
 - Then file `file3` is `Hello World!`
+
+### Scenario: Creating a file with some content
+- Given the file `file4` containing `alpha`
+- Given the file `file5` containing 
+~~~
+beta
+zeta
+~~~
+
+- Then file `file4` is `alpha`
+- Then file `file5` is
+~~~
+beta
+zeta
+~~~
 

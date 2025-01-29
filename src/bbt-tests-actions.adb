@@ -64,10 +64,13 @@ package body BBT.Tests.Actions is
          return [1 => +Step.Object_String];
 
       else
-         IO.Put_Error ("No file or string given", Step.Location);
-         -- Ill formatted scenarios should cause an error and interrupt bbt,
-         -- so this should never append, unless run with "--keep_going".
-         -- Fixme: should be checked
+         -- Either the provided file content was null (two consecutive code
+         -- fence marks), or there is an error somewhere in the scenario.
+         -- But scenario errors are supposed to be caught during scenario
+         -- analysis, and the run stopped before reaching this point,
+         -- unless run with "--keep_going".
+         -- In both cases, returning an Empty_Text seems to be the right
+         -- things to do.
          return Empty_Text;
       end if;
    end Get_Expected;
