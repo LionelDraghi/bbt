@@ -62,14 +62,18 @@ autosave=true
 - And output contains 
 ```
 file config.ini does not contain expected
-| mode=silent    
-| lang=uk    
-| recurse=true    
-| autosave=true    
+~~~
+mode=silent    
+lang=uk    
+recurse=true    
+autosave=true    
+~~~
   
 but:   
-| mode=silent    
-| lang=fr      
-| recurse=true     
-| autosave=true 
+~~~
+mode=silent    
+lang=fr      
+recurse=true     
+autosave=true 
+~~~
 ```

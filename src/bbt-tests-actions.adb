@@ -97,8 +97,8 @@ package body BBT.Tests.Actions is
             Tmp : String := Spawn_Arg.all (I).all;
             I1  : constant Positive := (if Tmp (Tmp'First) = '"' then Tmp'First + 1
                                         else Tmp'First);
-            I2  : constant Positive := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
-                                        else Tmp'Last);
+            I2  : constant Natural := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
+                                       else Tmp'Last);
             -- uggly and buggy
          begin
             Free (Spawn_Arg.all (I));
@@ -377,8 +377,8 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (Output, T2,
                          Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "Output:  " & Text_Image (Output) &
-                         "not equal to expected:  " & Text_Image (T2),
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                         "not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Output_Is;
 
@@ -391,8 +391,9 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => Contains (Output, T2,
                          Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "Output:  " & Text_Image (Output) &
-                         "does not contain expected:  " & Text_Image (T2),
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                         "does not contain expected:  " &
+                         Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Output_Contains;
 
@@ -405,8 +406,8 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => not Contains (Output, T2,
                          Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "Output:  " & Text_Image (Output) &
-                         "contains unexpected:  " & Text_Image (T2),
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                         "contains unexpected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Output_Does_Not_Contain;
 
@@ -420,8 +421,8 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (T1, T2,
                          Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => Text_Image (T1) &
-                         "not equal to expected:  " & Text_Image (T2),
+                       Fail_Msg =>  Code_Fenced_Image (T1) &
+                         "not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Files_Is;
 
@@ -436,7 +437,7 @@ package body BBT.Tests.Actions is
                        Success  => not Is_Equal (T1, T2,
                          Sort_Texts => Step.Ignore_Order),
                        Fail_Msg => "file is equal to expected " &
-                         Text_Image (T1),
+                         Code_Fenced_Image (T1),
                        Loc      => Step.Location);
    end Files_Is_Not;
 
@@ -451,8 +452,9 @@ package body BBT.Tests.Actions is
                        Success  => Contains (T1, T2,
                          Sort_Texts => Step.Ignore_Order),
                        Fail_Msg => "file " & To_String (Step.Subject_String) &
-                         " does not contain expected:  " & Text_Image (T2) &
-                         "but: " & Text_Image (T1),
+                         " does not contain expected:  " &
+                         Code_Fenced_Image (T2) &
+                         "but: " & Code_Fenced_Image (T1),
                        Loc      => Step.Location);
    end File_Contains;
 
@@ -466,9 +468,9 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => not Contains (T1, T2,
                          Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "file " & To_String (Step.Subject_String)  &
-                                   Text_Image (T1) &
-                                   "contain unexpected:  " & Text_Image (T2),
+                       Fail_Msg => "file " & To_String (Step.Subject_String) &
+                         Code_Fenced_Image (T1) &
+                         "contain unexpected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end File_Does_Not_Contain;
 

@@ -290,6 +290,18 @@
   - [X] scenario [](../../features/B090_tmp_dir.md) pass  
 
 
+## [B100_Results_Output_In_MD_Format.md](../../features/B100_Results_Output_In_MD_Format.md)  
+
+  Document Background   
+  - [X] scenario [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
+
+  Document Background   
+  - [X] scenario [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
+
+  Document Background   
+  - [X] scenario [run with an error](../../features/B100_Results_Output_In_MD_Format.md) pass  
+
+
 ## [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
 
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
@@ -350,5 +362,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  78
+- Successful =  81
 - Empty      =  0

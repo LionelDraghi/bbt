@@ -34,13 +34,17 @@ Tulip
 ```
 *** NOK : Then output doesn't contain `Rose` (failed_doesnt_1.md:3:)    
 Output:    
-| Rose    
-| Tulip
+~~~
+Rose    
+Tulip
+~~~
 ```
 - And output contains 
 ```
 contains unexpected:    
-| Rose    
+~~~
+Rose    
+~~~
 ```
 
 ### Scenario : Failed "file doesn't contain"
@@ -57,12 +61,16 @@ contains unexpected:
 ```
 *** NOK : Then file `flowers.txt` do not contain `Tulip` (failed_doesnt_2.md:3:)    
 file flowers.txt  
-| Rose    
-| Tulip    
+~~~
+Rose    
+Tulip    
+~~~
 ```
   
 - and output contains 
 ```
 contain unexpected:    
-| Tulip    
+~~~
+Tulip    
+~~~
 ```

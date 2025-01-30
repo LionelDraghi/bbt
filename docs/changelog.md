@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [changed] Close #9 (error code block fenced instead of line prefixed with "|")
   - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
   - [Added]   `Given the file containing` now accept code fenced block content .
@@ -15,7 +16,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
   - [Added]   First implementation of a progress bar, `-sb` option
   - [Changed] On the command line, commands no more start with '-' or '--' (previous form still taken into account for now)
-  - [Fixed]   Closes #7
+  - [Fixed]   Fixes #7 
   - [Added]   "not equal to file" form added
 
 - [0.0.6] - 2024-14-12

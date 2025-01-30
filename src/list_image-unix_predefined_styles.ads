@@ -52,7 +52,7 @@ package List_Image.Unix_Predefined_Styles is
    --
    -- --------------------------------------------------------------------------
 
-   package Simple_One_Per_Line_Style is new Image_Style
+   package Simple_One_Per_Line_Style is new Image_Style -- Fixme: not the right name at all
      (Prefix           =>        EOL & "| ",
       Separator        => "  " & EOL & "| ",
       Postfix          => "  " & EOL & EOL,

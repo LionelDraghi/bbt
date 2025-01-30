@@ -5,7 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with List_Image;
+with List_Image;                        use List_Image;
 with List_Image.Unix_Predefined_Styles;
 
 with Ada.Containers.Indefinite_Vectors;
@@ -146,5 +146,18 @@ package Text_Utilities is
    function Text_Image is new List_Image.Image
      (Cursors => Text_Cursors,
       Style   => List_Image.Unix_Predefined_Styles.Simple_One_Per_Line_Style);
+
+   -- Return the text prefixed and postfixed by (one of) the MarkDown code
+   -- fence marks, here "~~~".
+   package Code_Fenced_Style is new List_Image.Image_Style
+     (Prefix           => Unix_EOL & "~~~" & Unix_EOL,
+      Separator        => "  " & Unix_EOL,
+      Postfix          => Unix_EOL & "~~~" & Unix_EOL,
+      Postfix_If_Empty => "~~~" & Unix_EOL);
+   function Code_Fenced_Image is new List_Image.Image
+     (Cursors => Text_Cursors,
+      Style   => Code_Fenced_Style);
+   -- Fixme : this, and all dependencies to List_Image, should be moved
+   -- to a child package Markdown_Images
 
 end Text_Utilities;
