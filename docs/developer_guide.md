@@ -26,10 +26,10 @@ It is mostly implemented in BBT.Scenarios package and child packages.
 It’s goal is to extract the Gherkin structure from the scenario files, that is mostly identifying scenarios, features, background and steps text, whatever is the analyzed text format.
 
 For example, in a Markdown file, a scenario may be declared this way:  
-> ## Scenario: My_Scenario
+`## Scenario: My_Scenario`
 
 But in a Asciidoc text, it will be:  
-> == Scenario: My_Scenario
+`== Scenario: My_Scenario`
 
 In both cases, this first lexer will return a Scenario called My_Scenario, and the location in the file for error message purpose.
  
