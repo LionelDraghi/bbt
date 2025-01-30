@@ -21,10 +21,11 @@ Le mal s'est fait une béquille de votre croix
 - Given the `file_is_code_fence.input` file
 ```md
 # Scenario: 
-- Then `blaise_cendrars.txt` is `Un effroyable drôle m'a jeté un regard Aigu, puis a passé, mauvais, comme un poignard.`
+- Then `blaise_cendrars.txt` is
+~~~
+Un effroyable drôle m'a jeté un regard Aigu, puis a passé, mauvais, comme un poignard.
+~~~
 ```
-Fixme: don't know how to have a true "code fenced" expected file definition, because bbt 
-does not recognize ~~~ as a code fence marker (and this is intentional).
 
 - When running `bbt file_is_code_fence.input`
 
