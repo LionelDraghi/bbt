@@ -194,6 +194,15 @@
   - [X] scenario ["Then file is | contains | does not contain file" form](../../features/A170_File_vs_File_Name.md) pass  
 
 
+## [A180_Spawn.md](../../features/A180_Spawn.md)  
+
+  ### Feature: Command line to spawn processing  
+
+  - [X] scenario [Directory with space in the name](../../features/A180_Spawn.md) pass  
+
+  - [X] scenario [command with quoted arguments](../../features/A180_Spawn.md) pass  
+
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
 
   ### Feature: tmp files and directories deletion  
@@ -309,13 +318,6 @@
   - [X] scenario [No scenario in Feature](../../features/C010_Empty_scenarios.md) pass  
 
 
-## [C020_Escaped_char.md](../../features/C020_Escaped_char.md)  
-
-  ### Feature: Space in names  
-
-  - [X] scenario [Directory with space in the name](../../features/C020_Escaped_char.md) pass  
-
-
 ## [C030_Markdown_syntax.md](../../features/C030_Markdown_syntax.md)  
 
   ### Feature: Tolerance to formatting variations  
@@ -362,5 +364,5 @@
 
 ------------------
 - Failed     =  0
-- Successful =  81
+- Successful =  82
 - Empty      =  0

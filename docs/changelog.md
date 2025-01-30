@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
   - [changed] Close #9 (error code block fenced instead of line prefixed with "|")
   - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
