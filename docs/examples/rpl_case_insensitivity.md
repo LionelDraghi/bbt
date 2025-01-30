@@ -15,7 +15,7 @@
   ```
 
 - When I run `rpl -i FR UK config.ini`
-  -i = --ignore-case
+  -i = --ignore-case  
   On Windows, I found rpl 1.4.1 by Joe Laffey, but not xx with long options equivalence
 
 - Then the `config.ini` file contains 
