@@ -9,7 +9,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 - [master]
   - [changed] Close #10 (final counts formatted as MD table)
   - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
-  - [changed] Close #9 (error code block fenced instead of line prefixed with "|")
+  - [changed] Close #9  (error code block fenced instead of line prefixed with "|")
   - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
   - [Added]   `Given the file containing` now accept code fenced block content .
