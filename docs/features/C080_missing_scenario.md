@@ -17,7 +17,7 @@ Warning : No scenario in document "No_Scenario.md"
 ~~~
 - And output contains 
 ~~~
-- Empty      =  1
+| Empty      |  1
 ~~~
 
 ### Scenario : Empty file
@@ -32,5 +32,5 @@ Warning : No scenario in document "empty.md"
 ~~~
 - And output contains 
 ~~~
-- Empty      =  1
+| Empty      |  1
 ~~~

@@ -28,4 +28,4 @@ I can even use `+ When`, it won't be recognized as a step.
 
 - When I run `./bbt -c step_markers.md`
 - Then I get no error
-- And the output contains `Successful =  1` 
+- And the output contains `| Successful |  1` 

@@ -29,7 +29,7 @@ I’ve been trying thissssssssssssssssss out a bit on Windows, and it seems like
 ```
 
 - When I run `./bbt test_that_should_fail.md`
-- Then output contains `- Failed     =  1`
+- Then output contains `| Failed     |  1 `
 - And I get an error
 
 ### Scenario : test the negative form `is not equal to file` 

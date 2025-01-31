@@ -200,7 +200,7 @@
 
   - [X] scenario [Directory with space in the name](../../features/A180_Spawn.md) pass  
 
-  - [X] scenario [command with quoted arguments](../../features/A180_Spawn.md) pass  
+  - [X] scenario [Command with quoted arguments](../../features/A180_Spawn.md) pass  
 
 
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -362,7 +362,8 @@
   - [X] scenario [Empty file](../../features/C080_missing_scenario.md) pass  
 
 
-------------------
-- Failed     =  0
-- Successful =  82
-- Empty      =  0
+| Status     | Count |
+|------------|-------|
+| Failed     | 0     |
+| Successful | 82    |
+| Empty      | 0     |

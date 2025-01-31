@@ -10,6 +10,7 @@ with BBT.Tests.Builder;
 with File_Utilities;
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Strings.Fixed;
 
 package body BBT.Documents is
 
@@ -238,14 +239,23 @@ package body BBT.Documents is
 
    -- --------------------------------------------------------------------------
    procedure Put_Overall_Results is
+      subtype Count_String is String (1 .. 7);
+      Blank_Image : constant Count_String := [others => ' '];
+      function Count (Test : Test_Result) return Count_String is
+      begin
+         return Ada.Strings.Fixed.Overwrite (Source   => Blank_Image,
+                                             Position => 1,
+                                             New_Item => Results (Test)'Image);
+      end Count;
    begin
       New_Line;
-      Put_Line ("------------------");
-      Put_Line ("- Failed     = " & Results (Failed)'Image);
-      Put_Line ("- Successful = " & Results (Successful)'Image);
-      Put_Line ("- Empty      = " & Results (Empty)'Image);
+      Put_Line ("| Status     | Count |");
+      Put_Line ("|------------|-------|");
+      Put_Line ("| Failed     |" & Count (Failed) & "|");
+      Put_Line ("| Successful |" & Count (Successful) & "|");
+      Put_Line ("| Empty      |" & Count (Empty) & "|");
       if Results (Failed) /= 0 then
-         Put_Line ("- Not run    = " & Results (Not_Run)'Image);
+         Put_Line ("| Not run    |" & Count (Not_Run) & "|");
       end if;
    end Put_Overall_Results;
 

@@ -33,18 +33,18 @@ Without, the run ends with 1 fail, 1 success and 1 not run.
 - When I run `./bbt -k feature1.md`
 - then output contains
 ```
-- Failed     =  1  
-- Successful =  2  
-- Empty      =  0  
-- Not run    =  0  
+| Failed     |  1 |
+| Successful |  2 |
+| Empty      |  0 |
+| Not run    |  0 |
 ```
 
 # Scenario: without `-k`
 - When I run `./bbt feature1.md`
 - then output contains
 ```
-- Failed     =  1
-- Successful =  1
-- Empty      =  0
-- Not run    =  1
+| Failed     |  1 |
+| Successful |  1 |
+| Empty      |  0 |
+| Not run    |  1 |
 ```

@@ -18,7 +18,7 @@ One more line.
 ```
 
 - When I run `./bbt test_that_should_fail.md`
-- Then output contains `- Failed     =  1`
+- Then output contains `| Failed     |  1`
 - Then output do not contain `Exception`
 - And I get an error
 

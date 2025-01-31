@@ -34,8 +34,7 @@ In error messages, outputs are put in code blocks to be easily identified (Refer
 - Then the output contains
 ~~~
 ## [OK_scen.md](OK_scen.md)    
-  
-------------------  
+
 ~~~
 
 ### Scenario: verbose mode run
@@ -50,7 +49,6 @@ In error messages, outputs are put in code blocks to be easily identified (Refer
     OK  : Then I get `sut version 1.0`  
   - [X] scenario [](OK_scen.md) pass    
 
-------------------
 ~~~
 
 ### Scenario: run with an error
