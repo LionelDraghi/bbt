@@ -10,6 +10,8 @@ with Ada.Directories.Hierarchical_File_Names,
      Ada.Strings.Fixed.Equal_Case_Insensitive,
      Ada.Strings.Maps;
 
+-- with Ada.Text_IO;
+
 use Ada.Directories.Hierarchical_File_Names,
     Ada.Strings.Maps;
 
@@ -74,6 +76,9 @@ package body File_Utilities is
         -- call the "=" equal function above that is case insensitive on Windows
 
    begin
+      -- Ada.Text_IO.Put_Line ("********* Short PATH from " & From_Dir & " to file "
+      --                       & To_File & ", prefix " & Prefix);
+
       -- -----------------------------------------------------------------------
       if (Is_Root_Directory_Name (Dir) and then -- Is_Full_Name (File))
           Dir = File (File'First .. File'First + Dir'Length - 1))

@@ -18,7 +18,8 @@
   - [X] scenario [I want to know sut version](..\..\examples\sut_version.md) pass  
 
 
-------------------
-- Failed     =  0
-- Successful =  4
-- Empty      =  0
+| Status     | Count |
+|------------|-------|
+| Failed     | 0     |
+| Successful | 4     |
+| Empty      | 0     |

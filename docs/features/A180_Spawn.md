@@ -7,7 +7,7 @@ On Unix, those spaces need to be escaped with a backslash, but only in the `run`
 ([Issue #2](https://github.com/LionelDraghi/bbt/issues/2#issue-2406271975))
 
 - Given the directory `dir 1`
-- when I run `sut create dir\ 1/file\ 1` 
+- when I run `./sut create dir\ 1/file\ 1` 
 - then I get no error
 - And there is a file `dir 1/file 1`
 
@@ -22,11 +22,11 @@ passed to the executed program.
 ~~~
 ~~~
   
-- When I run `sut append "Hello world" tmp.txt`
+- When I run `./sut append "Hello world" tmp.txt`
 - Then I get no error
 - And file `tmp.txt` is `Hello world`
 
-- When I run `sut append Bye tmp.txt`
+- When I run `./sut append Bye tmp.txt`
 - Then I get no error
 - And file `tmp.txt` is 
 ~~~

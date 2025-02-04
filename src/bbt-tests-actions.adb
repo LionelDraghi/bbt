@@ -92,7 +92,7 @@ package body BBT.Tests.Actions is
                    Verbosity => IO.Debug);
 
       for I in Spawn_Arg.all'Range loop
-         IO.Put_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
+         -- IO.Put_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
          declare
             Tmp : String := Spawn_Arg.all (I).all;
             I1  : constant Positive := (if Tmp (Tmp'First) = '"' then Tmp'First + 1
@@ -104,7 +104,7 @@ package body BBT.Tests.Actions is
             Free (Spawn_Arg.all (I));
             Spawn_Arg.all (I) := new String'(Tmp (I1 .. I2));
          end;
-         IO.Put_Line ("===========" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
+         -- IO.Put_Line ("===========" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
       end loop;
 
       Spawn (Program_Name => Spawn_Arg.all (1).all,

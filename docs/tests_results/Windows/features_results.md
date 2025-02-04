@@ -1,4 +1,17 @@
 
+## [A005_Given.md](..\..\features\A005_Given.md)  
+
+  ### Feature:   
+
+  - [X] scenario [Checking that there is no file or dir](..\..\features\A005_Given.md) pass  
+
+  - [X] scenario [Checking that there is some dir](..\..\features\A005_Given.md) pass  
+
+  - [X] scenario [Checking that there is a file with some content](..\..\features\A005_Given.md) pass  
+
+  - [X] scenario [Creating a file with some content](..\..\features\A005_Given.md) pass  
+
+
 ## [A010_Then_Contains_String.md](..\..\features\A010_Then_Contains_String.md)  
 
   ### Feature: testing that a file contains a line  
@@ -48,13 +61,13 @@
   - [X] scenario [file is not as expected](..\..\features\A050_Then_File_Is_Code_Fence.md) pass  
 
 
-## [A060_Then_File_Equal_File_String.md](..\..\features\A060_Then_File_Equal_File_String.md)  
+## [A060_Then_File_Equal_Code_Span.md](..\..\features\A060_Then_File_Equal_Code_Span.md)  
 
   ### Feature: "file is" followed by a code span (a string)  
 
-  - [X] scenario [test on a single line file](..\..\features\A060_Then_File_Equal_File_String.md) pass  
+  - [X] scenario [test on a single line file](..\..\features\A060_Then_File_Equal_Code_Span.md) pass  
 
-  - [X] scenario [adding a second line to the file, so the same test should fail](..\..\features\A060_Then_File_Equal_File_String.md) pass  
+  - [X] scenario [adding a second line to the file, so the same test should fail](..\..\features\A060_Then_File_Equal_Code_Span.md) pass  
 
 
 ## [A065_Then_File_Equal_File_Code_Fence.md](..\..\features\A065_Then_File_Equal_File_Code_Fence.md)  
@@ -181,6 +194,19 @@
   - [X] scenario ["Then file is | contains | does not contain file" form](..\..\features\A170_File_vs_File_Name.md) pass  
 
 
+## [A180_Spawn.md](..\..\features\A180_Spawn.md)  
+
+  ### Feature: Command line to spawn processing  
+
+*** NOK : then I get no error (..\docs\features\a180_spawn.md:11:)  
+No error expected, but got one ( 1)  
+*** NOK : And there is a file `dir 1/file 1` (..\docs\features\a180_spawn.md:12:)  
+Expected file "dir 1/file 1" doesn't exists  
+  - [ ] scenario [Directory with space in the name](..\..\features\A180_Spawn.md) fails  
+
+  - [X] scenario [Command with quoted arguments](..\..\features\A180_Spawn.md) pass  
+
+
 ## [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
 
   ### Feature: tmp files and directories deletion  
@@ -220,15 +246,17 @@
   - [X] scenario [no file or dir on the command line](..\..\features\B040_Find_scenarios.md) pass  
 
   Feature background   
-*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:60:)  
+*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:64:)  
 Output:  
-| dir1\scen1.md  
-| dir1\scen2.md  
-
+~~~
+dir1\scen1.md  
+dir1\scen2.md
+~~~
 not equal to expected:  
-| dir1/scen2.md  
-| dir1/scen1.md  
-
+~~~
+dir1/scen2.md  
+dir1/scen1.md
+~~~
   
   - [ ] scenario [running all scenarios in dir1](..\..\features\B040_Find_scenarios.md) fails  
 
@@ -236,19 +264,21 @@ not equal to expected:
   - [X] scenario [running multiple scenarios given on command line](..\..\features\B040_Find_scenarios.md) pass  
 
   Feature background   
-*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:89:)  
+*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:93:)  
 Output:  
-| dir1\dir2\scen5.md  
-| dir1\dir3\dir4\scen6.md  
-| dir1\scen1.md  
-| dir1\scen2.md  
-
+~~~
+dir1\dir2\scen5.md  
+dir1\dir3\dir4\scen6.md  
+dir1\scen1.md  
+dir1\scen2.md
+~~~
 not equal to expected:  
-| dir1/scen2.md  
-| dir1/scen1.md  
-| dir1/dir3/dir4/scen6.md  
-| dir1/dir2/scen5.md  
-
+~~~
+dir1/scen2.md  
+dir1/scen1.md  
+dir1/dir3/dir4/scen6.md  
+dir1/dir2/scen5.md
+~~~
   
   - [ ] scenario [running scenarios in a tree thanks to `-r`](..\..\features\B040_Find_scenarios.md) fails  
 
@@ -294,22 +324,30 @@ not equal to expected:
   - [X] scenario [without `-k`](..\..\features\B080_Keep_Going.md) pass  
 
 
+## [B090_tmp_dir.md](..\..\features\B090_tmp_dir.md)  
+
+  ### Feature: Tmp dir  
+
+  - [X] scenario [](..\..\features\B090_tmp_dir.md) pass  
+
+
+## [B100_Results_Output_In_MD_Format.md](..\..\features\B100_Results_Output_In_MD_Format.md)  
+
+  Document Background   
+  - [X] scenario [default mode run](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
+  Document Background   
+  - [X] scenario [verbose mode run](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
+  Document Background   
+  - [X] scenario [run with an error](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
+
 ## [C010_Empty_scenarios.md](..\..\features\C010_Empty_scenarios.md)  
 
   - [X] scenario [No step test](..\..\features\C010_Empty_scenarios.md) pass  
 
-  - [X] scenario [No scenario test](..\..\features\C010_Empty_scenarios.md) pass  
-
-
-## [C020_Escaped_char.md](..\..\features\C020_Escaped_char.md)  
-
-  ### Feature: Space in names  
-
-*** NOK : then I get no error (..\docs\features\c020_escaped_char.md:12:)  
-No error expected, but got one ( 1)  
-*** NOK : And there is a file `dir 1/file 1` (..\docs\features\c020_escaped_char.md:13:)  
-Expected file "dir 1/file 1" doesn't exists  
-  - [ ] scenario [Directory with space in the name](..\..\features\C020_Escaped_char.md) fails  
+  - [X] scenario [No scenario in Feature](..\..\features\C010_Empty_scenarios.md) pass  
 
 
 ## [C030_Markdown_syntax.md](..\..\features\C030_Markdown_syntax.md)  
@@ -338,8 +376,27 @@ Expected file "dir 1/file 1" doesn't exists
   - [X] scenario [Code fenced blocks](..\..\features\C060_code_block.md) pass  
 
 
-------------------
-- Failed     =  3
-- Successful =  66
-- Empty      =  0
-- Not run    =  0
+## [C070_missing_code_block.md](..\..\features\C070_missing_code_block.md)  
+
+  ### Feature: missing or erroneous code blocks  
+
+  - [X] scenario [Code block missing at the end of the file](..\..\features\C070_missing_code_block.md) pass  
+
+  - [X] scenario [closing code block mark missing](..\..\features\C070_missing_code_block.md) pass  
+
+
+## [C080_missing_scenario.md](..\..\features\C080_missing_scenario.md)  
+
+  ### Feature:   
+
+  - [X] scenario [Steps without scenario header](..\..\features\C080_missing_scenario.md) pass  
+
+  - [X] scenario [Empty file](..\..\features\C080_missing_scenario.md) pass  
+
+
+| Status     | Count |
+|------------|-------|
+| Failed     | 3     |
+| Successful | 79    |
+| Empty      | 0     |
+| Not run    | 0     |

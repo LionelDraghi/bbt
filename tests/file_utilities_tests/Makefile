@@ -12,7 +12,11 @@ build:
 test_file_utilities: build
 
 check: test_file_utilities
+ifeq ($(PLATFORM), Windows)
+	@ ./test_file_utilities.exe > test_file_utilities.md
+else
 	@ ./test_file_utilities > test_file_utilities.md
+endif
 	@ echo
 	
 test_file_utilities.md: check
