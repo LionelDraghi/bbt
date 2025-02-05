@@ -30,6 +30,7 @@ begin
    Put_Line ("Options:");
    Put_Line ("          --yes            : do not prompt if deletion is needed in");
    Put_Line ("                             ""Given"" steps, silently answer yes");
+   Put_Line ("          --strict         : warn when not strictly following Gherkin common guidelines");
    Put_Line ("   -c   | --cleanup        : after run, remove every file and dir");
    Put_Line ("                             created by bbt in ""Given"" steps");
    Put_Line ("   -r   | --recursive      : search bbt files in subdir");
@@ -43,9 +44,8 @@ begin
    Put_Line ("                             whatever are the verbosity settings (-q, -v, etc.)");
    Put_Line ("                             for standard output.");
    -- Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
-   Put_Line ("   -ed  | --exec_dir 'dir'   : run command in dir instead of current dir");
-   Put_Line ("   -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir");
-   Put_Line ("          --strict           : warning on steps not following the Given/When/Then order.");
+   Put_Line ("   -ed  | --exec_dir 'dir' : run command in dir instead of current dir");
+   Put_Line ("   -td  | --tmp_dir 'dir'  : create .out file in dir instead of current dir");
    -- Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
 
    New_Line;
