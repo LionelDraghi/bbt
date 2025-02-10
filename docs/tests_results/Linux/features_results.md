@@ -12,15 +12,15 @@
   - [X] scenario [Creating a file with some content](../../features/A005_Given.md) pass  
 
 
-## [A010_Then_Contains_String.md](../../features/A010_Then_Contains_String.md)  
+## [A010_Then_Contains_Code_Span.md](../../features/A010_Then_Contains_Code_Span.md)  
 
-  ### Feature: testing that a file contains a line  
+  ### Feature: testing that a file contains a string  
 
-  - [X] scenario [test on a string output](../../features/A010_Then_Contains_String.md) pass  
+  - [X] scenario [test on a string output](../../features/A010_Then_Contains_Code_Span.md) pass  
 
-  - [X] scenario [test on a multiline output](../../features/A010_Then_Contains_String.md) pass  
+  - [X] scenario [test on a multiline output](../../features/A010_Then_Contains_Code_Span.md) pass  
 
-  - [X] scenario [test on a file](../../features/A010_Then_Contains_String.md) pass  
+  - [X] scenario [test on a file](../../features/A010_Then_Contains_Code_Span.md) pass  
 
 
 ## [A020_Then_Contains.md](../../features/A020_Then_Contains.md)  
@@ -61,13 +61,13 @@
   - [X] scenario [file is not as expected](../../features/A050_Then_File_Is_Code_Fence.md) pass  
 
 
-## [A060_Then_File_Equal_File_String.md](../../features/A060_Then_File_Equal_File_String.md)  
+## [A060_Then_File_Equal_Code_Span.md](../../features/A060_Then_File_Equal_Code_Span.md)  
 
   ### Feature: "file is" followed by a code span (a string)  
 
-  - [X] scenario [test on a single line file](../../features/A060_Then_File_Equal_File_String.md) pass  
+  - [X] scenario [test on a single line file](../../features/A060_Then_File_Equal_Code_Span.md) pass  
 
-  - [X] scenario [adding a second line to the file, so the same test should fail](../../features/A060_Then_File_Equal_File_String.md) pass  
+  - [X] scenario [adding a second line to the file, so the same test should fail](../../features/A060_Then_File_Equal_Code_Span.md) pass  
 
 
 ## [A065_Then_File_Equal_File_Code_Fence.md](../../features/A065_Then_File_Equal_File_Code_Fence.md)  
@@ -194,13 +194,17 @@
   - [X] scenario ["Then file is | contains | does not contain file" form](../../features/A170_File_vs_File_Name.md) pass  
 
 
-## [A180_Spawn.md](../../features/A180_Spawn.md)  
+## [A190_Run.md](../../features/A190_Run.md)  
 
-  ### Feature: Command line to spawn processing  
+  ### Feature:   
 
-  - [X] scenario [Directory with space in the name](../../features/A180_Spawn.md) pass  
+  - [X] scenario [the command relative path is given](../../features/A190_Run.md) pass  
 
-  - [X] scenario [Command with quoted arguments](../../features/A180_Spawn.md) pass  
+  - [X] scenario [the command is in the PATH](../../features/A190_Run.md) pass  
+
+  - [X] scenario [command not found](../../features/A190_Run.md) pass  
+
+  - [X] scenario [the command is not executable](../../features/A190_Run.md) pass  
 
 
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -311,6 +315,15 @@
   - [X] scenario [run with an error](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
 
+## [B110_Spawn.md](../../features/B110_Spawn.md)  
+
+  ### Feature: Command line to spawn processing  
+
+  - [X] scenario [Directory with space in the name](../../features/B110_Spawn.md) pass  
+
+  - [X] scenario [Command with quoted arguments](../../features/B110_Spawn.md) pass  
+
+
 ## [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
 
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
@@ -365,5 +378,5 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 82    |
+| Successful | 86    |
 | Empty      | 0     |

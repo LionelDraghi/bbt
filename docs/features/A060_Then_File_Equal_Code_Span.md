@@ -4,8 +4,8 @@ In the rare case where the expected file content is a single line, it can for co
 
 ### Scenario: test on a single line file
 
-  - When I run `sut create config.ini`
-  - When I run `sut append mode=silent config.ini`
+  - When I run `./sut create config.ini`
+  - When I run `./sut append mode=silent config.ini`
   - Then file `config.ini` is equal to `mode=silent`
   - Then file `config.ini` is          `mode=silent`
   (both form are identical, "equal" and "to" are not keywords)
@@ -18,9 +18,9 @@ In the rare case where the expected file content is a single line, it can for co
 - Then file `config.ini` is equal to `mode=silent`
 ```
 
-- When I run `sut create config.ini`
-- When I run `sut append mode=silent config.ini`
-- When I run `sut append recurse=false config.ini`
+- When I run `./sut create config.ini`
+- When I run `./sut append mode=silent config.ini`
+- When I run `./sut append recurse=false config.ini`
 
 - When I run `./bbt tmp.md`
 - then I get an error

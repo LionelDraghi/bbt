@@ -1,15 +1,15 @@
-## Feature : testing that a file contains a line
+## Feature : testing that a file contains a string
 
-bbt may be used to check that the output or a file contains a single line, thanks to the `contains` keyword.
+bbt may be used to check that the output or a file contains a string, thanks to the `contains` keyword.
 
 ### Scenario: test on a string output
 
-  - When I run `sut -v`
+  - When I run `./sut -v`
   - Then the output should contains `version`
 
 ### Scenario: test on a multiline output
 
-  - When I run `sut -h`
+  - When I run `./sut -h`
   - Then the output should contains `--version`
 
 ### Scenario: test on a file

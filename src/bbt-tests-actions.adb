@@ -86,12 +86,55 @@ package body BBT.Tests.Actions is
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
         := Argument_String_To_List (Cmd);
+
    begin
       IO.Put_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
                      ", output file = " & Output_Name,
                    Verbosity => IO.Debug);
 
-      for I in Spawn_Arg.all'Range loop
+      -- The first argument should be an executable (e.g. not a bash
+      -- built-in)
+      --
+      -- If it is, replace it by the fully-qualified path name (spawn
+      -- is implemented via execve, which _ on macOS - doesn't
+      -- understand PATH)
+      Find_The_Executable_If_Any :
+      declare
+         Full_Path : GNAT.OS_Lib.String_Access;
+      begin
+         Full_Path := Locate_Exec_On_Path (Spawn_Arg.all (1).all);
+
+         if Exists (Spawn_Arg.all (1).all) and then
+           not Is_Executable_File (Spawn_Arg.all (1).all)
+         then
+            -- IO.Put_Line ("not exec", Verbosity => IO.Normal);
+            Spawn_OK := False;
+            Put_Step_Result (Step     => Step,
+                             Success  => Spawn_OK,
+                             Fail_Msg => Spawn_Arg.all (1).all & " not executable",
+                             Loc      => Step.Location);
+            return;
+
+         elsif Full_Path = null then
+            -- IO.Put_Line ("not found", Verbosity => IO.Normal);
+            Spawn_OK := False;
+            Put_Step_Result (Step     => Step,
+                             Success  => Spawn_OK,
+                             Fail_Msg => Spawn_Arg.all (1).all & " not found",
+                             Loc      => Step.Location);
+            return;
+
+         else
+            IO.Put_Line ("Cmd " & Spawn_Arg.all (1).all & " = " & Full_Path.all,
+                         Verbosity => IO.Debug);
+            Free (Spawn_Arg.all (1));
+            Spawn_Arg.all (1) := Full_Path;
+
+         end if;
+      end Find_The_Executable_If_Any;
+
+      -- Removes quote on argument
+      for I in 2 .. Spawn_Arg'Last loop
          -- IO.Put_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
          declare
             Tmp : String := Spawn_Arg.all (I).all;

@@ -31,6 +31,6 @@ Errors:
   When calling append with a file_name but without text to
   append, an unhandled exception is raised.
 ```
-- When I run `sut -h`
+- When I run `./sut -h`
 
 - Then output is equal to file `help_message.txt`

@@ -27,6 +27,6 @@ Un effroyable drôle m'a jeté un regard Aigu, puis a passé, mauvais, comme un 
 ~~~
 ```
 
-- When running `bbt file_is_code_fence.input`
+- When running `./bbt file_is_code_fence.input`
 
 - Then I get an error
