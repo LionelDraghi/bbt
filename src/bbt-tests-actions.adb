@@ -150,6 +150,31 @@ package body BBT.Tests.Actions is
          -- IO.Put_Line ("===========" & Spawn_Arg.all (I).all & "<", Verbosity => IO.Debug);
       end loop;
 
+      --  The first argument should be an executable (e.g. not a bash
+      --  built-in)
+      --
+      -- If it is, replace it by the fully-qualified path name (spawn
+      -- is implemented via execve, which _ on macOS - doesn't
+      -- understand PATH)
+      Find_The_Executable_If_Any :
+      declare
+         Full_Path : GNAT.OS_Lib.String_Access;
+      begin
+         Full_Path := Locate_Exec_On_Path (Spawn_Arg.all (1).all);
+         if Full_Path = null
+           or else not Is_Executable_File (Full_Path.all)
+         then
+            Spawn_OK := False;
+            Put_Step_Result
+              (Step => Step,
+               Success => Spawn_OK,
+               Fail_Msg => "Couldn't run " & Cmd,
+               Loc => Step.Location);
+            return;
+         end if;
+         Spawn_Arg.all (1) := Full_Path;
+      end Find_The_Executable_If_Any;
+
       Spawn (Program_Name => Spawn_Arg.all (1).all,
              Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
              Success      => Spawn_OK,
