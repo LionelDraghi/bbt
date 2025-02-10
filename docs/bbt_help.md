@@ -17,6 +17,7 @@ Commands:
 Options:
           --yes            : do not prompt if deletion is needed in
                              "Given" steps, silently answer yes
+          --strict         : warn when not strictly following Gherkin common guidelines
    -c   | --cleanup        : after run, remove every file and dir
                              created by bbt in "Given" steps
    -r   | --recursive      : search bbt files in subdir
@@ -29,9 +30,8 @@ Options:
                              This file will contain the normal bbt output,
                              whatever are the verbosity settings (-q, -v, etc.)
                              for standard output.
-   -ed  | --exec_dir 'dir'   : run command in dir instead of current dir
-   -td  | --tmp_dir 'dir'    : create .out file in dir instead of current dir
-          --strict           : warning on steps not following the Given/When/Then order.
+   -ed  | --exec_dir 'dir' : run command in dir instead of current dir
+   -td  | --tmp_dir 'dir'  : create .out file in dir instead of current dir
 
 Debug command:
    -lt                    : list log topics

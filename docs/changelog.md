@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master]
+  - [changed] Close #5 and #15 (more clear msg on spawn problems and auto find the exe in PATH)
   - [changed] Close #10 (final counts formatted as MD table)
   - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
   - [changed] Close #9  (error code block fenced instead of line prefixed with "|")
