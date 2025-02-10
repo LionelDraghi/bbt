@@ -78,7 +78,7 @@ check: setup ./bbt ./sut
 doc: $(RESULTS_DIR)
 
 clean:
-	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl tmp.txt
+	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl *.created_files
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	
