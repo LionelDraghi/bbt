@@ -5,7 +5,7 @@ Checking that there is no output is sometime useful.
 ### Scenario: silent operation
 - Given the new file `file.txt` containing `text1`
 
-- When I run `sut append text file.txt`
+- When I run `./sut append text file.txt`
 
 - Then there is no output
 - And I get no error
@@ -16,7 +16,7 @@ Checking that there is no output is sometime useful.
 - Given the new file `no_output.input`
 ```
 # Scenario:
-- When I run `sut read file.txt`
+- When I run `./sut read file.txt`
 - Then there is no output
 ```
 

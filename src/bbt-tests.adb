@@ -28,11 +28,9 @@ package body BBT.Tests is
                       Verbosity => IO.Verbose);
          IO.Restore_Tee;
       else
-         IO.Put_Line (Item      => Pre & (+Step.Step_String)
-                      & " (" & Image (Loc) & ")  ",
-                      Verbosity => IO.Normal);
-         IO.Put_Line (Fail_Msg & "  ",
-                      Verbosity => IO.Normal);
+         IO.Put_Line (Pre & (+Step.Step_String) & " (" & Image (Loc) & ")  ",
+                      Verbosity => IO.Normal); --Verbose);
+         IO.Put_Error (Fail_Msg & "  ", Loc);
       end if;
    end Put_Step_Result;
 

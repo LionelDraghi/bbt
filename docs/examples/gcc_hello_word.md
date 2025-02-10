@@ -23,6 +23,6 @@ return 0;
 - And given there is no `main` file
 
 - When I successfully run `gcc main.c -o main`
-- And  I run `main`
+- And  I run `./main`
 
 - Then the output is `Hello, World!`

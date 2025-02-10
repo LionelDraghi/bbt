@@ -33,17 +33,12 @@ Tulip
 - And output contains 
 ```
 *** NOK : Then output doesn't contain `Rose` (failed_doesnt_1.md:3:)    
-Output:    
-~~~
-Rose    
-Tulip
-~~~
 ```
 - And output contains 
 ```
 contains unexpected:    
 ~~~
-Rose    
+Rose        
 ~~~
 ```
 

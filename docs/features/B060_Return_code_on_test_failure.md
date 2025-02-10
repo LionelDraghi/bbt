@@ -13,7 +13,7 @@ Therefore, the return status is set to fail not only when there is an internal e
 - Given the new `good_option.md` file
 ```md
 # Scenario: Good option
-- When I run `sut -v`
+- When I run `./sut -v`
 - Then output contains `version 1.0`
 ```
 
@@ -29,7 +29,7 @@ sut version 1.0
 - Given the new `wrong_option.md` file
 ```md
 # Scenario: Wrong option
-- When I run `sut -wxz`
+- When I run `./sut -wxz`
 - Then output contains `sut version`
 ```
 
@@ -43,11 +43,11 @@ The first scenario hereafter fails and the second succeed, but bbt should still 
 - Given the new `wrong_and_good_option.md` file
 ```md
 # Scenario: Wrong option
-- When I run `sut -wxz`
+- When I run `./sut -wxz`
 - Then output contains `sut version`
 
 # Scenario: Good option
-- When I run `sut -v`
+- When I run `./sut -v`
 - Then output contains `sut version`
 ```
 

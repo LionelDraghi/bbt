@@ -33,7 +33,7 @@ Rose
 - Given the file `scenario1.md`
 ```
 # Scenario: Scenario1
-- When I run `sut read flowers1.txt`
+- When I run `./sut read flowers1.txt`
 - Then I get file `flowers2.txt`
 ```
 
@@ -41,7 +41,7 @@ Rose
 - Then I get an error
 
 ### Scenario: same "I get" with the modifier
-- When I run `sut read flowers1.txt`
+- When I run `./sut read flowers1.txt`
 - Then I get file (unordered) `flowers2.txt`
 
 ## Scenario: "contains" without the modifier
@@ -49,16 +49,16 @@ Rose
 - Given the file `scenario1.md`
 ```
 # Scenario: Scenario1
-- When I run `sut read flowers1.txt`
+- When I run `./sut read flowers1.txt`
 - Then output contains file `flowers3.txt`
 ```
 
-- When I run `bbt scenario1.md`
+- When I run `./bbt scenario1.md`
 - Then I get an error
 (because Rose stands before Orchids in the original file)
 
 # Scenario: same "contains" but with the "unordered" modifier
 
-- When I run `sut read flowers1.txt`
+- When I run `./sut read flowers1.txt`
 - Then output contains file `flowers3.txt` (unordered)
 

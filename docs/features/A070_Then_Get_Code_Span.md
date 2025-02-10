@@ -4,7 +4,7 @@ Test an expected multi-lines output.
 
 ### Scenario : asking for sut help
 
-  - When I run `sut -h`
+  - When I run `./sut -h`
   - Then I get 
 
 ```
@@ -35,7 +35,7 @@ Errors:
 
 ### Scenario : causing an sut error with a long explanation
 
-  - When I run `sut -e append `
+  - When I run `./sut -e append `
   - Then I get on stderr
 
 ```

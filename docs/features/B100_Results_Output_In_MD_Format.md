@@ -15,14 +15,14 @@ In error messages, outputs are put in code blocks to be easily identified (Refer
 - Given the file `OK_scen.md`
 ~~~
 # Scenario
-- When I run `sut -v`
+- When I run `./sut -v`
 - Then I get `sut version 1.0`
 ~~~
 
 - Given the file `NOK_scen.md`
 ~~~
 # Scenario
-- When I run `sut -v`
+- When I run `./sut -v`
 - Then I get `v3.1`
 ~~~
 
@@ -45,7 +45,7 @@ In error messages, outputs are put in code blocks to be easily identified (Refer
 ~~~
 ## [OK_scen.md](OK_scen.md)    
   
-    OK  : When I run `sut -v`  
+    OK  : When I run `./sut -v`  
     OK  : Then I get `sut version 1.0`  
   - [X] scenario [](OK_scen.md) pass    
 
