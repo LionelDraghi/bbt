@@ -6,7 +6,10 @@ Let start with something easy :
 
 - When I run `gcc -v`
 
-- Then the output contains `gcc version `
+- Then the output contains `version `
+
+(Fixme: when regexp implemented, add gcc or clang before version, and number.number.number after)
+
 
 ## Scenario: compiling and executing an hello word
 

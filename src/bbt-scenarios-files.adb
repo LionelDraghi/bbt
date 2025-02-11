@@ -42,9 +42,13 @@ package body BBT.Scenarios.Files is
    -- --------------------------------------------------------------------------
    procedure Append_File (File_Name : String) is
       use Ada.Directories;
+      Name : constant String := Full_Name (File_Name);
    begin
-      if Full_Name (File_Name) /= Full_Name (Settings.Template_Name)
-        and then Full_Name (File_Name) /= Result_File_Name
+      -- Ada.Text_IO.Put_Line ("--- File_Name = " & File_Name);
+      -- Ada.Text_IO.Put_Line ("--- Full_Name (File_Name) = " & Name);
+
+      if Name /= Full_Name (Settings.Template_Name)
+        and then Name /= Result_File_Name
       then
          --  Filters the md file created with --create-template, that is
          --  not supposed to be executed, and the output file if any.
@@ -154,10 +158,13 @@ package body BBT.Scenarios.Files is
 
    begin
       IO.Put_Line ("==== Loading " & File_Name, IO.No_Location, IO.Debug);
+      -- Ada.Text_IO.Put_Line ("==== Loading                        " & File_Name);
 
       Open (Input,
             Mode => In_File,
             Name => File_Name);
+
+      -- Ada.Text_IO.Put_Line ("==== Ada.Text_IO.Name (File) return " & Ada.Text_IO.Name (Input));
 
       Tests.Builder.Add_Document (File_Name);
       -- The doc name is not in the file content
@@ -177,7 +184,7 @@ package body BBT.Scenarios.Files is
                                            then "  | "
                                            elsif BBT.IO.Line (Loc) in 10 .. 99
                                            then " | "
-                                           else "| ");
+                                           else "|ï¿½");
             Code_Block_Expected : Boolean;
          begin
 

@@ -15,11 +15,15 @@ When a command fails, bbt make it clear to the user if it was a spawn fail, that
 - and  I get no output
 
 ### scenario: the command is in the PATH
-- when i run `awk --version`
+([Issue #15](https://github.com/LionelDraghi/bbt/issues/15))
+
+- when i run `git --version`
 - then I get no error
-- and  output contains `GNU Awk 5`
+- and  output contains `git version`
 
 ### scenario: command not found
+([Issue #6](https://github.com/LionelDraghi/bbt/issues/6))
+
 - Given the `cmd_not_found.md` file 
 ~~~ 
 # Scenario:

@@ -8,6 +8,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - [master]
   - [changed] Close #5 and #15 (more clear msg on spawn problems and auto find the exe in PATH)
+  - [Added]   Tested on MacOS Ventura 13.6 Intel CPU
   - [changed] Close #10 (final counts formatted as MD table)
   - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
   - [changed] Close #9  (error code block fenced instead of line prefixed with "|")

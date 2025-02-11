@@ -8,11 +8,11 @@ package Bbt_Config is
    Crate_Version : constant String := "0.0.6";
    Crate_Name : constant String := "bbt";
 
-   Alire_Host_OS : constant String := "linux";
+   Alire_Host_OS : constant String := "macos";
 
    Alire_Host_Arch : constant String := "x86_64";
 
-   Alire_Host_Distro : constant String := "debian";
+   Alire_Host_Distro : constant String := "homebrew";
 
    type Build_Profile_Kind is (release, validation, development);
    Build_Profile : constant Build_Profile_Kind := development;

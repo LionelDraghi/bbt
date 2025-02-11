@@ -34,12 +34,19 @@ setup:
 ifeq ($(PLATFORM), Windows)
 	@ln -fs ../sut sut.exe
 	@ln -fs ../bbt bbt.exe
-else
+
+else ifeq ($(PLATFORM), Darwin)
+	export GNAT_FILE_NAME_CASE_SENSITIVE=1
+	@ln -fs ../sut sut
+	@ln -fs ../bbt bbt
+
+else # Linux
 	@ln -fs ../sut sut
 	@ln -fs ../bbt bbt
 	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 	@ln -fs /usr/bin/rpl rpl
+
 endif
 
 check: setup ./bbt ./sut
