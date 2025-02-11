@@ -205,15 +205,15 @@ package body BBT.Tests.Runner is
                   Put_Line ("  - [ ] scenario " & Link_Image &
                               " is empty, nothing tested  ",
                             Verbosity => Normal);
-                  IO.New_Line (Verbosity => Normal);
+                  -- IO.New_Line (Verbosity => Normal);
                when Successful =>
                   Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
-                            Verbosity => Verbose);
-                  IO.New_Line (Verbosity => Verbose);
+                            Verbosity => Normal);
+                  -- IO.New_Line (Verbosity => Normal);
                when Not_Run | Failed =>
                   Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
                             Verbosity => Quiet);
-                  IO.New_Line (Verbosity => Quiet);
+                  -- IO.New_Line (Verbosity => Quiet);
             end case;
          end;
 

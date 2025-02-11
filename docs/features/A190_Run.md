@@ -40,9 +40,7 @@ When a command fails, bbt make it clear to the user if it was a spawn fail, that
 - Given the `cmd_not_exe.md` file 
 ~~~ 
 # Scenario:
-- when i run `./lambda_file -v`
-- then I get an error
-- and  I get `xyzabc not exe`
+- when I run `./lambda_file -v`
 ~~~ 
 - When I run `./bbt -c cmd_not_exe.md`
 - Then I get an error
