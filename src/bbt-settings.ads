@@ -31,6 +31,7 @@ private package BBT.Settings is
    Cleanup            : Boolean := False;
    Strict_Gherkin     : Boolean := False;
    Status_Bar         : Boolean := False;
+   Generate_Badge     : Boolean := False;
 
    Template_Name      : constant String := "bbt_template.md";
 
@@ -55,5 +56,9 @@ private package BBT.Settings is
    function Result_File_Name return String;
    function Result_Dir       return String;
    -- returns the containing directory of the file_name
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Badge_File_Name (File_Name : String);
+   function Badge_File_Name return String;
 
 end BBT.Settings;

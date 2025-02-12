@@ -55,7 +55,7 @@ begin
    Put_Line ("Debug options:");
    Put_Line ("   -t topic               : activate log related to the topic");
    New_Line;
-   Put_Line ("bbt version " & Settings.BBT_Version'Image);
+   Put_Line ("bbt version " & Settings.BBT_Version);
    Put_Line ("https://github.com/LionelDraghi/bbt/");
    New_Line;
 end Put_Help;

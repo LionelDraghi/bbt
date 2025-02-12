@@ -141,6 +141,10 @@ begin
             Documents.Compute_Overall_Tests_Results;
             Documents.Put_Overall_Results;
 
+            if Settings.Generate_Badge then
+               Documents.Generate_Badge;
+            end if;
+
          end if;
       end if;
    end if;

@@ -1,3 +1,5 @@
+PLATFORM = $(shell uname -s)
+
 .SILENT:
 all: build check doc
 
@@ -59,9 +61,14 @@ doc: ./bbt
 
 	echo Checking links in md files
 ifeq ($(OS), Windows_NT)
-	- mlc --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
+	- mlc --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
+else ifeq ($(PLATFORM), Darwin)
+	- mlc --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
+else ifeq ($(PLATFORM), Linux)
+	- mlc --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
 else
-	- mlc --ignore-path docs/tests_results/Windows | grep '\[Err' && echo OK 
+	echo "Unknown platform $(PLATFORM)"
+	exit 1
 endif
 	# mlc is much faster than markdown-link-check and gives no false positive yet
 	# > apt install cargo

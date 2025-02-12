@@ -120,6 +120,11 @@ begin
          elsif Arg = "-sb" or Arg = "--status_bar" then
             Settings.Status_Bar := True;
 
+         elsif Arg = "-gb" or Arg = "--generate_badge" then
+            Settings.Generate_Badge := True;
+            Next_Arg;
+            Settings.Set_Badge_File_Name (Ada.Command_Line.Argument (Arg_Counter));
+
          elsif Ada.Directories.Exists (Arg) then
             -- if it's not an option, its a file name
             case Kind (Arg) is

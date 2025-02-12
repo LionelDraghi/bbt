@@ -11,28 +11,9 @@ with File_Utilities;
 
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Fixed;
+with Ada.Text_IO;
 
 package body BBT.Documents is
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Image
-   --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-   --     S      :        Object_Text_Type) is
-   --  begin
-   --     Output.Put ("Text source = " & S.Source'Image & " : ");
-   --     case S.Source is
-   --        when Code_Span =>
-   --           Output.Put (S.Object_String'Image);
-   --        when Code_Block =>
-   --           Output.New_Line;
-   --           Output.Increase_Indent;
-   --           Output.Put (S.File_Content'Image);
-   --           Output.Decrease_Indent;
-   --        when File =>
-   --           Output.Put (S.File_Type'Image & S.File_Name'Image);
-   --     end case;
-   --     Output.New_Line;
-   --  end Put_Image;
 
    -- --------------------------------------------------------------------------
    procedure Put_Image
@@ -61,6 +42,7 @@ package body BBT.Documents is
       Output.New_Line;
    end Put_Image;
 
+   -- --------------------------------------------------------------------------
    function Short_Line_Image (Step : Step_Type) return String is
    begin
       return
@@ -135,10 +117,12 @@ package body BBT.Documents is
       -- New_Line;
    end Put_Scenario;
 
+   -- --------------------------------------------------------------------------
    function Parent_Doc (Scen : Scenario_Type) return access Document_Type is
      (if Scen.Parent_Feature /= null then Scen.Parent_Feature.Parent_Document
       else Scen.Parent_Document);
 
+   -- --------------------------------------------------------------------------
    function Is_In_Feature (Scen : Scenario_Type) return Boolean is
      (Scen.Parent_Feature /= null);
 
@@ -200,6 +184,15 @@ package body BBT.Documents is
       end if;
    end Result;
 
+   -- --------------------------------------------------------------------------
+   procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is
+   begin
+      To_Scen.Failed_Step_Count     := @ + From_Scen.Failed_Step_Count;
+      To_Scen.Successful_Step_Count := @ + From_Scen.Successful_Step_Count;
+      From_Scen.Failed_Step_Count     := 0;
+      From_Scen.Successful_Step_Count := 0;
+   end Move_Results;
+
    Results : Test_Results_Count;
 
    -- --------------------------------------------------------------------------
@@ -260,12 +253,36 @@ package body BBT.Documents is
    end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
-   procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is
+   procedure Generate_Badge is
+
+      function Generate_URL return String is
+         use Ada.Strings;
+         use Ada.Strings.Fixed;
+         Passed_Text : constant String :=
+                         Trim (Natural'Image (Results (Successful)),
+                               Side => Left);
+         Failed_Text : constant String :=
+                         Trim (Natural'Image (Results (Failed)),
+                               Side => Left);
+         Empty_Text  : constant String :=
+                         Trim (Natural'Image (Results (Empty)),
+                               Side => Left);
+         Color       : constant String :=
+                         (if Results (Failed) > 0 then "red"
+                          else (if Results (Empty) > 0 then "orange"
+                            else "blue"));
+      begin
+         return "https://img.shields.io/badge/bbt-"
+           & Passed_Text & "_tests_passed_|_"
+           & Failed_Text & "_failed_|_"
+           & Empty_Text & "_empty-"
+           & Color & ".svg?style=flat-square";
+      end Generate_URL;
+      File : Ada.Text_IO.File_Type;
    begin
-      To_Scen.Failed_Step_Count     := @ + From_Scen.Failed_Step_Count;
-      To_Scen.Successful_Step_Count := @ + From_Scen.Successful_Step_Count;
-      From_Scen.Failed_Step_Count     := 0;
-      From_Scen.Successful_Step_Count := 0;
-   end Move_Results;
+      Ada.Text_IO.Create   (File, Name => BBT.Settings.Badge_File_Name);
+      Ada.Text_IO.Put_Line (File, Generate_URL);
+      Ada.Text_IO.Close    (File);
+   end Generate_Badge;
 
 end BBT.Documents;

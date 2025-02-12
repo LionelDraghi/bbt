@@ -40,12 +40,16 @@ else ifeq ($(PLATFORM), Darwin)
 	@ln -fs ../sut sut
 	@ln -fs ../bbt bbt
 
-else # Linux
+else ifeq ($(PLATFORM), Linux)
 	@ln -fs ../sut sut
 	@ln -fs ../bbt bbt
 	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 	@ln -fs /usr/bin/rpl rpl
+
+else
+	@echo "Unknown platform $(PLATFORM)"
+	@exit 1
 
 endif
 
@@ -70,7 +74,7 @@ check: setup ./bbt ./sut
 	@ echo
 
 	@ # Then test all the features
-	@ ./bbt --yes --keep_going --cleanup --output $(RESULTS_DIR)/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ ./bbt --yes --keep_going --cleanup --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
 	@ # Then run non reg tests
@@ -83,6 +87,8 @@ check: setup ./bbt ./sut
 	@ echo
 
 doc: $(RESULTS_DIR)
+	@ rpl bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
+	@ wget -q "`cat $(RESULTS_DIR)/badge.url`" -O $(RESULTS_DIR)/badge.svg
 
 clean:
 	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl *.created_files

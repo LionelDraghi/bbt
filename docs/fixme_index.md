@@ -14,3 +14,4 @@ docs/features/B030_File_test_and_creation.md:14|> This last case is not yet test
 docs/features/B070_Mandatory_new_bug.md:1| bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `whatever` file, even if it has not the same content.
 docs/features/B090_tmp_dir.md:30| dir2 is not removed although --cleanup
 docs/features/proposed_features/contains_line.md:5| not yet implemented.
+

@@ -18,7 +18,8 @@ package body BBT.Settings is
      new String'(Ada.Directories.Current_Directory);
    Outfile_Name,
    Exec_Dir_Name,
-   Tmp_Dir_Name : access String := null;
+   Tmp_Dir_Name,
+   Badge_Name   : access String := null;
 
    -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
@@ -73,5 +74,14 @@ package body BBT.Settings is
    function Result_Dir return String is
     (if Outfile_Name = null then Ada.Directories.Current_Directory
        else Ada.Directories.Containing_Directory (Outfile_Name.all));
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Badge_File_Name (File_Name : String) is
+   begin
+      Badge_Name := new String'(File_Name);
+   end Set_Badge_File_Name;
+
+   function Badge_File_Name return String is
+     (if Badge_Name = null then "" else Badge_Name.all);
 
 end BBT.Settings;

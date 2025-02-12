@@ -1,10 +1,15 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html)
+![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-black)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) 
 
+![](docs/tests_results/Linux/badge.svg)
+![](docs/tests_results/Windows/badge.svg)
+![](docs/tests_results/Darwin/badge.svg)
 
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
-  - [What does the description look like?](#what-does-the-description-looks-like)
+  - [What does the description look like?](#what-does-the-description-look-like)
   - [Partial parsing](#partial-parsing)
   - [Step arguments](#step-arguments)
   - [One more example](#one-more-example)

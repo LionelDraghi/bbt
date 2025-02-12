@@ -39,7 +39,7 @@ Debug command:
 Debug options:
    -t topic               : activate log related to the topic
 
-bbt version "0.0.6"
+bbt version 0.0.6
 https://github.com/LionelDraghi/bbt/
 
 ```
