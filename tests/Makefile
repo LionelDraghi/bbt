@@ -87,7 +87,8 @@ check: setup ./bbt ./sut
 	@ echo
 
 doc: $(RESULTS_DIR)
-	@ rpl bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
+	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
+	echo wget badge ...
 	@ wget -q "`cat $(RESULTS_DIR)/badge.url`" -O $(RESULTS_DIR)/badge.svg
 
 clean:
