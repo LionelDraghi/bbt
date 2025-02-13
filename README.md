@@ -119,27 +119,25 @@ With two main consequences:
 
 Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md), but as far as I know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
-### Easy to read, easy to write
+### Write a real documentation, not a script  
 
-bbt uses a limited English subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
-But this limited English subset does not come at the cost of limited readability or expressiveness: 
+bbt effectiveness does not come at the cost of a limiting documentation readability or expressiveness: 
 
-- First, bbt is reading only specifics line in the specification, the rest of the file is yours: you can give as much context as you want, using all Markdown (and Markdown extensions) possibilities, including graphics (Give a try to [Mermaid](https://mermaid.js.org/intro/)).
-
-- Second, thanks to the partial parser, you can write real, readable English sentences, so that it's almost impossible to guess that the text is also a script;
+- First, thanks to the partial parsing, Steps are written in readable English;
+  bbt Steps uses a limited English subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
+  Although simple, you don't have to learn this subset by heart, you may ask for a template scenario by running `bbt -ct` (or `--create_template`), or ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
+- Second, the rest of the file being yours, you can give as much context as you want, and use all Markdown cool extensions (for example graphics with [Mermaid](https://mermaid.js.org/intro/)).
 
 A direct consequence of that simple model is that the specifications / scenarios may be written by non-coders.
 
-Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or `--create_template`), and ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
-
-### Simple to run
+### No-fuss no-wait run
 
 To run a scenario : `bbt my_scenario.md`  
 Or to run all the md files in the *tests* tree `bbt -r tests`  
 
 bbt has no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
 
-### Publish! 
+### Ready to publish output! 
 
 bbt can output a **Test results index** Markdown file, that cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
 You can push it on GitHub without further processing.  
@@ -152,9 +150,9 @@ Test results are generated when running `bbt`, by just using the `-o` option (`-
 ## Status of the project
 
 bbt is in an early stage, meaning that interface and behavior are subject to changes.  
-Feel free to make suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
+Feel free to make features suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
-The code has grown fast in the second half of 2024, and is far from being clean.  
+The code has grown fast in 2024, and is far from being clean.  
 Nevertheless, bbt is working, and has as a serious [test base](docs/tests_results/Linux/features_results.md).  
 
 In real life, A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
@@ -164,8 +162,9 @@ Other people are using it too.
 
 btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
 On Windows, some tests fail because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
-I'm not yet able to specify per platform expected results, so this is not going to be fixed quickly.  
+bbt syntax is not yet able to specify per platform expected results, so this is not going to be fixed quickly.  
 On MacOS, it may be usefull to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
+
 That said, I'm not aware of any Windows or MacOS specific bug.
 
 ## Installation
@@ -180,7 +179,7 @@ That said, I'm not aware of any Windows or MacOS specific bug.
    alr build  
    ```
 
-4. Move the bbt exec somewhere in your PATH
+3. Move the bbt exec somewhere in your PATH
 
 Or, to get the latest version:
 ```sh
