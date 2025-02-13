@@ -28,73 +28,8 @@
   ### Feature: checking that some string is not present in output or file  
 
   - [X] scenario [Successful checks](../../features/A030_Then_Does_Not_Contain.md) pass  
-*** NOK : And output contains  (/users/lionel/prj/bbt/tests/../docs/features/a030_then_does_not_contain.md:33:)  
-/users/lionel/prj/bbt/tests/../docs/features/a030_then_does_not_contain.md:33: Error : Output:  
-~~~
-  
-## [failed_doesnt_1.md](failed_doesnt_1.md)    
-*** NOK : Then output doesn't contain `Rose` (/users/lionel/prj/bbt/tests/failed_doesnt_1.md:3:)    
-/users/lionel/prj/bbt/tests/failed_doesnt_1.md:3: Error : Output:    
-~~~  
-Rose    
-Tulip  
-~~~  
-contains unexpected:    
-~~~  
-Rose  
-~~~  
-    
-  - [ ] scenario [](failed_doesnt_1.md) fails    
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 1     |  
-| Successful | 0     |  
-| Empty      | 0     |  
-| Not run    | 0     |
-~~~
-does not contain expected:  
-~~~
-*** NOK : Then output doesn't contain `Rose` (failed_doesnt_1.md:3:)    
-~~~
-  
-  - [ ] scenario [Failed "output doesnt contain"](../../features/A030_Then_Does_Not_Contain.md) fails  
-*** NOK : And output contains  (/users/lionel/prj/bbt/tests/../docs/features/a030_then_does_not_contain.md:55:)  
-/users/lionel/prj/bbt/tests/../docs/features/a030_then_does_not_contain.md:55: Error : Output:  
-~~~
-  
-## [failed_doesnt_2.md](failed_doesnt_2.md)    
-*** NOK : Then file `flowers.txt` do not contain `Tulip` (/users/lionel/prj/bbt/tests/failed_doesnt_2.md:3:)    
-/users/lionel/prj/bbt/tests/failed_doesnt_2.md:3: Error : file flowers.txt  
-~~~  
-Rose    
-Tulip  
-~~~  
-contain unexpected:    
-~~~  
-Tulip  
-~~~  
-    
-  - [ ] scenario [](failed_doesnt_2.md) fails    
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 1     |  
-| Successful | 0     |  
-| Empty      | 0     |  
-| Not run    | 0     |
-~~~
-does not contain expected:  
-~~~
-*** NOK : Then file `flowers.txt` do not contain `Tulip` (failed_doesnt_2.md:3:)      
-file flowers.txt    
-~~~  
-Rose      
-Tulip      
-~~~
-~~~
-  
-  - [ ] scenario [Failed "file doesn't contain"](../../features/A030_Then_Does_Not_Contain.md) fails  
+  - [X] scenario [Failed "output doesnt contain"](../../features/A030_Then_Does_Not_Contain.md) pass  
+  - [X] scenario [Failed "file doesn't contain"](../../features/A030_Then_Does_Not_Contain.md) pass  
 
 ## [A040_Example_Keyword.md](../../features/A040_Example_Keyword.md)  
 
@@ -356,7 +291,6 @@ Tulip
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 2     |
-| Successful | 84    |
+| Failed     | 0     |
+| Successful | 86    |
 | Empty      | 0     |
-| Not run    | 0     |
