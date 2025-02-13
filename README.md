@@ -98,8 +98,8 @@ And this is what gives the ability to write steps in almost natural language.
 Step's argument may be strings or multiline text.
 
 As per [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses :
-- to describe a multiline text (expected output, file content, etc) : [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines
-- to identify strings, like file name or command to run : [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks  
+- multiline text (expected output, file content, etc) : [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines
+- strings (file name, command to run, etc.) : [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is a string between backticks  
 
 It's not only to nicely highlight inputs in the doc, but also because otherwise the analysis of the steps would be too complex.  
  
@@ -121,7 +121,7 @@ Alternative tools exist, some are mentioned in [my quick overview of some compar
 
 ### Write a real documentation, not a script  
 
-bbt effectiveness does not come at the cost of a limiting documentation readability or expressiveness: 
+bbt effectiveness does not come at the cost of limiting documentation readability or expressiveness: 
 
 - First, thanks to the partial parsing, Steps are written in readable English;
   bbt Steps uses a limited English subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
