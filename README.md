@@ -28,9 +28,10 @@
 
 bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).
 Hence the name: bbt stands for *Black Box Tester*.  
-bbt targets both *specification of the behavior* and *end-to-end test automation*.  
 
-**The outstanding feature of btt is that it directly uses your behavior documentation as the test script.**  
+bbt targets both *specification of the behavior* and *end-to-end test automation* for the very common case of Command Line Interface (CLI) apps taking some input and producing some output. It aims to enable developers **to write and execute end-to-end test scenarios in just a few minutes**. 
+
+**The outstanding feature of btt is that it directly uses your behavior documentation in plain english as the test script.**  
 There is no other file to write.
 
 ### What does the description look like?
@@ -42,7 +43,6 @@ Here is a minimal example:
 
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
-
 
 It is written in Markdown:  
 ```md
@@ -82,51 +82,43 @@ A distinctive feature of bbt is that it seems to directly understand those almos
 - When I run `sut --quiet input.txt`
 - Then I have no output
 ```
-This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that bbt takes into account only some keywords to recognize the skeleton of the sentence, but does not understand the whole sentence.  
+This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that there is no rigid grammar, because bbt takes into account only some keywords to recognize the skeleton of the sentence.  
 
 So when you write:  
-> - When I run `gcc --version`  
-> - Then I get `version 15.0.0` (Fix #2398 and #2402)    
+> - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
 
 bbt actually reads:  
-> - when run `gcc --version`   
 > - then get `version 15.0.0`     
   
 And this is what gives the ability to write steps in natural language. 
 
 ### Step arguments
 
-Like [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines, to describe a multiline text (expected output, file content, etc).
+Step's argument may be strings or multiline text.
 
-bbt also uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is, string between backticks, to identify one line text like file name or command to run.  
-It's not only because it makes the doc nicer, but also because otherwise it would be impossible to distinguish arguments from free text.  
+As per [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses :
+- to describe a multiline text (expected output, file content, etc) : [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines
+- to identify strings, like file name or command to run : [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is string between backticks  
+
+It's not only to nicely highlight inputs in the doc, but also because otherwise the analysis of the steps would be too complex.  
  
-Note that steps accepting a fenced code block, like:  
-` - Then the output contains `  
-`   ``` `  
-`   20 files processed `  
-`   ``` `   
-
-also accept the code span shortcut when there is only one line.  
-`` - Then the output contains `20 files processed` ``  
-
 ### One more example
 
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compiles and runs the ubiquitous *Hello Word*.
 
-## Main characteristics
+## Why should I use bbt?
 
 ### Write once
 
 Specification is the only source of truth. This is bbt most interesting feature, there is nothing else: no intermediate representation, no glue code, no scripting language, no duplication of the original source at all.  
 
 With two main consequences: 
-1. writing those tests is a matter of minutes,
+1. writing a test is a matter of minutes,
 2. there is no more place for a discrepancy between documentation and tests.
 
 Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md), but as far as I know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
-### Tests are easy to read and easy to write
+### Easy to read, easy to write
 
 bbt uses a limited English subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
 But this limited English subset does not come at the cost of limited readability or expressiveness: 
@@ -139,14 +131,14 @@ A direct consequence of that simple model is that the specifications / scenarios
 
 Although simple, you don't have to learn this subset by heart, you may ask for a template by running `bbt -ct` (or `--create_template`), and ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
 
-### Tests are easy to run
+### Simple to run
 
 To run a scenario : `bbt my_scenario.md`  
 Or to run all the md files in the *tests* tree `bbt -r tests`  
 
 bbt has no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
 
-### Test Results are immediately publishable 
+### Publish! 
 
 bbt can output a **Test results index** Markdown file, that cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
 You can push it on GitHub without further processing.  
@@ -154,16 +146,7 @@ You can push it on GitHub without further processing.
 To see what it looks like, consider [bbt own tests](docs/tests_results/Linux/features_results.md).  
 
 Test results are generated when running `bbt`, by just using the `-o` option (`--output`).
-
-## Objective of the project 
-
-bbt project aims at exploring how far we can push the "specification in natural language is the single source of truth" motto, while maintaining the main feature: ease of use. 
-
-**If a newbie is able to use btt in a quarter of an hour, and an experienced user is able to write and run a test in less than 3 minutes, with no need to rewrite or post-process the generated documentation, I'll consider it as a great success.**    
-
-bbt has a precise scope: it is dedicated to Command Line Interface, taking some input and producing some output.
-Keep in mind that it is not meant for specifying or testing UI, complex systems, unit testing, API, etc.  
-Using a natural language description for those kind of tests is a very tempting way to explore, but implementation may be an order of magnitude more complex, and this is out of bbt current scope.   
+  
 
 ## Status of the project
 
@@ -173,20 +156,16 @@ Feel free to make suggestions [in bbt discussions](https://github.com/LionelDrag
 The code has grown fast in the second half of 2024, and is far from being clean.  
 Nevertheless, bbt is working, and has as a serious [test base](docs/tests_results/Linux/features_results.md).  
 
-> [!NOTE]
-> bbt is fully tested with bbt since 0.0.4 version.
-> bbt own tests are based on features descriptions indexed [here](docs/tests_results/Linux/features_results.md).
-
-In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
-
-A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
+In real life, A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
 Tests where easy and fast to setup, allowing to stay 99% of the time focus on the code.
+The [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt
+Other people are using it too.  
 
-btt compile on Linux, Windows and Mac OS (at least the Alire version), but is currently tested only on Linux (my dev. platform) and Windows.
-
-On Windows, 3 tests fail (3 out of 65 on version 0.0.6), 2 because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
-I'm not yet able to specify per platform expected results, so this is not going to be fixed quickly. 
-That said, I'm not aware of any Windows specific bug.
+btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
+On Windows, some tests fail because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
+I'm not yet able to specify per platform expected results, so this is not going to be fixed quickly.  
+On MacOS, it may be usefull to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
+That said, I'm not aware of any Windows or MacOS specific bug.
 
 ## Installation
 
