@@ -2,8 +2,6 @@
 
 ![](docs/tests_results/Linux/badge.svg) ![](docs/tests_results/Windows/badge.svg) ![](docs/tests_results/Darwin/badge.svg)
 
----
-
 # `bbt` README <!-- omit from toc -->
 
 - [Overview](#overview)
