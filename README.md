@@ -91,7 +91,7 @@ So when you write:
 bbt actually reads:  
 > - then get `version 15.0.0`     
   
-And this is what gives the ability to write steps in natural language. 
+And this is what gives the ability to write steps in almost natural language. 
 
 ### Step arguments
 
