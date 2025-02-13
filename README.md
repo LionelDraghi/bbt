@@ -32,9 +32,8 @@ Hence the name: bbt stands for *Black Box Tester*.
 bbt targets both *specification of the behavior* and *end-to-end test automation* for the very common case of apps taking some input and producing some output.  
 It enable developers **to write and execute comprehensive test scenarios in just a few minutes**. 
 
-> [!NOTE]  
-> The outstanding feature of btt is that **it directly uses your behavior documentation in plain english**.  
-> There is no script nor other file to write.
+The outstanding feature of btt is that **it directly uses your behavior documentation in plain english**.  
+There is no script nor other file to write.
 
 ### What does the behavior description look like?
 
