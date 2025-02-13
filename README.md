@@ -1,10 +1,8 @@
-![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-black)
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-black) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![](docs/tests_results/Linux/badge.svg)
-![](docs/tests_results/Windows/badge.svg)
-![](docs/tests_results/Darwin/badge.svg)
+![](docs/tests_results/Linux/badge.svg) ![](docs/tests_results/Windows/badge.svg) ![](docs/tests_results/Darwin/badge.svg)
+
+---
 
 # `bbt` README <!-- omit from toc -->
 
