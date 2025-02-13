@@ -163,7 +163,7 @@ Nevertheless, bbt is working, and has as a serious [test base](docs/tests_result
 
 In real life, A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
 Tests where easy and fast to setup, allowing to stay 99% of the time focus on the code.
-The [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt
+The [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
 Other people are using it too.  
 
 btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
