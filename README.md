@@ -29,10 +29,11 @@
 bbt is a simple tool to black box check the behavior of an executable through [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).
 Hence the name: bbt stands for *Black Box Tester*.  
 
-bbt targets both *specification of the behavior* and *end-to-end test automation* for the very common case of Command Line Interface (CLI) apps taking some input and producing some output. It aims to enable developers **to write and execute end-to-end test scenarios in just a few minutes**. 
+bbt targets both *specification of the behavior* and *end-to-end test automation* for the very common case of those apps taking some input and producing some output. It enable developers **to write and execute comprehensive test scenarios in just a few minutes**. 
 
-**The outstanding feature of btt is that it directly uses your behavior documentation in plain english as the test script.**  
-There is no other file to write.
+> [!NOTE]  
+> The outstanding feature of btt is that **it directly uses your behavior documentation in plain english as the test script**.
+> There is no other file to write.
 
 ### What does the description look like?
 
