@@ -53,7 +53,7 @@ It is written in Markdown:
 - Then the output contains `14.2.0`
 ```  
 
-bbt is about documentation and simplicity, Markdown[^1] is a perfect fit.  
+bbt being about documentation and simplicity, Markdown[^1] is a perfect fit.  
 
 Let's consider a slightly more complete example:
 ![simple example](image-2.png)
