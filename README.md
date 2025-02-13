@@ -117,25 +117,32 @@ With two main consequences:
 1. writing a test is a matter of minutes,
 2. there is no more place for a discrepancy between documentation and tests.
 
-Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md), but as far as I know, **bbt is the only one to provide such a direct "run the doc" approach**.
+Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md).  
+But as far as I know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
 ### Write a real documentation, not a script  
 
 bbt effectiveness does not come at the cost of limiting documentation readability or expressiveness: 
 
-- First, thanks to the partial parsing, Steps are written in readable English;
-  bbt Steps uses a limited English subset, with a vocabulary dedicated to test with keywords like *run*, *output*, *contains*, etc.
-  Although simple, you don't have to learn this subset by heart, you may ask for a template scenario by running `bbt -ct` (or `--create_template`), or ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
-- Second, the rest of the file being yours, you can give as much context as you want, and use all Markdown cool extensions (for example graphics with [Mermaid](https://mermaid.js.org/intro/)).
+- First, the vast majority of the file is just plain markdown : use it, structure it the way you like, give as much context as you want, and use all Markdown cool extensions (for example graphics with [Mermaid](https://mermaid.js.org/intro/));
+- Second, even the part that is interpreted by bbt, the steps, is written in readable English thanks to the partial parsing.
 
-A direct consequence of that simple model is that the specifications / scenarios may be written by non-coders.
+Nice consequence, bbt scenarios may be written by non coders people.
+
+### Be proficient in no time
+
+bbt Steps uses a limited English subset, with a vocabulary dedicated to test with no-surprise keywords like *run*, *output*, *contains*, etc.  
+
+Although simple, you don't have to learn this subset by heart, you may :
+- ask for a template scenario by running `bbt -ct` (or `--create_template`), or
+- ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
 
 ### No-fuss no-wait run
 
 To run a scenario : `bbt my_scenario.md`  
 Or to run all the md files in the *tests* tree `bbt -r tests`  
 
-bbt has no dependencies on external lib or tools (diff, for example), to ensure that it can be run on most platforms.  
+bbt has no dependencies on external lib or tools (diff, for example) and can be run as is on major native platforms.  
 
 ### Ready to publish output! 
 
@@ -146,7 +153,6 @@ To see what it looks like, consider [bbt own tests](docs/tests_results/Linux/fea
 
 Test results are generated when running `bbt`, by just using the `-o` option (`--output`).
   
-
 ## Status of the project
 
 bbt is in an early stage, meaning that interface and behavior are subject to changes.  
