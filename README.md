@@ -157,9 +157,10 @@ Feel free to make features suggestions [in bbt discussions](https://github.com/L
 The code has grown fast in 2024, and is far from being clean.  
 Nevertheless, bbt is working, and has as a serious [test base](docs/tests_results/Linux/features_results.md).  
 
-In real life, A very conclusive test was done using bbt 0.0.6 for [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
-Tests where easy and fast to setup, allowing to stay 99% of the time focus on the code.
-The [acc](https://github.com/LionelDraghi/ArchiCheck) project has started the migration of its large tests base to bbt.  
+A very conclusive test on the effectiveness of bbt as being conducted on [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
+Tests where easy and fast to setup, allowing to stay most of the time focus on coding.
+
+In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has largely migrated to BBT, resulting in a drastically reduced number of files and a significant gain in maintenability and readability of the tests.  
 Other people are using it too.  
 
 btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
