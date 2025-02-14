@@ -33,10 +33,9 @@ There is no script nor other file to write.
 
 ### What does the behavior description look like?
 
-The behavior is described in almost natural English, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) / [Gherkin](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language) usual pattern *Given / When / Then*.  
+The behavior is described in almost natural English, in Markdown, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) / [Gherkin](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language) usual pattern *Given / When / Then*.  
 Here is a minimal example:  
 
-It is written in Markdown:  
 ```md
 ### Scenario: I want to know gcc version
 
