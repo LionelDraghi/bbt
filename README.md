@@ -42,7 +42,7 @@ Here is a minimal example:
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
 ```  
-and render this way :
+that render this way :
 
 ### Scenario: I want to know gcc version  <!-- omit from toc -->
 
