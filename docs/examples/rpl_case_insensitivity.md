@@ -14,9 +14,9 @@
   keyboard=FR
   ```
 
-- When I run `rpl -i FR UK config.ini`
+- When I run `rpl -i FR UK config.ini`  
   -i = --ignore-case  
-  (On Windows, I found rpl 1.4.1 by Joe Laffey, but not the rpl packaged in Debian that accept both long and short option form)
+  Note that on Windows, we are using rpl 1.4.1 by Joe Laffey, that do not accept long options unlike the rpl packaged on Debian 
 
 - Then the `config.ini` file contains 
   ```
