@@ -38,14 +38,14 @@ Here is a minimal example:
 
 It is written in Markdown:  
 ```md
-#### Scenario: I want to know gcc version
+### Scenario: I want to know gcc version
 
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
 ```  
-It render this way :
+and render this way :
 
-#### Scenario: I want to know gcc version  <!-- omit from toc -->
+### Scenario: I want to know gcc version  <!-- omit from toc -->
 
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
