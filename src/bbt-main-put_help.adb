@@ -47,7 +47,9 @@ begin
    Put_Line ("   -ed  | --exec_dir 'dir' : run command in dir instead of current dir");
    Put_Line ("   -td  | --tmp_dir 'dir'  : create .out file in dir instead of current dir");
    -- Put_Line ("   -sb  | --status_bar       : enable a progress bar in the terminal");
-
+   Put_Line ("   -gb  | --generate_badge badge.url : create a text file containing");
+   Put_Line ("                                       a shields.io URL to get a svg badge");
+   Put_Line ("                                       with tests results summary.");
    New_Line;
    Put_Line ("Debug command:");
    Put_Line ("   -lt                    : list log topics");

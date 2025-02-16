@@ -8,6 +8,8 @@
 with Ada.Characters.Handling;
 with Ada.Strings.Equal_Case_Insensitive;
 
+with GNAT.Regexp;
+
 package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
@@ -469,6 +471,38 @@ package body Text_Utilities is
                               Case_Insensitive => Case_Insensitive,
                               Ignore_Blanks    => Ignore_Blanks);
    end Contains_String;
+
+   -- --------------------------------------------------------------------------
+   function Matches (In_Text    : Text;
+                     Regexp     : String) -- ;
+                     -- Line       : out Natural;
+                     -- Matches    : in out GNAT.Regpat.Match_Array)
+                     return Boolean
+   is
+      -- use GNAT.Regpat;
+      use GNAT.Regexp;
+      -- Matcher : Pattern_Matcher := Compile (Regexp);
+      Matcher : GNAT.Regexp.Regexp;
+      Line : Natural := 0;
+
+   begin
+      -- Line    := 0;
+      -- Compile (Matcher, Regexp);
+      Matcher := Compile (Regexp);
+      --  Put_Line ("regexp = " & Regexp);
+      for I in In_Text.First_Index .. In_Text.Last_Index loop
+         --  Put_Line ("Line = " & In_Text (I));
+
+         Line := I;
+         -- Match (Self => Matcher, Data => In_Text (I), Matches => Matches);
+         -- Put_Line ("Matches = " & Matches'Image);
+         if Match (In_Text (I), Matcher) then
+            -- Put_Line ("Match " & In_Text (I));
+            return True;
+         end if;
+      end loop;
+      return False;
+   end Matches;
 
    -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;

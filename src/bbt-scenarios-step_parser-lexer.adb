@@ -46,6 +46,8 @@ package body BBT.Scenarios.Step_Parser.Lexer is
          "contain",
          "contains",
          "containing",
+         "matches",
+         "match",
          "successfully",
          "file",
          "dir",

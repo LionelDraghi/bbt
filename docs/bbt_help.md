@@ -32,6 +32,9 @@ Options:
                              for standard output.
    -ed  | --exec_dir 'dir' : run command in dir instead of current dir
    -td  | --tmp_dir 'dir'  : create .out file in dir instead of current dir
+   -gb  | --generate_badge badge.url : create a text file containing
+                                       a shields.io URL to get a svg badge
+                                       with tests results summary.
 
 Debug command:
    -lt                    : list log topics

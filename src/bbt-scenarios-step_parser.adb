@@ -44,6 +44,8 @@ package body BBT.Scenarios.Step_Parser is
                     Get_No,
                     Does_Not_Contain,
                     Contains,
+                    Matches,
+                    Does_Not_Match,
                     Containing,
                     Is_V,
                     Is_No,
@@ -86,8 +88,10 @@ package body BBT.Scenarios.Step_Parser is
          when Get              => return "get";
          when Get_No           => return "get no";
          when Contains         => return "contains";
+         when Matches          => return "matches";
          when Containing       => return "containing";
          when Does_Not_Contain => return "does not contain";
+         when Does_Not_Match   => return "does not match";
          when Is_V             => return "is";
          when Is_No            => return "is no";
          when No_Object        => return "";
@@ -156,6 +160,8 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, Obj_Text)      := (Output_Does_Not_Contain, False); -- then output does not contain `msg`
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, Obj_File_Name) := (Output_Does_Not_Contain, False); -- Then output does not contain file `snippet.txt`
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, No_Object)     := (Output_Does_Not_Contain, True); -- then output does not contain followed by code fenced content
+      G (Then_P, No_SA, Output_Subj,  Matches,  Obj_Text)              := (Output_Matches, False); -- then output matches `[:digit:]*.[:digit:]*`
+      G (Then_P, No_SA, Output_Subj,  Does_Not_Match,  Obj_Text)       := (Output_Does_Not_Match, False); -- then output does not match `[:digit:]*.[:digit:]*`
       G (Then_P, No_SA, Subject_File, Is_V,     Obj_Text)              := (File_Is, False); -- then `config.ini` is `mode=silent`
       G (Then_P, No_SA, Subject_File, Is_V,     Obj_File_Name)         := (File_Is, False); -- then `config.ini` is equal to file `expected/config.ini`
       G (Then_P, No_SA, Subject_File, Is_V,     No_Object)             := (File_Is, True); -- then `config.ini` is followed by code fenced content
@@ -299,17 +305,10 @@ package body BBT.Scenarios.Step_Parser is
                              ("Keyword : " & Tok & " ignored", Loc);
 
                         end if;
-
-                     else
-                        null;
                         -- given/when/then may appear later on the line, but
                         -- then are not considered as keywords.
-                     end if;
 
-                     -- Fixme: optimization, the following elsif suite is tested even
-                     --  when we already met Given/When/Then
-
-                     if Lower_Keyword = "run" or Lower_Keyword = "running" then
+                     elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
                         if Successfully_Met then
                            Verb := Successful_Run;
                         else
@@ -365,6 +364,15 @@ package body BBT.Scenarios.Step_Parser is
                            Verb := Does_Not_Contain;
                         else
                            Verb := Contains;
+                        end if;
+
+                     elsif Lower_Keyword = "match" or
+                       Lower_Keyword = "matches"
+                     then
+                        if Not_Met then
+                           Verb := Does_Not_Match;
+                        else
+                           Verb := Matches;
                         end if;
 
                      elsif Lower_Keyword = "containing" then
@@ -453,7 +461,9 @@ package body BBT.Scenarios.Step_Parser is
                              Get              |
                              Get_No           |
                              Contains         |
+                             Matches          |
                              Does_Not_Contain |
+                             Does_Not_Match   |
                              Containing       =>
                            -- Those verbs are always followed by a text
                            Object := Obj_Text;
@@ -506,19 +516,22 @@ package body BBT.Scenarios.Step_Parser is
          end if;
       end;
 
-      Action := The_Grammar
-        (Prep, Subject_Attr, Subject, Verb, Object).Action;
-      Code_Block_Expected := The_Grammar
-        (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
-
-      Previous_Step_Kind := Cat;
-
-      --  Ada.Text_IO.Put_Line ("Code_Block_Expected = " & Code_Block_Expected'Image);
       --  Ada.Text_IO.Put_Line ("Prep         = " & Prep'Image);
       --  Ada.Text_IO.Put_Line ("Subject_Attr = " & Subject_Attr'Image);
       --  Ada.Text_IO.Put_Line ("Subject      = " & Subject'Image);
       --  Ada.Text_IO.Put_Line ("Verb         = " & Verb'Image);
       --  Ada.Text_IO.Put_Line ("Object       = " & Object'Image);
+
+      Action := The_Grammar
+        (Prep, Subject_Attr, Subject, Verb, Object).Action;
+      Code_Block_Expected := The_Grammar
+        (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
+
+      --  Ada.Text_IO.Put_Line ("Action       = " & Action'Image);
+      --  Ada.Text_IO.Put_Line ("Code_Block_Expected = " & Code_Block_Expected'Image);
+
+      Previous_Step_Kind := Cat;
+
 
       return (Cat              => Cat,
               Action           => Action,
