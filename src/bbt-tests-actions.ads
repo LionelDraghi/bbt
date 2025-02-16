@@ -49,6 +49,10 @@ private package BBT.Tests.Actions is
                               Step   : Step_Type);
    procedure Output_Does_Not_Contain (Output : Text;
                                       Step   : Step_Type);
+   procedure Output_Matches (Output : Text;
+                             Step   : Step_Type);
+   procedure Output_Does_Not_Match (Output : Text;
+                                    Step   : Step_Type);
 
    procedure Files_Is (Step : Step_Type);
    procedure Files_Is_Not (Step : Step_Type);

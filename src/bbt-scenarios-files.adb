@@ -260,11 +260,12 @@ package body BBT.Scenarios.Files is
 
    exception
       when E : others =>
-         -- Missing_Scenario
          IO.Put_Exception (Ada.Exceptions.Exception_Message (E)
-                           & " while processing " & File_Name
+                           & ASCII.LF
                            & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                            Loc);
+         if not Settings.Keep_Going then raise;
+         end if;
 
    end Analyze_MDG_File;
 

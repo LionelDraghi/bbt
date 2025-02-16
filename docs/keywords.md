@@ -18,6 +18,8 @@
 - contain
 - contains
 - containing
+- matches
+- match
 - successfully
 - file
 - dir

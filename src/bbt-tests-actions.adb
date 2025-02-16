@@ -455,6 +455,34 @@ package body BBT.Tests.Actions is
    end Output_Does_Not_Contain;
 
    -- --------------------------------------------------------------------------
+   procedure Output_Matches (Output : Text;
+                             Step   : Step_Type) is
+      Regexp : constant String := Get_Expected (Step)(1);
+   begin
+      IO.Put_Line ("Output_Matches ", Verbosity => Debug);
+      Put_Step_Result (Step     => Step,
+                       Success  => Text_Utilities.Matches (Output, Regexp),
+                       -- , Line, Matches),
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                         "does not match expected:  " & Regexp,
+                       Loc      => Step.Location);
+   end Output_Matches;
+
+   -- --------------------------------------------------------------------------
+   procedure Output_Does_Not_Match (Output : Text;
+                                    Step   : Step_Type) is
+      Regexp : constant String := Get_Expected (Step) (1);
+   begin
+      IO.Put_Line ("Output_Does_Not_Match ", Verbosity => Debug);
+      Put_Step_Result (Step     => Step,
+                       Success  => Text_Utilities.Matches (Output, Regexp),
+                       --, Line, Matches),
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                         "match unexpected:  " & Regexp,
+                       Loc      => Step.Location);
+   end Output_Does_Not_Match;
+
+   -- --------------------------------------------------------------------------
    procedure Files_Is (Step : Step_Type) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);

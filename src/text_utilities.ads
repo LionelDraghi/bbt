@@ -122,6 +122,14 @@ package Text_Utilities is
                              Ignore_Blanks    : Boolean := True) return Boolean;
 
    -- --------------------------------------------------------------------------
+   function Matches (In_Text    : Text;
+                     Regexp     : String)
+     -- ;
+     -- Line       : out Natural;
+     -- Matches    : in out GNAT.Regpat.Match_Array)
+                     return Boolean;
+
+   -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;
                                   From    : Positive := 1) return Natural;
    -- Start looking at index From

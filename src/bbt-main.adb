@@ -160,4 +160,8 @@ begin
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;
 
+exception
+   when others =>
+      Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+
 end BBT.Main;

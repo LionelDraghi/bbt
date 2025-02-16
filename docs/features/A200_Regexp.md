@@ -1,0 +1,31 @@
+## Feature: identifying expected output with regexp 
+
+You sometimes need to check the output not for an exact match, but for a pattern.  
+bbt uses the specific `match` / `matches` keyword for that purpose.  
+bbt is using simple regexp (no posix subtleties for now).  
+
+Note that the regexp should match the whole line :
+- to find `word` in a line you should use `.*word.*`
+- to find line ending with word, use `.*word`
+
+# scenario: version number match
+
+- When I run `./sut -v`
+- Then output matches `sut version [0-9]+.[0-9]+`
+
+# scenario: version number mismatch
+
+- Given the file `wrong_regexp.md`
+~~~
+# Scenario:
+- When I run `./sut -v`
+- Then output matches `sut version [0-9]+.[0-9]+.[0-9]+`
+~~~
+- When I run `./bbt wrong_regexp.md`
+- Then I get an error
+- and output contains 
+```
+sut version 1.0  
+~~~  
+does not match expected:  sut version [0-9]+.[0-9]+.[0-9]+    
+```
