@@ -29,3 +29,26 @@ sut version 1.0
 ~~~  
 does not match expected:  sut version [0-9]+.[0-9]+.[0-9]+    
 ```
+
+# Scenario: Test of "does not match" 
+
+- When I run `./sut -v`
+Let's check that the number is of the form "major.minor" and not "major.minor.patch"
+- Then output does not match `sut version [0-9]+.[0-9]+.[0-9]+`
+
+# Scenario: Test of "does not match" that indeed matches
+
+- Given the file `wrong_regexp.md`
+~~~
+# Scenario:
+- When I run `./sut -v`
+- Then output does not match `sut version [0-9]+.[0-9]+`
+~~~
+- When I run `./bbt wrong_regexp.md`
+- Then I get an error
+- and output contains 
+```
+sut version 1.0  
+~~~  
+match unexpected:  sut version [0-9]+.[0-9]+
+```

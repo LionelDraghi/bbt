@@ -7,18 +7,17 @@ when there is an appropriate source file, or :
 > program: message
 otherwise.
 
-This is a good test case for bbt pattern!
+# Scenario: 
 
-Scenario: 
-- Given the file t1.md
+We create a scenario with multiple When, and run it with the "strict" option, in order to generate Warnings.
+
+- Given the file `t1.md`
  ```
   # Scenario
   - When I run `./sut create tmp.txt`
-  - When I run `./sut append fillet  tmp.txt`
-  - When I run `./sut append chamfer tmp.txt`
+  - And  I run `./sut append fillet  tmp.txt`
+  - And  I run `./sut append chamfer tmp.txt`
   ```
 
 - When I successfully run `./bbt --strict t1.md`
-- Then the output contains `t1.md:[0-9]*: Warning`
-- And the output contain          `t1.md:[0-9]*: Warn.ng`
-- But the output does not contain `t1.md:[0-9]*: Warn..ng`
+- Then the output matches `t1.md:[0-9]*: Warning : Multiple When in the same Scenario.*`

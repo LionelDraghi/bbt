@@ -475,7 +475,7 @@ package body BBT.Tests.Actions is
    begin
       IO.Put_Line ("Output_Does_Not_Match ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
-                       Success  => Text_Utilities.Matches (Output, Regexp),
+                       Success  => not Text_Utilities.Matches (Output, Regexp),
                        --, Line, Matches),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "match unexpected:  " & Regexp,
