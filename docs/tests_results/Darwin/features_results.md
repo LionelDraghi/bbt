@@ -158,6 +158,15 @@
   - [X] scenario [command not found](../../features/A190_Run.md) pass  
   - [X] scenario [the command is not executable](../../features/A190_Run.md) pass  
 
+## [A200_Regexp.md](../../features/A200_Regexp.md)  
+
+  ### Feature: identifying expected output with regexp  
+
+  - [X] scenario [version number match](../../features/A200_Regexp.md) pass  
+  - [X] scenario [version number mismatch](../../features/A200_Regexp.md) pass  
+  - [X] scenario [Test of "does not match"](../../features/A200_Regexp.md) pass  
+  - [X] scenario [Test of "does not match" that indeed matches](../../features/A200_Regexp.md) pass  
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
 
   ### Feature: tmp files and directories deletion  
@@ -289,8 +298,14 @@
   - [X] scenario [Steps without scenario header](../../features/C080_missing_scenario.md) pass  
   - [X] scenario [Empty file](../../features/C080_missing_scenario.md) pass  
 
+## [C090_GNU_Error_Msg_Format.md](../../features/C090_GNU_Error_Msg_Format.md)  
+
+  ### Feature: GNU error messages  
+
+  - [X] scenario [](../../features/C090_GNU_Error_Msg_Format.md) pass  
+
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 86    |
+| Successful | 91    |
 | Empty      | 0     |
