@@ -43,9 +43,9 @@ begin
       New_Line;
       Put_Line ("## Steps  ");
       Put_Line ("Steps are the most important part of bbt files.  ");
-      Put_Line ("  ""Given"" steps setup preconditions  ");
-      Put_Line ("  ""When""  steps run what should be tested  ");
-      Put_Line ("  ""Then""  steps check the results  ");
+      Put_Line ("  ""Given"" steps put the system in a known state  ");
+      Put_Line ("  ""When""  steps run defined actions  ");
+      Put_Line ("  ""Then""  steps observes outcomes  ");
       New_Line;
       Put_Line ("Examples of steps:  ");
       Put_Line ("  - Given there is no `.config` dir");
