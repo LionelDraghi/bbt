@@ -116,7 +116,7 @@ With two main consequences:
 Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md).  
 But as far as I know, **bbt is the only one to provide such a direct "run the doc" approach**.
 
-### Write a real documentation, not a script  
+### Write a real documentation, not just a ".feature" Gherkin file  
 
 bbt effectiveness does not come at the cost of limiting documentation readability or expressiveness: 
 
