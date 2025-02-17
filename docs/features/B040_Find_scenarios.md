@@ -60,6 +60,9 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 
 
 ### Scenario: running all scenarios in dir1
+
+Fixme: this scenario fail on Windows because of the directory separator in the expected result.  
+
 - When I run `./bbt -lf dir1`
 - Then the output is (unordered)
 ```
@@ -80,6 +83,8 @@ dir1/scen4.scen
 ```
 
 ### Scenario: running scenarios in a tree thanks to `-r`
+
+Fixme: this scenario fail on Windows because of the directory separator in the expected result.  
 
 - Given the `dir1/dir2/` dir
 - Given the `dir1/dir3/dir4` dir

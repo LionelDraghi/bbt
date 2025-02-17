@@ -241,7 +241,6 @@ package body BBT.Documents is
                                              New_Item => Results (Test)'Image);
       end Count;
    begin
-      New_Line;
       Put_Line ("| Status     | Count |");
       Put_Line ("|------------|-------|");
       Put_Line ("| Failed     |" & Count (Failed) & "|");

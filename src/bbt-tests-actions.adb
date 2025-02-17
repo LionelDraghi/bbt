@@ -157,6 +157,10 @@ package body BBT.Tests.Actions is
              Return_Code  => Return_Code,
              Err_To_Out   => True);
 
+      IO.Put_Line ("Spawn returns : Success = " & Spawn_OK'Image &
+                     ", Return_Code = " & Return_Code'Image,
+                   Verbosity => IO.Debug);
+
       Put_Step_Result (Step     => Step,
                        Success  => Spawn_OK,
                        Fail_Msg => "Couldn't run " & Cmd,

@@ -295,7 +295,7 @@ package body BBT.IO is
       if Print_On_Standard_Output then
          Ada.Text_IO.Put_Line (Prefix & Item);
       end if;
-      if Print_In_Tee_File  (Verbosity, Topic) then
+      if Print_In_Tee_File (Verbosity, Topic) then
          Ada.Text_IO.Put_Line (Tee_File, Prefix & Item);
       end if;
    end Put_Line;

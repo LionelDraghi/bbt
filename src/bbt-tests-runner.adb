@@ -160,8 +160,8 @@ package body BBT.Tests.Runner is
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
       if Has_Background (Doc) then
-         Put_Line ("  Document Background " & (+Doc.Background.Name)
-                   & "  ", IO.No_Location, IO.Verbose);
+         Put_Line ("  Running document Background """ & (+Doc.Background.Name)
+                   & """  ", IO.No_Location, IO.Debug);
          Run_Scenario (Doc.Background.all);
          Move_Results (From_Scen => Doc.Background.all,
                        To_Scen   => Scen);
@@ -177,8 +177,8 @@ package body BBT.Tests.Runner is
          declare
             Feat : constant Feature_Type := Scen.Parent_Feature.all;
          begin
-            Put_Line ("  Feature background " & (+Feat.Background.Name) &
-                        "  ", IO.No_Location, IO.Verbose);
+            Put_Line ("  Running feature Background """ & (+Feat.Background.Name) &
+                        """  ", IO.No_Location, IO.Debug);
             Run_Scenario (Feat.Background.all);
             Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
          end;
@@ -213,17 +213,16 @@ package body BBT.Tests.Runner is
                   Put_Line ("  - [ ] scenario " & Link_Image &
                               " is empty, nothing tested  ",
                             Verbosity => Normal);
-                  -- IO.New_Line (Verbosity => Normal);
                when Successful =>
                   Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
                             Verbosity => Normal);
-                  -- IO.New_Line (Verbosity => Normal);
                when Not_Run | Failed =>
                   Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
                             Verbosity => Quiet);
-                  -- IO.New_Line (Verbosity => Quiet);
             end case;
          end;
+
+         IO.New_Line (Verbosity => Verbose);
 
          if IO.Some_Error and not Settings.Keep_Going then
             exit;
@@ -261,14 +260,13 @@ package body BBT.Tests.Runner is
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
-         IO.New_Line (IO.Debug);
+         -- IO.New_Line (IO.Debug);
          IO.Put_Line ("==== Running " & D.Name'Image, IO.No_Location, IO.Debug);
 
          BBT.Created_File_List.Open
            (Ada.Directories.Simple_Name (To_String (D.Name))
             & ".created_files");
 
-         IO.New_Line (Verbosity => IO.Normal);
          begin
             declare
                Path_To_Scen  : constant String
@@ -278,7 +276,6 @@ package body BBT.Tests.Runner is
                Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
                          & "](" & (Path_To_Scen) & ")  ",
                          Verbosity => Normal);
-               IO.New_Line (Verbosity => Verbose);
 
                Status_Bar.Progress_Bar_Next_Step (Path_To_Scen); delay (0.1);
 
@@ -299,7 +296,6 @@ package body BBT.Tests.Runner is
                   -- Then run scenarios attached to each Feature
                   IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ",
                                Verbosity => Verbose);
-                  IO.New_Line (Verbosity => Verbose);
 
                   if F.Scenario_List.Is_Empty then
                      Put_Warning ("No scenario in feature " &
