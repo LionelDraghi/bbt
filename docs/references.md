@@ -203,6 +203,7 @@ Meaning that code blocks can be used within the documentation without interferin
 And, as per Markdown rules, the closing mark should the same as the opening one.
 So that code blocks may include code block marks of the other type.  
 For example, you can have:
+
 > - Given the file `foo.md` 
 > ```md
 >
