@@ -506,10 +506,10 @@ package body BBT.Scenarios.Step_Parser is
       begin
          if Verb = Run or Verb = Successful_Run then
             if Or_Met > 0 and then Cmd_List.Length /= Count_Type (Or_Met + 1) then
-               IO.Put_Warning ("Command missing after last ""or""", Loc);
+               IO.Put_Error ("Command missing after last ""or""", Loc);
             else
                if Object_String = Null_Unbounded_String then
-                  IO.Put_Warning ("No command after ""run"" keyword", Loc);
+                  IO.Put_Error ("No command after ""run"" keyword", Loc);
                end if;
             end if;
 

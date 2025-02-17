@@ -19,9 +19,9 @@ Other header will be ignored by bbt.
 
 ## Steps  
 Steps are the most important part of bbt files.  
-  "Given" steps setup preconditions  
-  "When"  steps run what should be tested  
-  "Then"  steps check the results  
+  "Given" steps put the system in a known state  
+  "When"  steps run defined actions  
+  "Then"  steps observes outcomes  
 
 Examples of steps:  
   - Given there is no `.config` dir
