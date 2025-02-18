@@ -162,10 +162,15 @@ package body Text_Utilities is
       T    : Text;
    begin
       Open (File, Name => File_Name, Mode => In_File);
-      T := Get_Text (File);
-      while not End_Of_File (File) loop
-         T.Append (Get_Line (File));
-      end loop;
+      T := Empty_Text;
+      begin
+         loop
+            T.Append (Get_Line (File));
+         end loop;
+      exception
+         when End_Error =>
+            null;
+      end;
       Close (File);
       return T;
    end Get_Text;
@@ -313,6 +318,7 @@ package body Text_Utilities is
    begin
       Compare (Text1, Text2,
                Ignore_Blank_Lines => Ignore_Blank_Lines,
+               Ignore_Blanks      => Ignore_Blanks,
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
                Identical          => Identical);
