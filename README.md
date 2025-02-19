@@ -140,9 +140,11 @@ Or to run all the md files in the *tests* tree `bbt -r tests`
 
 bbt has no dependencies on external lib or tools (diff, for example) and can be run as is on major native platforms.  
 
-### Ready to publish output! 
+### Ready to publish output 
 
-bbt can output a **Test results index** Markdown file, that cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
+bbt output is in Markdown format. You can adjust the detail level with the usual "-q" and "-v" options.
+
+The output cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
 You can push it on GitHub without further processing.  
 
 To see what it looks like, consider [bbt own tests](docs/tests_results/Linux/features_results.md).  
