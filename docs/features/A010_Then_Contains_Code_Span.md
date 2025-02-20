@@ -1,11 +1,11 @@
 ## Feature : testing that a file contains a string
 
-bbt may be used to check that the output or a file contains a string, thanks to the `contains` keyword.
+bbt may be used to check that the output or a file contains a string, thanks to the `contains` or `contain` keyword.
 
 ### Scenario: test on a string output
 
   - When I run `./sut -v`
-  - Then the output should contains `version`
+  - Then the output should contain `version`
 
 ### Scenario: test on a multiline output
 

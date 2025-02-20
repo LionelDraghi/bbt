@@ -59,7 +59,7 @@ autosave=true
 
 - When I run `./bbt contains_multiline.md`
 - Then I get an error
-- And output contains 
+- And output should contain  
 ```
 file config.ini does not contain expected
 ~~~
