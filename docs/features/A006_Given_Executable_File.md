@@ -4,11 +4,14 @@ btt is able to create a shell script, that will have the executable attributes t
   
 ### Scenario: trying to run a script without the executable keyword should fail
 
-- Given the file `cmd1.sh` containing
+- Given the new file `cmd1.sh` containing
 ~~~
-#!/usr/bin/bash
+#!/bin/bash
 echo "bbt rules!"
 ~~~
+
+/bin/bash on MacOS
+/usr/bin/bash on Debian
 
 - Given the file `create_exec.md` 
 ~~~
@@ -22,9 +25,9 @@ echo "bbt rules!"
 
 ### Scenario: trying to run the same script created with the executable attribute should succeed
 
-- Given the executable file `cmd2.sh` containing
+- Given the new executable file `cmd2.sh` containing
 ~~~
-#!/usr/bin/bash
+#!/bin/bash
 echo "bbt rules!"
 ~~~
 

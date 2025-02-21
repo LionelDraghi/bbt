@@ -69,4 +69,4 @@ package body BBT.Tests.Actions.File_Operations is
    -- --------------------------------------------------------------------------
     procedure Close  (File : in out File_Type) renames Ada.Text_IO.Close;
 
- end BBT.Tests.Actions.File_Operations;
+end BBT.Tests.Actions.File_Operations;
