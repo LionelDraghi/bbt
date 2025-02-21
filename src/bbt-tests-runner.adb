@@ -115,11 +115,8 @@ package body BBT.Tests.Runner is
             when Check_Dir_Existence =>
                Check_Dir_Existence (Subject_Or_Object_String (Step), Step);
 
-            when Create_File =>
-               Create_New (Step);
-
-            when Create_Directory =>
-               Create_New (Step);
+            when Create_If_None =>
+               Create_If_None (Step);
 
             when Erase_And_Create =>
                Erase_And_Create (Step);

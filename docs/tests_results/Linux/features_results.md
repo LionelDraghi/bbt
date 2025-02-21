@@ -8,6 +8,12 @@
 
   - [X] scenario [Creating a file with some content](../../features/A005_Given.md) pass  
 
+## [A006_Given_Executable_File.md](../../features/A006_Given_Executable_File.md)  
+  ### Feature: running scripts  
+  - [X] scenario [trying to run a script without the executable keyword should fail](../../features/A006_Given_Executable_File.md) pass  
+
+  - [X] scenario [trying to run the same script created with the executable attribute should succeed](../../features/A006_Given_Executable_File.md) pass  
+
 ## [A010_Then_Contains_Code_Span.md](../../features/A010_Then_Contains_Code_Span.md)  
   ### Feature: testing that a file contains a string  
   - [X] scenario [test on a string output](../../features/A010_Then_Contains_Code_Span.md) pass  
@@ -258,5 +264,5 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 91    |
+| Successful | 93    |
 | Empty      | 0     |

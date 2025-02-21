@@ -58,6 +58,9 @@ package body BBT.Documents is
              then ", dir = """ & (+Step.Object_File_Name) & """"
              else ", File = """ & (+Step.Object_File_Name) & """")
            else "")
+         & (if Step.Executable_File
+           then ", attrib = exec"
+           else "")
          & (if Step.Ignore_Order
            then ", Ignore_Order = True"
            else "")

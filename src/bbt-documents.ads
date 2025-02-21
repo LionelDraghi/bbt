@@ -38,8 +38,7 @@ private package BBT.Documents is
       Check_Dir_Existence,
       Check_No_File,
       Check_No_Dir,
-      Create_File,
-      Create_Directory,
+      Create_If_None,
       Erase_And_Create,
       Setup_No_File,
       Setup_No_Dir,
@@ -107,6 +106,7 @@ private package BBT.Documents is
       Object_String    : Unbounded_String          := Null_Unbounded_String;
       Object_File_Name : Unbounded_String          := Null_Unbounded_String;
       File_Type        : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;
       Parent_Scenario  : access Scenario_Type;

@@ -15,12 +15,13 @@ Note that the regexp should match the whole line :
 
 # scenario: version number mismatch
 
-- Given the file `wrong_regexp.md`
+- Given the new file `wrong_regexp.md`
 ~~~
 # Scenario:
 - When I run `./sut -v`
 - Then output matches `sut version [0-9]+.[0-9]+.[0-9]+`
 ~~~
+
 - When I run `./bbt wrong_regexp.md`
 - Then I get an error
 - and output contains 
@@ -38,7 +39,7 @@ Let's check that the number is of the form "major.minor" and not "major.minor.pa
 
 # Scenario: Test of "does not match" that indeed matches
 
-- Given the file `wrong_regexp.md`
+- Given the new file `wrong_regexp.md`
 ~~~
 # Scenario:
 - When I run `./sut -v`

@@ -8,6 +8,7 @@
 with Ada.Characters.Handling;
 with Ada.Strings.Equal_Case_Insensitive;
 
+with GNAT.OS_Lib;
 with GNAT.Regexp;
 
 package body Text_Utilities is
@@ -56,7 +57,8 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    procedure Create_File (File_Name    : String;
-                          With_Content : Text) is
+                          With_Content : Text;
+                          Executable   : Boolean) is
       Output : File_Type;
       pragma Warnings (Off, Output);
    begin
@@ -65,13 +67,15 @@ package body Text_Utilities is
          Put_Line (Output, Item => L);
       end loop;
       Close (Output);
+      if Executable then GNAT.OS_Lib.Set_Executable (File_Name); end if;
    end Create_File;
 
    -- --------------------------------------------------------------------------
    function Create_File (File_Name    : Unbounded_String;
-                         With_Content : Text) return Boolean is
+                         With_Content : Text;
+                         Executable   : Boolean) return Boolean is
    begin
-      Create_File (To_String (File_Name), With_Content);
+      Create_File (To_String (File_Name), With_Content, Executable);
       return True;
    exception
       when others => return False;

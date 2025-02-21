@@ -32,6 +32,11 @@ The --cleanup option is here to ensure that those files are removed after run.
 - And  there is a `f1` file
 
 ### Scenario: run with --cleanup
+- Given there is no dir `dir3/dir4/dir5`
+- Given there is no file `f1`
+- Given there is no file `dir1/dir2/f2`
+- Given there is no dir `dir1/dir2`
+- Given there is no dir `dir1`
 
 - When I run `./bbt --yes --cleanup create_tree.md`
 

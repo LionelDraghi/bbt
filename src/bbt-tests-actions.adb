@@ -11,12 +11,13 @@ with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
-with Ada.Exceptions;
+with Ada.Directories;
+-- with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- no direct with of Ada.Directories or Ada.Text_IO here
 
 with GNAT.OS_Lib;
-with GNAT.Traceback.Symbolic;
+-- with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Actions is
 
@@ -176,69 +177,29 @@ package body BBT.Tests.Actions is
    end Run_Cmd;
 
    -- --------------------------------------------------------------------------
-   procedure Create_If_None (Step : Step_Type) is
-      Success   : Boolean;
-      File_Name : constant String := +Step.Object_File_Name;
-   begin
-      IO.Put_Line ("Create_If_None " & File_Name, Verbosity => Debug);
-      if Step.File_Type = Ordinary_File then
-         Success := Text_Utilities.Create_File
-           (File_Name    => Step.Subject_String,
-            With_Content => Step.File_Content);
-         Created_File_List.Add (File_Name);
-         Put_Step_Result (Step     => Step,
-                          Success  => File_Exists (File_Name),
-                          Fail_Msg => "Unable To Create File " & File_Name,
-                          Loc      => Step.Location);
-         if Success and IO.Is_Authorized (IO.Verbose) then
-            Put_Text (Step.File_Content);
-         end if;
-
-      elsif Step.File_Type = Directory then
-         if not Entry_Exists (File_Name) then
-            Create_Path (File_Name);
-            Created_File_List.Add (File_Name);
-         end if;
-         Put_Step_Result (Step     => Step,
-                          Success  => Dir_Exists (File_Name),
-                          Fail_Msg => "Unable to create directory " &
-                            File_Name'Image,
-                          Loc      => Step.Location);
-      end if;
-
-   exception
-      when E : others =>
-         Put_Error  ("Unable to create """ &
-                       Step.Subject_String'Image & """" &
-                       Ada.Exceptions.Exception_Message (E) &
-                       GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
-                     Step.Location);
-   end Create_If_None;
-
-   -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step : Step_Type) is
       File_Name : constant String := To_String (Step.Subject_String);
-      File      : File_Type;
    begin
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
+      Created_File_List.Add (File_Name); -- should be deleted at the end, even
+                                         -- if pre-existing.
       case Step.File_Type is
          when Ordinary_File =>
             if Exists (File_Name) then
                Delete_File (File_Name);
             end if;
-            Create (File, Name => File_Name);
-            Created_File_List.Add (File_Name);
-            Put_Text (File, Get_Expected (Step));
-            Close (File);
+            Create_File (File_Name    => File_Name,
+                         With_Content => Get_Expected (Step),
+                         Executable   => Step.Executable_File);
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
                                " creation failed",
                              Loc      => Step.Location);
          when Directory =>
-            Delete_Tree (File_Name);
-            Create_Path (File_Name);
-            Created_File_List.Add (File_Name);
+            if not Exists (File_Name) then
+               Ada.Directories.Create_Path (File_Name);
+            end if;
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &
@@ -251,31 +212,30 @@ package body BBT.Tests.Actions is
    end Erase_And_Create;
 
    -- --------------------------------------------------------------------------
-   procedure Create_New (Step : Step_Type) is
+   procedure Create_If_None (Step : Step_Type) is
       File_Name : constant String := To_String (Step.Subject_String);
-      File      : File_Type;
    begin
       IO.Put_Line ("Create_New " & File_Name, Verbosity => Debug);
       case Step.File_Type is
          when Ordinary_File =>
-            if Exists (File_Name) then
-               Delete_File (File_Name);
+            if not Exists (File_Name) then
+               Create_File (File_Name    => File_Name,
+                            With_Content => Get_Expected (Step),
+                            Executable   => Step.Executable_File);
+               Created_File_List.Add (File_Name);
+               -- should be deleted at the end only if created here
             end if;
-            Create (File, Name => File_Name);
-            Created_File_List.Add (File_Name);
-            Put_Text (File, Get_Expected (Step));
-            Close (File);
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
                                " creation failed",
                              Loc      => Step.Location);
          when Directory =>
-            if Exists (File_Name) then
-               Delete_Tree (File_Name);
+            if not Exists (File_Name) then
+               Ada.Directories.Create_Path (File_Name);
+               Created_File_List.Add (File_Name);
+               -- should be deleted at the end only if created here
             end if;
-            Create_Path (File_Name);
-            Created_File_List.Add (File_Name);
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &
@@ -285,7 +245,7 @@ package body BBT.Tests.Actions is
             -- don't mess around with special files!
             null;
       end case;
-   end Create_New;
+   end Create_If_None;
 
    -- --------------------------------------------------------------------------
    procedure Return_Error (Last_Returned_Code : Integer;

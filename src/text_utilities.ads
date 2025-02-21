@@ -26,10 +26,12 @@ package Text_Utilities is
    package Texts_Sorting is new Texts.Generic_Sorting;
 
    -- --------------------------------------------------------------------------
-   --  procedure Create_File (File_Name    : String;
-   --                         With_Content : Text);
+   procedure Create_File (File_Name    : String;
+                          With_Content : Text;
+                          Executable   : Boolean);
    function Create_File (File_Name    : Unbounded_String;
-                         With_Content : Text) return Boolean;
+                         With_Content : Text;
+                         Executable   : Boolean) return Boolean;
    -- Any existing files with the same name is overwritten.
    -- The file is closed when the call ends.
 

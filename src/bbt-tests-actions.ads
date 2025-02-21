@@ -19,7 +19,6 @@ private package BBT.Tests.Actions is
                       Return_Code  : out Integer);
 
    procedure Create_If_None (Step : Step_Type);
-   procedure Create_New (Step : Step_Type);
    procedure Erase_And_Create (Step : Step_Type);
 
    procedure Setup_No_File (Step : Step_Type);

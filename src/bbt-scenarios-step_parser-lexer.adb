@@ -32,6 +32,7 @@ package body BBT.Scenarios.Step_Parser.Lexer is
          "but",      -- appear in the "Given" section, to "Then" if tey
          "run",      -- appear in the "Then" section, etc.
          "running",  -- "When I run" = "When running"
+         "executable",
          "get",
          "new",
          "no",       -- "no" = "not" = "dont"

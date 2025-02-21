@@ -26,6 +26,7 @@ package body BBT.Scenarios.Step_Parser is
                     Then_P,
                     -- Subjects Attribute -----------------------------------
                     No_SA, -- = no Subject Attribute
+                    Executable,
                     -- Empty,
                     -- Existing,
                     New_SA,
@@ -76,6 +77,7 @@ package body BBT.Scenarios.Step_Parser is
          when When_P           => return "When";
          when Then_P           => return "Then";
          when No_SA            => return "";
+         when Executable       => return "executable";
          when New_SA           => return "new";
          when No_Subject       => return "";
          when Output_Subj      => return "output";
@@ -125,13 +127,17 @@ package body BBT.Scenarios.Step_Parser is
       G (Given, No_SA,  No_Subject,   Is_V,       Obj_File_Name)       := (Check_File_Existence, False); -- Given there is a `config.ini` file
       G (Given, No_SA,  No_Subject,   Is_V,       Obj_Dir_Name)        := (Check_Dir_Existence, False);  -- Given there is a `dir1` directory
       G (Given, New_SA, Subject_File, Containing, Obj_Text)            := (Erase_And_Create, False); -- Given the new file `config.ini` containing `lang=it`
-      G (Given, New_SA, Subject_File, Containing, No_Object)           := (Create_File, True);       -- Given the new file `config.ini` followed by code fenced content
-      G (Given, No_SA,  Subject_File, Containing, Obj_Text)            := (Erase_And_Create, False); -- Given the file `config.ini` containing `lang=it`
-      G (Given, No_SA,  Subject_File, Containing, No_Object)           := (Create_File, True);       -- Given the file `config.ini` followed by code fenced content
+      G (Given, No_SA,  Subject_File, Containing, Obj_Text)            := (Create_If_None, False); -- Given the file `config.ini` containing `lang=it`
+                                                                                                   -- Fixme: we currently do not check if the existing file contains
+                                                                                                   --  what is expected
+      G (Given, New_SA, Subject_File, Containing, No_Object)           := (Erase_And_Create, True); -- Given the new file `config.ini` followed by code fenced content
+      G (Given, No_SA,  Subject_File, Containing, No_Object)           := (Create_If_None, True);   -- Given the file `config.ini` followed by code fenced content
+                                                                                                    -- Fixme : we currently do not check if the existing file contains
+                                                                                                    --  what is expected
       G (Given, New_SA, Subject_File, No_Verb,    No_Object)           := (Erase_And_Create, True); -- Given the new file `config.ini` followed by code fenced content
-      G (Given, No_SA,  Subject_File, No_Verb,    No_Object)           := (Create_File, True);      -- Given the file `config.ini` followed by code fenced content
+      G (Given, No_SA,  Subject_File, No_Verb,    No_Object)           := (Erase_And_Create, True); -- Given the file `config.ini` followed by code fenced content
       G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)           := (Erase_And_Create, False); -- Given the new directory `dir1`
-      G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)           := (Create_Directory, False); -- Given the directory `dir1`
+      G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)           := (Create_If_None, False);   -- Given the directory `dir1`
       G (Given, No_SA,  No_Subject,   Run,            Obj_Text)        := (Run_Cmd, False);           -- Given I run `cmd`
       G (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text)        := (Run_Without_Error, False); -- Given i successfully run `cmd`
 
@@ -248,6 +254,7 @@ package body BBT.Scenarios.Step_Parser is
       Object_File_Name : Unbounded_String         := Null_Unbounded_String;
       Ignore_Order     : Boolean                  := False;
       -- by default, order of expected output is significant
+      Executable       : Boolean                  := False;
 
       File_Type        : File_Kind                := Ordinary_File;
 
@@ -307,6 +314,9 @@ package body BBT.Scenarios.Step_Parser is
                         end if;
                         -- given/when/then may appear later on the line, but
                         -- then are not considered as keywords.
+
+                     elsif Lower_Keyword = "executable" then
+                        Executable := True;
 
                      elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
                         if Successfully_Met then
@@ -532,7 +542,6 @@ package body BBT.Scenarios.Step_Parser is
 
       Previous_Step_Kind := Cat;
 
-
       return (Cat              => Cat,
               Action           => Action,
               Step_String      => Step_String,
@@ -542,6 +551,7 @@ package body BBT.Scenarios.Step_Parser is
               Object_String    => Object_String,
               Object_File_Name => Object_File_Name,
               File_Type        => File_Type,
+              Executable_File  => Executable,
               Ignore_Order     => Ignore_Order,
               File_Content     => Empty_Text,
               Parent_Scenario  => null);
@@ -554,8 +564,8 @@ package body BBT.Scenarios.Step_Parser is
    -- -----------------------------------------------------------------------
    procedure Put_Grammar is
    begin
-      Ada.Text_IO.Put_Line ("| Prep  |     |Subject |       Verb       | Object |         Action          | Code block expected |  ");
-      Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|--------|-------------------------|------------|  ");
+      Ada.Text_IO.Put_Line ("| Prep  |         |Subject |       Verb       | Object |         Action          | Code block expected |  ");
+      Ada.Text_IO.Put_Line ("|-------|---------|--------|------------------|--------|-------------------------|------------|  ");
       for P in The_Grammar'Range (1) loop -- A of G when A /= None loop
          for SA in The_Grammar'Range (2) loop -- A of G when A /= None loop
             for S in The_Grammar'Range (3) loop -- A of G when A /= None loop

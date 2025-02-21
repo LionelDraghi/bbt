@@ -6,7 +6,6 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.Settings;
-with Text_Utilities;
 
 package body BBT.Tests.Actions.File_Operations is
 
@@ -45,9 +44,7 @@ package body BBT.Tests.Actions.File_Operations is
 
    function Kind (Name : String) return File_Kind
                   renames Ada.Directories.Kind;
-   procedure Create_Path (New_Directory : String;
-                          Form          : String := "")
-                          renames Ada.Directories.Create_Path;
+
 
    -- --------------------------------------------------------------------------
    procedure Delete_File (Name : String) is
@@ -70,14 +67,6 @@ package body BBT.Tests.Actions.File_Operations is
    end Delete_Tree;
 
    -- --------------------------------------------------------------------------
-   procedure Create (File : in out File_Type;
-                     Mode : File_Mode := Out_File;
-                     Name : String := "";
-                     Form : String := "") renames Ada.Text_IO.Create;
-   procedure Close  (File : in out File_Type) renames Ada.Text_IO.Close;
+    procedure Close  (File : in out File_Type) renames Ada.Text_IO.Close;
 
-   function Create_File (File_Name    : Ada.Strings.Unbounded.Unbounded_String;
-                         With_Content : Text) return Boolean
-                         renames Text_Utilities.Create_File;
-
-end BBT.Tests.Actions.File_Operations;
+ end BBT.Tests.Actions.File_Operations;

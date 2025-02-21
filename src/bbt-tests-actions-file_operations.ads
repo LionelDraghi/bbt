@@ -6,7 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with Ada.Directories;
-with Ada.Strings.Unbounded;
+-- with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
 package BBT.Tests.Actions.File_Operations is
@@ -20,8 +20,6 @@ package BBT.Tests.Actions.File_Operations is
    -- --------------------------------------------------------------------------
    function Exists (Name : String) return Boolean;
    function Kind (Name : String) return File_Kind;
-   procedure Create_Path (New_Directory : String;
-                          Form          : String := "");
    procedure Delete_File (Name : String);
    procedure Delete_Tree (Dir_Name : String);
 
@@ -31,14 +29,6 @@ package BBT.Tests.Actions.File_Operations is
    Out_File : File_Mode renames Ada.Text_IO.Out_File;
 
    -- --------------------------------------------------------------------------
-   procedure Create (File : in out File_Type;
-                     Mode : File_Mode := Out_File;
-                     Name : String := "";
-                     Form : String := "");
    procedure Close  (File : in out File_Type);
-
-   -- --------------------------------------------------------------------------
-   function Create_File (File_Name    : Ada.Strings.Unbounded.Unbounded_String;
-                         With_Content : Text) return Boolean;
 
 end BBT.Tests.Actions.File_Operations;
