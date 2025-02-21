@@ -48,7 +48,7 @@ doc: ./bbt
 	echo                            >> fixme_index.md
 	echo 'Location | Text'          >> fixme_index.md
 	echo '---------|-----'          >> fixme_index.md
-	find src docs -type f -exec grep -n 'Fixme:' {} \+|sed "s/:/|/2;s/Fixme://" | sort --version-sort >> fixme_index.md
+	grep -rn 'Fixme:' docs/* src/* | sort | sed "s/:/|/2;s/Fixme://" >> fixme_index.md
 	mv fixme_index.md docs/fixme_index.md
 
 	echo 'Issue references in current version'	>  issues_index.md
@@ -56,7 +56,7 @@ doc: ./bbt
 	echo                                		>> issues_index.md
 	echo 'Location | Text'             		    >> issues_index.md
 	echo '---------|-----'             		    >> issues_index.md
-	find src docs -type f -exec grep -n 'Issue #' {} \+|sed "s/:/|/2;s/Issue #/#/" | sort --version-sort >> issues_index.md
+	grep -rn 'Issue #' docs/* src/* | sort | sed "s/:/|/2;s/Issue #/#/" >> issues_index.md
 	mv issues_index.md docs/issues_index.md
 
 	echo Checking links in md files
