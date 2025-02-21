@@ -92,7 +92,7 @@ doc: $(RESULTS_DIR)
 	@ wget -q "`cat $(RESULTS_DIR)/badge.url`" -O $(RESULTS_DIR)/badge.svg
 
 clean:
-	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl *.created_files
+	@ - rm -f *.out main bbt bbt.exe sut sut.exe gcc rpl *.created_files tmp.txt
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	
