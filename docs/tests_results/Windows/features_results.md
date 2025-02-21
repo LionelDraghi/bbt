@@ -8,6 +8,39 @@
 
   - [X] scenario [Creating a file with some content](..\..\features\A005_Given.md) pass  
 
+## [A006_Given_Executable_File.md](..\..\features\A006_Given_Executable_File.md)  
+  ### Feature: running scripts  
+*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:23:)  
+..\docs\features\a006_given_executable_file.md:23: Error : Expected error code, got no error  
+*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:24:)  
+..\docs\features\a006_given_executable_file.md:24: Error : Output:  
+~~~
+## [create_exec.md](create_exec.md)    
+  - [X] scenario [](create_exec.md) pass    
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 0     |  
+| Successful | 1     |  
+| Empty      | 0     |
+~~~
+does not contain expected:  
+~~~
+create_exec.md:2: Error : ./cmd1.sh not executable
+~~~
+  
+  - [ ] scenario [trying to run a script without the executable keyword should fail](..\..\features\A006_Given_Executable_File.md) fails  
+
+*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:36:)  
+..\docs\features\a006_given_executable_file.md:36: Error : Output:  
+~~~
+~~~
+not equal to expected:  
+~~~
+bbt rules!
+~~~
+  
+  - [ ] scenario [trying to run the same script created with the executable attribute should succeed](..\..\features\A006_Given_Executable_File.md) fails  
+
 ## [A010_Then_Contains_Code_Span.md](..\..\features\A010_Then_Contains_Code_Span.md)  
   ### Feature: testing that a file contains a string  
   - [X] scenario [test on a string output](..\..\features\A010_Then_Contains_Code_Span.md) pass  
@@ -307,7 +340,7 @@ dir1/dir2/scen5.md
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 4     |
+| Failed     | 6     |
 | Successful | 87    |
 | Empty      | 0     |
 | Not run    | 0     |
