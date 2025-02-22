@@ -197,6 +197,15 @@ cmd_not_exe.md:2: Error : ./lambda_file not executable
 
   - [X] scenario [Test of "does not match" that indeed matches](..\..\features\A200_Regexp.md) pass  
 
+## [A210_Exact_Match.md](..\..\features\A210_Exact_Match.md)  
+  - [X] scenario [Human match](..\..\features\A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match](..\..\features\A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match except for casing](..\..\features\A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match except for casing and blank lines](..\..\features\A210_Exact_Match.md) pass  
+
 ## [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](..\..\features\B010_Deleting_created_files.md) pass  
@@ -341,6 +350,6 @@ dir1/dir2/scen5.md
 | Status     | Count |
 |------------|-------|
 | Failed     | 6     |
-| Successful | 87    |
+| Successful | 91    |
 | Empty      | 0     |
 | Not run    | 0     |

@@ -53,7 +53,7 @@ begin
    New_Line;
    Put_Line ("Human vs exact matching:");
    Put_Line ("  bbt default behavior is ""human match"", that is ignoring differences");
-   Put_Line ("  in casing, ignoring consecutives spaces, and ignoring blank lines.");
+   Put_Line ("  in casing, ignoring consecutive spaces, and ignoring blank lines.");
    Put_Line ("  The opposite behavior, to make strict compare, is set with:");
    Put_Line ("   -em  | --exact_match");
    Put_Line ("  exact_match may be altered if **followed** by one or more of:");
