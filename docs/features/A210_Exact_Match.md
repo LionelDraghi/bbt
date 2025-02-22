@@ -3,8 +3,8 @@
 bbt default behavior is pretty unusual, because it ignores difference between expected and actual results in casing, white spaces and blank lines.
 This is what we call "Human match".
 
-This behavior is usually handy, but prevent testing apps that precisely transform the casing or more generally the presentation.
-To allow those kind of test, there is a command line option that completely switch the default behavior, `--exact_match`.
+This behavior is usually handy, but prevent testing apps that precisely transform the casing or more generally the text presentation.
+To allow those kind of tests, there is a command line option that completely switch the default behavior, `--exact_match`.
 
 It is possible to amend `--exact_match` with one of `--ignore_casing`, `--ignore_whitespaces` and `--ignore_blank_lines`.
 Each of those option returns to one of the default behavior.
