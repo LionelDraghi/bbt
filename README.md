@@ -4,7 +4,22 @@
 
 # `bbt` README <!-- omit from toc -->
 
-- [Overview](#overview)
+- [Overview](#overview)- [Overview](#overview)
+  - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
+  - [Partial parsing](#partial-parsing)
+  - [Step arguments](#step-arguments)
+  - [One more example](#one-more-example)
+- [Why should I use bbt?](#why-should-i-use-bbt)
+  - [Write once](#write-once)
+  - [Write a real documentation, not just a ".feature" Gherkin file](#write-a-real-documentation-not-just-a-feature-gherkin-file)
+  - [Be proficient in no time](#be-proficient-in-no-time)
+  - [No-fuss no-wait run](#no-fuss-no-wait-run)
+  - [Ready to publish output](#ready-to-publish-output)
+- [Status of the project](#status-of-the-project)
+- [Installation](#installation)
+- [Help and comments](#help-and-comments)
+- [Further reading](#further-reading)
+
   - [What does the description look like?](#what-does-the-description-look-like)
   - [Partial parsing](#partial-parsing)
   - [Step arguments](#step-arguments)

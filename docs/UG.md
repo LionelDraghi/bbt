@@ -1,8 +1,7 @@
 User Guide  <!-- omit from toc -->
 ==========
 
-- [Basic Concepts](#basic-concepts)
-- [Command line examples](#command-line-examples)
+- [Where to start](#where-to-start)
 - [Features](#features)
   - [Cleanup](#cleanup)
   - [Background](#background)
@@ -10,71 +9,24 @@ User Guide  <!-- omit from toc -->
   - [Removing Files and directories](#removing-files-and-directories)
     - [using the negative form](#using-the-negative-form)
     - [using the positive form](#using-the-positive-form)
+- [Behavior](#behavior)
+  - [Blank lines and Case sensitivity and line order](#blank-lines-and-case-sensitivity-and-line-order)
+  - [Execution](#execution)
 - [Tips](#tips)
   - [Understanding what bbt doesn't understand](#understanding-what-bbt-doesnt-understand)
   - [Test in place](#test-in-place)
+  - [Avoiding ambiguities](#avoiding-ambiguities)
+  - [Command line examples](#command-line-examples)
+- [Makefile snippet](#makefile-snippet)
 
+## Where to start
 
-## Basic Concepts
-
-Basic concepts of bbt files are illustrated in this basic example:
-
-```md
-## Scenario : Command line version option
-
-- When I run `sut --version`
-- Then the output contains `version 1.0`
-```
-
-1. **the BDD usual keywords**: *Scenario*, *When*, *Then*, etc.  
-bbt uses a subset of the [Gherkin language](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language), in the [Markdown with Gherkin](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.
-
-2. [**bbt specifics  keywords**](keywords.md): *run*, *output*, *contains*, etc.  
-Here is an example with keywords in bold:  
-
-**Given** there **is** **no** `.sut` **directory**  
-**When** I **run** `sut --init`  
-**Then** there **is** **no** **error**  
-**And** **file** `.sut/config.ini` **contains** `lang=de`  
+  To understand the basics of `bbt`, read first the [README](https://github.com/LionelDraghi/bbt/blob/main/README.md).
+  That's enough to start playing.
   
-3. **glue word**: *I*, *the*  
-As illustrated in the previous example, some words are ignored by bbt. Their only aim is to give users a way to read and write more natural english. This semi-formal language is an important bbt feature. As long as the language remains simple, the risk of ambiguity is low (Describing behavior is specifying, and you certainly don't want ambiguity when writing specifications).
-   
-4. [**code span** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#code-spans), that is text surrounded by backticks: `` `sut --version` ``, `` `version 1.0` ``  
-bbt uses code span to express a command, a file or directory name or some expected output.
+  To get more Steps examples, read the [template of scenario](https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_template.md) generated with `bbt create_template`.
 
-> [!WARNING]
-> Till now, there is no ambiguity in the grammar between file and string: bbt is always able to understand what it's about.  
-> To avoid ambiguity between file and directory, I had to take into account both `file` and `directory` keywords.  
-> It is not excluded in the future that the Markdown syntax for files becomes mandatory instead of code span for the same reason: backtick would then be reserved to command or other strings, and File or dir would be written ``[my_file](my_file.md)``.  
-> I'll try to avoid this evolution as it would be less natural to write, and this goes against project objectives.  
- 
-5. [**Fenced code block** (in Markdown parlance)](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is, lines between ``` or ~~~ 
-  
-Fenced code blocks are used to specify multiline output or file content, as in: 
-
-~~~md
-    ## Scenario: Command line help
-
-    - When I run `sut -h`
-    - Then the output is
-    ```
-    sut [options] [-I directory]
-    options :
-    -h : help
-    -r : recurse
-    ```
-~~~
-
-## Command line examples
-
-> bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
-
-  This example illustrates the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third one.
-
-> bbt --yes tests/scenario.md 
- 
-  When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
+  And to have an overview of command line options, run `bbt` without arguments.
 
 ## Features
 
@@ -132,7 +84,8 @@ The title sounds kind of a provocation, it is not, unless you have other kind of
 
 When setting up a test, we often need to check that there is no pre-existing file or directory.  
 To avoid the burden of deleting those files in a Makefile or a script, bbt interprets a line like:
-> ``Given there is no `.config` file``  
+> ``Given there is no `.config` file``
+  
 as:
 *if there is, delete it*  
 and offer to delete it, or even delete it automatically. To avoid any unwanted deletion, it is important to understand the following behavior.
@@ -174,6 +127,36 @@ If you want to start with a brand new one whatever is the situation, use:
 > [!WARNING] 
 > Fixme: as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
 > And if there is no test, don't trust the doc :-)
+
+
+## Behavior
+
+### Blank lines and Case sensitivity and line order
+
+bbt is designed for humans, and is not going to trap users with blank line, white space or casing differences, meaning that :
+- keywords are case insensitive, `- When` or `- when`, it's as you want.
+- blank lines and casing are ignored when comparing actual with expected output. I suppose that if you expect `version 1.0` and the actual output is `Version 1.0` the test is OK.
+
+This is not always the expected behavior, you may want to check the exact output. Use then the `--exact_match` option on the command line.
+
+The implementation of an explicit mention in the scenario is still in the TDL, not yet implemented.  
+
+On the other hand, the order of lines in files is generally meaningful.
+But not always. If you want to check the presence of some files in a directory, you don't care in which order they are listed, and you don't want your test to fail on another platform because the `ls` command behavior may be different.
+The "I don't care the line order" behavior is implemented through the `unordered` keyword.  
+(cf. [feature `unordered`](features/A140_Unordered_Keyword.md) for an example).
+
+### Execution
+
+bbt is executed where you launch the command. All output files will be created here, and input file are expected here. 
+
+bbt scenarii are Markdown files. So if you don't specify the precise file names, bbt will try to execute all md files.  
+To see what files, use `bbt --list_files`, possibly with `--recurse`.  
+(or the short form `bbt -lf -r`).
+
+But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you wish.
+
+As a special rule, two specific files will be ignored even if they are in the search path: the template file (`bbt_template.md`), and the output file if the `-o` option is used. The first is not supposed to be run, and the second is probably a consequence of a previous run. 
 
 ## Tips
 
@@ -220,4 +203,47 @@ the command could be:
 > cd tests  
 > bbt --output ../docs/test_run/results.md ../docs/features/*.md
 
+### Avoiding ambiguities
 
+You can write
+```
+When run `my_command -r`
+```
+or 
+```
+When I once more try to run something like `my_command -r`
+```
+
+but neither is recommended.  
+The former is not easy to read, and the latter is misleading by introducing nuances that bbt ignores!  
+
+Moreover, you could change the test semantic by using inadvertently some bbt's keyword. And if not now, your test could fail in the future because of a new keyword in a new bbt version, causing the Step to become incomprehensible.  
+If you have long explanation do provide, do it on the next line.
+
+More generally, this is specification, make short sentences and go straight to the point.
+
+### Command line examples
+
+> bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
+
+  This example illustrates the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third one.
+
+> bbt --yes tests/scenario.md 
+ 
+  When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
+
+## Makefile snippet 
+
+~~~Makefile
+results.md : bin/sut tests/scenario.md
+  bbt tests/scenario.md | tee $@
+~~~
+ 
+This Makefile rule generate or update the file `results.md`.
+
+If either the software under test (sut) or the scenario is newer than `results.md`, the bbt command will be executed.  
+
+`tee` writes the output to both the console and the file `results.md`. 
+(`$@` is a Makefile automatic variable that represents the target of the rule, which in this case is `results.md`).
+
+Kudos to [Manuel](https://github.com/mgrojo/coap_spark/blob/main/client/tests/Makefile)

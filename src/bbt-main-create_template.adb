@@ -105,10 +105,11 @@ begin
       Put_Line ("## Help  ");
       Put_Line ("To get a complete (although less friendly) view on the grammar:  ");
       Put_Line ("> bbt -lg  ");
+      New_Line;
       Put_Line ("And the to get the list of keywords:  ");
       Put_Line ("> bbt -lk  ");
       New_Line;
-      Put_Line ("More features here : https://github.com/LionelDraghi/bbt/tree/main");
+      Put_Line ("More features here : https://github.com/LionelDraghi/bbt/tree/main#bbt-readme-");
 
       Close (Template);
       Set_Output (Standard_Output);

@@ -1,6 +1,7 @@
 # Developer Guide <!-- omit from toc -->
 
 - [Design overview](#design-overview)
+- [Tests](#tests)
 - [Issues and discussions](#issues-and-discussions)
 - [Development Status](#development-status)
 - [Development environment](#development-environment)
@@ -49,6 +50,28 @@ The internal representation of the scenarios is stored in the BBT documentation 
 One of the component of the scenario file will be further analyzed, it’s the step text. 
 
 === to be completed ===
+
+## Tests
+
+`make` or `make check` run different kind of tests :
+1. First of all, this is bbt vocation, all feature descriptions in docs/features
+
+2. Examples from the documentation in docs/examples
+
+3. A few unit testing in tests subdirectories 
+
+Regarding features, files are prefixed with a category letter and index number.
+Categories are :  
+  A. Features related to the language (both Gherkin framework and bbt steps) : for example, the test of the `output does not contain` form.  
+  B. Features of bbt overall behavior : for example, test of the --cleanup feature;  
+  C. Robustness and compliance test : for example, test of bbt tolerance to weird formatted markdown files.
+ 
+The index number is not significant, but lowest number are supposed to be more basic features.  
+
+Tests are run in the tests directory, so that docs will not be polluted with possibly remaining files.
+
+All test results per platform are then available in docs/tests_results/Windows|Linux|Darwin
+
 
 ## Issues and discussions
 

@@ -172,7 +172,7 @@ package body BBT.Tests.Builder is
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
-                          & "or at Feature level, not " & Current_State'Image,
+                          & " or at Feature level, not " & Current_State'Image,
                           Loc);
       end case;
 

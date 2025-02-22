@@ -24,12 +24,12 @@ package body BBT.Tests is
       if Success then
          IO.Pause_Tee; --  We don't want this level of detail in the
                        --  generated test index.
-         IO.Put_Line (Item      => Pre & (+Step.Step_String),
+         IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
                       Verbosity => IO.Verbose);
          IO.Restore_Tee;
       else
          IO.Put_Line (Pre & (+Step.Step_String) & " (" & Image (Loc) & ")  ",
-                      Verbosity => IO.Normal); --Verbose);
+                      Verbosity => IO.Normal);
          IO.Put_Error (Fail_Msg & "  ", Loc);
       end if;
    end Put_Step_Result;
