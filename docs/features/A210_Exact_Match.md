@@ -15,7 +15,7 @@ This test scenario is organized around :
 - a file that differ from the reference only in white spaces;
 - a file that differ from the reference only in blank lines.
 
-and a scenario that compare the ref file with the three others.
+and a scenario that compare the ref file with the three other.
 
 This scenario is run with the various options.
 
