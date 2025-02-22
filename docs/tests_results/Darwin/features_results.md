@@ -152,6 +152,15 @@
 
   - [X] scenario [Test of "does not match" that indeed matches](../../features/A200_Regexp.md) pass  
 
+## [A210_Exact_Match.md](../../features/A210_Exact_Match.md)  
+  - [X] scenario [Human match](../../features/A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match](../../features/A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match except for casing](../../features/A210_Exact_Match.md) pass  
+
+  - [X] scenario [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](../../features/B010_Deleting_created_files.md) pass  
@@ -264,5 +273,5 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 93    |
+| Successful | 97    |
 | Empty      | 0     |
