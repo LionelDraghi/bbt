@@ -62,6 +62,9 @@ Tulip
 
 - When I run `./bbt compare.md`
 - Then I get no error
+- When I run `./bbt --human_match compare.md`
+- Then I get no error
+
 
 ### Scenario: exact match
 
