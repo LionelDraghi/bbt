@@ -32,6 +32,9 @@ private package BBT.Settings is
    Strict_Gherkin     : Boolean := False;
    Status_Bar         : Boolean := False;
    Generate_Badge     : Boolean := False;
+   Ignore_Whitespaces : Boolean := True;
+   Ignore_Casing      : Boolean := True;
+   Ignore_Blank_Lines : Boolean := True;
 
    Template_Name      : constant String := "bbt_template.md";
 

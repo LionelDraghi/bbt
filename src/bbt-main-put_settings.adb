@@ -39,6 +39,9 @@ begin
    Put_Line ("   " & Checkbox (Warnings_As_Errors) & " Warnings_As_Errors");
    Put_Line ("   " & Checkbox (No_File_Given) & " No_File_Given");
    Put_Line ("   " & Checkbox (Recursive) & " Recursive");
+   Put_Line ("   " & Checkbox (Ignore_Whitespaces) & " Ignore_Whitespaces");
+   Put_Line ("   " & Checkbox (Ignore_Casing) & " Ignore_Casing");
+   Put_Line ("   " & Checkbox (Ignore_Blank_Lines) & " Ignore_Blank_Lines");
    Put_Line ("   " & Checkbox (Help_Needed) & " Help_Needed");
    Put_Line ("   " & Checkbox (List_Files) & " List_Files");
    Put_Line ("   " & Checkbox (Create_Template) & " Create_Template");

@@ -30,8 +30,6 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    function Is_Success (I : Integer) return Boolean is
      (I = Integer (Ada.Command_Line.Success));
-   -- Fixme: can I compare the return status of spawn with
-   --        Ada.Command_Line Success or Fail?
 
    function Entry_Exists (File_Name : String) return Boolean is
      (File_Name /= "" and then Exists (File_Name));
@@ -383,7 +381,10 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Equal_To ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (Output, T2,
-                         Sort_Texts => Step.Ignore_Order),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
@@ -397,7 +398,10 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Contains ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Contains (Output, T2,
-                         Sort_Texts => Step.Ignore_Order),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not contain expected:  " &
                          Code_Fenced_Image (T2),
@@ -412,7 +416,10 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Does_Not_Contain ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => not Contains (Output, T2,
-                         Sort_Texts => Step.Ignore_Order),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "contains unexpected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
@@ -426,7 +433,6 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Matches ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Text_Utilities.Matches (Output, Regexp),
-                       -- , Line, Matches),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not match expected:  " & Regexp,
                        Loc      => Step.Location);
@@ -440,7 +446,6 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Output_Does_Not_Match ", Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => not Text_Utilities.Matches (Output, Regexp),
-                       --, Line, Matches),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "match unexpected:  " & Regexp,
                        Loc      => Step.Location);
@@ -455,7 +460,10 @@ package body BBT.Tests.Actions is
       IO.Put_Line ("Files_Is " & File_Name, Verbosity => Debug);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal (T1, T2,
-                         Sort_Texts => Step.Ignore_Order),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg =>  Code_Fenced_Image (T1) &
                          "not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);

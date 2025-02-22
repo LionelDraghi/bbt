@@ -30,6 +30,11 @@ Examples of steps:
     verbose=false
     lang=am
     ```
+  - Given the executable file `command.sh`
+    ```
+    #!/bin/bash
+    echo "bbt rules!"
+    ```
   - When I successfully run `xxx` (Equivalent to both lines "- When I run `xxx`" and "- Then I Get No Error"
   - Then there is no output
   - Then I get no error

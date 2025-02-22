@@ -54,6 +54,11 @@ begin
       Put_Line ("    verbose=false");
       Put_Line ("    lang=am");
       Put_Line ("    ```");
+      Put_Line ("  - Given the executable file `command.sh`");
+      Put_Line ("    ```");
+      Put_Line ("    #!/bin/bash");
+      Put_Line ("    echo ""bbt rules!""");
+      Put_Line ("    ```");
       Put_Line ("  - When I successfully run `xxx` (Equivalent to both lines ""- When I run `xxx`"" and ""- Then I Get No Error""");
       Put_Line ("  - Then there is no output");
       Put_Line ("  - Then I get no error");

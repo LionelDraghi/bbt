@@ -69,16 +69,16 @@ check: setup ./bbt ./sut
 	@ # =====================================================================
 	
 	@ # Check examples
-	@ ./bbt --yes -k -c -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
+	@ ./bbt --yes -k -c -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
 	  && echo 1. examples tests OK ========== || echo 1. examples tests KO, check the availability of gcc and rpl on your platform "******"
 	@ echo
 
 	@ # Then test all the features
-	@ ./bbt --yes --keep_going --cleanup --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ ./bbt --yes --keep_going --cleanup --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
 	@ echo
 
 	@ # Then run non reg tests
-	@ ./bbt --yes --keep_going --cleanup --output $(RESULTS_DIR)/non_reg_tests.md ../docs/non_reg_tests && echo 3. non reg tests OK ========== || echo 3. features reg KO "******"
+	@ ./bbt --yes --keep_going --cleanup --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../docs/non_reg_tests && echo 3. non reg tests OK ========== || echo 3. features reg KO "******"
 	@ echo
 
 	@ # Unit testing

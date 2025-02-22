@@ -34,7 +34,7 @@ package body Text_Utilities is
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
-   function Is_Equal (Text1, Text2           : Text;
+   function Is_Equal (Text1, Text2     : Text;
                       Case_Insensitive : Boolean := True;
                       Ignore_Blanks    : Boolean := True) return Boolean
    is

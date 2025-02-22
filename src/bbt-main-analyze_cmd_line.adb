@@ -80,6 +80,25 @@ begin
          --     Next_Arg;
          --     -- Fixme: opt -ot / --output_tag not yet coded
 
+         elsif Arg = "-iw" or Arg = "--ignore_whitespaces" then
+            Settings.Ignore_Whitespaces := True;
+
+         elsif Arg = "-ic" or Arg = "--ignore_casing" then
+            Settings.Ignore_Casing := True;
+
+         elsif Arg = "-ibl" or Arg = "--ignore_blank_lines" then
+            Settings.Ignore_Blank_Lines := True;
+
+         elsif Arg = "-hm" or Arg = "--human_match" then
+            Settings.Ignore_Whitespaces := True;
+            Settings.Ignore_Casing      := True;
+            Settings.Ignore_Blank_Lines := True;
+
+         elsif Arg = "-em" or Arg = "--exact_match" then
+            Settings.Ignore_Whitespaces := False;
+            Settings.Ignore_Casing      := False;
+            Settings.Ignore_Blank_Lines := False;
+
          elsif Arg = "-ed" or Arg = "--exec_dir" then
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));

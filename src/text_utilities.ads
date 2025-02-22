@@ -126,10 +126,7 @@ package Text_Utilities is
    -- --------------------------------------------------------------------------
    function Matches (In_Text    : Text;
                      Regexp     : String)
-     -- ;
-     -- Line       : out Natural;
-     -- Matches    : in out GNAT.Regpat.Match_Array)
-                     return Boolean;
+                      return Boolean;
 
    -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;
