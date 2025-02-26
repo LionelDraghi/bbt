@@ -4,7 +4,7 @@
 
 # `bbt` README <!-- omit from toc -->
 
-- [Overview](#overview)- [Overview](#overview)
+- [Overview](#overview)
   - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
   - [Partial parsing](#partial-parsing)
   - [Step arguments](#step-arguments)
@@ -19,7 +19,6 @@
 - [Installation](#installation)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
-
   - [What does the description look like?](#what-does-the-description-look-like)
   - [Partial parsing](#partial-parsing)
   - [Step arguments](#step-arguments)
