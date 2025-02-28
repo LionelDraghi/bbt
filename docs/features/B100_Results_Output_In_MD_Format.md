@@ -34,7 +34,7 @@ In error messages, outputs are put in code blocks to be easily identified (Refer
 - Then the output contains
 ~~~
 ## [OK_scen.md](OK_scen.md)    
-
+  - [X] scenario [](OK_scen.md) pass    
 ~~~
 
 ### Scenario: verbose mode run
