@@ -91,7 +91,7 @@ We have:
 A distinctive feature of bbt is that it seems to directly understand those almost normal English sentences like:  
 ```
 - When I run `sut --quiet input.txt`
-- Then I have no output
+- Then there is no output
 ```
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that there is no rigid grammar, because bbt takes into account only some keywords to recognize the skeleton of the sentence.  
 
