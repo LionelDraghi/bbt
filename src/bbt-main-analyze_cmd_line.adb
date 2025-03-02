@@ -26,6 +26,27 @@ procedure Analyze_Cmd_Line is
       Arg_Counter := Arg_Counter + 1;
    end Next_Arg;
 
+   function Dash_To_Underscore (S : String) return String is
+   -- Transform option like "--list-file" in "--list_file"
+      Tmp : String (S'Range);
+      Conversion_On : Boolean := False;
+      -- The conversion starts after the first letter, otherwise we
+      -- end up converting --list to __list.
+   begin
+      for I in S'Range loop
+         if S (I) = '-' and Conversion_On then
+            Tmp (I) := '_';
+         else
+            Tmp (I) := S (I);
+         end if;
+
+         if S (I) /= '-' then
+            Conversion_On := True;
+         end if;
+      end loop;
+      return Tmp;
+   end Dash_To_Underscore;
+
    use Ada.Directories;
 
 begin
@@ -42,33 +63,39 @@ begin
    Opt_Analysis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
 
       declare
-         Arg : constant String := Ada.Command_Line.Argument (Arg_Counter);
+         -- arg are either a command or option, in which case we neutralize the
+         -- '-' character to have --list_item = --list-item
+         -- or a file name, in which case it remain
+         File : constant String
+           := Ada.Command_Line.Argument (Arg_Counter);
+         Cmd  : constant String
+           := Dash_To_Underscore (Ada.Command_Line.Argument (Arg_Counter));
          use Settings;
 
       begin
          -- Commands -----------------------------------------------------------
          -- Note that after v0.0.6, commands starting with '-' are deprecated
-         if  Arg in "-h" | "--help" | "he" | "help" then
+         if  Cmd in "-h" | "--help" | "he" | "help" then
             Settings.Help_Needed := True;
             return;
 
-         elsif Arg in "-e" | "--explain" | "ex" | "explain" then
+         elsif Cmd in "-e" | "--explain" | "ex" | "explain" then
             Settings.Explain := True;
 
-         elsif Arg in "-lf" | "--list_files" | "lf" | "list_files" then
+         elsif Cmd in "-lf" | "--list_files" | "lf" | "list_files" then
             Settings.List_Files := True;
 
-         elsif Arg in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
+         elsif Cmd in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
             Settings.List_Keywords := True;
 
-         elsif Arg in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
+         elsif Cmd in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
             Settings.List_Grammar := True;
 
-         elsif Arg in "-ct" | "--create_template" | "ct" | "create_template" then
+         elsif Cmd in "-ct" | "--create_template" | "ct" | "create_template" then
             Settings.Create_Template := True;
 
             -- Options ---------------------------------------------------------
-         elsif Arg = "-o" or Arg = "--output" then
+         elsif Cmd = "-o" or Cmd = "--output" then
             Next_Arg;
             Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
             IO.Enable_Tee (Settings.Result_File_Name,
@@ -80,91 +107,91 @@ begin
          --     Next_Arg;
          --     -- Fixme: opt -ot / --output_tag not yet coded
 
-         elsif Arg = "-iw" or Arg = "--ignore_whitespaces" then
+         elsif Cmd = "-iw" or Cmd = "--ignore_whitespaces" then
             Settings.Ignore_Whitespaces := True;
 
-         elsif Arg = "-ic" or Arg = "--ignore_casing" then
+         elsif Cmd = "-ic" or Cmd = "--ignore_casing" then
             Settings.Ignore_Casing := True;
 
-         elsif Arg = "-ibl" or Arg = "--ignore_blank_lines" then
+         elsif Cmd = "-ibl" or Cmd = "--ignore_blank_lines" then
             Settings.Ignore_Blank_Lines := True;
 
-         elsif Arg = "-hm" or Arg = "--human_match" then
+         elsif Cmd = "-hm" or Cmd = "--human_match" then
             Settings.Ignore_Whitespaces := True;
             Settings.Ignore_Casing      := True;
             Settings.Ignore_Blank_Lines := True;
 
-         elsif Arg = "-em" or Arg = "--exact_match" then
+         elsif Cmd = "-em" or Cmd = "--exact_match" then
             Settings.Ignore_Whitespaces := False;
             Settings.Ignore_Casing      := False;
             Settings.Ignore_Blank_Lines := False;
 
-         elsif Arg = "-ed" or Arg = "--exec_dir" then
+         elsif Cmd = "-ed" or Cmd = "--exec_dir" then
             Next_Arg;
             Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
-         elsif Arg = "-td" or Arg = "--tmp_dir" then
+         elsif Cmd = "-td" or Cmd = "--tmp_dir" then
             Next_Arg;
             Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
 
-         elsif Arg = "-r" or Arg = "--recursive" then
+         elsif Cmd = "-r" or Cmd = "--recursive" then
             Settings.Recursive := True;
 
-         elsif Arg = "-k" or Arg = "--keep_going" then
+         elsif Cmd = "-k" or Cmd = "--keep_going" then
             Settings.Keep_Going := True;
 
-         elsif Arg = "-c" or Arg = "--cleanup" then
+         elsif Cmd = "-c" or Cmd = "--cleanup" then
             Settings.Cleanup := True;
 
-         elsif Arg = "--yes" then
+         elsif Cmd = "--yes" then
             Settings.Yes := True;
 
-         elsif Arg = "-v" or Arg = "--verbose" then
+         elsif Cmd = "-v" or Cmd = "--verbose" then
             Set_Verbosity  (Verbose);
 
-         elsif Arg = "-q" or Arg = "--quiet" then
+         elsif Cmd = "-q" or Cmd = "--quiet" then
             Set_Verbosity  (Quiet);
 
-         elsif Arg = "-d" then
+         elsif Cmd = "-d" then
             -- undocumented option
             Set_Verbosity  (Debug);
 
-         elsif Arg = "-ls" then
+         elsif Cmd = "-ls" then
             -- undocumented option, list settings
             Settings.List_Settings := True;
 
-         elsif Arg = "--strict" then
+         elsif Cmd = "--strict" then
             Settings.Strict_Gherkin := True;
 
-         elsif Arg = "-sb" or Arg = "--status_bar" then
+         elsif Cmd = "-sb" or Cmd = "--status_bar" then
             Settings.Status_Bar := True;
 
-         elsif Arg = "-gb" or Arg = "--generate_badge" then
+         elsif Cmd = "-gb" or Cmd = "--generate_badge" then
             Settings.Generate_Badge := True;
             Next_Arg;
             Settings.Set_Badge_File_Name (Ada.Command_Line.Argument (Arg_Counter));
 
-         elsif Ada.Directories.Exists (Arg) then
+         elsif Ada.Directories.Exists (File) then
             -- if it's not an option, its a file name
-            case Kind (Arg) is
+            case Kind (File) is
                when Directory =>
                   Settings.No_File_Given := False;
                   Scenarios.Files.Find_BBT_Files
-                    (Start_In  => Arg,
+                    (Start_In  => File,
                      Recursive => Settings.Recursive);
 
                when Ordinary_File =>
                   Settings.No_File_Given := False;
-                  Scenarios.Files.Append_File (Arg);
+                  Scenarios.Files.Append_File (File);
 
                when Special_File =>
-                  IO.Put_Error ("Unknown file type """ & Arg & """");
+                  IO.Put_Error ("Unknown file type """ & File & """");
                   return;
 
             end case;
 
          else
-            IO.Put_Error ("Unknown option or file """ & Arg & """");
+            IO.Put_Error ("Unknown option or file """ & File & """");
 
          end if;
 

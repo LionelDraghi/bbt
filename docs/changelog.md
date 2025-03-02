@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [master] - 2025-??-??
+  - [changed] option and command on command line now accept both '_' and '-' separator (you can use both `--keep_going` and `--keep-going`)
   - [Added]   *Human match* versus *Exact match* concept added, with `-em`, `-ic`, `-iw` and `-ibl` options
   - [Added]   keyword `executable` added to create scripts
   - [Added]   "Crate of the year" and tests results badges added

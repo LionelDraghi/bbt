@@ -55,3 +55,9 @@ May imply to switch to Max Reznik's more sophisticated MarkDown parser...
   Stderr = error output  
   Stdout = output
 
+- Adding a command line completion generation  
+  cf. to https://rust-lang.github.io/rustup/installation/index.html#enable-tab-completion-for-bash-fish-zsh-or-powershell  
+  and https://github.com/carapace-sh
+
+- Running only selected features or scenario, cf [#21](https://github.com/LionelDraghi/bbt/discussions/21)
+

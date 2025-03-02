@@ -1,30 +1,78 @@
 # Existing comparables and inspiring references <!-- omit from toc -->
 
-- [Expect](#expect)
+- [Introduction](#introduction)
+- [Cucumber](#cucumber)
 - [Aruba](#aruba)
+- [Expect](#expect)
 - [JetBlack](#jetblack)
 - [Exactly ](#exactly-)
 - [BATS](#bats)
-- [Specflow](#specflow)
 
-## [Expect](https://en.wikipedia.org/wiki/Expect)
+## Introduction
+
+References fit into two main category, those matching the bbt objective of easily defining and run a command line test, like `bats` or `exactly`, and those using the Gherkin language to define the test.   
+
+## [Cucumber](https://cucumber.io/)
+
+Cucumber uses tests written in a natural language style, backed up by some glue code (Java, JavaScript, Kotlin, etc.).
+
+To run the test, you have to :
+1. first write your scenarios and steps in Gherkin (plain english);
+2. write in some programming language the matching steps; 
+3. And to have a nice doc, you further need to integrate the Gherkin snippet (usually .feature files) in you documentation.
+
+The start of [Behave](https://behave.readthedocs.io/en/stable/tutorial.html) (one of the Cucumber implementations) tutorial make it crystal clear :
+
+> First, install behave.
+
+> Now make a directory called “features”. In that directory create a file called “tutorial.feature” containing:
 
 ```
-# Open a Telnet session to a remote server, and wait 
-# for a username prompt.
-spawn telnet $remote_server
-expect "username:"
+Feature: showing off behave
 
-# Send the username, and then wait for a password prompt.
-send "$my_user_id\r"
-expect "password:"
-
-# Send the password, and then wait for a shell prompt.
-send "$my_password\r"
-expect "%"
+  Scenario: run a simple test
+     Given we have behave installed
+      When we implement a test
+      Then behave will test it for us!
 ```
+
+>Make a new directory called “features/steps”. In that directory create a file called “tutorial.py” containing:
+
+```python
+from behave import *
+
+@given('we have behave installed')
+def step_impl(context):
+    pass
+
+@when('we implement a test')
+def step_impl(context):
+    assert True is not False
+
+@then('behave will test it for us!')
+def step_impl(context):
+    assert context.failed is False
+```
+
+> Run behave:
+
+~~~
+% behave
+Feature: showing off behave # features/tutorial.feature:1
+
+  Scenario: run a simple test        # features/tutorial.feature:3
+    Given we have behave installed   # features/steps/tutorial.py:3
+    When we implement a test         # features/steps/tutorial.py:7
+    Then behave will test it for us! # features/steps/tutorial.py:11
+
+1 feature passed, 0 failed, 0 skipped
+1 scenario passed, 0 failed, 0 skipped
+3 steps passed, 0 failed, 0 skipped, 0 undefined
+~~~
 
 ## [Aruba](https://github.com/cucumber/aruba/tree/main/features/)
+
+Aruba is a Cucumber extension for Command line applications written in any programming language. As such, it is probably the closest match to bbt.
 
 Sample (from https://github.com/cucumber/aruba/blob/main/features/06_use_aruba_cli/initialize_project_with_aruba.feature) :
 
@@ -73,10 +121,26 @@ Feature: Initialize project with aruba
     """
 ```
 
+## [Expect](https://en.wikipedia.org/wiki/Expect)
+
+```
+# Open a Telnet session to a remote server, and wait 
+# for a username prompt.
+spawn telnet $remote_server
+expect "username:"
+
+# Send the username, and then wait for a password prompt.
+send "$my_user_id\r"
+expect "password:"
+
+# Send the password, and then wait for a shell prompt.
+send "$my_password\r"
+expect "%"
+```
+
 ## [JetBlack](https://github.com/odlp/jet_black)
 
 Same spirit, but Ruby specific.
-
 
 Main features :
 
@@ -127,12 +191,3 @@ example :
             [ "$result" -eq 4 ]
           }
 
-
-## Specflow
-
-https://specflow.org/benefits/testers/
-
-> Make maintaining and extending existing automated tests easy
-> SpecFlow enables you to separate the test cases from your automation, reducing the effort needed to maintain your tests.
-
-Interestingly, it's pretty much the opposite of bbt objective : bbt will try hard to just suppress the automation part, and to keep only the documented test case definition.
