@@ -36,7 +36,7 @@ Without, the run ends with 1 fail, 1 success and 1 not run.
 | Failed     |  1 |
 | Successful |  2 |
 | Empty      |  0 |
-| Not run    |  0 |
+| Skipped    |  0 |
 ```
 
 # Scenario: without `-k`
@@ -46,5 +46,5 @@ Without, the run ends with 1 fail, 1 success and 1 not run.
 | Failed     |  1 |
 | Successful |  1 |
 | Empty      |  0 |
-| Not run    |  1 |
+| Skipped    |  1 |
 ```

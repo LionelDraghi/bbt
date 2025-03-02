@@ -213,7 +213,7 @@ package body BBT.Tests.Runner is
                when Successful =>
                   Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
                             Verbosity => Normal);
-               when Not_Run | Failed =>
+               when Skipped | Failed =>
                   Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
                             Verbosity => Quiet);
             end case;

@@ -10,6 +10,10 @@
 ## [sut_version.md](../../examples/sut_version.md)  
   - [X] scenario [I want to know sut version](../../examples/sut_version.md) pass  
 
+
+## Summary : **Success**
+
+
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |

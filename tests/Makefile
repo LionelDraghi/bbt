@@ -68,25 +68,30 @@ check: setup ./bbt ./sut
 	@ # scenario files will be wrong!
 	@ # =====================================================================
 	
-	@ # Check examples
-	@ ./bbt --yes -k -c -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
-	  && echo 1. examples tests OK ========== || echo 1. examples tests KO, check the availability of gcc and rpl on your platform "******"
+	@ # Then test all the features
+	@ echo 1. features tests ================
+	@ ./bbt --yes --keep_going --cleanup -q --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo OK =============================== || echo KO "********"
 	@ echo
 
-	@ # Then test all the features
-	@ ./bbt --yes --keep_going --cleanup --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo 2. features tests OK ========== || echo 2. features tests KO "******"
+	@ # Check examples
+	@ echo 2. examples check ================
+	@ ./bbt --yes -k -c -q -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
+	  && echo OK =============================== || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests
-	@ ./bbt --yes --keep_going --cleanup --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../docs/non_reg_tests && echo 3. non reg tests OK ========== || echo 3. features reg KO "******"
+	@ echo 3. non regression tests ==========
+	@ ./bbt --yes --keep_going --cleanup -q --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../tests/non_reg_tests && echo OK =============================== || echo KO "******"
 	@ echo
 
 	@ # Unit testing
-	@ $(MAKE) check --directory=file_utilities_tests && echo 4. file_utilities_tests OK ========== || echo 4. file_utilities_tests KO "******"
-	@ mv file_utilities_tests/test_file_utilities.md $(RESULTS_DIR)/test_file_utilities.md
+	@ echo 4. unit testing ==================
+	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK =============================== || echo KO "******"
 	@ echo
 
 doc: $(RESULTS_DIR)
+	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) --directory=file_utilities_tests
+	
 	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	echo wget badge ...
 	@ wget -q "`cat $(RESULTS_DIR)/badge.url`" -O $(RESULTS_DIR)/badge.svg

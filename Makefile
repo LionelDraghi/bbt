@@ -29,7 +29,7 @@ check:
 
 doc: ./bbt
 	echo === doc prod
-	@ $(MAKE) doc --directory=tests
+	@ $(MAKE) -s doc --directory=tests
 	
 	./bbt -lg > docs/grammar.md
 	./bbt -lk > docs/keywords.md
@@ -87,7 +87,7 @@ clean:
 	echo --- clean:
 	alr clean
 	cd tools && alr clean
-	@ $(MAKE) clean --directory=tests
+	@ $(MAKE) -s clean --directory=tests
 	@ - rm -rf config.ini *.out dir1 docs/tests/*/*.out obj/* tmp.txt
 	echo OK
 	echo

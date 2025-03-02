@@ -5,7 +5,7 @@
 package Simple is
 end Simple;
 ~~~
-- When I run `sut read simple.ads`
+- When I run `./sut read simple.ads`
 - then the output is
 ~~~
 package Simple is

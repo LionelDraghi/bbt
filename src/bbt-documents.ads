@@ -23,7 +23,8 @@ private package BBT.Documents is
 -- vocabulary.
 
    -- --------------------------------------------------------------------------
-   type Test_Result is (Not_Run, Failed, Empty, Successful);
+   type Test_Result is (Skipped, Failed, Empty, Successful)
+     with Default_Value => Empty;
 
    type Extended_Step_Categories is (Unknown,
                                      Given_Step, -- Precond, -- Given
@@ -204,5 +205,6 @@ private package BBT.Documents is
    function Overall_Results return Test_Results_Count;
    procedure Put_Overall_Results;
    procedure Generate_Badge;
+   -- Fixme : results and Put functions should be moved in child packages
 
 end BBT.Documents;

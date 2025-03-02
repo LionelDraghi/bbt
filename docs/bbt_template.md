@@ -1,6 +1,6 @@
 
 ## Introduction  
-This is a template bbt file, generated with BBT 0.0.6  
+This is a template bbt file, generated with BBT 0.1.0  
 (It's also the shortest possible bbt tutorial!)
 
 A bbt file contains at least :  

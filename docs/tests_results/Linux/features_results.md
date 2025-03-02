@@ -233,6 +233,15 @@
 
   - [X] scenario [Command with quoted arguments](../../features/B110_Spawn.md) pass  
 
+## [B120_Output_Verbosity.md](../../features/B120_Output_Verbosity.md)  
+  - [X] scenario [Quiet mode run](../../features/B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Default mode run](../../features/B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Verbose mode run](../../features/B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Normal mode with an error](../../features/B120_Output_Verbosity.md) pass  
+
 ## [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
 
@@ -270,8 +279,12 @@
   ### Feature: GNU error messages  
   - [X] scenario [](../../features/C090_GNU_Error_Msg_Format.md) pass  
 
+
+## Summary : **Success**
+
+
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 97    |
+| Successful | 101   |
 | Empty      | 0     |

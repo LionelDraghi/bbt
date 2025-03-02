@@ -181,7 +181,7 @@ package body BBT.Documents is
       elsif Scenario.Successful_Step_Count > 0 then
          return Successful;
       elsif not Scenario.Has_Run then
-         return Not_Run;
+         return Skipped;
       else
          return Empty;
       end if;
@@ -244,14 +244,22 @@ package body BBT.Documents is
                                              New_Item => Results (Test)'Image);
       end Count;
    begin
+      New_Line;
+      if Results (Failed) = 0
+      then Put_Line ("## Summary : **Success**", Verbosity => Quiet);
+      else Put_Line ("## Summary : **Fail**", Verbosity => Quiet);
+      end if;
+      New_Line;
+      New_Line;
       Put_Line ("| Status     | Count |");
       Put_Line ("|------------|-------|");
       Put_Line ("| Failed     |" & Count (Failed) & "|");
       Put_Line ("| Successful |" & Count (Successful) & "|");
       Put_Line ("| Empty      |" & Count (Empty) & "|");
       if Results (Failed) /= 0 then
-         Put_Line ("| Not run    |" & Count (Not_Run) & "|");
+         Put_Line ("| Skipped    |" & Count (Skipped) & "|");
       end if;
+      New_Line;
    end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
