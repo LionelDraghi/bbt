@@ -127,8 +127,10 @@ alr build
 
 ## First use
 
-A good example of the simpliest first step is Simon's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
-He just created a scenario file called tests.md, and put the command line to run the test in the README.  
+The easiest way to start is illustrated by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
+He just: 
+1. created a scenario file called tests.md,  
+2. put a reference to that file and the command line to run the tests in the README.  
 And you're good to go, you don't even need to create a "tests" directory.
 
 ## Why should I use bbt?
