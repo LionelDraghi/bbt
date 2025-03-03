@@ -72,6 +72,34 @@ We have:
 2. Steps  
    Steps are lines starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contain the things to check or do.
 
+## Installation
+
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
+1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
+   
+2. Then to install bbt:
+   ```sh
+   alr get bbt  
+   cd bbt  
+   alr build  
+   ```
+
+3. Move the bbt exec somewhere in your PATH
+
+Or, to get the latest version:
+```sh
+git clone https://github.com/LionelDraghi/bbt  
+cd bbt  
+alr build 
+```
+(if you don't want to install `alr`, just run `gprbuild` instead of `alr build`) 
+
+## First use
+
+The easiest way to start is illustrated by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
+He just created a scenario file called `tests.md`, and put a reference to that file and the command line to run the tests in the README.  
+Thats'it, he did not even have to create a "tests" directory.
+
 ### Partial parsing 
 
 A distinctive feature of bbt is that it seems to directly understand those almost normal English sentences like:  
@@ -102,36 +130,6 @@ It's not only to nicely highlight inputs in the doc, but also because otherwise 
 ### One more example
 
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compiles and runs the ubiquitous *Hello Word*.
-
-## Installation
-
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
-1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
-   
-2. Then to install bbt:
-   ```sh
-   alr get bbt  
-   cd bbt  
-   alr build  
-   ```
-
-3. Move the bbt exec somewhere in your PATH
-
-Or, to get the latest version:
-```sh
-git clone https://github.com/LionelDraghi/bbt  
-cd bbt  
-alr build 
-```
-(if you don't want to install `alr`, just run `gprbuild` instead of `alr build`) 
-
-## First use
-
-The easiest way to start is illustrated by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
-He just: 
-1. created a scenario file called tests.md,  
-2. put a reference to that file and the command line to run the tests in the README.  
-And you're good to go, you don't even need to create a "tests" directory.
 
 ## Why should I use bbt?
 
