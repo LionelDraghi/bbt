@@ -19,20 +19,6 @@
 - [Installation](#installation)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
-  - [What does the description look like?](#what-does-the-description-look-like)
-  - [Partial parsing](#partial-parsing)
-  - [Step arguments](#step-arguments)
-  - [One more example](#one-more-example)
-- [Main characteristics](#main-characteristics)
-  - [Write once](#write-once)
-  - [Tests are easy to read and easy to write](#tests-are-easy-to-read-and-easy-to-write)
-  - [Tests are easy to run](#tests-are-easy-to-run)
-  - [Test Results are immediately publishable](#test-results-are-immediately-publishable)
-- [Objective of the project](#objective-of-the-project)
-- [Status of the project](#status-of-the-project)
-- [Installation](#installation)
-- [Help and comments](#help-and-comments)
-- [Further reading](#further-reading)
 
 ## Overview
 
@@ -117,6 +103,34 @@ It's not only to nicely highlight inputs in the doc, but also because otherwise 
 
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compiles and runs the ubiquitous *Hello Word*.
 
+## Installation
+
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
+1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
+   
+2. Then to install bbt:
+   ```sh
+   alr get bbt  
+   cd bbt  
+   alr build  
+   ```
+
+3. Move the bbt exec somewhere in your PATH
+
+Or, to get the latest version:
+```sh
+git clone https://github.com/LionelDraghi/bbt  
+cd bbt  
+alr build 
+```
+(if you don't want to install `alr`, just run `gprbuild` instead of `alr build`) 
+
+## First use
+
+A good example of the simpliest first step is Simon's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
+He just created a scenario file called tests.md, and put the command line to run the test in the README.  
+And you're good to go, you don't even need to create a "tests" directory.
+
 ## Why should I use bbt?
 
 ### Write once
@@ -185,28 +199,6 @@ bbt syntax is not yet able to specify per platform expected results, so this is 
 On MacOS, it may be usefull to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
 
 That said, I'm not aware of any Windows or MacOS specific bug.
-
-## Installation
-
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
-1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
-   
-2. Then to install bbt:
-   ```sh
-   alr get bbt  
-   cd bbt  
-   alr build  
-   ```
-
-3. Move the bbt exec somewhere in your PATH
-
-Or, to get the latest version:
-```sh
-git clone https://github.com/LionelDraghi/bbt  
-cd bbt  
-alr build 
-```
-(if you don't want to install `alr`, just run `gprbuild` instead of `alr build`) 
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
