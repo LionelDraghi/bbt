@@ -23,9 +23,6 @@ private package BBT.Documents is
 -- vocabulary.
 
    -- --------------------------------------------------------------------------
-   type Test_Result is (Skipped, Failed, Empty, Successful)
-     with Default_Value => Empty;
-
    type Extended_Step_Categories is (Unknown,
                                      Given_Step, -- Precond, -- Given
                                      When_Step,  -- Action,  -- When
@@ -187,24 +184,9 @@ private package BBT.Documents is
    --    is (To_String (D.Name) & ".created_files");
 
    -- --------------------------------------------------------------------------
-   procedure Put_Text          (The_Text : Text);
-   procedure Put_Step          (Step     : Step_Type);
-   procedure Put_Scenario      (Scenario : Scenario_Type);
-   procedure Put_Feature       (Feature  : Feature_Type);
-   procedure Put_Document      (Doc      : Document_Type);
    procedure Put_Document_List (Doc_List : Documents_Lists.Vector);
 
    -- --------------------------------------------------------------------------
-   function Result (Scenario : Scenario_Type) return Test_Result;
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type);
-
-   type Test_Results_Count is array (Test_Result) of Natural
-     with Default_Component_Value => 0;
-
-   procedure Compute_Overall_Tests_Results;
-   function Overall_Results return Test_Results_Count;
-   procedure Put_Overall_Results;
-   procedure Generate_Badge;
-   -- Fixme : results and Put functions should be moved in child packages
 
 end BBT.Documents;

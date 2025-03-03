@@ -11,7 +11,7 @@ Note that the regexp should match the whole line :
 # scenario: version number match
 
 - When I run `./sut -v`
-- Then output matches `sut version [0-9]+.[0-9]+`
+- Then output matches `sut version [0-9]+\.[0-9]+`
 
 # scenario: version number mismatch
 
@@ -19,7 +19,7 @@ Note that the regexp should match the whole line :
 ~~~
 # Scenario:
 - When I run `./sut -v`
-- Then output matches `sut version [0-9]+.[0-9]+.[0-9]+`
+- Then output matches `sut version [0-9]+\.[0-9]+\.[0-9]+`
 ~~~
 
 - When I run `./bbt wrong_regexp.md`
@@ -28,14 +28,14 @@ Note that the regexp should match the whole line :
 ```
 sut version 1.0  
 ~~~  
-does not match expected:  sut version [0-9]+.[0-9]+.[0-9]+    
+does not match expected:  sut version [0-9]+\.[0-9]+\.[0-9]+    
 ```
 
 # Scenario: Test of "does not match" 
 
 - When I run `./sut -v`
 Let's check that the number is of the form "major.minor" and not "major.minor.patch"
-- Then output does not match `sut version [0-9]+.[0-9]+.[0-9]+`
+- Then output does not match `sut version [0-9]+\.[0-9]+\.[0-9]+`
 
 # Scenario: Test of "does not match" that indeed matches
 
@@ -43,7 +43,7 @@ Let's check that the number is of the form "major.minor" and not "major.minor.pa
 ~~~
 # Scenario:
 - When I run `./sut -v`
-- Then output does not match `sut version [0-9]+.[0-9]+`
+- Then output does not match `sut version [0-9]+\.[0-9]+`
 ~~~
 - When I run `./bbt wrong_regexp.md`
 - Then I get an error
@@ -51,5 +51,5 @@ Let's check that the number is of the form "major.minor" and not "major.minor.pa
 ```
 sut version 1.0  
 ~~~  
-match unexpected:  sut version [0-9]+.[0-9]+
+match unexpected:  sut version [0-9]+\.[0-9]+
 ```

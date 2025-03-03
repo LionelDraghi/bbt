@@ -42,8 +42,14 @@ Errors are always output in verbose mode, meaning that you have the info on the 
 
 - Then the output is
 ~~~
+## Summary : **Success**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 0     |  
+| Successful | 2     |  
+| Empty      | 0     |  
 ~~~
-# Fixme: --quiet is maybe too quiet!
 
 ### Scenario: Default mode run
 
@@ -52,6 +58,7 @@ Errors are always output in verbose mode, meaning that you have the info on the 
 - Then the output is
 ~~~
 ## [OK_scen.md](OK_scen.md)  
+  ### Feature: Getting info    
   - [X] scenario [Getting the version](OK_scen.md) pass  
   - [X] scenario [Getting help](OK_scen.md) pass  
 
@@ -63,7 +70,6 @@ Errors are always output in verbose mode, meaning that you have the info on the 
 | Successful | 2     |
 | Empty      | 0     |
 ~~~
-Fixme: in normal mode, document and scenarios are displayed, but not the feature!
 
 ### Scenario: Verbose mode run
 

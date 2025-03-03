@@ -8,6 +8,7 @@
 with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;
+with BBT.Results;           use BBT.Results;
 with BBT.Settings;
 with BBT.Status_Bar;
 with BBT.Tests.Builder;
@@ -202,7 +203,7 @@ package body BBT.Tests.Runner is
             -- And finally run the scenario
             Run_Scenario (Scen);
 
-            case Documents.Result (Scen) is
+            case Results.Result (Scen) is
                when Empty =>
                   -- Note the two spaces at the end of each line, to cause a
                   -- new line in Markdown format when this line is followed
@@ -291,8 +292,7 @@ package body BBT.Tests.Runner is
 
                for F of D.Feature_List loop
                   -- Then run scenarios attached to each Feature
-                  IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ",
-                               Verbosity => Verbose);
+                  IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ");
 
                   if F.Scenario_List.Is_Empty then
                      Put_Warning ("No scenario in feature " &

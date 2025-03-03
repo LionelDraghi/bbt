@@ -7,6 +7,8 @@
 
 with BBT.Documents; use BBT.Documents;
 with BBT.IO;
+with BBT.Output_Formatter.Initialize;
+with BBT.Results;   use BBT.Results;
 with BBT.Scenarios.Files;
 with BBT.Scenarios.Step_Parser;
 with BBT.Settings;
@@ -21,8 +23,6 @@ with Ada.Text_IO;
 
 procedure BBT.Main is
 
-   -- use all type BBT.IO.Print_Out_Level;
-
    -- --------------------------------------------------------------------------
    -- Put_Line Utilities:
    procedure Put_Help     is separate;
@@ -36,6 +36,7 @@ procedure BBT.Main is
 
 begin
    -- --------------------------------------------------------------------------
+   BBT.Output_Formatter.Initialize;
    Analyze_Cmd_Line;
 
    if Settings.Status_Bar then
@@ -69,7 +70,7 @@ begin
 
    if Settings.List_Files then
       Status_Bar.Put_Activity ("Listing files");
-      for File of Scenarios.Files.BBT_Files loop
+      for File of BBT.Scenarios.Files.BBT_Files loop
          Ada.Text_IO.Put_Line (File);
       end loop;
       return;
@@ -105,7 +106,7 @@ begin
       return;
    end if;
 
-   if Scenarios.Files.No_BBT_File then
+   if BBT.Scenarios.Files.No_BBT_File then
       -- No file given on cmd line, and no bbt file found
       IO.Put_Error ("No md file found", IO.No_Location);
 
@@ -113,7 +114,7 @@ begin
       -- HERE we hare in the normal execution flow
       Status_Bar.Put_Activity ("Loading files");
 
-      for File of Scenarios.Files.BBT_Files loop
+      for File of BBT.Scenarios.Files.BBT_Files loop
          Scenarios.Files.Analyze_MDG_File (File);
          exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
@@ -138,11 +139,11 @@ begin
                Status_Bar.Put_Activity ("Running scenarios");
                Tests.Runner.Run_All;
             end if;
-            Documents.Compute_Overall_Tests_Results;
-            Documents.Put_Overall_Results;
+            Results.Sum_Results (BBT.Tests.Builder.The_Tests_List);
+            Results.Put_Overall_Results;
 
             if Settings.Generate_Badge then
-               Documents.Generate_Badge;
+               Results.Generate_Badge;
             end if;
 
          end if;
@@ -155,13 +156,9 @@ begin
    -- --------------------------------------------------------------------
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
-   or else Overall_Results (Failed) /= 0
+   or else Results.Overall_Results (Failed) /= 0
    then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;
-
-exception
-   when others =>
-      Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
 
 end BBT.Main;
