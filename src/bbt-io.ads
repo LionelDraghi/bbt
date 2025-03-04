@@ -34,12 +34,13 @@ private package BBT.IO is
    -- --------------------------------------------------------------------------
    -- Observability! (kind of a tentative of...)
    type Extended_Topics is (None,
-                            Spawn,
-                            Lexer,
                             BBT_Files,
-                            Tests_Builder,
+                            Lexer,
+                            Output,
+                            Runner,
+                            Spawn,
                             Step_Lexer,
-                            Runner);
+                            Tests_Builder);
    subtype Topics is Extended_Topics range
      Extended_Topics'Succ (None) .. Extended_Topics'Last;
    -- None is the default parameter for IO operation, but is not in Topics

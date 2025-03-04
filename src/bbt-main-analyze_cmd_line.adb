@@ -176,13 +176,13 @@ begin
             case Kind (File) is
                when Directory =>
                   Settings.No_File_Given := False;
-                  Scenarios.Files.Find_BBT_Files
+                  BBT.Scenarios.Files.Get_Document_List
                     (Start_In  => File,
                      Recursive => Settings.Recursive);
 
                when Ordinary_File =>
                   Settings.No_File_Given := False;
-                  Scenarios.Files.Append_File (File);
+                  BBT.Scenarios.Files.Append_File (File);
 
                when Special_File =>
                   IO.Put_Error ("Unknown file type """ & File & """");
@@ -194,6 +194,9 @@ begin
             IO.Put_Error ("Unknown option or file """ & File & """");
 
          end if;
+
+         --  IO.Put_Error (BBT.Output_Format.One_Line_Image
+         --                (BBT.Output_Format.BBT_Files));
 
          if IO.Some_Error then return; end if;
          -- No need to further analyze command line, or to do
