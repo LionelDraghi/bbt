@@ -91,33 +91,6 @@ package body BBT.Documents is
    end Output_File_Name;
 
    -- --------------------------------------------------------------------------
-   --  procedure Put_Text (The_Text : Text) is
-   --  begin
-   --     for L of The_Text loop
-   --        Put_Line (L);
-   --     end loop;
-   --  end Put_Text;
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Step (Step : Step_Type) is
-   begin
-      Put_Line (Line (Step.Location)'Image & ": Step """ &
-                (+Step.Step_String) & """");
-      Put_Line (Step'Image);
-   end Put_Step;
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Scenario (Scenario : Scenario_Type) is
-   begin
-      Put_Line (Line (Scenario.Location)'Image & ": Scenario """ &
-                  To_String ((Scenario.Name)) & """");
-      for Step of Scenario.Step_List loop
-         Put_Step (Step);
-      end loop;
-      -- New_Line;
-   end Put_Scenario;
-
-   -- --------------------------------------------------------------------------
    function Parent_Doc (Scen : Scenario_Type) return access Document_Type is
      (if Scen.Parent_Feature /= null then Scen.Parent_Feature.Parent_Document
       else Scen.Parent_Document);
@@ -125,50 +98,6 @@ package body BBT.Documents is
    -- --------------------------------------------------------------------------
    function Is_In_Feature (Scen : Scenario_Type) return Boolean is
      (Scen.Parent_Feature /= null);
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Feature (Feature : Feature_Type) is
-      -- Pref : constant String := "## ";
-   begin
-      -- Current_Indent_Level := 1;
-      Put_Line (Line (Feature.Location)'Image & ": Feature """ &
-                  To_String (Feature.Name) & """");
-
-      if Feature.Background /= null then
-         Put_Scenario (Feature.Background.all);
-      end if;
-
-      for Scenario of Feature.Scenario_List loop
-         Put_Scenario (Scenario);
-      end loop;
-      New_Line;
-   end Put_Feature;
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Document (Doc : Document_Type) is
-   begin
-      Put_Line ("Document Name : " & To_String (Doc.Name));
-      New_Line;
-      if Doc.Background /= null then
-       Put_Scenario (Doc.Background.all);
-      end if;
-
-      for S of Doc.Scenario_List loop
-         Put_Scenario (S);
-      end loop;
-
-      for Feature of Doc.Feature_List loop
-         Put_Feature (Feature);
-      end loop;
-   end Put_Document;
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Document_List (Doc_List : Documents_Lists.Vector) is
-   begin
-      for Doc of Doc_List loop
-         Put_Document (Doc);
-      end loop;
-   end Put_Document_List;
 
    -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is

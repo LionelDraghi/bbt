@@ -98,8 +98,11 @@ begin
          elsif Cmd = "-o" or Cmd = "--output" then
             Next_Arg;
             Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
-            IO.Enable_Tee (Settings.Result_File_Name,
-                           Verbosity => Verbose);
+            --  IO.Enable_Tee (Settings.Result_File_Name,
+            --                 Verbosity => Verbose);
+            Writers.Enable_Output
+              (For_Format => MD, -- Fixme:, format à déterminer avec l'extension
+               File_Name  => Ada.Command_Line.Argument (Arg_Counter));
             -- Verbose is the right detail level for the Markdown output file,
             -- even if --quiet or -- verbose is set.
 

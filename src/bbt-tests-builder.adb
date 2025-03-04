@@ -5,8 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;
-with BBT.Settings;
+with BBT.Settings;   use BBT.Settings;
 
 with Text_Utilities; use Text_Utilities;
 
@@ -416,7 +415,7 @@ package body BBT.Tests.Builder is
    end Duplicate_Multiple_Run;
 
    -- --------------------------------------------------------------------------
-   function The_Tests_List return access Documents_Lists.Vector is
+   function The_Tests_List return access Documents.Documents_Lists.Vector is
      (The_Doc_List'Access);
 
 end BBT.Tests.Builder;

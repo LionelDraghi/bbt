@@ -5,16 +5,16 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;
+with BBT.IO;                            use BBT.IO;
 with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
+with BBT.Writers;                       use BBT.Writers;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
 with Ada.Directories;
 -- with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
--- no direct with of Ada.Directories or Ada.Text_IO here
 
 with GNAT.OS_Lib;
 -- with GNAT.Traceback.Symbolic;

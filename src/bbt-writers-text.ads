@@ -5,20 +5,20 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-package BBT.Output_Formatter.Markdown is
+package BBT.Writers.Text is
 
    -- --------------------------------------------------------------------------
    procedure Initialize;
 
 private
-   type Markdown_Formatter is new Abstract_Formatter with null record;
+   type Text_Writer is new Abstract_Writer with null record;
 
    -- --------------------------------------------------------------------------
    overriding function File_Extensions
-     (Formatter : Markdown_Formatter) return String is ("*.md");
+     (Writer : Text_Writer) return String is ("*.txt");
 
    -- --------------------------------------------------------------------------
    overriding function Default_Extension
-     (Formatter : Markdown_Formatter) return String is (".md");
+     (Writer : Text_Writer) return String is (".txt");
 
-end BBT.Output_Formatter.Markdown;
+end BBT.Writers.Text;

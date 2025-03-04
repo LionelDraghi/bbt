@@ -5,21 +5,24 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents; use BBT.Documents;
 with BBT.IO;
-with BBT.Output_Formatter.Initialize;
-with BBT.Results;   use BBT.Results;
+with BBT.Writers.Markdown_Writer;
+with BBT.Results;
 with BBT.Scenarios.Files;
 with BBT.Scenarios.Step_Parser;
 with BBT.Settings;
 with BBT.Status_Bar;
 with BBT.Tests.Builder;
 with BBT.Tests.Runner;
+with BBT.Writers;
 
 with Ada.Command_Line;
 -- with Ada.Calendar;
 -- with Ada.Calendar.Formatting;
 with Ada.Text_IO;
+
+use BBT.Writers,
+    BBT.Results;
 
 procedure BBT.Main is
 
@@ -36,7 +39,9 @@ procedure BBT.Main is
 
 begin
    -- --------------------------------------------------------------------------
-   BBT.Output_Formatter.Initialize;
+   Writers.Markdown_Writer.Initialize;
+
+   Writers.Enable_Output (MD); -- Enable Markdown output by default
    Analyze_Cmd_Line;
 
    if Settings.Status_Bar then
@@ -131,7 +136,7 @@ begin
             -- Let's display our rebuild of the original test definition file
             -- comment lines are filtered out
             Status_Bar.Put_Activity ("Display loaded scenarios");
-            Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
+            Writers.Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
 
          else
             if IO.No_Error or Settings.Keep_Going then
@@ -140,7 +145,7 @@ begin
                Tests.Runner.Run_All;
             end if;
             Results.Sum_Results (BBT.Tests.Builder.The_Tests_List);
-            Results.Put_Overall_Results;
+            Writers.Put_Overall_Results (Overall_Results);
 
             if Settings.Generate_Badge then
                Results.Generate_Badge;

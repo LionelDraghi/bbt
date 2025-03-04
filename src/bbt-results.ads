@@ -23,7 +23,6 @@ private package BBT.Results is
    -- Walk through the Document list to count the results
 
    function Overall_Results return Test_Results_Count;
-   procedure Put_Overall_Results;
 
    procedure Generate_Badge;
 

@@ -184,9 +184,6 @@ private package BBT.Documents is
    --    is (To_String (D.Name) & ".created_files");
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_List (Doc_List : Documents_Lists.Vector);
-
-   -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type);
 
 end BBT.Documents;

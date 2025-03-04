@@ -7,7 +7,7 @@
 
 with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
-with BBT.IO;
+with BBT.IO;                use BBT.IO;
 with BBT.Results;           use BBT.Results;
 with BBT.Settings;
 with BBT.Status_Bar;
@@ -295,9 +295,9 @@ package body BBT.Tests.Runner is
                   IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ");
 
                   if F.Scenario_List.Is_Empty then
-                     Put_Warning ("No scenario in feature " &
-                                    F.Name'Image & "  ",
-                                  F.Location);
+                     Put_Warning
+                       ("No scenario in feature " & F.Name'Image & "  ",
+                        F.Location);
                   else
                      Run_Scenario_List (F.Scenario_List, Path_To_Scen);
 

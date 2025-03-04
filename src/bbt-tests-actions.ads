@@ -5,6 +5,8 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with BBT.Documents;  use BBT.Documents;
+
 with Text_Utilities; use Text_Utilities;
 
 private package BBT.Tests.Actions is

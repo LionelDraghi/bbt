@@ -5,7 +5,8 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Settings;
+with BBT.IO,
+     BBT.Settings;
 
 package body BBT.Tests.Actions.File_Operations is
 
@@ -37,7 +38,7 @@ package body BBT.Tests.Actions.File_Operations is
       return Ada.Directories.Exists (Name);
    exception
       when Ada.Directories.Name_Error =>
-         Put_Error ("Illegal file name : """ & Name & """");
+         BBT.IO.Put_Error ("Illegal file name : """ & Name & """");
          raise;
          -- return False;
    end Exists;

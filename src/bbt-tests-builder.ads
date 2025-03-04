@@ -5,6 +5,9 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with BBT.Documents; use BBT.Documents;
+with BBT.IO;        use BBT.IO;
+
 package BBT.Tests.Builder is
 -- This package is in charge of building the tests list
 -- by processing lines extracted from Scenarios files.

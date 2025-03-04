@@ -12,7 +12,7 @@ with Ada.Text_IO;
 
 with BBT.Documents;     use BBT.Documents;
 with BBT.IO;
-with BBT.Output_Formatter;
+with BBT.Writers;
 with BBT.Scenarios.MDG_Lexer;
 with BBT.Scenarios.Step_Parser;
 with BBT.Settings;      use BBT.Settings;
@@ -57,7 +57,7 @@ package body BBT.Scenarios.Files is
       Recursive   : Boolean;
       Remove_Root : String := Settings.Launch_Directory)
    is
-      use BBT.Output_Formatter;
+      use BBT.Writers;
       -- -----------------------------------------------------------------------
       Src_Count : array (Format) of Natural := [others => 0];
       Dir_Count : array (Format) of Natural := [others => 1];
@@ -117,7 +117,7 @@ package body BBT.Scenarios.Files is
       end Walk;
 
    begin
-      for F in Format loop
+      for F in Format'Range when Is_Enabled (F) loop
          Put_Debug_Line ("Analyzing directory " & Start_In
                          & " for language : " & Format'Image (F));
          Walk (Start_In, F);

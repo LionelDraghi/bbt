@@ -5,7 +5,6 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;            use BBT.IO;
 with BBT.Settings;
 
 with Ada.Strings.Fixed;
@@ -64,34 +63,6 @@ package body BBT.Results is
 
    -- --------------------------------------------------------------------------
    function Overall_Results return Test_Results_Count is (Results);
-
-   -- --------------------------------------------------------------------------
-   procedure Put_Overall_Results is
-      subtype Count_String is String (1 .. 7);
-      Blank_Image : constant Count_String := [others => ' '];
-      function Count (Test : Test_Result) return Count_String is
-      begin
-         return Ada.Strings.Fixed.Overwrite (Source   => Blank_Image,
-                                             Position => 1,
-                                             New_Item => Results (Test)'Image);
-      end Count;
-   begin
-      New_Line (Verbosity => Quiet);
-      if Results (Failed) = 0
-      then Put_Line ("## Summary : **Success**", Verbosity => Quiet);
-      else Put_Line ("## Summary : **Fail**", Verbosity => Quiet);
-      end if;
-      New_Line (Verbosity => Quiet);
-      Put_Line ("| Status     | Count |", Verbosity => Quiet);
-      Put_Line ("|------------|-------|", Verbosity => Quiet);
-      Put_Line ("| Failed     |" & Count (Failed) & "|", Verbosity => Quiet);
-      Put_Line ("| Successful |" & Count (Successful) & "|", Verbosity => Quiet);
-      Put_Line ("| Empty      |" & Count (Empty) & "|", Verbosity => Quiet);
-      if Results (Failed) /= 0 then
-         Put_Line ("| Skipped    |" & Count (Skipped) & "|", Verbosity => Quiet);
-      end if;
-      New_Line (Verbosity => Quiet);
-   end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
    procedure Generate_Badge is

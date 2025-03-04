@@ -7,7 +7,7 @@ maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
 maintainers-logins = ["LionelDraghi"]
 licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
 website = ""
-tags = ["gherkin", "test", "markdown", "tdd", "black-box"]
+tags = ["test", "testing", "gherkin", "markdown", "tdd", "bdd"]
 
 executables = ["bbt"]
 

@@ -5,16 +5,20 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-package body BBT.Output_Formatter.Markdown is
+package body BBT.Writers.Text is
 
    -- --------------------------------------------------------------------------
-   Processor : aliased Markdown_Formatter;
+   Processor : aliased Text_Writer;
 
-   -- --------------------------------------------------------------------------
-   procedure Initialize is
-   begin
-      Register (Formatter   => Processor'Access,
-                For_Format => MD);
-   end Initialize;
+   --  -- --------------------------------------------------------------------------
+   --  procedure Initialize is
+   --  begin
+   --     Register (Writer  => Processor'Access,
+   --               For_Format => Txt);
+   --  end Initialize;
 
-end BBT.Output_Formatter.Markdown;
+begin
+   Register (Writer     => Processor'Access,
+             For_Format => Txt);
+
+end BBT.Writers.Text;

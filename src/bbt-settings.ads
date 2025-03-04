@@ -55,7 +55,7 @@ private package BBT.Settings is
    function Output_File_Dir return String;
 
    -- --------------------------------------------------------------------------
-   procedure Set_Result_File (File_Name : String);
+   procedure Set_Result_File (File_Name : String); -- Fixme: utile?
    function Result_File_Name return String;
    function Result_Dir       return String;
    -- returns the containing directory of the file_name

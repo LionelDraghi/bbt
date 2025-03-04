@@ -70,18 +70,18 @@ check: setup ./bbt ./sut
 	
 	@ # Then test all the features
 	@ echo 1. features tests ================
-	@ ./bbt --yes --keep_going --cleanup -q --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo OK =============================== || echo KO "********"
+	@ ./bbt --yes --keep_going --cleanup -q -sb --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo OK =============================== || echo KO "********"
 	@ echo
 
 	@ # Check examples
 	@ echo 2. examples check ================
-	@ ./bbt --yes -k -c -q -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
+	@ ./bbt --yes -k -c -q -sb -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
 	  && echo OK =============================== || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
-	@ ./bbt --yes --keep_going --cleanup -q --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../tests/non_reg_tests && echo OK =============================== || echo KO "******"
+	@ ./bbt --yes --keep_going --cleanup -q -sb --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../tests/non_reg_tests && echo OK =============================== || echo KO "******"
 	@ echo
 
 	@ # Unit testing

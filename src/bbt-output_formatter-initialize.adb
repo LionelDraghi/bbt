@@ -5,11 +5,11 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Output_Formatter.Markdown;
-     -- BBT.Output_Formatter.Text;
-
-procedure BBT.Output_Formatter.Initialize is
-begin
-   BBT.Output_Formatter.Markdown.Initialize;
-   -- BBT.Output_Formatter.Text.Initialize;
-end BBT.Output_Formatter.Initialize;
+--  with BBT.Output_Writer.Markdown;
+--       -- BBT.Output_Writer.Text;
+--
+--  procedure BBT.Output_Writer.Initialize is
+--  begin
+--     BBT.Output_Writer.Markdown.Initialize;
+--     -- BBT.Output_Writer.Text.Initialize;
+--  end BBT.Output_Writer.Initialize;
