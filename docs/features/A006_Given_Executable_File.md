@@ -1,17 +1,26 @@
 ## Feature: running scripts
 
 btt is able to create a shell script, that will have the executable attributes thanks to the "executable" keyword.
+
+Note : this feature is pretty much useless. 
+Without the +x, you cannot run "./cmd.txt", but you can still run the script with ". ./cmd.txt" or "source cmd.txt".
   
 ### Scenario: trying to run a script without the executable keyword should fail
 
 - Given the new file `cmd1.sh` containing
 ~~~
-#!/bin/bash
 echo "bbt rules!"
 ~~~
 
+#### Notes on shebang : #!/bin/bash
 /bin/bash on MacOS
-/usr/bin/bash on Debian
+/usr/bin/bash on Windows, but useless
+both on Debian
+Note that there is a shebang utility on https://github.com/insomnimus/shebang to interpret the shebang prefix on Windows
+
+On windows, the file should be suffixed .bat or .cmd, no need to chmod +x.
+Fixme : here the model is too different between Windows and Unix, we need an alternate mechanism 
+to run different scripts, with different command.
 
 - Given the file `create_exec.md` 
 ~~~
@@ -27,10 +36,8 @@ echo "bbt rules!"
 
 - Given the new executable file `cmd2.sh` containing
 ~~~
-#!/bin/bash
 echo "bbt rules!"
 ~~~
 
 - When I run `./cmd2.sh`
-
 - Then I get `bbt rules!`

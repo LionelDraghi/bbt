@@ -10,10 +10,10 @@
 
 ## [A006_Given_Executable_File.md](..\..\features\A006_Given_Executable_File.md)  
   ### Feature: running scripts  
-*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:23:)  
-..\docs\features\a006_given_executable_file.md:23: Error : Expected error code, got no error  
-*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:24:)  
-..\docs\features\a006_given_executable_file.md:24: Error : Output:  
+*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:32:)  
+..\docs\features\a006_given_executable_file.md:32: Error : Expected error code, got no error  
+*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:33:)  
+..\docs\features\a006_given_executable_file.md:33: Error : Output:  
 ~~~
 ## [create_exec.md](create_exec.md)    
   - [X] scenario [](create_exec.md) pass    
@@ -34,8 +34,8 @@ create_exec.md:2: Error : ./cmd1.sh not executable
   
   - [ ] scenario [trying to run a script without the executable keyword should fail](..\..\features\A006_Given_Executable_File.md) fails  
 
-*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:36:)  
-..\docs\features\a006_given_executable_file.md:36: Error : Output:  
+*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:43:)  
+..\docs\features\a006_given_executable_file.md:43: Error : Output:  
 ~~~
 ~~~
 not equal to expected:  
