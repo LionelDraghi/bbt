@@ -17,11 +17,16 @@
 ~~~
 ## [create_exec.md](create_exec.md)    
   - [X] scenario [](create_exec.md) pass    
+  
+## Summary : **Success**  
+  
+  
 | Status     | Count |  
 |------------|-------|  
 | Failed     | 0     |  
 | Successful | 1     |  
-| Empty      | 0     |
+| Empty      | 0     |  
+
 ~~~
 does not contain expected:  
 ~~~
@@ -49,11 +54,11 @@ bbt rules!
 
   - [X] scenario [test on a file](..\..\features\A010_Then_Contains_Code_Span.md) pass  
 
-## [A020_Then_Contains.md](..\..\features\A020_Then_Contains.md)  
+## [A020_Then_Contains_Code_Block.md](..\..\features\A020_Then_Contains_Code_Block.md)  
   ### Feature: "contains" a string feature  
-  - [X] scenario [test the standard output](..\..\features\A020_Then_Contains.md) pass  
+  - [X] scenario [test the standard output](..\..\features\A020_Then_Contains_Code_Block.md) pass  
 
-  - [X] scenario [compare with an existing file](..\..\features\A020_Then_Contains.md) pass  
+  - [X] scenario [compare with an existing file](..\..\features\A020_Then_Contains_Code_Block.md) pass  
 
 ## [A030_Then_Does_Not_Contain.md](..\..\features\A030_Then_Does_Not_Contain.md)  
   ### Feature: checking that some string is not present in output or file  
@@ -69,11 +74,11 @@ bbt rules!
 
   - [X] scenario [NOK return code](..\..\features\A040_Example_Keyword.md) pass  
 
-## [A050_Then_File_Is_Code_Fence.md](..\..\features\A050_Then_File_Is_Code_Fence.md)  
+## [A050_Then_File_Is_Code_Block.md](..\..\features\A050_Then_File_Is_Code_Block.md)  
   ### Feature: testing the "file is" feature  
-  - [X] scenario [file is as expected](..\..\features\A050_Then_File_Is_Code_Fence.md) pass  
+  - [X] scenario [file is as expected](..\..\features\A050_Then_File_Is_Code_Block.md) pass  
 
-  - [X] scenario [file is not as expected](..\..\features\A050_Then_File_Is_Code_Fence.md) pass  
+  - [X] scenario [file is not as expected](..\..\features\A050_Then_File_Is_Code_Block.md) pass  
 
 ## [A060_Then_File_Equal_Code_Span.md](..\..\features\A060_Then_File_Equal_Code_Span.md)  
   ### Feature: "file is" followed by a code span (a string)  
@@ -81,13 +86,13 @@ bbt rules!
 
   - [X] scenario [adding a second line to the file, so the same test should fail](..\..\features\A060_Then_File_Equal_Code_Span.md) pass  
 
-## [A065_Then_File_Equal_File_Code_Fence.md](..\..\features\A065_Then_File_Equal_File_Code_Fence.md)  
+## [A065_Then_File_Equal_File.md](..\..\features\A065_Then_File_Equal_File.md)  
   ### Feature: file is equal to a file  
-  - [X] scenario [test `is equal to file` form](..\..\features\A065_Then_File_Equal_File_Code_Fence.md) pass  
+  - [X] scenario [test `is equal to file` form](..\..\features\A065_Then_File_Equal_File.md) pass  
 
-  - [X] scenario [test `is equal to file` when files are *not* equal](..\..\features\A065_Then_File_Equal_File_Code_Fence.md) pass  
+  - [X] scenario [test `is equal to file` when files are *not* equal](..\..\features\A065_Then_File_Equal_File.md) pass  
 
-  - [X] scenario [test the negative form `is not equal to file`](..\..\features\A065_Then_File_Equal_File_Code_Fence.md) pass  
+  - [X] scenario [test the negative form `is not equal to file`](..\..\features\A065_Then_File_Equal_File.md) pass  
 
 ## [A070_Then_Get_Code_Span.md](..\..\features\A070_Then_Get_Code_Span.md)  
   ### Feature: checking an expected multiline output  
@@ -174,11 +179,16 @@ bbt rules!
 ~~~
 ## [cmd_not_exe.md](cmd_not_exe.md)    
   - [X] scenario [](cmd_not_exe.md) pass    
+  
+## Summary : **Success**  
+  
+  
 | Status     | Count |  
 |------------|-------|  
 | Failed     | 0     |  
 | Successful | 1     |  
-| Empty      | 0     |
+| Empty      | 0     |  
+
 ~~~
 does not contain expected:  
 ~~~
@@ -310,6 +320,24 @@ dir1/dir2/scen5.md
 
   - [X] scenario [Command with quoted arguments](..\..\features\B110_Spawn.md) pass  
 
+## [B120_Output_Verbosity.md](..\..\features\B120_Output_Verbosity.md)  
+*** NOK : Then the output is (..\docs\features\b120_output_verbosity.md:43:)  
+..\docs\features\b120_output_verbosity.md:43: Error : Output:  
+~~~
+## Summary : **Success**
+~~~
+not equal to expected:  
+~~~
+~~~
+  
+  - [ ] scenario [Quiet mode run](..\..\features\B120_Output_Verbosity.md) fails  
+
+  - [X] scenario [Default mode run](..\..\features\B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Verbose mode run](..\..\features\B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Normal mode with an error](..\..\features\B120_Output_Verbosity.md) pass  
+
 ## [C010_Empty_scenarios.md](..\..\features\C010_Empty_scenarios.md)  
   - [X] scenario [No step test](..\..\features\C010_Empty_scenarios.md) pass  
 
@@ -347,9 +375,14 @@ dir1/dir2/scen5.md
   ### Feature: GNU error messages  
   - [X] scenario [](..\..\features\C090_GNU_Error_Msg_Format.md) pass  
 
+
+## Summary : **Fail**
+
+
 | Status     | Count |
 |------------|-------|
-| Failed     | 6     |
-| Successful | 91    |
+| Failed     | 7     |
+| Successful | 94    |
 | Empty      | 0     |
-| Not run    | 0     |
+| Skipped    | 0     |
+
