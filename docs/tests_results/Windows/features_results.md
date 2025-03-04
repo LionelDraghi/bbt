@@ -20,7 +20,6 @@
   
 ## Summary : **Success**  
   
-  
 | Status     | Count |  
 |------------|-------|  
 | Failed     | 0     |  
@@ -182,7 +181,6 @@ bbt rules!
   
 ## Summary : **Success**  
   
-  
 | Status     | Count |  
 |------------|-------|  
 | Failed     | 0     |  
@@ -321,16 +319,7 @@ dir1/dir2/scen5.md
   - [X] scenario [Command with quoted arguments](..\..\features\B110_Spawn.md) pass  
 
 ## [B120_Output_Verbosity.md](..\..\features\B120_Output_Verbosity.md)  
-*** NOK : Then the output is (..\docs\features\b120_output_verbosity.md:43:)  
-..\docs\features\b120_output_verbosity.md:43: Error : Output:  
-~~~
-## Summary : **Success**
-~~~
-not equal to expected:  
-~~~
-~~~
-  
-  - [ ] scenario [Quiet mode run](..\..\features\B120_Output_Verbosity.md) fails  
+  - [X] scenario [Quiet mode run](..\..\features\B120_Output_Verbosity.md) pass  
 
   - [X] scenario [Default mode run](..\..\features\B120_Output_Verbosity.md) pass  
 
@@ -378,11 +367,10 @@ not equal to expected:
 
 ## Summary : **Fail**
 
-
 | Status     | Count |
 |------------|-------|
-| Failed     | 7     |
-| Successful | 94    |
+| Failed     | 6     |
+| Successful | 95    |
 | Empty      | 0     |
 | Skipped    | 0     |
 
