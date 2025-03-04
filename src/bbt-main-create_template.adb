@@ -91,7 +91,7 @@ begin
       Put_Line ("  > - Then output contains `sut version v0.1.0`  ");
       New_Line;
       Put_Line ("If what you want is search for some pattern, then use the ""matches"" keyword, followed by a regexp :  ");
-      Put_Line ("  > - Then output **matches** `sut version [0-9]+.[0-9]+.[0-9]+`  ");
+      Put_Line ("  > - Then output **matches** `sut version [0-9]+\.[0-9]+\.[0-9]+`  ");
       New_Line;
       Put_Line ("Note that the regexp must match the entire line,");
       Put_Line ("don't forget to put "".*"" at the beginning or at the end if necessary.  ");
