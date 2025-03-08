@@ -9,6 +9,7 @@ Without the +x, you cannot run "./cmd.txt", but you can still run the script wit
 
 - Given the new file `cmd1.sh` containing
 ~~~
+#!/bin/sh
 echo "bbt rules!"
 ~~~
 
@@ -36,6 +37,7 @@ to run different scripts, with different command.
 
 - Given the new executable file `cmd2.sh` containing
 ~~~
+#!/bin/sh
 echo "bbt rules!"
 ~~~
 

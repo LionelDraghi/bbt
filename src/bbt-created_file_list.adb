@@ -51,14 +51,14 @@ package body BBT.Created_File_List  is
 
    -- --------------------------------------------------------------------------
    procedure Delete_All is
-      package File_Lists is new Ada.Containers.Indefinite_Doubly_Linked_Lists
-        (String);
+      package File_Lists is new
+        Ada.Containers.Indefinite_Doubly_Linked_Lists (String);
       FL : File_Lists.List;
    begin
       Is_Open := False;
       if BBT.Settings.Cleanup then
          -- Put_Line ("== Delete_All ");
-         -- First delete all files
+
          Reset (File, Mode => In_File);
          while not End_Of_File (File) loop
             FL.Append (Get_Line (File));

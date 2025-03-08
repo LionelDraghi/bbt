@@ -13,8 +13,8 @@ docs/features/B110_Spawn.md:9| this scenario is Unix specific, and should not be
 docs/features/B120_Output_Verbosity.md:120| missing error output for Quiet and Verbose mode
 docs/features/proposed_features/contains_line.md:5| not yet implemented.
 docs/UG.md:128|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
-src/bbt-main-analyze_cmd_line.adb:111|         --     --  opt -ot / --output_tag not yet coded
+src/bbt-main-analyze_cmd_line.adb:128|         --     --  opt -ot / --output_tag not yet coded
 src/bbt-scenarios-step_parser.adb:131|                                                                                                   --  we currently do not check if the existing file contains
 src/bbt-settings.ads:58|   procedure Set_Result_File (File_Name : String); --  utile?
-src/bbt-tests-runner.adb:31|   --  Clearly not confortable with that function, it's magic.
+src/bbt-tests-runner.adb:39|   --  Clearly not confortable with that function, it's magic.
 src/list_image-unix_predefined_styles.ads:55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

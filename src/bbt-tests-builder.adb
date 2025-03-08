@@ -14,7 +14,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Tests.Builder is
 
-
    type States is (In_Document,
                    In_Feature,
                    In_Scenario,

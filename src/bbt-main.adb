@@ -5,24 +5,27 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;
-with BBT.Writers.Markdown_Writer;
-with BBT.Results;
-with BBT.Scenarios.Files;
-with BBT.Scenarios.Step_Parser;
-with BBT.Settings;
-with BBT.Status_Bar;
-with BBT.Tests.Builder;
-with BBT.Tests.Runner;
-with BBT.Writers;
+with BBT.IO,
+     BBT.Writers.Markdown_Writer,
+     BBT.Writers.Asciidoc_Writer,
+     BBT.Tests.Results,
+     BBT.Scenarios.Files,
+     BBT.Scenarios.Readers.MDG_Reader,
+     BBT.Scenarios.Step_Parser,
+     BBT.Settings,
+     BBT.Status_Bar,
+     BBT.Tests.Builder,
+     BBT.Tests.Runner,
+     BBT.Writers;
 
-with Ada.Command_Line;
--- with Ada.Calendar;
--- with Ada.Calendar.Formatting;
-with Ada.Text_IO;
+with Ada.Command_Line,
+--  Ada.Calendar,
+--  Ada.Calendar.Formatting,
+     Ada.Text_IO;
 
-use BBT.Writers,
-    BBT.Results;
+use BBT.Scenarios.Readers,
+    BBT.Writers,
+    BBT.Tests.Results;
 
 procedure BBT.Main is
 
@@ -39,10 +42,16 @@ procedure BBT.Main is
 
 begin
    -- --------------------------------------------------------------------------
-   Writers.Markdown_Writer.Initialize;
+   MDG_Reader.Initialize;
+   Markdown_Writer.Initialize;
+   Asciidoc_Writer.Initialize;
 
-   Writers.Enable_Output (MD); -- Enable Markdown output by default
    Analyze_Cmd_Line;
+
+   if No_Output_Format_Enabled then
+      Writers.Enable_Output (For_Format => Markdown);
+      -- Default, for when there is no explicit --output
+   end if;
 
    if Settings.Status_Bar then
       Status_Bar.Enable;
@@ -75,7 +84,7 @@ begin
 
    if Settings.List_Files then
       Status_Bar.Put_Activity ("Listing files");
-      for File of BBT.Scenarios.Files.BBT_Files loop
+      for File of Scenarios.Files.Document_List loop
          Ada.Text_IO.Put_Line (File);
       end loop;
       return;
@@ -101,7 +110,7 @@ begin
 
    if Settings.List_Keywords then
       Status_Bar.Put_Activity ("Listing keywords");
-      BBT.Scenarios.Step_Parser.Put_Keywords;
+      Scenarios.Step_Parser.Put_Keywords;
       return;
    end if;
 
@@ -111,16 +120,16 @@ begin
       return;
    end if;
 
-   if BBT.Scenarios.Files.No_BBT_File then
+   if Scenarios.Files.No_Document_Found then
       -- No file given on cmd line, and no bbt file found
-      IO.Put_Error ("No md file found", IO.No_Location);
+      IO.Put_Error ("No scenario file found", IO.No_Location);
 
    else
       -- HERE we hare in the normal execution flow
       Status_Bar.Put_Activity ("Loading files");
 
-      for File of BBT.Scenarios.Files.BBT_Files loop
-         Scenarios.Files.Analyze_MDG_File (File);
+      for File of Scenarios.Files.Document_List loop
+         Scenarios.Files.Analyze_Document (File);
          exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
 
@@ -136,7 +145,7 @@ begin
             -- Let's display our rebuild of the original test definition file
             -- comment lines are filtered out
             Status_Bar.Put_Activity ("Display loaded scenarios");
-            Writers.Put_Document_List (BBT.Tests.Builder.The_Tests_List.all);
+            Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
          else
             if IO.No_Error or Settings.Keep_Going then
@@ -144,11 +153,11 @@ begin
                Status_Bar.Put_Activity ("Running scenarios");
                Tests.Runner.Run_All;
             end if;
-            Results.Sum_Results (BBT.Tests.Builder.The_Tests_List);
+            Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);
             Writers.Put_Overall_Results (Overall_Results);
 
             if Settings.Generate_Badge then
-               Results.Generate_Badge;
+               Tests.Results.Generate_Badge;
             end if;
 
          end if;
@@ -161,7 +170,7 @@ begin
    -- --------------------------------------------------------------------
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
-   or else Results.Overall_Results (Failed) /= 0
+   or else Tests.Results.Overall_Results (Failed) /= 0
    then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;

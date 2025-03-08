@@ -7,33 +7,56 @@
 
 package body BBT.Writers is
 
-   -- --------------------------------------------------------------------------
-   Writer_List : array (Format) of Interface_Access;
-   Enabled     : array (Format) of Boolean := [others => False];
-
+   -- -----------------------------------------------------------------------
    use BBT.IO;
    procedure Put_Debug_Line (Item      : String;
                              Location  : Location_Type    := No_Location;
                              Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := Output)
+                             Topic     : Extended_Topics  := IO.Writers)
                              renames BBT.IO.Put_Line;
    pragma Warnings (Off, Put_Debug_Line);
 
-   -- -------------------------------------------------------------------------
-   function Is_Enabled (F : Format) return Boolean is (Enabled (F));
+   -- --------------------------------------------------------------------------
+   Writer_List : array (Output_Format) of Interface_Access;
+   Enabled     : array (Output_Format) of Boolean := [others => False];
 
-   function File_Extensions (For_Format : Format) return String is
-     (File_Extensions (Writer_List (For_Format).all));
+   -- -------------------------------------------------------------------------
+   function Is_Enabled (F : Output_Format) return Boolean is (Enabled (F));
+   function No_Output_Format_Enabled return Boolean is
+     (for all F in Enabled'Range => Enabled (F) = False);
+
+   function File_Pattern (For_Format : Output_Format) return String is
+     (File_Pattern (Writer_List (For_Format).all));
    -- Dispatching call
 
-   function Default_Extension (For_Format : Format) return String is
+   function Default_Extension (For_Format : Output_Format) return String is
      (Default_Extension (Writer_List (For_Format).all));
    -- Dispatching call
 
+   procedure File_Format (File_Name    :     String;
+                          Found        : out Boolean;
+                          Found_Format : out Output_Format) is
+   begin
+      Put_Debug_Line ("Writers.File_Format");
+      Found        := False;
+      Found_Format := Output_Format'Last;
+      for F in Writer_List'Range when Writer_List (F) /= null loop
+         if Is_Of_The_Format (Writer_List (F).all,
+                              File_Name)
+         then
+            Found        := True;
+            Found_Format := F;
+            return;
+         end if;
+      end loop;
+   end File_Format;
+
    -- -------------------------------------------------------------------------
-   procedure Enable_Output (For_Format : Format;
+   procedure Enable_Output (For_Format : Output_Format;
                             File_Name  : String := "") is
    begin
+      Put_Debug_Line ("Writers.Enable_Output (For_Format => " &
+                        For_Format'Image & ", File_Name => " & File_Name);
       Enabled (For_Format) := True;
       Enable_Output (Writer_List (For_Format).all, File_Name);
       if File_Name /= "" then
@@ -43,6 +66,7 @@ package body BBT.Writers is
 
    procedure Put_Summary is
    begin
+      Put_Debug_Line ("Writers.Put_Summary");
       for F in Writer_List'Range when Enabled (F) loop
          Put_Summary (Writer_List (F).all);
       end loop;
@@ -53,7 +77,10 @@ package body BBT.Writers is
                               Fail_Msg : String;
                               Loc      : BBT.IO.Location_Type) is
    begin
+      Put_Debug_Line ("****** Put_Step_Results");
       for F in Writer_List'Range when Enabled (F) loop
+         Put_Debug_Line ("Enabled, Succes = " & Success'Image &
+                           ", Step = " & Step'Image);
          Put_Step_Result (Writer_List (F).all,
                           Step,
                           Success,
@@ -62,7 +89,7 @@ package body BBT.Writers is
       end loop;
    end Put_Step_Result;
 
-   procedure Put_Overall_Results (Results : BBT.Results.Test_Results_Count) is
+   procedure Put_Overall_Results (Results : BBT.Tests.Results.Test_Results_Count) is
    begin
       for F in Writer_List'Range when Enabled (F) loop
          Put_Overall_Results (Writer_List (F).all, Results);
@@ -134,7 +161,7 @@ package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
    procedure Register (Writer     : Interface_Access;
-                       For_Format : Format) is
+                       For_Format : Output_Format) is
    begin
       Writer_List (For_Format) := Writer;
    end Register;

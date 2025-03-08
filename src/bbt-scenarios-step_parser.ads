@@ -5,8 +5,6 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;                use BBT.IO;
 

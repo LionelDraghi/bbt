@@ -16,23 +16,23 @@ package BBT.Scenarios.Files is
    -- --------------------------------------------------------------------------
    package File_List is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                String);
-   procedure Append_File (File_Name : String);
+   procedure Add_Document (File_Name : String);
 
    -- --------------------------------------------------------------------------
-   function No_BBT_File return Boolean;
-   function BBT_Files return File_List.Vector;
+   function No_Document_Found return Boolean;
+   function Document_List return File_List.Vector;
    function One_Line_Image (Files : File_List.Vector) return String;
    -- returns something like "[name1, name2, name3]"
 
    -- --------------------------------------------------------------------------
-   procedure Get_Document_List
-     (Start_In    : String;
+   procedure Find_Documents
+     (Dir         : String;
       Recursive   : Boolean;
       Remove_Root : String := BBT.Settings.Launch_Directory);
    -- Returns all sources in Start_In and surbdirs that is recognized
    -- by one of the Formater.
 
    -- --------------------------------------------------------------------------
-   procedure Analyze_MDG_File (File_Name : String);
+   procedure Analyze_Document (File_Name : String);
 
 end BBT.Scenarios.Files;

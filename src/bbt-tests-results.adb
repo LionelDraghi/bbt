@@ -10,7 +10,7 @@ with BBT.Settings;
 with Ada.Strings.Fixed;
 with Ada.Text_IO;
 
-package body BBT.Results is
+package body BBT.Tests.Results is
 
    Results : Test_Results_Count;
 
@@ -97,4 +97,4 @@ package body BBT.Results is
       Ada.Text_IO.Close    (File);
    end Generate_Badge;
 
-end BBT.Results;
+end BBT.Tests.Results;

@@ -67,7 +67,7 @@ If what you want is just test that the output contains something, then use the "
   > - Then output contains `sut version v0.1.0`  
 
 If what you want is search for some pattern, then use the "matches" keyword, followed by a regexp :  
-  > - Then output **matches** `sut version [0-9]+.[0-9]+.[0-9]+`  
+  > - Then output **matches** `sut version [0-9]+\.[0-9]+\.[0-9]+`  
 
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  

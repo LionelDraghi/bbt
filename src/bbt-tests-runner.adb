@@ -8,7 +8,7 @@
 with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;                use BBT.IO;
-with BBT.Results;           use BBT.Results;
+with BBT.Tests.Results;           use BBT.Tests.Results;
 with BBT.Settings;
 with BBT.Status_Bar;
 with BBT.Tests.Builder;
@@ -24,7 +24,15 @@ with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Runner is
 
-  -- -----------------------------------------------------------------------
+   -- -----------------------------------------------------------------------
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.Runner)
+                             renames BBT.IO.Put_Line;
+   pragma Warnings (Off, Put_Debug_Line);
+
+   -- -----------------------------------------------------------------------
    function Subject_Or_Object_String (Step : Step_Type) return String is
      (To_String (if Step.Object_File_Name = Null_Unbounded_String then
            Step.Subject_String else Step.Object_File_Name));
@@ -37,8 +45,11 @@ package body BBT.Tests.Runner is
       Spawn_OK : Boolean := False;
       The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
    begin
+      Put_Debug_Line ("====== Running Scen " & Scen'Image);
+
       Scen.Has_Run := True;
       Step_Processing : for Step of Scen.Step_List loop
+         Put_Debug_Line ("====== Running Step " & Step'Image);
          Spawn_OK := False;
          begin
             case Step.Action is
@@ -60,9 +71,8 @@ package body BBT.Tests.Runner is
                         Check_Result => True,
                         Spawn_OK     => Spawn_OK,
                         Return_Code  => Return_Code);
-
-               exit Step_Processing when not (Spawn_OK and
-                                                Is_Success (Return_Code));
+               exit Step_Processing when not
+                 (Spawn_OK and Is_Success (Return_Code));
 
             when Error_Return_Code =>
                Return_Error (Return_Code, Step);
@@ -158,8 +168,8 @@ package body BBT.Tests.Runner is
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
       if Has_Background (Doc) then
-         Put_Line ("  Running document Background """ & (+Doc.Background.Name)
-                   & """  ", IO.No_Location, IO.Debug);
+         Put_Debug_Line ("  Running document Background """ & (+Doc.Background.Name)
+                   & """  ", IO.No_Location);
          Run_Scenario (Doc.Background.all);
          Move_Results (From_Scen => Doc.Background.all,
                        To_Scen   => Scen);
@@ -175,8 +185,8 @@ package body BBT.Tests.Runner is
          declare
             Feat : constant Feature_Type := Scen.Parent_Feature.all;
          begin
-            Put_Line ("  Running feature Background """ & (+Feat.Background.Name) &
-                        """  ", IO.No_Location, IO.Debug);
+            Put_Debug_Line ("  Running feature Background """ & (+Feat.Background.Name) &
+                        """  ", IO.No_Location);
             Run_Scenario (Feat.Background.all);
             Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
          end;
@@ -203,7 +213,7 @@ package body BBT.Tests.Runner is
             -- And finally run the scenario
             Run_Scenario (Scen);
 
-            case Results.Result (Scen) is
+            case Tests.Results.Result (Scen) is
                when Empty =>
                   -- Note the two spaces at the end of each line, to cause a
                   -- new line in Markdown format when this line is followed
@@ -258,8 +268,8 @@ package body BBT.Tests.Runner is
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
-         -- IO.New_Line (IO.Debug);
-         IO.Put_Line ("==== Running " & D.Name'Image, IO.No_Location, IO.Debug);
+         Put_Debug_Line (D'Image);
+         Put_Debug_Line ("==== Running " & D.Name'Image, IO.No_Location);
 
          BBT.Created_File_List.Open
            (Ada.Directories.Simple_Name (To_String (D.Name))

@@ -112,7 +112,7 @@ dir1/dir2/scen5.md
 - When I run `./bbt dir5 dir6`
 - Then the output contains
 ```
-Error : No md file found
+Error : No scenario file found
 ```
 - And I get an error
 

@@ -5,10 +5,10 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO; use BBT.IO;
+with BBT.IO;                use BBT.IO;
 with BBT.Settings;
+with BBT.Scenarios.Readers; use BBT.Scenarios.Readers;
 
--- with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Directories;
 with Ada.Text_IO;
@@ -98,15 +98,32 @@ begin
          elsif Cmd = "-o" or Cmd = "--output" then
             Next_Arg;
             Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
+
+            declare
+               Writer_Found : Boolean := False;
+               Format       : Writers.Output_Format;
+               File_Name    : constant String := Settings.Result_File_Name;
+            begin
+               Writers.File_Format (File_Name    => File_Name,
+                                    Found        => Writer_Found,
+                                    Found_Format => Format);
+               if Writer_Found then
+                  Writers.Enable_Output (For_Format => Format,
+                                         File_Name  => File_Name);
+
+               else
+                  IO.Put_Error
+                    ("Unkwnow format for file """ & File_Name & """");
+
+               end if;
+            end;
+
             --  IO.Enable_Tee (Settings.Result_File_Name,
             --                 Verbosity => Verbose);
-            Writers.Enable_Output
-              (For_Format => MD, -- Fixme:, format à déterminer avec l'extension
-               File_Name  => Ada.Command_Line.Argument (Arg_Counter));
             -- Verbose is the right detail level for the Markdown output file,
             -- even if --quiet or -- verbose is set.
 
-         --  elsif Arg = "-ot" or Arg = "--output_tag" then
+            --  elsif Arg = "-ot" or Arg = "--output_tag" then
          --     Next_Arg;
          --     -- Fixme: opt -ot / --output_tag not yet coded
 
@@ -157,7 +174,16 @@ begin
 
          elsif Cmd = "-d" then
             -- undocumented option
-            Set_Verbosity  (Debug);
+            Next_Arg;
+            if Topics'Valid_Value (Ada.Command_Line.Argument (Arg_Counter)) then
+               -- -d is followed by the topic to watch
+               Enable_Topic
+                 (Topic =>  Topics'Value (Ada.Command_Line.Argument (Arg_Counter)));
+            else
+               -- there is only -d
+               Set_Verbosity  (Debug);
+               Arg_Counter := @ - 1;
+            end if;
 
          elsif Cmd = "-ls" then
             -- undocumented option, list settings
@@ -179,13 +205,13 @@ begin
             case Kind (File) is
                when Directory =>
                   Settings.No_File_Given := False;
-                  BBT.Scenarios.Files.Get_Document_List
-                    (Start_In  => File,
+                  BBT.Scenarios.Files.Find_Documents
+                    (Dir  => File,
                      Recursive => Settings.Recursive);
 
                when Ordinary_File =>
                   Settings.No_File_Given := False;
-                  BBT.Scenarios.Files.Append_File (File);
+                  BBT.Scenarios.Files.Add_Document (File);
 
                when Special_File =>
                   IO.Put_Error ("Unknown file type """ & File & """");

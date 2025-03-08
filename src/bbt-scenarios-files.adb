@@ -7,16 +7,15 @@
 
 with Ada.Directories;
 with Ada.Exceptions;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
-with BBT.Documents;     use BBT.Documents;
+with BBT.Documents;                     use BBT.Documents;
 with BBT.IO;
-with BBT.Writers;
-with BBT.Scenarios.MDG_Lexer;
+with BBT.Scenarios.Readers;             use BBT.Scenarios.Readers;
 with BBT.Scenarios.Step_Parser;
-with BBT.Settings;      use BBT.Settings;
-with BBT.Tests.Builder; use BBT.Tests.Builder;
+with BBT.Settings;                      use BBT.Settings;
+with BBT.Tests.Builder;                 use BBT.Tests.Builder;
 
 with List_Image;
 
@@ -29,16 +28,15 @@ package body BBT.Scenarios.Files is
    procedure Put_Debug_Line (Item      : String;
                              Location  : Location_Type    := No_Location;
                              Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := BBT_Files)
+                             Topic     : Extended_Topics  := Scen_Files)
                              renames BBT.IO.Put_Line;
-
 
    -- --------------------------------------------------------------------------
    The_List : File_List.Vector;
    package File_List_Sorting is new File_List.Generic_Sorting;
 
    -- --------------------------------------------------------------------------
-   procedure Append_File (File_Name : String) is
+   procedure Add_Document (File_Name : String) is
       use Ada.Directories;
       Name : constant String := Full_Name (File_Name);
    begin
@@ -49,42 +47,43 @@ package body BBT.Scenarios.Files is
          --  not supposed to be executed, and the output file if any.
          The_List.Append (File_Name);
       end if;
-   end Append_File;
+   end Add_Document;
 
    -- --------------------------------------------------------------------------
-   procedure Get_Document_List
-     (Start_In    : String;
+   procedure Find_Documents
+     (Dir         : String;
       Recursive   : Boolean;
       Remove_Root : String := Settings.Launch_Directory)
    is
-      use BBT.Writers;
       -- -----------------------------------------------------------------------
-      Src_Count : array (Format) of Natural := [others => 0];
-      Dir_Count : array (Format) of Natural := [others => 1];
+      Src_Count : array (Input_Format) of Natural := [others => 0];
+      Dir_Count : array (Input_Format) of Natural := [others => 1];
 
       use Ada.Directories;
 
       -- -----------------------------------------------------------------------
       procedure Walk (Name : String;
-                      L    : Format) is
+                      L    : Input_Format) is
       -- code mostly from :
       -- https://rosettacode.org/wiki/Walk_a_directory/Recursively#Ada
-         Extension : constant String := File_Extensions (For_Format => L);
+         Extension_Regexp : constant String
+           := File_Pattern (For_Format => L);
 
          -- --------------------------------------------------------------------
          procedure Process_File (Item : Directory_Entry_Type) is
             Name : constant String := Full_Name (Item);
          begin
-            if Name'Length > Remove_Root'Length and then
-              Name (Name'First .. Name'First + Remove_Root'Length - 1) = Remove_Root
+            if Name'Length > Remove_Root'Length
+              and then Name (Name'First .. Name'First + Remove_Root'Length - 1)
+              = Remove_Root
             -- Simple optimization : if the long path is a subdir of the
             -- current one, we only print the subdir
             then
-               BBT.Scenarios.Files.Append_File
+               Add_Document
                  (File_Name =>
                     (Name (Name'First + Remove_Root'Length + 1 .. Name'Last)));
             else
-               BBT.Scenarios.Files.Append_File (File_Name => (Name));
+               Add_Document (File_Name => (Name));
             end if;
             Src_Count (L) := Src_Count (L) + 1;
          end Process_File;
@@ -103,9 +102,9 @@ package body BBT.Scenarios.Files is
          end Walk;
 
       begin
-         Put_Debug_Line ("Walking in " & Name);
+         Put_Debug_Line ("Walking in " & Name & ", regexp = " & Extension_Regexp);
          Search (Directory => Name,
-                 Pattern   => Extension,
+                 Pattern   => Extension_Regexp,
                  Filter    => [Directory => False, others => True],
                  Process   => Process_File'Access);
          if Recursive then
@@ -117,23 +116,23 @@ package body BBT.Scenarios.Files is
       end Walk;
 
    begin
-      for F in Format'Range when Is_Enabled (F) loop
-         Put_Debug_Line ("Analyzing directory " & Start_In
-                         & " for language : " & Format'Image (F));
-         Walk (Start_In, F);
+      for F in Valid_Input_Format'Range loop -- when Is_Enabled (F) loop
+         Put_Debug_Line ("Analyzing directory " & Dir
+                         & " for language : " & Input_Format'Image (F));
+         Walk (Dir, F);
          if Src_Count (F) /= 0 then
-            BBT.Scenarios.Files.File_List_Sorting.Sort (The_List);
+            File_List_Sorting.Sort (The_List);
             Put_Debug_Line ("Found " & Integer'Image (Src_Count (F)) &
-                              " "  & Format'Image (F) & " src in" &
+                              " "  & Input_Format'Image (F) & " src in" &
                               Natural'Image (Dir_Count (F)) & " dir");
          end if;
       end loop;
 
-   end Get_Document_List;
+   end Find_Documents;
 
    -- --------------------------------------------------------------------------
-   function No_bbt_File return Boolean is (The_List.Is_Empty);
-   function bbt_Files return File_List.Vector is (The_List);
+   function No_Document_Found return Boolean is (The_List.Is_Empty);
+   function Document_List return File_List.Vector is (The_List);
 
    use File_List;
    package File_List_Cursors is new List_Image.Cursors_Signature
@@ -142,25 +141,27 @@ package body BBT.Scenarios.Files is
 
    function Image (C : Cursor) return String is (Element (C));
 
-   function Id_Set_Image is new List_Image.Image
+   function File_List_Image is new List_Image.Image
      (Cursors => File_List_Cursors,
       Style   => List_Image.Bracketed_List_Style);
 
    function One_Line_Image (Files : File_List.Vector) return String renames
-     Id_Set_Image;
+     File_List_Image;
 
    -- --------------------------------------------------------------------------
-   procedure Analyze_MDG_File (File_Name : String) is
+   procedure Analyze_Document (File_Name : String) is
 
       Input : Ada.Text_IO.File_Type;
       use Ada.Text_IO;
 
-      use BBT.Scenarios.MDG_Lexer;
-      MDG_Lexer_Context : Parsing_Context := Initialize_Context;
-      Loc               : Location_Type   := Location (Input);
+      Lexer_Context : Parsing_Context := Initialize_Context;
+      Loc           : Location_Type   := Location (Input);
+
+      File_Format : constant Valid_Input_Format := Readers.Format (File_Name);
 
    begin
       Put_Debug_Line ("==== Loading " & File_Name);
+      Put_Debug_Line ("     Format = " & File_Format'Image);
       Open (Input,
             Mode => In_File,
             Name => File_Name);
@@ -174,60 +175,65 @@ package body BBT.Scenarios.Files is
          -- next one.
 
          Line_Processing : declare
-            Line     : aliased constant String  := Get_Line (Input);
-            Attrib   : constant Line_Attributes := Parse_Line
-              (Line'Access, MDG_Lexer_Context, Loc);
-            S        : Step_Type;
-            Cmd_List : Cmd_Lists.Vector;
-            Filler   : constant String := (if BBT.IO.Line (Loc) in 1 .. 9
-                                           then "  | "
-                                           elsif BBT.IO.Line (Loc) in 10 .. 99
-                                           then " | "
-                                           else "|�");
+            Line                : aliased constant String  := Get_Line (Input);
+            S                   : Step_Type;
+            Cmd_List            : Cmd_Lists.Vector;
+            Filler              : constant String := (if BBT.IO.Line (Loc) in 1 .. 9
+                                                      then "  | "
+                                                      elsif BBT.IO.Line (Loc) in 10 .. 99
+                                                      then " | "
+                                                      else "| ");
             Code_Block_Expected : Boolean;
+
          begin
+            Put_Debug_Line ("Line = " & Line);
+            Put_Debug_Line ("S    = " & S'Image);
+            declare
+               Attrib   : constant Line_Attributes := Parse_Line
+                 (Line'Access, File_Format, Lexer_Context, Loc);
+            begin
+               case Attrib.Kind is
+                  when Feature_Line =>
+                     Put_Debug_Line ("Feature      " & Filler & Line, Loc);
+                     Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
 
-            case Attrib.Kind is
-            when Feature_Line =>
-               Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
-               Put_Debug_Line ("Feature     " & Filler & Line);
+                  when Scenario_Line =>
+                     Put_Debug_Line ("Scenario     " & Filler & Line, Loc);
+                     Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
 
-            when Scenario_Line =>
-               Put_Debug_Line ("Scenario    " & Filler & Line);
-               Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
+                  when Background_Line =>
+                     Put_Debug_Line ("Background   " & Filler & Line, Loc);
+                     Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
 
-            when Background_Line =>
-               Put_Debug_Line ("Background  " & Filler & Line);
-               Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
+                  when Step_Line =>
+                     Put_Debug_Line ("Step         " & Filler & Line, Loc);
+                     S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
+                                                       Loc,
+                                                       Code_Block_Expected,
+                                                       Cmd_List);
+                     Put_Debug_Line ("             " & Filler & "  "
+                                     & Short_Line_Image (S), Loc);
 
-            when Step_Line =>
-               Put_Debug_Line ("Step        " & Filler & Line);
-               S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
-                                                 Loc,
-                                                 Code_Block_Expected,
-                                                 Cmd_List);
-               Put_Debug_Line ("            " & Filler & "  "
-                            & Short_Line_Image (S));
+                     Tests.Builder.Add_Step (S, Code_Block_Expected, Cmd_List);
 
-               Tests.Builder.Add_Step (S, Code_Block_Expected, Cmd_List);
+                  when Code_Fence =>
+                     Put_Debug_Line ("Code fence   " & Filler & Line, Loc);
+                     Tests.Builder.Add_Code_Fence (Loc);
 
-            when Code_Fence =>
-               Put_Debug_Line ("Code fence  " & Filler & Line);
-               Tests.Builder.Add_Code_Fence (Loc);
+                  when Text_Line =>
+                     if Tests.Builder.In_File_Content then
+                        Put_Debug_Line ("File content " & Filler & Line, Loc);
+                     else
+                        Put_Debug_Line ("Ignored      " & Filler & Line, Loc);
+                     end if;
+                     Tests.Builder.Add_Line (To_String (Attrib.Line));
 
-            when Text_Line =>
-               if Tests.Builder.In_File_Content then
-                  Put_Debug_Line ("File content" & Filler & Line);
-               else
-                  Put_Debug_Line ("Ignored     " & Filler & Line);
-               end if;
-               Tests.Builder.Add_Line (To_String (Attrib.Line));
+                  when Empty_Line =>
+                     Tests.Builder.Add_Line (Line);
 
-            when Empty_Line =>
-               Tests.Builder.Add_Line (Line);
+               end case;
 
-            end case;
-
+            end;
          end Line_Processing;
 
          if Some_Error then exit; end if;
@@ -236,7 +242,7 @@ package body BBT.Scenarios.Files is
 
       Tests.Builder.End_Of_Scenario (Loc);
 
-      -- and finally, let's record the document
+      -- And finally, let's record the document
       Close (Input);
 
    exception
@@ -248,6 +254,6 @@ package body BBT.Scenarios.Files is
          if not Settings.Keep_Going then raise;
          end if;
 
-   end Analyze_MDG_File;
+   end Analyze_Document;
 
 end BBT.Scenarios.Files;

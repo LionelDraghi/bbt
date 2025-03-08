@@ -7,7 +7,7 @@
 
 with BBT.Documents;
 
-private package BBT.Results is
+package BBT.Tests.Results is
 
    type Test_Result is (Skipped, Failed, Empty, Successful)
      with Default_Value => Empty;
@@ -20,10 +20,10 @@ private package BBT.Results is
    -- stored in the scenario.
 
    procedure Sum_Results (Docs : access Documents.Documents_Lists.Vector);
-   -- Walk through the Document list to count the results
+   -- Walk through the Document list to sum all scenarios result's.
 
    function Overall_Results return Test_Results_Count;
 
    procedure Generate_Badge;
 
-end BBT.Results;
+end BBT.Tests.Results;

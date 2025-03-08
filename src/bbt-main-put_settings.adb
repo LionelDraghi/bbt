@@ -25,7 +25,7 @@ begin
    Put_Line ("---------------------------------");
    New_Line;
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
-   Put_Line ("   bbt files             : " & One_Line_Image (BBT_Files));
+   Put_Line ("   bbt files             : " & One_Line_Image (Document_List));
    Put_Line ("   Initial directory     : " & Launch_Directory);
    Put_Line ("   Exec    directory     : " & Settings.Exec_Dir);
    Put_Line ("   Output file directory : " & Settings.Output_File_Dir);

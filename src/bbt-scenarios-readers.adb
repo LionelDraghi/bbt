@@ -11,7 +11,10 @@ with Ada.Strings.Equal_Case_Insensitive;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Maps;  use Ada.Strings.Maps;
 
-package body BBT.Scenarios.MDG_Lexer is
+package body BBT.Scenarios.Readers is
+
+   -- --------------------------------------------------------------------------
+   Reader_List : array (Valid_Input_Format) of Interface_Access;
 
    -- --------------------------------------------------------------------------
    Blanks  : constant Character_Set := To_Set (" " & Ada.Characters.Latin_1.HT);
@@ -19,115 +22,21 @@ package body BBT.Scenarios.MDG_Lexer is
 
    -- Bold_And_Blanks : constant Character_Set := To_Set ('*') or Blanks;
 
-   Separators : constant Character_Set := To_Set (':') or Blanks;
+   -- Separators : constant Character_Set := To_Set (':') or Blanks;
 
    -- Markdown_Emphasis : constant Character_Set := To_Set ("*_");
    -- Markdown treats asterisks (*) and underscores (_) as indicators of emphasis
 
-   Decorators : constant Character_Set := To_Set ('#'); -- or Markdown_Emphasis
+   -- Decorators : constant Character_Set := To_Set ('#'); -- or Markdown_Emphasis
    -- All surrounding chars that should be trimmed
-
-   -- --------------------------------------------------------------------------
-   function Find_Heading_Mark (Line        : String;
-                               First       : out Natural;
-                               Last        : out Natural;
-                               Title_First : out Natural;
-                               Title_Last  : out Natural;
-                               Location    : Location_Type) return Boolean is
-      --  In
-      --  ### **Header** : text
-      --  First will point 'H'
-      --  Last  will point 'r'
-      --  Colon will point after ':'
-      --
-      -- refer to https://spec.commonmark.org/0.31.2/#atx-heading
-      -- for specification
-   begin
-      -- First point to the first  #
-      First := Index_Non_Blank (Source => Line, From => Line'First);
-
-      if Line (First) /= '#' then
-         return False;
-      end if;
-
-      -- let's jump over all others '#'
-      First := Index (Source => Line,
-                      Set    => Ada.Strings.Maps.To_Set ("#"),
-                      Test   => Ada.Strings.Outside,
-                      From   => First + 1,
-                      Going  => Forward);
-      -- Now First point to the first character after all '#'
-      -- First is set, and should not be overwritten from now on
-
-      if Line'Last = First then
-         return False;
-      end if;
-
-      if Is_In (Line (First), Blanks) then
-         -- let's jump over blanks
-         First := Index (Source => Line,
-                         Set    => Blanks,
-                         Test   => Ada.Strings.Outside,
-                         From   => First,
-                         Going  => Forward);
-      else
-         IO.Put_Warning ("Markdown expect space in Headings after last '#'", Location);
-         --  IO.Put_Warning ("First = " & First'Image);
-         --  IO.Put_Warning ("Line  = " & Line);
-         --  IO.Put_Warning ("Line (First) = " & """" & Line (First)'Image & """");
-      end if;
-
-      Find_Token (Source => Line,
-                  Set    => Separators,
-                  From   => First,
-                  Test   => Ada.Strings.Outside,
-                  First  => First,
-                  Last   => Last);
-
-      -- Last is set, and should not be overwritten from now on
-
-      if Line'Last = Last then
-      -- There is noting after "# Scenario" (for example)
-         Title_First := 1;
-         Title_Last  := 0;
-         return True;
-      end if;
-
-      -- Now we hare in the Title
-      Title_First := Index (Source => Line,
-                            Set    => Separators or Decorators,
-                            Test   => Ada.Strings.Outside,
-                            From   => Last + 1,
-                            Going  => Forward);
-      if Title_First = 0 then
-      -- There is only Separators or Decorators after "# Scenario" (for example)
-         -- Put_Line ("only Separators after # Scenario");
-         Title_First := 1;
-         Title_Last  := 0;
-         return True;
-      end if;
-
-      Title_Last := Index (Source => Line,
-                           Set    => Decorators or Blanks,
-                           Test   => Ada.Strings.Outside,
-                           From   => Line'Last,
-                           Going  => Backward);
-      if Title_Last = 0 then
-         -- nothing to remove at the end
-         Title_Last := Line'Last;
-      end if;
-
-      return True;
-
-   end Find_Heading_Mark;
 
    -- --------------------------------------------------------------------------
    function Bullet_List_Marker (Line  : String;
                                 First : out Natural) return Boolean is
-      -- refer to https://spec.commonmark.org/0.31.2/#bullet-list-marker
-      -- for specification.
-      -- We intentionally limit bullet to '-', so that bullet list may appear in
-      -- comments, providing you use '*' or '+', without interfering with bbt.
+   -- Refer to https://spec.commonmark.org/0.31.2/#bullet-list-marker
+   -- for specification.
+   -- We intentionally limit bullet to '-', so that bullet list may appear in
+   -- comments, providing you use '*' or '+', without interfering with bbt.
 
    begin
       First := Index_Non_Blank (Line, Going => Forward);
@@ -174,7 +83,7 @@ package body BBT.Scenarios.MDG_Lexer is
          end if;
 
       else
-         -- The opening marker is of one of the two possibility
+         -- The opening marker is one of the two possibility
          if Index (Trim (Line, Left), Tilda_Fence_Marker) = 1 then
             Current_Fence_Marker := Tilda_Fence_Marker;
             return True;
@@ -190,29 +99,32 @@ package body BBT.Scenarios.MDG_Lexer is
    end Code_Fence_Line;
 
    -- --------------------------------------------------------------------------
+   function Format (File_Name : String) return Valid_Input_Format is
+   begin
+      for Reader of Reader_List loop
+         if Is_Of_The_Format (Reader.all, File_Name) then
+            return Format (Reader.all);
+         end if;
+      end loop;
+      IO.Put_Warning ("Defaulting to MDG format for file """ & File_Name & """");
+      return MDG; -- If the file was not recognized by the Readers,
+                  -- let's fallback on the default format.
+   end Format;
+
+   -- --------------------------------------------------------------------------
+   function File_Pattern (For_Format : Valid_Input_Format) return String is
+     (File_Pattern (Reader_List (For_Format).all));
+   -- Dispatching call
+
+   -- --------------------------------------------------------------------------
    function Initialize_Context return Parsing_Context is
      ((In_Code_Fence => False, In_Scenario => False));
 
-   procedure Put_Image
-     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      A      :        Line_Attributes) is
-   begin
-      Output.Put (Line_Kind'Image (A.Kind) & " | ");
-      case A.Kind is
-         when Feature_Line    |
-              Scenario_Line   |
-              Background_Line => Output.Put (A.Name'Image);
-         when Text_Line       => Output.Put (A.Line'Image);
-         when Step_Line       => Output.Put (A.Step_Ln'Image);
-         when Code_Fence      |
-              Empty_Line      => null;
-      end case;
-   end Put_Image;
-
    -- --------------------------------------------------------------------------
-   function Parse_Line (Line    : access constant String;
-                        Context : in out Parsing_Context;
-                        Loc     : Location_Type)
+   function Parse_Line (Line       : access constant String;
+                        For_Format :        Valid_Input_Format;
+                        Context    : in out Parsing_Context;
+                        Loc        :        Location_Type)
                         return Line_Attributes is
       First, Last, Title_First, Title_Last : Natural;
    begin
@@ -233,7 +145,7 @@ package body BBT.Scenarios.MDG_Lexer is
          return (Kind => Code_Fence);
 
       elsif Context.In_Code_Fence then
-         -- While in code fence, al is considered as text (otherwise a comment
+         -- While in code fence, all is considered as text (otherwise a comment
          -- with a bullet marker '-' would be interpreted as a Step).
          return (Kind => Text_Line,
                  Line => To_Unbounded_String (Line.all));
@@ -253,7 +165,8 @@ package body BBT.Scenarios.MDG_Lexer is
                  Step_Ln   => To_Unbounded_String
                    (Line.all (First .. Line.all'Last)));
 
-      elsif Find_Heading_Mark (Line        => Line.all (First .. Line.all'Last),
+      elsif Find_Heading_Mark (Reader      => Reader_List (For_Format).all,
+                               Line        => Line.all (First .. Line.all'Last),
                                First       => First,
                                Last        => Last,
                                Title_First => Title_First,
@@ -299,4 +212,11 @@ package body BBT.Scenarios.MDG_Lexer is
 
    end Parse_Line;
 
-end BBT.Scenarios.MDG_Lexer;
+   -- --------------------------------------------------------------------------
+   procedure Register (Reader     : Interface_Access;
+                       For_Format : Valid_Input_Format) is
+   begin
+      Reader_List (For_Format) := Reader;
+   end Register;
+
+end BBT.Scenarios.Readers;
