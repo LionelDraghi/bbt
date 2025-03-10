@@ -10,10 +10,10 @@
 
 ## [A006_Given_Executable_File.md](..\..\features\A006_Given_Executable_File.md)  
   ### Feature: running scripts  
-*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:32:)  
-..\docs\features\a006_given_executable_file.md:32: Error : Expected error code, got no error  
-*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:33:)  
-..\docs\features\a006_given_executable_file.md:33: Error : Output:  
+*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:33:)  
+..\docs\features\a006_given_executable_file.md:33: Error : Expected error code, got no error  
+*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:34:)  
+..\docs\features\a006_given_executable_file.md:34: Error : Output:  
 ~~~
 ## [create_exec.md](create_exec.md)    
   - [X] scenario [](create_exec.md) pass    
@@ -34,8 +34,8 @@ create_exec.md:2: Error : ./cmd1.sh not executable
   
   - [ ] scenario [trying to run a script without the executable keyword should fail](..\..\features\A006_Given_Executable_File.md) fails  
 
-*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:43:)  
-..\docs\features\a006_given_executable_file.md:43: Error : Output:  
+*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:45:)  
+..\docs\features\a006_given_executable_file.md:45: Error : Output:  
 ~~~
 ~~~
 not equal to expected:  
@@ -214,6 +214,11 @@ cmd_not_exe.md:2: Error : ./lambda_file not executable
 
   - [X] scenario [exact match except for casing and blank lines](..\..\features\A210_Exact_Match.md) pass  
 
+## [A220_AsciiDoc_gcc_hello_word.adoc](..\..\features\A220_AsciiDoc_gcc_hello_word.adoc)  
+  - [X] scenario [gcc version?](..\..\features\A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
+  - [X] scenario [compiling and executing an hello word](..\..\features\A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
 ## [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](..\..\features\B010_Deleting_created_files.md) pass  
@@ -370,7 +375,7 @@ dir1/dir2/scen5.md
 | Status     | Count |
 |------------|-------|
 | Failed     | 6     |
-| Successful | 95    |
+| Successful | 97    |
 | Empty      | 0     |
 | Skipped    | 0     |
 
