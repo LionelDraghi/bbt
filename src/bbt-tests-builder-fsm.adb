@@ -10,6 +10,14 @@ separate (BBT.Tests.Builder)
 -- -----------------------------------------------------------------------------
 package body FSM is
 
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.FSM)
+                             renames BBT.IO.Put_Line;
+   pragma Warnings (Off, Put_Debug_Line);
+
+   -- -----------------------------------------------------------------------
    Internal_State            : States            := In_Document;
    Internal_Previous_State   : States;
    Internal_Step_State       : Step_States;
@@ -36,10 +44,10 @@ package body FSM is
       Internal_Previous_State := Internal_State;
       Internal_State          := To_State;
 
-      Put_Line ("State : " & Internal_Previous_State'Image & " --> " &
-                  Internal_State'Image & "   CB_Expected : " & CB_Expected'Image
-                & "   CB_Missing : " & CB_Missing'Image,
-                Verbosity => Debug);
+      Put_Debug_Line
+        ("State : " & Internal_Previous_State'Image & " --> " &
+           Internal_State'Image & "   CB_Expected : " & CB_Expected'Image
+         & "   CB_Missing : " & CB_Missing'Image);
 
       -- When living the In_Step state, check that the expected code block
       -- was provided

@@ -11,7 +11,7 @@ package BBT.Scenarios.Readers is
    -- Common declarations for scenario readers
 
    -- --------------------------------------------------------------------------
-  type Input_Format is (MDG, Unknown);
+  type Input_Format is (MDG, Adoc, Unknown);
    subtype Valid_Input_Format is
      Input_Format range Input_Format'First .. Input_Format'Pred (Unknown);
 
@@ -32,6 +32,10 @@ package BBT.Scenarios.Readers is
                         Context    : in out Parsing_Context;
                         Loc        : Location_Type)
                         return Line_Attributes;
+
+   function Code_Fence_Line (Line             : String;
+                             For_Format       : Valid_Input_Format;
+                             Look_For_Closing : Boolean) return Boolean;
 
 private
    type Parsing_Context is record
@@ -70,6 +74,12 @@ private
    -- Last  will point 'r'
    -- Title_First will point 'x'
    -- Title_Last  will point 'z'
+
+   -- -------------------------------------------------------------------------
+   function Code_Fence_Line
+     (Reader           : Abstract_Reader;
+      Line             : String;
+      Look_For_Closing : Boolean) return Boolean is abstract;
 
    -- -------------------------------------------------------------------------
    type Interface_Access is access all Abstract_Reader'class;

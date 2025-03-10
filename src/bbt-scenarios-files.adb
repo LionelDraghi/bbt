@@ -186,12 +186,12 @@ package body BBT.Scenarios.Files is
             Code_Block_Expected : Boolean;
 
          begin
-            Put_Debug_Line ("Line = " & Line);
-            Put_Debug_Line ("S    = " & S'Image);
             declare
                Attrib   : constant Line_Attributes := Parse_Line
                  (Line'Access, File_Format, Lexer_Context, Loc);
             begin
+               Put_Debug_Line ("Line   = " & Line);
+               Put_Debug_Line ("Attrib = " & Attrib'Image);
                case Attrib.Kind is
                   when Feature_Line =>
                      Put_Debug_Line ("Feature      " & Filler & Line, Loc);

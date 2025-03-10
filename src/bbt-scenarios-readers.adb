@@ -38,6 +38,9 @@ package body BBT.Scenarios.Readers is
    -- We intentionally limit bullet to '-', so that bullet list may appear in
    -- comments, providing you use '*' or '+', without interfering with bbt.
 
+   -- Same for AsciiDoc, '*' and '-' works, but bbt only uses the first.
+   -- Cf. https://docs.asciidoctor.org/asciidoc/latest/lists/unordered/
+
    begin
       First := Index_Non_Blank (Line, Going => Forward);
       if Line'Last - First < 2 then
@@ -57,46 +60,6 @@ package body BBT.Scenarios.Readers is
          return False;
       end if;
    end Bullet_List_Marker;
-
-   -- --------------------------------------------------------------------------
-   subtype Marker_String is String (1 .. 3);
-   Tilda_Fence_Marker    : constant Marker_String := 3 * '~';
-   Backtick_Fence_Marker : constant Marker_String := 3 * '`';
-   No_Marker             : constant Marker_String := 3 * ' ';
-   Current_Fence_Marker  : Marker_String := No_Marker;
-   -- Stores what marker was used to open the block
-   -- This allows to ignore code block inserted with the other marker
-   function Code_Fence_Line (Line             : String;
-                             Look_For_Closing : Boolean) return Boolean is
-   begin
-      if Look_For_Closing then
-         -- Looking for the closing marker
-         -- The closing marker must be equal to the opening one
-         if Index (Trim (Line, Left),
-                   Current_Fence_Marker) = 1
-         then
-            -- this is the closing marker, let's reset
-            Current_Fence_Marker := No_Marker;
-            return True;
-         else
-            return False;
-         end if;
-
-      else
-         -- The opening marker is one of the two possibility
-         if Index (Trim (Line, Left), Tilda_Fence_Marker) = 1 then
-            Current_Fence_Marker := Tilda_Fence_Marker;
-            return True;
-         elsif Index (Trim (Line, Left), Backtick_Fence_Marker) = 1 then
-            Current_Fence_Marker := Backtick_Fence_Marker;
-            return True;
-         else
-            return False;
-         end if;
-
-      end if;
-
-   end Code_Fence_Line;
 
    -- --------------------------------------------------------------------------
    function Format (File_Name : String) return Valid_Input_Format is
@@ -139,6 +102,7 @@ package body BBT.Scenarios.Readers is
          return (Kind => Empty_Line);
 
       elsif Code_Fence_Line (Line             => Line.all,
+                             For_Format       => For_Format,
                              Look_For_Closing => Context.In_Code_Fence)
       then
          Context.In_Code_Fence := not @;
@@ -178,8 +142,7 @@ package body BBT.Scenarios.Readers is
             Header : constant String := Line.all (First .. Last);
             Title  : constant String := Line.all (Title_First .. Title_Last);
          begin
-            --  Put_Line ("Header = """ & Header & """, Title = """ & Title & """",
-            --            Level => IO.Debug);
+            -- Put_Line ("Header = """ & Header & """, Title = """ & Title & """");
             if Ada.Strings.Equal_Case_Insensitive (Header, "Feature") then
                return (Kind => Feature_Line,
                        Name => To_Unbounded_String (Title));
@@ -197,9 +160,8 @@ package body BBT.Scenarios.Readers is
                        Name => To_Unbounded_String (Title));
 
             else
-               -- WTF Header ---------------------------------------------------
-               Put_Line ("Unknown Header = " & Header'Image
-                         & ", should be Features or Scenario",
+               -- Non processed header
+               Put_Line ("Header = """ & Header'Image & """ ignored by bbt",
                          Location  => Loc,
                          Verbosity => IO.Debug);
             end if;
@@ -211,6 +173,15 @@ package body BBT.Scenarios.Readers is
               Line => To_Unbounded_String (Line.all));
 
    end Parse_Line;
+
+   function Code_Fence_Line (Line             : String;
+                             For_Format       : Valid_Input_Format;
+                             Look_For_Closing : Boolean) return Boolean is
+   begin
+      return Code_Fence_Line (Reader           => Reader_List (For_Format).all,
+                              Line             => Line,
+                              Look_For_Closing => Look_For_Closing);
+   end Code_Fence_Line;
 
    -- --------------------------------------------------------------------------
    procedure Register (Reader     : Interface_Access;

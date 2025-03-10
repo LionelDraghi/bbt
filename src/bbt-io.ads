@@ -33,14 +33,15 @@ private package BBT.IO is
 
    -- --------------------------------------------------------------------------
    -- Observability! (kind of a tentative of...)
-   type Extended_Topics is (None,
-                            Step_Actions,
-                            Scen_Files,
+   type Extended_Topics is (None, -- keep as first enum (see Topics declaration)
+                            FSM,
                             Lexer,
                             MD_Writer,
                             -- Output,
                             Runner,
+                            Scen_Files,
                             Spawn,
+                            Step_Actions,
                             Step_Lexer,
                             Tests_Builder,
                             Writers);

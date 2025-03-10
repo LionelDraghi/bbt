@@ -161,6 +161,11 @@
 
   - [X] scenario [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
 
+## [A220_AsciiDoc_gcc_hello_word.adoc](../../features/A220_AsciiDoc_gcc_hello_word.adoc)  
+  - [X] scenario [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
+  - [X] scenario [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](../../features/B010_Deleting_created_files.md) pass  
@@ -285,6 +290,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 101   |
+| Successful | 103   |
 | Empty      | 0     |
 

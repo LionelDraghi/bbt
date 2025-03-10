@@ -10,6 +10,7 @@ with BBT.IO,
      BBT.Writers.Asciidoc_Writer,
      BBT.Tests.Results,
      BBT.Scenarios.Files,
+     BBT.Scenarios.Readers.Adoc_Reader,
      BBT.Scenarios.Readers.MDG_Reader,
      BBT.Scenarios.Step_Parser,
      BBT.Settings,
@@ -43,6 +44,8 @@ procedure BBT.Main is
 begin
    -- --------------------------------------------------------------------------
    MDG_Reader.Initialize;
+   Adoc_Reader.Initialize;
+
    Markdown_Writer.Initialize;
    Asciidoc_Writer.Initialize;
 

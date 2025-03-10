@@ -73,4 +73,10 @@ private
    -- Refer to https://spec.commonmark.org/0.31.2/#atx-heading
    -- for specification
 
+   -- -------------------------------------------------------------------------
+   function Code_Fence_Line
+     (Reader           : MDG_Reader;
+      Line             : String;
+      Look_For_Closing : Boolean) return Boolean;
+
 end BBT.Scenarios.Readers.MDG_Reader;

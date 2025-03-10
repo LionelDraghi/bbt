@@ -7,6 +7,7 @@
 - [JetBlack](#jetblack)
 - [Exactly ](#exactly-)
 - [BATS](#bats)
+- [Spectest](#spectest)
 
 ## Introduction
 
@@ -191,3 +192,16 @@ example :
             [ "$result" -eq 4 ]
           }
 
+
+ 
+## Spectest
+
+Generate document from end-to-end tests (opposite to bbt way), so not comparable to bbt, but interesting idea: generate sequence diagram with cli and sut exchanging signals
+
+https://dev.to/nchika/spectest-api-thttps://dev.to/nchika/spectest-api-testing-library-for-go-that-generate-e2e-test-result-document-in-markdown-11pi
+
+
+ 
+
+
+ 
