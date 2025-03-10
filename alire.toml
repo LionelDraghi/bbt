@@ -21,3 +21,15 @@ generate_C = false
 [[depends-on]]
 ansiada = "^1.0.0"
 
+[[actions]]
+type = "post-build"
+command = ["echo", 'run "alr test" to check bbt build'] 
+# /home/lionel/prj/bbt/bbt -c --yes /home/lionel/prj/bbt/docs/examples/sut_version.md"]
+
+[[actions]]
+type = "test" 
+command = ["make", "build"]
+
+[[actions]]
+type = "test"   
+command = ["make", "check"]
