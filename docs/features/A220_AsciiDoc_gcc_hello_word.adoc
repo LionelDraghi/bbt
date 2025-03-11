@@ -11,10 +11,12 @@ Let start with something easy:
 More subtle:
 
 * on Linux or Windows, the output is something like:
-  > gcc version 14.2.0 (Debian 14.2.0-16)
+[quote]
+gcc version 14.2.0 (Debian 14.2.0-16)
 
 * on Darwin:
-  > Apple clang version 12.0.0 (clang-1200.0.32.29)
+[quote]
+Apple clang version 12.0.0 (clang-1200.0.32.29)
 
 We can use a regexp to test both:
 
