@@ -110,8 +110,9 @@ Syntax is the same, a string between backticks.
 
 In particular, regexp containing '[' are not rendered correctly. The  
 > `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
+
 regexp is printed  
-> (gcc|.* clang) version \.[0-9]\.[0-9]+ .*
+> (gcc|.* clang) version \.[0-9]\.[0-9]+ .*  
 
 Meaning that the test will be run normaly, but reader is not reading what is actually run.
 
