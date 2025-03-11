@@ -9,9 +9,7 @@
     - [Headings](#headings)
     - [Fenced Code blocks](#fenced-code-blocks)
 
-## Syntax
-
-### Gherkin language subset
+## Gherkin language subset
 
 - *Feature*
 - *Scenario* or *Example*
@@ -23,7 +21,7 @@
 
 ([Cf. Gherkin language reference](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language))
 
-### bbt own DSL 
+## Step's definition 
 
 [bbt keywords](https://github.com/LionelDraghi/bbt/blob/main/docs/keywords.md), including both the Gherkin subset and bbt specifics keywords may be obtained with `bbt -lk` (`--list_keywords`).
 
@@ -41,7 +39,11 @@ Here is an excerpt from the grammar :
 - And, at the end, the resulting action.
 
 
-### Scenario files format
+## Scenario files format
+
+### MDG
+
+This is the default format for bbt input (scenarios).
 
 The BBT Markdown subset tries to comply with [CommonMark Spec](https://spec.commonmark.org/), meaning that bbt generate Common Mark compliant Markdown.
 On the other hand, restrictions apply when writing bbt scenario.
@@ -88,3 +90,30 @@ For example, you can have:
 > 
 > ```
 ~~~
+
+### AsciiDoc
+
+Syntax diffrence with the default MDG format are :
+
+#### Steps
+
+#### Heading
+
+#### Fenced Code blocks
+
+#### Code span
+
+Syntax is the same, a string between backticks.
+
+> [!WARNING]  
+> The content may be interpreted by the asciidoc. 
+
+In particular, regexp containing '[' are not rendered correctly. The  
+> `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
+regexp is printed  
+> (gcc|.* clang) version \.[0-9]\.[0-9]+ .*
+
+Meaning that the test will be run normaly, but reader is not reading what is actually run.
+
+I have no solution right now, any asciidoc expertise is welcome.
+
