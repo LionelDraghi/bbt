@@ -114,7 +114,7 @@ In particular, regexp containing '[' are not rendered correctly. The
 regexp is printed  
 > (gcc|.* clang) version \.[0-9]\.[0-9]+ .*  
 
-Meaning that the test will be run normaly, but reader is not reading what is actually run.
+Meaning that the test will be run normaly, but the reader is not reading what is actually run.
 
 I have no solution right now, any asciidoc expertise is welcome.
 
