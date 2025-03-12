@@ -8,7 +8,6 @@ docs/features/B030_File_test_and_creation.md:14|> This last case is not yet test
 docs/features/B040_Find_scenarios.md:64| this scenario fail on Windows because of the directory separator in the expected result.  
 docs/features/B040_Find_scenarios.md:87| this scenario fail on Windows because of the directory separator in the expected result.  
 docs/features/B070_Mandatory_new_bug.md:1| bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `whatever` file, even if it has not the same content.
-docs/features/B090_tmp_dir.md:30| dir2 is not removed although --cleanup
 docs/features/B110_Spawn.md:9| this scenario is Unix specific, and should not be run on Windows.  
 docs/features/B120_Output_Verbosity.md:120| missing error output for Quiet and Verbose mode
 docs/proposed_features/contains_line.md:5| not yet implemented.
