@@ -24,7 +24,7 @@ with GNAT.Traceback.Symbolic;
 
 package body BBT.Tests.Runner is
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Put_Debug_Line (Item      : String;
                              Location  : Location_Type    := No_Location;
                              Verbosity : Verbosity_Levels := Debug;
@@ -32,7 +32,7 @@ package body BBT.Tests.Runner is
                              renames BBT.IO.Put_Line;
    pragma Warnings (Off, Put_Debug_Line);
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Subject_Or_Object_String (Step : Step_Type) return String is
      (To_String (if Step.Object_File_Name = Null_Unbounded_String then
            Step.Subject_String else Step.Object_File_Name));
@@ -40,7 +40,7 @@ package body BBT.Tests.Runner is
 
    Return_Code : Integer := 0;
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Run_Scenario (Scen : in out Scenario_Type) is
       Spawn_OK : Boolean := False;
       The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
@@ -168,7 +168,8 @@ package body BBT.Tests.Runner is
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
       if Has_Background (Doc) then
-         Put_Debug_Line ("  Running document Background """ & (+Doc.Background.Name)
+         Put_Debug_Line
+           ("  Running document Background """ & (+Doc.Background.Name)
                    & """  ", IO.No_Location);
          Run_Scenario (Doc.Background.all);
          Move_Results (From_Scen => Doc.Background.all,
@@ -185,8 +186,9 @@ package body BBT.Tests.Runner is
          declare
             Feat : constant Feature_Type := Scen.Parent_Feature.all;
          begin
-            Put_Debug_Line ("  Running feature Background """ & (+Feat.Background.Name) &
-                        """  ", IO.No_Location);
+            Put_Debug_Line
+              ("  Running feature Background """ & (+Feat.Background.Name) &
+                 """  ", IO.No_Location);
             Run_Scenario (Feat.Background.all);
             Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
          end;
@@ -242,19 +244,16 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_All is
       use File_Utilities;
-      File_Count : constant Natural := Natural (BBT.Tests.Builder.The_Tests_List.Length);
+      File_Count : constant Natural :=
+                     Natural (BBT.Tests.Builder.The_Tests_List.Length);
       -- package CVer is new GNAT.Compiler_Version;
 
    begin
       -- First, let's move to a different exec dir, if any
       Ada.Directories.Set_Directory (Settings.Exec_Dir);
 
-      -- Put_Line ("+++++++++++++ tmp dir = " & Settings.Tmp_Dir);
-      if not Ada.Directories.Exists (Settings.Tmp_Dir)
-        -- and
-        -- then Kind (Settings.Tmp_Dir) = Directory)
-      then
-         -- Put_Line ("*************** tmp dir = " & Settings.Tmp_Dir);
+      if not Ada.Directories.Exists (Settings.Tmp_Dir) then
+         Created_File_List.Add (Settings.Tmp_Dir);
          Ada.Directories.Create_Path (Settings.Tmp_Dir);
       end if;
 
