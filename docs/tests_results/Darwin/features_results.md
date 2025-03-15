@@ -161,6 +161,11 @@
 
   - [X] scenario [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
 
+## [A220_AsciiDoc_gcc_hello_word.adoc](../../features/A220_AsciiDoc_gcc_hello_word.adoc)  
+  - [X] scenario [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
+  - [X] scenario [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](../../features/B010_Deleting_created_files.md) pass  
@@ -218,7 +223,13 @@
 
 ## [B090_tmp_dir.md](../../features/B090_tmp_dir.md)  
   ### Feature: Tmp dir  
-  - [X] scenario [](../../features/B090_tmp_dir.md) pass  
+  - [X] scenario [Current dir, no cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Current dir, with cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Within dir1, no cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Within dir1, with cleanup](../../features/B090_tmp_dir.md) pass  
 
 ## [B100_Results_Output_In_MD_Format.md](../../features/B100_Results_Output_In_MD_Format.md)  
   - [X] scenario [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
@@ -285,6 +296,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 101   |
+| Successful | 106   |
 | Empty      | 0     |
 
