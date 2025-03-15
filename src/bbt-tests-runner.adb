@@ -45,11 +45,11 @@ package body BBT.Tests.Runner is
       Spawn_OK : Boolean := False;
       The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
    begin
-      Put_Debug_Line ("====== Running Scen " & Scen'Image);
+      Put_Debug_Line ("  ====== Running Scen " & Scen.Name'Image);
 
       Scen.Has_Run := True;
       Step_Processing : for Step of Scen.Step_List loop
-         Put_Debug_Line ("====== Running Step " & Step'Image);
+         -- Put_Debug_Line ("  ====== Running Step " & Step'Image);
          Spawn_OK := False;
          begin
             case Step.Action is
@@ -150,7 +150,8 @@ package body BBT.Tests.Runner is
                Add_Result (False, Scen);
                Put_Exception ("while processing scenario "
                               & Scen.Name'Image
-                              & " : " & Ada.Exceptions.Exception_Message (E)
+                              & " : " & Ada.Exceptions.Exception_Name (E) & " "
+                              & Ada.Exceptions.Exception_Message (E)
                               & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                               Step.Location);
          end;
@@ -245,7 +246,7 @@ package body BBT.Tests.Runner is
    procedure Run_All is
       use File_Utilities;
       File_Count : constant Natural :=
-                     Natural (BBT.Tests.Builder.The_Tests_List.Length);
+                     Natural (Tests.Builder.The_Tests_List.Length);
       -- package CVer is new GNAT.Compiler_Version;
 
    begin
@@ -267,13 +268,6 @@ package body BBT.Tests.Runner is
 
       -- let's run the test
       for D of BBT.Tests.Builder.The_Tests_List.all loop
-         Put_Debug_Line (D'Image);
-         Put_Debug_Line ("==== Running " & D.Name'Image, IO.No_Location);
-
-         BBT.Created_File_List.Open
-           (Ada.Directories.Simple_Name (To_String (D.Name))
-            & ".created_files");
-
          begin
             declare
                Path_To_Scen  : constant String
@@ -318,6 +312,11 @@ package body BBT.Tests.Runner is
                end loop;
 
             end;
+
+            Created_File_List.Delete_All;
+            -- All files and dir created during bbt run of this document
+            -- are removed if -c | --cleanup option was used.
+
          exception
             when E : others =>
                Put_Exception (Ada.Exceptions.Exception_Message (E)
@@ -326,8 +325,6 @@ package body BBT.Tests.Runner is
                IO.Put_Line ("To_File    => " & (+D.Name));
                -- IO.Put_Line ("Short_Path => " & Path_To_Scen);
          end;
-
-         Created_File_List.Delete_All;
 
          if IO.Some_Error and not Settings.Keep_Going then
             exit;

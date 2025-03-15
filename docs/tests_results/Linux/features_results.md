@@ -223,7 +223,13 @@
 
 ## [B090_tmp_dir.md](../../features/B090_tmp_dir.md)  
   ### Feature: Tmp dir  
-  - [X] scenario [](../../features/B090_tmp_dir.md) pass  
+  - [X] scenario [Current dir, no cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Current dir, with cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Within dir1, no cleanup](../../features/B090_tmp_dir.md) pass  
+
+  - [X] scenario [Within dir1, with cleanup](../../features/B090_tmp_dir.md) pass  
 
 ## [B100_Results_Output_In_MD_Format.md](../../features/B100_Results_Output_In_MD_Format.md)  
   - [X] scenario [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
@@ -290,6 +296,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 103   |
+| Successful | 106   |
 | Empty      | 0     |
 

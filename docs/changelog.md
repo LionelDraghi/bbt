@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [Latest] - 2025-??-??
+  - [Fixed]   --cleanup now correctly removes directories tree (fixes #3)
   - [Added]   Processing of Asciidoc input (.adoc files) added
 
 - [0.1.0] - 2025-03-03

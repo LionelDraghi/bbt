@@ -19,6 +19,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.OS_Lib;
 -- with GNAT.Traceback.Symbolic;
 
+use Ada;
+
 package body BBT.Tests.Actions is
 
    -- -----------------------------------------------------------------------
@@ -31,7 +33,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    function Is_Success (I : Integer) return Boolean is
-     (I = Integer (Ada.Command_Line.Success));
+     (I = Integer (Command_Line.Success));
 
    function Entry_Exists (File_Name : String) return Boolean is
      (File_Name /= "" and then Exists (File_Name));
@@ -178,14 +180,22 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step : Step_Type) is
       File_Name : constant String := To_String (Step.Subject_String);
+      Parent_Dir : constant String :=
+                     Directories.Containing_Directory (File_Name);
    begin
       Put_Debug_Line ("Create_New " & File_Name);
-      Created_File_List.Add (File_Name); -- should be deleted at the end, even
-                                         -- if pre-existing.
+      Created_File_List.Add (File_Name);
+      -- Should be deleted at the end, even if pre-existing.
+
       case Step.File_Type is
          when Ordinary_File =>
             if Exists (File_Name) then
+               Put_Debug_Line (Item => "Deleting existing " & File_Name);
                Delete_File (File_Name);
+            elsif not Exists (Parent_Dir) then
+               Put_Debug_Line (Item => "Creating missing dir " & Parent_Dir);
+               Directories.Create_Path (Parent_Dir);
+               -- Create all missing intermediate directories
             end if;
             Create_File (File_Name    => File_Name,
                          With_Content => Get_Expected (Step),
@@ -197,7 +207,7 @@ package body BBT.Tests.Actions is
                              Loc      => Step.Location);
          when Directory =>
             if not Exists (File_Name) then
-               Ada.Directories.Create_Path (File_Name);
+               Directories.Create_Path (File_Name);
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),
@@ -207,6 +217,7 @@ package body BBT.Tests.Actions is
          when others =>
             -- don't mess around with special files!
             null;
+
       end case;
    end Erase_And_Create;
 
@@ -218,11 +229,12 @@ package body BBT.Tests.Actions is
       case Step.File_Type is
          when Ordinary_File =>
             if not Exists (File_Name) then
+               Created_File_List.Add (File_Name);
+               -- should be deleted at the end only if created here
                Create_File (File_Name    => File_Name,
                             With_Content => Get_Expected (Step),
                             Executable   => Step.Executable_File);
-               Created_File_List.Add (File_Name);
-               -- should be deleted at the end only if created here
+
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
@@ -231,9 +243,9 @@ package body BBT.Tests.Actions is
                              Loc      => Step.Location);
          when Directory =>
             if not Exists (File_Name) then
-               Ada.Directories.Create_Path (File_Name);
                Created_File_List.Add (File_Name);
                -- should be deleted at the end only if created here
+               Directories.Create_Path (File_Name);
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => Dir_Exists (File_Name),

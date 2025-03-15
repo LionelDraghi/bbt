@@ -1,6 +1,6 @@
 ## Feature : GNU error messages
    
-bbt error and warning messages are prefixed with line and column number using [the GNU Standard](https://www.gnu.org/prep/standards/html_node/Errors).html),
+bbt error and warning messages are prefixed with line and column number using [the GNU Standard](https://www.gnu.org/prep/standards/html_node/Errors.html),
 That is :
 > program:sourcefile:lineno: message
 when there is an appropriate source file, or :
