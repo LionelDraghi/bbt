@@ -1,17 +1,24 @@
+<!-- omit from toc -->
 ## Feature : checking that some string is not present in output or file
 
 All "doesnt", "doesn't" and "do not" are accepted in  
 "output doesn't contain" and  
 "file `x` doesn't contain". 
 
+- [Background](#background)
+- [Scenario : Successful checks](#scenario--successful-checks)
+- [Scenario : Failed "output doesn't contain"](#scenario--failed-output-doesnt-contain)
+- [Scenario : Failed "file doesn't contain"](#scenario--failed-file-doesnt-contain)
 
-### Scenario : Successful checks
+### Background
 
 - Given file `flowers.txt`
 ```
 Rose
 Tulip
 ```
+
+### Scenario : Successful checks
 
 - When I run `./sut read flowers.txt`
 - Then output contains `Rose`
@@ -20,7 +27,7 @@ Tulip
 - Then file `flowers.txt` contains `Tulip`
 - But file `flowers.txt` do not contain `Eucalyptus`
 
-### Scenario : Failed "output doesnt contain"
+### Scenario : Failed "output doesn't contain"
 
 - Given the file `failed_doesnt_1.md`
 ```
@@ -54,18 +61,8 @@ Rose
 - Then I get an error
 - And output contains 
 ```
-*** NOK : Then file `flowers.txt` do not contain `Tulip` (failed_doesnt_2.md:3:)    
-file flowers.txt  
-~~~
-Rose    
-Tulip    
-~~~
-```
-  
-- and output contains 
-```
-contain unexpected:    
-~~~
-Tulip    
-~~~
+failed_doesnt_2.md:3: Error : flowers.txt shouldn't contain :    
+~~~  
+Tulip  
+~~~  
 ```

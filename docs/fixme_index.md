@@ -12,7 +12,6 @@ docs/features/B110_Spawn.md:9| this scenario is Unix specific, and should not be
 docs/features/B120_Output_Verbosity.md:120| missing error output for Quiet and Verbose mode
 docs/proposed_features/contains_line.md:5| not yet implemented.
 docs/UG.md:128|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
-src/bbt-created_file_list.ads:24|   --  precond should be added to avoid another long debugging session
 src/bbt-main-analyze_cmd_line.adb:128|         --     --  opt -ot / --output_tag not yet coded
 src/bbt-scenarios-step_parser.adb:131|                                                                                                   --  we currently do not check if the existing file contains
 src/bbt-settings.ads:58|   procedure Set_Result_File (File_Name : String); --  utile?

@@ -270,7 +270,6 @@ package body Text_Utilities is
                       Ignore_Blank_Lines : Boolean := True;
                       Sort_Texts         : Boolean := False;
                       Identical          : out Boolean)
-                      -- Diff_Index         : out Natural)
    is
       T1 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text1)
                     else Text1);
@@ -326,22 +325,27 @@ package body Text_Utilities is
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
                Identical          => Identical);
-               -- Diff_Index         => Diff_Index);
+      -- Diff_Index         => Diff_Index);
       return Identical;
    end Is_Equal;
 
    -- --------------------------------------------------------------------------
    function Search (Source,
-                    Pattern          : String;
-                    Case_Insensitive : Boolean := True;
-                    Ignore_Blanks    : Boolean := True) return Boolean is
+                    Pattern            : String;
+                    Case_Insensitive   : Boolean := True;
+                    Ignore_Whitespaces : Boolean := True) return Boolean is
       use Ada.Strings;
       use Ada.Strings.Fixed;
-      Src : constant String := (if Ignore_Blanks then Join_Spaces (Source)
-                                  else Source);
-      Pat : constant String := (if Ignore_Blanks then Join_Spaces (Pattern)
+      Src : constant String := (if Ignore_Whitespaces then Join_Spaces (Source)
+                                else Source);
+      Pat : constant String := (if Ignore_Whitespaces then Join_Spaces (Pattern)
                                 else Pattern);
    begin
+       --  Ada.Text_IO.Put_Line ("Source  = """ & Source  & """");
+       --  Ada.Text_IO.Put_Line ("Pattern = """ & Pattern & """");
+      if Src = "" or Pat = "" then
+         return False;
+      end if;
       return (Index (Source  => Src,
                      Pattern => Pat,
                      From    => Src'First) /= 0)
@@ -353,10 +357,10 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean := False;
                       Case_Insensitive   : Boolean := True;
-                      Ignore_Blanks      : Boolean := True;
-                      Ignore_Blank_Lines : Boolean := True) return Boolean is
+                      Ignore_Whitespaces : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True;
+                      Sort_Texts         : Boolean := False) return Boolean is
    -- After eliminating easy cases T1 = T2 and T2 is longer than T1, the
    -- comparison algorithm is :
    -- I1 and I2 (in the loop below) are the two cursor respectively
@@ -395,9 +399,10 @@ package body Text_Utilities is
                I1 := Start;
                Inner : for I2 in T2.First_Index .. T2.Last_Index loop
                   -- We look for a first match between texts.
-                  if Search (T1 (I1), T2 (I2),
-                             Case_Insensitive,
-                             Ignore_Blanks)
+                  if Search (Source             => T1 (I1),
+                             Pattern            => T2 (I2),
+                             Case_Insensitive   => Case_Insensitive,
+                             Ignore_Whitespaces => Ignore_Whitespaces)
                   then
                      -- Lines match
                      if I2 = T2.Last_Index then
@@ -422,15 +427,15 @@ package body Text_Utilities is
    end Contains;
 
    -- --------------------------------------------------------------------------
-   function Contains_Line (The_Text         : Text;
-                           The_Line         : String;
-                           Case_Insensitive : Boolean := True;
-                           Ignore_Blanks    : Boolean := True) return Boolean is
+   function Contains_Line (The_Text           : Text;
+                           The_Line           : String;
+                           Case_Insensitive   : Boolean := True;
+                           Ignore_Whitespaces : Boolean := True) return Boolean is
    begin
       for L of The_Text loop
          if Is_Equal (L, The_Line,
                       Case_Insensitive => Case_Insensitive,
-                      Ignore_Blanks    => Ignore_Blanks)
+                      Ignore_Blanks    => Ignore_Whitespaces)
          then
             return True;
          end if;
@@ -440,15 +445,15 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains_String
-     (The_Text         : Text;
-      The_String       : String;
-      Case_Insensitive : Boolean := True;
-      Ignore_Blanks    : Boolean := True) return Boolean is
+     (The_Text           : Text;
+      The_String         : String;
+      Case_Insensitive   : Boolean := True;
+      Ignore_Whitespaces : Boolean := True) return Boolean is
    begin
       for L of The_Text loop
          if Search (L, The_String,
-                    Case_Insensitive => Case_Insensitive,
-                    Ignore_Blanks    => Ignore_Blanks)
+                    Case_Insensitive      => Case_Insensitive,
+                    Ignore_Whitespaces    => Ignore_Whitespaces)
          then
             return True;
          end if;
@@ -458,15 +463,15 @@ package body Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains_Line
-     (File_Name        : String;
-      The_Line         : String;
-      Case_Insensitive : Boolean := True;
-      Ignore_Blanks    : Boolean := True) return Boolean is
+     (File_Name          : String;
+      The_Line           : String;
+      Case_Insensitive   : Boolean := True;
+      Ignore_Whitespaces : Boolean := True) return Boolean is
    begin
       return Contains_Line (Get_Text (File_Name),
                             The_Line,
-                            Case_Insensitive => Case_Insensitive,
-                            Ignore_Blanks    => Ignore_Blanks);
+                            Case_Insensitive      => Case_Insensitive,
+                            Ignore_Whitespaces    => Ignore_Whitespaces);
    end Contains_Line;
 
    -- --------------------------------------------------------------------------
@@ -474,12 +479,12 @@ package body Text_Utilities is
      (File_Name          : String;
       The_String         : String;
       Case_Insensitive   : Boolean := True;
-      Ignore_Blanks      : Boolean := True) return Boolean is
+      Ignore_Whitespaces : Boolean := True) return Boolean is
    begin
       return Contains_String (Get_Text (File_Name),
                               The_String,
-                              Case_Insensitive => Case_Insensitive,
-                              Ignore_Blanks    => Ignore_Blanks);
+                              Case_Insensitive      => Case_Insensitive,
+                              Ignore_Whitespaces    => Ignore_Whitespaces);
    end Contains_String;
 
    -- --------------------------------------------------------------------------

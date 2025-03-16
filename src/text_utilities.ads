@@ -83,10 +83,6 @@ package Text_Utilities is
                       Ignore_Blank_Lines : Boolean := True;
                       Sort_Texts         : Boolean := False;
                       Identical          : out Boolean);
-                      -- Diff_Index         : out Natural);
-   -- If Test1 = Text2, return Identical = True
-                      --  and Diff_Index = 0
-   -- Otherwise, return False and Index of the first different line in Text1
 
    -- --------------------------------------------------------------------------
    function Is_Equal (Text1, Text2     : Text;
@@ -101,32 +97,32 @@ package Text_Utilities is
 
    -- --------------------------------------------------------------------------
    function Contains (Text1, Text2       : Text;
-                      Sort_Texts         : Boolean := False;
                       Case_Insensitive   : Boolean := True;
-                      Ignore_Blanks      : Boolean := True;
-                      Ignore_Blank_Lines : Boolean := True) return Boolean;
+                      Ignore_Whitespaces : Boolean := True;
+                      Ignore_Blank_Lines : Boolean := True;
+                      Sort_Texts         : Boolean := False) return Boolean;
    -- Return True if Text1 contains Text2.
-   function Contains_Line (The_Text         : Text;
-                           The_Line         : String;
-                           Case_Insensitive : Boolean := True;
-                           Ignore_Blanks    : Boolean := True) return Boolean;
-   function Contains_String (The_Text         : Text;
-                             The_String       : String;
-                             Case_Insensitive : Boolean := True;
-                             Ignore_Blanks    : Boolean := True) return Boolean;
-   function Contains_Line (File_Name        : String;
-                           The_Line         : String;
-                           Case_Insensitive : Boolean := True;
-                           Ignore_Blanks    : Boolean := True) return Boolean;
-   function Contains_String (File_Name        : String;
-                             The_String       : String;
-                             Case_Insensitive : Boolean := True;
-                             Ignore_Blanks    : Boolean := True) return Boolean;
+   function Contains_Line (The_Text           : Text;
+                           The_Line           : String;
+                           Case_Insensitive   : Boolean := True;
+                           Ignore_Whitespaces : Boolean := True) return Boolean;
+   function Contains_String (The_Text           : Text;
+                             The_String         : String;
+                             Case_Insensitive   : Boolean := True;
+                             Ignore_Whitespaces : Boolean := True) return Boolean;
+   function Contains_Line (File_Name          : String;
+                           The_Line           : String;
+                           Case_Insensitive   : Boolean := True;
+                           Ignore_Whitespaces : Boolean := True) return Boolean;
+   function Contains_String (File_Name          : String;
+                             The_String         : String;
+                             Case_Insensitive   : Boolean := True;
+                             Ignore_Whitespaces : Boolean := True) return Boolean;
 
    -- --------------------------------------------------------------------------
    function Matches (In_Text    : Text;
                      Regexp     : String)
-                      return Boolean;
+                     return Boolean;
 
    -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;
@@ -139,7 +135,7 @@ package Text_Utilities is
    function Join_Spaces (From : String) return String;
    -- Reduce multiple consecutive blanks to a single space character
    function Is_Blank (S : String) return Boolean is
-      (Ada.Strings.Fixed.Index_Non_Blank (S) = 0);
+     (Ada.Strings.Fixed.Index_Non_Blank (S) = 0);
 
    use Texts;
    package Text_Cursors is new List_Image.Cursors_Signature

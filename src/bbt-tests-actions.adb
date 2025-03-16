@@ -408,11 +408,12 @@ package body BBT.Tests.Actions is
    begin
       Put_Debug_Line ("Output_Contains ");
       Put_Step_Result (Step     => Step,
-                       Success  => Contains (Output, T2,
-                         Case_Insensitive   => Settings.Ignore_Casing,
-                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
-                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                         Sort_Texts         => Step.Ignore_Order),
+                       Success  => Contains
+                         (Output, T2,
+                          Case_Insensitive   => Settings.Ignore_Casing,
+                          Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                          Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not contain expected:  " &
                          Code_Fenced_Image (T2),
@@ -426,11 +427,12 @@ package body BBT.Tests.Actions is
    begin
       Put_Debug_Line ("Output_Does_Not_Contain ");
       Put_Step_Result (Step     => Step,
-                       Success  => not Contains (Output, T2,
-                         Case_Insensitive   => Settings.Ignore_Casing,
-                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
-                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                         Sort_Texts         => Step.Ignore_Order),
+                       Success  => not Contains
+                         (Output, T2,
+                          Case_Insensitive   => Settings.Ignore_Casing,
+                          Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                          Sort_Texts         => Step.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "contains unexpected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
@@ -475,8 +477,8 @@ package body BBT.Tests.Actions is
                          Ignore_Blanks      => Settings.Ignore_Whitespaces,
                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
                          Sort_Texts         => Step.Ignore_Order),
-                       Fail_Msg =>  Code_Fenced_Image (T1) &
-                         "not equal to expected:  " & Code_Fenced_Image (T2),
+                       Fail_Msg =>  File_Name &
+                         " not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Files_Is;
 
@@ -489,9 +491,12 @@ package body BBT.Tests.Actions is
       Put_Debug_Line ("Files_Is_Not " & File_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not Is_Equal (T1, T2,
-                         Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "file is equal to expected " &
-                         Code_Fenced_Image (T1),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
+                       Fail_Msg => File_Name & " expected to be different from " &
+                         Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end Files_Is_Not;
 
@@ -501,14 +506,19 @@ package body BBT.Tests.Actions is
       T1        : constant Text   := Get_Text (File_Name);
       T2        : constant Text   := Get_Expected (Step);
    begin
-      Put_Debug_Line ("File_Contains " & File_Name);
+      Put_Debug_Line ("File_Contains " & File_Name &
+                        " T1 = " & T1'Image &
+                        " T2 = " & T2'Image);
       Put_Step_Result (Step     => Step,
-                       Success  => Contains (T1, T2,
-                         Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "file " & To_String (Step.Subject_String) &
+                       Success  =>
+                         Contains (T1, T2,
+                           Case_Insensitive   => Settings.Ignore_Casing,
+                           Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                           Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                           Sort_Texts         => Step.Ignore_Order),
+                       Fail_Msg => File_Name &
                          " does not contain expected:  " &
-                         Code_Fenced_Image (T2) &
-                         "but: " & Code_Fenced_Image (T1),
+                         Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end File_Contains;
 
@@ -521,10 +531,12 @@ package body BBT.Tests.Actions is
       Put_Debug_Line ("File_Does_Not_Contain " & File_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not Contains (T1, T2,
-                         Sort_Texts => Step.Ignore_Order),
-                       Fail_Msg => "file " & To_String (Step.Subject_String) &
-                         Code_Fenced_Image (T1) &
-                         "contain unexpected:  " & Code_Fenced_Image (T2),
+                         Case_Insensitive   => Settings.Ignore_Casing,
+                         Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                         Sort_Texts         => Step.Ignore_Order),
+                       Fail_Msg => File_Name &
+                         " shouldn't contain :  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
    end File_Does_Not_Contain;
 

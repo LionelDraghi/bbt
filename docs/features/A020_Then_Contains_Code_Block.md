@@ -1,6 +1,10 @@
+<!-- omit from toc -->
 ## Feature : "contains" a string feature
 
 No surprise, `contains` is the to keyword to use when checking that the output or a file contain a sequence of line.
+
+- [Scenario: test the standard output](#scenario-test-the-standard-output)
+- [Scenario : compare with an existing file](#scenario--compare-with-an-existing-file)
 
 ### Scenario: test the standard output
 
@@ -61,19 +65,11 @@ autosave=true
 - Then I get an error
 - And output should contain  
 ```
-file config.ini does not contain expected
+contains_multiline.md:3: Error : config.ini does not contain expected:    
 ~~~
 mode=silent    
 lang=uk    
 recurse=true    
 autosave=true    
-~~~
-  
-but:   
-~~~
-mode=silent    
-lang=fr      
-recurse=true     
-autosave=true 
 ~~~
 ```
