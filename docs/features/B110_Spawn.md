@@ -17,8 +17,7 @@ This scenario fails on Windows.
 
 ### Scenario : Command with quoted arguments
 
-bbt is using quotes for joining arguments as the shell, but the quotes should not be
-passed to the executed program.  
+bbt is using quotes for joining arguments as the shell, but the quotes should not be passed to the executed program.  
 ([Issue #11](https://github.com/LionelDraghi/bbt/issues/11))
 
 - Given the new file `tmp.txt`

@@ -38,7 +38,7 @@ When a command fails, bbt make it clear to the user if it was a spawn fail, that
 ### scenario: the command is not executable
 
 Fixme: this scenario fail on Windows : on Windows, Spawn return Success 
-even if the file was not executable.
+even if the file is not executable.
 
 - Given the `lambda_file` containing `nothing`
 - Given the `cmd_not_exe.md` file 

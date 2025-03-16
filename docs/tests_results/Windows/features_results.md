@@ -63,7 +63,7 @@ bbt rules!
   ### Feature: checking that some string is not present in output or file  
   - [X] scenario [Successful checks](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
-  - [X] scenario [Failed "output doesnt contain"](..\..\features\A030_Then_Does_Not_Contain.md) pass  
+  - [X] scenario [Failed "output doesn't contain"](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
   - [X] scenario [Failed "file doesn't contain"](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
@@ -153,7 +153,14 @@ bbt rules!
   - [X] scenario [only first background should apply](..\..\features\A150_Background_Keyword.md) pass  
 
 ## [A160_Ignoring_Blank_Lines.md](..\..\features\A160_Ignoring_Blank_Lines.md)  
-  - [X] scenario [Comparing ignoring blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+  ### Feature: Ignoring blank lines  
+  - [X] scenario [some obvious tests](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
+  - [X] scenario [default behavior, non sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
+  - [X] scenario [with --exact_match, sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
+  - [X] scenario [with --exact_match and --ignore_blank_lines, non sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
 
 ## [A170_File_vs_File_Name.md](..\..\features\A170_File_vs_File_Name.md)  
   ### Feature: expected content in a file  
@@ -381,7 +388,7 @@ dir1/dir2/scen5.md
 | Status     | Count |
 |------------|-------|
 | Failed     | 6     |
-| Successful | 100   |
+| Successful | 103   |
 | Empty      | 0     |
 | Skipped    | 0     |
 
