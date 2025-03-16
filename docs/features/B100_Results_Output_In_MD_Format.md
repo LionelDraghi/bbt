@@ -8,7 +8,7 @@ Each step is a prefixed by OK or NOK.
 
 For each scenario, there is a summary line, with a bullet list item, using the [GFM Task list items extension](https://github.github.com/gfm/#task-list-items-extension-). If the test pass, the box is checked `[X]`, empty otherwise `[ ]`.    
 
-In error messages, outputs are put in code blocks to be easily identified (Refer to Issue #9).
+In error messages, outputs are put in code blocks to be easily identified (Refer to [Issue #9](https://github.com/LionelDraghi/bbt/issues/9)).
 
 ## Background:
 
