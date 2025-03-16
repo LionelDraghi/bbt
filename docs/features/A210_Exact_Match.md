@@ -6,7 +6,7 @@ This is what we call "Human match".
 This behavior is usually handy, but prevent testing apps that precisely transform the casing or more generally the text presentation.
 To allow those kind of tests, there is a command line option that completely switch the default behavior, `--exact_match`.
 
-It is possible to amend `--exact_match` with one of `--ignore_casing`, `--ignore_whitespaces` and `--ignore_blank_lines`.
+It is possible to amend `--exact_match` with one or more of `--ignore_casing`, `--ignore_whitespaces` and `--ignore_blank_lines`.
 Each of those option returns to one of the default behavior.
 
 This test scenario is organized around :

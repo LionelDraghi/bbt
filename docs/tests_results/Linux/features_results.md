@@ -123,6 +123,8 @@
 
 ## [A160_Ignoring_Blank_Lines.md](../../features/A160_Ignoring_Blank_Lines.md)  
   ### Feature: Ignoring blank lines  
+  - [X] scenario [some obvious tests](../../features/A160_Ignoring_Blank_Lines.md) pass  
+
   - [X] scenario [default behavior, non sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md) pass  
 
   - [X] scenario [with --exact_match, sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md) pass  
@@ -301,6 +303,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 108   |
+| Successful | 109   |
 | Empty      | 0     |
 

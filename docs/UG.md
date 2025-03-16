@@ -137,7 +137,8 @@ bbt is designed for humans, and is not going to trap users with blank line, whit
 - keywords are case insensitive, `- When` or `- when`, it's as you want.
 - blank lines and casing are ignored when comparing actual with expected output. I suppose that if you expect `version 1.0` and the actual output is `Version 1.0` the test is OK.
 
-This is not always the expected behavior, you may want to check the exact output. Use then the `--exact_match` option on the command line.
+This is not always the expected behavior, you may want to check the exact output. Use then the `--exact_match` option on the command line.  
+Actually, there is more options to control individually casing, whitespaces and blank lines, refer to the [feature file](features/A210_Exact_Match.md) for more details.
 
 The implementation of an explicit mention in the scenario is still in the TDL, not yet implemented.  
 
