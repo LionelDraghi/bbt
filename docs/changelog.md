@@ -6,11 +6,11 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- [Latest] - 2025-??-??
+- **[Latest] - 2025-??-??**
   - [Fixed]   --cleanup now correctly removes directories tree (fixes #3)
   - [Added]   Processing of Asciidoc input (.adoc files) added
 
-- [0.1.0] - 2025-03-03
+- **[0.1.0] - 2025-03-03**
   - [changed] option and command on command line now accept both '_' and '-' separator (you can use both `--keep_going` and `--keep-going`)
   - [Added]   *Human match* versus *Exact match* concept added, with `-em`, `-ic`, `-iw` and `-ibl` options
   - [Added]   keyword `executable` added to create scripts
@@ -31,7 +31,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   Fixes #7 
   - [Added]   "not equal to file" form added
 
-- [0.0.6] - 2024-14-12
+- **[0.0.6] - 2024-14-12**
   - [Fixed]   Ambiguity in all steps with a `string` object : if there is the `file` keyword in the object
               part of the step, then the expected output is in the file, otherwise, it's the string.
   - [Fixed]   `explain` output is now readable!
@@ -49,11 +49,11 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Changed] Files are now processed in alphabetic order, and displayed accordingly by --list_file
   - [Changed] Big Features renaming and reorg
 
-- [0.0.5] - 2024-10-17
+- **[0.0.5] - 2024-10-17**
   - [Removed] `-pg` compilation option that prevented Alire integration. 
   - `bbt` version 0.0.5 is in Alire. First public announce on Reddit and ada-lang.io!
   
-- [0.0.4] - 2024-07-17
+- **[0.0.4] - 2024-07-17**
   - [Changed] bbt now return an error status when one of the test fails
   - [Added]   first `--cleanup` implementation, that removes files created during the test by bbt
   - [Added]   in scenarios, `dir` is now a synonym of `directory`
@@ -64,17 +64,17 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   `--yes` option to avoid interactive prompting
   - [Removed] due to the new `--yes` option, `--auto_delete` is removed
   
-- [0.0.3] - 2024-06-30
+- **[0.0.3] - 2024-06-30**
   - [Added] text file creation
 
-- [0.0.2] - 2024-06-04 
+- **[0.0.2] - 2024-06-04** 
   - [Added] automatically delete files and directories if needed in "Given" steps
     
-- [0.0.1] - 2024-05-13
+- **[0.0.1] - 2024-05-13**
   - [Added] `background` feature
   - [Added] bbt `directory` keyword and related creation/check operations
 
-- [0.0.0] - 2024-05-04
+- **[0.0.0] - 2024-05-04**
   - Initial release  
     A basic set of keywords operational, 11 tests OK, but not yet tested on my real test cases (acc and smk). 
 
