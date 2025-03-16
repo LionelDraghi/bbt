@@ -1,5 +1,5 @@
-Issue references in current version
------------------------------------
+Reference to issues in current version
+--------------------------------------
 
 Location | Text
 ---------|-----
