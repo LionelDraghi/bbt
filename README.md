@@ -9,6 +9,10 @@
   - [Partial parsing](#partial-parsing)
   - [Step arguments](#step-arguments)
   - [One more example](#one-more-example)
+- [Installation](#installation)
+  - [Stable version](#stable-version)
+  - [Latest version](#latest-version)
+- [First use](#first-use)
 - [Why should I use bbt?](#why-should-i-use-bbt)
   - [Write once](#write-once)
   - [Write a real documentation, not just a ".feature" Gherkin file](#write-a-real-documentation-not-just-a-feature-gherkin-file)
@@ -16,7 +20,6 @@
   - [No-fuss no-wait run](#no-fuss-no-wait-run)
   - [Ready to publish output](#ready-to-publish-output)
 - [Status of the project](#status-of-the-project)
-- [Installation](#installation)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
 
@@ -105,25 +108,32 @@ It's not only to nicely highlight inputs in the doc, but also because otherwise 
 
 ## Installation
 
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available thanks to the Alire package manager.  
-1. To install Alire on your platform, refer to [Alire](https://alire.ada.dev/)  
+### Stable version
+
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available on Windows, Linux and Darwin thanks to the Alire package manager:
+
+1. Go to [Alire home](https://alire.ada.dev/) for a “one click” install.  
    
-2. Then to install bbt:
-   ```sh
-   alr get bbt  
-   cd bbt  
-   alr build  
-   ```
+2. Run :
+   > alr install bbt
 
-3. Move the bbt exec somewhere in your PATH
+   The exe will be moved in ~/.alire/bin on Linux and Darwin, or in xxxx on Windows.  
+   Alternatively, you may choose another installation directory with:
+   > alr install --prefix=/path/to/installation bbt  
 
-Or, to get the latest version:
+   If needed, ensure that the installation directory is in your PATH.
+
+### Latest version
+
+For Linux user, an AppImage of the latest version is available [here](https://github.com/LionelDraghi/bbt/releases).  
+(Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
+
+Or, to build the latest version on Windows, Darwin or Linux:
 ```sh
 git clone https://github.com/LionelDraghi/bbt  
 cd bbt  
 alr build 
 ```
-(if you don't want to install `alr`, just run `gprbuild` instead of `alr build`) 
 
 ## First use
 
@@ -196,7 +206,7 @@ Other people are using it too.
 btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
 On Windows, some tests fail because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
 bbt syntax is not yet able to specify per platform expected results, so this is not going to be fixed quickly.  
-On MacOS, it may be usefull to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
+On MacOS, it may be useful to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
 
 That said, I'm not aware of any Windows or MacOS specific bug.
 
