@@ -21,8 +21,6 @@ jobs:
          # Install and setup Alire package manager
        - name: Setup Alire
          uses: alire-project/setup-alire@v2
-         with:
-          version: 2.1.0 # Remove this option to use the default (latest stable release)
 
        - name: Update apt
          run: sudo apt-get update
