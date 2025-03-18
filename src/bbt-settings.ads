@@ -13,20 +13,25 @@ private package BBT.Settings is
 
    BBT_Version : constant String := Bbt_Config.Crate_Version;
 
+   type Command is (Run,
+                    List,
+                    Explain,
+                    List_Settings,
+                    List_Topics,
+                    List_Keywords,
+                    List_Grammar,
+                    Create_Template,
+                    Help,
+                    None);
+
    -- --------------------------------------------------------------------------
-   Explain            : Boolean := False;
+   -- Explain            : Boolean := False;
    Keep_Going         : Boolean := False; -- if set, do not exit on assertion failure
    Ignore_Errors      : Boolean := False; -- if set, return no error code when a test fails
    Warnings_As_Errors : Boolean := False;
    No_File_Given      : Boolean := True;
    Recursive          : Boolean := False;
-   Help_Needed        : Boolean := False;
    List_Files         : Boolean := False;
-   Create_Template    : Boolean := False;
-   List_Settings      : Boolean := False;
-   List_Topics        : Boolean := False;
-   List_Keywords      : Boolean := False;
-   List_Grammar       : Boolean := False;
    Yes                : Boolean := False;
    Cleanup            : Boolean := False;
    Strict_Gherkin     : Boolean := False;
@@ -35,6 +40,8 @@ private package BBT.Settings is
    Ignore_Whitespaces : Boolean := True;
    Ignore_Casing      : Boolean := True;
    Ignore_Blank_Lines : Boolean := True;
+   Current_Command    : Command := None;
+
 
    Template_Name      : constant String := "bbt_template.md";
 

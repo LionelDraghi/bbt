@@ -41,6 +41,36 @@ procedure BBT.Main is
    procedure Analyze_Cmd_Line is separate;
    -- Cmd line options are then available in the Settings package.
 
+   -- --------------------------------------------------------------------------
+   procedure Analyze_Document is
+   begin
+      if Scenarios.Files.No_Document_Found then
+         -- No file given on cmd line, and no bbt file found
+         IO.Put_Error ("No scenario file found", IO.No_Location);
+
+      else
+         -- HERE we hare in the normal execution flow
+         Status_Bar.Put_Activity ("Loading files");
+
+         for File of Scenarios.Files.Document_List loop
+            Scenarios.Files.Analyze_Document (File);
+            exit when IO.Some_Error and not Settings.Keep_Going;
+         end loop;
+      end if;
+   end Analyze_Document;
+
+   -- --------------------------------------------------------------------------
+   procedure Build_Postprocess is
+   begin
+      if not IO.Some_Error or Settings.Keep_Going then
+         -- If there is some error during the file analysis, we don't go further
+         -- except if the Keep_Going option is set.
+         Tests.Builder.Duplicate_Multiple_Run;
+         -- Process in all recorded scenario the
+         -- duplication of the "run X or Y" steps.
+      end if;
+   end Build_Postprocess;
+
 begin
    -- --------------------------------------------------------------------------
    MDG_Reader.Initialize;
@@ -71,11 +101,6 @@ begin
       return;
    end if;
 
-   if Settings.Help_Needed then
-      Put_Help;
-      return;
-   end if;
-
    --  if Settings.No_File_Given then
    --     Scenarios.Files.Find_BBT_Files (Settings.Recursive);
    --  end if;
@@ -93,79 +118,64 @@ begin
       return;
    end if;
 
-   if Settings.Create_Template then
-      Status_Bar.Put_Activity ("Creating template");
-      Create_Template;
-      return;
-   end if;
+   case Settings.Current_Command is
 
-   if Settings.List_Topics then
+   when Settings.List_Topics =>
       Status_Bar.Put_Activity ("Listing topics");
       Put_Topics;
-      return;
-   end if;
 
-   if Settings.List_Settings then
+   when Settings.List_Settings =>
       Status_Bar.Put_Activity ("Listing settings");
       Put_Settings;
-      return;
-   end if;
 
-   if Settings.List_Keywords then
+   when Settings.List_Keywords =>
       Status_Bar.Put_Activity ("Listing keywords");
       Scenarios.Step_Parser.Put_Keywords;
       return;
-   end if;
 
-   if Settings.List_Grammar then
+   when Settings.List_Grammar =>
       Status_Bar.Put_Activity ("Listing grammar");
       BBT.Scenarios.Step_Parser.Put_Grammar;
-      return;
-   end if;
 
-   if Scenarios.Files.No_Document_Found then
-      -- No file given on cmd line, and no bbt file found
-      IO.Put_Error ("No scenario file found", IO.No_Location);
+   when Settings.Explain =>
+      Analyze_Document;
+      Build_Postprocess;
+      -- Dry run --
+      -- Let's display our rebuild of the original test definition file
+      -- comment lines are filtered out
+      Status_Bar.Put_Activity ("Display loaded scenarios");
+      Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
-   else
-      -- HERE we hare in the normal execution flow
-      Status_Bar.Put_Activity ("Loading files");
+   when Settings.List =>
+      Analyze_Document;
+      Build_Postprocess;
+      Status_Bar.Put_Activity ("****List TBD");
 
-      for File of Scenarios.Files.Document_List loop
-         Scenarios.Files.Analyze_Document (File);
-         exit when IO.Some_Error and not Settings.Keep_Going;
-      end loop;
+   when Settings.Run | Settings.None =>
+      -- Run is the default command, so None => Run
+      Analyze_Document;
+      Build_Postprocess;
 
-      if not IO.Some_Error or Settings.Keep_Going then
-      -- If there is some error during the file analysis, we don't go further
-      -- except if the Keep_Going option is set.
-         Tests.Builder.Duplicate_Multiple_Run;
-         -- Process in all recorded scenario the
-         -- duplication of the "run X or Y" steps.
-
-         if Settings.Explain then
-            -- Dry run --
-            -- Let's display our rebuild of the original test definition file
-            -- comment lines are filtered out
-            Status_Bar.Put_Activity ("Display loaded scenarios");
-            Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
-
-         else
-            if IO.No_Error or Settings.Keep_Going then
-               -- Real run --
-               Status_Bar.Put_Activity ("Running scenarios");
-               Tests.Runner.Run_All;
-            end if;
-            Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);
-            Writers.Put_Overall_Results (Overall_Results);
-
-            if Settings.Generate_Badge then
-               Tests.Results.Generate_Badge;
-            end if;
-
-         end if;
+      if IO.No_Error or Settings.Keep_Going then
+         -- Real run --
+         Status_Bar.Put_Activity ("Running scenarios");
+         Tests.Runner.Run_All;
       end if;
-   end if;
+      Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);
+      Writers.Put_Overall_Results (Overall_Results);
+
+      if Settings.Generate_Badge then
+         Tests.Results.Generate_Badge;
+      end if;
+
+   when Settings.Create_Template =>
+      Status_Bar.Put_Activity ("Creating template");
+      Create_Template;
+
+   when Settings.Help =>
+      Put_Help;
+
+   end case;
 
    -- --------------------------------------------------------------------
    -- "run" is the default action, so they shouldn't be any other action

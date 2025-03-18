@@ -26,6 +26,11 @@ procedure Analyze_Cmd_Line is
       Arg_Counter := Arg_Counter + 1;
    end Next_Arg;
 
+   -- --------------------------------------------------------------------------
+   function Last_Arg return Boolean is
+     (Arg_Counter = Ada.Command_Line.Argument_Count);
+
+   -- --------------------------------------------------------------------------
    function Dash_To_Underscore (S : String) return String is
    -- Transform option like "--list-file" in "--list_file"
       Tmp : String (S'Range);
@@ -47,6 +52,18 @@ procedure Analyze_Cmd_Line is
       return Tmp;
    end Dash_To_Underscore;
 
+   -- --------------------------------------------------------------------------
+   procedure Set_Cmd (C : Settings.Command) is
+      use Settings;
+   begin
+      if Current_Command = None then
+         Current_Command := C;
+      else
+         IO.Put_Error ("Cannot have both " & Current_Command'Image
+                       & " and " & C'Image & " on command line");
+      end if;
+   end Set_Cmd;
+
    use Ada.Directories;
 
 begin
@@ -56,7 +73,10 @@ begin
    -- (https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
 
    if Ada.Command_Line.Argument_Count = 0 then
-      Settings.Help_Needed := True;
+      Set_Cmd (Settings.Help);
+      -- If bbt is called without parameter, Help is the default command.
+      -- But if the command line is populated, and no command given,
+      -- then the default command is Run.
       return;
    end if;
 
@@ -76,28 +96,33 @@ begin
          -- Commands -----------------------------------------------------------
          -- Note that after v0.0.6, commands starting with '-' are deprecated
          if  Cmd in "-h" | "--help" | "he" | "help" then
-            Settings.Help_Needed := True;
+            Set_Cmd (Help);
             return;
 
          elsif Cmd in "-e" | "--explain" | "ex" | "explain" then
-            Settings.Explain := True;
+            Set_Cmd (Explain);
 
          elsif Cmd in "-lf" | "--list_files" | "lf" | "list_files" then
             Settings.List_Files := True;
 
          elsif Cmd in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
-            Settings.List_Keywords := True;
+            Set_Cmd (List_Keywords);
 
          elsif Cmd in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
-            Settings.List_Grammar := True;
+            Set_Cmd (List_Grammar);
 
-         elsif Cmd in "-ct" | "--create_template" | "ct" | "create_template" then
-            Settings.Create_Template := True;
+         elsif Cmd in "-ct" | "--create_template" | "ct" | "create_template"
+         then
+            Set_Cmd (Create_Template);
 
             -- Options ---------------------------------------------------------
          elsif Cmd = "-o" or Cmd = "--output" then
-            Next_Arg;
-            Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
+            if Last_Arg then
+               IO.Put_Error ("-o must be followed by a file name");
+            else
+               Next_Arg;
+               Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
+            end if;
 
             declare
                Writer_Found : Boolean := False;
@@ -147,12 +172,20 @@ begin
             Settings.Ignore_Blank_Lines := False;
 
          elsif Cmd = "-ed" or Cmd = "--exec_dir" then
-            Next_Arg;
-            Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
+            if Last_Arg then
+               IO.Put_Error ("-ed must be followed by a file name");
+            else
+               Next_Arg;
+               Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
+            end if;
 
          elsif Cmd = "-td" or Cmd = "--tmp_dir" then
-            Next_Arg;
-            Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
+            if Last_Arg then
+               IO.Put_Error ("-td must be followed by a file name");
+            else
+               Next_Arg;
+               Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
+            end if;
 
          elsif Cmd = "-r" or Cmd = "--recursive" then
             Settings.Recursive := True;
@@ -173,21 +206,30 @@ begin
             Set_Verbosity  (Quiet);
 
          elsif Cmd = "-d" then
-            -- undocumented option
-            Next_Arg;
-            if Topics'Valid_Value (Ada.Command_Line.Argument (Arg_Counter)) then
-               -- -d is followed by the topic to watch
-               Enable_Topic
-                 (Topic =>  Topics'Value (Ada.Command_Line.Argument (Arg_Counter)));
+            -- Undocumented option ---------------------------------------------
+            if Last_Arg then
+               IO.Put_Error ("-d may be followed by ");
+               for T in Topics loop
+                  IO.Put_Line (T'Image);
+               end loop;
             else
-               -- there is only -d
-               Set_Verbosity  (Debug);
-               Arg_Counter := @ - 1;
+               Next_Arg;
+               if Topics'Valid_Value (Ada.Command_Line.Argument (Arg_Counter))
+               then
+                  -- -d is followed by the topic to watch
+                  Enable_Topic
+                    (Topic => Topics'Value
+                       (Ada.Command_Line.Argument (Arg_Counter)));
+               else
+                  -- there is only -d
+                  Set_Verbosity  (Debug);
+                  Arg_Counter := @ - 1;
+               end if;
             end if;
 
          elsif Cmd = "-ls" then
             -- undocumented option, list settings
-            Settings.List_Settings := True;
+            Set_Cmd (List_Settings);
 
          elsif Cmd = "--strict" then
             Settings.Strict_Gherkin := True;
@@ -196,9 +238,14 @@ begin
             Settings.Status_Bar := True;
 
          elsif Cmd = "-gb" or Cmd = "--generate_badge" then
-            Settings.Generate_Badge := True;
-            Next_Arg;
-            Settings.Set_Badge_File_Name (Ada.Command_Line.Argument (Arg_Counter));
+            if Last_Arg then
+               IO.Put_Error ("-gb must be followed by a file name");
+            else
+               Next_Arg;
+               Settings.Generate_Badge := True;
+               Settings.Set_Badge_File_Name
+                 (Ada.Command_Line.Argument (Arg_Counter));
+            end if;
 
          elsif Ada.Directories.Exists (File) then
             -- if it's not an option, its a file name

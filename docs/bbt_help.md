@@ -6,6 +6,8 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 If no file name provided, read *.md (recursively if "-r")
 
 Commands:
+   run                   : the default command
+   list                  : list selected items
    lf  | list_files      : list Scenario files found
    lk  | list_keywords   : list Step keywords
    lg  | list_grammar    : list rules for Step analysis

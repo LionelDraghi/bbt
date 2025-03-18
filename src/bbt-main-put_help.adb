@@ -18,7 +18,8 @@ begin
    Put_Line ("If no file name provided, read *.md (recursively if ""-r"")");
    New_Line;
    Put_Line ("Commands:");
-   -- Put_Line ("   run                   : the default command");
+   Put_Line ("   run                   : the default command");
+   Put_Line ("   list                  : list selected items");
    Put_Line ("   lf  | list_files      : list Scenario files found");
    Put_Line ("   lk  | list_keywords   : list Step keywords");
    Put_Line ("   lg  | list_grammar    : list rules for Step analysis");

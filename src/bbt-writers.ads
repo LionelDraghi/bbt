@@ -50,7 +50,6 @@ private package BBT.Writers is
                               Loc      : BBT.IO.Location_Type);
    procedure Put_Overall_Results (Results : BBT.Tests.Results.Test_Results_Count);
 
-
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
    procedure Put_Document_List (Doc_List : Documents.Documents_Lists.Vector);

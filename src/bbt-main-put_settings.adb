@@ -24,6 +24,7 @@ begin
    Put_Line ("Settings / Command line analysis:");
    Put_Line ("---------------------------------");
    New_Line;
+   Put_Line ("   Command               : " & Current_Command'Image);
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
    Put_Line ("   bbt files             : " & One_Line_Image (Document_List));
    Put_Line ("   Initial directory     : " & Launch_Directory);
@@ -33,7 +34,6 @@ begin
    Put_Line ("   Result file           : " & Result_File_Name);
    Put_Line ("   Template_Name         : " & Template_Name);
    New_Line;
-   Put_Line ("   " & Checkbox (Explain) & " Explain");
    Put_Line ("   " & Checkbox (Keep_Going) & " Keep_Going");
    Put_Line ("   " & Checkbox (Ignore_Errors) & " Ignore_Errors");
    Put_Line ("   " & Checkbox (Warnings_As_Errors) & " Warnings_As_Errors");
@@ -42,13 +42,7 @@ begin
    Put_Line ("   " & Checkbox (Ignore_Whitespaces) & " Ignore_Whitespaces");
    Put_Line ("   " & Checkbox (Ignore_Casing) & " Ignore_Casing");
    Put_Line ("   " & Checkbox (Ignore_Blank_Lines) & " Ignore_Blank_Lines");
-   Put_Line ("   " & Checkbox (Help_Needed) & " Help_Needed");
    Put_Line ("   " & Checkbox (List_Files) & " List_Files");
-   Put_Line ("   " & Checkbox (Create_Template) & " Create_Template");
-   Put_Line ("   " & Checkbox (List_Settings) & " List_Settings");
-   Put_Line ("   " & Checkbox (List_Topics) & " List_Topics");
-   Put_Line ("   " & Checkbox (List_Keywords) & " List_Keywords");
-   Put_Line ("   " & Checkbox (List_Grammar) & " List_Grammar");
    Put_Line ("   " & Checkbox (Yes) & " Yes");
    Put_Line ("   " & Checkbox (Settings.Cleanup) & " Cleanup");
    Put_Line ("   " & Checkbox (Settings.Strict_Gherkin) & " Strict_Gherkin");

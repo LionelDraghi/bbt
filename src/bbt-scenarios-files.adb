@@ -167,7 +167,8 @@ package body BBT.Scenarios.Files is
             Name => File_Name);
 
       Tests.Builder.Add_Document (File_Name);
-      -- The doc name is not in the file content
+      -- The doc name is the file name, it is not in the file content
+      -- so we have to pass it.
 
       while not End_Of_File (Input) loop
          Loc := Location (Input);

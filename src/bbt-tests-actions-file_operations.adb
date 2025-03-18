@@ -46,7 +46,6 @@ package body BBT.Tests.Actions.File_Operations is
    function Kind (Name : String) return File_Kind
                   renames Ada.Directories.Kind;
 
-
    -- --------------------------------------------------------------------------
    procedure Delete_File (Name : String) is
    begin
