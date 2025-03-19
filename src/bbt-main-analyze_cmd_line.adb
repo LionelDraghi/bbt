@@ -9,7 +9,6 @@ with BBT.IO;                use BBT.IO;
 with BBT.Settings;
 with BBT.Scenarios.Readers; use BBT.Scenarios.Readers;
 
-with Ada.Command_Line;
 with Ada.Directories;
 with Ada.Text_IO;
 
@@ -17,18 +16,21 @@ separate (BBT.Main)
 
 procedure Analyze_Cmd_Line is
 
-   -- --------------------------------------------------------------------------
-   Arg_Counter : Positive := 1;
+  -- --------------------------------------------------------------------------
+   package Arg is
 
-   -- --------------------------------------------------------------------------
-   procedure Next_Arg is
-   begin
-      Arg_Counter := Arg_Counter + 1;
-   end Next_Arg;
+      procedure Go_Next;
+      procedure Go_Back;
+      function Last return Boolean;
+      function Current return String;
+      function More_Arg return Boolean;
 
-   -- --------------------------------------------------------------------------
-   function Last_Arg return Boolean is
-     (Arg_Counter = Ada.Command_Line.Argument_Count);
+   private
+      Arg_Counter : Natural := 1;
+
+   end Arg;
+
+   package body Arg is separate;
 
    -- --------------------------------------------------------------------------
    function Dash_To_Underscore (S : String) return String is
@@ -80,16 +82,14 @@ begin
       return;
    end if;
 
-   Opt_Analysis_Loop : while Arg_Counter <= Ada.Command_Line.Argument_Count loop
+   Opt_Analysis_Loop : while Arg.More_Arg loop
 
       declare
          -- arg are either a command or option, in which case we neutralize the
          -- '-' character to have --list_item = --list-item
          -- or a file name, in which case it remain
-         File : constant String
-           := Ada.Command_Line.Argument (Arg_Counter);
-         Cmd  : constant String
-           := Dash_To_Underscore (Ada.Command_Line.Argument (Arg_Counter));
+         File : constant String := Arg.Current;
+         Cmd  : constant String := Dash_To_Underscore (Arg.Current);
          use Settings;
 
       begin
@@ -117,11 +117,11 @@ begin
 
             -- Options ---------------------------------------------------------
          elsif Cmd = "-o" or Cmd = "--output" then
-            if Last_Arg then
+            if Arg.Last then
                IO.Put_Error ("-o must be followed by a file name");
             else
-               Next_Arg;
-               Settings.Set_Result_File (Ada.Command_Line.Argument (Arg_Counter));
+               Arg.Go_Next;
+               Settings.Set_Result_File (Arg.Current);
             end if;
 
             declare
@@ -172,19 +172,19 @@ begin
             Settings.Ignore_Blank_Lines := False;
 
          elsif Cmd = "-ed" or Cmd = "--exec_dir" then
-            if Last_Arg then
+            if Arg.Last then
                IO.Put_Error ("-ed must be followed by a file name");
             else
-               Next_Arg;
-               Settings.Set_Exec_Dir (Ada.Command_Line.Argument (Arg_Counter));
+               Arg.Go_Next;
+               Settings.Set_Exec_Dir (Arg.Current);
             end if;
 
          elsif Cmd = "-td" or Cmd = "--tmp_dir" then
-            if Last_Arg then
+            if Arg.Last then
                IO.Put_Error ("-td must be followed by a file name");
             else
-               Next_Arg;
-               Settings.Set_Tmp_Dir (Ada.Command_Line.Argument (Arg_Counter));
+               Arg.Go_Next;
+               Settings.Set_Tmp_Dir (Arg.Current);
             end if;
 
          elsif Cmd = "-r" or Cmd = "--recursive" then
@@ -207,23 +207,23 @@ begin
 
          elsif Cmd = "-d" then
             -- Undocumented option ---------------------------------------------
-            if Last_Arg then
+            if Arg.Last then
                IO.Put_Error ("-d may be followed by ");
                for T in Topics loop
                   IO.Put_Line (T'Image);
                end loop;
             else
-               Next_Arg;
-               if Topics'Valid_Value (Ada.Command_Line.Argument (Arg_Counter))
+               Arg.Go_Next;
+               if Topics'Valid_Value (Arg.Current)
                then
                   -- -d is followed by the topic to watch
                   Enable_Topic
                     (Topic => Topics'Value
-                       (Ada.Command_Line.Argument (Arg_Counter)));
+                       (Arg.Current));
                else
                   -- there is only -d
                   Set_Verbosity  (Debug);
-                  Arg_Counter := @ - 1;
+                  Arg.Go_Back;
                end if;
             end if;
 
@@ -238,13 +238,12 @@ begin
             Settings.Status_Bar := True;
 
          elsif Cmd = "-gb" or Cmd = "--generate_badge" then
-            if Last_Arg then
+            if Arg.Last then
                IO.Put_Error ("-gb must be followed by a file name");
             else
-               Next_Arg;
+               Arg.Go_Next;
                Settings.Generate_Badge := True;
-               Settings.Set_Badge_File_Name
-                 (Ada.Command_Line.Argument (Arg_Counter));
+               Settings.Set_Badge_File_Name (Arg.Current);
             end if;
 
          elsif Ada.Directories.Exists (File) then
@@ -279,7 +278,7 @@ begin
          -- Options_Coherency_Tests.
       end;
 
-      Next_Arg;
+      Arg.Go_Next;
 
    end loop Opt_Analysis_Loop;
 
