@@ -107,6 +107,8 @@ private package BBT.Documents is
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;
+      Filtered         : Boolean                   := False;
+      -- If Filtered = True, then it should not being run
       Parent_Scenario  : access Scenario_Type;
    end record with Put_Image => Put_Image;
    procedure Put_Image
@@ -140,6 +142,8 @@ private package BBT.Documents is
       -- be in Object_String, one by Cmd_List item.
       Cmd_List_Step_Index   : Step_Lists.Cursor;
       -- store the index in Step_List where the cmd_list was found
+      Filtered              : Boolean := False;
+      -- If Filtered = True, then it should not being run
    end record;
    -- with Type_Invariant => Parent_Feature /= null xor Parent_Document /= null;
    function Parent_Doc (Scen : Scenario_Type) return access Document_Type;
@@ -159,6 +163,8 @@ private package BBT.Documents is
       Scenario_List   : Scenario_Lists.Vector;
       Background      : access Scenario_Type;
       Parent_Document : access Document_Type;
+      Filtered              : Boolean := False;
+      -- If Filtered = True, then it should not being run
    end record;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Feature_Type);
@@ -173,6 +179,8 @@ private package BBT.Documents is
       Scenario_List : Scenario_Lists.Vector;
       Feature_List  : Feature_Lists.Vector;
       Background    : access Scenario_Type;
+      Filtered              : Boolean := False;
+      -- If Filtered = True, then it should not being run
    end record;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type);

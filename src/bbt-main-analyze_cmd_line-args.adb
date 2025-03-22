@@ -9,45 +9,45 @@ with Ada.Command_Line;
 
 separate (BBT.Main.Analyze_Cmd_Line)
 
-package body Arg is
+package body Args is
 
    -- --------------------------------------------------------------------------
-   procedure Go_Next is
+   procedure Go_Next_Arg is
    begin
       Arg_Counter := @ + 1;
       -- Put_Line ("Go_Next " & Arg_Counter'Image);
-   end Go_Next;
+   end Go_Next_Arg;
 
    -- --------------------------------------------------------------------------
-   procedure Go_Back is
+   procedure Go_Previous_Arg is
    begin
       Arg_Counter := @ - 1;
-      -- Put_Line ("Go_Back " & Arg_Counter'Image);
-   end Go_Back;
+      -- Put_Line ("Go_Previous_Arg " & Arg_Counter'Image);
+   end Go_Previous_Arg;
 
    -- --------------------------------------------------------------------------
-   function Last return Boolean is
+   function On_Last_Arg return Boolean is
       L : constant Boolean := Arg_Counter = Ada.Command_Line.Argument_Count;
    begin
       -- Put_Line ("Last " & L'Image);
       return L;
-   end Last;
+   end On_Last_Arg;
 
    -- --------------------------------------------------------------------------
-   function Current return String is
+   function Current_Arg return String is
       S : constant String := Ada.Command_Line.Argument (Arg_Counter);
    begin
       -- Put_Line ("Current " & S'Image);
       return S;
-   end Current;
+   end Current_Arg;
 
    -- --------------------------------------------------------------------------
-   function More_Arg return Boolean is
+   function More_Args return Boolean is
       B : constant Boolean := Arg_Counter <= Ada.Command_Line.Argument_Count;
    begin
       -- Put_Line ("More_Arg " & B'Image);
       return B;
-   end More_Arg;
+   end More_Args;
 
 
-end Arg;
+end Args;

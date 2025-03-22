@@ -554,6 +554,7 @@ package body BBT.Scenarios.Step_Parser is
               Executable_File  => Executable,
               Ignore_Order     => Ignore_Order,
               File_Content     => Empty_Text,
+              Filtered         => False,
               Parent_Scenario  => null);
 
    end Parse;

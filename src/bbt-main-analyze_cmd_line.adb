@@ -5,32 +5,38 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;                use BBT.IO;
-with BBT.Settings;
-with BBT.Scenarios.Readers; use BBT.Scenarios.Readers;
+with BBT.IO,
+     BBT.Settings,
+     BBT.Scenarios.Readers,
+     BBT.Tests.Filter_List;
 
-with Ada.Directories;
-with Ada.Text_IO;
+use BBT.IO,
+    BBT.Scenarios.Readers;
+
+with Ada.Directories,
+     Ada.Text_IO;
 
 separate (BBT.Main)
 
 procedure Analyze_Cmd_Line is
 
   -- --------------------------------------------------------------------------
-   package Arg is
+   package Args is
 
-      procedure Go_Next;
-      procedure Go_Back;
-      function Last return Boolean;
-      function Current return String;
-      function More_Arg return Boolean;
+      procedure Go_Next_Arg;
+      procedure Go_Previous_Arg;
+      function On_Last_Arg return Boolean;
+      function Current_Arg return String;
+      function More_Args return Boolean;
 
    private
       Arg_Counter : Natural := 1;
 
-   end Arg;
+   end Args;
 
-   package body Arg is separate;
+   package body Args is separate;
+
+   use Args;
 
    -- --------------------------------------------------------------------------
    function Dash_To_Underscore (S : String) return String is
@@ -82,14 +88,14 @@ begin
       return;
    end if;
 
-   Opt_Analysis_Loop : while Arg.More_Arg loop
+   Opt_Analysis_Loop : while More_Args loop
 
       declare
          -- arg are either a command or option, in which case we neutralize the
          -- '-' character to have --list_item = --list-item
          -- or a file name, in which case it remain
-         File : constant String := Arg.Current;
-         Cmd  : constant String := Dash_To_Underscore (Arg.Current);
+         File : constant String := Current_Arg;
+         Cmd  : constant String := Dash_To_Underscore (Current_Arg);
          use Settings;
 
       begin
@@ -117,11 +123,11 @@ begin
 
             -- Options ---------------------------------------------------------
          elsif Cmd = "-o" or Cmd = "--output" then
-            if Arg.Last then
+            if On_Last_Arg then
                IO.Put_Error ("-o must be followed by a file name");
             else
-               Arg.Go_Next;
-               Settings.Set_Result_File (Arg.Current);
+               Go_Next_Arg;
+               Settings.Set_Result_File (Current_Arg);
             end if;
 
             declare
@@ -172,19 +178,19 @@ begin
             Settings.Ignore_Blank_Lines := False;
 
          elsif Cmd = "-ed" or Cmd = "--exec_dir" then
-            if Arg.Last then
+            if On_Last_Arg then
                IO.Put_Error ("-ed must be followed by a file name");
             else
-               Arg.Go_Next;
-               Settings.Set_Exec_Dir (Arg.Current);
+               Go_Next_Arg;
+               Settings.Set_Exec_Dir (Current_Arg);
             end if;
 
          elsif Cmd = "-td" or Cmd = "--tmp_dir" then
-            if Arg.Last then
+            if On_Last_Arg then
                IO.Put_Error ("-td must be followed by a file name");
             else
-               Arg.Go_Next;
-               Settings.Set_Tmp_Dir (Arg.Current);
+               Go_Next_Arg;
+               Settings.Set_Tmp_Dir (Current_Arg);
             end if;
 
          elsif Cmd = "-r" or Cmd = "--recursive" then
@@ -207,23 +213,21 @@ begin
 
          elsif Cmd = "-d" then
             -- Undocumented option ---------------------------------------------
-            if Arg.Last then
+            if On_Last_Arg then
                IO.Put_Error ("-d may be followed by ");
                for T in Topics loop
                   IO.Put_Line (T'Image);
                end loop;
             else
-               Arg.Go_Next;
-               if Topics'Valid_Value (Arg.Current)
+               Go_Next_Arg;
+               if Topics'Valid_Value (Current_Arg)
                then
                   -- -d is followed by the topic to watch
-                  Enable_Topic
-                    (Topic => Topics'Value
-                       (Arg.Current));
+                  Enable_Topic (Topic => Topics'Value (Current_Arg));
                else
                   -- there is only -d
                   Set_Verbosity  (Debug);
-                  Arg.Go_Back;
+                  Go_Previous_Arg;
                end if;
             end if;
 
@@ -238,12 +242,43 @@ begin
             Settings.Status_Bar := True;
 
          elsif Cmd = "-gb" or Cmd = "--generate_badge" then
-            if Arg.Last then
+            if On_Last_Arg then
                IO.Put_Error ("-gb must be followed by a file name");
             else
-               Arg.Go_Next;
+               Go_Next_Arg;
                Settings.Generate_Badge := True;
-               Settings.Set_Badge_File_Name (Arg.Current);
+               Settings.Set_Badge_File_Name (Current_Arg);
+            end if;
+
+         elsif Cmd in "-e" | "--exclude" then
+            if On_Last_Arg then
+               IO.Put_Error ("--exclude must be followed by a string");
+            else
+               Go_Next_Arg;
+               declare
+                  -- Filter : Tests.Filter_List.Filter;
+                  use Tests.Filter_List;
+               begin
+                  Add_Filter (S => Current_Arg,
+                              A => Apply_To_All,
+                              M => Exclude);
+               end;
+            end if;
+
+         elsif Cmd in "-s" | "--select" then
+            if On_Last_Arg then
+               IO.Put_Error ("--select must be followed by a string");
+            else
+               Go_Next_Arg;
+               declare
+                  -- Filter : Tests.Filter_List.Filter;
+                  use Tests.Filter_List;
+               begin
+                  Set_Global_Mode (M => Selection);
+                  Add_Filter (S => Current_Arg,
+                              A => Apply_To_All,
+                              M => Include);
+               end;
             end if;
 
          elsif Ada.Directories.Exists (File) then
@@ -278,7 +313,7 @@ begin
          -- Options_Coherency_Tests.
       end;
 
-      Arg.Go_Next;
+      Go_Next_Arg;
 
    end loop Opt_Analysis_Loop;
 

@@ -179,11 +179,12 @@ package body BBT.Scenarios.Files is
             Line                : aliased constant String  := Get_Line (Input);
             S                   : Step_Type;
             Cmd_List            : Cmd_Lists.Vector;
-            Filler              : constant String := (if BBT.IO.Line (Loc) in 1 .. 9
-                                                      then "  | "
-                                                      elsif BBT.IO.Line (Loc) in 10 .. 99
-                                                      then " | "
-                                                      else "| ");
+            Filler              : constant String :=
+                                    (if BBT.IO.Line (Loc) in 1 .. 9
+                                     then "  | "
+                                     elsif BBT.IO.Line (Loc) in 10 .. 99
+                                     then " | "
+                                     else "| ");
             Code_Block_Expected : Boolean;
 
          begin
