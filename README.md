@@ -127,6 +127,11 @@ It's not only to nicely highlight inputs in the doc, but also because otherwise 
 
 For Linux user, an AppImage of the latest version is available [here](https://github.com/LionelDraghi/bbt/releases).  
 (Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
+Download the AppImage, and:  
+```sh
+chmod +x bbt-0.1.0-x86_64.AppImage
+ln -s bbt-0.1.0-x86_64.AppImage bbt
+```
 
 Or, to build the latest version on Windows, Darwin or Linux:
 ```sh
