@@ -14,38 +14,8 @@ jobs:
   release:
     name: Continuous
     runs-on: ubuntu-22.04
-    steps:    
+    steps:
        - name: Checkout
          uses: actions/checkout@v2
-       
-         # Install and setup Alire package manager
-       - name: Setup Alire
-         uses: alire-project/setup-alire@v2
-         with:
-           version: 2.1.0 # Remove this option to use the default (latest stable release)
-
-       - name: Update apt
-         run: sudo apt-get update
-       
-       - name: Install dependencies of linuxdeploy and default toolchain
-         run: sudo apt-get install libfuse2 gnat gprbuild
-
-       - name: Build
-         run: alr --non-interactive build --release
-       
-       - name: Get alr2appimage
-         run: |
-           wget -O alr2appimage https://github.com/mgrojo/alr2appimage/releases/download/v0.9.3/alr2appimage-0.9.3-x86_64.AppImage
-           chmod +x alr2appimage
-       
-       - name: Build AppImage
-         run: |
-           alr --non-interactive build --release
-           VERSION=$(printf $(alr show | awk -v FS=[=:] '/bbt=/ {print $2}')) ./alr2appimage
-       
-       - name: Release
-         uses: softprops/action-gh-release@v2
-         with:
-           files: bbt*.AppImage
-           prerelease: true
-           tag_name: continuous
+       - name: alr2appimage-action
+         uses: mgrojo/alr2appimage-action@main
