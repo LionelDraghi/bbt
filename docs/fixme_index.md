@@ -11,9 +11,9 @@ Location | Text
 [docs/features/B110_Spawn.md](../docs/features/B110_Spawn.md):9| this scenario is Unix specific, and should not be run on Windows.  
 [docs/features/B120_Output_Verbosity.md](../docs/features/B120_Output_Verbosity.md):120| missing error output for Quiet and Verbose mode
 [docs/proposed_features/contains_line.md](../docs/proposed_features/contains_line.md):5| not yet implemented.
-[docs/UG.md](../docs/UG.md):128|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
-[src/bbt-main-analyze_cmd_line.adb](../src/bbt-main-analyze_cmd_line.adb):159|         --     --  opt -ot / --output_tag not yet coded
+[docs/UG.md](../docs/UG.md):155|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
+[src/bbt-main-analyze_cmd_line.adb](../src/bbt-main-analyze_cmd_line.adb):164|         --     --  opt -ot / --output_tag not yet coded
 [src/bbt-scenarios-step_parser.adb](../src/bbt-scenarios-step_parser.adb):131|                                                                                                   --  we currently do not check if the existing file contains
-[src/bbt-settings.ads](../src/bbt-settings.ads):65|   procedure Set_Result_File (File_Name : String); --  utile?
+[src/bbt-settings.ads](../src/bbt-settings.ads):70|   procedure Set_Result_File (File_Name : String); --  utile?
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):39|   --  Clearly not confortable with that function, it's magic.
 [src/list_image-unix_predefined_styles.ads](../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

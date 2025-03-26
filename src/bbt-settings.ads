@@ -41,7 +41,12 @@ private package BBT.Settings is
    Ignore_Casing      : Boolean := True;
    Ignore_Blank_Lines : Boolean := True;
    Current_Command    : Command := None;
-
+   Selection_Mode     : Boolean := False;
+   -- In the default mode no File/Feature/Scenario etc. is filtered except those
+   -- provided with --exclude on command line.
+   -- But if the user wants to select specific items by using --select, the
+   -- Selection_Mode will be set, and all items will be filtered
+   -- except those provided with --select or --include.
 
    Template_Name      : constant String := "bbt_template.md";
 

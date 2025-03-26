@@ -7,6 +7,7 @@
 
 with BBT.Settings;   use BBT.Settings;
 
+
 with Text_Utilities; use Text_Utilities;
 
 with Ada.Text_IO;
@@ -112,9 +113,11 @@ package body BBT.Tests.Builder is
    begin
       -- Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
       The_Doc_List.Append
-        (Document_Type'(Name   => To_Unbounded_String (Name),
-                        others => <>));
+        (Document_Type'(Name     => To_Unbounded_String (Name),
+                        Location => Location (Name, 0),
+                        others   => <>));
       Set_State (In_Document);
+
    end Add_Document;
 
    -- --------------------------------------------------------------------------
@@ -145,7 +148,7 @@ package body BBT.Tests.Builder is
               (Scenario_Type'(Name           => To_Unbounded_String (Name),
                               Parent_Feature => Last_Feature_Ref.Element,
                               Location       => Loc,
-                              others         => <>));
+                              others          => <>));
       end case;
       Set_State (In_Scenario);
       Check_Missing_Code_Block (Loc);
@@ -160,13 +163,15 @@ package body BBT.Tests.Builder is
             Last_Doc_Ref.Background := new Scenario_Type'
               (Name            => To_Unbounded_String (Name),
                Parent_Document => Last_Doc_Ref.Element,
+               Location        => Loc,
                others          => <>);
 
          when In_Feature =>
             Last_Feature_Ref.Background := new Scenario_Type'
               (Name           => To_Unbounded_String (Name),
                Parent_Feature => Last_Feature_Ref.Element,
-               others         => <>);
+               Location        => Loc,
+               others          => <>);
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
@@ -182,16 +187,17 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step                : Step_Type;
                        Code_Block_Expected : Boolean;
-                       Cmd_List            : Cmd_Lists.Vector) is
+                       Cmd_List            : Cmd_Lists.Vector;
+                       Loc                 : Location_Type) is
 
       -- -----------------------------------------------------------------------
       procedure Append_Step (Scen : not null access Scenario_Type) is
       begin
-         -- Scen.Step_List.Append
-         --  (Step_Type'(Step with delta Parent_Scenario => Scen));
          if Cmd_List.Is_Empty then
             -- normal case, there is no "or"
-            Scen.Step_List.Append ((Step with delta Parent_Scenario => Scen));
+            Scen.Step_List.Append
+              ((Step with delta Parent_Scenario => Scen,
+                Location                        => Loc));
             --  declare
             --     S2 : Step_Type := Step;
             --  begin
@@ -204,9 +210,12 @@ package body BBT.Tests.Builder is
             -- cmd
 
             -- the existing scenario will receive the first cmd
-            Scen.Step_List.Append ((Step with delta
-                                     Object_String => +Cmd_List.First_Element,
-                                   Parent_Scenario => Scen));
+            Scen.Step_List.Append
+              ((Step with delta Object_String   => +Cmd_List.First_Element,
+                Parent_Scenario                 => Scen,
+                Location                        => Loc
+                -- Filtered                        => Filtered
+               ));
 
             --  for S in 1 .. Cmd_List.Count - 1 loop
             --     Scen.Step_List

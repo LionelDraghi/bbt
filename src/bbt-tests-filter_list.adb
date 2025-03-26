@@ -1,8 +1,13 @@
-with BBT.IO;            use BBT.IO;
-with BBT.Tests.Builder; use BBT.Tests.Builder;
-with BBT.Documents;     use BBT.Documents;
+with BBT.IO;
 
-with Ada.Containers.Vectors; use Ada.Containers;
+use BBT.IO;
+
+with Ada.Characters,
+     Ada.Characters.Handling,
+     Ada.Containers.Vectors,
+     Ada.Strings.Fixed;
+
+use Ada.Containers;
 
 package body BBT.Tests.Filter_List is
 
@@ -14,25 +19,16 @@ package body BBT.Tests.Filter_List is
                              renames BBT.IO.Put_Line;
 
    -- --------------------------------------------------------------------------
-   Mode : Global_Mode := Exclusion;
-
-   -- --------------------------------------------------------------------------
-   procedure Set_Global_Mode (M : Global_Mode) is
-   begin
-      Mode := M;
-      Put_Debug_Line ("Global Filter Mode set to " & Mode'Image);
-   end Set_Global_Mode;
-
    -- Define a vector to store the filters
    package Filter_Vectors is new Ada.Containers.Vectors
-     (Index_Type   => Natural,
+     (Index_Type   => Positive,
       Element_Type => Filter);
 
    Filter_List : Filter_Vectors.Vector;
 
    -- --------------------------------------------------------------------------
    procedure Add_Filter (S : String;
-                         A : Filters;
+                         A : Apply_On;
                          M : Filter_Mode)
    is
       New_Filter : constant Filter := (S => To_Unbounded_String (S),
@@ -44,55 +40,168 @@ package body BBT.Tests.Filter_List is
                       & " to " & A'Image);
    end Add_Filter;
 
-   Result_List : aliased BBT.Documents.Documents_Lists.Vector;
-
-   -- function Filtered_Document_List return access Documents_Lists.Vector;
    -- --------------------------------------------------------------------------
-   function Filtered_Document_List return access Documents_Lists.Vector is
+   function Contains (Src : String;
+                      Pat : Unbounded_String) return Boolean
+   is
+      use Ada.Strings.Fixed,
+          Ada.Characters.Handling;
    begin
-      -- Iterate over the test list and apply filters
-      for Doc of The_Tests_List.all loop
+      return Index (Source  => To_Lower (Src),
+                    Pattern => To_Lower (+Pat),
+                    From    => Src'First) /= 0;
+   end Contains;
+
+   -- --------------------------------------------------------------------------
+   function Is_Filtered (S : String;
+                         I : Filtered_Item) return Boolean is
+   begin
+      for F of Filter_List loop
+         if (F.A = I or F.A = Apply_To_All)
+           and then Contains (S, F.S)
+           and then F.M = Exclude
+         then
+            Put_Debug_Line ("Is_Filtered (" & S &
+                              ", " & I'Image &
+                              ", Mode = " & F.M'Image & ") return True");
+            return True;
+            -- exit;
+            -- The item may be included and excluded several
+            -- time, the last to spoke has right.
+         end if;
+      end loop;
+      Put_Debug_Line ("Is_Filtered (" & S &
+                        ", " & I'Image & ") return False");
+      return False;
+   end Is_Filtered;
+
+   -- --------------------------------------------------------------------------
+   function Is_Selected (S : String;
+                         I : Filtered_Item) return Boolean is
+   begin
+      for F of Filter_List loop
+         if (F.A = I or F.A = Apply_To_All)
+           and then Contains (S, F.S)
+           and then F.M = Include
+         then
+            Put_Debug_Line ("Is_Selected (" & S &
+                              ", " & I'Image &
+                              ", Mode = " & F.M'Image & ") return True");
+            return True;
+            -- exit;
+            -- The item may be included and excluded several
+            -- time, the last to spoke has right.
+         end if;
+      end loop;
+      Put_Debug_Line ("Is_Selected (" & S &
+                        ", " & I'Image & ") return False");
+      return False;
+   end Is_Selected;
+
+   -- --------------------------------------------------------------------------
+   procedure Apply_Filters_To (S : in out Step_Type) is
+      Filtered : constant Boolean := Is_Filtered (+S.Step_String, Step);
+      Selected : constant Boolean := not Filtered and
+        Is_Selected (+S.Step_String, Step);
+
+   begin
+      Put_Debug_Line ("Apply_Filters_To" & (+S.Step_String));
+      if Selected then
+         Unfilter_Parents (S);
+         -- If a Step matches, we also need the enclosing scenario
+         Unfilter (S);
+         -- if One step is selected, we must mark the parent scenario as
+         -- selected, and possibly Background, etc.
+
+      elsif Filtered then
+         Documents.Filter (S);
+
+      end if;
+   end Apply_Filters_To;
+
+   -- --------------------------------------------------------------------------
+   procedure Apply_Filters_To (Scen : in out Scenario_Type) is
+      Filtered : constant Boolean := Is_Filtered (+Scen.Name, Scenario);
+      Selected : constant Boolean := not Filtered and
+        Is_Selected (+Scen.Name, Scenario);
+
+   begin
+      Put_Debug_Line ("Apply_Filters_To scen " & (+Scen.Name));
+      if Filtered then
+         Documents.Filter_Tree (Scen);
+
+      elsif Selected then
+         Unfilter_Parents (Scen);
+         Unfilter_Tree (Scen);
+         -- if scenario is selected, we must mark the parent feature or
+         -- document as selected, and possibly Background, etc.
+
+      end if;
+
+      for S of Scen.Step_List loop
+         Apply_Filters_To (S);
+      end loop;
+   end Apply_Filters_To;
+
+   -- --------------------------------------------------------------------------
+   procedure Apply_Filters_To (F : in out Feature_Type) is
+      Filtered : constant Boolean := Is_Filtered (+F.Name, Feature);
+      Selected : constant Boolean := not Filtered and
+        Is_Selected (+F.Name, Feature);
+
+   begin
+      Put_Debug_Line ("Apply_Filters_To " & (+F.Name));
+      if Filtered then
+         Documents.Filter_Tree (F);
+
+      elsif Selected then
+         Unfilter_Parents (F);
+         Unfilter_Tree (F);
+
+      end if;
+
+      if F.Background /= null then
+         Apply_Filters_To (F.Background.all);
+      end if;
+
+      for Scen of F.Scenario_List loop
+         Apply_Filters_To (Scen);
+      end loop;
+   end Apply_Filters_To;
+
+   -- --------------------------------------------------------------------------
+   procedure Apply_Filters_To (Docs : access Documents_Lists.Vector) is
+   begin
+      for D of Docs.all loop
          declare
-            Include_Document : Boolean := (Mode = Selection);
+            Filtered : constant Boolean := Is_Filtered (+D.Name, File_Name);
+            Selected : constant Boolean := not Filtered and
+              Is_Selected (+D.Name, File_Name);
+
          begin
-            -- Apply each filter in the Filter_List
-            for Filter of Filter_List loop
-            --     if Filter.M = Include then
-            --        if Filter.A = Doc.Tags and then
-            --           Contains (Doc.Tags, Filter.S) then
-            --           Include_Document := True;
-            --        elsif Filter.A = Names and then
-            --           Contains (To_Unbounded_String (Doc.Name), Filter.S) then
-            --           Include_Document := True;
-            --        end if;
-            --     elsif Filter.M = Exclude then
-            --        if Filter.A = Tags and then
-            --           Contains (Doc.Tags, Filter.S) then
-            --           Include_Document := False;
-            --        elsif Filter.A = Names and then
-            --           Contains (To_Unbounded_String (Doc.Name), Filter.S) then
-            --           Include_Document := False;
-            --        end if;
-            --     end if;
-               null;
+            Put_Debug_Line ("Apply_Filters_To : """ & (+D.Name) & """");
+
+            if Filtered then
+               Documents.Filter_Tree (D);
+
+            elsif Selected then
+               Unfilter_Tree (D);
+
+            end if;
+
+            if D.Background /= null then
+               Apply_Filters_To (D.Background.all);
+            end if;
+
+            for S of D.Scenario_List loop
+               Apply_Filters_To (S);
             end loop;
 
-            -- Add the document to the result list if it matches the filters
-            if Include_Document then
-               Result_List.Append (Doc);
-            end if;
+            for F of D.Feature_List loop
+               Apply_Filters_To (F);
+            end loop;
          end;
       end loop;
+   end Apply_Filters_To;
 
-      return Result_List'Access;
-   end Filtered_Document_List;
-
-   --  private
-   --     -- type Filter_List is access all Filter_Lists.Vector;
-   --     type Filter is record
-   --        S : Unbounded_String;
-   --        A : Filters;
-   --        M : Mode;
-   --     end record;
-   --
 end BBT.Tests.Filter_List;

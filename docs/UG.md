@@ -5,6 +5,7 @@ User Guide  <!-- omit from toc -->
 - [Features](#features)
   - [Cleanup](#cleanup)
   - [Background](#background)
+  - [Selection](#selection)
   - [No more tests directory?](#no-more-tests-directory)
   - [Removing Files and directories](#removing-files-and-directories)
     - [using the negative form](#using-the-negative-form)
@@ -64,6 +65,32 @@ Before each scenario, the document background will be executed, and then the fea
 Background, like Scenarios, may contain Given, When and Then Steps. 
 
 Note that bbt is more flexible than Cucumber, for example, where Background should contain only Given Steps, and where there is only one Background per file.
+
+### Selection 
+
+You may exclude or select specific steps, scenarios, features or document.  
+`--select` allows you to run only the specified items.  
+`--exclude` allows you to run all but the specified items.  
+`--include` add items excluded with the two others options.  
+
+Those options are followed by a string (not a regexp).  
+The string is searched in file name, Feature, Scenario, Background title, or Step line.  
+Matching is case insensitive. `Windows` will match all `WindowsOnly` and `not on windows`.  
+
+Note that there is no specific syntax for tags. You can use `@Tag`, `#tag` or your own convention.
+But unlike with Gherkin tags are not searched on the line preceding the title, but on same line.
+
+The selection is smart enough to auto-extend to parents and needed Background : if you select a specific Step, the enclosing Scenario will be also selected, the Background if any, the Feature enclosing the Scenario, and the document enclosing the Feature.
+
+Examples :
+
+> bbt --exclude "For Windows only" tests
+
+Run all Scenarios/Steps/Features except those for Windows.
+
+> bbt list --Select "For Windows only" --exclude "@long_test" tests
+
+List scenarios for Windows, unless too long.
 
 ### No more tests directory?
 It's a common practice to have a dev tree structured like this:

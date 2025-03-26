@@ -155,7 +155,7 @@ package body BBT.Scenarios.Files is
       use Ada.Text_IO;
 
       Lexer_Context : Parsing_Context := Initialize_Context;
-      Loc           : Location_Type   := Location (Input);
+      Loc           : Location_Type   := Location (File_Name, 0);
 
       File_Format : constant Valid_Input_Format := Readers.Format (File_Name);
 
@@ -171,71 +171,71 @@ package body BBT.Scenarios.Files is
       -- so we have to pass it.
 
       while not End_Of_File (Input) loop
-         Loc := Location (Input);
-         -- to be done before the Get_Line, otherwise Line is already on the
-         -- next one.
+         Loc := Location (File_Name, Line (Input));
+         -- To be done before the Get_Line, otherwise Line is already
+         -- on the next one.
 
-         Line_Processing : declare
-            Line                : aliased constant String  := Get_Line (Input);
-            S                   : Step_Type;
-            Cmd_List            : Cmd_Lists.Vector;
-            Filler              : constant String :=
-                                    (if BBT.IO.Line (Loc) in 1 .. 9
-                                     then "  | "
-                                     elsif BBT.IO.Line (Loc) in 10 .. 99
-                                     then " | "
-                                     else "| ");
+         Line_Processing :
+         declare
+            Line     : aliased constant String  := Get_Line (Input);
+            S        : Step_Type;
+            Cmd_List : Cmd_Lists.Vector;
+            Filler   : constant String :=
+                         (if BBT.IO.Line (Loc) in 1 .. 9
+                          then "  | "
+                          elsif BBT.IO.Line (Loc) in 10 .. 99
+                          then " | "
+                          else "| ");
             Code_Block_Expected : Boolean;
+            Attrib              : constant Line_Attributes := Parse_Line
+              (Line'Access, File_Format, Lexer_Context, Loc);
 
          begin
-            declare
-               Attrib   : constant Line_Attributes := Parse_Line
-                 (Line'Access, File_Format, Lexer_Context, Loc);
-            begin
-               Put_Debug_Line ("Line   = " & Line);
-               Put_Debug_Line ("Attrib = " & Attrib'Image);
-               case Attrib.Kind is
-                  when Feature_Line =>
-                     Put_Debug_Line ("Feature      " & Filler & Line, Loc);
-                     Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
+            -- Put_Debug_Line ("Line   = " & Line);
+            -- Put_Debug_Line ("Attrib = " & Attrib'Image);
+            case Attrib.Kind is
+               when Feature_Line =>
+                  Put_Debug_Line ("Feature      " & Filler & Line, Loc);
+                  Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
 
-                  when Scenario_Line =>
-                     Put_Debug_Line ("Scenario     " & Filler & Line, Loc);
-                     Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
+               when Scenario_Line =>
+                  Put_Debug_Line ("Scenario     " & Filler & Line, Loc);
+                  Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
 
-                  when Background_Line =>
-                     Put_Debug_Line ("Background   " & Filler & Line, Loc);
-                     Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
+               when Background_Line =>
+                  Put_Debug_Line ("Background   " & Filler & Line, Loc);
+                  Tests.Builder.Add_Background
+                    (To_String (Attrib.Name), Loc);
 
-                  when Step_Line =>
-                     Put_Debug_Line ("Step         " & Filler & Line, Loc);
-                     S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
-                                                       Loc,
-                                                       Code_Block_Expected,
-                                                       Cmd_List);
-                     Put_Debug_Line ("             " & Filler & "  "
-                                     & Short_Line_Image (S), Loc);
+               when Step_Line =>
+                  Put_Debug_Line ("Step         " & Filler & Line, Loc);
+                  S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
+                                                    Loc,
+                                                    Code_Block_Expected,
+                                                    Cmd_List);
+                  Put_Debug_Line ("             " & Filler & "  "
+                                  & Short_Line_Image (S), Loc);
 
-                     Tests.Builder.Add_Step (S, Code_Block_Expected, Cmd_List);
+                  Tests.Builder.Add_Step
+                    (S, Code_Block_Expected, Cmd_List, Loc);
 
-                  when Code_Fence =>
-                     Put_Debug_Line ("Code fence   " & Filler & Line, Loc);
-                     Tests.Builder.Add_Code_Fence (Loc);
+               when Code_Fence =>
+                  Put_Debug_Line ("Code fence   " & Filler & Line, Loc);
+                  Tests.Builder.Add_Code_Fence (Loc);
 
-                  when Text_Line =>
-                     if Tests.Builder.In_File_Content then
-                        Put_Debug_Line ("File content " & Filler & Line, Loc);
-                     else
-                        Put_Debug_Line ("Ignored      " & Filler & Line, Loc);
-                     end if;
-                     Tests.Builder.Add_Line (To_String (Attrib.Line));
+               when Text_Line =>
+                  if Tests.Builder.In_File_Content then
+                     Put_Debug_Line ("File content " & Filler & Line, Loc);
+                  else
+                     Put_Debug_Line ("Ignored      " & Filler & Line, Loc);
+                  end if;
+                  Tests.Builder.Add_Line (To_String (Attrib.Line));
 
-                  when Empty_Line =>
-                     Tests.Builder.Add_Line (Line);
+               when Empty_Line =>
+                  Tests.Builder.Add_Line (Line);
 
-               end case;
+            end case;
 
-            end;
          end Line_Processing;
 
          if Some_Error then exit; end if;

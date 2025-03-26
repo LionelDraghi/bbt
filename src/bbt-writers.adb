@@ -29,10 +29,12 @@ package body BBT.Writers is
      (File_Pattern (Writer_List (For_Format).all));
    -- Dispatching call
 
+   -- -------------------------------------------------------------------------
    function Default_Extension (For_Format : Output_Format) return String is
      (Default_Extension (Writer_List (For_Format).all));
    -- Dispatching call
 
+   -- -------------------------------------------------------------------------
    procedure File_Format (File_Name    :     String;
                           Found        : out Boolean;
                           Found_Format : out Output_Format) is
@@ -64,6 +66,7 @@ package body BBT.Writers is
       end if;
    end Enable_Output;
 
+   -- -------------------------------------------------------------------------
    procedure Put_Summary is
    begin
       Put_Debug_Line ("Writers.Put_Summary");
@@ -72,6 +75,7 @@ package body BBT.Writers is
       end loop;
    end Put_Summary;
 
+   -- -------------------------------------------------------------------------
    procedure Put_Step_Result (Step     : BBT.Documents.Step_Type;
                               Success  : Boolean;
                               Fail_Msg : String;
@@ -89,7 +93,9 @@ package body BBT.Writers is
       end loop;
    end Put_Step_Result;
 
-   procedure Put_Overall_Results (Results : BBT.Tests.Results.Test_Results_Count) is
+   -- -------------------------------------------------------------------------
+   procedure Put_Overall_Results
+     (Results : BBT.Tests.Results.Test_Results_Count) is
    begin
       for F in Writer_List'Range when Enabled (F) loop
          Put_Overall_Results (Writer_List (F).all, Results);
@@ -100,53 +106,61 @@ package body BBT.Writers is
    procedure Put_Scenario (Writer     : Interface_Access;
                            Scenario   : Scenario_Type) is
    begin
-      Put_Scenario_Title (Writer.all,
-                          Line (Scenario.Location)'Image & ": Scenario """ &
-                          (+Scenario.Name) & """");
-      for Step of Scenario.Step_List loop
-         Put_Step (Writer.all, Step);
-      end loop;
-      -- New_Line;
+      if Scenario.Filtered then
+         Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
+      else
+         Put_Scenario_Title (Writer.all,
+                             Scenario.Location'Image & " Scenario """ &
+                             (+Scenario.Name) & """");
+         for Step of Scenario.Step_List loop
+            Put_Step (Writer.all, Step);
+         end loop;
+         -- New_Line;
+      end if;
    end Put_Scenario;
 
    -- --------------------------------------------------------------------------
    procedure Put_Feature (Writer     : Interface_Access;
                           Feature    : Feature_Type) is
-   -- Pref : constant String := "## ";
    begin
-      -- Current_Indent_Level := 1;
-      Put_Feature_Title (Writer.all,
-                         Line (Feature.Location)'Image & ": Feature """ &
-                         (+Feature.Name) & """");
+      if Feature.Filtered then
+         Put_Debug_Line ("Feature " & (+Feature.Name) & " is filtered");
+      else
+         Put_Feature_Title (Writer.all,
+                            Feature.Location'Image & " Feature """ &
+                            (+Feature.Name) & """");
 
-      if Feature.Background /= null then
-         Put_Scenario (Writer, Feature.Background.all);
+         if Feature.Background /= null then
+            Put_Scenario (Writer, Feature.Background.all);
+         end if;
+
+         for Scenario of Feature.Scenario_List loop
+            Put_Scenario (Writer, Scenario);
+         end loop;
+         New_Line;
       end if;
-
-      for Scenario of Feature.Scenario_List loop
-         Put_Scenario (Writer, Scenario);
-      end loop;
-      New_Line;
    end Put_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Put_Document (Writer     : Interface_Access;
                            Doc        : Document_Type) is
    begin
-      Put_Document_Title (Writer.all,
-                          "Document Name : " & (+Doc.Name));
-      New_Line;
-      if Doc.Background /= null then
-         Put_Scenario (Writer, Doc.Background.all);
+      if Doc.Filtered then
+         Put_Debug_Line ("Document " & (+Doc.Name) & " is filtered");
+      else
+         New_Line;
+         if Doc.Background /= null then
+            Put_Scenario (Writer, Doc.Background.all);
+         end if;
+
+         for S of Doc.Scenario_List loop
+            Put_Scenario (Writer, S);
+         end loop;
+
+         for Feature of Doc.Feature_List loop
+            Put_Feature (Writer, Feature);
+         end loop;
       end if;
-
-      for S of Doc.Scenario_List loop
-         Put_Scenario (Writer, S);
-      end loop;
-
-      for Feature of Doc.Feature_List loop
-         Put_Feature (Writer, Feature);
-      end loop;
    end Put_Document;
 
    -- --------------------------------------------------------------------------

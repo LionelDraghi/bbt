@@ -77,8 +77,8 @@ package body BBT.Writers.Markdown_Writer is
       Put_Debug_Line ("Step.Parent     = " & Step.Parent_Scenario'Image);
       Documents.Add_Result (Success, Step.Parent_Scenario.all);
       if Success then
-         IO.Pause_Tee; --  We don't want this level of detail in the
-         --  generated test index.
+         IO.Pause_Tee; -- We don't want this level of detail in the
+         --               generated test index.
          IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
                       Verbosity => IO.Verbose);
          IO.Restore_Tee;
@@ -127,7 +127,7 @@ package body BBT.Writers.Markdown_Writer is
    begin
       Put_Line (Line (Step.Location)'Image & ": Step """ &
                 (+Step.Step_String) & """");
-      Put_Line (Step'Image);
+      -- Put_Line (Step'Image);
    end Put_Step;
 
    overriding procedure Put_Scenario_Title (Writer : Markdown_Writer;

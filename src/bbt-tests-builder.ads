@@ -21,7 +21,8 @@ package BBT.Tests.Builder is
    procedure Add_Background (Name : String; Loc : Location_Type);
    procedure Add_Step       (Step                : Step_Type;
                              Code_Block_Expected : Boolean;
-                             Cmd_List            : Cmd_Lists.Vector);
+                             Cmd_List            : Cmd_Lists.Vector;
+                             Loc                 : Location_Type);
    procedure Add_Line       (Line : String);
    procedure Add_Code_Fence (Loc : Location_Type);
    function In_File_Content return Boolean;

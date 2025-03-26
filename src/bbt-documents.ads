@@ -6,6 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO;         use BBT.IO;
+with BBT.Settings;
 with Text_Utilities; use Text_Utilities;
 
 with Ada.Containers.Indefinite_Vectors;
@@ -93,6 +94,12 @@ private package BBT.Documents is
    --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
    --     S      :        Object_Text_Type);
 
+   function Filtered_By_Default return Boolean is (Settings.Selection_Mode);
+   -- If in Selection mode, then items are filtered by default, and selected
+   -- items should be provided with --select.
+   -- If in normal mode, nothing is filtered by default, and filtered items
+   -- should be provided with --exclude.
+
    -- --------------------------------------------------------------------------
    type Step_Type is record
       Cat              : Extended_Step_Categories  := Unknown;
@@ -107,8 +114,7 @@ private package BBT.Documents is
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;
-      Filtered         : Boolean                   := False;
-      -- If Filtered = True, then it should not being run
+      Filtered         : Boolean                   := Filtered_By_Default;
       Parent_Scenario  : access Scenario_Type;
    end record with Put_Image => Put_Image;
    procedure Put_Image
@@ -122,11 +128,15 @@ private package BBT.Documents is
    function "+" (Name : Unbounded_String) return String is (To_String (Name));
    function "+" (Name : String) return Unbounded_String is
      (To_Unbounded_String (Name));
+   procedure Filter   (S : in out Step_Type);
+   procedure Unfilter (S : in out Step_Type);
+   -- Mark the Step as filtered
+   procedure Unfilter_Parents (S : in out Step_Type);
 
    -- --------------------------------------------------------------------------
    type Scenario_Type is record
       Name                  : Unbounded_String;
-      Location              : Location_Type; -- record only the keyword line
+      Location              : Location_Type;
       Comment               : Text    := Empty_Text;
       Step_List             : aliased Step_Lists.Vector;
       Parent_Feature        : access Feature_Type;
@@ -142,7 +152,7 @@ private package BBT.Documents is
       -- be in Object_String, one by Cmd_List item.
       Cmd_List_Step_Index   : Step_Lists.Cursor;
       -- store the index in Step_List where the cmd_list was found
-      Filtered              : Boolean := False;
+      Filtered              : Boolean := Filtered_By_Default;
       -- If Filtered = True, then it should not being run
    end record;
    -- with Type_Invariant => Parent_Feature /= null xor Parent_Document /= null;
@@ -154,32 +164,45 @@ private package BBT.Documents is
    procedure Add_Result  (Success : Boolean; To : in out Scenario_Type);
    package Scenario_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Scenario_Type);
+   procedure Unfilter (Scen : in out Scenario_Type);
+   procedure Filter   (Scen : in out Scenario_Type);
+   procedure Unfilter_Tree (Scen : in out Scenario_Type);
+   procedure Filter_Tree   (Scen : in out Scenario_Type);
+   -- Mark the scenario and all contained steps as filtered
+   procedure Unfilter_Parents (S : in out Scenario_Type);
 
    -- --------------------------------------------------------------------------
    type Feature_Type is record
       Name            : Unbounded_String;
-      Location        : Location_Type; -- only record the keyword line
-      Comment         : Text := Empty_Text;
+      Location        : Location_Type;
+      Comment         : Text    := Empty_Text;
       Scenario_List   : Scenario_Lists.Vector;
       Background      : access Scenario_Type;
       Parent_Document : access Document_Type;
-      Filtered              : Boolean := False;
+      Filtered        : Boolean := Filtered_By_Default;
       -- If Filtered = True, then it should not being run
    end record;
    package Feature_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Feature_Type);
    function Has_Background (F : Feature_Type) return Boolean is
      (F.Background /= null and then not F.Background.Step_List.Is_Empty);
+   procedure Filter   (F : in out Feature_Type);
+   procedure Unfilter (F : in out Feature_Type);
+   procedure Filter_Tree   (F : in out Feature_Type);
+   procedure Unfilter_Tree (F : in out Feature_Type);
+   -- Mark the feature and all contained scenarios and steps as filtered
+   procedure Unfilter_Parents (F : in out Feature_Type);
+
 
    -- --------------------------------------------------------------------------
    type Document_Type is record
       Name          : Unbounded_String;
-      Location      : Location_Type; -- record only location of the keyword line
-      Comment       : Text := Empty_Text;
+      Location      : Location_Type; -- only the file name, obviously
+      Comment       : Text    := Empty_Text;
       Scenario_List : Scenario_Lists.Vector;
       Feature_List  : Feature_Lists.Vector;
       Background    : access Scenario_Type;
-      Filtered              : Boolean := False;
+      Filtered      : Boolean := Filtered_By_Default;
       -- If Filtered = True, then it should not being run
    end record;
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
@@ -187,6 +210,12 @@ private package BBT.Documents is
    function Has_Background (D : Document_Type) return Boolean is
      (D.Background /= null and then not D.Background.Step_List.Is_Empty);
    function Output_File_Name (D : Document_Type) return String;
+   procedure Filter   (D : in out Document_Type);
+   procedure Unfilter (D : in out Document_Type);
+   procedure Filter_Tree   (D : in out Document_Type);
+   procedure Unfilter_Tree (D : in out Document_Type);
+   -- Mark the document all contained features, scenarios, etc.
+   -- as filtered/unfiltered
 
    --  function Created_Files_List_File_Name (D : Document_Type) return String
    --    is (To_String (D.Name) & ".created_files");

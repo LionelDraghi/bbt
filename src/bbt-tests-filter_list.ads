@@ -1,7 +1,6 @@
--- with BBT.Documents;
+with BBT.Documents;
 
--- use BBT,
-    -- BBT.Documents;
+use BBT.Documents;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -9,30 +8,30 @@ package BBT.Tests.Filter_List is
 -- This package manages the filters that will be applied to the tests.
 -- Filters may apply to file name, feature name, scenario name, tag, etc.
 
-   type Global_Mode is (Selection, Exclusion)
-     with Default_Value => Exclusion;
+   type Apply_On is (Apply_To_All,
+                     File_Name,
+                     Feature,
+                     Scenario,
+                     Step);
 
-   procedure Set_Global_Mode (M : Global_Mode);
-   -- Default Global Mode is Include, meaning that the initial situation
-   -- is that nothing is filtered. But if the user wants to select specific
-   -- items, then this should be called with Mode => Exclude, and then
-   -- some filter should be added with Mode => Include
+   subtype Filtered_Item is Apply_On range
+     Apply_On'Succ (Apply_To_All) .. Apply_On'Last;
 
-   type Filters is (Apply_To_All, File_Name, Feature_Name, Scenario_Name, Tag);
    type Filter_Mode is (Include, Exclude);
 
    type Filter is private;
    procedure Add_Filter (S : String;
-                         A : Filters;
+                         A : Apply_On;
                          M : Filter_Mode);
 
-   -- function Filtered_Document_List return access Documents_Lists.Vector;
+   procedure Apply_Filters_To (Docs : access Documents_Lists.Vector);
+   -- Apply all added filters on the provided document list
 
 private
    -- type Filter_List is access all Filter_Lists.Vector;
    type Filter is record
       S : Unbounded_String;
-      A : Filters;
+      A : Apply_On;
       M : Filter_Mode;
    end record;
 

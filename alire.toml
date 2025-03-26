@@ -21,15 +21,30 @@ generate_C = false
 [[depends-on]]
 ansiada = "^1.0.0"
 
+[[test]]
+command = ["make", "build"]
+
+[[test]]
+id = "examples"
+directory = "tests/"
+command = ["./bbt", "-c", "-q", "-sb", "--yes", "../docs/examples/"]
+
+[[test]]
+id = "features"
+directory = "tests/"
+command = ["./bbt", "-c", "-q", "-sb", "--yes", "../docs/features/"]
+
+[[test]]
+id = "non_reg"
+directory = "tests/"
+command = ["./bbt", "-c", "-q", "-sb", "--yes", "non_reg_tests/"]
+
+[[test]]
+id = "unit_testing"
+directory = "tests/file_utilities_tests/"
+# runner = "alire"
+command = ["./test_file_utilities", "-q"]
+
 [[actions]]
 type = "post-build"
 command = ["echo", 'run "alr test" to check bbt build'] 
-# /home/lionel/prj/bbt/bbt -c --yes /home/lionel/prj/bbt/docs/examples/sut_version.md"]
-
-[[actions]]
-type = "test" 
-command = ["make", "build"]
-
-[[actions]]
-type = "test"   
-command = ["make", "check"]

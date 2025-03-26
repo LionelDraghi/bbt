@@ -5,10 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
---  with BBT.IO;        use BBT.IO;
-
 private package BBT.Tests is
--- This package (and child packages) is in charge of building the tests list
--- and running it.
+-- This package (and child packages) is in charge of building the tests list.
 
 end BBT.Tests;

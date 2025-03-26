@@ -28,6 +28,12 @@ begin
    Put_Line ("   ct  | create_template : create a commented example of rules file");
    Put_Line ("   he  | help            : this message");
    New_Line;
+   Put_Line ("Selections:");
+   Put_Line ("   -s   | --select 'string'  : select Docs/Features/Scenarios/Steps containing 'string'");
+   Put_Line ("   -e   | --exclude 'string' : remove from selection Docs/Features/Scenarios/Steps containing 'string'");
+   Put_Line ("   -i   | --include 'string' : include to selection Docs/Features/Scenarios/Steps containing 'string'");
+   Put_Line ("   Multiple occurrences are processed in order");
+   New_Line;
    Put_Line ("Options:");
    Put_Line ("          --yes            : do not prompt if deletion is needed in");
    Put_Line ("                             ""Given"" steps, silently answer yes");

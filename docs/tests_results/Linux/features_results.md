@@ -173,6 +173,20 @@
 
   - [X] scenario [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
 
+## [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
+  ### Feature: Filter  
+  - [X] scenario [List all files](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Excluding @security tagged items](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Select](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Select only a Background](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Select on two docs](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Select followed by an exclude](../../features/A230_select_exclude_include.md) pass  
+
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
   - [X] scenario [run without --cleanup](../../features/B010_Deleting_created_files.md) pass  
@@ -303,6 +317,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 109   |
+| Successful | 115   |
 | Empty      | 0     |
 

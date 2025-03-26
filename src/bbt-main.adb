@@ -6,6 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
+     BBT.Writers.Text_Writer,
      BBT.Writers.Markdown_Writer,
      BBT.Writers.Asciidoc_Writer,
      BBT.Tests.Results,
@@ -16,6 +17,7 @@ with BBT.IO,
      BBT.Settings,
      BBT.Status_Bar,
      BBT.Tests.Builder,
+     BBT.Tests.Filter_List,
      BBT.Tests.Runner,
      BBT.Writers;
 
@@ -25,6 +27,7 @@ with Ada.Command_Line,
      Ada.Text_IO;
 
 use BBT.Scenarios.Readers,
+    BBT.Settings,
     BBT.Writers,
     BBT.Tests.Results;
 
@@ -42,47 +45,50 @@ procedure BBT.Main is
    -- Cmd line options are then available in the Settings package.
 
    -- --------------------------------------------------------------------------
-   procedure Analyze_Document is
+   procedure Analyze_Documents is
    begin
       if Scenarios.Files.No_Document_Found then
          -- No file given on cmd line, and no bbt file found
          IO.Put_Error ("No scenario file found", IO.No_Location);
 
       else
-         -- HERE we hare in the normal execution flow
+         -- Here we are in the normal execution flow
          Status_Bar.Put_Activity ("Loading files");
 
          for File of Scenarios.Files.Document_List loop
             Scenarios.Files.Analyze_Document (File);
             exit when IO.Some_Error and not Settings.Keep_Going;
+            -- If there is some error during the file analysis, we don't go
+            -- further except if the Keep_Going option is set.
+            Tests.Builder.Duplicate_Multiple_Run;
+            -- Process in all recorded scenario the
+            -- duplication of the "run X or Y" steps.
          end loop;
       end if;
-   end Analyze_Document;
 
-   -- --------------------------------------------------------------------------
-   procedure Build_Postprocess is
-   begin
-      if not IO.Some_Error or Settings.Keep_Going then
-         -- If there is some error during the file analysis, we don't go further
-         -- except if the Keep_Going option is set.
-         Tests.Builder.Duplicate_Multiple_Run;
-         -- Process in all recorded scenario the
-         -- duplication of the "run X or Y" steps.
-      end if;
-   end Build_Postprocess;
+      -- Set filters
+      -- if Settings.Selection_Mode then
+         -- When in selection mode, all item are filtered unless selected
+         -- with --select
+      Tests.Filter_List.Apply_Filters_To
+        (Docs => Tests.Builder.The_Tests_List);
+      -- end if;
+
+   end Analyze_Documents;
 
 begin
    -- --------------------------------------------------------------------------
    MDG_Reader.Initialize;
    Adoc_Reader.Initialize;
 
+   Text_Writer.Initialize;
    Markdown_Writer.Initialize;
    Asciidoc_Writer.Initialize;
 
    Analyze_Cmd_Line;
 
    if No_Output_Format_Enabled then
-      Writers.Enable_Output (For_Format => Markdown);
+      Writers.Enable_Output (For_Format => Txt);
       -- Default, for when there is no explicit --output
    end if;
 
@@ -120,41 +126,39 @@ begin
 
    case Settings.Current_Command is
 
-   when Settings.List_Topics =>
+   when List_Topics =>
       Status_Bar.Put_Activity ("Listing topics");
       Put_Topics;
 
-   when Settings.List_Settings =>
+   when List_Settings =>
       Status_Bar.Put_Activity ("Listing settings");
       Put_Settings;
 
-   when Settings.List_Keywords =>
+   when List_Keywords =>
       Status_Bar.Put_Activity ("Listing keywords");
       Scenarios.Step_Parser.Put_Keywords;
       return;
 
-   when Settings.List_Grammar =>
+   when List_Grammar =>
       Status_Bar.Put_Activity ("Listing grammar");
       BBT.Scenarios.Step_Parser.Put_Grammar;
 
-   when Settings.Explain =>
-      Analyze_Document;
-      Build_Postprocess;
+   when Explain =>
+      Analyze_Documents;
       -- Dry run --
-      -- Let's display our rebuild of the original test definition file
-      -- comment lines are filtered out
+      -- Let's display our rebuild of the original test definition
+      -- file comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
       Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
-   when Settings.List =>
-      Analyze_Document;
-      Build_Postprocess;
+   when List =>
+      Analyze_Documents;
       Status_Bar.Put_Activity ("****List TBD");
+      Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
-   when Settings.Run | Settings.None =>
+   when Run | Settings.None =>
       -- Run is the default command, so None => Run
-      Analyze_Document;
-      Build_Postprocess;
+      Analyze_Documents;
 
       if IO.No_Error or Settings.Keep_Going then
          -- Real run --
@@ -168,11 +172,11 @@ begin
          Tests.Results.Generate_Badge;
       end if;
 
-   when Settings.Create_Template =>
+   when Create_Template =>
       Status_Bar.Put_Activity ("Creating template");
       Create_Template;
 
-   when Settings.Help =>
+   when Help =>
       Put_Help;
 
    end case;

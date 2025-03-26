@@ -16,6 +16,12 @@ Commands:
    ct  | create_template : create a commented example of rules file
    he  | help            : this message
 
+Selections:
+   -s   | --select 'string'  : select Docs/Features/Scenarios/Steps containing 'string'
+   -e   | --exclude 'string' : remove from selection Docs/Features/Scenarios/Steps containing 'string'
+   -i   | --include 'string' : include to selection Docs/Features/Scenarios/Steps containing 'string'
+   Multiple occurrences are processed in order
+
 Options:
           --yes            : do not prompt if deletion is needed in
                              "Given" steps, silently answer yes

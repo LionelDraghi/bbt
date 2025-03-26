@@ -62,7 +62,6 @@ procedure Analyze_Cmd_Line is
 
    -- --------------------------------------------------------------------------
    procedure Set_Cmd (C : Settings.Command) is
-      use Settings;
    begin
       if Current_Command = None then
          Current_Command := C;
@@ -96,35 +95,41 @@ begin
          -- or a file name, in which case it remain
          File : constant String := Current_Arg;
          Cmd  : constant String := Dash_To_Underscore (Current_Arg);
-         use Settings;
+         use Tests.Filter_List;
 
       begin
          -- Commands -----------------------------------------------------------
          -- Note that after v0.0.6, commands starting with '-' are deprecated
-         if  Cmd in "-h" | "--help" | "he" | "help" then
+         if Cmd = "list" then
+            Set_Cmd (List);
+
+         elsif Cmd = "run" then
+            Set_Cmd (Run);
+
+         elsif Cmd in "help" | "-h" | "--help" then
             Set_Cmd (Help);
             return;
 
-         elsif Cmd in "-e" | "--explain" | "ex" | "explain" then
+         elsif Cmd in "explain" | "-e" | "--explain" | "ex" then
             Set_Cmd (Explain);
 
-         elsif Cmd in "-lf" | "--list_files" | "lf" | "list_files" then
+         elsif Cmd in "list_files" | "-lf" | "--list_files" | "lf" then
             Settings.List_Files := True;
 
-         elsif Cmd in "-lk" | "--list_keywords" | "lk" | "list_keywords" then
+         elsif Cmd in "list_keywords" | "-lk" | "--list_keywords" | "lk" then
             Set_Cmd (List_Keywords);
 
-         elsif Cmd in "-lg" | "--list_grammar" | "lg" | "list_grammar" then
+         elsif Cmd in "list_grammar" | "-lg" | "--list_grammar" | "lg" then
             Set_Cmd (List_Grammar);
 
-         elsif Cmd in "-ct" | "--create_template" | "ct" | "create_template"
+         elsif Cmd in "create_template" | "-ct" | "--create_template" | "ct"
          then
             Set_Cmd (Create_Template);
 
             -- Options ---------------------------------------------------------
          elsif Cmd = "-o" or Cmd = "--output" then
             if On_Last_Arg then
-               IO.Put_Error ("-o must be followed by a file name");
+               IO.Put_Error (Cmd & " must be followed by a file name");
             else
                Go_Next_Arg;
                Settings.Set_Result_File (Current_Arg);
@@ -179,7 +184,7 @@ begin
 
          elsif Cmd = "-ed" or Cmd = "--exec_dir" then
             if On_Last_Arg then
-               IO.Put_Error ("-ed must be followed by a file name");
+               IO.Put_Error (Cmd & " must be followed by a file name");
             else
                Go_Next_Arg;
                Settings.Set_Exec_Dir (Current_Arg);
@@ -187,7 +192,7 @@ begin
 
          elsif Cmd = "-td" or Cmd = "--tmp_dir" then
             if On_Last_Arg then
-               IO.Put_Error ("-td must be followed by a file name");
+               IO.Put_Error (Cmd & " must be followed by a file name");
             else
                Go_Next_Arg;
                Settings.Set_Tmp_Dir (Current_Arg);
@@ -243,7 +248,7 @@ begin
 
          elsif Cmd = "-gb" or Cmd = "--generate_badge" then
             if On_Last_Arg then
-               IO.Put_Error ("-gb must be followed by a file name");
+               IO.Put_Error (Cmd & " must be followed by a file name");
             else
                Go_Next_Arg;
                Settings.Generate_Badge := True;
@@ -252,33 +257,34 @@ begin
 
          elsif Cmd in "-e" | "--exclude" then
             if On_Last_Arg then
-               IO.Put_Error ("--exclude must be followed by a string");
+               IO.Put_Error (Cmd & " must be followed by a string");
             else
                Go_Next_Arg;
-               declare
-                  -- Filter : Tests.Filter_List.Filter;
-                  use Tests.Filter_List;
-               begin
-                  Add_Filter (S => Current_Arg,
-                              A => Apply_To_All,
-                              M => Exclude);
-               end;
+               Add_Filter (S => Current_Arg,
+                           A => Apply_To_All,
+                           M => Exclude);
+            end if;
+
+         elsif Cmd in "-i" | "--include" then
+            if On_Last_Arg then
+               IO.Put_Error (Cmd & " must be followed by a string");
+            else
+               Go_Next_Arg;
+               Add_Filter (S => Current_Arg,
+                           A => Apply_To_All,
+                           M => Include);
             end if;
 
          elsif Cmd in "-s" | "--select" then
             if On_Last_Arg then
-               IO.Put_Error ("--select must be followed by a string");
+               IO.Put_Error (Cmd & " must be followed by a string");
             else
                Go_Next_Arg;
-               declare
-                  -- Filter : Tests.Filter_List.Filter;
-                  use Tests.Filter_List;
-               begin
-                  Set_Global_Mode (M => Selection);
-                  Add_Filter (S => Current_Arg,
-                              A => Apply_To_All,
-                              M => Include);
-               end;
+               Settings.Selection_Mode := True;
+               -- Set_Global_Mode (M => Selection);
+               Add_Filter (S => Current_Arg,
+                           A => Apply_To_All,
+                           M => Include);
             end if;
 
          elsif Ada.Directories.Exists (File) then

@@ -5,12 +5,18 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Settings;
 with File_Utilities;
 
 with Ada.Directories; use Ada.Directories;
 
 package body BBT.Documents is
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.Documents)
+                             renames BBT.IO.Put_Line;
 
    -- --------------------------------------------------------------------------
    procedure Put_Image
@@ -102,10 +108,169 @@ package body BBT.Documents is
    -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type) is
    begin
-      To_Scen.Failed_Step_Count     := @ + From_Scen.Failed_Step_Count;
-      To_Scen.Successful_Step_Count := @ + From_Scen.Successful_Step_Count;
+      To_Scen.Failed_Step_Count       := @ + From_Scen.Failed_Step_Count;
+      To_Scen.Successful_Step_Count   := @ + From_Scen.Successful_Step_Count;
       From_Scen.Failed_Step_Count     := 0;
       From_Scen.Successful_Step_Count := 0;
    end Move_Results;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Filter (S        : in out Step_Type;
+                         Filtered :        Boolean) is
+   begin
+      Put_Debug_Line ("Set_Filter (Step => " & (+S.Step_String)
+                      & ", To => " & Filtered'Image);
+      S.Filtered := Filtered;
+   end Set_Filter;
+
+   -- --------------------------------------------------------------------------
+   procedure Filter (S : in out Step_Type) is
+   begin
+      Set_Filter (S, True);
+   end Filter;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter (S : in out Step_Type) is
+   begin
+      Set_Filter (S, False);
+   end Unfilter;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter_Parents (S : in out Step_Type) is
+   begin
+      Put_Debug_Line ("Select_Parents of step """ & (+S.Step_String) & """");
+      if S.Parent_Scenario /= null then
+         Unfilter (S.Parent_Scenario.all);
+         Unfilter_Parents (S.Parent_Scenario.all);
+      end if;
+   end Unfilter_Parents;
+
+   -- -------------------------------------------------------------------------
+   procedure Set_Filter (Scen     : in out Scenario_Type;
+                         Filtered :        Boolean) is
+   begin
+      Put_Debug_Line ("Set_Filter (Scen => " & (+Scen.Name)
+                      & ", To => " & Filtered'Image);
+      Scen.Filtered := Filtered;
+      for Step of Scen.Step_List loop
+         Set_Filter (Step, Filtered);
+      end loop;
+   end Set_Filter;
+
+   -- -------------------------------------------------------------------------
+   procedure Filter (Scen : in out Scenario_Type) is
+   begin
+      Scen.Filtered := True;
+   end Filter;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter (Scen : in out Scenario_Type) is
+   begin
+      Scen.Filtered := False;
+   end Unfilter;
+   -- -------------------------------------------------------------------------
+   procedure Filter_Tree (Scen : in out Scenario_Type) is
+   begin
+      Set_Filter (Scen, True);
+   end Filter_Tree;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter_Tree (Scen : in out Scenario_Type) is
+   begin
+      Set_Filter (Scen, False);
+   end Unfilter_Tree;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter_Parents (S : in out Scenario_Type) is
+   begin
+      Put_Debug_Line ("Select_Parents of scen """ & (+S.Name) & """");
+      if S.Parent_Feature /= null then
+         Unfilter (S.Parent_Feature.all);
+         Unfilter_Parents (S.Parent_Feature.all);
+      end if;
+      if S.Parent_Document /= null then
+         Unfilter (S.Parent_Document.all);
+      end if;
+   end Unfilter_Parents;
+
+
+   -- -------------------------------------------------------------------------
+   procedure Set_Filter (F        : in out Feature_Type;
+                         Filtered :        Boolean) is
+   begin
+      Put_Debug_Line ("Set_Filter (Feature => " & (+F.Name)
+                      & ", To => " & Filtered'Image);
+      F.Filtered := Filtered;
+      for Scen of F.Scenario_List loop
+         Set_Filter (Scen, Filtered);
+      end loop;
+      if F.Background /= null then
+         Set_Filter (F.Background.all, Filtered);
+      end if;
+   end Set_Filter;
+
+   -- -------------------------------------------------------------------------
+   procedure Filter (F : in out Feature_Type) is
+   begin
+      F.Filtered := True;
+   end Filter;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter (F : in out Feature_Type) is
+   begin
+      F.Filtered := False;
+   end Unfilter;
+   -- -------------------------------------------------------------------------
+   procedure Filter_Tree (F : in out Feature_Type) is
+   begin
+      Set_Filter (F, True);
+   end Filter_Tree;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter_Tree (F : in out Feature_Type) is
+   begin
+      Set_Filter (F, False);
+   end Unfilter_Tree;
+   -- --------------------------------------------------------------------------
+   procedure Unfilter_Parents (F : in out Feature_Type) is
+   begin
+      Put_Debug_Line ("Select_Parents of feature """ & (+F.Name)  & """");
+      if F.Background /= null then
+         Unfilter (F.Background.all);
+      end if;
+      if F.Parent_Document /= null then
+         Unfilter (F.Parent_Document.all);
+      end if;
+   end Unfilter_Parents;
+
+
+   -- -------------------------------------------------------------------------
+   procedure Set_Filter (D        : in out Document_Type;
+                         Filtered :        Boolean) is
+   begin
+      Put_Debug_Line ("Set_Filter (Doc => " & (+D.Name)
+                      & ", To => " & Filtered'Image);
+      D.Filtered := Filtered;
+      for Scen of D.Scenario_List loop
+         Set_Filter (Scen, Filtered);
+      end loop;
+      for F of D.Feature_List loop
+         Set_Filter (F, Filtered);
+      end loop;
+      if D.Background /= null then
+         Set_Filter (D.Background.all, Filtered);
+      end if;
+   end Set_Filter;
+
+   -- -------------------------------------------------------------------------
+   procedure Filter   (D : in out Document_Type) is
+   begin
+      D.Filtered := True;
+   end Filter;
+   procedure Unfilter (D : in out Document_Type) is
+   begin
+      D.Filtered := False;
+   end Unfilter;
+   procedure Unfilter_Tree (D : in out Document_Type) is
+   begin
+      Set_Filter (D, False);
+   end Unfilter_Tree;
+   procedure Filter_Tree (D : in out Document_Type) is
+   begin
+      Set_Filter (D, True);
+   end Filter_Tree;
 
 end BBT.Documents;

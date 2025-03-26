@@ -15,7 +15,6 @@ procedure Put_Settings is
    function Checkbox (Switch : Boolean) return String is
      (if Switch then "[X]" else "[ ]");
 
-   use Settings;
    use Ada.Text_IO;
    use Scenarios.Files;
 
@@ -48,6 +47,7 @@ begin
    Put_Line ("   " & Checkbox (Settings.Strict_Gherkin) & " Strict_Gherkin");
    Put_Line ("   " & Checkbox (Settings.Status_Bar) & " Status_Bar");
    Put_Line ("   " & Checkbox (Settings.Generate_Badge) & " Generate_Badge");
+   Put_Line ("   " & Checkbox (Settings.Selection_Mode) & " Selection Mode");
    --  Put_Line ("   Trace enabled for topics:");
    --  for T in IO.Extended_Topics loop
    --     Put_Line ("       " & Checkbox (IO.Is_Enabled (T))

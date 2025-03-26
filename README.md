@@ -179,7 +179,8 @@ Although simple, you don't have to learn this subset by heart, you may :
 ### No-fuss no-wait run
 
 To run a scenario : `bbt my_scenario.md`  
-Or to run all the md files in the *tests* tree `bbt -r tests`  
+To run all the md files in the *tests* tree `bbt -r tests`  
+To run only a selection `bbt --select "Sanity check" tests`  
 
 bbt has no dependencies on external lib or tools (diff, for example) and can be run as is on major native platforms.  
 
