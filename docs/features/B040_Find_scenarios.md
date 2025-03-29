@@ -87,8 +87,6 @@ dir1/scen4.scen
 
 ### Scenario: running scenarios in a tree thanks to `-r`
 
-Fixme: this scenario fail on Windows because of the directory separator in the expected result.  
-
 - Given the `dir1/dir2/` dir
 - Given the `dir1/dir3/dir4` dir
 - Given the `dir1/dir2/scen5.md` file containing `foo`
