@@ -81,10 +81,8 @@ package body BBT.Writers is
                               Fail_Msg : String;
                               Loc      : BBT.IO.Location_Type) is
    begin
-      Put_Debug_Line ("****** Put_Step_Results");
       for F in Writer_List'Range when Enabled (F) loop
-         Put_Debug_Line ("Enabled, Succes = " & Success'Image &
-                           ", Step = " & Step'Image);
+         Put_Debug_Line (Inline_Image (Step));
          Put_Step_Result (Writer_List (F).all,
                           Step,
                           Success,
@@ -113,7 +111,11 @@ package body BBT.Writers is
                              Scenario.Location'Image & " Scenario """ &
                              (+Scenario.Name) & """");
          for Step of Scenario.Step_List loop
-            Put_Step (Writer.all, Step);
+            if Step.Filtered then
+               Put_Debug_Line ("Filtered Step " & (+Step.Step_String));
+            else
+               Put_Step (Writer.all, Step);
+            end if;
          end loop;
          -- New_Line;
       end if;

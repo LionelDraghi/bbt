@@ -5,7 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;                            use BBT.IO;
+with BBT.IO;
 with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Writers;                       use BBT.Writers;
@@ -13,22 +13,21 @@ with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
 with Ada.Directories;
--- with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with GNAT.OS_Lib;
--- with GNAT.Traceback.Symbolic;
 
-use Ada;
+use Ada, BBT;
 
 package body BBT.Tests.Actions is
 
    -- -----------------------------------------------------------------------
-   procedure Put_Debug_Line (Item      : String;
-                             Location  : Location_Type    := No_Location;
-                             Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := IO.Step_Actions)
-                             renames BBT.IO.Put_Line;
+   procedure Put_Debug_Line
+     (Item      : String;
+      Location  : IO.Location_Type    := IO.No_Location;
+      Verbosity : IO.Verbosity_Levels := IO.Debug;
+      Topic     : IO.Extended_Topics  := IO.Step_Actions)
+      renames IO.Put_Line;
    pragma Warnings (Off, Put_Debug_Line);
 
    -- --------------------------------------------------------------------------
@@ -179,7 +178,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step : Step_Type) is
-      File_Name : constant String := To_String (Step.Subject_String);
+      File_Name  : constant String := To_String (Step.Subject_String);
       Parent_Dir : constant String :=
                      Directories.Containing_Directory (File_Name);
    begin

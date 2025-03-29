@@ -6,10 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Writers.Text_Writer,
-     BBT.Writers.Markdown_Writer,
-     BBT.Writers.Asciidoc_Writer,
-     BBT.Tests.Results,
+     BBT.Documents.Apply_Filters,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
      BBT.Scenarios.Readers.MDG_Reader,
@@ -18,8 +15,12 @@ with BBT.IO,
      BBT.Status_Bar,
      BBT.Tests.Builder,
      BBT.Tests.Filter_List,
+     BBT.Tests.Results,
      BBT.Tests.Runner,
-     BBT.Writers;
+     BBT.Writers,
+     BBT.Writers.Text_Writer,
+     BBT.Writers.Markdown_Writer,
+     BBT.Writers.Asciidoc_Writer;
 
 with Ada.Command_Line,
 --  Ada.Calendar,
@@ -28,8 +29,8 @@ with Ada.Command_Line,
 
 use BBT.Scenarios.Readers,
     BBT.Settings,
-    BBT.Writers,
-    BBT.Tests.Results;
+    BBT.Tests.Results,
+    BBT.Writers;
 
 procedure BBT.Main is
 
@@ -70,9 +71,8 @@ procedure BBT.Main is
       -- if Settings.Selection_Mode then
          -- When in selection mode, all item are filtered unless selected
          -- with --select
-      Tests.Filter_List.Apply_Filters_To
-        (Docs => Tests.Builder.The_Tests_List);
-      -- end if;
+      Documents.Apply_Filters
+         (To_Docs => Tests.Builder.The_Tests_List);
 
    end Analyze_Documents;
 
@@ -144,6 +144,7 @@ begin
       BBT.Scenarios.Step_Parser.Put_Grammar;
 
    when Explain =>
+      Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
       -- Dry run --
       -- Let's display our rebuild of the original test definition
@@ -152,17 +153,19 @@ begin
       Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
    when List =>
+      Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
-      Status_Bar.Put_Activity ("****List TBD");
+      Status_Bar.Put_Activity ("Display non filtered items");
       Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
 
    when Run | Settings.None =>
       -- Run is the default command, so None => Run
+      Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
 
       if IO.No_Error or Settings.Keep_Going then
          -- Real run --
-         Status_Bar.Put_Activity ("Running scenarios");
+         Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;
       end if;
       Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);

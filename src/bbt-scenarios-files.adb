@@ -214,7 +214,7 @@ package body BBT.Scenarios.Files is
                                                     Code_Block_Expected,
                                                     Cmd_List);
                   Put_Debug_Line ("             " & Filler & "  "
-                                  & Short_Line_Image (S), Loc);
+                                  & Inline_Image (S), Loc);
 
                   Tests.Builder.Add_Step
                     (S, Code_Block_Expected, Cmd_List, Loc);

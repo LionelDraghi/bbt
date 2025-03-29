@@ -7,18 +7,22 @@
 
 with BBT.Scenarios.Step_Parser.Lexer;
 
-with Text_Utilities; use Text_Utilities;
+with Text_Utilities;
 
 with Ada.Containers;
-with Ada.Directories;                   use Ada.Directories;
-with Ada.Strings.Fixed;                 use Ada.Strings.Fixed;
+with Ada.Directories;
+with Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
 with Ada.Text_IO;
 with Ada.Strings.Maps;
 
-package body BBT.Scenarios.Step_Parser is
 
-   use BBT.Scenarios.Step_Parser.Lexer;
+use BBT.Scenarios.Step_Parser.Lexer,
+    Text_Utilities,
+    Ada.Directories,
+    Ada.Strings.Fixed;
+
+package body BBT.Scenarios.Step_Parser is
 
    type Tokens is ( -- Prepositions -----------------------------------------
                     Given,

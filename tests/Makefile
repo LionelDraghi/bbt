@@ -34,11 +34,13 @@ setup:
 ifeq ($(PLATFORM), Windows)
 	@ln -fs ../sut sut.exe
 	@ln -fs ../bbt bbt.exe
+EXCLUDE := --exclude Unix_Only
 
 else ifeq ($(PLATFORM), Darwin)
 	export GNAT_FILE_NAME_CASE_SENSITIVE=1
 	@ln -fs ../sut sut
 	@ln -fs ../bbt bbt
+EXCLUDE := --exclude Windows_Only
 
 else ifeq ($(PLATFORM), Linux)
 	@ln -fs ../sut sut
@@ -46,6 +48,7 @@ else ifeq ($(PLATFORM), Linux)
 	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 	@ln -fs /usr/bin/rpl rpl
+EXCLUDE = --exclude Windows_Only
 
 else
 	@echo "Unknown platform $(PLATFORM)"
@@ -70,18 +73,30 @@ check: setup ./bbt ./sut
 	
 	@ # Then test all the features
 	@ echo 1. features tests ================
-	@ ./bbt --yes --keep_going --cleanup -q -sb --human_match --generate_badge $(RESULTS_DIR)/badge.url --output $(RESULTS_DIR)/features_results.md ../docs/features && echo OK =============================== || echo KO "********"
+	@ ./bbt --yes --keep_going \
+	--cleanup $(EXCLUDE) \
+	-q -sb --human_match \
+	--generate_badge $(RESULTS_DIR)/badge.url \
+	--output $(RESULTS_DIR)/features_results.md \
+	../docs/features \
+	&& echo OK =============================== || echo KO "********"
 	@ echo
 
 	@ # Check examples
 	@ echo 2. examples check ================
-	@ ./bbt --yes -k -c -q -sb -hm -o $(RESULTS_DIR)/examples_results.md ../docs/examples \
-	  && echo OK =============================== || echo KO, check the availability of gcc and rpl on your platform "********"
+	@ ./bbt --yes -k -c -q -sb -hm \
+	-o $(RESULTS_DIR)/examples_results.md \
+	../docs/examples \
+	&& echo OK =============================== || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
-	@ ./bbt --yes --keep_going --cleanup -q -sb --human_match --output $(RESULTS_DIR)/non_reg_tests.md ../tests/non_reg_tests && echo OK =============================== || echo KO "******"
+	@ ./bbt --yes --keep_going --cleanup -q -sb \
+	--human_match \
+	--output $(RESULTS_DIR)/non_reg_tests.md \
+	../tests/non_reg_tests \
+	&& echo OK =============================== || echo KO "******"
 	@ echo
 
 	@ # Unit testing

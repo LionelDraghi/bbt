@@ -147,7 +147,7 @@
 
   - [X] scenario [command not found](../../features/A190_Run.md) pass  
 
-  - [X] scenario [the command is not executable](../../features/A190_Run.md) pass  
+  - [X] scenario [the command is not executable (Unix_Only)](../../features/A190_Run.md) pass  
 
 ## [A200_Regexp.md](../../features/A200_Regexp.md)  
   ### Feature: identifying expected output with regexp  
@@ -179,13 +179,17 @@
 
   - [X] scenario [Excluding @security tagged items](../../features/A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Select](../../features/A230_select_exclude_include.md) pass  
+  - [X] scenario [Select tagged items](../../features/A230_select_exclude_include.md) pass  
 
   - [X] scenario [Select only a Background](../../features/A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Select on two docs](../../features/A230_select_exclude_include.md) pass  
+  - [X] scenario [Select tagged scenarios in two docs](../../features/A230_select_exclude_include.md) pass  
 
   - [X] scenario [Select followed by an exclude](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [no step filtering](../../features/A230_select_exclude_include.md) pass  
+
+  - [X] scenario [step filtering](../../features/A230_select_exclude_include.md) pass  
 
 ## [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
@@ -317,6 +321,6 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 115   |
+| Successful | 117   |
 | Empty      | 0     |
 

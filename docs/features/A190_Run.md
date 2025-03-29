@@ -35,10 +35,9 @@ When a command fails, bbt make it clear to the user if it was a spawn fail, that
 - Then I get an error
 - And  the output contains `cmd_not_found.md:2: Error : xyzabc not found`
 
-### scenario: the command is not executable
+### scenario: the command is not executable (Unix_Only)
 
-Fixme: this scenario fail on Windows : on Windows, Spawn return Success 
-even if the file is not executable.
+On Windows, Spawn return Success even if the file is not executable.
 
 - Given the `lambda_file` containing `nothing`
 - Given the `cmd_not_exe.md` file 

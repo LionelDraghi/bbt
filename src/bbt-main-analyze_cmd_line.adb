@@ -20,7 +20,7 @@ separate (BBT.Main)
 
 procedure Analyze_Cmd_Line is
 
-  -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    package Args is
 
       procedure Go_Next_Arg;
@@ -41,7 +41,7 @@ procedure Analyze_Cmd_Line is
    -- --------------------------------------------------------------------------
    function Dash_To_Underscore (S : String) return String is
    -- Transform option like "--list-file" in "--list_file"
-      Tmp : String (S'Range);
+      Tmp           : String (S'Range);
       Conversion_On : Boolean := False;
       -- The conversion starts after the first letter, otherwise we
       -- end up converting --list to __list.
@@ -160,8 +160,8 @@ begin
             -- even if --quiet or -- verbose is set.
 
             --  elsif Arg = "-ot" or Arg = "--output_tag" then
-         --     Next_Arg;
-         --     -- Fixme: opt -ot / --output_tag not yet coded
+            --     Next_Arg;
+            --     -- Fixme: opt -ot / --output_tag not yet coded
 
          elsif Cmd = "-iw" or Cmd = "--ignore_whitespaces" then
             Settings.Ignore_Whitespaces := True;
@@ -260,9 +260,9 @@ begin
                IO.Put_Error (Cmd & " must be followed by a string");
             else
                Go_Next_Arg;
-               Add_Filter (S => Current_Arg,
-                           A => Apply_To_All,
-                           M => Exclude);
+               Add_Filter (Pattern => Current_Arg,
+                           Target  => Apply_To_All,
+                           Mode    => Exclude);
             end if;
 
          elsif Cmd in "-i" | "--include" then
@@ -270,9 +270,9 @@ begin
                IO.Put_Error (Cmd & " must be followed by a string");
             else
                Go_Next_Arg;
-               Add_Filter (S => Current_Arg,
-                           A => Apply_To_All,
-                           M => Include);
+               Add_Filter (Pattern => Current_Arg,
+                           Target  => Apply_To_All,
+                           Mode    => Include);
             end if;
 
          elsif Cmd in "-s" | "--select" then
@@ -282,9 +282,9 @@ begin
                Go_Next_Arg;
                Settings.Selection_Mode := True;
                -- Set_Global_Mode (M => Selection);
-               Add_Filter (S => Current_Arg,
-                           A => Apply_To_All,
-                           M => Include);
+               Add_Filter (Pattern => Current_Arg,
+                           Target  => Apply_To_All,
+                           Mode    => Include);
             end if;
 
          elsif Ada.Directories.Exists (File) then
@@ -293,7 +293,7 @@ begin
                when Directory =>
                   Settings.No_File_Given := False;
                   BBT.Scenarios.Files.Find_Documents
-                    (Dir  => File,
+                    (Dir       => File,
                      Recursive => Settings.Recursive);
 
                when Ordinary_File =>

@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature: Filter
 
 `bbt` allows for fine-grained selection of what is executed in the set of files passed in the command line, 
@@ -12,9 +13,11 @@ This can be done:
 
 Filter are processed in order of appearance on the command line.
 
+<!-- omit from toc -->
 ### Auto propagation
 To maintain consistency, when a Step is selected, the parents (Scenario, Feature) and necessary background are selected.
 
+<!-- omit from toc -->
 ### Tags
 The is no special processing for tags. From bbt point of view *@regression* is a string, and you can filter on that basis.  
 But if it's your convention you may as well use *#regression*.  
@@ -24,8 +27,19 @@ Important Note : there is no filtering on the lines before header, meaning that 
 The following Scenarios are based on two files containing several scenarios and tags.  
 To facilitate understanding, tags are prefixed here in the usual way, with '@'.
 
+- [Background: Lets create the two files scen1.md and scen2.md](#background-lets-create-the-two-files-scen1md-and-scen2md)
+- [Scenario: List all files](#scenario-list-all-files)
+- [Scenario: Excluding @security tagged items](#scenario-excluding-security-tagged-items)
+- [Scenario: Select tagged items](#scenario-select-tagged-items)
+- [Scenario: Select only a Background](#scenario-select-only-a-background)
+- [Scenario: Select tagged scenarios in two docs](#scenario-select-tagged-scenarios-in-two-docs)
+- [Scenario: Select followed by an exclude](#scenario-select-followed-by-an-exclude)
+- [Scenario: no step filtering](#scenario-no-step-filtering)
+- [Scenario: step filtering](#scenario-step-filtering)
 
-## Background: Lets create the two files scen1.md and scen2.md 
+### Background: Lets create the two files scen1.md and scen2.md 
+- Given there is no file `output.txt`
+
 - Given the directory `dir7`
 - Given the directory `dir8`
 - Given the file `dir7/scen1.md`
@@ -91,7 +105,7 @@ To facilitate understanding, tags are prefixed here in the usual way, with '@'.
     Then the search results are updated to match the filter
 ~~~
 
-# Scenario: List all files
+### Scenario: List all files
 
 - When I run `./bbt list dir7 dir8`
 - Then I get
@@ -110,7 +124,7 @@ dir8/scen1.md:31: Scenario "Search returns no results @search @negative"
 dir8/scen1.md:36: Scenario "Filter search results @search @filter"
 ~~~
 
-# Scenario: Excluding @security tagged items
+### Scenario: Excluding @security tagged items
 
 - When I run `./bbt list --exclude @security dir7 dir8`
 - Then I get
@@ -127,7 +141,7 @@ dir8/scen1.md:31: Scenario "Search returns no results @search @negative"
 dir8/scen1.md:36: Scenario "Filter search results @search @filter"
 ~~~
 
-# Scenario: Select 
+### Scenario: Select tagged items
 
 - When I run `./bbt list --select @security dir7 dir8`
 - Then I get
@@ -139,7 +153,7 @@ dir7/scen1.md:11: Scenario "A.2 User banned when DOS attack detected @security"
 ~~~
 Note that the parent Feature are also selected, but Background are not.
 
-# Scenario: Select only a Background
+### Scenario: Select only a Background
 
 - When I run `./bbt list --select "credential is recorded" dir7 dir8`
 - Then I get
@@ -148,7 +162,7 @@ dir7/scen1.md:1: Feature "Security related tests"
 dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
 ~~~
 
-# Scenario: Select on two docs
+### Scenario: Select tagged scenarios in two docs
 
 - When I run `./bbt list --select @smoke dir7 dir8`
 - Then I get
@@ -161,7 +175,7 @@ dir8/scen1.md:11: Scenario "Failed login with invalid credentials @login @negati
 dir8/scen1.md:16: Scenario "Successful logout @logout"  
 ~~~
 
-# Scenario: Select followed by an exclude
+### Scenario: Select followed by an exclude
 
 - When I run `./bbt list --select @security --exclude DOS dir7 dir8`
 - Then I get 
@@ -170,3 +184,32 @@ dir7/scen1.md:1: Feature "Security related tests"
 dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
 dir7/scen1.md:5: Scenario "A.1 User blocked after multiple failed login attempt @login @security"  
 ~~~
+
+### Scenario: no step filtering
+
+- Given the file `filtered_step.md`
+~~~
+# Scenario:
+- When I run `./sut create         output.txt`
+- When I run `./sut append Linux   output.txt`
+- When I run `./sut append Windows output.txt`
+~~~
+
+- When I run `./bbt filtered_step.md`
+  Both steps are run
+
+- Then file `output.txt` is
+```
+Linux
+Windows
+```
+
+### Scenario: step filtering
+
+- When I run `./bbt --exclude Windows -d filters filtered_step.md`
+  Only the create and Linux Steps are run
+
+- Then file `output.txt` is
+```
+Linux
+```
