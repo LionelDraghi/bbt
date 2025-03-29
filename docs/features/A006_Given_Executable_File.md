@@ -1,10 +1,13 @@
-## Feature: running scripts
+## Feature: running scripts (Unix_Only)
 
-btt is able to create a shell script, that will have the executable attributes thanks to the "executable" keyword.
+btt is able to create a shell script, that will have the executable attributes thanks to the "executable" keyword. 
 
-Note : this feature is pretty much useless. 
-Without the +x, you cannot run "./cmd.txt", but you can still run the script with ". ./cmd.txt" or "source cmd.txt".
-  
+This is a Unix only feature. On windows, the file should be suffixed .bat or .cmd, no need to chmod +x.
+Fixme : here the model is too different between Windows and Unix, we need an alternate mechanism 
+to run different scripts, with different command.
+
+And note that on Unix, without the +x you cannot run "./cmd.txt", but you still can run the script with ". ./cmd.txt" or "source cmd.txt".
+
 ### Scenario: trying to run a script without the executable keyword should fail
 
 - Given the new file `cmd1.sh` containing
@@ -16,12 +19,7 @@ echo "bbt rules!"
 #### Notes on shebang : #!/bin/bash
 /bin/bash on MacOS
 /usr/bin/bash on Windows, but useless
-both on Debian
-Note that there is a shebang utility on https://github.com/insomnimus/shebang to interpret the shebang prefix on Windows
-
-On windows, the file should be suffixed .bat or .cmd, no need to chmod +x.
-Fixme : here the model is too different between Windows and Unix, we need an alternate mechanism 
-to run different scripts, with different command.
+Note that there is a shebang utility on https://github.com/insomnimus/shebang to interpret the shebang prefix on Windows, but as said before, this feature is useless on Windows.
 
 - Given the file `create_exec.md` 
 ~~~

@@ -218,11 +218,15 @@ package body BBT.Documents is
    -- -------------------------------------------------------------------------
    procedure Filter (F : in out Feature_Type) is
    begin
+      Put_Debug_Line ("Set_Filter (Feature => " & (+F.Name)
+                      & ", To => True");
       F.Filtered := True;
    end Filter;
    -- --------------------------------------------------------------------------
    procedure Unfilter (F : in out Feature_Type) is
    begin
+      Put_Debug_Line ("Set_Filter (Feature => " & (+F.Name)
+                      & ", To => False");
       F.Filtered := False;
    end Unfilter;
    -- -------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ## Feature: Command line to spawn processing
 
-### Scenario: Directory with space in the name
+### Scenario: Directory with space in the name (Unix_Only)
 
 Created file or dir may contain space chars.
 On Unix, those spaces need to be escaped with a backslash, but only in the `run` command.  
@@ -15,7 +15,7 @@ This scenario fails on Windows.
 - And there is a file `dir 1/file 1`
 
 
-### Scenario : Command with quoted arguments
+### Scenario : Command with quoted arguments (Unix_Only)
 
 bbt is using quotes for joining arguments as the shell, but the quotes should not be passed to the executed program.  
 ([Issue #11](https://github.com/LionelDraghi/bbt/issues/11))

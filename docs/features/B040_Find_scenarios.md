@@ -61,13 +61,16 @@ Usage : bbt [Options]* [Command] [bbt_file]*
 
 ### Scenario: running all scenarios in dir1
 
-Fixme: this scenario fail on Windows because of the directory separator in the expected result.  
-
 - When I run `./bbt -lf dir1`
-- Then the output is (unordered)
+- Then the output is on Unix_Only (unordered)
 ```
 dir1/scen2.md
 dir1/scen1.md
+```
+- And the output is on Windows_Only (unordered)
+```
+dir1\scen2.md
+dir1\scen1.md
 ```
 
 ### Scenario: running multiple scenarios given on command line
@@ -95,12 +98,19 @@ Fixme: this scenario fail on Windows because of the directory separator in the e
 - Given the `dir1/res1` file containing `res1`
 ``` 
 - When I run `./bbt -r -lf dir1`
-- Then the output is (unordered)
+- Then the output is on Unix_Only (unordered)
 ```
 dir1/scen2.md
 dir1/scen1.md
 dir1/dir3/dir4/scen6.md
 dir1/dir2/scen5.md
+```
+- And the output is on Windows_Only (unordered)
+```
+dir1\scen2.md
+dir1\scen1.md
+dir1\dir3\dir4\scen6.md
+dir1\dir2\scen5.md
 ```
 
 ### Scenario: error msg when trying to run scenarios, but none found in given directories

@@ -68,7 +68,7 @@ Debug command:
 Debug options:
    -t topic               : activate log related to the topic
 
-bbt version 0.2.0-dev
+bbt version 0.1.0
 https://github.com/LionelDraghi/bbt/
 
 ```

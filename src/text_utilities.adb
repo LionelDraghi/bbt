@@ -172,8 +172,7 @@ package body Text_Utilities is
             T.Append (Get_Line (File));
          end loop;
       exception
-         when End_Error =>
-            null;
+         when End_Error => null;
       end;
       Close (File);
       return T;
@@ -275,7 +274,6 @@ package body Text_Utilities is
                     else Text1);
       T2 : Text := (if Ignore_Blank_Lines then Remove_Blank_Lines (Text2)
                     else Text2);
-      -- Diff_Index : Natural;
       use type Ada.Containers.Count_Type;
       Same_Size : Boolean;
 
@@ -303,10 +301,6 @@ package body Text_Utilities is
          end loop;
       end if;
 
-      --  if Identical then
-      --     Diff_Index := 0;
-      --  end if;
-
    end Compare;
 
    -- --------------------------------------------------------------------------
@@ -317,7 +311,6 @@ package body Text_Utilities is
                       Sort_Texts         : Boolean := False) return Boolean
    is
       Identical  : Boolean;
-      -- Diff_Index : Natural;
    begin
       Compare (Text1, Text2,
                Ignore_Blank_Lines => Ignore_Blank_Lines,
@@ -325,7 +318,6 @@ package body Text_Utilities is
                Case_Insensitive   => Case_Insensitive,
                Sort_Texts         => Sort_Texts,
                Identical          => Identical);
-      -- Diff_Index         => Diff_Index);
       return Identical;
    end Is_Equal;
 
@@ -382,6 +374,9 @@ package body Text_Utilities is
 
       elsif T1 = T2 then
          return True;
+
+      elsif Is_Empty (T2) then
+         return True; -- If T2 is empty, what does "contains" means?
 
       else
          declare

@@ -38,9 +38,27 @@ package body BBT.Tests.Runner is
            Step.Subject_String else Step.Object_File_Name));
    -- Fixme: Clearly not confortable with that function, it's magic.
 
+
    -- --------------------------------------------------------------------------
    procedure Run_Step (Step      : in out Step_Type;
-                       Run_Error :    out Boolean) is
+                       Run_Error :    out Boolean);
+   procedure Run_Scenario (Scen         : in out Scenario_Type;
+                           Path_To_Scen :        String);
+   -- run only the scenario, not Doc and / or Feature Background.
+   procedure Run_Background (Scen         : in out Scenario_Type;
+                             Path_To_Scen :        String);
+   -- run only Doc and / or Feature Background, not the scenario himself.
+   procedure Run_Doc_Background (Scen         : in out Scenario_Type;
+                                 Path_To_Scen :        String);
+   procedure Run_Feature_Background (Scen         : in out Scenario_Type;
+                                     Path_To_Scen :        String);
+   procedure Run_Scenario_List (L            : in out Scenario_Lists.Vector;
+                                Path_To_Scen :        String);
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Step (Step      : in out Step_Type;
+                       Run_Error :    out Boolean)
+   is
       Spawn_OK    : Boolean;
       Return_Code : Integer;
       Output      : constant String :=
@@ -164,9 +182,12 @@ package body BBT.Tests.Runner is
    end Run_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Scenario (Scen : in out Scenario_Type) is
+   procedure Run_Scenario (Scen         : in out Scenario_Type;
+                           Path_To_Scen :        String) is
       Spawn_OK : Boolean := False;
       --The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
+      Link_Image : constant String
+        := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
 
    begin
       if Scen.Filtered then
@@ -176,6 +197,7 @@ package body BBT.Tests.Runner is
       else
          Put_Debug_Line ("  ====== Running Scen " & Scen.Name'Image);
          Scen.Has_Run := True;
+
          Step_Processing : for Step of Scen.Step_List loop
             Run_Step (Step, Spawn_OK);
 
@@ -184,12 +206,48 @@ package body BBT.Tests.Runner is
             end if;
          end loop Step_Processing;
 
+         case Tests.Results.Result (Scen) is
+            when Empty =>
+               -- Note the two spaces at the end of each line, to cause a
+               -- new line in Markdown format when this line is followed
+               -- by an error message.
+               Put_Line ("  - [ ] scenario " & Link_Image &
+                           " is empty, nothing tested  ",
+                         Verbosity => Normal);
+            when Successful =>
+               Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
+                         Verbosity => Normal);
+            when Skipped | Failed =>
+               Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+                         Verbosity => Quiet);
+         end case;
+
       end if;
+
+      IO.New_Line (Verbosity => Verbose);
 
    end Run_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Doc_Background (Scen : in out Scenario_Type) is
+   procedure Run_Background (Scen         : in out Scenario_Type;
+                             Path_To_Scen :        String) is
+   begin
+      if Scen.Filtered then
+         Put_Debug_Line ("  ====== Skipping background of filtered scen " & Scen.Name'Image);
+         return;
+
+      else
+         -- Run background scenarios
+         Run_Doc_Background     (Scen, Path_To_Scen);
+         Run_Feature_Background (Scen, Path_To_Scen);
+
+      end if;
+
+   end Run_Background;
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Doc_Background (Scen         : in out Scenario_Type;
+                                 Path_To_Scen :        String) is
    -- Run background scenario at document level, if any
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
@@ -202,7 +260,7 @@ package body BBT.Tests.Runner is
             Put_Debug_Line
               ("  Running document Background """ & (+Doc.Background.Name)
                & """  ", IO.No_Location);
-            Run_Scenario (Doc.Background.all);
+            Run_Scenario (Doc.Background.all, Path_To_Scen);
             Move_Results (From_Scen => Doc.Background.all,
                           To_Scen   => Scen);
          end if;
@@ -210,10 +268,11 @@ package body BBT.Tests.Runner is
    end Run_Doc_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Feature_Background (Scen : in out Scenario_Type) is
+   procedure Run_Feature_Background (Scen         : in out Scenario_Type;
+                                     Path_To_Scen :        String) is
    -- Run background scenario at feature level, if any
    begin
-      if Is_In_Feature (Scen) and Has_Background (Scen.Parent_Feature.all)
+      if Is_In_Feature (Scen) and then Has_Background (Scen.Parent_Feature.all)
       then
          declare
             Feat : constant Feature_Type := Scen.Parent_Feature.all;
@@ -226,7 +285,7 @@ package body BBT.Tests.Runner is
                Put_Debug_Line
                  ("  Running feature Background """ & (+Feat.Background.Name) &
                     """  ", IO.No_Location);
-               Run_Scenario (Feat.Background.all);
+               Run_Scenario (Feat.Background.all, Path_To_Scen);
                Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
             end if;
          end;
@@ -239,43 +298,9 @@ package body BBT.Tests.Runner is
 
    begin
       for Scen of L loop
-         declare
-            Link_Image : constant String
-              := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
-
-         begin
-            -- Run background scenarios
-            Run_Doc_Background (Scen);
-            if Is_In_Feature (Scen) then
-               Run_Feature_Background (Scen);
-            end if;
-
-            -- And finally run the scenario
-            Run_Scenario (Scen);
-
-            case Tests.Results.Result (Scen) is
-               when Empty =>
-                  -- Note the two spaces at the end of each line, to cause a
-                  -- new line in Markdown format when this line is followed
-                  -- by an error message.
-                  Put_Line ("  - [ ] scenario " & Link_Image &
-                              " is empty, nothing tested  ",
-                            Verbosity => Normal);
-               when Successful =>
-                  Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
-                            Verbosity => Normal);
-               when Skipped | Failed =>
-                  Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
-                            Verbosity => Quiet);
-            end case;
-         end;
-
-         IO.New_Line (Verbosity => Verbose);
-
-         if IO.Some_Error and not Settings.Keep_Going then
-            exit;
-         end if;
-
+         Run_Background (Scen, Path_To_Scen);
+         Run_Scenario (Scen, Path_To_Scen);
+         exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
    end Run_Scenario_List;
 
@@ -342,6 +367,7 @@ package body BBT.Tests.Runner is
       Created_File_List.Delete_All;
       -- All files and dir created during bbt run of this document
       -- are removed if -c | --cleanup option was used.
+      -- Files are not removed when something goes wrong to ease debugging.
 
    exception
       when E : others =>

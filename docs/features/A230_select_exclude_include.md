@@ -1,8 +1,7 @@
 <!-- omit from toc -->
 ## Feature: Filter
 
-`bbt` allows for fine-grained selection of what is executed in the set of files passed in the command line, 
-at the document (file), feature, scenario, and even step level.  
+`bbt` allows for fine-grained selection of what is executed in the set of files passed in the command line, at the document (file), feature, scenario, and even step level.  
 
 This can be done:
 
@@ -39,153 +38,10 @@ To facilitate understanding, tags are prefixed here in the usual way, with '@'.
 
 ### Background: Lets create the two files scen1.md and scen2.md 
 - Given there is no file `output.txt`
+- Given there is no file `output2.txt`
+- Given there is no file `input.txt`
 
-- Given the directory `dir7`
-- Given the directory `dir8`
-- Given the file `dir7/scen1.md`
-~~~md
-# Feature Security related tests
-
-## Background: user's credential is recorded @smoke
-
-## Scenario A.1 User blocked after multiple failed login attempt @login @security
-  Given the user is on the login page
-  When the user enters invalid credentials 5 times
-  Then the user account is blocked
-  And an error message "Your account has been blocked due to multiple failed login attempts" is displayed
-
-## Scenario A.2 User banned when DOS attack detected @security 
-  Given the system detects multiple rapid login attempts from the same IP address
-  When the number of attempts exceeds the threshold
-  Then the IP address is banned
-  And a warning is logged in the security system
-~~~
-
-- Given the file `dir8/scen1.md`
-~~~md
-##  Feature: User Authentication @regression @smoke
-  As a user
-  I want to log in and log out of the system
-  So that I can access my account securely
-
-  ### Scenario: Successful login @login @positive
-    Given the user navigates to the login page
-    When the user enters valid credentials
-    Then the user is redirected to the dashboard
-
-  ### Scenario: Failed login with invalid credentials @login @negative
-    Given the user navigates to the login page
-    When the user enters invalid credentials
-    Then an error message "Invalid username or password" is displayed
-
-  ### Scenario: Successful logout @logout
-    Given the user is logged in
-    When the user clicks the logout button
-    Then the user is redirected to the login page
-
-##  Feature: Search Functionality @search @regression
-  As a user
-  I want to search for items
-  So that I can find what I am looking for quickly
-  
-  ### Scenario: Search returns results @search @positive
-    Given the user is on the search page
-    When the user enters a valid search term
-    Then a list of matching items is displayed
-
-  ### Scenario: Search returns no results @search @negative
-    Given the user is on the search page
-    When the user enters a search term that does not match any items
-    Then a message "No results found" is displayed
-
-  ### Scenario: Filter search results @search @filter
-    Given the user is on the search page
-    And the user has entered a valid search term
-    When the user applies a filter
-    Then the search results are updated to match the filter
-~~~
-
-### Scenario: List all files
-
-- When I run `./bbt list dir7 dir8`
-- Then I get
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-dir7/scen1.md:5: Scenario "A.1 User blocked after multiple failed login attempt @login @security"  
-dir7/scen1.md:11: Scenario "A.2 User banned when DOS attack detected @security"  
-dir8/scen1.md:1: Feature "User Authentication @regression @smoke"  
-dir8/scen1.md:6: Scenario "Successful login @login @positive"  
-dir8/scen1.md:11: Scenario "Failed login with invalid credentials @login @negative"  
-dir8/scen1.md:16: Scenario "Successful logout @logout"  
-dir8/scen1.md:21: Feature "Search Functionality @search @regression"  
-dir8/scen1.md:26: Scenario "Search returns results @search @positive"  
-dir8/scen1.md:31: Scenario "Search returns no results @search @negative"  
-dir8/scen1.md:36: Scenario "Filter search results @search @filter"
-~~~
-
-### Scenario: Excluding @security tagged items
-
-- When I run `./bbt list --exclude @security dir7 dir8`
-- Then I get
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-dir8/scen1.md:1: Feature "User Authentication @regression @smoke"  
-dir8/scen1.md:6: Scenario "Successful login @login @positive"  
-dir8/scen1.md:11: Scenario "Failed login with invalid credentials @login @negative"  
-dir8/scen1.md:16: Scenario "Successful logout @logout"  
-dir8/scen1.md:21: Feature "Search Functionality @search @regression"  
-dir8/scen1.md:26: Scenario "Search returns results @search @positive"  
-dir8/scen1.md:31: Scenario "Search returns no results @search @negative"  
-dir8/scen1.md:36: Scenario "Filter search results @search @filter"
-~~~
-
-### Scenario: Select tagged items
-
-- When I run `./bbt list --select @security dir7 dir8`
-- Then I get
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-dir7/scen1.md:5: Scenario "A.1 User blocked after multiple failed login attempt @login @security"  
-dir7/scen1.md:11: Scenario "A.2 User banned when DOS attack detected @security"  
-~~~
-Note that the parent Feature are also selected, but Background are not.
-
-### Scenario: Select only a Background
-
-- When I run `./bbt list --select "credential is recorded" dir7 dir8`
-- Then I get
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-~~~
-
-### Scenario: Select tagged scenarios in two docs
-
-- When I run `./bbt list --select @smoke dir7 dir8`
-- Then I get
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-dir8/scen1.md:1: Feature "User Authentication @regression @smoke"  
-dir8/scen1.md:6: Scenario "Successful login @login @positive"  
-dir8/scen1.md:11: Scenario "Failed login with invalid credentials @login @negative"  
-dir8/scen1.md:16: Scenario "Successful logout @logout"  
-~~~
-
-### Scenario: Select followed by an exclude
-
-- When I run `./bbt list --select @security --exclude DOS dir7 dir8`
-- Then I get 
-~~~
-dir7/scen1.md:1: Feature "Security related tests"  
-dir7/scen1.md:3: Scenario "user's credential is recorded @smoke"  
-dir7/scen1.md:5: Scenario "A.1 User blocked after multiple failed login attempt @login @security"  
-~~~
-
-### Scenario: no step filtering
+### Scenario: no filtering
 
 - Given the file `filtered_step.md`
 ~~~
@@ -206,10 +62,110 @@ Windows
 
 ### Scenario: step filtering
 
-- When I run `./bbt --exclude Windows -d filters filtered_step.md`
+- When I run `./bbt --exclude Windows filtered_step.md`
   Only the create and Linux Steps are run
 
 - Then file `output.txt` is
 ```
 Linux
 ```
+
+### Scenario: step selection
+
+- When I run `./bbt --select create filtered_step.md`
+  Only the create step is executed, so the output file should be empty
+
+- Then file `output.txt` contains
+~~~
+~~~
+
+### Scenario: Selecting a scenario
+
+- Given the file `robustness.md`
+~~~
+# Scenario: Robustness
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --select Robustness filtered_step.md robustness.md`
+  Only the scenario in the second file is executed
+
+- Then there is no file `output.txt`
+- And `output2.txt` is
+~~~
+Linux
+Windows
+~~~
+
+### Scenario: selection is empty
+
+- Given the file `robustness.md`
+~~~
+# Scenario: Robustness
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --select xzscskfjhs filtered_step.md robustness.md`
+  Nothing should be executed
+
+- Then there is no file `output.txt`
+- And  there is no file `output2.txt`
+
+### Scenario: Selecting a Background only
+
+- Given the file `background.md`
+~~~
+# Background : new_file
+- Given the new file `input.txt`
+```
+new file
+```
+# Scenario: Robustness
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --select new_file background.md`
+  As no scenario is going to invoke the Background scenario, it is not run
+
+- Then there is no file `input.txt`
+- And  there is no file `output2.txt`
+
+### Scenario: Select followed by an exclude
+
+- Given the file `robustness.md`
+~~~
+# Scenario: Robustness
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --select Robustness --exclude Linux robustness.md`
+
+- Then `output2.txt` is
+~~~
+Windows
+~~~
+
+### Scenario: Exclude followed by an Include
+
+- Given the file `robustness.md`
+~~~
+# Scenario: Robustness
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --exclude Robustness --include create robustness.md`
+Only the creation should be run
+
+- Then `output2.txt` is
+~~~
+~~~

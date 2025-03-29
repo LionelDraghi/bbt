@@ -7,7 +7,7 @@
 
 package body BBT.Writers is
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    use BBT.IO;
    procedure Put_Debug_Line (Item      : String;
                              Location  : Location_Type    := No_Location;
@@ -20,7 +20,7 @@ package body BBT.Writers is
    Writer_List : array (Output_Format) of Interface_Access;
    Enabled     : array (Output_Format) of Boolean := [others => False];
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Is_Enabled (F : Output_Format) return Boolean is (Enabled (F));
    function No_Output_Format_Enabled return Boolean is
      (for all F in Enabled'Range => Enabled (F) = False);
@@ -29,12 +29,12 @@ package body BBT.Writers is
      (File_Pattern (Writer_List (For_Format).all));
    -- Dispatching call
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Default_Extension (For_Format : Output_Format) return String is
      (Default_Extension (Writer_List (For_Format).all));
    -- Dispatching call
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure File_Format (File_Name    :     String;
                           Found        : out Boolean;
                           Found_Format : out Output_Format) is
@@ -53,12 +53,13 @@ package body BBT.Writers is
       end loop;
    end File_Format;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Enable_Output (For_Format : Output_Format;
                             File_Name  : String := "") is
    begin
-      Put_Debug_Line ("Writers.Enable_Output (For_Format => " &
-                        For_Format'Image & ", File_Name => " & File_Name);
+      Put_Debug_Line ("Writers.Enable_Output (For_Format => "
+                      & For_Format'Image
+                      & ", File_Name => '" & File_Name & "')");
       Enabled (For_Format) := True;
       Enable_Output (Writer_List (For_Format).all, File_Name);
       if File_Name /= "" then
@@ -66,7 +67,7 @@ package body BBT.Writers is
       end if;
    end Enable_Output;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Put_Summary is
    begin
       Put_Debug_Line ("Writers.Put_Summary");
@@ -75,7 +76,7 @@ package body BBT.Writers is
       end loop;
    end Put_Summary;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Put_Step_Result (Step     : BBT.Documents.Step_Type;
                               Success  : Boolean;
                               Fail_Msg : String;
@@ -91,7 +92,7 @@ package body BBT.Writers is
       end loop;
    end Put_Step_Result;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Put_Overall_Results
      (Results : BBT.Tests.Results.Test_Results_Count) is
    begin

@@ -9,42 +9,7 @@
   - [X] scenario [Creating a file with some content](..\..\features\A005_Given.md) pass  
 
 ## [A006_Given_Executable_File.md](..\..\features\A006_Given_Executable_File.md)  
-  ### Feature: running scripts  
-*** NOK : Then I get an error (..\docs\features\a006_given_executable_file.md:33:)  
-..\docs\features\a006_given_executable_file.md:33: Error : Expected error code, got no error  
-*** NOK : And  the output contains `create_exec.md:2: Error : ./cmd1.sh not executable` (..\docs\features\a006_given_executable_file.md:34:)  
-..\docs\features\a006_given_executable_file.md:34: Error : Output:  
-~~~
-## [create_exec.md](create_exec.md)    
-  - [X] scenario [](create_exec.md) pass    
-  
-## Summary : **Success**  
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 0     |  
-| Successful | 1     |  
-| Empty      | 0     |  
-
-~~~
-does not contain expected:  
-~~~
-create_exec.md:2: Error : ./cmd1.sh not executable
-~~~
-  
-  - [ ] scenario [trying to run a script without the executable keyword should fail](..\..\features\A006_Given_Executable_File.md) fails  
-
-*** NOK : Then I get `bbt rules!` (..\docs\features\a006_given_executable_file.md:45:)  
-..\docs\features\a006_given_executable_file.md:45: Error : Output:  
-~~~
-~~~
-not equal to expected:  
-~~~
-bbt rules!
-~~~
-  
-  - [ ] scenario [trying to run the same script created with the executable attribute should succeed](..\..\features\A006_Given_Executable_File.md) fails  
-
+  ### Feature: running scripts (Unix_Only)  
 ## [A010_Then_Contains_Code_Span.md](..\..\features\A010_Then_Contains_Code_Span.md)  
   ### Feature: testing that a file contains a string  
   - [X] scenario [test on a string output](..\..\features\A010_Then_Contains_Code_Span.md) pass  
@@ -61,9 +26,15 @@ bbt rules!
 
 ## [A030_Then_Does_Not_Contain.md](..\..\features\A030_Then_Does_Not_Contain.md)  
   ### Feature: checking that some string is not present in output or file  
+  - [X] scenario [](..\..\features\A030_Then_Does_Not_Contain.md) pass  
+
   - [X] scenario [Successful checks](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
+  - [X] scenario [](..\..\features\A030_Then_Does_Not_Contain.md) pass  
+
   - [X] scenario [Failed "output doesn't contain"](..\..\features\A030_Then_Does_Not_Contain.md) pass  
+
+  - [X] scenario [](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
   - [X] scenario [Failed "file doesn't contain"](..\..\features\A030_Then_Does_Not_Contain.md) pass  
 
@@ -133,32 +104,60 @@ bbt rules!
 
 ## [A140_Unordered_Keyword.md](..\..\features\A140_Unordered_Keyword.md)  
   ### Feature: when the modifier `unordered` is given after `get`, order of line is ignored  
+  - [X] scenario [](..\..\features\A140_Unordered_Keyword.md) pass  
+
   - [X] scenario ["I get" without the modifier](..\..\features\A140_Unordered_Keyword.md) pass  
+
+  - [X] scenario [](..\..\features\A140_Unordered_Keyword.md) pass  
 
   - [X] scenario [same "I get" with the modifier](..\..\features\A140_Unordered_Keyword.md) pass  
 
+  - [X] scenario [](..\..\features\A140_Unordered_Keyword.md) pass  
+
   - [X] scenario ["contains" without the modifier](..\..\features\A140_Unordered_Keyword.md) pass  
+
+  - [X] scenario [](..\..\features\A140_Unordered_Keyword.md) pass  
 
   - [X] scenario [same "contains" but with the "unordered" modifier](..\..\features\A140_Unordered_Keyword.md) pass  
 
 ## [A150_Background_Keyword.md](..\..\features\A150_Background_Keyword.md)  
   ### Feature: Feature 1  
+  - [X] scenario [Background1](..\..\features\A150_Background_Keyword.md) pass  
+
+  - [X] scenario [Background2 in feature 1](..\..\features\A150_Background_Keyword.md) pass  
+
   - [X] scenario [lets erase what was created by previous background runs](..\..\features\A150_Background_Keyword.md) pass  
+
+  - [X] scenario [Background1](..\..\features\A150_Background_Keyword.md) pass  
+
+  - [X] scenario [Background2 in feature 1](..\..\features\A150_Background_Keyword.md) pass  
 
   - [X] scenario [Two Background executed](..\..\features\A150_Background_Keyword.md) pass  
 
   ### Feature: Feature 2  
+  - [X] scenario [Background1](..\..\features\A150_Background_Keyword.md) pass  
+
   - [X] scenario [lets erase once more what was created by previous background runs](..\..\features\A150_Background_Keyword.md) pass  
+
+  - [X] scenario [Background1](..\..\features\A150_Background_Keyword.md) pass  
 
   - [X] scenario [only first background should apply](..\..\features\A150_Background_Keyword.md) pass  
 
 ## [A160_Ignoring_Blank_Lines.md](..\..\features\A160_Ignoring_Blank_Lines.md)  
   ### Feature: Ignoring blank lines  
+  - [X] scenario [](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
   - [X] scenario [some obvious tests](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
+  - [X] scenario [](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
 
   - [X] scenario [default behavior, non sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
 
+  - [X] scenario [](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
   - [X] scenario [with --exact_match, sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
+
+  - [X] scenario [](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
 
   - [X] scenario [with --exact_match and --ignore_blank_lines, non sensible to blank lines](..\..\features\A160_Ignoring_Blank_Lines.md) pass  
 
@@ -178,30 +177,6 @@ bbt rules!
 
   - [X] scenario [command not found](..\..\features\A190_Run.md) pass  
 
-*** NOK : Then I get an error (..\docs\features\a190_run.md:50:)  
-..\docs\features\a190_run.md:50: Error : Expected error code, got no error  
-*** NOK : And  the output contains `cmd_not_exe.md:2: Error : ./lambda_file not executable` (..\docs\features\a190_run.md:51:)  
-..\docs\features\a190_run.md:51: Error : Output:  
-~~~
-## [cmd_not_exe.md](cmd_not_exe.md)    
-  - [X] scenario [](cmd_not_exe.md) pass    
-  
-## Summary : **Success**  
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 0     |  
-| Successful | 1     |  
-| Empty      | 0     |  
-
-~~~
-does not contain expected:  
-~~~
-cmd_not_exe.md:2: Error : ./lambda_file not executable
-~~~
-  
-  - [ ] scenario [the command is not executable](..\..\features\A190_Run.md) fails  
-
 ## [A200_Regexp.md](..\..\features\A200_Regexp.md)  
   ### Feature: identifying expected output with regexp  
   - [X] scenario [version number match](..\..\features\A200_Regexp.md) pass  
@@ -213,11 +188,19 @@ cmd_not_exe.md:2: Error : ./lambda_file not executable
   - [X] scenario [Test of "does not match" that indeed matches](..\..\features\A200_Regexp.md) pass  
 
 ## [A210_Exact_Match.md](..\..\features\A210_Exact_Match.md)  
+  - [X] scenario [](..\..\features\A210_Exact_Match.md) pass  
+
   - [X] scenario [Human match](..\..\features\A210_Exact_Match.md) pass  
+
+  - [X] scenario [](..\..\features\A210_Exact_Match.md) pass  
 
   - [X] scenario [exact match](..\..\features\A210_Exact_Match.md) pass  
 
+  - [X] scenario [](..\..\features\A210_Exact_Match.md) pass  
+
   - [X] scenario [exact match except for casing](..\..\features\A210_Exact_Match.md) pass  
+
+  - [X] scenario [](..\..\features\A210_Exact_Match.md) pass  
 
   - [X] scenario [exact match except for casing and blank lines](..\..\features\A210_Exact_Match.md) pass  
 
@@ -226,15 +209,57 @@ cmd_not_exe.md:2: Error : ./lambda_file not executable
 
   - [X] scenario [compiling and executing an hello word](..\..\features\A220_AsciiDoc_gcc_hello_word.adoc) pass  
 
+## [A230_select_exclude_include.md](..\..\features\A230_select_exclude_include.md)  
+  ### Feature: Filter  
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [no filtering](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [step filtering](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [step selection](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Selecting a scenario](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [selection is empty](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Selecting a Background only](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Select followed by an exclude](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Exclude followed by an Include](..\..\features\A230_select_exclude_include.md) pass  
+
 ## [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
+  - [X] scenario [](..\..\features\B010_Deleting_created_files.md) pass  
+
   - [X] scenario [run without --cleanup](..\..\features\B010_Deleting_created_files.md) pass  
+
+  - [X] scenario [](..\..\features\B010_Deleting_created_files.md) pass  
 
   - [X] scenario [run with --cleanup](..\..\features\B010_Deleting_created_files.md) pass  
 
 ## [B020_Exec_dir.md](..\..\features\B020_Exec_dir.md)  
   ### Feature: **Exec Dir**  
+  - [X] scenario [create some dir and file](..\..\features\B020_Exec_dir.md) pass  
+
   - [X] scenario [Lets run `create_tree` in the current dir](..\..\features\B020_Exec_dir.md) pass  
+
+  - [X] scenario [create some dir and file](..\..\features\B020_Exec_dir.md) pass  
 
   - [X] scenario [Lets run `create_tree` in ./dir2](..\..\features\B020_Exec_dir.md) pass  
 
@@ -248,43 +273,27 @@ cmd_not_exe.md:2: Error : ./lambda_file not executable
 
 ## [B040_Find_scenarios.md](..\..\features\B040_Find_scenarios.md)  
   ### Feature: multiples scenarios given in command line  
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
+
   - [X] scenario [no file or dir on the command line](..\..\features\B040_Find_scenarios.md) pass  
 
-*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:67:)  
-..\docs\features\b040_find_scenarios.md:67: Error : Output:  
-~~~
-dir1\scen1.md  
-dir1\scen2.md
-~~~
-not equal to expected:  
-~~~
-dir1/scen2.md  
-dir1/scen1.md
-~~~
-  
-  - [ ] scenario [running all scenarios in dir1](..\..\features\B040_Find_scenarios.md) fails  
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
+
+  - [X] scenario [running all scenarios in dir1](..\..\features\B040_Find_scenarios.md) pass  
+
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
 
   - [X] scenario [running multiple scenarios given on command line](..\..\features\B040_Find_scenarios.md) pass  
 
-*** NOK : Then the output is (unordered) (..\docs\features\b040_find_scenarios.md:98:)  
-..\docs\features\b040_find_scenarios.md:98: Error : Output:  
-~~~
-dir1\dir2\scen5.md  
-dir1\dir3\dir4\scen6.md  
-dir1\scen1.md  
-dir1\scen2.md
-~~~
-not equal to expected:  
-~~~
-dir1/scen2.md  
-dir1/scen1.md  
-dir1/dir3/dir4/scen6.md  
-dir1/dir2/scen5.md
-~~~
-  
-  - [ ] scenario [running scenarios in a tree thanks to `-r`](..\..\features\B040_Find_scenarios.md) fails  
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
+
+  - [X] scenario [running scenarios in a tree thanks to `-r`](..\..\features\B040_Find_scenarios.md) pass  
+
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
 
   - [X] scenario [error msg when trying to run scenarios, but none found in given directories](..\..\features\B040_Find_scenarios.md) pass  
+
+  - [X] scenario [](..\..\features\B040_Find_scenarios.md) pass  
 
   - [X] scenario [empty list file on -lf if there is no scenario in given directories](..\..\features\B040_Find_scenarios.md) pass  
 
@@ -303,45 +312,65 @@ dir1/dir2/scen5.md
 ## [B070_Mandatory_new_bug.md](..\..\features\B070_Mandatory_new_bug.md)  
   - [X] scenario [](..\..\features\B070_Mandatory_new_bug.md) pass  
 
+  - [X] scenario [](..\..\features\B070_Mandatory_new_bug.md) pass  
+
 ## [B080_Keep_Going.md](..\..\features\B080_Keep_Going.md)  
   ### Feature: on error, Keep going or stop  
+  - [X] scenario [](..\..\features\B080_Keep_Going.md) pass  
+
   - [X] scenario [with `-k`](..\..\features\B080_Keep_Going.md) pass  
+
+  - [X] scenario [](..\..\features\B080_Keep_Going.md) pass  
 
   - [X] scenario [without `-k`](..\..\features\B080_Keep_Going.md) pass  
 
 ## [B090_tmp_dir.md](..\..\features\B090_tmp_dir.md)  
   ### Feature: Tmp dir  
+  - [X] scenario [](..\..\features\B090_tmp_dir.md) pass  
+
   - [X] scenario [Current dir, no cleanup](..\..\features\B090_tmp_dir.md) pass  
+
+  - [X] scenario [](..\..\features\B090_tmp_dir.md) pass  
 
   - [X] scenario [Current dir, with cleanup](..\..\features\B090_tmp_dir.md) pass  
 
+  - [X] scenario [](..\..\features\B090_tmp_dir.md) pass  
+
   - [X] scenario [Within dir1, no cleanup](..\..\features\B090_tmp_dir.md) pass  
+
+  - [X] scenario [](..\..\features\B090_tmp_dir.md) pass  
 
   - [X] scenario [Within dir1, with cleanup](..\..\features\B090_tmp_dir.md) pass  
 
 ## [B100_Results_Output_In_MD_Format.md](..\..\features\B100_Results_Output_In_MD_Format.md)  
+  - [X] scenario [](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
   - [X] scenario [default mode run](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
 
+  - [X] scenario [](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
   - [X] scenario [verbose mode run](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
+
+  - [X] scenario [](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
 
   - [X] scenario [run with an error](..\..\features\B100_Results_Output_In_MD_Format.md) pass  
 
 ## [B110_Spawn.md](..\..\features\B110_Spawn.md)  
   ### Feature: Command line to spawn processing  
-*** NOK : then I get no error (..\docs\features\b110_spawn.md:14:)  
-..\docs\features\b110_spawn.md:14: Error : No error expected, but got one ( 1)  
-*** NOK : And there is a file `dir 1/file 1` (..\docs\features\b110_spawn.md:15:)  
-..\docs\features\b110_spawn.md:15: Error : Expected file "dir 1/file 1" doesn't exists  
-  - [ ] scenario [Directory with space in the name](..\..\features\B110_Spawn.md) fails  
-
-  - [X] scenario [Command with quoted arguments](..\..\features\B110_Spawn.md) pass  
-
 ## [B120_Output_Verbosity.md](..\..\features\B120_Output_Verbosity.md)  
+  - [X] scenario [](..\..\features\B120_Output_Verbosity.md) pass  
+
   - [X] scenario [Quiet mode run](..\..\features\B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [](..\..\features\B120_Output_Verbosity.md) pass  
 
   - [X] scenario [Default mode run](..\..\features\B120_Output_Verbosity.md) pass  
 
+  - [X] scenario [](..\..\features\B120_Output_Verbosity.md) pass  
+
   - [X] scenario [Verbose mode run](..\..\features\B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [](..\..\features\B120_Output_Verbosity.md) pass  
 
   - [X] scenario [Normal mode with an error](..\..\features\B120_Output_Verbosity.md) pass  
 
@@ -383,12 +412,11 @@ dir1/dir2/scen5.md
   - [X] scenario [](..\..\features\C090_GNU_Error_Msg_Format.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 6     |
-| Successful | 103   |
+| Failed     | 0     |
+| Successful | 112   |
 | Empty      | 0     |
-| Skipped    | 0     |
 
