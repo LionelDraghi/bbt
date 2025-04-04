@@ -54,7 +54,7 @@ This behavior was retained dangerous, and moreover, unexpected : most command ju
 - When I run `./bbt`
 - Then the output contains
 ```
-Usage : bbt [Options]* [Command] [bbt_file]*
+Usage : bbt [Options]* [Command] file*  
 ````
 - And there is no error
 

@@ -56,6 +56,14 @@ private
       File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
+   function Remove_Emphasis (Reader    : MDG_Reader;
+                             S         : String) return String;
+   -- Removes potential emphasis on keyword
+   -- * : bold (two *) and italic (one *)
+   -- _ : underline
+   -- [](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)
+
+   -- --------------------------------------------------------------------------
    overriding function Find_Heading_Mark
      (Reader      : MDG_Reader;
       Line        : String;

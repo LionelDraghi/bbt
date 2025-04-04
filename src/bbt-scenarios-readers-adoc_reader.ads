@@ -48,6 +48,17 @@ private
       File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
+   function Remove_Emphasis (Reader    : Adoc_Reader;
+                             S         : String) return String;
+   -- Removes potential emphasis on keyword
+   -- * : bold
+   -- _ : italic
+   -- ` : monospace
+   -- [](https://asciidoc.org/#specifications)
+   -- (there is no precise reference for now, as AsciiDoc specification is a
+   -- work in progress)
+
+   -- --------------------------------------------------------------------------
    overriding function Find_Heading_Mark
      (Reader      : Adoc_Reader;
       Line        : String;

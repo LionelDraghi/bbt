@@ -11,11 +11,11 @@ package BBT.Scenarios.Readers is
    -- Common declarations for scenario readers
 
    -- --------------------------------------------------------------------------
-  type Input_Format is (MDG, Adoc, Unknown);
+   type Input_Format is (MDG, Adoc, Unknown);
    subtype Valid_Input_Format is
      Input_Format range Input_Format'First .. Input_Format'Pred (Unknown);
 
-    function Format (File_Name : String) return Valid_Input_Format;
+   function Format (File_Name : String) return Valid_Input_Format;
 
    function File_Pattern (For_Format : Valid_Input_Format) return String;
    -- Returns the regexp that will be used to identify sources files
@@ -58,6 +58,11 @@ private
       File_Name : String) return Boolean is abstract;
    -- Returns True if the given file is processed by this reader.
 
+   function Remove_Emphasis (Reader    : Abstract_Reader;
+                             S         : String) return String is abstract;
+   -- Keywords may be surrounded by Bold or Underline marks, like '*' or '_'
+   -- for Markdown. This function return S without those marks if any.
+
    -- --------------------------------------------------------------------------
    function Find_Heading_Mark
      (Reader      : Abstract_Reader;
@@ -68,8 +73,7 @@ private
       Title_Last  : out Natural;
       Location    : Location_Type) return Boolean is abstract;
    -- In Markdown, for example :
-   -- ### **Header** : xyz
-   -- if found,
+   -- ### **Header** : xy z
    -- First will point 'H'
    -- Last  will point 'r'
    -- Title_First will point 'x'

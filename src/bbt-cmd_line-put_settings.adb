@@ -5,9 +5,10 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Characters.Handling;
+with Ada.Characters.Handling,
+     Ada.Text_IO;
 
-separate (BBT.Main)
+separate (BBT.Cmd_Line)
 
 procedure Put_Settings is
 
@@ -16,14 +17,16 @@ procedure Put_Settings is
      (if Switch then "[X]" else "[ ]");
 
    use Ada.Text_IO;
-   use Scenarios.Files;
 
 begin
    New_Line;
    Put_Line ("Settings / Command line analysis:");
    Put_Line ("---------------------------------");
    New_Line;
-   Put_Line ("   Command               : " & Current_Command'Image);
+   Put_Line ("   Command               : " & Current_Command'Image
+             & (if Current_Command = Help and Current_Topic /= Global
+               then " " & Current_Topic'Image
+               else ""));
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
    Put_Line ("   bbt files             : " & One_Line_Image (Document_List));
    Put_Line ("   Initial directory     : " & Launch_Directory);
@@ -41,7 +44,6 @@ begin
    Put_Line ("   " & Checkbox (Ignore_Whitespaces) & " Ignore_Whitespaces");
    Put_Line ("   " & Checkbox (Ignore_Casing) & " Ignore_Casing");
    Put_Line ("   " & Checkbox (Ignore_Blank_Lines) & " Ignore_Blank_Lines");
-   Put_Line ("   " & Checkbox (List_Files) & " List_Files");
    Put_Line ("   " & Checkbox (Yes) & " Yes");
    Put_Line ("   " & Checkbox (Settings.Cleanup) & " Cleanup");
    Put_Line ("   " & Checkbox (Settings.Strict_Gherkin) & " Strict_Gherkin");

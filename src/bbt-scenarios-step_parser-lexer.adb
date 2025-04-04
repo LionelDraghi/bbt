@@ -64,6 +64,7 @@ package body BBT.Scenarios.Step_Parser.Lexer is
    is
    -- We first remove potential emphasis on keyword
    -- [](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)
+   -- Fixme : should call Reader.Remove_Emphasis
       Emphasis  : constant Ada.Strings.Maps.Character_Set
         := Ada.Strings.Maps.To_Set ("*_");
       Trimmed   : constant String := Trim (S.all (First .. Last),

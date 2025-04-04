@@ -5,17 +5,14 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Characters.Handling;
-with Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 
-separate (BBT.Main)
+separate (BBT.Cmd_Line)
 
 -- -----------------------------------------------------------------------------
-procedure Put_Topics is
-   use Ada.Characters.Handling;
+procedure Put_Error (Msg       : String  := "";
+                     With_Help : Boolean := False) is
 begin
-   Ada.Text_IO.Put_Line ("Available topics :");
-   for T in IO.Topics loop
-      Ada.Text_IO.Put_Line ("- " & To_Lower (T'Image));
-   end loop;
-end Put_Topics;
+   IO.Put_Error (Msg);
+   if With_Help then Put_Help; end if;
+end Put_Error;

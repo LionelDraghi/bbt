@@ -7,6 +7,7 @@
 
 with BBT.IO,
      BBT.Documents.Apply_Filters,
+     BBT.Cmd_Line,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
      BBT.Scenarios.Readers.MDG_Reader,
@@ -14,7 +15,6 @@ with BBT.IO,
      BBT.Settings,
      BBT.Status_Bar,
      BBT.Tests.Builder,
-     BBT.Tests.Filter_List,
      BBT.Tests.Results,
      BBT.Tests.Runner,
      BBT.Writers,
@@ -27,23 +27,13 @@ with Ada.Command_Line,
 --  Ada.Calendar.Formatting,
      Ada.Text_IO;
 
-use BBT.Scenarios.Readers,
+use BBT,
+    BBT.Scenarios.Readers,
     BBT.Settings,
     BBT.Tests.Results,
     BBT.Writers;
 
 procedure BBT.Main is
-
-   -- --------------------------------------------------------------------------
-   -- Put_Line Utilities:
-   procedure Put_Help     is separate;
-   procedure Put_Settings is separate;
-   procedure Put_Topics   is separate;
-   --  procedure Put_Error (Msg       : String  := "";
-   --                       With_Help : Boolean := False) is separate;
-   procedure Create_Template  is separate;
-   procedure Analyze_Cmd_Line is separate;
-   -- Cmd line options are then available in the Settings package.
 
    -- --------------------------------------------------------------------------
    procedure Analyze_Documents is
@@ -67,12 +57,8 @@ procedure BBT.Main is
          end loop;
       end if;
 
-      -- Set filters
-      -- if Settings.Selection_Mode then
-         -- When in selection mode, all item are filtered unless selected
-         -- with --select
       Documents.Apply_Filters
-         (To_Docs => Tests.Builder.The_Tests_List);
+        (To_Docs => Tests.Builder.The_Tests_List);
 
    end Analyze_Documents;
 
@@ -85,7 +71,7 @@ begin
    Markdown_Writer.Initialize;
    Asciidoc_Writer.Initialize;
 
-   Analyze_Cmd_Line;
+   Cmd_Line.Analyze;
 
    if No_Output_Format_Enabled then
       Writers.Enable_Output (For_Format => Txt);
@@ -94,6 +80,11 @@ begin
 
    if Settings.Status_Bar then
       Status_Bar.Enable;
+   end if;
+
+   if Settings.List_Settings then
+      Status_Bar.Put_Activity ("Listing settings");
+      Cmd_Line.Put_Settings;
    end if;
 
    IO.Set_Reference_Directory (Settings.Launch_Directory);
@@ -115,24 +106,11 @@ begin
    --   Principle : "There can be only one". If one action is found, then
    --               do the job and exit.
    --   (options are already processed in the analyze Cmd_Line procedure)
-
-   if Settings.List_Files then
-      Status_Bar.Put_Activity ("Listing files");
-      for File of Scenarios.Files.Document_List loop
-         Ada.Text_IO.Put_Line (File);
-      end loop;
-      return;
-   end if;
-
    case Settings.Current_Command is
 
    when List_Topics =>
       Status_Bar.Put_Activity ("Listing topics");
-      Put_Topics;
-
-   when List_Settings =>
-      Status_Bar.Put_Activity ("Listing settings");
-      Put_Settings;
+      Cmd_Line.Put_Topics;
 
    when List_Keywords =>
       Status_Bar.Put_Activity ("Listing keywords");
@@ -142,6 +120,13 @@ begin
    when List_Grammar =>
       Status_Bar.Put_Activity ("Listing grammar");
       BBT.Scenarios.Step_Parser.Put_Grammar;
+
+   when List_Files =>
+      Status_Bar.Put_Activity ("Listing files");
+      for File of Scenarios.Files.Document_List loop
+         Ada.Text_IO.Put_Line (File);
+      end loop;
+      -- return;
 
    when Explain =>
       Status_Bar.Put_Activity ("Analyzing documents");
@@ -177,10 +162,14 @@ begin
 
    when Create_Template =>
       Status_Bar.Put_Activity ("Creating template");
-      Create_Template;
+      Cmd_Line.Create_Template;
+
+   when Version =>
+      Ada.Text_IO.Put_Line ("bbt version " & Settings.BBT_Version);
 
    when Help =>
-      Put_Help;
+      Cmd_Line.Put_Help (Settings.Current_Topic);
+      --Fixme: what if there is multiple topics ont the cmd line?
 
    end case;
 

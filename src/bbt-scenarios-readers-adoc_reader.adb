@@ -50,6 +50,17 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
+   function Remove_Emphasis (Reader    : Adoc_Reader;
+                             S         : String) return String is
+      Emphasis  : constant Ada.Strings.Maps.Character_Set
+        := Ada.Strings.Maps.To_Set ("*_`");
+   begin
+      return Trim (S,
+                   Left  => Emphasis,
+                   Right => Emphasis);
+   end Remove_Emphasis;
+
+   -- --------------------------------------------------------------------------
    function Find_Heading_Mark
      (Reader      : Adoc_Reader;
       Line        : String;

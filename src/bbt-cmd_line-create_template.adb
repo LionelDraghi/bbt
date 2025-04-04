@@ -8,7 +8,7 @@
 with Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 
-separate (BBT.Main)
+separate (BBT.Cmd_Line)
 
 procedure Create_Template is
    Template  : File_Type;
