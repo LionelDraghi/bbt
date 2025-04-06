@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ package body BBT.Scenarios.Step_Parser is
                     New_SA,
                     -- Subjects ---------------------------------------------
                     No_Subject,
-                    Subject_Dir,  -- dir name
+                    Dir_Subject,  -- dir name
                     Subject_File, -- file name
                     Subject_Text, -- content of code span or following
                     --               code fenced lines, before verb
@@ -73,7 +73,7 @@ package body BBT.Scenarios.Step_Parser is
    subtype Subject_Attrib is Tokens range No_SA        .. Tokens'Pred (Subjects'First);
    subtype Prepositions   is Tokens range Tokens'First .. Tokens'Pred (Subject_Attrib'First);
 
-   -- -----------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Image (T : Tokens) return String is
    begin
       case T is
@@ -86,7 +86,7 @@ package body BBT.Scenarios.Step_Parser is
          when No_Subject       => return "";
          when Output_Subj      => return "output";
          when Subject_File     => return "`file`";
-         when Subject_Dir      => return "`dir`";
+         when Dir_Subject      => return "`dir`";
          when Subject_Text     => return "`text`";
          when No_Verb          => return "";
          when Run              => return "run";
@@ -140,8 +140,8 @@ package body BBT.Scenarios.Step_Parser is
                                                                                                     --  what is expected
       G (Given, New_SA, Subject_File, No_Verb,    No_Object)           := (Erase_And_Create, True); -- Given the new file `config.ini` followed by code fenced content
       G (Given, No_SA,  Subject_File, No_Verb,    No_Object)           := (Erase_And_Create, True); -- Given the file `config.ini` followed by code fenced content
-      G (Given, New_SA, Subject_Dir,  No_Verb,    No_Object)           := (Erase_And_Create, False); -- Given the new directory `dir1`
-      G (Given, No_SA,  Subject_Dir,  No_Verb,    No_Object)           := (Create_If_None, False);   -- Given the directory `dir1`
+      G (Given, New_SA, Dir_Subject,  No_Verb,    No_Object)           := (Erase_And_Create, False); -- Given the new directory `dir1`
+      G (Given, No_SA,  Dir_Subject,  No_Verb,    No_Object)           := (Create_If_None, False);   -- Given the directory `dir1`
       G (Given, No_SA,  No_Subject,   Run,            Obj_Text)        := (Run_Cmd, False);           -- Given I run `cmd`
       G (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text)        := (Run_Without_Error, False); -- Given i successfully run `cmd`
 
@@ -234,10 +234,65 @@ package body BBT.Scenarios.Step_Parser is
    -- between calls to Parse.
 
    -- --------------------------------------------------------------------------
-   function Parse (Line                : Unbounded_String;
-                   Loc                 : Location_Type;
-                   Code_Block_Expected : out Boolean;
-                   Cmd_List            : out Cmd_Lists.Vector) return Step_Type
+   package Chunk is
+      procedure Initialize;
+      procedure Set_Verb (V : Verbs);
+      procedure Set_Loc (L : Location_Type);
+      function Verb return Verbs;
+      function In_Subject_Part return Boolean;
+      function In_Object_Part  return Boolean;
+   end Chunk;
+
+   -- --------------------------------------------------------------------------
+   package body Chunk is
+
+      Current_Verb : Verbs := No_Verb;
+      Loc : Location_Type;
+
+      procedure Initialize is
+      begin
+         Current_Verb := No_Verb;
+      end Initialize;
+
+      procedure Set_Verb (V : Verbs) is
+      begin
+         if Current_Verb = No_Verb
+           or else (Current_Verb = Get      and V = Get_No)
+           or else (Current_Verb = Contains and V = Does_Not_Contain)
+           or else (Current_Verb = Matches  and V = Does_Not_Match)
+           or else (Current_Verb = Is_V     and V = Is_No)
+         then
+            -- Setting a verb for the first time, or changing it
+            -- to the negative form is OK.
+            Current_Verb := V;
+         else
+            -- But if 'is' is detected after 'contains' we warn the user
+            -- that the step wording may be ambiguous.
+            IO.Put_Warning
+              ("Verb is '" & Image (Current_Verb)
+               & "', ignoring following '" & Image (V) & "'",
+               Loc);
+         end if;
+      end Set_Verb;
+
+      procedure Set_Loc (L : Location_Type) is
+      begin
+         Loc := L;
+      end Set_Loc;
+
+      function Verb return Verbs is (Current_Verb);
+
+      function In_Subject_Part return Boolean is (Current_Verb  = No_Verb);
+      function In_Object_Part  return Boolean is (Current_Verb /= No_Verb);
+
+   end Chunk;
+
+   -- --------------------------------------------------------------------------
+   function Parse (Line                :        Unbounded_String;
+                   Loc                 : in out Location_Type;
+                   Code_Block_Expected :    out Boolean;
+                   Cmd_List            :    out Cmd_Lists.Vector)
+                   return Step_Type
    is
       First_Token      : Boolean        := True;
       Successfully_Met : Boolean        := False;
@@ -246,8 +301,8 @@ package body BBT.Scenarios.Step_Parser is
       Prep             : Prepositions;
       Subject_Attr     : Subject_Attrib := No_SA;
       Subject          : Subjects       := No_Subject;
-      Verb             : Verbs          := No_Verb;
       Object           : Objects        := No_Object;
+      File_Type        : File_Kind      := Ordinary_File;
 
       -- All component of the returned Step are initialized :
       Cat              : Extended_Step_Categories := Unknown;
@@ -260,25 +315,25 @@ package body BBT.Scenarios.Step_Parser is
       -- by default, order of expected output is significant
       Executable       : Boolean                  := False;
 
-      File_Type        : File_Kind                := Ordinary_File;
-
-      function In_Subject_Part return Boolean is (Verb  = No_Verb);
-      function In_Object_Part  return Boolean is (Verb /= No_Verb);
+      use Chunk;
 
    begin
       Step_String := Line;
       Cmd_List    := Cmd_Lists.Empty_Vector;
 
       Initialize_Lexer;
+      Chunk.Initialize;
 
       -- Put_Line ("Parsing """ & To_String (Line) & """", Verbosity => IO.Debug);
       Line_Processing : while More_Token loop
          declare
             TT  : Token_Type;
             Tmp : aliased constant String := To_String (Line);
-            Tok : constant String := Next_Token (Tmp'Access, TT);
+            Tok : constant String := Next_Token (Tmp'Access, TT, Loc);
 
          begin
+            Chunk.Set_Loc (Loc);
+
             -- Put_Line ("Token = " & TT'Image & " " & Tok'Image);
             case TT is
                when Keyword =>
@@ -324,9 +379,9 @@ package body BBT.Scenarios.Step_Parser is
 
                      elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
                         if Successfully_Met then
-                           Verb := Successful_Run;
+                           Set_Verb (Successful_Run);
                         else
-                           Verb := Run;
+                           Set_Verb (Run);
                         end if;
 
                      elsif Lower_Keyword = "or" then
@@ -340,10 +395,10 @@ package body BBT.Scenarios.Step_Parser is
                         end if;
 
                      elsif Lower_Keyword = "get" then
-                        Verb := Get;
+                        Set_Verb (Get);
 
                      elsif Lower_Keyword = "is" then
-                        Verb := Is_V;
+                        Set_Verb (Is_V);
 
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
@@ -353,9 +408,9 @@ package body BBT.Scenarios.Step_Parser is
                      then
                         Not_Met := True;
                         if Verb = Is_V then
-                           Verb := Is_No;
+                           Set_Verb (Is_No);
                         elsif Verb = Get then
-                           Verb := Get_No;
+                           Set_Verb (Get_No);
                         end if;
 
                      elsif Lower_Keyword = "successfully" then
@@ -375,22 +430,22 @@ package body BBT.Scenarios.Step_Parser is
                        Lower_Keyword = "contain"
                      then
                         if Not_Met then
-                           Verb := Does_Not_Contain;
+                           Set_Verb (Does_Not_Contain);
                         else
-                           Verb := Contains;
+                           Set_Verb (Contains);
                         end if;
 
                      elsif Lower_Keyword = "match" or
                        Lower_Keyword = "matches"
                      then
                         if Not_Met then
-                           Verb := Does_Not_Match;
+                           Set_Verb (Does_Not_Match);
                         else
-                           Verb := Matches;
+                           Set_Verb (Matches);
                         end if;
 
                      elsif Lower_Keyword = "containing" then
-                        Verb := Containing;
+                        Set_Verb (Containing);
 
                      elsif Lower_Keyword = "new" then
                         Subject_Attr := New_SA;
@@ -400,7 +455,7 @@ package body BBT.Scenarios.Step_Parser is
                         File_Type := Directory;
 
                         if In_Subject_Part then
-                           Subject := Subject_Dir;
+                           Subject := Dir_Subject;
 
                         elsif In_Object_Part then
                            Object := Obj_Dir_Name;
@@ -454,7 +509,7 @@ package body BBT.Scenarios.Step_Parser is
 
                   elsif In_Subject_Part and then Subject = No_Subject then
                      if File_Type = Directory then
-                        Subject := Subject_Dir;
+                        Subject := Dir_Subject;
                      else
                         Subject := Subject_File;
                      end if;

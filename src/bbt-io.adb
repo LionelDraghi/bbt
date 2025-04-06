@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ package body BBT.IO is
    Tee_Enabled        : Boolean          := False;
    Was_Tee_Enabled    : Boolean          := False;
    Tee_File_Verbosity : Verbosity_Levels := Normal;
-   Tee_File           : Ada.Text_IO.File_Type;
+   Tee_File           : Text_IO.File_Type;
    Current_Level      : Verbosity_Levels := Normal;
 
    -- --------------------------------------------------------------------------
@@ -49,18 +49,9 @@ package body BBT.IO is
      (Topic in Topics and then Enabled_Topics (Topic));
 
    -- --------------------------------------------------------------------------
-   function File   (Loc : Location_Type) return String is
-   begin
-      return +Loc.File;
-   end File;
-   function Line   (Loc : Location_Type) return Ada.Text_IO.Count is
-   begin
-      return Loc.Line;
-   end Line;
-   function Column (Loc : Location_Type) return Ada.Text_IO.Count is
-   begin
-      return Loc.Column;
-   end Column;
+   function File   (Loc : Location_Type) return String        is (+Loc.File);
+   function Line   (Loc : Location_Type) return Text_IO.Count is (Loc.Line);
+   function Column (Loc : Location_Type) return Text_IO.Count is (Loc.Column);
 
    -- --------------------------------------------------------------------------
    -- Function: GNU_Prefix
@@ -76,29 +67,29 @@ package body BBT.IO is
    --    otherwise.
    --
    -- --------------------------------------------------------------------------
-   function GNU_Prefix (File : String;
-                        Line : Ada.Text_IO.Count := 0) return String
-   is
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      Trimmed_File   : constant String := Trim (File, Side => Both);
-      Trimmed_Line   : constant String := Trim (Ada.Text_IO.Count'Image (Line),
-                                                Side => Both);
-      Common_Part   : constant String := "bbt:" & Trimmed_File;
-   begin
-      if File = "" then
-         return "";
-      elsif Line = 0 then
-         return Common_Part & " ";
-      else
-         return Common_Part & ":" & Trimmed_Line & ": ";
-      end if;
-   end GNU_Prefix;
+   --  function GNU_Prefix (File : String;
+   --                       Line : Text_IO.Count := 0) return String
+   --  is
+   --     use Ada.Strings;
+   --     use Ada.Strings.Fixed;
+   --     Trimmed_File   : constant String := Trim (File, Side => Both);
+   --     Trimmed_Line   : constant String := Trim (Text_IO.Count'Image (Line),
+   --                                               Side => Both);
+   --     Common_Part   : constant String := "bbt:" & Trimmed_File;
+   --  begin
+   --     if File = "" then
+   --        return "";
+   --     elsif Line = 0 then
+   --        return Common_Part & " ";
+   --     else
+   --        return Common_Part & ":" & Trimmed_Line & ": ";
+   --     end if;
+   --  end GNU_Prefix;
 
    -- --------------------------------------------------------------------------
    function Image (Loc : Location_Type) return String is
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
+      use Strings;
+      use Strings.Fixed;
       Trimmed_Line   : constant String := Trim (Loc.Line'Image,   Side => Left);
       Trimmed_Column : constant String := Trim (Loc.Column'Image, Side => Left);
    begin
@@ -112,53 +103,30 @@ package body BBT.IO is
    end Image;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Warning (Msg  : String;
-                          File : String := "";
-                          Line :  Ada.Text_IO.Count  := 0) is
+   procedure Put_Warning   (Msg      : String;
+                            Location : Location_Type := No_Location) is
    begin
       Warnings_Count := @ + 1;
-      Put_Line ("Warning : " & Msg, File, Line);
-      -- use the local version of Put_Line, and not the Ada.Text_IO one,
+      Put_Line ("Warning : " & Msg, Location);
+      -- Uses the local version of Put_Line, and not the Ada.Text_IO one,
       -- so that Warning messages are also ignored when --quiet.
    end Put_Warning;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Error (Msg  : String;
-                        File : String := "";
-                        Line :  Ada.Text_IO.Count  := 0) is
+   procedure Put_Error     (Msg      : String;
+                            Location : Location_Type := No_Location) is
    begin
       Errors_Count := @ + 1;
-      Put_Line ("Error : " & Msg, File, Line, Verbosity => Quiet);
+      Put_Line ("Error : " & Msg, Location, Verbosity => Quiet);
       -- Quiet because Error Msg should not be ignored
    end Put_Error;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Exception (Msg  : String;
-                            File : String  := "";
-                            Line :  Ada.Text_IO.Count := 0) is
-   begin
-      Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error,
-                            GNU_Prefix (File => File,
-                                        Line => Line)
-                            & "Exception : " & Msg);
-   end Put_Exception;
-
-   procedure Put_Warning   (Msg      : String;
-                            Location : Location_Type) is
-   begin
-      Put_Warning (Msg, +Location.File, Location.Line);
-   end Put_Warning;
-
-   procedure Put_Error     (Msg      : String;
-                            Location : Location_Type) is
-   begin
-      Put_Error (Msg, +Location.File, Location.Line);
-   end Put_Error;
-
    procedure Put_Exception (Msg      : String;
-                            Location : Location_Type) is
+                            Location : Location_Type := No_Location) is
    begin
-      Put_Exception (Msg, +Location.File, Location.Line);
+      Text_IO.Put_Line (Text_IO.Standard_Error,
+                        Image (Location) & "Exception : " & Msg);
    end Put_Exception;
 
    -- --------------------------------------------------------------------------
@@ -187,7 +155,7 @@ package body BBT.IO is
    function Error_Count   return Natural is (Errors_Count);
    function Warning_Count return Natural is (Warnings_Count);
    function Some_Error return Boolean is
-     (Error_Count /= 0 or (Settings.Warnings_As_Errors and Warning_Count /= 0));
+     (Errors_Count /= 0 or (Settings.Warnings_As_Errors and Warnings_Count /= 0));
 
    -- --------------------------------------------------------------------------
    type String_Access is access String;
@@ -205,8 +173,8 @@ package body BBT.IO is
 
    -- --------------------------------------------------------------------------
    function Location (Name   : String;
-                      Line   : Ada.Text_IO.Count;
-                      Column : Ada.Text_IO.Count := 0) return Location_Type is
+                      Line   : Text_IO.Count;
+                      Column : Text_IO.Count := 0) return Location_Type is
    begin
       if Name = "" then
          return No_Location;
@@ -220,7 +188,7 @@ package body BBT.IO is
    end Location;
 
    -- --------------------------------------------------------------------------
-   function Location (File : Ada.Text_IO.File_Type) return Location_Type is
+   function Location (File : Text_IO.File_Type) return Location_Type is
    begin
       if Is_Open (File) then
          return (File   => +Short_Path (From_Dir => Ref_Dir.all,
@@ -244,7 +212,7 @@ package body BBT.IO is
    -- --------------------------------------------------------------------------
    procedure Put_Line (Item      : String;
                        File      : String           := "";
-                       Line      : Ada.Text_IO.Count;
+                       Line      : Text_IO.Count;
                        Verbosity : Verbosity_Levels := Normal;
                        Topic     : Extended_Topics  := None) is
    begin
@@ -254,7 +222,7 @@ package body BBT.IO is
    -- --------------------------------------------------------------------------
    procedure Put (Item      : String;
                   File      : String           := "";
-                  Line      : Ada.Text_IO.Count;
+                  Line      : Text_IO.Count;
                   Verbosity : Verbosity_Levels := Normal;
                   Topic     : Extended_Topics  := None) is
    begin
@@ -275,10 +243,10 @@ package body BBT.IO is
         := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
    begin
       if Print_On_Standard_Output then
-         Ada.Text_IO.New_Line;
+         Text_IO.New_Line;
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then
-         Ada.Text_IO.New_Line (Tee_File);
+         Text_IO.New_Line (Tee_File);
       end if;
    end New_Line;
 
@@ -293,10 +261,10 @@ package body BBT.IO is
         := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
-         Ada.Text_IO.Put_Line (Prefix & Item);
+         Text_IO.Put_Line (Prefix & Item);
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then
-         Ada.Text_IO.Put_Line (Tee_File, Prefix & Item);
+         Text_IO.Put_Line (Tee_File, Prefix & Item);
       end if;
    end Put_Line;
 
@@ -313,10 +281,10 @@ package body BBT.IO is
         := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
-         Ada.Text_IO.Put (Prefix & Item);
+         Text_IO.Put (Prefix & Item);
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then
-         Ada.Text_IO.Put (Tee_File, Prefix & Item);
+         Text_IO.Put (Tee_File, Prefix & Item);
       end if;
    end Put;
 

@@ -5,14 +5,16 @@
 Those levels are controlled with `--quiet` and `--verbose` options.
 
 - Quiet mode  
-  Only the global result is output.
+  No output.
   There is a single line summary.
 
 - Normal mode  
   Result is output for each Feature and Scenario
+  There is a full summary.
 
 - Verbose mode  
   Result is output for each step
+  There is a full summary.
 
 Errors are always output in verbose mode, meaning that you have the info on the failing step even in Quiet mode. 
 
@@ -31,7 +33,7 @@ Errors are always output in verbose mode, meaning that you have the info on the 
 
 - Given the file `NOK_scen.md`
 ~~~
-# Scenario
+# Scenario: sut version
 - When I run `./sut -v`
 - Then I get `v3.1`
 ~~~
@@ -40,16 +42,8 @@ Errors are always output in verbose mode, meaning that you have the info on the 
 
 - When I run `./bbt -q OK_scen.md`
 
-- Then the output is
-~~~
-## Summary : **Success**  
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 0     |  
-| Successful | 2     |  
-| Empty      | 0     |  
-~~~
+- Then the output contains `2 scenarios OK`
+- And  the output contains `success`
 
 ### Scenario: Default mode run
 
@@ -62,13 +56,7 @@ Errors are always output in verbose mode, meaning that you have the info on the 
   - [X] scenario [Getting the version](OK_scen.md) pass  
   - [X] scenario [Getting help](OK_scen.md) pass  
 
-## Summary : **Success**
-
-| Status     | Count |
-|------------|-------|
-| Failed     | 0     |
-| Successful | 2     |
-| Empty      | 0     |
+  Success, 2 scenarios OK
 ~~~
 
 ### Scenario: Verbose mode run
@@ -87,7 +75,7 @@ Errors are always output in verbose mode, meaning that you have the info on the 
     OK  : Then output contains `Usage:`    
   - [X] scenario [Getting help](OK_scen.md) pass    
 
-## Summary : **Success**
+  Success, 2 scenarios OK
 
 | Status     | Count |
 |------------|-------|
@@ -114,7 +102,48 @@ v3.1
 
 - And the output contains
 ```
-  - [ ] scenario [](NOK_scen.md) fails
+  - [ ] scenario [sut version](NOK_scen.md) fails
 ```
 
-Fixme: missing error output for Quiet and Verbose mode
+- And the output contains
+```
+| Status     | Count |
+|------------|-------|
+| Failed     | 1     |
+| Successful | 0     |
+| Empty      | 0     |
+| Skipped    | 0     |
+```
+
+### Scenario: Quiet mode with an error
+
+When there is an error, even if quiet mode is specified, we output all info.
+
+- When I run `./bbt --quiet NOK_scen.md`
+
+- Then the output contains
+```
+Output:    
+~~~  
+sut version 1.0  
+~~~  
+not equal to expected:    
+~~~  
+v3.1  
+~~~   
+```
+
+- And the output contains
+```
+  - [ ] scenario [sut version](NOK_scen.md) fails
+```
+
+- And the output contains
+```
+| Status     | Count |
+|------------|-------|
+| Failed     | 1     |
+| Successful | 0     |
+| Empty      | 0     |
+| Skipped    | 0     |
+```

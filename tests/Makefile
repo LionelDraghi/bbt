@@ -78,16 +78,14 @@ check: setup ./bbt ./sut
 	-q -sb --human_match \
 	--generate_badge $(RESULTS_DIR)/badge.url \
 	--output $(RESULTS_DIR)/features_results.md \
-	../docs/features \
-	&& echo OK =============================== || echo KO "********"
+	../docs/features 
 	@ echo
 
 	@ # Check examples
 	@ echo 2. examples check ================
 	@ ./bbt --yes -k -c -q -sb -hm \
 	-o $(RESULTS_DIR)/examples_results.md \
-	../docs/examples \
-	&& echo OK =============================== || echo KO, check the availability of gcc and rpl on your platform "********"
+	../docs/examples || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests
@@ -95,13 +93,12 @@ check: setup ./bbt ./sut
 	@ ./bbt --yes --keep_going --cleanup -q -sb \
 	--human_match \
 	--output $(RESULTS_DIR)/non_reg_tests.md \
-	../tests/non_reg_tests \
-	&& echo OK =============================== || echo KO "******"
+	../tests/non_reg_tests 
 	@ echo
 
 	@ # Unit testing
 	@ echo 4. unit testing ==================
-	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK =============================== || echo KO "******"
+	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK || echo ***** KO
 	@ echo
 
 doc: $(RESULTS_DIR)

@@ -1,9 +1,10 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
+
 with BBT.Settings;
 
 use BBT;
@@ -17,6 +18,7 @@ private package BBT.Cmd_Line is
    function More_Args return Boolean;
 
    function Dash_To_Underscore (S : String) return String;
+   -- Transform option like "--list-file" in "--list_file"
    procedure Set_Cmd (C : Settings.Command);
    procedure Analyze;
 

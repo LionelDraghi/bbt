@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -42,42 +42,41 @@ package body BBT.Created_File_List  is
    -- --------------------------------------------------------------------------
    procedure Add_Path (Path : String) is
    begin
-      if BBT.Settings.Cleanup then
-         Put_Debug_Line ("== Add_Path (" & Path & ");");
-         if Exists (Path) then
-            -- The file exists, let's exit
-            Put_Debug_Line ("   Path " & Path & " exists, exiting... ");
-         else
-            Put_Debug_Line ("   " & Path & " doesnt exists, adding it");
-            Register (Path);
-            declare
-               Parent : constant String :=
-                          Directories.Containing_Directory (Path);
-            begin
-               Add_Path (Parent);
-            end;
-         end if;
+      Put_Debug_Line ("== Add_Path (" & Path & ");");
+
+      if Exists (Path) then
+         -- The file exists, let's exit
+         Put_Debug_Line ("   Path " & Path & " exists, exiting... ");
+      else
+         Put_Debug_Line ("   " & Path & " doesnt exists, adding it");
+         Register (Path);
+         declare
+            Parent : constant String :=
+                       Directories.Containing_Directory (Path);
+         begin
+            Add_Path (Parent);
+         end;
       end if;
    end Add_Path;
 
    -- --------------------------------------------------------------------------
    procedure Add (Name : String) is
+      -- use String_Sets;
    begin
-      if BBT.Settings.Cleanup then
-         Put_Debug_Line ("== Add (" & Name & ");");
-         Register (Name);
-         Add_Path (Directories.Containing_Directory (Name));
-      end if;
+      --  if File_Set.Contains (Name) then
+      --     Put_Warning ("Overwriting " & Name);
+      --  end if;
+      Put_Debug_Line ("== Add (" & Name & ");");
+      Register (Name);
+      Add_Path (Directories.Containing_Directory (Name));
    end Add;
 
    -- --------------------------------------------------------------------------
    procedure Put is
    begin
-      if BBT.Settings.Cleanup then
-         for F of File_Set loop
-            Text_IO.Put_Line (F);
-         end loop;
-      end if;
+      for F of File_Set loop
+         Text_IO.Put_Line (F);
+      end loop;
    end Put;
 
    -- --------------------------------------------------------------------------

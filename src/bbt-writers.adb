@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -68,13 +68,28 @@ package body BBT.Writers is
    end Enable_Output;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Summary is
+   procedure Put_Document_Start (Doc : Document_Type) is
    begin
-      Put_Debug_Line ("Writers.Put_Summary");
-      for F in Writer_List'Range when Enabled (F) loop
-         Put_Summary (Writer_List (F).all);
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Document_Start (Writer_List (W).all, Doc);
       end loop;
-   end Put_Summary;
+   end Put_Document_Start;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Feature_Start (Feat : Feature_Type) is
+   begin
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Feature_Start (Writer_List (W).all, Feat);
+      end loop;
+   end Put_Feature_Start;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Scenario_Start (Scen : Scenario_Type) is
+   begin
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Scenario_Start (Writer_List (W).all, Scen);
+      end loop;
+   end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
    procedure Put_Step_Result (Step     : BBT.Documents.Step_Type;
@@ -82,9 +97,9 @@ package body BBT.Writers is
                               Fail_Msg : String;
                               Loc      : BBT.IO.Location_Type) is
    begin
-      for F in Writer_List'Range when Enabled (F) loop
+      for W in Writer_List'Range when Enabled (W) loop
          Put_Debug_Line (Inline_Image (Step));
-         Put_Step_Result (Writer_List (F).all,
+         Put_Step_Result (Writer_List (W).all,
                           Step,
                           Success,
                           Fail_Msg,
@@ -93,11 +108,19 @@ package body BBT.Writers is
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Overall_Results
-     (Results : BBT.Tests.Results.Test_Results_Count) is
+   procedure Put_Scenario_Result (Scen : Scenario_Type) is
+   begin
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Scenario_Result (Writer_List (W).all, Scen);
+      end loop;
+   end Put_Scenario_Result;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Overall_Results is
    begin
       for F in Writer_List'Range when Enabled (F) loop
-         Put_Overall_Results (Writer_List (F).all, Results);
+         Put_Summary (Writer_List (F).all);
+         Put_Detailed_Results (Writer_List (F).all);
       end loop;
    end Put_Overall_Results;
 
@@ -182,5 +205,9 @@ package body BBT.Writers is
    begin
       Writer_List (For_Format) := Writer;
    end Register;
+
+   function Get_Writer (For_Format : Output_Format) return Interface_Access is
+     (Writer_List (For_Format));
+
 
 end BBT.Writers;

@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ separate (BBT.Cmd_Line)
 procedure Put_Help (Topic : Settings.Help_Topic) is
 begin
    case Topic is
-      when Global =>
+      when Base =>
          New_Line;
          Put_Line ("Usage : bbt [Options]* [Command] file*");
          New_Line;
@@ -27,6 +27,7 @@ begin
          Put_Line ("                      created by bbt in ""Given"" steps");
          Put_Line ("  -r | --recursive  : search scenarios in subdirs");
          Put_Line ("  -k | --keep_going : do as much work as possible");
+         Put_Line ("       --Werror     : treat warnings as errors");
          Put_Line ("  -v | --verbose");
          Put_Line ("  -q | --quiet      : no message unless error,");
          Put_Line ("                      Warnings are also ignored");
@@ -35,7 +36,8 @@ begin
          Put_Line ("       run               : the default command");
          Put_Line ("  ls | list              : list selected items");
          Put_Line ("  ct | create_template   : create a commented example of rules file");
-         Put_Line ("  he | help | -h [topic] : this message or more on the topic");
+         Put_Line ("  he | help [topic]      : base help, or more on one of the topic listed below");
+         Put_Line ("  he | help on_all       : full online help");
          New_Line;
          Put_Line ("Help topics:");
          Put_Line ("  filtering : --select --exclude --include");
@@ -46,7 +48,6 @@ begin
          New_Line;
          Put_Line ("bbt version " & Settings.BBT_Version);
          Put_Line ("https://github.com/LionelDraghi/bbt/");
-         New_Line;
 
       when Filtering =>
          New_Line;
@@ -58,7 +59,6 @@ begin
          Put_Line ("  -i | --include 'string' : include in selection items containing 'string'");
          Put_Line ("  Multiple occurrences are processed in order, meaning that you can exclude");
          Put_Line ("  a whole Feature and then re-include a Scenario belonging to this feature.");
-         New_Line;
 
       when Matching =>
          New_Line;
@@ -79,7 +79,6 @@ begin
          Put_Line ("  -hm  | --human_match");
          Put_Line ("  option, equivalent to defaults ""-iw -ic -ibl"", if you want to");
          Put_Line ("  assert on the command line that this is the required behavior.");
-         New_Line;
 
       when Other =>
          New_Line;
@@ -104,7 +103,6 @@ begin
          Put_Line ("  -gb | --generate_badge badge.url : create a text file containing");
          Put_Line ("                           a shields.io URL to get a svg badge");
          Put_Line ("                           with tests results summary.");
-         New_Line;
 
       when Debug =>
          New_Line;
@@ -117,7 +115,15 @@ begin
          New_Line;
          Put_Line ("Friends are here : https://github.com/LionelDraghi/bbt/Issues");
          Put_Line ("Good luck :-)");
-         New_Line;
+
+      when On_All =>
+         -- First the base, then topics
+         Put_Help (Base);
+         for Topic in Help_Topic when Topic not in On_All | Base loop
+            -- Recursive call on all but this topic
+            Put_Help (Topic);
+         end loop;
 
    end case;
+
 end Put_Help;

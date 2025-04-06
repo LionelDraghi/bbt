@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -8,11 +8,11 @@
 with BBT.Created_File_List; use BBT.Created_File_List;
 with BBT.Documents;         use BBT.Documents;
 with BBT.IO;                use BBT.IO;
-with BBT.Tests.Results;     use BBT.Tests.Results;
 with BBT.Settings;
 with BBT.Status_Bar;
 with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
+with BBT.Writers;           use BBT.Writers;
 with File_Utilities;
 with Text_Utilities;        use Text_Utilities;
 
@@ -42,18 +42,13 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_Step (Step      : in out Step_Type;
                        Run_Error :    out Boolean);
-   procedure Run_Scenario (Scen         : in out Scenario_Type;
-                           Path_To_Scen :        String);
+   procedure Run_Scenario (Scen : in out Scenario_Type);
    -- run only the scenario, not Doc and / or Feature Background.
-   procedure Run_Background (Scen         : in out Scenario_Type;
-                             Path_To_Scen :        String);
+   procedure Run_Background (Scen : in out Scenario_Type);
    -- run only Doc and / or Feature Background, not the scenario himself.
-   procedure Run_Doc_Background (Scen         : in out Scenario_Type;
-                                 Path_To_Scen :        String);
-   procedure Run_Feature_Background (Scen         : in out Scenario_Type;
-                                     Path_To_Scen :        String);
-   procedure Run_Scenario_List (L            : in out Scenario_Lists.Vector;
-                                Path_To_Scen :        String);
+   procedure Run_Doc_Background (Scen : in out Scenario_Type);
+   procedure Run_Feature_Background (Scen : in out Scenario_Type);
+   procedure Run_Scenario_List (L : in out Scenario_Lists.Vector);
 
    -- --------------------------------------------------------------------------
    procedure Run_Step (Step      : in out Step_Type;
@@ -182,12 +177,8 @@ package body BBT.Tests.Runner is
    end Run_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Scenario (Scen         : in out Scenario_Type;
-                           Path_To_Scen :        String) is
+   procedure Run_Scenario (Scen : in out Scenario_Type) is
       Spawn_OK : Boolean := False;
-      --The_Doc  : constant Document_Type := Parent_Doc (Scen).all;
-      Link_Image : constant String
-        := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
 
    begin
       if Scen.Filtered then
@@ -198,6 +189,8 @@ package body BBT.Tests.Runner is
          Put_Debug_Line ("  ====== Running Scen " & Scen.Name'Image);
          Scen.Has_Run := True;
 
+         Put_Scenario_Start (Scen);
+
          Step_Processing : for Step of Scen.Step_List loop
             Run_Step (Step, Spawn_OK);
 
@@ -206,21 +199,7 @@ package body BBT.Tests.Runner is
             end if;
          end loop Step_Processing;
 
-         case Tests.Results.Result (Scen) is
-            when Empty =>
-               -- Note the two spaces at the end of each line, to cause a
-               -- new line in Markdown format when this line is followed
-               -- by an error message.
-               Put_Line ("  - [ ] scenario " & Link_Image &
-                           " is empty, nothing tested  ",
-                         Verbosity => Normal);
-            when Successful =>
-               Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
-                         Verbosity => Normal);
-            when Skipped | Failed =>
-               Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
-                         Verbosity => Quiet);
-         end case;
+         Put_Scenario_Result (Scen);
 
       end if;
 
@@ -229,8 +208,7 @@ package body BBT.Tests.Runner is
    end Run_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Background (Scen         : in out Scenario_Type;
-                             Path_To_Scen :        String) is
+   procedure Run_Background (Scen : in out Scenario_Type) is
    begin
       if Scen.Filtered then
          Put_Debug_Line ("  ====== Skipping background of filtered scen " & Scen.Name'Image);
@@ -238,16 +216,15 @@ package body BBT.Tests.Runner is
 
       else
          -- Run background scenarios
-         Run_Doc_Background     (Scen, Path_To_Scen);
-         Run_Feature_Background (Scen, Path_To_Scen);
+         Run_Doc_Background     (Scen);
+         Run_Feature_Background (Scen);
 
       end if;
 
    end Run_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Doc_Background (Scen         : in out Scenario_Type;
-                                 Path_To_Scen :        String) is
+   procedure Run_Doc_Background (Scen : in out Scenario_Type) is
    -- Run background scenario at document level, if any
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
@@ -260,7 +237,7 @@ package body BBT.Tests.Runner is
             Put_Debug_Line
               ("  Running document Background """ & (+Doc.Background.Name)
                & """  ", IO.No_Location);
-            Run_Scenario (Doc.Background.all, Path_To_Scen);
+            Run_Scenario (Doc.Background.all);
             Move_Results (From_Scen => Doc.Background.all,
                           To_Scen   => Scen);
          end if;
@@ -268,8 +245,7 @@ package body BBT.Tests.Runner is
    end Run_Doc_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Feature_Background (Scen         : in out Scenario_Type;
-                                     Path_To_Scen :        String) is
+   procedure Run_Feature_Background (Scen : in out Scenario_Type) is
    -- Run background scenario at feature level, if any
    begin
       if Is_In_Feature (Scen) and then Has_Background (Scen.Parent_Feature.all)
@@ -285,7 +261,7 @@ package body BBT.Tests.Runner is
                Put_Debug_Line
                  ("  Running feature Background """ & (+Feat.Background.Name) &
                     """  ", IO.No_Location);
-               Run_Scenario (Feat.Background.all, Path_To_Scen);
+               Run_Scenario (Feat.Background.all);
                Move_Results (From_Scen => Feat.Background.all, To_Scen => Scen);
             end if;
          end;
@@ -293,13 +269,11 @@ package body BBT.Tests.Runner is
    end Run_Feature_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Scenario_List (L            : in out Scenario_Lists.Vector;
-                                Path_To_Scen :        String) is
-
+   procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
    begin
       for Scen of L loop
-         Run_Background (Scen, Path_To_Scen);
-         Run_Scenario (Scen, Path_To_Scen);
+         Run_Background (Scen);
+         Run_Scenario (Scen);
          exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
    end Run_Scenario_List;
@@ -325,9 +299,7 @@ package body BBT.Tests.Runner is
            := Short_Path (From_Dir => Settings.Result_Dir,
                           To_File  => (+Doc.Name));
       begin
-         Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
-                   & "](" & (Path_To_Scen) & ")  ",
-                   Verbosity => Normal);
+         Put_Document_Start (Doc);
 
          Status_Bar.Progress_Bar_Next_Step (Path_To_Scen); delay (0.1);
 
@@ -339,21 +311,21 @@ package body BBT.Tests.Runner is
 
          -- Run scenarios directly attached to the document
          -- (that is not in a Feature)
-         Run_Scenario_List (Doc.Scenario_List, Path_To_Scen);
+         Run_Scenario_List (Doc.Scenario_List);
          if IO.Some_Error and not Settings.Keep_Going then
             return;
          end if;
 
          for F of Doc.Feature_List loop
             -- Then run scenarios attached to each Feature
-            IO.Put_Line ("  ### Feature: " & (+F.Name) & "  ");
+            Writers.Put_Feature_Start (F);
 
             if F.Scenario_List.Is_Empty then
                Put_Warning
                  ("No scenario in feature " & F.Name'Image & "  ",
                   F.Location);
             else
-               Run_Scenario_List (F.Scenario_List, Path_To_Scen);
+               Run_Scenario_List (F.Scenario_List);
 
                if IO.Some_Error and not Settings.Keep_Going then
                   return;

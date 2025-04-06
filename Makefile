@@ -32,10 +32,10 @@ doc: ./bbt
 	echo === doc prod
 	@ $(MAKE) -s doc --directory=tests
 	
-	./bbt -lg > docs/grammar.md
-	./bbt -lk > docs/keywords.md
+	./bbt list_grammar  > docs/grammar.md
+	./bbt list_keywords > docs/keywords.md
 
-	./bbt -ct
+	./bbt create_template
 	mv bbt_template.md docs/
 
 	> docs/bbt_help.md

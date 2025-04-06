@@ -1,13 +1,12 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
 with BBT.Documents; use BBT.Documents;
 with BBT.IO;
-with BBT.Tests.Results;
 
 private package BBT.Writers is
 -- This package defines common services for all types of output, and
@@ -37,18 +36,23 @@ private package BBT.Writers is
 
    procedure Enable_Output (For_Format : Output_Format;
                             File_Name  : String := "");
-   -- Will find and initialize the writer for this format.
+   -- Will find and initialize the writer for this format
 
    -- -------------------------------------------------------------------------
    -- Runner Events
    -- During test run, each event result in a call on those procedure, that
    -- will be dispatch on each enabled Formatter
-   procedure Put_Summary;
-   procedure Put_Step_Result (Step     : BBT.Documents.Step_Type;
+   -- procedure Put_Summary;
+   procedure Put_Document_Start (Doc : Document_Type);
+   procedure Put_Feature_Start (Feat : Feature_Type);
+   procedure Put_Scenario_Start (Scen : Scenario_Type);
+   procedure Put_Step_Result (Step     : Documents.Step_Type;
                               Success  : Boolean;
                               Fail_Msg : String;
-                              Loc      : BBT.IO.Location_Type);
-   procedure Put_Overall_Results (Results : BBT.Tests.Results.Test_Results_Count);
+                              Loc      : IO.Location_Type);
+   procedure Put_Scenario_Result (Scen : Scenario_Type);
+   procedure Put_Overall_Results;
+
 
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
@@ -75,15 +79,23 @@ private
    -- Enable the Writer
 
    -- -------------------------------------------------------------------------
-   procedure Put_Summary (Writer : Abstract_Writer) is abstract;
+   procedure Put_Document_Start (Writer    : Abstract_Writer;
+                                 Doc       : Document_Type) is abstract;
+   procedure Put_Feature_Start (Writer    : Abstract_Writer;
+                                Feat      : Feature_Type) is abstract;
+   procedure Put_Scenario_Start (Writer    : Abstract_Writer;
+                                 Scen      : Scenario_Type) is abstract;
    procedure Put_Step_Result (Writer    : Abstract_Writer;
-                              Step      : BBT.Documents.Step_Type;
+                              Step      : Documents.Step_Type;
                               Success   : Boolean;
                               Fail_Msg  : String;
-                              Loc       : BBT.IO.Location_Type) is abstract;
-   procedure Put_Overall_Results
-     (Writer    : Abstract_Writer;
-      Results   : BBT.Tests.Results.Test_Results_Count) is abstract;
+                              Loc       : IO.Location_Type) is abstract;
+   procedure Put_Scenario_Result (Writer : Abstract_Writer;
+                                  Scen   : Scenario_Type) is abstract;
+   procedure Put_Summary (Writer : Abstract_Writer) is abstract;
+   procedure Put_Detailed_Results (Writer : Abstract_Writer) is abstract;
+
+
 
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
@@ -100,5 +112,6 @@ private
    type Interface_Access is access all Abstract_Writer'Class;
    procedure Register (Writer     : Interface_Access;
                        For_Format : Output_Format);
+   function Get_Writer (For_Format : Output_Format) return Interface_Access;
 
 end BBT.Writers;

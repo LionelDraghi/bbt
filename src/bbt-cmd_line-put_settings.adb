@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ begin
    Put_Line ("---------------------------------");
    New_Line;
    Put_Line ("   Command               : " & Current_Command'Image
-             & (if Current_Command = Help and Current_Topic /= Global
+             & (if Current_Command = Help and Current_Topic /= Base
                then " " & Current_Topic'Image
                else ""));
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);

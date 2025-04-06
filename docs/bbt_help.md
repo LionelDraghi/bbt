@@ -13,6 +13,7 @@ Basic options:
                       created by bbt in "Given" steps
   -r | --recursive  : search scenarios in subdirs
   -k | --keep_going : do as much work as possible
+       --Werror     : treat warnings as errors
   -v | --verbose
   -q | --quiet      : no message unless error,
                       Warnings are also ignored
@@ -21,7 +22,8 @@ Basic commands:
        run               : the default command
   ls | list              : list selected items
   ct | create_template   : create a commented example of rules file
-  he | help | -h [topic] : this message or more on the topic
+  he | help [topic]      : base help, or more on one of the topic listed below
+  he | help on_all       : full online help
 
 Help topics:
   filtering : --select --exclude --include
@@ -33,7 +35,6 @@ Help topics:
 bbt version 0.2.0-dev
 https://github.com/LionelDraghi/bbt/
 
-
 Filtering:
   Features, Scenarios and Steps may be selected or filtered.
   By default, every item is selected.
@@ -42,7 +43,6 @@ Filtering:
   -i | --include 'string' : include in selection items containing 'string'
   Multiple occurrences are processed in order, meaning that you can exclude
   a whole Feature and then re-include a Scenario belonging to this feature.
-
 
 Human vs exact matching:
   bbt default behavior is "human match", that is ignoring differences
@@ -61,7 +61,6 @@ Human vs exact matching:
   -hm  | --human_match
   option, equivalent to defaults "-iw -ic -ibl", if you want to
   assert on the command line that this is the required behavior.
-
 
 Other commands:
   lf | list_files      : list Scenario files found
@@ -82,5 +81,4 @@ Other options:
   -gb | --generate_badge badge.url : create a text file containing
                            a shields.io URL to get a svg badge
                            with tests results summary.
-
 ```

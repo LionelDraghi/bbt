@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -9,6 +9,8 @@ with Ada.Strings.Text_Buffers;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;              use Ada.Text_IO;
 with Ada.Calendar;
+
+use Ada;
 
 private package BBT.IO is
 
@@ -65,8 +67,8 @@ private package BBT.IO is
    No_Location : constant Location_Type;
 
    function File   (Loc : Location_Type) return String;
-   function Line   (Loc : Location_Type) return Ada.Text_IO.Count;
-   function Column (Loc : Location_Type) return Ada.Text_IO.Count;
+   function Line   (Loc : Location_Type) return Text_IO.Count;
+   function Column (Loc : Location_Type) return Text_IO.Count;
 
    -- --------------------------------------------------------------------------
    function Image (Loc : Location_Type) return String;
@@ -84,11 +86,11 @@ private package BBT.IO is
 
    -- --------------------------------------------------------------------------
    function Location (Name   : String;
-                      Line   : Ada.Text_IO.Count;
-                      Column : Ada.Text_IO.Count := 0) return Location_Type;
+                      Line   : Text_IO.Count;
+                      Column : Text_IO.Count := 0) return Location_Type;
    -- When manual adjustment is needed.
 
-   function Location (File : Ada.Text_IO.File_Type) return Location_Type;
+   function Location (File : Text_IO.File_Type) return Location_Type;
    -- Automatic Line/Col through Text_IO calls
 
    -- --------------------------------------------------------------------------
@@ -106,12 +108,12 @@ private package BBT.IO is
    --     are ignored and the Item is printed.
    procedure Put_Line (Item      : String;
                        File      : String           := "";
-                       Line      : Ada.Text_IO.Count;
+                       Line      : Text_IO.Count;
                        Verbosity : Verbosity_Levels := Normal;
                        Topic     : Extended_Topics  := None);
    procedure Put (Item      : String;
                   File      : String           := "";
-                  Line      : Ada.Text_IO.Count;
+                  Line      : Text_IO.Count;
                   Verbosity : Verbosity_Levels := Normal;
                   Topic     : Extended_Topics  := None);
    procedure New_Line (Verbosity : Verbosity_Levels := Normal;
@@ -126,21 +128,12 @@ private package BBT.IO is
                   Topic     : Extended_Topics  := None);
 
    -- --------------------------------------------------------------------------
-   procedure Put_Warning   (Msg  : String;
-                            File : String := "";
-                            Line :  Ada.Text_IO.Count  := 0);
-   procedure Put_Error     (Msg  : String;
-                            File : String := "";
-                            Line :  Ada.Text_IO.Count  := 0);
-   procedure Put_Exception (Msg  : String;
-                            File : String := "";
-                            Line :  Ada.Text_IO.Count  := 0);
    procedure Put_Warning   (Msg      : String;
-                            Location : Location_Type);
+                            Location : Location_Type := No_Location);
    procedure Put_Error     (Msg      : String;
-                            Location : Location_Type);
+                            Location : Location_Type := No_Location);
    procedure Put_Exception (Msg      : String;
-                            Location : Location_Type);
+                            Location : Location_Type := No_Location);
 
    -- --------------------------------------------------------------------------
    procedure Enable_Tee (File_Name : String;
@@ -188,8 +181,8 @@ private package BBT.IO is
 private
    type Location_Type is record
       File   : File_Name         := No_Name;
-      Line   : Ada.Text_IO.Count := 1;
-      Column : Ada.Text_IO.Count := 0;
+      Line   : Text_IO.Count := 1;
+      Column : Text_IO.Count := 0;
    end record;
 
    No_Location : constant Location_Type := (No_Name, 1, 0);

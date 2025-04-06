@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -26,11 +26,14 @@ private package BBT.Settings is
                     Version,
                     None);
 
-   type Help_Topic is (Debug,
+   type Help_Topic is (Base,
                        Filtering,
-                       Global,
                        Matching,
-                       Other);
+                       Other,
+                       Debug,
+                       On_All);
+   -- Topics are given in importance order, because this order is used when
+   -- printing full help with command 'help on_all'
 
    -- --------------------------------------------------------------------------
    -- Explain            : Boolean := False;
@@ -39,7 +42,6 @@ private package BBT.Settings is
    Warnings_As_Errors : Boolean    := False;
    No_File_Given      : Boolean    := True;
    Recursive          : Boolean    := False;
-   -- List_Files         : Boolean    := False;
    List_Settings      : Boolean    := False;
    Yes                : Boolean    := False;
    Cleanup            : Boolean    := False;
@@ -50,7 +52,7 @@ private package BBT.Settings is
    Ignore_Casing      : Boolean    := True;
    Ignore_Blank_Lines : Boolean    := True;
    Current_Command    : Command    := None;
-   Current_Topic      : Help_Topic := Global;
+   Current_Topic      : Help_Topic := Base;
    Selection_Mode     : Boolean    := False;
    -- In the default mode no File/Feature/Scenario etc. is filtered except those
    -- provided with --exclude on command line.

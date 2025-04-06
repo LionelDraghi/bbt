@@ -10,7 +10,7 @@ The return code is the one of the command if it could be run, error otherwise.
 When a command fails, bbt make it clear to the user if it was a spawn fail, that is bbt wasn't able to find or to run the command, or a command fail (that is the command returns an error code).
 
 ### scenario: the command relative path is given
-- when i run `./bbt -lf`
+- when i run `./bbt lf`
 - then I get no error
 - and  I get no output
 

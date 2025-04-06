@@ -17,7 +17,7 @@ Note that this is not really tested here, as the globbing expansion is done by t
 - [Scenario: running multiple scenarios given on command line](#scenario-running-multiple-scenarios-given-on-command-line)
 - [Scenario: running scenarios in a tree thanks to `-r`](#scenario-running-scenarios-in-a-tree-thanks-to--r)
 - [Scenario: error msg when trying to run scenarios, but none found in given directories](#scenario-error-msg-when-trying-to-run-scenarios-but-none-found-in-given-directories)
-- [Scenario: empty list file on -lf if there is no scenario in given directories](#scenario-empty-list-file-on--lf-if-there-is-no-scenario-in-given-directories)
+- [Scenario: empty list file on list\_files if there is no scenario in given directories](#scenario-empty-list-file-on-list_files-if-there-is-no-scenario-in-given-directories)
 
 ### Background:
 - Given the new `dir1` directory
@@ -61,7 +61,7 @@ Usage : bbt [Options]* [Command] file*
 
 ### Scenario: running all scenarios in dir1
 
-- When I run `./bbt -lf dir1`
+- When I run `./bbt lf dir1`
 - Then the output is on Unix_Only (unordered)
 ```
 dir1/scen2.md
@@ -75,7 +75,7 @@ dir1\scen1.md
 
 ### Scenario: running multiple scenarios given on command line
 
-- When I run `./bbt -lf dir1/scen3.scen dir1/scen4.scen`  
+- When I run `./bbt list_files dir1/scen3.scen dir1/scen4.scen`  
 Note that this command line is the result of shell expansion of 
 `bbt -lf dir1/*.scen`
 
@@ -95,7 +95,7 @@ dir1/scen4.scen
 # scenario:
 - Given the `dir1/res1` file containing `res1`
 ``` 
-- When I run `./bbt -r -lf dir1`
+- When I run `./bbt lf -r dir1`
 - Then the output is on Unix_Only (unordered)
 ```
 dir1/scen2.md
@@ -124,8 +124,8 @@ Error : No scenario file found
 ```
 - And I get an error
 
-### Scenario: empty list file on -lf if there is no scenario in given directories
+### Scenario: empty list file on list_files if there is no scenario in given directories
 
-- When I run `./bbt -lf dir5 dir6`
+- When I run `./bbt lf dir5 dir6`
 - Then I get no output
 - And I get no error

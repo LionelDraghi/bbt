@@ -1,17 +1,25 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO; use BBT.IO;
+with BBT.IO,
+     BBT.Settings,
+     BBT.Tests.Results;
 
-with Ada.Strings.Fixed;
+use BBT,
+    BBT.IO,
+    BBT.Settings;
+
+with File_Utilities;
+
+with Ada.Directories;
 
 with GNAT.Regexp;
 
-package body BBT.Writers.Markdown_Writer is
+package body BBT.Writers.Markdown_Writers is
 
    -- -----------------------------------------------------------------------
    procedure Put_Debug_Line (Item      : String;
@@ -56,14 +64,79 @@ package body BBT.Writers.Markdown_Writer is
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Summary (Writer : Markdown_Writer) is
+   procedure Put_Summary
+     (Writer    : Markdown_Writer)
+   is
+      use all type Tests.Results.Test_Result;
    begin
-      null;
+      New_Line (Quiet);
+      if Tests.Results.Success then
+         Put_Line ("## Summary : **Success**,"
+                   & Count (Successful)'Image & " scenarios OK"
+                   & (if Count (Empty) = 0
+                     then ""
+                     else "," & Count (Empty)'Image & " empty scenarios"),
+                   Verbosity => Quiet);
+      else
+         Put_Line ("## Summary : **Fail**",
+                   Verbosity => Quiet);
+      end if;
    end Put_Summary;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Detailed_Results
+     (Writer    : Markdown_Writer)
+   is
+      use Tests.Results;
+      Verbosity_Level : constant Verbosity_Levels
+        := (if Success then Verbose else Quiet);
+   begin
+      New_Line (Verbosity => Verbosity_Level);
+      Put_Line ("| Status     | Count |", Verbosity => Verbosity_Level);
+      Put_Line ("|------------|-------|", Verbosity => Verbosity_Level);
+      Put_Line ("| Failed     |" & Count_String_Image (Failed) & "|",
+                Verbosity => Verbosity_Level);
+      Put_Line ("| Successful |" & Count_String_Image (Successful) & "|",
+                Verbosity => Verbosity_Level);
+      Put_Line ("| Empty      |" & Count_String_Image (Empty) & "|",
+                Verbosity => Verbosity_Level);
+      if Count (Failed) /= 0 then
+         Put_Line ("| Skipped    |" & Count_String_Image (Skipped) & "|",
+                   Verbosity => Verbosity_Level);
+      end if;
+      New_Line (Verbosity => Verbosity_Level);
+   end Put_Detailed_Results;
 
    Pref : constant array (Boolean) of String (1 .. 10) :=
             [True  => "    OK  : ",
              False => "*** NOK : "];
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Document_Start (Writer : Markdown_Writer;
+                                 Doc    : Document_Type)
+   is
+      Path_To_Scen  : constant String
+        := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,
+                                      To_File  => (+Doc.Name));
+   begin
+      Put_Line ("## [" & Ada.Directories.Simple_Name (Path_To_Scen)
+                & "](" & (Path_To_Scen) & ")  ",
+                Verbosity => Normal);
+   end Put_Document_Start;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Feature_Start (Writer  : Markdown_Writer;
+                                Feat    : Feature_Type) is
+   begin
+      IO.Put_Line ("  ### Feature: " & (+Feat.Name) & "  ");
+   end Put_Feature_Start;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Scenario_Start (Writer : Markdown_Writer;
+                                 Scen   : Scenario_Type) is
+   begin
+      null; -- IO.Put_Line ("  ### Scen start: " & (+Scen.Name) & "  ");
+   end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
    procedure Put_Step_Result (Writer    : Markdown_Writer;
@@ -90,36 +163,35 @@ package body BBT.Writers.Markdown_Writer is
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Overall_Results
-     (Writer    : Markdown_Writer;
-      Results   : BBT.Tests.Results.Test_Results_Count)
+   procedure Put_Scenario_Result (Writer : Markdown_Writer;
+                                  Scen   : Scenario_Type)
    is
-      use BBT.Tests.Results;
-      subtype Count_String is String (1 .. 7);
-      Blank_Image : constant Count_String := [others => ' '];
-      function Count (Test : Test_Result) return Count_String is
-      begin
-         return Ada.Strings.Fixed.Overwrite (Source   => Blank_Image,
-                                             Position => 1,
-                                             New_Item => Results (Test)'Image);
-      end Count;
-   begin -- Fixme : should be factorized in the parent package
-      New_Line (Verbosity => Quiet);
-      if Results (Failed) = 0 and Results (Empty) = 0
-      then Put_Line ("## Summary : **Success**", Verbosity => Quiet);
-      else Put_Line ("## Summary : **Fail**", Verbosity => Quiet);
-      end if;
-      New_Line (Verbosity => Quiet);
-      Put_Line ("| Status     | Count |", Verbosity => Quiet);
-      Put_Line ("|------------|-------|", Verbosity => Quiet);
-      Put_Line ("| Failed     |" & Count (Failed) & "|", Verbosity => Quiet);
-      Put_Line ("| Successful |" & Count (Successful) & "|", Verbosity => Quiet);
-      Put_Line ("| Empty      |" & Count (Empty) & "|", Verbosity => Quiet);
-      if Results (Failed) /= 0 then
-         Put_Line ("| Skipped    |" & Count (Skipped) & "|", Verbosity => Quiet);
-      end if;
-      New_Line (Verbosity => Quiet);
-   end Put_Overall_Results;
+      Path_To_Scen  : constant String
+        := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,
+                                      To_File  => (+Parent_Doc (Scen).Name));
+      -- Fixme: should be in parameters to avoid recomputing
+      -- when looping on the writers
+      Link_Image    : constant String
+        := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+      use Tests.Results;
+   begin
+      case Tests.Results.Result (Scen) is
+         when Empty =>
+            -- Note the two spaces at the end of each line, to cause a
+            -- new line in Markdown format when this line is followed
+            -- by an error message.
+            Put_Line ("  - [ ] scenario " & Link_Image &
+                        " is empty, nothing tested  ",
+                      Verbosity => Normal);
+         when Successful =>
+            Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
+                      Verbosity => Normal);
+         when Skipped | Failed =>
+            Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+                      Verbosity => Quiet);
+      end case;
+
+   end Put_Scenario_Result;
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step (Writer : Markdown_Writer;
@@ -148,4 +220,4 @@ package body BBT.Writers.Markdown_Writer is
       Put_Line ("## " & S);
    end Put_Document_Title;
 
-end BBT.Writers.Markdown_Writer;
+end BBT.Writers.Markdown_Writers;

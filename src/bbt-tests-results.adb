@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -12,6 +12,7 @@ with Ada.Text_IO;
 
 package body BBT.Tests.Results is
 
+   -- --------------------------------------------------------------------------
    Results : Test_Results_Count;
 
    -- --------------------------------------------------------------------------
@@ -62,7 +63,13 @@ package body BBT.Tests.Results is
    end Sum_Results;
 
    -- --------------------------------------------------------------------------
-   function Overall_Results return Test_Results_Count is (Results);
+   function Success return Boolean is
+     (Results (Failed) = 0 and Results (Empty) = 0);
+
+   function No_Fail return Boolean is (Results (Failed) = 0);
+
+   -- --------------------------------------------------------------------------
+   function Count (Test : Test_Result) return Natural is (Results (Test));
 
    -- --------------------------------------------------------------------------
    procedure Generate_Badge is
@@ -90,11 +97,24 @@ package body BBT.Tests.Results is
            & Empty_Text & "_empty-"
            & Color & ".svg?style=flat-square";
       end Generate_URL;
-      File        : Ada.Text_IO.File_Type;
+      File : Ada.Text_IO.File_Type;
    begin
       Ada.Text_IO.Create   (File, Name => BBT.Settings.Badge_File_Name);
       Ada.Text_IO.Put_Line (File, Generate_URL);
       Ada.Text_IO.Close    (File);
    end Generate_Badge;
+
+   -- --------------------------------------------------------------------------
+   Blank_Image : constant Count_String := [others => ' '];
+
+   -- --------------------------------------------------------------------------
+   function Count_String_Image (Test : Test_Result) return Count_String is
+      Img : constant String := Results (Test)'Image;
+   begin
+      return Ada.Strings.Fixed.Overwrite (Source   => Blank_Image,
+                                          Position => 1,
+                                          New_Item => Img);
+   end Count_String_Image;
+
 
 end BBT.Tests.Results;

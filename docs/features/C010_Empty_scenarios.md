@@ -19,7 +19,7 @@ And we don't want that to be unnoticed, so :
 
 - Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`
 - And  the output contains `| Empty      |  1`
-- And I get no error
+- And  I get no error
   
 ### Scenario: No scenario in Feature
 

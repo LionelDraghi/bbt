@@ -55,7 +55,7 @@ resulting in:
 bbt being about documentation and simplicity, Markdown[^1] is a perfect fit.  
 
 Let's consider a slightly more complete example:
-![simple example](rpl_example.png)
+![simple example](docs/rpl_example.png)
 
 (Markdown source [here](docs/examples/rpl_case_insensitivity.md))
 

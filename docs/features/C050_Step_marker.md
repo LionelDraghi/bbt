@@ -28,4 +28,10 @@ I can even use `+ When`, it won't be recognized as a step.
 
 - When I run `./bbt -c step_markers.md`
 - Then I get no error
-- And the output contains `| Successful |  1` 
+- And the output is
+~~~
+## [step_markers.md](step_markers.md)  
+  - [X] scenario [](step_markers.md) pass  
+
+Success, 1 scenarios OK
+~~~

@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -29,16 +29,24 @@ private
                                          File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
-   overriding procedure Put_Summary (Writer : Text_Writer);
+   procedure Put_Document_Start (Writer : Text_Writer;
+                                 Doc    : Document_Type);
+   procedure Put_Feature_Start (Writer  : Text_Writer;
+                                Feat    : Feature_Type);
+   procedure Put_Scenario_Start (Writer : Text_Writer;
+                                 Scen   : Scenario_Type);
    overriding procedure Put_Step_Result
      (Writer   : Text_Writer;
       Step     : BBT.Documents.Step_Type;
       Success  : Boolean;
       Fail_Msg : String;
       Loc      : BBT.IO.Location_Type);
-   overriding procedure Put_Overall_Results
-     (Writer  : Text_Writer;
-      Results : BBT.Tests.Results.Test_Results_Count);
+   overriding procedure Put_Scenario_Result (Writer : Text_Writer;
+                                             Scen   : Scenario_Type);
+   overriding procedure Put_Summary
+     (Writer    : Text_Writer);
+   overriding procedure Put_Detailed_Results
+     (Writer    : Text_Writer);
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step (Writer : Text_Writer; Step : Step_Type);

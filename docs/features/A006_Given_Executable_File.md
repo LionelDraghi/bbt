@@ -3,8 +3,6 @@
 btt is able to create a shell script, that will have the executable attributes thanks to the "executable" keyword. 
 
 This is a Unix only feature. On windows, the file should be suffixed .bat or .cmd, no need to chmod +x.
-Fixme : here the model is too different between Windows and Unix, we need an alternate mechanism 
-to run different scripts, with different command.
 
 And note that on Unix, without the +x you cannot run "./cmd.txt", but you still can run the script with ". ./cmd.txt" or "source cmd.txt".
 

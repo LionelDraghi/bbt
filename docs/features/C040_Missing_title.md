@@ -20,10 +20,11 @@ No Tittle Scenario
 - Then output contains 
 ```
 ## [no_title.input](no_title.input)  
+  ### Feature:   
+  - [X] scenario [](no_title.input) pass  
+  - [X] scenario [](no_title.input) pass 
 ```
 - And output contains 
 ```
-| Failed     | 0 |
-| Successful | 1 |
-| Empty      | 0 |
+Success, 1 scenarios OK  
 ```

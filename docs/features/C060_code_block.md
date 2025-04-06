@@ -85,5 +85,5 @@ lot_of_code_blocks.md:63: Warning : File content already provided, ignoring this
 ```
 - And output contains  
 ```
-| Successful |  1
+Success, 1 scenarios OK
 ```

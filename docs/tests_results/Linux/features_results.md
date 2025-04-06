@@ -269,13 +269,13 @@
 
   - [X] scenario [Lets run `create_tree` in ./dir2](../../features/B020_Exec_dir.md) pass  
 
-## [B030_File_test_and_creation.md](../../features/B030_File_test_and_creation.md)  
+## [B030_File_creation_in_Given_steps.md](../../features/B030_File_creation_in_Given_steps.md)  
   ### Feature: testing the existence of a file  
-  - [X] scenario [a required file does not exist](../../features/B030_File_test_and_creation.md) pass  
+  - [X] scenario [a required file does not exist](../../features/B030_File_creation_in_Given_steps.md) pass  
 
-  - [X] scenario [the required file is created](../../features/B030_File_test_and_creation.md) pass  
+  - [X] scenario [the required file is created](../../features/B030_File_creation_in_Given_steps.md) pass  
 
-  - [X] scenario ["Given there is no", when there actually is, should erase the file](../../features/B030_File_test_and_creation.md) pass  
+  - [X] scenario ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md) pass  
 
 ## [B040_Find_scenarios.md](../../features/B040_Find_scenarios.md)  
   ### Feature: multiples scenarios given in command line  
@@ -301,7 +301,7 @@
 
   - [X] scenario [](../../features/B040_Find_scenarios.md) pass  
 
-  - [X] scenario [empty list file on -lf if there is no scenario in given directories](../../features/B040_Find_scenarios.md) pass  
+  - [X] scenario [empty list file on list_files if there is no scenario in given directories](../../features/B040_Find_scenarios.md) pass  
 
 ## [B050_Strict_gherkin.md](../../features/B050_Strict_gherkin.md)  
   ### Feature: Strict Gherkin rules  
@@ -384,6 +384,10 @@
 
   - [X] scenario [Normal mode with an error](../../features/B120_Output_Verbosity.md) pass  
 
+  - [X] scenario [](../../features/B120_Output_Verbosity.md) pass  
+
+  - [X] scenario [Quiet mode with an error](../../features/B120_Output_Verbosity.md) pass  
+
 ## [B130_Cmd_Line_Help.md](../../features/B130_Cmd_Line_Help.md)  
   ### Feature: Clear command line help  
   - [X] scenario [](../../features/B130_Cmd_Line_Help.md) pass  
@@ -401,6 +405,10 @@
   - [X] scenario [](../../features/B130_Cmd_Line_Help.md) pass  
 
   - [X] scenario [others help](../../features/B130_Cmd_Line_Help.md) pass  
+
+  - [X] scenario [](../../features/B130_Cmd_Line_Help.md) pass  
+
+  - [X] scenario [On_All help](../../features/B130_Cmd_Line_Help.md) pass  
 
 ## [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
   - [X] scenario [No step test](../../features/C010_Empty_scenarios.md) pass  
@@ -439,12 +447,15 @@
   ### Feature: GNU error messages  
   - [X] scenario [](../../features/C090_GNU_Error_Msg_Format.md) pass  
 
+## [C110_Two_Verbs_In_The_Step.md](../../features/C110_Two_Verbs_In_The_Step.md)  
+  - [X] scenario [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md) pass  
 
-## Summary : **Success**
+
+## Summary : **Success**, 124 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 121   |
+| Successful | 124   |
 | Empty      | 0     |
 

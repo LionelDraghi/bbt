@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -86,8 +86,9 @@ package body BBT.Scenarios.Step_Parser.Lexer is
 
    -- -----------------------------------------------------------------------
    function Next_Token (Line     : access constant String;
-                        Tok_Type : out Token_Type)
-                           return String is
+                        Tok_Type :    out Token_Type;
+                        Loc      : in out Location_Type) return String
+   is
       First : Positive;      -- Index of first character in token
       Last  : Natural := 0;  -- Index of last character in token
 
@@ -135,8 +136,8 @@ package body BBT.Scenarios.Step_Parser.Lexer is
             else
                -- Code span -------------------------------------------------
                Cursor := Last + 1; -- the cursor goes over the final backtick
-               First := @ + 1; -- remove first backtick
-               Last  := @ - 1; -- remove final backtick
+               First  := @ + 1; -- remove first backtick
+               Last   := @ - 1; -- remove final backtick
 
                Tok_Type := Code_Span;
             end if;
@@ -153,6 +154,10 @@ package body BBT.Scenarios.Step_Parser.Lexer is
          Tok_Type := Identifier;
 
       end if;
+
+      --  Loc := Location (Name   => File (@),
+      --                   Line   => IO.Line (@),
+      --                   Column => Ada.Text_IO.Count (First));
 
       if Cursor >= Line.all'Last then
          -- It's the end of line

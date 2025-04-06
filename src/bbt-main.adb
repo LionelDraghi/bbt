@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -19,7 +19,7 @@ with BBT.IO,
      BBT.Tests.Runner,
      BBT.Writers,
      BBT.Writers.Text_Writer,
-     BBT.Writers.Markdown_Writer,
+     BBT.Writers.Markdown_Writers,
      BBT.Writers.Asciidoc_Writer;
 
 with Ada.Command_Line,
@@ -68,7 +68,7 @@ begin
    Adoc_Reader.Initialize;
 
    Text_Writer.Initialize;
-   Markdown_Writer.Initialize;
+   Markdown_Writers.Initialize;
    Asciidoc_Writer.Initialize;
 
    Cmd_Line.Analyze;
@@ -154,7 +154,7 @@ begin
          Tests.Runner.Run_All;
       end if;
       Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);
-      Writers.Put_Overall_Results (Overall_Results);
+      Writers.Put_Overall_Results;
 
       if Settings.Generate_Badge then
          Tests.Results.Generate_Badge;
@@ -179,7 +179,7 @@ begin
    -- --------------------------------------------------------------------
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
-   or else Tests.Results.Overall_Results (Failed) /= 0
+     or else not Tests.Results.No_Fail
    then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;

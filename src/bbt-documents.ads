@@ -1,18 +1,23 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;         use BBT.IO;
-with BBT.Settings;
-with Text_Utilities; use Text_Utilities;
+with BBT.IO,
+     BBT.Settings,
+     Text_Utilities;
 
-with Ada.Containers.Indefinite_Vectors;
-with Ada.Directories;
-with Ada.Strings.Text_Buffers;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+use BBT.IO,
+    Text_Utilities;
+
+with Ada.Containers.Indefinite_Vectors,
+     Ada.Directories,
+     Ada.Strings.Text_Buffers,
+     Ada.Strings.Unbounded;
+
+use Ada.Strings.Unbounded;
 
 private package BBT.Documents is
 -- Defines the main bbt internal data structure, wich is essentialy a tree of
@@ -62,37 +67,6 @@ private package BBT.Documents is
 
    package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, String);
-
-   --  type Text_Sources is (Code_Span, Code_Block, File);
-   --  -- Most steps accepts a text as object, that is either :
-   --  -- - provided on the same line within backquote (Code Span in Markdown parlance)
-   --  --   > - Then I get `result=10
-   --  -- - provided after the step on multiple lines between code fence line "```"
-   --  --   > - Then I get
-   --  --   >   ``
-   --  --   >   Provided under
-   --  --   >   LGPL licence
-   --  --   >   ``
-   --  -- - to be read in a file
-   --  --   > - Then I get file `expected.txt`
-
-   --  type Object_Text_Type (Source : Text_Sources := Code_Span) is record
-   --     File_Name : Unbounded_String := Null_Unbounded_String;
-   --     -- File_Name is common to Code_Block and File
-   --     case Source is
-   --        when Code_Span =>
-   --           Object_String : Unbounded_String := Null_Unbounded_String;
-   --        when Code_Block =>
-   --           File_Content  : Text             := Empty_Text;
-   --           -- On A Pas Le Nom Du Code Block!
-   --        when File =>
-   --           File_Type : Ada.Directories.File_Kind
-   --             := Ada.Directories.Ordinary_File;
-   --     end case;
-   --  end record;
-   --  procedure Put_Image
-   --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-   --     S      :        Object_Text_Type);
 
    function Filtered_By_Default return Boolean is (Settings.Selection_Mode);
    -- If in Selection mode, then items are filtered by default, and selected
@@ -194,7 +168,6 @@ private package BBT.Documents is
    -- Mark the feature and all contained scenarios and steps as filtered
    procedure Unfilter_Parents (F : in out Feature_Type);
 
-
    -- --------------------------------------------------------------------------
    type Document_Type is record
       Name          : Unbounded_String;
@@ -217,9 +190,6 @@ private package BBT.Documents is
    procedure Unfilter_Tree (D : in out Document_Type);
    -- Mark the document all contained features, scenarios, etc.
    -- as filtered/unfiltered
-
-   --  function Created_Files_List_File_Name (D : Document_Type) return String
-   --    is (To_String (D.Name) & ".created_files");
 
    -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type);

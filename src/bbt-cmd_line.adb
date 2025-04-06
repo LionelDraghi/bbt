@@ -1,9 +1,10 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
+
 with BBT.IO,
      BBT.Settings,
      BBT.Scenarios,
@@ -65,7 +66,6 @@ package body BBT.Cmd_Line is
 
    -- --------------------------------------------------------------------------
    function Dash_To_Underscore (S : String) return String is
-   -- Transform option like "--list-file" in "--list_file"
       Tmp           : String (S'Range);
       Conversion_On : Boolean := False;
       -- The conversion starts after the first letter, otherwise we
@@ -109,7 +109,7 @@ package body BBT.Cmd_Line is
           Ada.Directories;
 
    begin
-      -- --------------------------------------------------------------------------
+      -- -----------------------------------------------------------------------
       -- NB: command line, including arguments should comply with GNU Coding
       -- standards
       -- (https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
@@ -125,23 +125,23 @@ package body BBT.Cmd_Line is
       Opt_Analysis_Loop : while More_Args loop
 
          declare
-            -- arg are either a command or option, in which case we neutralize the
-            -- '-' character to have --list_item = --list-item
-            -- or a file name, in which case it remain
+            -- arg are either a command or option, in which case we
+            -- neutralize the '-' character to have
+            -- --list_item = --list-item
+            -- or a file name, in which case it remain.
             File : constant String := Current_Arg;
             Cmd  : constant String := Dash_To_Underscore (Current_Arg);
             use Tests.Filter_List;
 
          begin
-            -- Commands -----------------------------------------------------------
-            -- Note that after v0.0.6, commands starting with '-' are deprecated
-            if Cmd = "list" then
+            -- Commands --------------------------------------------------------
+            if Cmd in "list" | "ls" then
                Set_Cmd (List);
 
             elsif Cmd = "run" then
                Set_Cmd (Run);
 
-            elsif Cmd in "help" | "-h" | "--help" | "he" then
+            elsif Cmd in "help" | "he" then
                Set_Cmd (Help);
                if not On_Last_Arg then
                   -- help may be followed by an help topic
@@ -154,23 +154,22 @@ package body BBT.Cmd_Line is
                   end if;
                end if;
 
-            elsif Cmd in "explain" | "-e" | "--explain" | "ex" then
+            elsif Cmd in "explain" | "ex" then
                Set_Cmd (Explain);
 
-            elsif Cmd in "list_files" | "-lf" | "--list_files" | "lf" then
+            elsif Cmd in "list_files" | "lf" then
                Set_Cmd (List_Files);
 
-            elsif Cmd in "list_keywords" | "-lk" | "--list_keywords" | "lk" then
+            elsif Cmd in "list_keywords" | "lk" then
                Set_Cmd (List_Keywords);
 
-            elsif Cmd in "list_grammar" | "-lg" | "--list_grammar" | "lg" then
+            elsif Cmd in "list_grammar" | "lg" then
                Set_Cmd (List_Grammar);
 
-            elsif Cmd in "create_template" | "-ct" | "--create_template" | "ct"
-            then
+            elsif Cmd in "create_template" | "ct" then
                Set_Cmd (Create_Template);
 
-               -- Options ---------------------------------------------------------
+               -- Options ------------------------------------------------------
             elsif Cmd = "-o" or Cmd = "--output" then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a file name");
@@ -207,25 +206,6 @@ package body BBT.Cmd_Line is
                --     Next_Arg;
                --     -- Fixme: opt -ot / --output_tag not yet coded
 
-            elsif Cmd = "-iw" or Cmd = "--ignore_whitespaces" then
-               Settings.Ignore_Whitespaces := True;
-
-            elsif Cmd = "-ic" or Cmd = "--ignore_casing" then
-               Settings.Ignore_Casing := True;
-
-            elsif Cmd = "-ibl" or Cmd = "--ignore_blank_lines" then
-               Settings.Ignore_Blank_Lines := True;
-
-            elsif Cmd = "-hm" or Cmd = "--human_match" then
-               Settings.Ignore_Whitespaces := True;
-               Settings.Ignore_Casing      := True;
-               Settings.Ignore_Blank_Lines := True;
-
-            elsif Cmd = "-em" or Cmd = "--exact_match" then
-               Settings.Ignore_Whitespaces := False;
-               Settings.Ignore_Casing      := False;
-               Settings.Ignore_Blank_Lines := False;
-
             elsif Cmd = "-ed" or Cmd = "--exec_dir" then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a file name");
@@ -248,6 +228,9 @@ package body BBT.Cmd_Line is
             elsif Cmd = "-k" or Cmd = "--keep_going" then
                Settings.Keep_Going := True;
 
+            elsif Cmd = "-Werror" then
+               Settings.Warnings_As_Errors := True;
+
             elsif Cmd = "-c" or Cmd = "--cleanup" then
                Settings.Cleanup := True;
 
@@ -263,8 +246,43 @@ package body BBT.Cmd_Line is
             elsif Cmd = "-q" or Cmd = "--quiet" then
                IO.Set_Verbosity (Quiet);
 
+            elsif Cmd = "--strict" then
+               Settings.Strict_Gherkin := True;
+
+            elsif Cmd = "-sb" or Cmd = "--status_bar" then
+               Settings.Status_Bar := True;
+
+            elsif Cmd = "-gb" or Cmd = "--generate_badge" then
+               if On_Last_Arg then
+                  IO.Put_Error (Cmd & " must be followed by a file name");
+               else
+                  Go_Next_Arg;
+                  Settings.Generate_Badge := True;
+                  Settings.Set_Badge_File_Name (Current_Arg);
+               end if;
+
+               -- Matching options ---------------------------------------------
+            elsif Cmd = "-iw" or Cmd = "--ignore_whitespaces" then
+               Settings.Ignore_Whitespaces := True;
+
+            elsif Cmd = "-ic" or Cmd = "--ignore_casing" then
+               Settings.Ignore_Casing := True;
+
+            elsif Cmd = "-ibl" or Cmd = "--ignore_blank_lines" then
+               Settings.Ignore_Blank_Lines := True;
+
+            elsif Cmd = "-hm" or Cmd = "--human_match" then
+               Settings.Ignore_Whitespaces := True;
+               Settings.Ignore_Casing      := True;
+               Settings.Ignore_Blank_Lines := True;
+
+            elsif Cmd = "-em" or Cmd = "--exact_match" then
+               Settings.Ignore_Whitespaces := False;
+               Settings.Ignore_Casing      := False;
+               Settings.Ignore_Blank_Lines := False;
+
+               -- Debug options ------------------------------------------------
             elsif Cmd = "-d" then
-               -- Undocumented option ---------------------------------------------
                if On_Last_Arg then
                   IO.Put_Error ("-d may be followed by ");
                   for T in IO.Topics loop
@@ -287,21 +305,7 @@ package body BBT.Cmd_Line is
                -- undocumented option, list settings
                Settings.List_Settings := True;
 
-            elsif Cmd = "--strict" then
-               Settings.Strict_Gherkin := True;
-
-            elsif Cmd = "-sb" or Cmd = "--status_bar" then
-               Settings.Status_Bar := True;
-
-            elsif Cmd = "-gb" or Cmd = "--generate_badge" then
-               if On_Last_Arg then
-                  IO.Put_Error (Cmd & " must be followed by a file name");
-               else
-                  Go_Next_Arg;
-                  Settings.Generate_Badge := True;
-                  Settings.Set_Badge_File_Name (Current_Arg);
-               end if;
-
+               -- Filtering options --------------------------------------------
             elsif Cmd in "-e" | "--exclude" then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a string");
@@ -334,6 +338,7 @@ package body BBT.Cmd_Line is
                               Mode    => Include);
                end if;
 
+               -- File processing ----------------------------------------------
             elsif Ada.Directories.Exists (File) then
                -- if it's not an option, its a file name
                case Kind (File) is

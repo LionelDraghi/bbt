@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author : Lionel Draghi
+-- Author: Lionel Draghi
 -- SPDX-License-Identifier: APSL-2.0
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
@@ -19,9 +19,9 @@ private package BBT.Scenarios.Step_Parser.Lexer is
 
    procedure Initialize_Lexer;
 
-   function Next_Token
-     (Line    : access constant String;
-     Tok_Type : out Token_Type) return String;
+   function Next_Token (Line     : access constant String;
+                        Tok_Type :    out Token_Type;
+                        Loc      : in out Location_Type) return String;
 
    function More_Token return Boolean;
 

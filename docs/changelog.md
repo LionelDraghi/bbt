@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[Latest] - 2025-??-??**
+  - [Changed] Removed option form of commands : "help" is a command, "-h" is removed (as announced in 0.1.0)
   - [Changed] The non essential explanation in the online help have bee moved to separate topics
   - [Added]   Close #21, first implementation of documents/features/scenario/steps selection through `--select` `--exclude` `--include` options.
   - [Added]   AppImage generation added by @mgrojo
