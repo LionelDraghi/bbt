@@ -20,8 +20,9 @@ private package BBT.Scenarios.Step_Parser.Lexer is
    procedure Initialize_Lexer;
 
    function Next_Token (Line     : access constant String;
-                        Tok_Type :    out Token_Type;
-                        Loc      : in out Location_Type) return String;
+                        Tok_Type :    out Token_Type
+                        -- Loc      : in out Location_Type
+                       ) return String;
 
    function More_Token return Boolean;
 

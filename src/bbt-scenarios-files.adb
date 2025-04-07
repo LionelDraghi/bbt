@@ -171,6 +171,8 @@ package body BBT.Scenarios.Files is
       -- so we have to pass it.
 
       while not End_Of_File (Input) loop
+         Reset_Error_Counts;
+
          Loc := Location (File_Name, Line (Input));
          -- To be done before the Get_Line, otherwise Line is already
          -- on the next one.
@@ -213,11 +215,13 @@ package body BBT.Scenarios.Files is
                                                     Loc,
                                                     Code_Block_Expected,
                                                     Cmd_List);
-                  Put_Debug_Line ("             " & Filler & "  "
-                                  & Inline_Image (S), Loc);
-
-                  Tests.Builder.Add_Step
-                    (S, Code_Block_Expected, Cmd_List, Loc);
+                  --  Put_Debug_Line ("             " & Filler & "  "
+                  --                  & Inline_Image (S), Loc);
+                  if No_Error then
+                     -- If the step was not clearly interpreted, let's ignore it
+                     Tests.Builder.Add_Step
+                       (S, Code_Block_Expected, Cmd_List, Loc);
+                  end if;
 
                when Code_Fence =>
                   Put_Debug_Line ("Code fence   " & Filler & Line, Loc);
@@ -237,8 +241,6 @@ package body BBT.Scenarios.Files is
             end case;
 
          end Line_Processing;
-
-         if Some_Error then exit; end if;
 
       end loop;
 

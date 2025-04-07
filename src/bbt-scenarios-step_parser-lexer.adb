@@ -86,8 +86,9 @@ package body BBT.Scenarios.Step_Parser.Lexer is
 
    -- -----------------------------------------------------------------------
    function Next_Token (Line     : access constant String;
-                        Tok_Type :    out Token_Type;
-                        Loc      : in out Location_Type) return String
+                        Tok_Type :    out Token_Type
+                       -- Loc      : in out Location_Type
+                       ) return String
    is
       First : Positive;      -- Index of first character in token
       Last  : Natural := 0;  -- Index of last character in token

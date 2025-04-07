@@ -294,11 +294,10 @@ package body BBT.Scenarios.Step_Parser is
                    Cmd_List            :    out Cmd_Lists.Vector)
                    return Step_Type
    is
-      First_Token      : Boolean        := True;
       Successfully_Met : Boolean        := False;
       Or_Met           : Natural        := 0;
       Not_Met          : Boolean        := False;
-      Prep             : Prepositions;
+      Prep             : Prepositions   := Prepositions'First;
       Subject_Attr     : Subject_Attrib := No_SA;
       Subject          : Subjects       := No_Subject;
       Object           : Objects        := No_Object;
@@ -317,6 +316,9 @@ package body BBT.Scenarios.Step_Parser is
 
       use Chunk;
 
+      Tmp : aliased constant String := To_String (Line);
+      TT            : Token_Type;
+
    begin
       Step_String := Line;
       Cmd_List    := Cmd_Lists.Empty_Vector;
@@ -324,57 +326,68 @@ package body BBT.Scenarios.Step_Parser is
       Initialize_Lexer;
       Chunk.Initialize;
 
-      -- Put_Line ("Parsing """ & To_String (Line) & """", Verbosity => IO.Debug);
-      Line_Processing : while More_Token loop
-         declare
-            TT  : Token_Type;
-            Tmp : aliased constant String := To_String (Line);
-            Tok : constant String := Next_Token (Tmp'Access, TT, Loc);
+      -- First token processing
+      declare
+         Tok           : constant String := Next_Token (Tmp'Access, TT); --, Loc);
+         Lower_Keyword : constant String := Translate
+           (Source  => Tok,
+            Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map);
 
-         begin
-            Chunk.Set_Loc (Loc);
+      begin
+         if    Lower_Keyword = "given" then
+            Cat  := Given_Step;
+            Prep := Given;
 
-            -- Put_Line ("Token = " & TT'Image & " " & Tok'Image);
-            case TT is
+         elsif Lower_Keyword = "when" then
+            Cat  := When_Step;
+            Prep := When_P;
+
+         elsif Lower_Keyword = "then" then
+            Cat  := Then_Step;
+            Prep := Then_P;
+
+         elsif Lower_Keyword = "and" or else
+           Lower_Keyword = "but"
+         then
+            Cat := Previous_Step_Kind;
+            -- Inherited from the context
+            case Previous_Step_Kind is
+               when Unknown    => null;
+               when Given_Step => Prep := Given;
+               when When_Step  => Prep := When_P;
+               when Then_Step  => Prep := Then_P;
+            end case;
+
+         else
+            IO.Put_Error ("line starting with '- " & Tok
+                          & "' is not a step, ignored", Loc);
+            -- If the first word after `-` is not one of those,
+            -- then this is not a step
+
+         end if;
+         -- given/when/then may appear later on the line, but
+         -- then are not considered as keywords.
+      end;
+
+      if No_Error then
+
+         Chunk.Set_Loc (Loc);
+
+         Line_Processing : while More_Token loop
+
+            declare
+               Tok : constant String := Next_Token (Tmp'Access, TT); -- , Loc);
+
+            begin
+               -- Put_Line ("Token = " & TT'Image & " " & Tok'Image);
+               case TT is
                when Keyword =>
                   declare
                      Lower_Keyword : constant String := Translate
                        (Source  => Tok,
                         Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map);
                   begin
-                     if First_Token then
-                        if    Lower_Keyword = "given" then
-                           Cat  := Given_Step;
-                           Prep := Given;
-
-                        elsif Lower_Keyword = "when" then
-                           Cat  := When_Step;
-                           Prep := When_P;
-
-                        elsif Lower_Keyword = "then" then
-                           Cat  := Then_Step;
-                           Prep := Then_P;
-
-                        elsif Lower_Keyword = "and" or else
-                          Lower_Keyword = "but"
-                        then
-                           Cat := Previous_Step_Kind;
-                           -- inherited from the context
-                           case Previous_Step_Kind is
-                              when Unknown    => null;
-                              when Given_Step => Prep := Given;
-                              when When_Step  => Prep := When_P;
-                              when Then_Step  => Prep := Then_P;
-                           end case;
-                        else
-                           IO.Put_Warning
-                             ("Keyword : " & Tok & " ignored", Loc);
-
-                        end if;
-                        -- given/when/then may appear later on the line, but
-                        -- then are not considered as keywords.
-
-                     elsif Lower_Keyword = "executable" then
+                     if Lower_Keyword = "executable" then
                         Executable := True;
 
                      elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
@@ -561,45 +574,46 @@ package body BBT.Scenarios.Step_Parser is
                when Empty =>
                   null;
 
-            end case;
+               end case;
 
-         end;
-         First_Token := False;
+            end;
 
-      end loop Line_Processing;
+         end loop Line_Processing;
 
-      -- Some coherency tests to give to the user a more helpful
-      -- message than "Unrecognized Step"
-      declare
-         use Ada.Containers;
-      begin
-         if Verb = Run or Verb = Successful_Run then
-            if Or_Met > 0 and then Cmd_List.Length /= Count_Type (Or_Met + 1) then
-               IO.Put_Error ("Command missing after last ""or""", Loc);
-            else
-               if Object_String = Null_Unbounded_String then
-                  IO.Put_Error ("No command after ""run"" keyword", Loc);
+         -- Some coherency tests to give to the user a more helpful
+         -- message than "Unrecognized Step"
+         declare
+            use Ada.Containers;
+         begin
+            if Verb = Run or Verb = Successful_Run then
+               if Or_Met > 0 and then Cmd_List.Length /= Count_Type (Or_Met + 1) then
+                  IO.Put_Error ("Command missing after last ""or""", Loc);
+               else
+                  if Object_String = Null_Unbounded_String then
+                     IO.Put_Error ("No command after ""run"" keyword", Loc);
+                  end if;
                end if;
+
             end if;
+         end;
 
-         end if;
-      end;
+         --  Ada.Text_IO.Put_Line ("Prep         = " & Prep'Image);
+         --  Ada.Text_IO.Put_Line ("Subject_Attr = " & Subject_Attr'Image);
+         --  Ada.Text_IO.Put_Line ("Subject      = " & Subject'Image);
+         --  Ada.Text_IO.Put_Line ("Verb         = " & Verb'Image);
+         --  Ada.Text_IO.Put_Line ("Object       = " & Object'Image);
 
-      --  Ada.Text_IO.Put_Line ("Prep         = " & Prep'Image);
-      --  Ada.Text_IO.Put_Line ("Subject_Attr = " & Subject_Attr'Image);
-      --  Ada.Text_IO.Put_Line ("Subject      = " & Subject'Image);
-      --  Ada.Text_IO.Put_Line ("Verb         = " & Verb'Image);
-      --  Ada.Text_IO.Put_Line ("Object       = " & Object'Image);
+         Action := The_Grammar
+           (Prep, Subject_Attr, Subject, Verb, Object).Action;
+         Code_Block_Expected := The_Grammar
+           (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
 
-      Action := The_Grammar
-        (Prep, Subject_Attr, Subject, Verb, Object).Action;
-      Code_Block_Expected := The_Grammar
-        (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
+         --  Ada.Text_IO.Put_Line ("Action       = " & Action'Image);
+         --  Ada.Text_IO.Put_Line ("Code_Block_Expected = " & Code_Block_Expected'Image);
 
-      --  Ada.Text_IO.Put_Line ("Action       = " & Action'Image);
-      --  Ada.Text_IO.Put_Line ("Code_Block_Expected = " & Code_Block_Expected'Image);
+         Previous_Step_Kind := Cat;
 
-      Previous_Step_Kind := Cat;
+      end if;
 
       return (Cat              => Cat,
               Action           => Action,

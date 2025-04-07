@@ -153,6 +153,8 @@ private package BBT.IO is
    function Error_Count   return Natural;
    function Warning_Count return Natural;
 
+   procedure Reset_Error_Counts;
+
    -- --------------------------------------------------------------------------
    -- Some_Error return True if some error occurred, or if some Warning
    -- occurred and option to treat warning as error is set.

@@ -80,9 +80,9 @@ Preconditions common to several scenarios may be put in a Background section, be
 
 ## Help  
 To get a complete (although less friendly) view on the grammar:  
-> bbt -lg  
+> bbt list_grammar  
 
 And the to get the list of keywords:  
-> bbt -lk  
+> bbt list_keywords  
 
 More features here : https://github.com/LionelDraghi/bbt/tree/main#bbt-readme-

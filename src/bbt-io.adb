@@ -157,6 +157,12 @@ package body BBT.IO is
    function Some_Error return Boolean is
      (Errors_Count /= 0 or (Settings.Warnings_As_Errors and Warnings_Count /= 0));
 
+   procedure Reset_Error_Counts is
+   begin
+      Errors_Count   := 0;
+      Warnings_Count := 0;
+   end Reset_Error_Counts;
+
    -- --------------------------------------------------------------------------
    type String_Access is access String;
    procedure Dealloc_String is new Ada.Unchecked_Deallocation

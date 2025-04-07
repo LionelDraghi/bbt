@@ -241,8 +241,8 @@ package body BBT.Tests.Builder is
       case Step.Cat is
          when Unknown =>
             if Step.Action = None then
-               IO.Put_Error ("No context to determine step kind of "
-                             & To_String (Step.Step_String),
+               IO.Put_Error ("No context to determine step kind of '"
+                             & To_String (Step.Step_String) & "'",
                              Step.Location);
             end if;
 
