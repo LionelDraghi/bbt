@@ -173,8 +173,8 @@ Nice consequence, bbt scenarios may be written by non coders people.
 bbt Steps uses a limited English subset, with a vocabulary dedicated to test with no-surprise keywords like *run*, *output*, *contains*, etc.  
 
 Although simple, you don't have to learn this subset by heart, you may :
-- ask for a template scenario by running `bbt -ct` (or `--create_template`), or
-- ask for the complete grammar with `bbt -lg` (or `--list_grammar`).  
+- ask for a template scenario by running `bbt create_template` (short form `bbt ct`), or
+- ask for the complete grammar with `bbt list_grammar` (short form `bbt lg`).  
 
 ### No-fuss no-wait run
 
