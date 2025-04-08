@@ -23,9 +23,9 @@
 
 ## Step's definition 
 
-[bbt keywords](https://github.com/LionelDraghi/bbt/blob/main/docs/keywords.md), including both the Gherkin subset and bbt specifics keywords may be obtained with `bbt -lk` (`--list_keywords`).
+[bbt keywords](https://github.com/LionelDraghi/bbt/blob/main/docs/keywords.md), including both the Gherkin subset and bbt specifics keywords may be obtained with `bbt lk` (`list_keywords`).
 
-But more interesting, [the grammar](https://github.com/LionelDraghi/bbt/blob/main/docs/grammar.md) can be obtained through the `-lg` (`--list_grammar`) option. 
+But more interesting, [the grammar](https://github.com/LionelDraghi/bbt/blob/main/docs/grammar.md) can be obtained through the `lg` (`list_grammar`) option. 
 
 Each Step is a one line sentence, with a basic "subject verb object" structure, starting with the preposition/adverb/conjunction (*Given*, *When*, *And*, etc.). 
 Add some attribute adjectives (e.g. *empty*), and here we are.
