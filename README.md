@@ -210,11 +210,7 @@ In real life, the [acc](https://github.com/LionelDraghi/ArchiCheck) project has 
 Other people are using it too.  
 
 btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
-On Windows, some tests fail because of expected output containing Unix style path, and one relative to escaping command line written for Linux.
-bbt syntax is not yet able to specify per platform expected results, so this is not going to be fixed quickly.  
 On MacOS, it may be useful to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
-
-That said, I'm not aware of any Windows or MacOS specific bug.
 
 ## Help and comments
 Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
