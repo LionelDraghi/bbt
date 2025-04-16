@@ -5,7 +5,7 @@
   - [X] scenario [](..\..\..\tests\non_reg_tests\extra_line.md) pass  
 
 
-## Summary : **Success**
+## Summary : **Success**, 2 scenarios OK
 
 | Status     | Count |
 |------------|-------|
