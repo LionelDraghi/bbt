@@ -11,7 +11,7 @@
   - [X] scenario [I want to know sut version](../../examples/sut_version.md) pass  
 
 
-## Summary : **Success**
+## Summary : **Success**, 4 scenarios OK
 
 | Status     | Count |
 |------------|-------|
