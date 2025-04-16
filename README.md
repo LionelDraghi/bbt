@@ -1,6 +1,8 @@
 [![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-black)](https://blog.adacore.com/ada-spark-crate-of-the-year-2024-winners-announced) [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![Made with Ada](https://img.shields.io/badge/Made%20with-Ada-1f425f.svg)](https://ada-lang.io/)
+[![Ada Logo](https://img.shields.io/badge/Ada-Logo-blue?logoImage=https://github.com/ada-lang-io/ada-logo-editor/blob/main/resources/ada_horizon_logo/ada_horizon.svg&logoColor=white)](https://www.adacore.com/)
+
 
 ![](docs/tests_results/Linux/badge.svg) ![](docs/tests_results/Windows/badge.svg) ![](docs/tests_results/Darwin/badge.svg)
 
