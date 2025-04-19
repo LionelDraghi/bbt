@@ -16,7 +16,8 @@ package body BBT.Tests.Results is
    Results : Test_Results_Count;
 
    -- --------------------------------------------------------------------------
-   function Result (Scenario : Documents.Scenario_Type) return Test_Result is
+   function Result (Scenario : Documents.Scenario_Type'Class)
+                    return Test_Result is
    begin
       if Scenario.Failed_Step_Count > 0 then
          return Failed;
@@ -31,14 +32,14 @@ package body BBT.Tests.Results is
 
    -- --------------------------------------------------------------------------
    procedure Sum_Results
-     (Docs : access Documents.Documents_Lists.Vector)
+     (Docs : Documents.Documents_Lists.Vector)
    is
-      procedure Get_Results (S : Documents.Scenario_Type) is
+      procedure Get_Results (S : Documents.Scenario_Type'Class) is
       begin
          Results (Result (S)) := @ + 1;
       end Get_Results;
    begin
-      for D of Docs.all loop
+      for D of Docs loop
          if D.Feature_List.Is_Empty and D.Scenario_List.Is_Empty then
             -- Empty Doc should be reported
             Results (Empty) := @ + 1;

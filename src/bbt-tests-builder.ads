@@ -19,10 +19,9 @@ package BBT.Tests.Builder is
    procedure Add_Feature    (Name : String; Loc : Location_Type);
    procedure Add_Scenario   (Name : String; Loc : Location_Type);
    procedure Add_Background (Name : String; Loc : Location_Type);
-   procedure Add_Step       (Step                : Step_Type;
-                             Code_Block_Expected : Boolean;
-                             Cmd_List            : Cmd_Lists.Vector;
-                             Loc                 : Location_Type);
+   procedure Add_Step       (Step                : in out Step_Type;
+                             Code_Block_Expected :        Boolean;
+                             Cmd_List            :        Cmd_Lists.Vector);
    procedure Add_Line       (Line : String);
    procedure Add_Code_Fence (Loc : Location_Type);
    function In_File_Content return Boolean;
@@ -34,8 +33,5 @@ package BBT.Tests.Builder is
    procedure Duplicate_Multiple_Run;
    -- Search for "When I run X or Y" steps, and duplicate the scenario,
    -- except that one will run X and the other will run Y.
-
-   -- --------------------------------------------------------------------------
-   function The_Tests_List return access Documents_Lists.Vector;
 
 end BBT.Tests.Builder;

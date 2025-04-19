@@ -10,7 +10,6 @@ with BBT.Documents;         use BBT.Documents;
 with BBT.IO;                use BBT.IO;
 with BBT.Settings;
 with BBT.Status_Bar;
-with BBT.Tests.Builder;
 with BBT.Tests.Actions;     use BBT.Tests.Actions;
 with BBT.Writers;           use BBT.Writers;
 with File_Utilities;
@@ -33,31 +32,31 @@ package body BBT.Tests.Runner is
    pragma Warnings (Off, Put_Debug_Line);
 
    -- --------------------------------------------------------------------------
-   function Subject_Or_Object_String (Step : Step_Type) return String is
+   function Subject_Or_Object_String (Step : Step_Type'Class) return String is
      (To_String (if Step.Object_File_Name = Null_Unbounded_String then
            Step.Subject_String else Step.Object_File_Name));
    -- Fixme: Clearly not confortable with that function, it's magic.
 
 
    -- --------------------------------------------------------------------------
-   procedure Run_Step (Step      : in out Step_Type;
+   procedure Run_Step (Step      : in out Step_Type'Class;
                        Run_Error :    out Boolean);
-   procedure Run_Scenario (Scen : in out Scenario_Type);
+   procedure Run_Scenario (Scen : in out Scenario_Type'Class);
    -- run only the scenario, not Doc and / or Feature Background.
-   procedure Run_Background (Scen : in out Scenario_Type);
+   procedure Run_Background (Scen : in out Scenario_Type'Class);
    -- run only Doc and / or Feature Background, not the scenario himself.
-   procedure Run_Doc_Background (Scen : in out Scenario_Type);
-   procedure Run_Feature_Background (Scen : in out Scenario_Type);
+   procedure Run_Doc_Background (Scen : in out Scenario_Type'Class);
+   procedure Run_Feature_Background (Scen : in out Scenario_Type'Class);
    procedure Run_Scenario_List (L : in out Scenario_Lists.Vector);
 
    -- --------------------------------------------------------------------------
-   procedure Run_Step (Step      : in out Step_Type;
+   procedure Run_Step (Step      : in out Step_Type'Class;
                        Run_Error :    out Boolean)
    is
       Spawn_OK    : Boolean;
       Return_Code : Integer;
       Output      : constant String :=
-                      Output_File_Name (Enclosing_Doc (Step).all);
+                      Output_File_Name (Step.Parent_Doc.all);
    begin
       Run_Error := False;
 
@@ -177,7 +176,7 @@ package body BBT.Tests.Runner is
    end Run_Step;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Scenario (Scen : in out Scenario_Type) is
+   procedure Run_Scenario (Scen : in out Scenario_Type'Class) is
       Spawn_OK : Boolean := False;
 
    begin
@@ -208,7 +207,7 @@ package body BBT.Tests.Runner is
    end Run_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Background (Scen : in out Scenario_Type) is
+   procedure Run_Background (Scen : in out Scenario_Type'Class) is
    begin
       if Scen.Filtered then
          Put_Debug_Line ("  ====== Skipping background of filtered scen " & Scen.Name'Image);
@@ -224,7 +223,7 @@ package body BBT.Tests.Runner is
    end Run_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Doc_Background (Scen : in out Scenario_Type) is
+   procedure Run_Doc_Background (Scen : in out Scenario_Type'Class) is
    -- Run background scenario at document level, if any
       Doc : constant Document_Type := Parent_Doc (Scen).all;
    begin
@@ -245,7 +244,7 @@ package body BBT.Tests.Runner is
    end Run_Doc_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Feature_Background (Scen : in out Scenario_Type) is
+   procedure Run_Feature_Background (Scen : in out Scenario_Type'Class) is
    -- Run background scenario at feature level, if any
    begin
       if Is_In_Feature (Scen) and then Has_Background (Scen.Parent_Feature.all)
@@ -279,7 +278,7 @@ package body BBT.Tests.Runner is
    end Run_Scenario_List;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Doc (Doc : in out Document_Type)  is
+   procedure Run_Doc (Doc : in out Document_Type'Class)  is
       use File_Utilities;
       --  File_Count : constant Natural :=
       --                 Natural (Tests.Builder.The_Tests_List.Length);
@@ -354,7 +353,7 @@ package body BBT.Tests.Runner is
    procedure Run_All is
       -- use File_Utilities;
       File_Count : constant Natural :=
-                     Natural (Tests.Builder.The_Tests_List.Length);
+                     Natural (The_Tests_List.Length);
       -- package CVer is new GNAT.Compiler_Version;
 
    begin
@@ -375,7 +374,7 @@ package body BBT.Tests.Runner is
       -- Put_Line ("GNAT version: " & CVer.Version);
 
       -- let's run the test
-      for D of BBT.Tests.Builder.The_Tests_List.all loop
+      for D of The_Tests_List.all loop
          Run_Doc (D);
 
          if IO.Some_Error and not Settings.Keep_Going then

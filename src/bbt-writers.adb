@@ -68,7 +68,7 @@ package body BBT.Writers is
    end Enable_Output;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_Start (Doc : Document_Type) is
+   procedure Put_Document_Start (Doc : Document_Type'Class) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Document_Start (Writer_List (W).all, Doc);
@@ -76,7 +76,7 @@ package body BBT.Writers is
    end Put_Document_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Feature_Start (Feat : Feature_Type) is
+   procedure Put_Feature_Start (Feat : Feature_Type'Class) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Feature_Start (Writer_List (W).all, Feat);
@@ -84,7 +84,7 @@ package body BBT.Writers is
    end Put_Feature_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Start (Scen : Scenario_Type) is
+   procedure Put_Scenario_Start (Scen : Scenario_Type'Class) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Scenario_Start (Writer_List (W).all, Scen);
@@ -92,7 +92,7 @@ package body BBT.Writers is
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Step     : BBT.Documents.Step_Type;
+   procedure Put_Step_Result (Step     : BBT.Documents.Step_Type'Class;
                               Success  : Boolean;
                               Fail_Msg : String;
                               Loc      : BBT.IO.Location_Type) is
@@ -108,7 +108,7 @@ package body BBT.Writers is
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Result (Scen : Scenario_Type) is
+   procedure Put_Scenario_Result (Scen : Scenario_Type'Class) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Scenario_Result (Writer_List (W).all, Scen);
@@ -126,7 +126,7 @@ package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
    procedure Put_Scenario (Writer     : Interface_Access;
-                           Scenario   : Scenario_Type) is
+                           Scenario   : Scenario_Type'Class) is
    begin
       if Scenario.Filtered then
          Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
@@ -147,7 +147,7 @@ package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
    procedure Put_Feature (Writer     : Interface_Access;
-                          Feature    : Feature_Type) is
+                          Feature    : Feature_Type'Class) is
    begin
       if Feature.Filtered then
          Put_Debug_Line ("Feature " & (+Feature.Name) & " is filtered");
@@ -169,7 +169,7 @@ package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
    procedure Put_Document (Writer     : Interface_Access;
-                           Doc        : Document_Type) is
+                           Doc        : Document_Type'Class) is
    begin
       if Doc.Filtered then
          Put_Debug_Line ("Document " & (+Doc.Name) & " is filtered");

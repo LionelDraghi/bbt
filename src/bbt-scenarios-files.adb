@@ -180,7 +180,6 @@ package body BBT.Scenarios.Files is
          Line_Processing :
          declare
             Line     : aliased constant String  := Get_Line (Input);
-            S        : Step_Type;
             Cmd_List : Cmd_Lists.Vector;
             Filler   : constant String :=
                          (if BBT.IO.Line (Loc) in 1 .. 9
@@ -211,17 +210,21 @@ package body BBT.Scenarios.Files is
 
                when Step_Line =>
                   Put_Debug_Line ("Step         " & Filler & Line, Loc);
-                  S := Scenarios.Step_Parser.Parse (Attrib.Step_Ln,
-                                                    Loc,
-                                                    Code_Block_Expected,
-                                                    Cmd_List);
-                  --  Put_Debug_Line ("             " & Filler & "  "
-                  --                  & Inline_Image (S), Loc);
-                  if No_Error then
-                     -- If the step was not clearly interpreted, let's ignore it
-                     Tests.Builder.Add_Step
-                       (S, Code_Block_Expected, Cmd_List, Loc);
-                  end if;
+                  declare
+                     S : Step_Type := Scenarios.Step_Parser.Parse
+                       (Attrib.Step_Ln,
+                        Loc,
+                        Code_Block_Expected,
+                        Cmd_List);
+                  begin
+                     --  Put_Debug_Line ("             " & Filler & "  "
+                     --                  & Inline_Image (S), Loc);
+                     if No_Error then
+                        -- If the step was not clearly interpreted, let's ignore it
+                        Tests.Builder.Add_Step
+                          (S, Code_Block_Expected, Cmd_List);
+                     end if;
+                  end;
 
                when Code_Fence =>
                   Put_Debug_Line ("Code fence   " & Filler & Line, Loc);

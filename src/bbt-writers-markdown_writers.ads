@@ -18,7 +18,7 @@ private
      (Writer : Markdown_Writer) return String is
      (".md");
 
-   function File_Pattern
+   overriding function File_Pattern
      (Writer : Markdown_Writer) return String;
    -- Regexp of files of this format
 
@@ -29,27 +29,28 @@ private
                                          File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_Start (Writer : Markdown_Writer;
-                                 Doc    : Document_Type);
-   procedure Put_Feature_Start (Writer  : Markdown_Writer;
-                                Feat    : Feature_Type);
-   procedure Put_Scenario_Start (Writer : Markdown_Writer;
-                                 Scen   : Scenario_Type);
+   overriding procedure Put_Document_Start (Writer : Markdown_Writer;
+                                            Doc    : Document_Type'Class);
+   overriding procedure Put_Feature_Start (Writer  : Markdown_Writer;
+                                           Feat    : Feature_Type'Class);
+   overriding procedure Put_Scenario_Start (Writer : Markdown_Writer;
+                                            Scen   : Scenario_Type'Class);
    overriding procedure Put_Step_Result
      (Writer   : Markdown_Writer;
-      Step     : BBT.Documents.Step_Type;
+      Step     : BBT.Documents.Step_Type'Class;
       Success  : Boolean;
       Fail_Msg : String;
       Loc      : BBT.IO.Location_Type);
    overriding procedure Put_Scenario_Result (Writer : Markdown_Writer;
-                                             Scen   : Scenario_Type);
+                                             Scen   : Scenario_Type'Class);
    overriding procedure Put_Summary
      (Writer    : Markdown_Writer);
-   procedure Put_Detailed_Results
+   overriding procedure Put_Detailed_Results
      (Writer    : Markdown_Writer);
 
    -- --------------------------------------------------------------------------
-   overriding procedure Put_Step (Writer : Markdown_Writer; Step : Step_Type);
+   overriding procedure Put_Step (Writer : Markdown_Writer;
+                                  Step   : Step_Type'Class);
    overriding procedure Put_Scenario_Title
      (Writer : Markdown_Writer; S : String);
    overriding procedure Put_Feature_Title

@@ -43,14 +43,14 @@ private package BBT.Writers is
    -- During test run, each event result in a call on those procedure, that
    -- will be dispatch on each enabled Formatter
    -- procedure Put_Summary;
-   procedure Put_Document_Start (Doc : Document_Type);
-   procedure Put_Feature_Start (Feat : Feature_Type);
-   procedure Put_Scenario_Start (Scen : Scenario_Type);
-   procedure Put_Step_Result (Step     : Documents.Step_Type;
+   procedure Put_Document_Start (Doc : Document_Type'Class);
+   procedure Put_Feature_Start (Feat : Feature_Type'Class);
+   procedure Put_Scenario_Start (Scen : Scenario_Type'Class);
+   procedure Put_Step_Result (Step     : Documents.Step_Type'Class;
                               Success  : Boolean;
                               Fail_Msg : String;
                               Loc      : IO.Location_Type);
-   procedure Put_Scenario_Result (Scen : Scenario_Type);
+   procedure Put_Scenario_Result (Scen : Scenario_Type'Class);
    procedure Put_Overall_Results;
 
 
@@ -80,18 +80,18 @@ private
 
    -- -------------------------------------------------------------------------
    procedure Put_Document_Start (Writer    : Abstract_Writer;
-                                 Doc       : Document_Type) is abstract;
+                                 Doc       : Document_Type'Class) is abstract;
    procedure Put_Feature_Start (Writer    : Abstract_Writer;
-                                Feat      : Feature_Type) is abstract;
+                                Feat      : Feature_Type'Class) is abstract;
    procedure Put_Scenario_Start (Writer    : Abstract_Writer;
-                                 Scen      : Scenario_Type) is abstract;
+                                 Scen      : Scenario_Type'Class) is abstract;
    procedure Put_Step_Result (Writer    : Abstract_Writer;
-                              Step      : Documents.Step_Type;
+                              Step      : Documents.Step_Type'Class;
                               Success   : Boolean;
                               Fail_Msg  : String;
                               Loc       : IO.Location_Type) is abstract;
    procedure Put_Scenario_Result (Writer : Abstract_Writer;
-                                  Scen   : Scenario_Type) is abstract;
+                                  Scen   : Scenario_Type'Class) is abstract;
    procedure Put_Summary (Writer : Abstract_Writer) is abstract;
    procedure Put_Detailed_Results (Writer : Abstract_Writer) is abstract;
 
@@ -100,7 +100,7 @@ private
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
    procedure Put_Step (Writer : Abstract_Writer;
-                       Step   : Step_Type) is abstract;
+                       Step   : Step_Type'Class) is abstract;
    procedure Put_Scenario_Title (Writer : Abstract_Writer;
                                  S      : String) is abstract;
    procedure Put_Feature_Title (Writer : Abstract_Writer;

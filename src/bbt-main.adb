@@ -6,7 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Documents.Apply_Filters,
+     BBT.Documents,
      BBT.Cmd_Line,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
@@ -57,8 +57,7 @@ procedure BBT.Main is
          end loop;
       end if;
 
-      Documents.Apply_Filters
-        (To_Docs => Tests.Builder.The_Tests_List);
+      Documents.Apply_Filters;
 
    end Analyze_Documents;
 
@@ -135,13 +134,13 @@ begin
       -- Let's display our rebuild of the original test definition
       -- file comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
-      Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
+      Writers.Put_Document_List (Documents.The_Tests_List.all);
 
    when List =>
       Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
       Status_Bar.Put_Activity ("Display non filtered items");
-      Writers.Put_Document_List (Tests.Builder.The_Tests_List.all);
+      Writers.Put_Document_List (Documents.The_Tests_List.all);
 
    when Run | Settings.None =>
       -- Run is the default command, so None => Run
@@ -153,7 +152,7 @@ begin
          Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;
       end if;
-      Tests.Results.Sum_Results (Tests.Builder.The_Tests_List);
+      Tests.Results.Sum_Results (Documents.The_Tests_List.all);
       Writers.Put_Overall_Results;
 
       if Settings.Generate_Badge then
@@ -169,7 +168,7 @@ begin
 
    when Help =>
       Cmd_Line.Put_Help (Settings.Current_Topic);
-      --Fixme: what if there is multiple topics ont the cmd line?
+      -- Fixme: what if there is multiple topics ont the cmd line?
 
    end case;
 

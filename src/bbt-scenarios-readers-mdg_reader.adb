@@ -38,11 +38,11 @@ package body BBT.Scenarios.Readers.MDG_Reader is
    end Initialize;
 
    -- --------------------------------------------------------------------------
-   function File_Pattern
+   overriding function File_Pattern
      (Reader : MDG_Reader) return String is (Regexp);
 
    -- --------------------------------------------------------------------------
-   function Is_Of_The_Format
+   overriding function Is_Of_The_Format
      (Reader    : MDG_Reader;
       File_Name : String) return Boolean is
    begin
@@ -51,8 +51,10 @@ package body BBT.Scenarios.Readers.MDG_Reader is
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
-   function Remove_Emphasis (Reader    : MDG_Reader;
-                             S         : String) return String is
+   overriding function Remove_Emphasis
+     (Reader    : MDG_Reader;
+      S         : String) return String
+   is
       Emphasis  : constant Ada.Strings.Maps.Character_Set
         := Ada.Strings.Maps.To_Set ("*_");
    begin
@@ -62,7 +64,7 @@ package body BBT.Scenarios.Readers.MDG_Reader is
    end Remove_Emphasis;
 
    -- --------------------------------------------------------------------------
-   function Find_Heading_Mark
+   overriding function Find_Heading_Mark
      (Reader      : MDG_Reader;
       Line        : String;
       First       : out Natural;
@@ -168,9 +170,10 @@ package body BBT.Scenarios.Readers.MDG_Reader is
    -- Stores what marker was used to open the block
    -- This allows to ignore code block inserted with the other marker
 
-   function Code_Fence_Line (Reader           : MDG_Reader;
-                             Line             : String;
-                             Look_For_Closing : Boolean) return Boolean is
+   overriding function Code_Fence_Line
+     (Reader           : MDG_Reader;
+      Line             : String;
+      Look_For_Closing : Boolean) return Boolean is
    begin
       if Look_For_Closing then
          -- Looking for the closing marker

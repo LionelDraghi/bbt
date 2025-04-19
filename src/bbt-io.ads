@@ -36,8 +36,9 @@ private package BBT.IO is
    -- --------------------------------------------------------------------------
    -- Observability! (kind of a tentative of...)
    type Extended_Topics is (None, -- keep as first enum (see Topics declaration)
+                            Builder,
                             Created_Files,
-                            Documents,
+                            Model,
                             Filters,
                             FSM,
                             Lexer,

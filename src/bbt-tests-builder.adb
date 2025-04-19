@@ -15,6 +15,14 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body BBT.Tests.Builder is
 
+   -- --------------------------------------------------------------------------
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.Builder)
+                             renames BBT.IO.Put_Line;
+
+   -- --------------------------------------------------------------------------
    type States is (In_Document,
                    In_Feature,
                    In_Scenario,
@@ -59,7 +67,6 @@ package body BBT.Tests.Builder is
 
    package body FSM is separate;
 
-   The_Doc_List        : aliased Documents_Lists.Vector;
    Opening_Marker_Line : Ada.Text_IO.Count := 0;
 
    use FSM;
@@ -72,63 +79,47 @@ package body BBT.Tests.Builder is
       end if;
    end Check_Missing_Code_Block;
 
-   -- --------------------------------------------------------------------------
-   function Last_Doc_Ref return Documents_Lists.Reference_Type is
-     (The_Doc_List.Reference (The_Doc_List.Last));
-
-   function Last_Feature_Ref return Feature_Lists.Reference_Type is
-     (Last_Doc_Ref.Feature_List.Reference
-        (Last_Doc_Ref.Element.Feature_List.Last));
-
-   function Last_Scenario_Ref return Scenario_Lists.Reference_Type is
+    -- --------------------------------------------------------------------------
+   function Last_Scenario return Scenario_Maybe is
    begin
       case Current_Doc_State is
          when In_Document =>
-            return Last_Doc_Ref.Element.Scenario_List.Reference
-              (Last_Doc_Ref.Scenario_List.Last);
+            return Current_Doc.Last_Scenario_In_Doc;
          when In_Feature =>
-            return Last_Feature_Ref.Element.Scenario_List.Reference
-              (Last_Feature_Ref.Scenario_List.Last);
+            return Current_Doc.Last_Scenario_In_Feature;
       end case;
-   end Last_Scenario_Ref;
+   end Last_Scenario;
 
    -- --------------------------------------------------------------------------
-   function Last_Step_Ref return Step_Lists.Reference_Type is
+   function Last_Step return Step_Maybe is
    begin
       case Current_Background is
          when None =>
-            return Last_Scenario_Ref.Element.Step_List.Reference
-              (Last_Scenario_Ref.Step_List.Last);
+            return Last_Scenario.Last_Step;
          when Doc =>
-            return Last_Doc_Ref.Background.Step_List.Reference
-              (Last_Doc_Ref.Background.Step_List.Last);
+            return Current_Doc.Background.Last_Step;
          when Feature =>
-            return Last_Feature_Ref.Background.Step_List.Reference
-              (Last_Feature_Ref.Background.Step_List.Last);
+            return Current_Doc.Last_Feature.Background.Last_Step;
       end case;
-   end Last_Step_Ref;
+   end Last_Step;
 
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      -- Put_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
-      The_Doc_List.Append
-        (Document_Type'(Name     => To_Unbounded_String (Name),
-                        Location => Location (Name, 0),
-                        others   => <>));
+      Put_Debug_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
+      The_Tests_List.Append
+        (Create_Document (Name     => To_Unbounded_String (Name),
+                          Location => Location (Name, 0)));
       Set_State (In_Document);
-
    end Add_Document;
 
    -- --------------------------------------------------------------------------
    procedure Add_Feature (Name : String; Loc : Location_Type) is
    begin
-      -- Put_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
-      Last_Doc_Ref.Feature_List.Append
-        (Feature_Type'(Name            => To_Unbounded_String (Name),
-                       Parent_Document => Last_Doc_Ref.Element,
-                       Location        => Loc,
-                       others          => <>));
+      Put_Debug_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
+      Current_Doc.Feature_List.Append
+        (Create_Feature (Name       => To_Unbounded_String (Name),
+                         Location   => Loc));
       Set_State (In_Feature);
       Check_Missing_Code_Block (Loc);
    end Add_Feature;
@@ -138,17 +129,18 @@ package body BBT.Tests.Builder is
    begin
       case Current_Doc_State is
          when In_Document =>
-            Last_Doc_Ref.Scenario_List.Append
-              (Scenario_Type'(Name            => To_Unbounded_String (Name),
-                              Parent_Document => Last_Doc_Ref.Element,
-                              Location        => Loc,
-                              others          => <>));
+            Put_Debug_Line ("Add_Scenario in Doc " & Name'Image,
+                      Verbosity => IO.Debug);
+            Current_Doc.Scenario_List.Append
+              (Create_Scenario (Name     => Name,
+                                Location => Loc));
          when In_Feature =>
-            Last_Feature_Ref.Scenario_List.Append
-              (Scenario_Type'(Name           => To_Unbounded_String (Name),
-                              Parent_Feature => Last_Feature_Ref.Element,
-                              Location       => Loc,
-                              others          => <>));
+            Put_Debug_Line ("Add_Scenario in Feature " & Name'Image,
+                      Verbosity => IO.Debug);
+            Last_Feature.Scenario_List.Append
+              (Create_Scenario (Name           => Name,
+                                Parent_Feature => Last_Feature,
+                                Location       => Loc));
       end case;
       Set_State (In_Scenario);
       Check_Missing_Code_Block (Loc);
@@ -160,18 +152,19 @@ package body BBT.Tests.Builder is
    begin
       case Current_State is
          when In_Document =>
-            Last_Doc_Ref.Background := new Scenario_Type'
-              (Name            => To_Unbounded_String (Name),
-               Parent_Document => Last_Doc_Ref.Element,
-               Location        => Loc,
-               others          => <>);
+            Put_Debug_Line ("Add_Background in Doc " & Name'Image,
+                      Verbosity => IO.Debug);
+            Current_Doc.Background := new Scenario_Type'
+              (Create_Scenario (Name     => Name,
+                                Location => Loc));
 
          when In_Feature =>
-            Last_Feature_Ref.Background := new Scenario_Type'
-              (Name           => To_Unbounded_String (Name),
-               Parent_Feature => Last_Feature_Ref.Element,
-               Location        => Loc,
-               others          => <>);
+            Put_Debug_Line ("Add_Background in Feature " & Name'Image,
+                      Verbosity => IO.Debug);
+            Last_Feature.Background := new Scenario_Type'(
+              Create_Scenario (Name           => Name,
+                               Parent_Feature => Last_Feature,
+                               Location       => Loc));
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
@@ -185,19 +178,17 @@ package body BBT.Tests.Builder is
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step                : Step_Type;
-                       Code_Block_Expected : Boolean;
-                       Cmd_List            : Cmd_Lists.Vector;
-                       Loc                 : Location_Type) is
+   procedure Add_Step (Step                : in out Step_Type;
+                       Code_Block_Expected :        Boolean;
+                       Cmd_List            :        Cmd_Lists.Vector) is
 
       -- -----------------------------------------------------------------------
-      procedure Append_Step (Scen : not null access Scenario_Type) is
+      procedure Append_Step (Scen : Scenario_Maybe) is
       begin
+         Step.Set_Parent_Scenario (Scen);
          if Cmd_List.Is_Empty then
             -- normal case, there is no "or"
-            Scen.Step_List.Append
-              ((Step with delta Parent_Scenario => Scen,
-                Location                        => Loc));
+            Scen.Step_List.Append (Step);
             --  declare
             --     S2 : Step_Type := Step;
             --  begin
@@ -210,12 +201,7 @@ package body BBT.Tests.Builder is
             -- cmd
 
             -- the existing scenario will receive the first cmd
-            Scen.Step_List.Append
-              ((Step with delta Object_String   => +Cmd_List.First_Element,
-                Parent_Scenario                 => Scen,
-                Location                        => Loc
-                -- Filtered                        => Filtered
-               ));
+            Scen.Step_List.Append (Step);
 
             --  for S in 1 .. Cmd_List.Count - 1 loop
             --     Scen.Step_List
@@ -230,7 +216,7 @@ package body BBT.Tests.Builder is
       end Append_Step;
 
    begin
-      --  Put_Line ("Add_Step " & Step'Image, Step.Location,
+      --  Put_Debug_Line ("Add_Step " & Step'Image, Step.Location,
       --            Verbosity => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
@@ -282,12 +268,21 @@ package body BBT.Tests.Builder is
 
       case Current_Background is
          when Doc     =>
-            Append_Step (Last_Doc_Ref.Background);
+            Put_Debug_Line ("Add_Step in Doc's Background : " & Step.Step_String'Image,
+                      Verbosity => IO.Debug);
+            Append_Step (Current_Doc.Background);
          when Feature =>
-            Append_Step (Last_Feature_Ref.Background);
+            Put_Debug_Line ("Add_Step in Feature's Background : " & Step.Step_String'Image,
+                      Verbosity => IO.Debug);
+            Append_Step (Last_Feature.Background);
          when None    =>
-            Last_Scenario_Ref.Element.Step_List.Append
-              ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
+            Put_Debug_Line ("Add_Step in Scenario : " & Step.Step_String'Image,
+                      Verbosity => IO.Debug);
+            Set_Parent_Scenario (Scenario => Last_Scenario,
+                                 Step     => Step);
+            Last_Scenario.Add_Step (Step);
+            --  Last_Scenario_Ref.Element.Step_List.Append
+            --    ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
 
       end case;
       Check_Missing_Code_Block (Step.Location);
@@ -301,7 +296,8 @@ package body BBT.Tests.Builder is
    -- At the end of the code block section, the previous Step state
    -- is restored.
    begin
-      -- Put_Line ("Add_Code_Block, Current_State = ", Loc, Verbosity => IO.Debug);
+      -- Put_Debug_Line ("Add_Code_Block, Current_State = ",
+      --  Loc, Verbosity => IO.Debug);
       case Current_State is
          when In_Step =>
             Opening_Marker_Line := Line (Loc);
@@ -309,7 +305,7 @@ package body BBT.Tests.Builder is
                Put_Warning
                  ("File content already provided, ignoring this code fence",
                   Loc);
-               Last_Step_Ref.Comment.Append ("```");
+               Last_Step.Comment.Append ("```");
             else
                Set_State (In_File_Content);
             end if;
@@ -318,27 +314,27 @@ package body BBT.Tests.Builder is
             -- Exiting code block
             Opening_Marker_Line := 0;
             Restore_Previous_State;
-            Put_Line ("Add_Code_Block, exiting code block. File_Content = "
-                      & Last_Step_Ref.File_Content'Image,
+            Put_Debug_Line ("Add_Code_Block, exiting code block. File_Content = "
+                      & Last_Step.File_Content'Image,
                       Loc, Verbosity => IO.Debug);
 
          when In_Document =>
-            Last_Doc_Ref.Comment.Append ("```");
+            Current_Doc.Comment.Append ("```");
 
          when In_Feature =>
-            Last_Feature_Ref.Comment.Append ("```");
+            Last_Feature.Comment.Append ("```");
 
          when In_Scenario =>
-            Last_Scenario_Ref.Comment.Append ("```");
+            Last_Scenario.Comment.Append ("```");
 
          when In_Background =>
             case Current_Background is
                when None =>
                   Put_Error ("No Doc or Feature Background??");
                when Doc =>
-                  Last_Doc_Ref.Comment.Append ("```");
+                  Current_Doc.Comment.Append ("```");
                when Feature =>
-                  Last_Feature_Ref.Comment.Append ("```");
+                  Last_Feature.Comment.Append ("```");
             end case;
 
       end case;
@@ -363,53 +359,53 @@ package body BBT.Tests.Builder is
    begin
       case Current_State is
          when In_Document =>
-            Last_Doc_Ref.Comment.Append (Line);
+            Current_Doc.Comment.Append (Line);
 
          when In_Feature =>
-            Last_Feature_Ref.Comment.Append (Line);
+            Last_Feature.Comment.Append (Line);
 
          when In_Scenario =>
-            Last_Scenario_Ref.Comment.Append (Line);
+            Last_Scenario.Comment.Append (Line);
 
          when In_Step =>
-            Last_Step_Ref.Comment.Append (Line);
+            Last_Step.Comment.Append (Line);
 
          when In_Background =>
             case Current_Background is
                when None =>
                   Put_Error ("No Doc or Feature Background??");
                when Doc =>
-                  Last_Doc_Ref.Comment.Append (Line);
+                  Current_Doc.Comment.Append (Line);
                when Feature =>
-                  Last_Feature_Ref.Comment.Append (Line);
+                  Last_Feature.Comment.Append (Line);
             end case;
 
          when In_File_Content =>
             -- Not a comment, we are in a file content description
-            Last_Step_Ref.File_Content.Append (Line);
+            Last_Step.File_Content.Append (Line);
 
       end case;
    end Add_Line;
 
    -- --------------------------------------------------------------------------
    procedure Duplicate_Multiple_Run is
-      procedure Duplicate (Scen : in out Scenario_Type) is
+      procedure Duplicate (Scen : in out Scenario_Type'Class) is
       begin
          if Has_Cmd_List (Scen) then
-            -- Put_Line ("Has_Cmd_List = true =============");
+            -- Put_Debug_Line ("Has_Cmd_List = true =============");
             for Cmd of Scen.Cmd_List loop
-               Put_Line
+               Put_Debug_Line
                  ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
             end loop;
          --  else
-         --     Put_Line ("Has_Cmd_List = false =============");
+         --     Put_Debug_Line ("Has_Cmd_List = false =============");
          end if;
       end Duplicate;
 
    begin
-      --  Put_Line ("Duplicate_Multiple_Run =============");
+      --  Put_Debug_Line ("Duplicate_Multiple_Run =============");
 
-      for D of The_Doc_List loop
+      for D of The_Tests_List.all loop
          for S of D.Scenario_List loop
             Duplicate (S);
          end loop;
@@ -421,9 +417,5 @@ package body BBT.Tests.Builder is
          end loop;
       end loop;
    end Duplicate_Multiple_Run;
-
-   -- --------------------------------------------------------------------------
-   function The_Tests_List return access Documents.Documents_Lists.Vector is
-     (The_Doc_List'Access);
 
 end BBT.Tests.Builder;

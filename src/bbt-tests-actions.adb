@@ -49,7 +49,7 @@ package body BBT.Tests.Actions is
       and then Kind (File_Name) = Directory);
 
    -- --------------------------------------------------------------------------
-   function Get_Expected (Step : Step_Type) return Text is
+   function Get_Expected (Step : Step_Type'Class) return Text is
       use type Text;
    begin
       if Step.File_Content /= Empty_Text then
@@ -79,7 +79,7 @@ package body BBT.Tests.Actions is
    end Get_Expected;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Cmd (Step         :     Step_Type;
+   procedure Run_Cmd (Step         :     Step_Type'Class;
                       Cmd          :     String;
                       Output_Name  :     String;
                       Check_Result :     Boolean;
@@ -177,7 +177,7 @@ package body BBT.Tests.Actions is
    end Run_Cmd;
 
    -- --------------------------------------------------------------------------
-   procedure Erase_And_Create (Step : Step_Type) is
+   procedure Erase_And_Create (Step : Step_Type'Class) is
       File_Name  : constant String := To_String (Step.Subject_String);
       Parent_Dir : constant String :=
                      Directories.Containing_Directory (File_Name);
@@ -221,7 +221,7 @@ package body BBT.Tests.Actions is
    end Erase_And_Create;
 
    -- --------------------------------------------------------------------------
-   procedure Create_If_None (Step : Step_Type) is
+   procedure Create_If_None (Step : Step_Type'Class) is
       File_Name : constant String := To_String (Step.Subject_String);
    begin
       Put_Debug_Line ("Create_New " & File_Name);
@@ -259,7 +259,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Return_Error (Last_Returned_Code : Integer;
-                           Step               : Step_Type) is
+                           Step               : Step_Type'Class) is
    begin
       Put_Debug_Line ("Return_Error " & Last_Returned_Code'Image);
       Put_Step_Result (Step     => Step,
@@ -270,7 +270,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Return_No_Error (Last_Returned_Code : Integer;
-                              Step               : Step_Type) is
+                              Step               : Step_Type'Class) is
    begin
       Put_Debug_Line ("Return_No_Error " & Last_Returned_Code'Image);
       Put_Step_Result (Step     => Step,
@@ -282,7 +282,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Check_File_Existence (File_Name : String;
-                                   Step      : Step_Type) is
+                                   Step      : Step_Type'Class) is
    begin
       Put_Debug_Line ("Check_File_Existence " & File_Name);
       if Entry_Exists (File_Name) then
@@ -302,7 +302,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Check_Dir_Existence (Dir_Name : String;
-                                  Step     : Step_Type) is
+                                  Step     : Step_Type'Class) is
    begin
       Put_Debug_Line ("Check_Dir_Existence " & Dir_Name);
       if Entry_Exists (Dir_Name) then
@@ -323,7 +323,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Check_No_File (File_Name : String;
-                            Step      : Step_Type) is
+                            Step      : Step_Type'Class) is
    begin
       Put_Debug_Line ("Check_No_File " & File_Name);
       Put_Step_Result (Step     => Step,
@@ -335,7 +335,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Check_No_Dir (Dir_Name : String;
-                           Step     : Step_Type) is
+                           Step     : Step_Type'Class) is
    begin
       Put_Debug_Line ("Check_No_Dir " & Dir_Name);
       Put_Step_Result (Step     => Step,
@@ -347,7 +347,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Check_No_Output (Output : Text;
-                              Step   : Step_Type) is
+                              Step   : Step_Type'Class) is
       use Texts;
    begin
       Put_Step_Result (Step     => Step,
@@ -357,7 +357,7 @@ package body BBT.Tests.Actions is
    end Check_No_Output;
 
    -- --------------------------------------------------------------------------
-   procedure Setup_No_File (Step : Step_Type) is
+   procedure Setup_No_File (Step : Step_Type'Class) is
       File_Name : constant String :=
                     +Step.Subject_String & (+Step.Object_File_Name);
    begin
@@ -370,7 +370,7 @@ package body BBT.Tests.Actions is
    end Setup_No_File;
 
    -- --------------------------------------------------------------------------
-   procedure Setup_No_Dir (Step : Step_Type) is
+   procedure Setup_No_Dir (Step : Step_Type'Class) is
       Dir_Name : constant String :=
                    +Step.Subject_String & (+Step.Object_File_Name);
    begin
@@ -384,7 +384,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Is (Output : Text;
-                        Step   : Step_Type) is
+                        Step   : Step_Type'Class) is
       use Texts;
       T2 : constant Text := Get_Expected (Step);
    begin
@@ -403,7 +403,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Contains (Output : Text;
-                              Step   : Step_Type) is
+                              Step   : Step_Type'Class) is
       T2  : constant Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("Output_Contains ");
@@ -422,7 +422,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Does_Not_Contain (Output : Text;
-                                      Step   : Step_Type) is
+                                      Step   : Step_Type'Class) is
       T2  : constant Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("Output_Does_Not_Contain ");
@@ -440,7 +440,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Matches (Output : Text;
-                             Step   : Step_Type) is
+                             Step   : Step_Type'Class) is
       Regexp : constant String := Get_Expected (Step)(1);
    begin
       Put_Debug_Line ("Output_Matches ");
@@ -453,7 +453,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Output_Does_Not_Match (Output : Text;
-                                    Step   : Step_Type) is
+                                    Step   : Step_Type'Class) is
       Regexp : constant String := Get_Expected (Step) (1);
    begin
       Put_Debug_Line ("Output_Does_Not_Match ");
@@ -465,7 +465,7 @@ package body BBT.Tests.Actions is
    end Output_Does_Not_Match;
 
    -- --------------------------------------------------------------------------
-   procedure Files_Is (Step : Step_Type) is
+   procedure Files_Is (Step : Step_Type'Class) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);
       T2        : constant Text   := Get_Expected (Step);
@@ -484,7 +484,7 @@ package body BBT.Tests.Actions is
    end Files_Is;
 
    -- --------------------------------------------------------------------------
-   procedure Files_Is_Not (Step : Step_Type) is
+   procedure Files_Is_Not (Step : Step_Type'Class) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);
       T2        : constant Text   := Get_Expected (Step);
@@ -503,7 +503,7 @@ package body BBT.Tests.Actions is
    end Files_Is_Not;
 
    -- --------------------------------------------------------------------------
-   procedure File_Contains (Step : Step_Type) is
+   procedure File_Contains (Step : Step_Type'Class) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);
       T2        : constant Text   := Get_Expected (Step);
@@ -525,7 +525,7 @@ package body BBT.Tests.Actions is
    end File_Contains;
 
    -- --------------------------------------------------------------------------
-   procedure File_Does_Not_Contain (Step : Step_Type) is
+   procedure File_Does_Not_Contain (Step : Step_Type'Class) is
       File_Name : constant String := +Step.Subject_String;
       T1        : constant Text   := Get_Text (File_Name);
       T2        : constant Text   := Get_Expected (Step);

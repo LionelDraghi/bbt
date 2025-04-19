@@ -9,9 +9,10 @@ Location | Text
 [docs/UG.md](../docs/UG.md):155|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
 [src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):207|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-cmd_line.ads](../src/bbt-cmd_line.ads):28|   procedure Create_Template; --  shouldn't be here
-[src/bbt-main.adb](../src/bbt-main.adb):172|      -- what if there is multiple topics ont the cmd line?
+[src/bbt-documents.ads](../src/bbt-documents.ads):261|   overriding procedure Apply_Filters_To (D : in out Document_Type); --  should be private
+[src/bbt-main.adb](../src/bbt-main.adb):171|      --  what if there is multiple topics ont the cmd line?
 [src/bbt-scenarios-step_parser.adb](../src/bbt-scenarios-step_parser.adb):135|                                                                                                   --  we currently do not check if the existing file contains
 [src/bbt-settings.ads](../src/bbt-settings.ads):82|   procedure Set_Result_File (File_Name : String); --  utile?
-[src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):39|   --  Clearly not confortable with that function, it's magic.
+[src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):38|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):172|      --  should be in parameters to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

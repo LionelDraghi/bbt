@@ -14,11 +14,12 @@ package BBT.Tests.Results is
 
    type Test_Results_Count is private;
 
-   function Result (Scenario : Documents.Scenario_Type) return Test_Result;
+   function Result (Scenario : Documents.Scenario_Type'Class)
+                    return Test_Result;
    -- Compute the Scenario status based on failed and successful step count
    -- stored in the scenario.
 
-   procedure Sum_Results (Docs : access Documents.Documents_Lists.Vector);
+   procedure Sum_Results (Docs : Documents.Documents_Lists.Vector);
    -- Walk through the Document list to sum all scenarios result's.
 
    -- function Overall_Results return Test_Results_Count;

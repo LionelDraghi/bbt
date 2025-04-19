@@ -615,20 +615,18 @@ package body BBT.Scenarios.Step_Parser is
 
       end if;
 
-      return (Cat              => Cat,
-              Action           => Action,
-              Step_String      => Step_String,
-              Location         => Loc,
-              Comment          => Empty_Text,
-              Subject_String   => Subject_String,
-              Object_String    => Object_String,
-              Object_File_Name => Object_File_Name,
-              File_Type        => File_Type,
-              Executable_File  => Executable,
-              Ignore_Order     => Ignore_Order,
-              File_Content     => Empty_Text,
-              Filtered         => False,
-              Parent_Scenario  => null);
+      return Create_Step (Cat              => Cat,
+                          Action           => Action,
+                          Step_String      => Step_String,
+                          Location         => Loc,
+                          Comment          => Empty_Text,
+                          Subject_String   => Subject_String,
+                          Object_String    => Object_String,
+                          Object_File_Name => Object_File_Name,
+                          File_Type        => File_Type,
+                          Executable_File  => Executable,
+                          Ignore_Order     => Ignore_Order,
+                          File_Content     => Empty_Text);
 
    end Parse;
 

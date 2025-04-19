@@ -21,8 +21,8 @@ generate_C = false
 [[depends-on]]
 ansiada = "^1.0.0"
 
-# [[test]]
-# command = ["make", "build"]
+[[test]]
+command = ["make", "build", "check"]
 
 # [[test]]
 # id = "examples"
@@ -42,7 +42,7 @@ ansiada = "^1.0.0"
 # [[test]]
 # id = "unit_testing"
 # directory = "tests/file_utilities_tests/"
-# # runner = "alire"
+# runner = "alire"
 # command = ["./test_file_utilities", "-q"]
 
 # [[actions]]

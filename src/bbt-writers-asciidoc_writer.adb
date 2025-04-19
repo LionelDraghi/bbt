@@ -40,26 +40,26 @@ package body BBT.Writers.Asciidoc_Writer is
    end Initialize;
 
    -- --------------------------------------------------------------------------
-   function File_Pattern
+   overriding function File_Pattern
      (Writer : Asciidoc_Writer) return String is (Regexp);
 
    -- --------------------------------------------------------------------------
-   procedure Enable_Output (Writer    : Asciidoc_Writer;
-                            File_Name : String := "") is
+   overriding procedure Enable_Output (Writer    : Asciidoc_Writer;
+                                       File_Name : String := "") is
    begin
       null;
    end Enable_Output;
 
    -- --------------------------------------------------------------------------
-   function Is_Of_The_Format (Writer    : Asciidoc_Writer;
-                              File_Name : String) return Boolean is
+   overriding function Is_Of_The_Format (Writer    : Asciidoc_Writer;
+                                         File_Name : String) return Boolean is
    begin
       return GNAT.Regexp.Match (S => File_Name,
                                 R => Compiled_Regexp);
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Summary (Writer    : Asciidoc_Writer) is
+   overriding procedure Put_Summary (Writer    : Asciidoc_Writer) is
       use Tests.Results;
    begin
       if Success then
@@ -76,7 +76,7 @@ package body BBT.Writers.Asciidoc_Writer is
    end Put_Summary;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Detailed_Results (Writer    : Asciidoc_Writer) is
+   overriding procedure Put_Detailed_Results (Writer    : Asciidoc_Writer) is
       use Tests.Results;
       Verbosity_Level : constant Verbosity_Levels
         := (if Success then Verbose else Quiet);
@@ -101,35 +101,35 @@ package body BBT.Writers.Asciidoc_Writer is
              False => "*** NOK : "];
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_Start (Writer : Asciidoc_Writer;
-                                 Doc    : Document_Type) is
+   overriding procedure Put_Document_Start (Writer : Asciidoc_Writer;
+                                            Doc    : Document_Type'Class) is
    begin
       Put_Document_Start (Get_Writer (For_Format => Markdown).all,
                           Doc);
    end Put_Document_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Feature_Start (Writer  : Asciidoc_Writer;
-                                Feat    : Feature_Type) is
+   overriding procedure Put_Feature_Start (Writer  : Asciidoc_Writer;
+                                           Feat    : Feature_Type'Class) is
    begin
       Put_Feature_Start (Get_Writer (For_Format => Markdown).all,
-                          Feat);
+                         Feat);
    end Put_Feature_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
-                                 Scen   : Scenario_Type) is
+   overriding procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
+                                            Scen   : Scenario_Type'Class) is
    begin
       Put_Scenario_Start (Get_Writer (For_Format => Markdown).all,
                           Scen);
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                              Step     : BBT.Documents.Step_Type;
-                              Success  : Boolean;
-                              Fail_Msg : String;
-                              Loc      : BBT.IO.Location_Type)
+   overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
+                                         Step     : BBT.Documents.Step_Type'Class;
+                                         Success  : Boolean;
+                                         Fail_Msg : String;
+                                         Loc      : BBT.IO.Location_Type)
    is
       Pre  : constant String := Pref (Success);
    begin
@@ -146,8 +146,8 @@ package body BBT.Writers.Asciidoc_Writer is
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Result (Writer : Asciidoc_Writer;
-                                  Scen   : Scenario_Type) is
+   overriding procedure Put_Scenario_Result (Writer : Asciidoc_Writer;
+                                             Scen   : Scenario_Type'Class) is
    begin
       Put_Scenario_Result (Get_Writer (For_Format => Markdown).all,
                            Scen);
@@ -155,7 +155,7 @@ package body BBT.Writers.Asciidoc_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step (Writer : Asciidoc_Writer;
-                                  Step   : Step_Type) is
+                                  Step   : Step_Type'Class) is
    begin
       Put_Line (Line (Step.Location)'Image & ": Step """ &
                 (+Step.Step_String) & """");

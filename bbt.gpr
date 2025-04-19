@@ -52,9 +52,9 @@ project BBT is
       --                                   "-g",
       --                                   -- "-pg",
       --                                   "-gnata",
-                                       --  "-gnatVa",
-                                       --  -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa",
-                                       --  "-gnatyaCefhIknOprxtAbilu");
+      --  "-gnatVa",
+      --  -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa",
+      --  "-gnatyaCefhIknOprxtAbilu");
    end Compiler;
 
    package Binder is
@@ -71,11 +71,12 @@ project BBT is
    end Linker;
 
    package Pretty_Printer is
-      for Default_Switches ("ada") use ("-A0", "-M80", "-W8", "--no-separate-loop-then", "-l2", "-c2");
+      for Default_Switches ("ada") use ("-A0", "-M80", "-W8", "--no-separate-loop-then", "-l2", "-c2", "-A1", "-A2", "-A4", "-A5", "-A3");
    end Pretty_Printer;
 
    package Coverage is
-      for Switches ("*") use ("--level=stmt");
+         for Switches ("*") use ("--level=stmt");
    end Coverage;
 
 end BBT;
+

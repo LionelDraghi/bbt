@@ -48,8 +48,8 @@ private
       File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
-   function Remove_Emphasis (Reader    : Adoc_Reader;
-                             S         : String) return String;
+   overriding function Remove_Emphasis (Reader    : Adoc_Reader;
+                                        S         : String) return String;
    -- Removes potential emphasis on keyword
    -- * : bold
    -- _ : italic
@@ -73,8 +73,8 @@ private
    -- Title_First will point 'x'
    -- Title_Last  will point 'z'
 
-   function Code_Fence_Line (Reader           : Adoc_Reader;
-                             Line             : String;
-                             Look_For_Closing : Boolean) return Boolean;
+   overriding function Code_Fence_Line (Reader           : Adoc_Reader;
+                                        Line             : String;
+                                        Look_For_Closing : Boolean) return Boolean;
 
 end BBT.Scenarios.Readers.Adoc_Reader;

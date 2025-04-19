@@ -17,7 +17,7 @@ private
    overriding function Default_Extension
      (Writer : Asciidoc_Writer) return String is (".adoc");
 
-   function File_Pattern (Writer : Asciidoc_Writer) return String;
+   overriding function File_Pattern (Writer : Asciidoc_Writer) return String;
    -- Regexp of files of this format
 
    overriding procedure Enable_Output
@@ -27,25 +27,26 @@ private
                                          File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_Start (Writer : Asciidoc_Writer;
-                                 Doc    : Document_Type);
-   procedure Put_Feature_Start (Writer  : Asciidoc_Writer;
-                                Feat    : Feature_Type);
-   procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
-                                 Scen   : Scenario_Type);
+   overriding procedure Put_Document_Start (Writer : Asciidoc_Writer;
+                                            Doc    : Document_Type'Class);
+   overriding procedure Put_Feature_Start (Writer  : Asciidoc_Writer;
+                                           Feat    : Feature_Type'Class);
+   overriding procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
+                                            Scen   : Scenario_Type'Class);
    overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                                         Step     : Documents.Step_Type;
+                                         Step     : Documents.Step_Type'Class;
                                          Success  : Boolean;
                                          Fail_Msg : String;
                                          Loc      : IO.Location_Type);
    overriding procedure Put_Scenario_Result (Writer : Asciidoc_Writer;
-                                             Scen   : Scenario_Type);
+                                             Scen   : Scenario_Type'Class);
    overriding procedure Put_Summary (Writer : Asciidoc_Writer);
    overriding procedure Put_Detailed_Results (Writer : Asciidoc_Writer);
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step
-     (Writer : Asciidoc_Writer; Step : Step_Type);
+     (Writer : Asciidoc_Writer;
+      Step   : Step_Type'Class);
    overriding procedure Put_Scenario_Title
      (Writer : Asciidoc_Writer; S : String);
    overriding procedure Put_Feature_Title

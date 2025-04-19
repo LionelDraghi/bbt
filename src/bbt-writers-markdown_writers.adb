@@ -45,26 +45,26 @@ package body BBT.Writers.Markdown_Writers is
    end Initialize;
 
    -- --------------------------------------------------------------------------
-   function File_Pattern
+   overriding function File_Pattern
      (Writer : Markdown_Writer) return String is (Regexp);
 
    -- --------------------------------------------------------------------------
-   procedure Enable_Output (Writer    : Markdown_Writer;
-                            File_Name : String := "") is
+   overriding procedure Enable_Output (Writer    : Markdown_Writer;
+                                       File_Name : String := "") is
    begin
       null;
    end Enable_Output;
 
    -- --------------------------------------------------------------------------
-   function Is_Of_The_Format (Writer    : Markdown_Writer;
-                              File_Name : String) return Boolean is
+   overriding function Is_Of_The_Format (Writer    : Markdown_Writer;
+                                         File_Name : String) return Boolean is
    begin
       return GNAT.Regexp.Match (S => File_Name,
                                 R => Compiled_Regexp);
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Summary
+   overriding procedure Put_Summary
      (Writer    : Markdown_Writer)
    is
       use all type Tests.Results.Test_Result;
@@ -84,7 +84,7 @@ package body BBT.Writers.Markdown_Writers is
    end Put_Summary;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Detailed_Results
+   overriding procedure Put_Detailed_Results
      (Writer    : Markdown_Writer)
    is
       use Tests.Results;
@@ -112,8 +112,8 @@ package body BBT.Writers.Markdown_Writers is
              False => "*** NOK : "];
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_Start (Writer : Markdown_Writer;
-                                 Doc    : Document_Type)
+   overriding procedure Put_Document_Start (Writer : Markdown_Writer;
+                                            Doc    : Document_Type'Class)
    is
       Path_To_Scen  : constant String
         := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,
@@ -125,25 +125,25 @@ package body BBT.Writers.Markdown_Writers is
    end Put_Document_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Feature_Start (Writer  : Markdown_Writer;
-                                Feat    : Feature_Type) is
+   overriding procedure Put_Feature_Start (Writer  : Markdown_Writer;
+                                           Feat    : Feature_Type'Class) is
    begin
       IO.Put_Line ("  ### Feature: " & (+Feat.Name) & "  ");
    end Put_Feature_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Start (Writer : Markdown_Writer;
-                                 Scen   : Scenario_Type) is
+   overriding procedure Put_Scenario_Start (Writer : Markdown_Writer;
+                                            Scen   : Scenario_Type'Class) is
    begin
       null; -- IO.Put_Line ("  ### Scen start: " & (+Scen.Name) & "  ");
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Writer    : Markdown_Writer;
-                              Step      : BBT.Documents.Step_Type;
-                              Success   : Boolean;
-                              Fail_Msg  : String;
-                              Loc       : BBT.IO.Location_Type) is
+   overriding procedure Put_Step_Result (Writer    : Markdown_Writer;
+                                         Step      : BBT.Documents.Step_Type'Class;
+                                         Success   : Boolean;
+                                         Fail_Msg  : String;
+                                         Loc       : BBT.IO.Location_Type) is
       Pre  : constant String := Pref (Success);
    begin
       Put_Debug_Line ("Put_Step_Result = " & Step'Image);
@@ -163,8 +163,8 @@ package body BBT.Writers.Markdown_Writers is
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Result (Writer : Markdown_Writer;
-                                  Scen   : Scenario_Type)
+   overriding procedure Put_Scenario_Result (Writer : Markdown_Writer;
+                                             Scen   : Scenario_Type'Class)
    is
       Path_To_Scen  : constant String
         := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,
@@ -195,7 +195,7 @@ package body BBT.Writers.Markdown_Writers is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step (Writer : Markdown_Writer;
-                                  Step   : Step_Type) is
+                                  Step   : Step_Type'Class) is
    begin
       Put_Line (Line (Step.Location)'Image & ": Step """ &
                 (+Step.Step_String) & """");

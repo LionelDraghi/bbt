@@ -56,8 +56,8 @@ private
       File_Name : String) return Boolean;
 
    -- --------------------------------------------------------------------------
-   function Remove_Emphasis (Reader    : MDG_Reader;
-                             S         : String) return String;
+   overriding function Remove_Emphasis (Reader    : MDG_Reader;
+                                        S         : String) return String;
    -- Removes potential emphasis on keyword
    -- * : bold (two *) and italic (one *)
    -- _ : underline
@@ -82,7 +82,7 @@ private
    -- for specification
 
    -- -------------------------------------------------------------------------
-   function Code_Fence_Line
+   overriding function Code_Fence_Line
      (Reader           : MDG_Reader;
       Line             : String;
       Look_For_Closing : Boolean) return Boolean;

@@ -24,7 +24,7 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
                              Case_Sensitive => False);
 
    -- --------------------------------------------------------------------------
-   Blanks  : constant Character_Set := To_Set (" " & Ada.Characters.Latin_1.HT);
+   Blanks     : constant Character_Set := To_Set (" " & Ada.Characters.Latin_1.HT);
    Separators : constant Character_Set := To_Set (':') or Blanks;
    Decorators : constant Character_Set := To_Set ('#');
    -- AsciiDoc highlight : https://docs.asciidoctor.org/asciidoc/latest/text/highlight/
@@ -37,11 +37,11 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
    end Initialize;
 
    -- --------------------------------------------------------------------------
-   function File_Pattern
+   overriding function File_Pattern
      (Reader : Adoc_Reader) return String is (Regexp);
 
    -- --------------------------------------------------------------------------
-   function Is_Of_The_Format
+   overriding function Is_Of_The_Format
      (Reader    : Adoc_Reader;
       File_Name : String) return Boolean is
    begin
@@ -50,8 +50,8 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
    end Is_Of_The_Format;
 
    -- --------------------------------------------------------------------------
-   function Remove_Emphasis (Reader    : Adoc_Reader;
-                             S         : String) return String is
+   overriding function Remove_Emphasis (Reader    : Adoc_Reader;
+                                        S         : String) return String is
       Emphasis  : constant Ada.Strings.Maps.Character_Set
         := Ada.Strings.Maps.To_Set ("*_`");
    begin
@@ -61,7 +61,7 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
    end Remove_Emphasis;
 
    -- --------------------------------------------------------------------------
-   function Find_Heading_Mark
+   overriding function Find_Heading_Mark
      (Reader      : Adoc_Reader;
       Line        : String;
       First       : out Natural;
@@ -70,16 +70,16 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
       Title_Last  : out Natural;
       Location    : Location_Type) return Boolean is
 
-   -- === **Header** : xyz
-   -- First will point 'H'
-   -- Last  will point 'r'
-   -- Title_First will point 'x'
-   -- Title_Last  will point 'z'
-   --
-   -- Refer to https://docs.asciidoctor.org/asciidoc/latest/sections/titles-and-levels/
-   -- for specification
+      -- === **Header** : xyz
+      -- First will point 'H'
+      -- Last  will point 'r'
+      -- Title_First will point 'x'
+      -- Title_Last  will point 'z'
+      --
+      -- Refer to https://docs.asciidoctor.org/asciidoc/latest/sections/titles-and-levels/
+      -- for specification
 
-   -- Fixme : This code is very similar to Markdown, and should be factorized.
+      -- Fixme : This code is very similar to Markdown, and should be factorized.
 
    begin
       -- First point to the first =
@@ -164,9 +164,9 @@ package body BBT.Scenarios.Readers.Adoc_Reader is
    subtype Marker_String is String (1 .. 4);
    Code_Block_Delimiter : constant Marker_String := 4 * '-';
 
-   function Code_Fence_Line (Reader           : Adoc_Reader;
-                             Line             : String;
-                             Look_For_Closing : Boolean) return Boolean is
+   overriding function Code_Fence_Line (Reader           : Adoc_Reader;
+                                        Line             : String;
+                                        Look_For_Closing : Boolean) return Boolean is
    -- We use the source block syntax
    -- https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-blocks/
    begin
