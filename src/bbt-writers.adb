@@ -136,7 +136,7 @@ package body BBT.Writers is
                              (+Scenario.Name) & """");
          for Step of Scenario.Step_List loop
             if Step.Filtered then
-               Put_Debug_Line ("Filtered Step " & (+Step.Step_String));
+               Put_Debug_Line ("Filtered Step " & (+Step.Data.Src_Code));
             else
                Put_Step (Writer.all, Step);
             end if;

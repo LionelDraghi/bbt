@@ -24,7 +24,7 @@ private package BBT.Cmd_Line is
 
    procedure Put_Settings;
    procedure Put_Help (Topic : Settings.Help_Topic);
-   procedure Put_Topics;
+   procedure Put_Trace_Topics;
    procedure Create_Template; -- Fixme: shouldn't be here
 
 end BBT.Cmd_Line;

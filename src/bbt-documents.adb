@@ -15,41 +15,47 @@ use BBT.Tests.Filter_List,
 package body BBT.Documents is
 
    use Documents_Lists;
-
    The_Doc_List : aliased Vector := Empty_Vector;
 
    -- --------------------------------------------------------------------------
    function The_Tests_List return access Documents_Lists.Vector is
      (The_Doc_List'Access);
 
-   --  function Current_Doc return access Document_Type is
-   --    (The_Doc_List.Reference (The_Doc_List.Last).Element);
+   -- --------------------------------------------------------------------------
+   function Current_Doc return Document_Access is
+     (Document_Access (The_Doc_List.Reference (The_Doc_List.Last).Element));
 
    -- --------------------------------------------------------------------------
-   function Current_Doc return Document_Maybe is
-     (Document_Maybe (The_Doc_List.Reference (The_Doc_List.Last).Element));
-
-   -- --------------------------------------------------------------------------
-   function Last_Feature return Feature_Maybe is
-     (Feature_Maybe (Current_Doc.Feature_List.Reference
+   function Last_Feature return Feature_Access is
+     (Feature_Access (Current_Doc.Feature_List.Reference
       (Current_Doc.Feature_List.Last).Element));
 
    -- --------------------------------------------------------------------------
-   procedure Filter (N : in out Node'Class) is
+   procedure Filter (N : in out Root_Node) is
    begin
+      Put_Debug_Line ("Filter '" & (+N.Name) & "'");
       N.Filtered := True;
    end Filter;
    -- --------------------------------------------------------------------------
-   procedure Unfilter (N : in out Node'Class) is
+   procedure Unfilter (N : in out Root_Node) is
    begin
+      Put_Debug_Line ("Unfilter '" & (+N.Name) & "'");
       N.Filtered := False;
    end Unfilter;
 
    -- --------------------------------------------------------------------------
    function Parent_Doc
-     (P : Leaf_Node'Class) return not null access Document_Type
+     (P : Non_Root_Node'Class) return Document_Access
    is
-     (P.Parent_Document);
+   begin
+      if P.Parent.all in Document_Type then
+         -- This is the root Document
+         return Document_Access (P.Parent);
+      else
+         -- Let's go one more level up
+         return Parent_Doc (Non_Root_Node'Class (P.Parent.all));
+      end if;
+   end Parent_Doc;
 
    -- --------------------------------------------------------------------------
    function Create_Document
@@ -57,23 +63,34 @@ package body BBT.Documents is
       Location      : Location_Type;
       Comment       : Text    := Empty_Text) return Document_Type
    is
-     (Name            => Name,
+     (Filtered        => <>,
       Location        => Location,
       Comment         => Comment,
-      others          => <>);
+      Name            => Name,
+      Scenario_List   => <>,
+      Feature_List    => <>,
+      Background      => <>);
 
    -- --------------------------------------------------------------------------
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type) is
    begin
+      Output.Put ("   Location         = " & Image (S.Location));
+      Output.New_Line;
+      Put_Image (Output, S.Data);
+   end Put_Image;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Image
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      S      :        Step_Data) is
+   begin
       Output.Put ("   Step type        = " & S.Cat'Image & ", ");
       Output.New_Line;
       Output.Put ("   Action           = " & S.Action'Image);
       Output.New_Line;
-      Output.Put ("   Step string      = " & S.Step_String'Image);
-      Output.New_Line;
-      Output.Put ("   Location         = " & Image (S.Location));
+      Output.Put ("   Src_Code         = " & S.Src_Code'Image);
       Output.New_Line;
       Output.Put ("   Subject string   = " & S.Subject_String'Image);
       Output.New_Line;
@@ -85,7 +102,7 @@ package body BBT.Documents is
       Output.New_Line;
       Output.Put ("   Ignore order     = " & S.Ignore_Order'Image);
       Output.New_Line;
-      Output.Put ("   File_Content     = " & Text_Image (S.File_Content));
+      Output.Put ("   File_Content     = " & Code_Fenced_Image (S.File_Content));
       Output.New_Line;
    end Put_Image;
 
@@ -93,31 +110,40 @@ package body BBT.Documents is
    function Inline_Image (Step : Step_Type) return String is
    begin
       return
-        ("'" & (+Step.Step_String) & "', Action = " & Step.Action'Image
-         & (if Step.Subject_String /= Null_Unbounded_String
-           then (", Subject = """ & (+Step.Subject_String) & """")
+        ("'" & (+Step.Data.Src_Code) & "', Action = " & Step.Data.Action'Image
+         & (if Step.Data.Subject_String /= Null_Unbounded_String
+           then (", Subject = """ & (+Step.Data.Subject_String) & """")
            else "")
          & (if Step.Filtered
-           then (", Filtered " & (+Step.Subject_String))
+           then (", Filtered " & (+Step.Data.Subject_String))
            else "")
-         & (if Step.Object_String /= Null_Unbounded_String
-           then (", Object = """ & (+Step.Object_String) & """")
+         & (if Step.Data.Object_String /= Null_Unbounded_String
+           then (", Object = """ & (+Step.Data.Object_String) & """")
            else "")
-         & (if Step.Object_File_Name /= Null_Unbounded_String
-           then (if Step.File_Type = Directory
-             then ", dir = """ & (+Step.Object_File_Name) & """"
-             else ", File = """ & (+Step.Object_File_Name) & """")
+         & (if Step.Data.Object_File_Name /= Null_Unbounded_String
+           then (if Step.Data.File_Type = Directory
+             then ", dir = """ & (+Step.Data.Object_File_Name) & """"
+             else ", File = """ & (+Step.Data.Object_File_Name) & """")
            else "")
-         & (if Step.Executable_File
+         & (if Step.Data.Executable_File
            then ", attrib = exec"
            else "")
-         & (if Step.Ignore_Order
+         & (if Step.Data.Ignore_Order
            then ", Ignore_Order = True"
            else "")
-         & (if Is_Empty (Step.File_Content)
+         & (if Is_Empty (Step.Data.File_Content)
            then ""
-           else (", File content = """ & (Step.File_Content'Image) & """")));
+           else (", File content = """ & (Step.Data.File_Content'Image) & """")));
    end Inline_Image;
+
+   -- --------------------------------------------------------------------------
+   function Has_Cmd_List
+     (Scen : Scenario_Type) return Boolean
+   is
+      use type Step_Lists.Cursor;
+   begin
+      return Scen.Cmd_List_Step_Index /= Step_Lists.No_Element;
+   end Has_Cmd_List;
 
    -- --------------------------------------------------------------------------
    procedure Add_Result (Success : Boolean; To : in out Scenario_Type) is
@@ -128,6 +154,10 @@ package body BBT.Documents is
          To.Failed_Step_Count := @ + 1;
       end if;
    end Add_Result;
+
+   -- --------------------------------------------------------------------------
+   function Has_Background (D : Document_Type) return Boolean is
+     (D.Background /= null and then not D.Background.Step_List.Is_Empty);
 
    -- --------------------------------------------------------------------------
    function Output_File_Name (D : Document_Type) return String is
@@ -143,49 +173,21 @@ package body BBT.Documents is
       end if;
    end Output_File_Name;
 
-   -- --------------------------------------------------------------------------
-   function Create_Step (Cat              : Extended_Step_Categories;
-                         Action           : Actions;
-                         Step_String      : Unbounded_String;
-                         Location         : Location_Type;
-                         Comment          : Text;
-                         Subject_String   : Unbounded_String;
-                         Object_String    : Unbounded_String;
-                         Object_File_Name : Unbounded_String;
-                         File_Type        : Ada.Directories.File_Kind;
-                         Executable_File  : Boolean;
-                         Ignore_Order     : Boolean;
-                         File_Content     : Text)
-                         return Step_Type is
-     (Filtered         => Filtered_By_Default, -- <>
-      Parent_Document  => Current_Doc,         -- <>
-      Cat              => Cat,
-      Action           => Action,
-      Step_String      => Step_String,
-      Location         => Location,
-      Comment          => Comment,
-      Subject_String   => Subject_String,
-      Object_String    => Object_String,
-      Object_File_Name => Object_File_Name,
-      File_Type        => File_Type,
-      Executable_File  => Executable_File,
-      Ignore_Order     => Ignore_Order,
-      File_Content     => File_Content,
-      Parent_Scenario  => <>);
-
-   -- --------------------------------------------------------------------------
-   procedure Set_Parent_Scenario (Step     : in out Step_Type'Class;
-                                  Scenario : Scenario_Maybe) is
-   begin
-      if Scenario = null then
-         Put_Error ("***** null Scenario in call to Set_Parent_Scenario *****");
-      end if;
-      Step.Parent_Scenario := Scenario;
-   end Set_Parent_Scenario;
+    -- --------------------------------------------------------------------------
+   function Create_Step (Info            : Step_Data;
+                         Loc             : Location_Type;
+                         Parent_Scenario : Scenario_Access)
+                         return Step_Type
+   is (Filtered => <>,
+       Location => Loc,
+       Comment  => <>,
+       Name     => To_Unbounded_String ("step"),
+       Data     => Info,
+       Parent   => Node_Access (Parent_Scenario));
 
    -- --------------------------------------------------------------------------
    function Is_In_Feature (Scen : Scenario_Type) return Boolean is
-     (Scen.Parent_Feature /= null);
+     (Scen.Parent.all in Feature_Type);
 
    -- --------------------------------------------------------------------------
    procedure Move_Results (From_Scen, To_Scen : in out Scenario_Type'Class) is
@@ -200,44 +202,52 @@ package body BBT.Documents is
    procedure Set_Filter (S        : in out Step_Type'Class;
                          Filtered :        Boolean) is
    begin
-      Put_Debug_Line ("Set_Filter (Step => " & (+S.Step_String)
+      Put_Debug_Line ("Set_Filter (Step => " & (+S.Data.Src_Code)
                       & ", To => " & Filtered'Image);
       S.Filtered := Filtered;
    end Set_Filter;
 
    -- --------------------------------------------------------------------------
-   procedure Unfilter_Parents (S : in out Step_Type) is
+   procedure Unfilter_Parents (N : in out Non_Root_Node'Class) is
    begin
-      Put_Debug_Line ("Select_Parents of step """ & (+S.Step_String) & """");
-      if S.Parent_Scenario /= null then
-         Unfilter (S.Parent_Scenario.all);
-         Unfilter_Parents (S.Parent_Scenario.all);
+      Put_Debug_Line ("Unfilter_Parents '" & (+N.Name) & "'");
+      if N in Non_Root_Node'Class then
+         Put_Debug_Line ("Unfilter '" & (+N.Parent.Name) & "'");
+         Unfilter (N.Parent.all);
+      end if;
+
+      if N.Parent.all in Non_Root_Node'Class then
+         -- We goes up recursively until top level
+         Unfilter_Parents (Non_Root_Node'Class (N.Parent.all));
       end if;
    end Unfilter_Parents;
 
    -- --------------------------------------------------------------------------
    overriding procedure Apply_Filters_To (S : in out Step_Type) is
-      Result : constant Filter_Result := Is_Filtered (+S.Step_String, Step);
+      Result : constant Filter_Result := Is_Filtered (+S.Data.Src_Code, Step);
    begin
-      Put_Debug_Line ("Apply_Filters_To step '" & (+S.Step_String) & "'");
+      Put_Debug_Line ("Apply_Filters_To step '" & (+S.Data.Src_Code) & "'");
       case Result is
          when Selected =>
-            Put_Debug_Line ("Step selected : '" & (+S.Step_String) & "'");
+            Put_Debug_Line ("Step selected : '" & (+S.Data.Src_Code) & "'");
             Unfilter_Parents (S);
-            -- If a Step matches, we also need the enclosing scenario
             Unfilter (S);
-            -- if One step is selected, we must mark the parent scenario as
-            -- selected, and possibly Background, etc.
+            -- if One step is selected, we must mark the parent scenario
+            -- as selected, and possibly Background, etc.
 
          when  Filtered =>
-            Put_Debug_Line ("Step filtered : '" & (+S.Step_String) & "'");
+            Put_Debug_Line ("Step filtered : '" & (+S.Data.Src_Code) & "'");
             Filter (S);
 
          when No_Match => null;
-            Put_Debug_Line ("Step ignored : '" & (+S.Step_String) & "'");
+            Put_Debug_Line ("Step ignored : '" & (+S.Data.Src_Code) & "'");
 
       end case;
    end Apply_Filters_To;
+
+   -- -------------------------------------------------------------------------
+   function Parent (S : Step_Type) return Scenario_Access is
+     (Scenario_Access (S.Parent));
 
    -- -------------------------------------------------------------------------
    procedure Set_Filter (Scen     : in out Scenario_Type'Class;
@@ -302,40 +312,38 @@ package body BBT.Documents is
    begin
       Set_Filter (Scen, False);
    end Unfilter_Tree;
-   -- --------------------------------------------------------------------------
-   procedure Unfilter_Parents (Scen : in out Scenario_Type) is
-   begin
-      Put_Debug_Line ("Select_Parents of scen """ & (+Scen.Name) & """");
-      if Scen.Parent_Feature /= null then
-         Unfilter (Scen.Parent_Feature.all);
-         Unfilter_Parents (Scen.Parent_Feature.all);
-      end if;
-      if Scen.Parent_Document /= null then
-         Unfilter (Scen.Parent_Document.all);
-      end if;
-   end Unfilter_Parents;
 
    -- -------------------------------------------------------------------------
    function Create_Scenario
-     (Name           : String;
-      Parent_Feature : Feature_Maybe  := null;
-      Location       : Location_Type) return Scenario_Type
+     (Name     : String;
+      Parent   : Node_Access;
+      Location : Location_Type) return Scenario_Type
    is
-     (Name            => To_Unbounded_String (Name),
-      Parent_Document => Current_Doc,
-      Parent_Feature  => Parent_Feature,
-      Location        => Location,
-      others          => <>);
+     (Filtered              => <>,
+      Location              => Location,
+      Comment               => <>,
+      Name                  => To_Unbounded_String (Name),
+      Parent                => Parent,
+      Step_List             => <>,
+      Has_Run               => <>,
+      Failed_Step_Count     => <>,
+      Successful_Step_Count => <>,
+      Cmd_List              => <>,
+      Cmd_List_Step_Index   => <>);
 
    -- -------------------------------------------------------------------------
    function Create_Feature
      (Name     : Unbounded_String;
+      Parent   : Document_Access;
       Location : Location_Type) return Feature_Type
    is
-     (Name            => Name,
-      Parent_Document => Current_Doc,
-      Location        => Location,
-      others          => <>);
+     (Filtered      => <>,
+      Location      => Location,
+      Comment       => <>,
+      Name          => Name,
+      Parent        => Node_Access (Parent),
+      Scenario_List => <>,
+      Background    => <>);
 
    -- -------------------------------------------------------------------------
    procedure Set_Filter (F        : in out Feature_Type'Class;
@@ -353,6 +361,10 @@ package body BBT.Documents is
    end Set_Filter;
 
    -- -------------------------------------------------------------------------
+   overriding function Has_Background (F : Feature_Type) return Boolean is
+     (F.Background /= null and then not F.Background.Step_List.Is_Empty);
+
+   -- -------------------------------------------------------------------------
    procedure Filter_Tree (F : in out Feature_Type) is
    begin
       Set_Filter (F, True);
@@ -362,17 +374,6 @@ package body BBT.Documents is
    begin
       Set_Filter (F, False);
    end Unfilter_Tree;
-   -- --------------------------------------------------------------------------
-   procedure Unfilter_Parents (F : in out Feature_Type) is
-   begin
-      Put_Debug_Line ("Select_Parents of feature """ & (+F.Name)  & """");
-      if F.Background /= null then
-         Unfilter (F.Background.all);
-      end if;
-      if F.Parent_Document /= null then
-         Unfilter (F.Parent_Document.all);
-      end if;
-   end Unfilter_Parents;
 
    -- --------------------------------------------------------------------------
    overriding procedure Apply_Filters_To (F : in out Feature_Type) is
@@ -475,41 +476,45 @@ package body BBT.Documents is
    -- --------------------------------------------------------------------------
    function Last_Scenario_In_Doc
      (D : in out Document_Type) return Scenario_Maybe is
-     (Scenario_Maybe (D.Scenario_List.Reference (D.Scenario_List.Last).Element));
+     (if D.Scenario_List.Is_Empty then null
+      else
+         Scenario_Maybe
+        (D.Scenario_List.Reference (D.Scenario_List.Last).Element));
 
+   -- --------------------------------------------------------------------------
    function Last_Scenario_In_Feature
      (D : in out Document_Type) return Scenario_Maybe is
+     (Last_Scenario (Last_Feature (D.Feature_List).Scenario_List));
 
-   begin
-      return Last_Scenario (Last_Feature (D.Feature_List).Scenario_List);
-   end Last_Scenario_In_Feature;
-
+   -- --------------------------------------------------------------------------
    function Last_Feature
      (D : in out Document_Type) return Feature_Maybe
    is
      (Last_Feature (D.Feature_List));
 
+   -- --------------------------------------------------------------------------
    function Background
      (D : in out Document_Type) return Scenario_Maybe is
+     (D.Background);
 
-   begin
-      return D.Background;
-   end Background;
-
+   -- --------------------------------------------------------------------------
    function Background
      (F : in out Feature_Type) return Scenario_Maybe is
      (F.Background);
 
+   -- --------------------------------------------------------------------------
    function Last_Doc
      (D : in out Documents_Lists.Vector) return Document_Access
    is
      (Document_Access (D.Reference (D.Last).Element));
 
+   -- --------------------------------------------------------------------------
    function Last_Scenario
      (Scen : in out Scenario_Lists.Vector) return Scenario_Maybe
    is
      (Scenario_Maybe (Scen.Reference (Scen.Last).Element));
 
+   -- --------------------------------------------------------------------------
    function Last_Step
      (S : in out Step_Lists.Vector) return Step_Maybe
    is

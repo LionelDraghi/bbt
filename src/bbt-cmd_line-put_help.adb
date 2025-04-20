@@ -44,7 +44,7 @@ begin
          Put_Line ("  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines");
          Put_Line ("  other     : list_files list_keywords list_grammar explain create_template");
          Put_Line ("              --strict --output file.md --exec_dir --tmp_dir --generate_badge");
-         Put_Line ("  debug     : -lt -ls -t");
+         Put_Line ("  debug     : -d tt -ls -t");
          New_Line;
          Put_Line ("bbt version " & Settings.BBT_Version);
          Put_Line ("https://github.com/LionelDraghi/bbt/");
@@ -107,11 +107,11 @@ begin
       when Debug =>
          New_Line;
          Put_Line ("Debug command:");
-         Put_Line ("   -d       : very very verbose output");
-         Put_Line ("   -lt      : list log topics");
-         Put_Line ("   -ls      : list settings");
+         Put_Line ("   tt             : list trace topics");
          Put_Line ("Debug options:");
-         Put_Line ("   -d topic : activate log related to the topic");
+         Put_Line ("   -ls            : list settings");
+         Put_Line ("   -d             : very very verbose output");
+         Put_Line ("   -d trace_topic : activate debug traces for the topic");
          New_Line;
          Put_Line ("Friends are here : https://github.com/LionelDraghi/bbt/Issues");
          Put_Line ("Good luck :-)");

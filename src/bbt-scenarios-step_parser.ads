@@ -15,7 +15,7 @@ package BBT.Scenarios.Step_Parser is
                    Loc                 : in out Location_Type;
                    Code_Block_Expected :    out Boolean;
                    Cmd_List            :    out Cmd_Lists.Vector)
-                   return Step_Type;
+                   return Step_Data;
 
    procedure Put_Keywords;
    procedure Put_Grammar;

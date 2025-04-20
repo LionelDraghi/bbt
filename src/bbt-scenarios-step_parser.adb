@@ -292,7 +292,7 @@ package body BBT.Scenarios.Step_Parser is
                    Loc                 : in out Location_Type;
                    Code_Block_Expected :    out Boolean;
                    Cmd_List            :    out Cmd_Lists.Vector)
-                   return Step_Type
+                   return Step_Data
    is
       Successfully_Met : Boolean        := False;
       Or_Met           : Natural        := 0;
@@ -306,7 +306,7 @@ package body BBT.Scenarios.Step_Parser is
       -- All component of the returned Step are initialized :
       Cat              : Extended_Step_Categories := Unknown;
       Action           : Actions                  := None;
-      Step_String      : Unbounded_String         := Null_Unbounded_String;
+      Src_Code         : Unbounded_String         := Null_Unbounded_String;
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
       Object_String    : Unbounded_String         := Null_Unbounded_String;
       Object_File_Name : Unbounded_String         := Null_Unbounded_String;
@@ -317,11 +317,11 @@ package body BBT.Scenarios.Step_Parser is
       use Chunk;
 
       Tmp : aliased constant String := To_String (Line);
-      TT            : Token_Type;
+      TT  : Token_Type;
 
    begin
-      Step_String := Line;
-      Cmd_List    := Cmd_Lists.Empty_Vector;
+      Src_Code := Line;
+      Cmd_List := Cmd_Lists.Empty_Vector;
 
       Initialize_Lexer;
       Chunk.Initialize;
@@ -615,18 +615,19 @@ package body BBT.Scenarios.Step_Parser is
 
       end if;
 
-      return Create_Step (Cat              => Cat,
-                          Action           => Action,
-                          Step_String      => Step_String,
-                          Location         => Loc,
-                          Comment          => Empty_Text,
-                          Subject_String   => Subject_String,
-                          Object_String    => Object_String,
-                          Object_File_Name => Object_File_Name,
-                          File_Type        => File_Type,
-                          Executable_File  => Executable,
-                          Ignore_Order     => Ignore_Order,
-                          File_Content     => Empty_Text);
+      return -- Create_Step
+        (Cat              => Cat,
+         Action           => Action,
+         Src_Code         => Src_Code,
+         -- Location         => Loc,
+         -- Comment          => Empty_Text,
+         Subject_String   => Subject_String,
+         Object_String    => Object_String,
+         Object_File_Name => Object_File_Name,
+         File_Type        => File_Type,
+         Executable_File  => Executable,
+         Ignore_Order     => Ignore_Order,
+         File_Content     => Empty_Text);
 
    end Parse;
 

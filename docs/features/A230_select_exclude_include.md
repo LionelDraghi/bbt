@@ -26,17 +26,18 @@ Important Note : there is no filtering on the lines before header, meaning that 
 The following Scenarios are based on two files containing several scenarios and tags.  
 To facilitate understanding, tags are prefixed here in the usual way, with '@'.
 
-- [Background: Lets create the two files scen1.md and scen2.md](#background-lets-create-the-two-files-scen1md-and-scen2md)
-- [Scenario: List all files](#scenario-list-all-files)
-- [Scenario: Excluding @security tagged items](#scenario-excluding-security-tagged-items)
-- [Scenario: Select tagged items](#scenario-select-tagged-items)
-- [Scenario: Select only a Background](#scenario-select-only-a-background)
-- [Scenario: Select tagged scenarios in two docs](#scenario-select-tagged-scenarios-in-two-docs)
-- [Scenario: Select followed by an exclude](#scenario-select-followed-by-an-exclude)
-- [Scenario: no step filtering](#scenario-no-step-filtering)
+- [Background: Lets cleanup the place](#background-lets-cleanup-the-place)
+- [Scenario: no filtering](#scenario-no-filtering)
 - [Scenario: step filtering](#scenario-step-filtering)
+- [Scenario: step selection](#scenario-step-selection)
+- [Scenario: Selecting a scenario](#scenario-selecting-a-scenario)
+- [Scenario: selection is empty](#scenario-selection-is-empty)
+- [Scenario: Selecting a Background only](#scenario-selecting-a-background-only)
+- [Scenario: Select followed by an exclude](#scenario-select-followed-by-an-exclude)
+- [Scenario: scenario Excluded followed by an include of a step inside](#scenario-scenario-excluded-followed-by-an-include-of-a-step-inside)
+- [Scenario: Exclude by file name](#scenario-exclude-by-file-name)
 
-### Background: Lets create the two files scen1.md and scen2.md 
+### Background: Lets cleanup the place 
 - Given there is no file `output.txt`
 - Given there is no file `output2.txt`
 - Given there is no file `input.txt`
@@ -153,19 +154,35 @@ new file
 Windows
 ~~~
 
-### Scenario: Exclude followed by an Include
+### Scenario: scenario Excluded followed by an include of a step inside
 
 - Given the file `robustness.md`
 ~~~
-# Scenario: Robustness
+# Scenario: Sanity
 - When I run `./sut create         output2.txt`
 - When I run `./sut append Linux   output2.txt`
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --exclude Robustness --include create robustness.md`
+- When I run `./bbt --exclude Sanity --include create --include Linux robustness.md`
 Only the creation should be run
 
 - Then `output2.txt` is
 ~~~
+Linux
 ~~~
+
+### Scenario: Exclude by file name
+
+- Given the file `robustness.md`
+~~~
+# Scenario: 
+- When I run `./sut create         output2.txt`
+- When I run `./sut append Linux   output2.txt`
+- When I run `./sut append Windows output2.txt`
+~~~
+
+- When I run `./bbt --exclude robustness.md robustness.md`
+Nothing is run
+
+- Then there is no `output2.txt` file

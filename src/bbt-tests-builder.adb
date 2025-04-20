@@ -119,6 +119,7 @@ package body BBT.Tests.Builder is
       Put_Debug_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
       Current_Doc.Feature_List.Append
         (Create_Feature (Name       => To_Unbounded_String (Name),
+                         Parent     => Current_Doc,
                          Location   => Loc));
       Set_State (In_Feature);
       Check_Missing_Code_Block (Loc);
@@ -133,14 +134,15 @@ package body BBT.Tests.Builder is
                       Verbosity => IO.Debug);
             Current_Doc.Scenario_List.Append
               (Create_Scenario (Name     => Name,
+                                Parent   => Node_Access (Current_Doc),
                                 Location => Loc));
          when In_Feature =>
             Put_Debug_Line ("Add_Scenario in Feature " & Name'Image,
                       Verbosity => IO.Debug);
             Last_Feature.Scenario_List.Append
-              (Create_Scenario (Name           => Name,
-                                Parent_Feature => Last_Feature,
-                                Location       => Loc));
+              (Create_Scenario (Name     => Name,
+                                Parent   => Node_Access (Last_Feature),
+                                Location => Loc));
       end case;
       Set_State (In_Scenario);
       Check_Missing_Code_Block (Loc);
@@ -156,6 +158,7 @@ package body BBT.Tests.Builder is
                       Verbosity => IO.Debug);
             Current_Doc.Background := new Scenario_Type'
               (Create_Scenario (Name     => Name,
+                                Parent   => Node_Access (Current_Doc),
                                 Location => Loc));
 
          when In_Feature =>
@@ -163,7 +166,7 @@ package body BBT.Tests.Builder is
                       Verbosity => IO.Debug);
             Last_Feature.Background := new Scenario_Type'(
               Create_Scenario (Name           => Name,
-                               Parent_Feature => Last_Feature,
+                               Parent         => Node_Access (Last_Feature),
                                Location       => Loc));
 
          when others =>
@@ -178,14 +181,15 @@ package body BBT.Tests.Builder is
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step                : in out Step_Type;
-                       Code_Block_Expected :        Boolean;
-                       Cmd_List            :        Cmd_Lists.Vector) is
-
+   procedure Add_Step (Step_Info           : in out Documents.Step_Data; -- Step_Type;
+                       Code_Block_Expected : Boolean;
+                       Cmd_List            : Cmd_Lists.Vector;
+                       Loc                 : Location_Type)
+   is
       -- -----------------------------------------------------------------------
-      procedure Append_Step (Scen : Scenario_Maybe) is
+      procedure Append_Step (Scen : Scenario_Access) is
+         Step : constant Step_Type := Create_Step (Step_Info, Loc, Scen);
       begin
-         Step.Set_Parent_Scenario (Scen);
          if Cmd_List.Is_Empty then
             -- normal case, there is no "or"
             Scen.Step_List.Append (Step);
@@ -220,28 +224,25 @@ package body BBT.Tests.Builder is
       --            Verbosity => IO.Debug);
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
-           To_String (Step.Step_String)
+           To_String (Step_Info.Src_Code)
            & """ declaration, should be in Scenario or Background";
       end if;
 
-      case Step.Cat is
+      case Step_Info.Cat is
          when Unknown =>
-            if Step.Action = None then
+            if Step_Info.Action = None then
                IO.Put_Error ("No context to determine step kind of '"
-                             & To_String (Step.Step_String) & "'",
-                             Step.Location);
+                             & To_String (Step_Info.Src_Code) & "'", Loc);
             end if;
 
          when Given_Step =>
             if Settings.Strict_Gherkin then
                if Current_Step_State = In_When_Step then
-                  IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                    """ appears after a ""When""",
-                                  Step.Location);
+                  IO.Put_Warning ("Given step """ & To_String (Step_Info.Src_Code) &
+                                    """ appears after a ""When""", Loc);
                elsif Current_Step_State = In_Then_Step then
-                  IO.Put_Warning ("Given step """ & To_String (Step.Step_String) &
-                                    """ appears after a ""Then""",
-                                  Step.Location);
+                  IO.Put_Warning ("Given step """ & To_String (Step_Info.Src_Code) &
+                                    """ appears after a ""Then""", Loc);
                end if;
             end if;
             Set_Step_State (In_Given_Step, Code_Block_Expected);
@@ -250,13 +251,11 @@ package body BBT.Tests.Builder is
             if Settings.Strict_Gherkin then
                if Current_Step_State = In_Then_Step then
                   IO.Put_Warning ("When step """
-                                  & To_String (Step.Step_String)
-                                  & """ appears after a ""Then""",
-                                  Step.Location);
+                                  & To_String (Step_Info.Src_Code)
+                                  & """ appears after a ""Then""", Loc);
                elsif Current_Step_State = In_When_Step then
                   IO.Put_Warning ("Multiple When in the same Scenario """
-                                  & To_String (Step.Step_String),
-                                 Step.Location);
+                                  & To_String (Step_Info.Src_Code), Loc);
                end if;
             end if;
             Set_Step_State (In_When_Step, Code_Block_Expected);
@@ -268,24 +267,25 @@ package body BBT.Tests.Builder is
 
       case Current_Background is
          when Doc     =>
-            Put_Debug_Line ("Add_Step in Doc's Background : " & Step.Step_String'Image,
+            Put_Debug_Line ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
                       Verbosity => IO.Debug);
             Append_Step (Current_Doc.Background);
          when Feature =>
-            Put_Debug_Line ("Add_Step in Feature's Background : " & Step.Step_String'Image,
+            Put_Debug_Line ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
                       Verbosity => IO.Debug);
             Append_Step (Last_Feature.Background);
          when None    =>
-            Put_Debug_Line ("Add_Step in Scenario : " & Step.Step_String'Image,
-                      Verbosity => IO.Debug);
-            Set_Parent_Scenario (Scenario => Last_Scenario,
-                                 Step     => Step);
-            Last_Scenario.Add_Step (Step);
-            --  Last_Scenario_Ref.Element.Step_List.Append
-            --    ((Step with delta Parent_Scenario => Last_Scenario_Ref.Element));
+            Put_Debug_Line ("Add_Step in Scenario : " & Step_Info.Src_Code'Image,
+                            Verbosity => IO.Debug);
+            if Last_Scenario = null then
+               Put_Error
+                 ("Adding step to doc, but there is no scenario yet", Loc);
+            else
+               Append_Step (Scenario_Access (Last_Scenario));
+            end if;
 
-      end case;
-      Check_Missing_Code_Block (Step.Location);
+        end case;
+      Check_Missing_Code_Block (Loc);
    end Add_Step;
 
    -- --------------------------------------------------------------------------
@@ -315,8 +315,8 @@ package body BBT.Tests.Builder is
             Opening_Marker_Line := 0;
             Restore_Previous_State;
             Put_Debug_Line ("Add_Code_Block, exiting code block. File_Content = "
-                      & Last_Step.File_Content'Image,
-                      Loc, Verbosity => IO.Debug);
+                            & Last_Step.Data.File_Content'Image,
+                            Loc, Verbosity => IO.Debug);
 
          when In_Document =>
             Current_Doc.Comment.Append ("```");
@@ -382,7 +382,7 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Not a comment, we are in a file content description
-            Last_Step.File_Content.Append (Line);
+            Last_Step.Data.File_Content.Append (Line);
 
       end case;
    end Add_Line;

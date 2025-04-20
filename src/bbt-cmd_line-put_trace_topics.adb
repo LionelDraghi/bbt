@@ -8,14 +8,16 @@
 with Ada.Characters.Handling;
 with Ada.Text_IO;
 
+use Ada;
+
 separate (BBT.Cmd_Line)
 
 -- -----------------------------------------------------------------------------
-procedure Put_Topics is
-   use Ada.Characters.Handling;
+procedure Put_Trace_Topics is
+   use Characters.Handling;
 begin
-   Ada.Text_IO.Put_Line ("Available topics :");
+   Text_IO.Put_Line ("Available topics :");
    for T in IO.Topics loop
-      Ada.Text_IO.Put_Line ("- " & To_Lower (T'Image));
+      Text_IO.Put_Line ("- " & To_Lower (T'Image));
    end loop;
-end Put_Topics;
+end Put_Trace_Topics;

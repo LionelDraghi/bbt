@@ -147,16 +147,17 @@ package body BBT.Writers.Markdown_Writers is
       Pre  : constant String := Pref (Success);
    begin
       Put_Debug_Line ("Put_Step_Result = " & Step'Image);
-      Put_Debug_Line ("Step.Parent     = " & Step.Parent_Scenario'Image);
-      Documents.Add_Result (Success, Step.Parent_Scenario.all);
+      Put_Debug_Line ("Step.Parent     = " & Step.Parent'Image);
+      Documents.Add_Result (Success, Parent (Step).all);
       if Success then
          IO.Pause_Tee; -- We don't want this level of detail in the
          --               generated test index.
-         IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
+         IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",
                       Verbosity => IO.Verbose);
          IO.Restore_Tee;
       else
-         IO.Put_Line (Pre & (+Step.Step_String) & " (" & IO.Image (Loc) & ")  ",
+         IO.Put_Line (Pre & (+Step.Data.Src_Code) &
+                        " (" & IO.Image (Loc) & ")  ",
                       Verbosity => IO.Normal);
          IO.Put_Error (Fail_Msg & "  ", Loc);
       end if;
@@ -198,7 +199,7 @@ package body BBT.Writers.Markdown_Writers is
                                   Step   : Step_Type'Class) is
    begin
       Put_Line (Line (Step.Location)'Image & ": Step """ &
-                (+Step.Step_String) & """");
+                (+Step.Data.Src_Code) & """");
       -- Put_Line (Step'Image);
    end Put_Step;
 

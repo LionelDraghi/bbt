@@ -52,19 +52,19 @@ package body BBT.Tests.Actions is
    function Get_Expected (Step : Step_Type'Class) return Text is
       use type Text;
    begin
-      if Step.File_Content /= Empty_Text then
+      if Step.Data.File_Content /= Empty_Text then
          -- File content provided in code fenced lines
-         return Step.File_Content;
+         return Step.Data.File_Content;
 
-      elsif Step.Object_File_Name /= Null_Unbounded_String
-        and then File_Exists (+Step.Object_File_Name)
+      elsif Step.Data.Object_File_Name /= Null_Unbounded_String
+        and then File_Exists (+Step.Data.Object_File_Name)
       then
          -- The string denotes a file
-         return Get_Text (+Step.Object_File_Name);
+         return Get_Text (+Step.Data.Object_File_Name);
 
-      elsif Step.Object_String /= Null_Unbounded_String then
+      elsif Step.Data.Object_String /= Null_Unbounded_String then
          -- The string is the content
-         return [1 => +Step.Object_String];
+         return [1 => +Step.Data.Object_String];
 
       else
          -- Either the provided file content was null (two consecutive code
@@ -92,7 +92,7 @@ package body BBT.Tests.Actions is
 
    begin
       Put_Debug_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
-                     ", output file = " & Output_Name);
+                        ", output file = " & Output_Name);
 
       -- The first argument should be an executable (e.g. not a bash
       -- built-in)
@@ -160,7 +160,7 @@ package body BBT.Tests.Actions is
              Err_To_Out   => True);
 
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
-                     ", Return_Code = " & Return_Code'Image);
+                        ", Return_Code = " & Return_Code'Image);
 
       Put_Step_Result (Step     => Step,
                        Success  => Spawn_OK,
@@ -170,7 +170,7 @@ package body BBT.Tests.Actions is
          Put_Step_Result (Step     => Step,
                           Success  => Is_Success (Return_Code),
                           Fail_Msg => "Unsuccessfully run " &
-                            Step.Object_String'Image,
+                            Step.Data.Object_String'Image,
                           Loc      => Step.Location);
       end if;
 
@@ -178,7 +178,7 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step : Step_Type'Class) is
-      File_Name  : constant String := To_String (Step.Subject_String);
+      File_Name  : constant String := To_String (Step.Data.Subject_String);
       Parent_Dir : constant String :=
                      Directories.Containing_Directory (File_Name);
    begin
@@ -186,7 +186,7 @@ package body BBT.Tests.Actions is
       Created_File_List.Add (File_Name);
       -- Should be deleted at the end, even if pre-existing.
 
-      case Step.File_Type is
+      case Step.Data.File_Type is
          when Ordinary_File =>
             if Exists (File_Name) then
                Put_Debug_Line (Item => "Deleting existing " & File_Name);
@@ -198,7 +198,7 @@ package body BBT.Tests.Actions is
             end if;
             Create_File (File_Name    => File_Name,
                          With_Content => Get_Expected (Step),
-                         Executable   => Step.Executable_File);
+                         Executable   => Step.Data.Executable_File);
             Put_Step_Result (Step     => Step,
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
@@ -222,17 +222,17 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Create_If_None (Step : Step_Type'Class) is
-      File_Name : constant String := To_String (Step.Subject_String);
+      File_Name : constant String := To_String (Step.Data.Subject_String);
    begin
       Put_Debug_Line ("Create_New " & File_Name);
-      case Step.File_Type is
+      case Step.Data.File_Type is
          when Ordinary_File =>
             if not Exists (File_Name) then
                Created_File_List.Add (File_Name);
                -- should be deleted at the end only if created here
                Create_File (File_Name    => File_Name,
                             With_Content => Get_Expected (Step),
-                            Executable   => Step.Executable_File);
+                            Executable   => Step.Data.Executable_File);
 
             end if;
             Put_Step_Result (Step     => Step,
@@ -316,7 +316,7 @@ package body BBT.Tests.Actions is
                           Success  => False,
                           Fail_Msg => "Expected dir " &
                             Dir_Name'Image & " doesn't exists in Exec_Dir "
-                            & Settings.Exec_Dir,
+                          & Settings.Exec_Dir,
                           Loc      => Step.Location);
       end if;
    end Check_Dir_Existence;
@@ -359,7 +359,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Setup_No_File (Step : Step_Type'Class) is
       File_Name : constant String :=
-                    +Step.Subject_String & (+Step.Object_File_Name);
+                    +Step.Data.Subject_String & (+Step.Data.Object_File_Name);
    begin
       Put_Debug_Line ("Setup_No_File " & File_Name);
       Delete_File (File_Name);
@@ -372,7 +372,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Setup_No_Dir (Step : Step_Type'Class) is
       Dir_Name : constant String :=
-                   +Step.Subject_String & (+Step.Object_File_Name);
+                   +Step.Data.Subject_String & (+Step.Data.Object_File_Name);
    begin
       Put_Debug_Line ("Setup_No_Dir " & Dir_Name);
       Delete_Tree (Dir_Name);
@@ -395,7 +395,7 @@ package body BBT.Tests.Actions is
                           Case_Insensitive   => Settings.Ignore_Casing,
                           Ignore_Blanks      => Settings.Ignore_Whitespaces,
                           Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
+                          Sort_Texts         => Step.Data.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "not equal to expected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
@@ -413,7 +413,7 @@ package body BBT.Tests.Actions is
                           Case_Insensitive   => Settings.Ignore_Casing,
                           Ignore_Whitespaces => Settings.Ignore_Whitespaces,
                           Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
+                          Sort_Texts         => Step.Data.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not contain expected:  " &
                          Code_Fenced_Image (T2),
@@ -432,7 +432,7 @@ package body BBT.Tests.Actions is
                           Case_Insensitive   => Settings.Ignore_Casing,
                           Ignore_Whitespaces => Settings.Ignore_Whitespaces,
                           Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
+                          Sort_Texts         => Step.Data.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "contains unexpected:  " & Code_Fenced_Image (T2),
                        Loc      => Step.Location);
@@ -441,7 +441,7 @@ package body BBT.Tests.Actions is
    -- --------------------------------------------------------------------------
    procedure Output_Matches (Output : Text;
                              Step   : Step_Type'Class) is
-      Regexp : constant String := Get_Expected (Step)(1);
+      Regexp : constant String := Get_Expected (Step) (1);
    begin
       Put_Debug_Line ("Output_Matches ");
       Put_Step_Result (Step     => Step,
@@ -466,81 +466,101 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Files_Is (Step : Step_Type'Class) is
-      File_Name : constant String := +Step.Subject_String;
-      T1        : constant Text   := Get_Text (File_Name);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
    begin
       Put_Debug_Line ("Files_Is " & File_Name);
-      Put_Step_Result (Step     => Step,
-                       Success  => Is_Equal
-                         (T1, T2,
-                          Case_Insensitive   => Settings.Ignore_Casing,
-                          Ignore_Blanks      => Settings.Ignore_Whitespaces,
-                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
-                       Fail_Msg =>  File_Name &
-                         " not equal to expected:  " & Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => Is_Equal
+                            (T1, T2,
+                             Case_Insensitive   => Settings.Ignore_Casing,
+                             Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                             Sort_Texts         => Step.Data.Ignore_Order),
+                          Fail_Msg =>  File_Name &
+                            " not equal to expected:  " & Code_Fenced_Image (T2),
+                          Loc      => Step.Location);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
    end Files_Is;
 
    -- --------------------------------------------------------------------------
    procedure Files_Is_Not (Step : Step_Type'Class) is
-      File_Name : constant String := +Step.Subject_String;
-      T1        : constant Text   := Get_Text (File_Name);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
    begin
       Put_Debug_Line ("Files_Is_Not " & File_Name);
-      Put_Step_Result (Step     => Step,
-                       Success  => not Is_Equal
-                         (T1, T2,
-                          Case_Insensitive   => Settings.Ignore_Casing,
-                          Ignore_Blanks      => Settings.Ignore_Whitespaces,
-                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
-                       Fail_Msg => File_Name & " expected to be different from " &
-                         Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => not Is_Equal
+                            (T1, T2,
+                             Case_Insensitive   => Settings.Ignore_Casing,
+                             Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                             Sort_Texts         => Step.Data.Ignore_Order),
+                          Fail_Msg => File_Name & " expected to be different from " &
+                            Code_Fenced_Image (T2),
+                          Loc      => Step.Location);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
    end Files_Is_Not;
 
    -- --------------------------------------------------------------------------
    procedure File_Contains (Step : Step_Type'Class) is
-      File_Name : constant String := +Step.Subject_String;
-      T1        : constant Text   := Get_Text (File_Name);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
    begin
       Put_Debug_Line ("File_Contains " & File_Name &
                         " T1 = " & T1'Image &
                         " T2 = " & T2'Image);
-      Put_Step_Result (Step     => Step,
-                       Success  => Contains
-                         (T1, T2,
-                          Case_Insensitive   => Settings.Ignore_Casing,
-                          Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
-                       Fail_Msg => File_Name &
-                         " does not contain expected:  " &
-                         Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => Contains
+                            (T1, T2,
+                             Case_Insensitive   => Settings.Ignore_Casing,
+                             Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                             Sort_Texts         => Step.Data.Ignore_Order),
+                          Fail_Msg => File_Name &
+                            " does not contain expected:  " &
+                            Code_Fenced_Image (T2),
+                          Loc      => Step.Location);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
    end File_Contains;
 
    -- --------------------------------------------------------------------------
    procedure File_Does_Not_Contain (Step : Step_Type'Class) is
-      File_Name : constant String := +Step.Subject_String;
-      T1        : constant Text   := Get_Text (File_Name);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
    begin
       Put_Debug_Line ("File_Does_Not_Contain " & File_Name);
-      Put_Step_Result (Step     => Step,
-                       Success  => not Contains
-                         (T1, T2,
-                          Case_Insensitive   => Settings.Ignore_Casing,
-                          Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Ignore_Order),
-                       Fail_Msg => File_Name &
-                         " shouldn't contain :  " & Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => not Contains
+                            (T1, T2,
+                             Case_Insensitive   => Settings.Ignore_Casing,
+                             Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                             Sort_Texts         => Step.Data.Ignore_Order),
+                          Fail_Msg => File_Name &
+                            " shouldn't contain :  " & Code_Fenced_Image (T2),
+                          Loc      => Step.Location);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
    end File_Does_Not_Contain;
 
 end BBT.Tests.Actions;

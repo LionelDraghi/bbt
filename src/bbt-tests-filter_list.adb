@@ -85,58 +85,8 @@ package body BBT.Tests.Filter_List is
       return No_Match;
    end Is_Filtered;
 
-   --  -- --------------------------------------------------------------------------
-   --  function Is_Filtered (S : String;
-   --                        Item_Type : Apply_On) return Boolean is
-   --  begin
-   --     for F of reverse Filter_Chain loop
-   --        -- The item may be included and excluded several time :
-   --        -- looking into the chain in reverse order is an optimized way to
-   --        -- have the bahavior "the last to spoke has right".
-   --        if (F.Target = Item_Type or F.Target = Apply_To_All)
-   --          and then Contains (S, F.Pattern)
-   --          and then F.Mode = Exclude
-   --        then
-   --           Put_Debug_Line ("Is_Filtered (" & S &
-   --                             ", " & Item_Type'Image &
-   --                             ", Mode = " & F.Mode'Image & ") return True");
-   --           return True;
-   --           -- exit;
-   --        end if;
-   --     end loop;
-   --     Put_Debug_Line ("Is_Filtered (" & S &
-   --                       ", " & Item_Type'Image & ") return False");
-   --     return False;
-   --  end Is_Filtered;
-   --
-   --  -- --------------------------------------------------------------------------
-   --  function Is_Selected (S : String;
-   --                        Item_Type : Apply_On) return Boolean is
-   --  begin
-   --     -- Fixme : duplicated code Is_Filtered Is_Selected
-   --     for F of reverse Filter_Chain loop
-   --        -- The item may be included and excluded several time :
-   --        -- looking into the chain in reverse order is an optimized way to
-   --        -- have the bahavior "the last to spoke has right".
-   --        if (F.Target = Item_Type or F.Target = Apply_To_All)
-   --          and then Contains (S, F.Pattern)
-   --          and then F.Mode = Include
-   --        then
-   --           Put_Debug_Line ("Is_Selected (" & S &
-   --                             ", " & Item_Type'Image &
-   --                             ", Mode = " & F.Mode'Image & ") return True");
-   --           return True;
-   --           -- exit;
-   --        end if;
-   --     end loop;
-   --     Put_Debug_Line ("Is_Selected (" & S &
-   --                       ", " & Item_Type'Image & ") return False");
-   --     return False;
-   --  end Is_Selected;
-
    -- -------------------------------------------------------------------------
    function Short_Image (F : Filter) return String is
       (F.Mode'Image & " """ & (+F.Pattern) & """ on " & F.Target'Image);
-
 
 end BBT.Tests.Filter_List;

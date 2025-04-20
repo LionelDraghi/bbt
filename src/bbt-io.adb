@@ -49,6 +49,18 @@ package body BBT.IO is
      (Topic in Topics and then Enabled_Topics (Topic));
 
    -- --------------------------------------------------------------------------
+   function Enabled_Topic_List_Image return String is
+      Accu : Unbounded_String := Null_Unbounded_String;
+   begin
+      for T in Topics loop
+         if Is_Enabled (T) then
+            Accu := @ & " " & T'Image;
+         end if;
+      end loop;
+      return To_String (Accu);
+   end Enabled_Topic_List_Image;
+
+   -- --------------------------------------------------------------------------
    function File   (Loc : Location_Type) return String        is (+Loc.File);
    function Line   (Loc : Location_Type) return Text_IO.Count is (Loc.Line);
    function Column (Loc : Location_Type) return Text_IO.Count is (Loc.Column);

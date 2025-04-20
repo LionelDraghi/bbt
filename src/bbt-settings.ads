@@ -17,7 +17,7 @@ private package BBT.Settings is
    type Command is (Run,
                     List,
                     Explain,
-                    List_Topics,
+                    List_Trace_Topics,
                     List_Keywords,
                     List_Grammar,
                     List_Files,

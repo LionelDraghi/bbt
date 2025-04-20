@@ -211,7 +211,7 @@ package body BBT.Scenarios.Files is
                when Step_Line =>
                   Put_Debug_Line ("Step         " & Filler & Line, Loc);
                   declare
-                     S : Step_Type := Scenarios.Step_Parser.Parse
+                     S : Step_Data := Scenarios.Step_Parser.Parse
                        (Attrib.Step_Ln,
                         Loc,
                         Code_Block_Expected,
@@ -222,7 +222,7 @@ package body BBT.Scenarios.Files is
                      if No_Error then
                         -- If the step was not clearly interpreted, let's ignore it
                         Tests.Builder.Add_Step
-                          (S, Code_Block_Expected, Cmd_List);
+                          (S, Code_Block_Expected, Cmd_List, Loc);
                      end if;
                   end;
 

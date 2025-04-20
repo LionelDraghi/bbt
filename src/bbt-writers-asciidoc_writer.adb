@@ -133,14 +133,14 @@ package body BBT.Writers.Asciidoc_Writer is
    is
       Pre  : constant String := Pref (Success);
    begin
-      Documents.Add_Result (Success, Step.Parent_Scenario.all);
+      Documents.Add_Result (Success, To => Parent (Step).all);
       if Success then
          IO.Pause_Tee;
-         IO.Put_Line (Item      => Pre & (+Step.Step_String) & "  ",
+         IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",
                       Verbosity => IO.Verbose);
          IO.Restore_Tee;
       else
-         IO.Put_Line (Pre & (+Step.Step_String) & " (" & IO.Image (Loc) & ")  ",
+         IO.Put_Line (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
                       Verbosity => IO.Normal);
       end if;
    end Put_Step_Result;
@@ -158,7 +158,7 @@ package body BBT.Writers.Asciidoc_Writer is
                                   Step   : Step_Type'Class) is
    begin
       Put_Line (Line (Step.Location)'Image & ": Step """ &
-                (+Step.Step_String) & """");
+                (+Step.Data.Src_Code) & """");
       Put_Line (Step'Image);
    end Put_Step;
 

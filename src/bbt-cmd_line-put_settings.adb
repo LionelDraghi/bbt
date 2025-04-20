@@ -5,7 +5,8 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Characters.Handling,
+with BBT.IO,
+     Ada.Characters.Handling,
      Ada.Text_IO;
 
 separate (BBT.Cmd_Line)
@@ -28,6 +29,9 @@ begin
                then " " & Current_Topic'Image
                else ""));
    Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
+   if IO.Enabled_Topic_List_Image /= "" then
+      Put_Line ("   debug traces enabled for : " & IO.Enabled_Topic_List_Image);
+   end if;
    Put_Line ("   bbt files             : " & One_Line_Image (Document_List));
    Put_Line ("   Initial directory     : " & Launch_Directory);
    Put_Line ("   Exec    directory     : " & Settings.Exec_Dir);

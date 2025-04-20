@@ -56,9 +56,11 @@ private package BBT.IO is
      Extended_Topics'Succ (None) .. Extended_Topics'Last;
    -- None is the default parameter for IO operation, but is not in Topics
    -- range, used when setting what should be printed.
+   -- --------------------------------------------------------------------------
    procedure Enable_Topic (Topic : Topics);
    function Is_Enabled (Topic : Extended_Topics) return Boolean;
    -- return always false for None
+   function Enabled_Topic_List_Image return String;
 
    -- --------------------------------------------------------------------------
    type Location_Type is private with Put_Image => Location_GNU_Image;

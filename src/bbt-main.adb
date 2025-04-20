@@ -107,9 +107,9 @@ begin
    --   (options are already processed in the analyze Cmd_Line procedure)
    case Settings.Current_Command is
 
-   when List_Topics =>
-      Status_Bar.Put_Activity ("Listing topics");
-      Cmd_Line.Put_Topics;
+   when List_Trace_Topics =>
+      Status_Bar.Put_Activity ("Listing trace topics");
+      Cmd_Line.Put_Trace_Topics;
 
    when List_Keywords =>
       Status_Bar.Put_Activity ("Listing keywords");

@@ -99,7 +99,7 @@ package body BBT.Cmd_Line is
    -- --------------------------------------------------------------------------
    procedure Put_Settings                           is separate;
    procedure Put_Help (Topic : Settings.Help_Topic) is separate;
-   procedure Put_Topics                             is separate;
+   procedure Put_Trace_Topics                       is separate;
    procedure Create_Template                        is separate;
 
    -- --------------------------------------------------------------------------
@@ -141,7 +141,10 @@ package body BBT.Cmd_Line is
             elsif Cmd = "run" then
                Set_Cmd (Run);
 
-            elsif Cmd in "help" | "he" then
+            elsif Cmd = "tt" then
+               Set_Cmd (List_Trace_Topics);
+
+            elsif Cmd in "help" | "he" | "-h" then
                Set_Cmd (Help);
                if not On_Last_Arg then
                   -- help may be followed by an help topic
@@ -302,8 +305,10 @@ package body BBT.Cmd_Line is
                end if;
 
             elsif Cmd = "-ls" then
-               -- undocumented option, list settings
                Settings.List_Settings := True;
+
+            --  elsif Cmd = "-lt" then
+            --     Put_Trace_Topics;
 
                -- Filtering options --------------------------------------------
             elsif Cmd in "-e" | "--exclude" then

@@ -33,8 +33,8 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    function Subject_Or_Object_String (Step : Step_Type'Class) return String is
-     (To_String (if Step.Object_File_Name = Null_Unbounded_String then
-           Step.Subject_String else Step.Object_File_Name));
+     (To_String (if Step.Data.Object_File_Name = Null_Unbounded_String then
+           Step.Data.Subject_String else Step.Data.Object_File_Name));
    -- Fixme: Clearly not confortable with that function, it's magic.
 
 
@@ -62,17 +62,17 @@ package body BBT.Tests.Runner is
 
       if Step.Filtered then
          Put_Debug_Line
-           ("  ====== Skipping filtered step " & Step.Step_String'Image);
+           ("  ====== Skipping filtered step " & Step.Data.Src_Code'Image);
          return;
       end if;
 
-      Put_Debug_Line ("  ====== Running Step " & Step.Step_String'Image);
+      Put_Debug_Line ("  ====== Running Step " & Step.Data.Src_Code'Image);
 
-      case Step.Action is
+      case Step.Data.Action is
          when Run_Cmd =>
             Created_File_List.Add (Output);
             Run_Cmd (Step         => Step,
-                     Cmd          => To_String (Step.Object_String),
+                     Cmd          => To_String (Step.Data.Object_String),
                      Output_Name  => Output,
                      Check_Result => False,
                      Spawn_OK     => Spawn_OK,
@@ -82,7 +82,7 @@ package body BBT.Tests.Runner is
          when Run_Without_Error =>
             Created_File_List.Add (Output);
             Run_Cmd (Step         => Step,
-                     Cmd          => To_String (Step.Object_String),
+                     Cmd          => To_String (Step.Data.Object_String),
                      Output_Name  => Output,
                      Check_Result => True,
                      Spawn_OK     => Spawn_OK,
@@ -157,15 +157,13 @@ package body BBT.Tests.Runner is
             Setup_No_Dir (Step);
 
          when None =>
-            Add_Result (False, Step.Parent_Scenario.all);
-            IO.Put_Error ("Unrecognized step " & Step.Step_String'Image,
+            IO.Put_Error ("Unrecognized step " & Step.Data.Src_Code'Image,
                           Step.Location);
 
       end case;
 
    exception
       when E : others =>
-         Add_Result (False, Step.Parent_Scenario.all);
          Put_Exception ("while processing step "
                         & Step'Image
                         & " : " & Ada.Exceptions.Exception_Name (E) & " "
@@ -180,6 +178,7 @@ package body BBT.Tests.Runner is
       Spawn_OK : Boolean := False;
 
    begin
+      Reset_Error_Counts;
       if Scen.Filtered then
          Put_Debug_Line ("  ====== Skipping filtered scen " & Scen.Name'Image);
          return;
@@ -192,6 +191,10 @@ package body BBT.Tests.Runner is
 
          Step_Processing : for Step of Scen.Step_List loop
             Run_Step (Step, Spawn_OK);
+
+            if IO.Some_Error then
+               Add_Result (False, Scen);
+            end if;
 
             if IO.Some_Error and not Settings.Keep_Going then
                exit Step_Processing;
@@ -247,14 +250,15 @@ package body BBT.Tests.Runner is
    procedure Run_Feature_Background (Scen : in out Scenario_Type'Class) is
    -- Run background scenario at feature level, if any
    begin
-      if Is_In_Feature (Scen) and then Has_Background (Scen.Parent_Feature.all)
+      if Is_In_Feature (Scen) and then Has_Background (Scen.Parent.all)
       then
          declare
-            Feat : constant Feature_Type := Scen.Parent_Feature.all;
+            Feat : constant Feature_Type := Feature_Type (Scen.Parent.all);
          begin
-            if Scen.Parent_Feature.Filtered then
+            if Scen.Parent.Filtered then
                Put_Debug_Line
-                 ("  Skipping filtered feature Background """ & (+Feat.Background.Name) &
+                 ("  Skipping filtered feature Background """ &
+                  (+Feat.Background.Name) &
                     """  ", IO.No_Location);
             else
                Put_Debug_Line
