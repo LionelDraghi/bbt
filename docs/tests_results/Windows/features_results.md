@@ -211,37 +211,41 @@
 
 ## [A230_select_exclude_include.md](..\..\features\A230_select_exclude_include.md)  
   ### Feature: Filter  
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [no filtering](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [step filtering](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [step selection](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [Selecting a scenario](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [selection is empty](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [Selecting a Background only](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
   - [X] scenario [Select followed by an exclude](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Lets create the two files scen1.md and scen2.md](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
-  - [X] scenario [Exclude followed by an Include](..\..\features\A230_select_exclude_include.md) pass  
+  - [X] scenario [scenario Excluded followed by an include of a step inside](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
+
+  - [X] scenario [Exclude by file name](..\..\features\A230_select_exclude_include.md) pass  
 
 ## [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
   ### Feature: tmp files and directories deletion  
@@ -441,11 +445,11 @@
   - [X] scenario [Detection of ambiguous use of multiple recognized verbs in the same Step](..\..\features\C110_Two_Verbs_In_The_Step.md) pass  
 
 
-## Summary : **Success**, 119 scenarios OK
+## Summary : **Success**, 120 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 119   |
+| Successful | 120   |
 | Empty      | 0     |
 
