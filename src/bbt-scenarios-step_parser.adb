@@ -5,7 +5,8 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Scenarios.Step_Parser.Lexer;
+with BBT.Model.Steps,
+     BBT.Scenarios.Step_Parser.Lexer;
 
 with Text_Utilities;
 
@@ -18,6 +19,7 @@ with Ada.Strings.Maps;
 
 
 use BBT.Scenarios.Step_Parser.Lexer,
+    BBT.Model.Steps,
     Text_Utilities,
     Ada.Directories,
     Ada.Strings.Fixed;
@@ -291,8 +293,8 @@ package body BBT.Scenarios.Step_Parser is
    function Parse (Line                :        Unbounded_String;
                    Loc                 : in out Location_Type;
                    Code_Block_Expected :    out Boolean;
-                   Cmd_List            :    out Cmd_Lists.Vector)
-                   return Step_Data
+                   Cmd_List            :    out Steps.Cmd_List)
+                   return Steps.Step_Data
    is
       Successfully_Met : Boolean        := False;
       Or_Met           : Natural        := 0;

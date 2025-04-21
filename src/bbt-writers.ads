@@ -5,8 +5,18 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents; use BBT.Documents;
-with BBT.IO;
+with BBT.Model.Documents,
+     BBT.Model.Features,
+     BBT.Model.Scenarios,
+     BBT.Model.Steps,
+     BBT.IO;
+
+use BBT.Model,
+    BBT.Model.Documents,
+    BBT.Model.Features,
+    BBT.Model.Scenarios,
+    BBT.Model.Steps,
+    BBT.IO;
 
 private package BBT.Writers is
 -- This package defines common services for all types of output, and
@@ -46,7 +56,7 @@ private package BBT.Writers is
    procedure Put_Document_Start (Doc : Document_Type'Class);
    procedure Put_Feature_Start (Feat : Feature_Type'Class);
    procedure Put_Scenario_Start (Scen : Scenario_Type'Class);
-   procedure Put_Step_Result (Step     : Documents.Step_Type'Class;
+   procedure Put_Step_Result (Step     : Step_Type'Class;
                               Success  : Boolean;
                               Fail_Msg : String;
                               Loc      : IO.Location_Type);
@@ -56,7 +66,7 @@ private package BBT.Writers is
 
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
-   procedure Put_Document_List (Doc_List : Documents.Documents_Lists.Vector);
+   procedure Put_Document_List (Doc_List : Documents.List);
 
 private
    -- -------------------------------------------------------------------------
@@ -86,7 +96,7 @@ private
    procedure Put_Scenario_Start (Writer    : Abstract_Writer;
                                  Scen      : Scenario_Type'Class) is abstract;
    procedure Put_Step_Result (Writer    : Abstract_Writer;
-                              Step      : Documents.Step_Type'Class;
+                              Step      : Step_Type'Class;
                               Success   : Boolean;
                               Fail_Msg  : String;
                               Loc       : IO.Location_Type) is abstract;

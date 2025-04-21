@@ -5,8 +5,11 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents; use BBT.Documents;
-with BBT.IO;        use BBT.IO;
+with BBT.Model.Steps,
+     BBT.IO;
+
+use BBT.Model,
+    BBT.IO;
 
 package BBT.Tests.Builder is
 -- This package is in charge of building the tests list
@@ -22,9 +25,9 @@ package BBT.Tests.Builder is
                              Loc  : Location_Type);
    procedure Add_Background (Name : String;
                              Loc  : Location_Type);
-   procedure Add_Step       (Step_Info           : in out Documents.Step_Data; -- Step_Type;
+   procedure Add_Step       (Step_Info           : in out Steps.Step_Data;
                              Code_Block_Expected :        Boolean;
-                             Cmd_List            :        Cmd_Lists.Vector;
+                             Cmd_List            :        Steps.Cmd_List;
                              Loc                 : Location_Type);
    procedure Add_Line       (Line : String);
    procedure Add_Code_Fence (Loc : Location_Type);

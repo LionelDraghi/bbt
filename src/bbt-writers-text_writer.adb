@@ -129,7 +129,7 @@ package body BBT.Writers.Text_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step_Result (Writer    : Text_Writer;
-                                         Step      : BBT.Documents.Step_Type'Class;
+                                         Step      : Step_Type'Class;
                                          Success   : Boolean;
                                          Fail_Msg  : String;
                                          Loc       : BBT.IO.Location_Type) is
@@ -137,7 +137,7 @@ package body BBT.Writers.Text_Writer is
    begin
       Put_Debug_Line ("Put_Step_Result = " & Step'Image);
       Put_Debug_Line ("Step.Parent     = " & Step.Parent'Image);
-      Documents.Add_Result (Success, Parent (Step).all);
+      Model.Scenarios.Add_Result (Success, Parent (Step).all);
       if Success then
          IO.Pause_Tee; --  We don't want this level of detail in the
          --  generated test index.

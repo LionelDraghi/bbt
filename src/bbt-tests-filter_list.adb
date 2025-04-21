@@ -1,5 +1,5 @@
 
-with BBT.Documents,
+with BBT.Model,
      BBT.IO,
      Ada.Characters,
      Ada.Characters.Handling,
@@ -7,7 +7,7 @@ with BBT.Documents,
      Ada.Strings.Fixed;
 
 use BBT,
-    BBT.Documents,
+    BBT.Model,
     Ada.Containers;
 
 package body BBT.Tests.Filter_List is

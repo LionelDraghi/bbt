@@ -34,7 +34,7 @@ private
    overriding procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
                                             Scen   : Scenario_Type'Class);
    overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                                         Step     : Documents.Step_Type'Class;
+                                         Step     : Step_Type'Class;
                                          Success  : Boolean;
                                          Fail_Msg : String;
                                          Loc      : IO.Location_Type);

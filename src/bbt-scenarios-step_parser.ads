@@ -5,8 +5,11 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents; use BBT.Documents;
-with BBT.IO;        use BBT.IO;
+with BBT.Model.Steps,
+     BBT.IO;
+
+use BBT.Model,
+    BBT.IO;
 
 package BBT.Scenarios.Step_Parser is
 
@@ -14,8 +17,8 @@ package BBT.Scenarios.Step_Parser is
    function Parse (Line                :        Unbounded_String;
                    Loc                 : in out Location_Type;
                    Code_Block_Expected :    out Boolean;
-                   Cmd_List            :    out Cmd_Lists.Vector)
-                   return Step_Data;
+                   Cmd_List            :    out Steps.Cmd_List)
+                   return Steps.Step_Data;
 
    procedure Put_Keywords;
    procedure Put_Grammar;

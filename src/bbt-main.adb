@@ -6,7 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Documents,
+     BBT.Model.Documents,
      BBT.Cmd_Line,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
@@ -57,7 +57,7 @@ procedure BBT.Main is
          end loop;
       end if;
 
-      Documents.Apply_Filters;
+      Model.Documents.Apply_Filters;
 
    end Analyze_Documents;
 
@@ -134,13 +134,13 @@ begin
       -- Let's display our rebuild of the original test definition
       -- file comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
-      Writers.Put_Document_List (Documents.The_Tests_List.all);
+      Writers.Put_Document_List (Model.Documents.The_Tests_List.all);
 
    when List =>
       Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
       Status_Bar.Put_Activity ("Display non filtered items");
-      Writers.Put_Document_List (Documents.The_Tests_List.all);
+      Writers.Put_Document_List (Model.Documents.The_Tests_List.all);
 
    when Run | Settings.None =>
       -- Run is the default command, so None => Run
@@ -152,7 +152,7 @@ begin
          Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;
       end if;
-      Tests.Results.Sum_Results (Documents.The_Tests_List.all);
+      Tests.Results.Sum_Results (Model.Documents.The_Tests_List.all);
       Writers.Put_Overall_Results;
 
       if Settings.Generate_Badge then

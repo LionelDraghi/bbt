@@ -5,15 +5,30 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Created_File_List; use BBT.Created_File_List;
-with BBT.Documents;         use BBT.Documents;
-with BBT.IO;                use BBT.IO;
-with BBT.Settings;
-with BBT.Status_Bar;
-with BBT.Tests.Actions;     use BBT.Tests.Actions;
-with BBT.Writers;           use BBT.Writers;
-with File_Utilities;
-with Text_Utilities;        use Text_Utilities;
+with BBT.Created_File_List,
+     BBT.Model,
+     BBT.Model.Documents,
+     BBT.Model.Features,
+     BBT.Model.Scenarios,
+     BBT.Model.Steps,
+     BBT.IO,
+     BBT.Settings,
+     BBT.Status_Bar,
+     BBT.Tests.Actions,
+     BBT.Writers,
+     File_Utilities,
+     Text_Utilities;
+
+use BBT.Created_File_List,
+    BBT.Model,
+    BBT.Model.Documents,
+    BBT.Model.Features,
+    BBT.Model.Scenarios,
+    BBT.Model.Steps,
+    BBT.IO,
+    BBT.Tests.Actions,
+    BBT.Writers,
+    Text_Utilities;
 
 with Ada.Directories;
 with Ada.Exceptions;
@@ -56,7 +71,7 @@ package body BBT.Tests.Runner is
       Spawn_OK    : Boolean;
       Return_Code : Integer;
       Output      : constant String :=
-                      Output_File_Name (Step.Parent_Doc.all);
+                      Output_File_Name (Parent_Doc (Step).all);
    begin
       Run_Error := False;
 

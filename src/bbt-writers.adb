@@ -8,7 +8,6 @@
 package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
-   use BBT.IO;
    procedure Put_Debug_Line (Item      : String;
                              Location  : Location_Type    := No_Location;
                              Verbosity : Verbosity_Levels := Debug;
@@ -92,7 +91,7 @@ package body BBT.Writers is
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Step     : BBT.Documents.Step_Type'Class;
+   procedure Put_Step_Result (Step     : Step_Type'Class;
                               Success  : Boolean;
                               Fail_Msg : String;
                               Loc      : BBT.IO.Location_Type) is
@@ -190,7 +189,7 @@ package body BBT.Writers is
    end Put_Document;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Document_List (Doc_List : Documents_Lists.Vector) is
+   procedure Put_Document_List (Doc_List : Documents.List) is
    begin
       for F in Writer_List'Range when Enabled (F) loop
          for Doc of Doc_List loop

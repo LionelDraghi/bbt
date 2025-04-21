@@ -10,7 +10,8 @@ with Ada.Exceptions;
 with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
-with BBT.Documents;                     use BBT.Documents;
+with BBT.Model.Steps;
+with BBT.Model;                         use BBT.Model;
 with BBT.IO;
 with BBT.Scenarios.Readers;             use BBT.Scenarios.Readers;
 with BBT.Scenarios.Step_Parser;
@@ -180,7 +181,7 @@ package body BBT.Scenarios.Files is
          Line_Processing :
          declare
             Line     : aliased constant String  := Get_Line (Input);
-            Cmd_List : Cmd_Lists.Vector;
+            Cmd_List : Steps.Cmd_List;
             Filler   : constant String :=
                          (if BBT.IO.Line (Loc) in 1 .. 9
                           then "  | "
@@ -211,7 +212,7 @@ package body BBT.Scenarios.Files is
                when Step_Line =>
                   Put_Debug_Line ("Step         " & Filler & Line, Loc);
                   declare
-                     S : Step_Data := Scenarios.Step_Parser.Parse
+                     S : Steps.Step_Data := Scenarios.Step_Parser.Parse
                        (Attrib.Step_Ln,
                         Loc,
                         Code_Block_Expected,

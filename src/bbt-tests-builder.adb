@@ -5,8 +5,17 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Settings;   use BBT.Settings;
+with BBT.Settings,
+     BBT.Model.Steps,
+     BBT.Model.Scenarios,
+     BBT.Model.Features,
+     BBT.Model.Documents;
 
+use BBT.Model.Steps,
+    BBT.Model.Scenarios,
+    BBT.Model.Features,
+    BBT.Settings,
+    BBT.Model.Documents;
 
 with Text_Utilities; use Text_Utilities;
 
@@ -181,9 +190,9 @@ package body BBT.Tests.Builder is
    end Add_Background;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Step (Step_Info           : in out Documents.Step_Data; -- Step_Type;
+   procedure Add_Step (Step_Info           : in out Steps.Step_Data;
                        Code_Block_Expected : Boolean;
-                       Cmd_List            : Cmd_Lists.Vector;
+                       Cmd_List            : Steps.Cmd_List;
                        Loc                 : Location_Type)
    is
       -- -----------------------------------------------------------------------
@@ -284,7 +293,7 @@ package body BBT.Tests.Builder is
                Append_Step (Scenario_Access (Last_Scenario));
             end if;
 
-        end case;
+      end case;
       Check_Missing_Code_Block (Loc);
    end Add_Step;
 

@@ -5,7 +5,11 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents;  use BBT.Documents;
+with BBT.Model,
+     BBT.Model.Steps;
+
+use BBT.Model,
+    BBT.Model.Steps;
 
 with Text_Utilities; use Text_Utilities;
 

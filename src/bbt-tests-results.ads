@@ -5,7 +5,10 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Documents;
+with BBT.Model.Documents,
+     BBT.Model.Scenarios;
+
+use  BBT.Model;
 
 package BBT.Tests.Results is
 
@@ -14,12 +17,12 @@ package BBT.Tests.Results is
 
    type Test_Results_Count is private;
 
-   function Result (Scenario : Documents.Scenario_Type'Class)
+   function Result (Scenario : Scenarios.Scenario_Type'Class)
                     return Test_Result;
    -- Compute the Scenario status based on failed and successful step count
    -- stored in the scenario.
 
-   procedure Sum_Results (Docs : Documents.Documents_Lists.Vector);
+   procedure Sum_Results (Docs : Documents.List);
    -- Walk through the Document list to sum all scenarios result's.
 
    -- function Overall_Results return Test_Results_Count;

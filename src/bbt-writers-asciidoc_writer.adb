@@ -126,14 +126,14 @@ package body BBT.Writers.Asciidoc_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                                         Step     : BBT.Documents.Step_Type'Class;
+                                         Step     : Step_Type'Class;
                                          Success  : Boolean;
                                          Fail_Msg : String;
                                          Loc      : BBT.IO.Location_Type)
    is
       Pre  : constant String := Pref (Success);
    begin
-      Documents.Add_Result (Success, To => Parent (Step).all);
+      Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       if Success then
          IO.Pause_Tee;
          IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",

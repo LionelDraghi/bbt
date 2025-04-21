@@ -16,7 +16,7 @@ package body BBT.Tests.Results is
    Results : Test_Results_Count;
 
    -- --------------------------------------------------------------------------
-   function Result (Scenario : Documents.Scenario_Type'Class)
+   function Result (Scenario : Scenarios.Scenario_Type'Class)
                     return Test_Result is
    begin
       if Scenario.Failed_Step_Count > 0 then
@@ -32,9 +32,9 @@ package body BBT.Tests.Results is
 
    -- --------------------------------------------------------------------------
    procedure Sum_Results
-     (Docs : Documents.Documents_Lists.Vector)
+     (Docs : Documents.List)
    is
-      procedure Get_Results (S : Documents.Scenario_Type'Class) is
+      procedure Get_Results (S : Scenarios.Scenario_Type'Class) is
       begin
          Results (Result (S)) := @ + 1;
       end Get_Results;

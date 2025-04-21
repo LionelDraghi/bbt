@@ -37,7 +37,7 @@ private
                                             Scen   : Scenario_Type'Class);
    overriding procedure Put_Step_Result
      (Writer   : Markdown_Writer;
-      Step     : BBT.Documents.Step_Type'Class;
+      Step     : Step_Type'Class;
       Success  : Boolean;
       Fail_Msg : String;
       Loc      : BBT.IO.Location_Type);
