@@ -148,7 +148,6 @@ package body BBT.Writers.Markdown_Writers is
    begin
       Put_Debug_Line ("Put_Step_Result = " & Step'Image);
       Put_Debug_Line ("Step.Parent     = " & Step.Parent'Image);
-      Model.Scenarios.Add_Result (Success, Parent (Step).all);
       if Success then
          IO.Pause_Tee; -- We don't want this level of detail in the
          --               generated test index.

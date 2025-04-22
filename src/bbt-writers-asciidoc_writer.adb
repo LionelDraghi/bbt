@@ -133,7 +133,6 @@ package body BBT.Writers.Asciidoc_Writer is
    is
       Pre  : constant String := Pref (Success);
    begin
-      Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       if Success then
          IO.Pause_Tee;
          IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",

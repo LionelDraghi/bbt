@@ -6,7 +6,7 @@ authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
 maintainers-logins = ["LionelDraghi"]
 licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
-website = ""
+website = "https://github.com/LionelDraghi/bbt"
 tags = ["test", "testing", "gherkin", "markdown", "tdd", "bdd"]
 
 executables = ["bbt"]

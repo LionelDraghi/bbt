@@ -103,6 +103,7 @@ package body BBT.Writers is
                           Success,
                           Fail_Msg,
                           Loc);
+         Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       end loop;
    end Put_Step_Result;
 
