@@ -9,11 +9,12 @@
 - [Overview](#overview)
   - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
   - [Partial parsing](#partial-parsing)
-  - [Step arguments](#step-arguments)
   - [One more example](#one-more-example)
 - [Installation](#installation)
   - [Stable version](#stable-version)
   - [Latest version](#latest-version)
+    - [building from sources](#building-from-sources)
+    - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
 - [Why should I use bbt?](#why-should-i-use-bbt)
   - [Write once](#write-once)
@@ -33,12 +34,14 @@ Hence the name: bbt stands for *Black Box Tester*.
 bbt targets both *specification of the behavior* and *end-to-end test automation* for the very common case of apps taking some input and producing some output.  
 It enable developers **to write and execute comprehensive test scenarios in just a few minutes**. 
 
-The outstanding feature of btt is that **it directly uses your behavior documentation in plain english**.  
+The outstanding feature of btt is that **it directly uses your documentation in plain english**.  
 There is no script nor other file to write.
+
+bbt doesn't care about the type of document: call it Acceptance test, feature or behavior description, test scenario, README file or user guide, that's the same.  
+bbt make no difference between runing a scenario in a test file and checking an example given in a README file, as long as it recognizes a behavior description in it.
 
 ### What does the behavior description look like?
 
-The behavior is described in almost natural English, in Markdown, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) / [Gherkin](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language) usual pattern *Given / When / Then*.  
 Here is a minimal example:  
 
 ```md
@@ -47,14 +50,19 @@ Here is a minimal example:
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
 ```  
-resulting in:
 
+The behavior is described in almost natural English, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) / [Gherkin](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language) usual pattern *Given / When / Then*.  
+
+It's in Markdown [^1], and render as:
+
+---
 ### Scenario: I want to know gcc version  <!-- omit from toc -->
 
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
+---
 
-bbt being about documentation and simplicity, Markdown[^1] is a perfect fit.  
+bbt being about documentation and simplicity, Markdown is a perfect fit.  
 
 Let's consider a slightly more complete example:
 ![simple example](docs/rpl_example.png)
@@ -62,21 +70,39 @@ Let's consider a slightly more complete example:
 (Markdown source [here](docs/examples/rpl_case_insensitivity.md))
 
 We have:
+  
+1. **A *Feature* and a *Scenario* header** (followed by the feature/scenario name)  
 
-1. An "Overview" header and a first text   
-   All this is ignored, because: 
-   - bbt processes **only** Gherkin headers *# Features*, *# Background*, and *# Scenario* or *# Example*.   
-   - bbt considers all text lines as comment, except Step lines.  
-   
-   bbt staying out of the way, you're free to use markdown almost without constraints to draft nice documentations. 
-   
-1. A "Feature" and a "Scenario" header (followed by the feature/scenario name)  
-   bbt is now awake, and waiting for step lines.  
-   Note that header's level is ignored (*#### Scenario*, is equal to *# Scenario* for bbt), you're free to structure the file as you want. 
+   bbt processes **only** headers starting with Gherkin keywords:
+   - *# Features* 
+   - *# Background* 
+   - *# Scenario* or *# Example*  
+  
+   In this example, the *Overview* Header is ignored.  
+   Note also that the header's level doesn't matter (*#### Scenario*, is equal to *# Scenario* for bbt), so that you're free to structure the file as you want. 
 
-2. Steps  
-   Steps are lines starting with *- Given*, *- When*, *- Then*, *- And*, *- But*, that contain the things to check or do.
+2. **Steps**  
 
+   Within Scenarios, bbt reads Steps, that is lines starting with:
+   - *- Given*
+   - *- When* 
+   - *- Then* 
+   - *- And* 
+   - *- But*  
+  
+   Those lines contains the things to check or do.  
+   Note that the only possible list marker for Steps is `-`, so that other list markers like '*' or '+' may be used for comments and will be ignored by bbt.
+
+3. **Step arguments**
+
+   Within or after step lines, Step's argument may be:
+   - strings for file name, command to run, etc. (for example here `config.ini`) 
+   - or multiline text for expected output, file content, etc. (for example here the config.ini file content).
+
+   As per [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), strings uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans) (that is a string between backticks), and multiline text uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) (that is a text between two `` ``` `` lines).  
+
+Everything else in the file is ignored. bbt staying out of the way, you're free to use markdown almost without constraints to draft nice documentations. 
+  
 ### Partial parsing 
 
 A distinctive feature of bbt is that it seems to directly understand those almost normal English sentences like:  
@@ -86,24 +112,14 @@ A distinctive feature of bbt is that it seems to directly understand those almos
 ```
 This is achieved thanks to a [partial parser](https://devopedia.org/natural-language-parsing). It means that there is no rigid grammar, because bbt takes into account only some keywords to recognize the skeleton of the sentence.  
 
-So when you write:  
+When you write:  
 > - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
 
-bbt actually reads:  
+bbt only sees two keywords and one parameter:  
 > - then get `version 15.0.0`     
   
 And this is what gives the ability to write steps in almost natural language. 
 
-### Step arguments
-
-Step's argument may be strings or multiline text.
-
-As per [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), bbt uses :
-- multiline text (expected output, file content, etc) : [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks), that is a text between two "```" lines
-- strings (file name, command to run, etc.) : [code span](https://spec.commonmark.org/0.31.2/#code-spans), that is a string between backticks  
-
-It's not only to nicely highlight inputs in the doc, but also because otherwise the analysis of the steps would be too complex.  
- 
 ### One more example
 
 [This example](docs/examples/gcc_hello_word.md) shows how simple it is to run a `gcc` sanity test, that compiles and runs the ubiquitous *Hello Word*.
@@ -114,39 +130,51 @@ It's not only to nicely highlight inputs in the doc, but also because otherwise 
 
 [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available on Windows, Linux and Darwin thanks to the Alire package manager:
 
-1. Go to [Alire home](https://alire.ada.dev/) for a “one click” install.  
-   
+1. Install Alire : [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/alire-badge.json)](https://alire.ada.dev/)
+
 2. Run :
-   > alr install bbt
-
-   The exe will be moved in ~/.alire/bin on Linux and Darwin, or in xxxx on Windows.  
+   ```sh
+   alr install bbt
+   ```
+   The exe will be moved in ~/.alire/bin.  
+   
    Alternatively, you may choose another installation directory with:
-   > alr install --prefix=/path/to/installation bbt  
+   ```sh
+   alr install --prefix=/path/to/installation bbt  
+   ```
 
-   If needed, ensure that the installation directory is in your PATH.
+   Ensure that the installation directory is in your PATH.
 
 ### Latest version
 
-For Linux user, an AppImage of the latest version is available [here](https://github.com/LionelDraghi/bbt/releases).  
-(Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
-Download the AppImage, and:  
-```sh
-chmod +x bbt-0.1.0-x86_64.AppImage
-ln -s bbt-0.1.0-x86_64.AppImage bbt
-```
-
-Or, to build the latest version on Windows, Darwin or Linux:
+#### building from sources
 ```sh
 git clone https://github.com/LionelDraghi/bbt  
 cd bbt  
 alr build 
 ```
 
+#### AppImage (Linux only)
+Download the AppImage [here](https://github.com/LionelDraghi/bbt/releases), and:  
+```sh
+chmod +x bbt-0.1.0-x86_64.AppImage
+ln -s bbt-0.1.0-x86_64.AppImage bbt
+```
+
+(Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
+
 ## First use
 
-The easiest way to start is illustrated by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project.  
-He just created a scenario file called `tests.md`, and put in the README a reference to that file and the command line to run the tests.  
-Thats'it, he didn't even need to create a "tests" directory.
+Start your own scenario file with one of the examples here: https://github.com/LionelDraghi/bbt/tree/main/docs/examples
+
+Then run 
+```
+bbt create_template
+```
+This will create a `bbt_template.md` file, which is both a template and a quick reference card.  
+Note : bbt recognize it's own template and doesn't run it, so that you can keep it with your scenarios.
+
+A good example to start simple is given by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project : there is just a scenarios file called `tests.md`.
 
 ## Why should I use bbt?
 
@@ -184,7 +212,7 @@ To run a scenario : `bbt my_scenario.md`
 To run all the md files in the *tests* tree `bbt -r tests`  
 To run only a selection `bbt --select "Sanity check" tests`  
 
-bbt has no dependencies on external lib or tools (diff, for example) and can be run as is on major native platforms.  
+bbt has no dependencies on external lib or tools (diff, for example), and is tested on Linux, Darwin and Windows.  
 
 ### Ready to publish output 
 
@@ -224,5 +252,4 @@ Comments are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
 - [Project status](docs/project.md): changelog, tests, TDL...
 - [Command line help](docs/bbt_help.md)
 
-[^1]: More precisely, this is a subset of the existing [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin) format.  
-
+[^1]: More precisely, bbt comply (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 

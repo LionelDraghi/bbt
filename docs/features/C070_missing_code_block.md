@@ -1,6 +1,11 @@
+<!-- omit from toc -->
 ## Feature : missing or erroneous code blocks
 
 bbt try to put clear error messages related to missing code blocks, or to missing code block's marks.
+
+_Table of Contents:_
+- [Scenario: Code block missing at the end of the file](#scenario-code-block-missing-at-the-end-of-the-file)
+- [Scenario: closing code block mark missing](#scenario-closing-code-block-mark-missing)
 
 ## Scenario: Code block missing at the end of the file
 

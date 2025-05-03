@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature : The “successfully” shortcut
 
 `when I successfully run 'X'`
@@ -8,6 +9,11 @@ is a handy shortcut to :
 `Then I get no error`
 
 Credit : I don't know who invented this, but I borrowed the idea from [Aruba](https://github.com/cucumber/aruba/tree/main/features/).
+
+_Table of Contents:_
+- [Scenario : *when I successfully run* a command with successful run](#scenario--when-i-successfully-run-a-command-with-successful-run)
+- [Scenario : *when I successfully run* a command with a wrong command line, returns an error status](#scenario--when-i-successfully-run-a-command-with-a-wrong-command-line-returns-an-error-status)
+- [Scenario : *when I run* a command with a wrong command line](#scenario--when-i-run-a-command-with-a-wrong-command-line)
 
 ### Scenario : *when I successfully run* a command with successful run
 

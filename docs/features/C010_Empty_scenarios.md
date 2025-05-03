@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Empty scenarios
 
 A scenario without any step may be a work in progress, in which case this is not an error.
@@ -7,6 +8,10 @@ And we don't want that to be unnoticed, so :
 1. there is a specific "Empty tests" count in the output.
 2. When there is a scenario, it will be displayed like a fail scenario, with a non checked box.
 3. when there is no step **and** no scenario, there is a specific warning.
+
+_Table of Contents:_
+- [Scenario: No step test](#scenario-no-step-test)
+- [Scenario: No scenario in Feature](#scenario-no-scenario-in-feature)
 
 ### Scenario: No step test
 

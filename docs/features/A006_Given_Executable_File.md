@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature: running scripts (Unix_Only)
 
 btt is able to create a shell script, that will have the executable attributes thanks to the "executable" keyword. 
@@ -5,6 +6,11 @@ btt is able to create a shell script, that will have the executable attributes t
 This is a Unix only feature. On windows, the file should be suffixed .bat or .cmd, no need to chmod +x.
 
 And note that on Unix, without the +x you cannot run "./cmd.txt", but you still can run the script with ". ./cmd.txt" or "source cmd.txt".
+
+_Table of Contents:_
+- [Scenario: trying to run a script without the executable keyword should fail](#scenario-trying-to-run-a-script-without-the-executable-keyword-should-fail)
+  - [Notes on shebang : #!/bin/bash](#notes-on-shebang--binbash)
+- [Scenario: trying to run the same script created with the executable attribute should succeed](#scenario-trying-to-run-the-same-script-created-with-the-executable-attribute-should-succeed)
 
 ### Scenario: trying to run a script without the executable keyword should fail
 

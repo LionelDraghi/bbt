@@ -14,11 +14,12 @@ User Guide  <!-- omit from toc -->
   - [Blank lines and Case sensitivity and line order](#blank-lines-and-case-sensitivity-and-line-order)
   - [Execution](#execution)
 - [Tips](#tips)
+  - [Filtering, tags and Conditional execution](#filtering-tags-and-conditional-execution)
   - [Understanding what bbt doesn't understand](#understanding-what-bbt-doesnt-understand)
   - [Test in place](#test-in-place)
   - [Avoiding ambiguities](#avoiding-ambiguities)
   - [Command line examples](#command-line-examples)
-- [Makefile snippet](#makefile-snippet)
+  - [Makefile snippet](#makefile-snippet)
 
 ## Where to start
 
@@ -84,11 +85,15 @@ The selection is smart enough to auto-extend to parents and needed Background : 
 
 Examples :
 
-> bbt --exclude "For Windows only" tests
+```sh
+bbt --exclude "For Windows only" tests
+```
 
 Run all Scenarios/Steps/Features except those for Windows.
 
-> bbt list --Select "For Windows only" --exclude "@long_test" tests
+```sh
+bbt list --Select "For Windows only" --exclude "@long_test" tests
+```
 
 List scenarios for Windows, unless too long.
 
@@ -111,7 +116,9 @@ The title sounds kind of a provocation, it is not, unless you have other kind of
 
 When setting up a test, we often need to check that there is no pre-existing file or directory.  
 To avoid the burden of deleting those files in a Makefile or a script, bbt interprets a line like:
-> ``Given there is no `.config` file``
+```md
+- Given there is no `.config` file
+```
   
 as:
 *if there is, delete it*  
@@ -120,8 +127,10 @@ and offer to delete it, or even delete it automatically. To avoid any unwanted d
 #### using the negative form
 
 The two lines below looks very close:
-> ``Then  there is no `.config` file``  
-> ``Given there is no `.config` file``  
+```md
+- Then  there is no `.config` file  
+- Given there is no `.config` file  
+```
  
 But while in the "Then" step, bbt is supposed to check that there is no such file, in the "Given" step, it is supposed to make so that there is no such file.  
 This is why the default behavior is not the same:
@@ -140,16 +149,24 @@ Note that the usual `--yes` option is available, for batch run.
 When using the *there is no* form, the meaning is pretty obvious.
 
 But what is the expected behavior of the line  
-``Given the directory `dir1`,`` if dir1 exists?  
+```md
+- Given the directory `dir1`
+```
+if dir1 exists?  
 The intent of the user to erase the directory is less obvious.
 
 To avoid any unwanted recursive deletion, in that case bbt will create a `dir1` directory only if there is none.
 If the intent is to start from a white page and erase an existing homonym, the "new" keyword should be used.
 
 So, if you want to start with a possibly existing dir1, use:  
-``Given the directory `dir1` ``  
+```md
+- Given the directory `dir1`  
+```
 If you want to start with a brand new one whatever is the situation, use:  
-``Given the new directory `dir1` `` **and** confirm deletion when prompted, or use the `--yes` option.
+```md
+- Given the new directory `dir1`
+```
+**and** confirm deletion when prompted, or use the `--yes` option.
 
 > [!WARNING] 
 > Fixme: as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
@@ -188,12 +205,37 @@ As a special rule, two specific files will be ignored even if they are in the se
 
 ## Tips
 
+### Filtering, tags and Conditional execution 
+
+Due to different conventions for file paths between Unix and Windows, the same test may have `/home/username/Documents` as expected output on the first and `c:\users\username\documents` on the later.
+
+An example of such a tags use may be found in bbt own tests.  
+(Refer to [this scenario](features/B040_Find_scenarios.md) and the corresponding [Makefile](../tests/Makefile))
+
+Steps or Scenarios contains *Unix_Only* or *Windows_Only* accordingly :
+~~~md
+- Then the output is on Unix_Only    `dir1/scen1.md`
+- And  the output is on Windows_Only `dir1\scen1.md`
+~~~
+
+And then bbt is run with `--exclude Windows_Only` or `--exclude Unix_Only` depending on the platform.
+
+Actually, there is no notion of tag for bbt: whatever string in the header or step line may be used.
+For example, to run only the scenario *test_1*, just use the option `--select test_1`.  
+
+**Be careful not to use a string that is too general, as it could appear in other headers or steps.**
+
+Note that there is a smart selection of what is run : if *test_1*  depends on a background, it will be also run. 
+
 ### Understanding what bbt doesn't understand
 
 Error and warning messages provided by the lexer are not bullet proof.
 
 For example, if you forget backticks on dir1 in:  
-``- Given the directory dir1 ``  
+```md
+- Given the directory dir1
+```
+
 It won't tell you *didn't you forget to "code fence" dir1?*.  
 It will just say:  
 *Unrecognized step "Given the directory dir1"*
@@ -228,18 +270,20 @@ For example, if you have:
 ```
 
 the command could be:
-> cd tests  
-> bbt --output ../docs/test_run/results.md ../docs/features/*.md
+```sh
+cd tests  
+bbt --output ../docs/test_run/results.md ../docs/features/*.md
+```
 
 ### Avoiding ambiguities
 
 You can write
-```
-When run `my_command -r`
+```md
+- When run `my_command -r`
 ```
 or 
-```
-When I once more try to run something like `my_command -r`
+```md
+- When I once more try to run something like `my_command -r`
 ```
 
 but neither is recommended.  
@@ -252,15 +296,19 @@ More generally, this is specification, make short sentences and go straight to t
 
 ### Command line examples
 
-> bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
+```sh
+bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
+```
 
-  This example illustrates the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third one.
+This example illustrates the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third one.
 
-> bbt --yes tests/scenario.md 
+```sh
+bbt --yes tests/scenario.md 
+```
  
-  When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
+When your scenario is fine-tuned, use that option to avoid the interactive confirmation of every dir or file deleted or overwritten by the scenario.
 
-## Makefile snippet 
+### Makefile snippet 
 
 ~~~Makefile
 results.md : bin/sut tests/scenario.md

@@ -11,6 +11,7 @@ Note that this is not really tested here, as the globbing expansion is done by t
 > If search directories are specified, but no scenario file name given, bbt will consider every .md file found as a scenario.  
 > This behavior is subject to discussion, and could be modified in the future.  
 
+_Table of Contents:_
 - [Background:](#background)
 - [Scenario: no file or dir on the command line](#scenario-no-file-or-dir-on-the-command-line)
 - [Scenario: running all scenarios in dir1](#scenario-running-all-scenarios-in-dir1)

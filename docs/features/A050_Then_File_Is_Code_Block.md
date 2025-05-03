@@ -1,6 +1,11 @@
+<!-- omit from toc -->
 ## Feature: testing the "file is" feature
 
 Basic bbt feature : checking a file content.  
+
+_Table of Contents:_
+- [Scenario: file is as expected](#scenario-file-is-as-expected)
+- [Scenario: file is not as expected](#scenario-file-is-not-as-expected)
 
 ### Scenario: file is as expected
 

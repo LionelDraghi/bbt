@@ -1,7 +1,12 @@
+<!-- omit from toc -->
 ## Feature
 
 The only constraint (for now) for bbt scenario is that there should be at least one scenario.
 When there is none, it deserve a clear error message!
+
+_Table of Contents:_
+- [Scenario : Steps without scenario header](#scenario--steps-without-scenario-header)
+- [Scenario : Empty file](#scenario--empty-file)
 
 ### Scenario : Steps without scenario header
 - Given the file `No_Scenario.md`

@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature
 
 When running a command, bbt try to locate the first parameter. 
@@ -8,6 +9,12 @@ If not, we put explicit error "command not found".
 The return code is the one of the command if it could be run, error otherwise.
 
 When a command fails, bbt make it clear to the user if it was a spawn fail, that is bbt wasn't able to find or to run the command, or a command fail (that is the command returns an error code).
+
+_Table of Contents:_
+- [scenario: the command relative path is given](#scenario-the-command-relative-path-is-given)
+- [scenario: the command is in the PATH](#scenario-the-command-is-in-the-path)
+- [scenario: command not found](#scenario-command-not-found)
+- [scenario: the command is not executable (Unix\_Only)](#scenario-the-command-is-not-executable-unix_only)
 
 ### scenario: the command relative path is given
 - when i run `./bbt lf`

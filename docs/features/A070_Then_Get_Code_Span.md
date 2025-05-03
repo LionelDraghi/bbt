@@ -1,6 +1,11 @@
+<!-- omit from toc -->
 ## Feature : checking an expected multiline output
 
 Test an expected multi-lines output.
+
+_Table of Contents:_
+- [Scenario : asking for sut help](#scenario--asking-for-sut-help)
+- [Scenario : causing an sut error with a long explanation](#scenario--causing-an-sut-error-with-a-long-explanation)
 
 ### Scenario : asking for sut help
 

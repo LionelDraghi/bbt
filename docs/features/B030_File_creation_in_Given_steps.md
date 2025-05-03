@@ -14,6 +14,7 @@ If run in interactive mode, the expected behavior depends on the user answer :
 > This last case is not yet tested because bbt doesn't support for now prompt interaction. (Fixme:)  
 > Meaning that this test can not be run in a test suite.
 
+_Table of Contents:_
 - [Scenario : a required file does not exist](#scenario--a-required-file-does-not-exist)
 - [Scenario : the required file is created](#scenario--the-required-file-is-created)
 - [Scenario : "Given there is no", when there actually is, should erase the file](#scenario--given-there-is-no-when-there-actually-is-should-erase-the-file)

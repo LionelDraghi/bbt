@@ -11,6 +11,7 @@ The second fails.
 With `-k` the run will end with 1 fail test and 2 success.
 Without, the run ends with 1 fail, 1 success and 1 not run.
 
+_Table of Contents:_
 - [Scenario: with `-k`](#scenario-with--k)
 - [Scenario: without `-k`](#scenario-without--k)
 

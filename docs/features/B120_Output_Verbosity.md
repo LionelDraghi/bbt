@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Features : Output verbosity is controlled through command line options
 
 `bbt` has three verbosity levels : Quiet / Normal / Verbose 
@@ -17,6 +18,14 @@ Those levels are controlled with `--quiet` and `--verbose` options.
   There is a full summary.
 
 Errors are always output in verbose mode, meaning that you have the info on the failing step even in Quiet mode. 
+
+_Table of Contents:_
+- [Background:](#background)
+  - [Scenario: Quiet mode run](#scenario-quiet-mode-run)
+  - [Scenario: Default mode run](#scenario-default-mode-run)
+  - [Scenario: Verbose mode run](#scenario-verbose-mode-run)
+  - [Scenario: Normal mode with an error](#scenario-normal-mode-with-an-error)
+  - [Scenario: Quiet mode with an error](#scenario-quiet-mode-with-an-error)
 
 ## Background:
 

@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature: identifying expected output with regexp 
 
 You sometimes need to check the output not for an exact match, but for a pattern.  
@@ -7,6 +8,12 @@ bbt is using simple regexp (no posix subtleties for now).
 Note that the regexp should match the whole line :
 - to find `word` in a line you should use `.*word.*`
 - to find line ending with word, use `.*word`
+
+_Table of Contents:_
+- [scenario: version number match](#scenario-version-number-match)
+- [scenario: version number mismatch](#scenario-version-number-mismatch)
+- [Scenario: Test of "does not match"](#scenario-test-of-does-not-match)
+- [Scenario: Test of "does not match" that indeed matches](#scenario-test-of-does-not-match-that-indeed-matches)
 
 # scenario: version number match
 

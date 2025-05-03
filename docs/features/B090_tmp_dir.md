@@ -5,6 +5,7 @@ If you want to keep the .out file (log of the standard output during the run), u
 
 Fixme : --tmp_dir isn't a good name : should be something like --keep_out_file, and the -o option should be modified to accept full name (with dir).
 
+_Table of Contents:_
 - [Background](#background)
 - [Scenario: Current dir, no cleanup](#scenario-current-dir-no-cleanup)
 - [Scenario: Current dir, with cleanup](#scenario-current-dir-with-cleanup)

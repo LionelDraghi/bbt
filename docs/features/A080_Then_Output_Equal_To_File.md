@@ -1,7 +1,11 @@
+<!-- omit from toc -->
 ## Feature : output is equal to a file
 
 Expected results may be very long.  
 It's handy to be able to keep the expected output in an external file.  
+
+_Table of Contents:_
+- [Scenario : test `output is equal` keyword](#scenario--test-output-is-equal-keyword)
 
 ### Scenario : test `output is equal` keyword
 

@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Scenario: Detection of ambiguous use of multiple recognized verbs in the same Step
 
 

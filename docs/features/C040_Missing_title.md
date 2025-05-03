@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Scenario: Missing tittle in scenario, background and feature
 
 Titles are not mandatory for feature, background and scenario Header.

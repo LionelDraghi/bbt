@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Features : run results are output in Markdown format
 
 The output of bbt is using Markdown.  
@@ -9,6 +10,12 @@ Each step is a prefixed by OK or NOK.
 For each scenario, there is a summary line, with a bullet list item, using the [GFM Task list items extension](https://github.github.com/gfm/#task-list-items-extension-). If the test pass, the box is checked `[X]`, empty otherwise `[ ]`.    
 
 In error messages, outputs are put in code blocks to be easily identified (Refer to [Issue #9](https://github.com/LionelDraghi/bbt/issues/9)).
+
+_Table of Contents:_
+- [Background:](#background)
+  - [Scenario: default mode run](#scenario-default-mode-run)
+  - [Scenario: verbose mode run](#scenario-verbose-mode-run)
+  - [Scenario: run with an error](#scenario-run-with-an-error)
 
 ## Background:
 

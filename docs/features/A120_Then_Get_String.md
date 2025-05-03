@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature : checking a message line on stdout
 
 First thing to test, a single line message on standard output!

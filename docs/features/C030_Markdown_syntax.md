@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature: Tolerance to formatting variations
 
 bbt aims at being as tolerant as possible to formatting imprecisions, while still respecting [the CommonMark](https://spec.commonmark.org/) specification, and 
@@ -27,6 +28,10 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
    + "overview"
    + "1.1 : overview"
    + ""
+
+_Table of Contents:_
+- [Scenario: Heading variations](#scenario-heading-variations)
+- [Scenario: Missing heading marker](#scenario-missing-heading-marker)
   
 ### Scenario: Heading variations
 

@@ -5,6 +5,7 @@ bbt default behavior is to ignore blank lines.
 There is no keyword to change this setting right now, but there is command line option, --exact_match.
 Cf. to `bbt -h` for more details.
 
+_Table of Contents:_
 - [Background](#background)
 - [Scenario : some obvious tests](#scenario--some-obvious-tests)
 - [Scenario : default behavior, non sensible to blank lines](#scenario--default-behavior-non-sensible-to-blank-lines)

@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Features: Exact match versus Human match
 
 bbt default behavior is pretty unusual, because it ignores difference between expected and actual results in casing, white spaces and blank lines.
@@ -18,6 +19,13 @@ This test scenario is organized around :
 and a scenario that compare the ref file with the three other.
 
 This scenario is run with the various options.
+
+_Table of Contents_:
+- [Background:](#background)
+- [Scenario: Human match](#scenario-human-match)
+- [Scenario: exact match](#scenario-exact-match)
+- [Scenario: exact match except for casing](#scenario-exact-match-except-for-casing)
+- [Scenario: exact match except for casing and blank lines](#scenario-exact-match-except-for-casing-and-blank-lines)
 
 ### Background:
 

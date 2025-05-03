@@ -5,6 +5,7 @@ All "doesnt", "doesn't" and "do not" are accepted in
 "output doesn't contain" and  
 "file `x` doesn't contain". 
 
+_Table of Contents:_
 - [Background](#background)
 - [Scenario : Successful checks](#scenario--successful-checks)
 - [Scenario : Failed "output doesn't contain"](#scenario--failed-output-doesnt-contain)

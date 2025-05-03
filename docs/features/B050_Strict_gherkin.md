@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Feature : Strict Gherkin rules 
 
 Gherkin is typically used in a BDD context, where it is advised for example to:
@@ -15,11 +16,13 @@ By default, bbt is much more flexible than Gherkin, allowing to uses Steps in wh
 
 Never the less, a `--strict` option is provided that emit Warnings on (some) of those rules. 
 
+_Table of Contents:_
+- [Scenario : Multiple When in a scenario](#scenario--multiple-when-in-a-scenario)
 
 ### Scenario : Multiple When in a scenario
 
 - Given there is no file `tmp.txt`
-- Given the file `t1.md`
+- Given the file `t1.md` :
   ```
   # Scenario
   - When I run `./sut create tmp.txt`

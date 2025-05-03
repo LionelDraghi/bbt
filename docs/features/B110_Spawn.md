@@ -1,4 +1,9 @@
+<!-- omit from toc -->
 ## Feature: Command line to spawn processing
+
+_Table of Contents:_
+- [Scenario: Directory with space in the name (Unix\_Only)](#scenario-directory-with-space-in-the-name-unix_only)
+- [Scenario : Command with quoted arguments (Unix\_Only)](#scenario--command-with-quoted-arguments-unix_only)
 
 ### Scenario: Directory with space in the name (Unix_Only)
 

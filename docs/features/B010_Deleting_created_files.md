@@ -11,6 +11,7 @@ Obviously, bbt never removes (unless a bug!) files and dir present when you star
 > 1. files that he did create;
 > 2. directories that he did create, the whole tree, including files and subdirectories that he didn't create!
 
+_Table of Contents_:
 - [Background:](#background)
 - [Scenario: run without --cleanup](#scenario-run-without---cleanup)
 - [Scenario: run with --cleanup](#scenario-run-with---cleanup)

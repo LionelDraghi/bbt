@@ -1,8 +1,12 @@
+<!-- omit from toc -->
 ## Feature:
 
 bbt only recognize `-` as a step marker.  
 Meaning that I can use other Markdown list marker `*` or `+` in the middle of the steps to build lists.  
 I can even use `+ When`, it won't be recognized as a step.
+
+_Table of Contents:_
+- [Scenario:](#scenario)
 
 ### Scenario:
 - Given the file `step_markers.md`

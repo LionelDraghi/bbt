@@ -3,6 +3,7 @@
 
 No surprise, `contains` is the to keyword to use when checking that the output or a file contain a sequence of line.
 
+_Table of Contents:_
 - [Scenario: test the standard output](#scenario-test-the-standard-output)
 - [Scenario : compare with an existing file](#scenario--compare-with-an-existing-file)
 

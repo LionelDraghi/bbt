@@ -1,7 +1,12 @@
+<!-- omit from toc -->
 ## Feature : return code test
 
 Test the error code returned by an exe.  
 Most OSes (but not all) implement such a mechanism.
+
+_Table of Contents:_
+- [Scenario : NOK return code](#scenario--nok-return-code)
+- [Example : OK return code](#example--ok-return-code)
 
 ### Scenario : NOK return code
 

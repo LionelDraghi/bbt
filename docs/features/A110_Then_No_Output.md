@@ -1,6 +1,11 @@
+<!-- omit from toc -->
 ## Feature: Check that there is no output
 
 Checking that there is no output is sometime useful.
+
+_Table of Contents:_
+- [Scenario: silent operation](#scenario-silent-operation)
+- [Scenario: silent operation expected, but there is an output](#scenario-silent-operation-expected-but-there-is-an-output)
 
 ### Scenario: silent operation
 - Given the new file `file.txt` containing `text1`

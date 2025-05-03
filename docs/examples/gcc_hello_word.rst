@@ -20,6 +20,7 @@ More subtle:
   Apple clang version 12.0.0 (clang-1200.0.32.29)
 
 We can use a regexp to test both:
+
 - Then the output matches ``(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*``
 
 Scenario: compiling and executing an hello word
@@ -28,7 +29,6 @@ Scenario: compiling and executing an hello word
 Sanity check of a complete compile / link / run sequence :
 
 - Given the new file ``main.c``
-
 
 .. code-block:: c
 

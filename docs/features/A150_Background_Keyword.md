@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 ## Overview
 
 A Background is a special scenario, that may be used :
@@ -11,6 +12,16 @@ Note that in pure Gherkin (https://cucumber.io/docs/gherkin/reference/) :
 - The first primary keyword in a Gherkin document must always be Feature
 
 bbt has no such constraints : a bbt file may start with a Scenario keyword, without Feature, and a Background may appear before a Feature, and apply to several Features.
+
+_Table of Contents:_
+- [Background: Background1](#background-background1)
+- [Feature: Feature 1](#feature-feature-1)
+- [Background: Background2 in feature 1](#background-background2-in-feature-1)
+- [Scenario: lets erase what was created by previous background runs](#scenario-lets-erase-what-was-created-by-previous-background-runs)
+- [Scenario: Two Background executed](#scenario-two-background-executed)
+- [Feature: Feature 2](#feature-feature-2)
+- [Scenario: lets erase once more what was created by previous background runs](#scenario-lets-erase-once-more-what-was-created-by-previous-background-runs)
+- [Scenario: only first background should apply](#scenario-only-first-background-should-apply)
 
 
 ### Background: Background1 

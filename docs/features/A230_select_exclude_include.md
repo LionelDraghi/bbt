@@ -26,6 +26,7 @@ Important Note : there is no filtering on the lines before header, meaning that 
 The following Scenarios are based on two files containing several scenarios and tags.  
 To facilitate understanding, tags are prefixed here in the usual way, with '@'.
 
+_Table of Contents_:
 - [Background: Lets cleanup the place](#background-lets-cleanup-the-place)
 - [Scenario: no filtering](#scenario-no-filtering)
 - [Scenario: step filtering](#scenario-step-filtering)
@@ -52,33 +53,35 @@ To facilitate understanding, tags are prefixed here in the usual way, with '@'.
 - When I run `./sut append Windows output.txt`
 ~~~
 
-- When I run `./bbt filtered_step.md`
-  Both steps are run
-
+- When I run `./bbt filtered_step.md`  
 - Then file `output.txt` is
 ```
 Linux
 Windows
 ```
 
+Because both steps are run
+
+
 ### Scenario: step filtering
 
-- When I run `./bbt --exclude Windows filtered_step.md`
-  Only the create and Linux Steps are run
-
+- When I run `./bbt --exclude Windows filtered_step.md`  
 - Then file `output.txt` is
 ```
 Linux
 ```
 
+Because only the create and Linux Steps are run
+
 ### Scenario: step selection
 
-- When I run `./bbt --select create filtered_step.md`
-  Only the create step is executed, so the output file should be empty
-
+- When I run `./bbt --select create filtered_step.md`  
 - Then file `output.txt` contains
 ~~~
 ~~~
+
+Because only the create step is executed, so the output file should be empty
+
 
 ### Scenario: Selecting a scenario
 
@@ -90,15 +93,16 @@ Linux
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --select Robustness filtered_step.md robustness.md`
-  Only the scenario in the second file is executed
-
+- When I run `./bbt --select Robustness filtered_step.md robustness.md`  
 - Then there is no file `output.txt`
 - And `output2.txt` is
 ~~~
 Linux
 Windows
 ~~~
+
+Because  only the scenario in the second file is executed
+
 
 ### Scenario: selection is empty
 
@@ -110,11 +114,12 @@ Windows
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --select xzscskfjhs filtered_step.md robustness.md`
-  Nothing should be executed
-
+- When I run `./bbt --select xzscskfjhs filtered_step.md robustness.md`  
 - Then there is no file `output.txt`
 - And  there is no file `output2.txt`
+
+Because nothing should be executed
+
 
 ### Scenario: Selecting a Background only
 
@@ -131,11 +136,12 @@ new file
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --select new_file background.md`
-  As no scenario is going to invoke the Background scenario, it is not run
-
+- When I run `./bbt --select new_file background.md`  
 - Then there is no file `input.txt`
 - And  there is no file `output2.txt`
+
+Because no scenario is going to invoke the Background scenario.
+
 
 ### Scenario: Select followed by an exclude
 
@@ -164,13 +170,14 @@ Windows
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --exclude Sanity --include create --include Linux robustness.md`
-Only the creation should be run
-
+- When I run `./bbt --exclude Sanity --include create --include Linux robustness.md`  
 - Then `output2.txt` is
 ~~~
 Linux
 ~~~
+
+Because only the creation should be run
+
 
 ### Scenario: Exclude by file name
 
@@ -182,7 +189,8 @@ Linux
 - When I run `./sut append Windows output2.txt`
 ~~~
 
-- When I run `./bbt --exclude robustness.md robustness.md`
-Nothing is run
-
+- When I run `./bbt --exclude robustness.md robustness.md`  
 - Then there is no `output2.txt` file
+
+Because nothing is run
+

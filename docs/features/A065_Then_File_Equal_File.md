@@ -1,7 +1,13 @@
+<!-- omit from toc -->
 ## Feature : file is equal to a file
 
 Expected results may be very long.  
 It's handy to be able to keep the expected output in an external file.  
+
+_Table of Contents:_
+- [Scenario : test `is equal to file` form](#scenario--test-is-equal-to-file-form)
+- [Scenario : test `is equal to file` when files are *not* equal](#scenario--test-is-equal-to-file-when-files-are-not-equal)
+- [Scenario : test the negative form `is not equal to file`](#scenario--test-the-negative-form-is-not-equal-to-file)
 
 ### Scenario : test `is equal to file` form
 

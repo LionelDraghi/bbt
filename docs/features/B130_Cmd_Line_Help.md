@@ -1,6 +1,14 @@
+<!-- omit from toc -->
 ## Feature: Clear command line help 
 
 bbt goal to have an almost zero effort learning curve rely on a clear command line help.
+
+_Table of Contents:_
+- [Scenario: calling bbt without parameter or with -h put the normal help](#scenario-calling-bbt-without-parameter-or-with--h-put-the-normal-help)
+- [Scenario: filtering help](#scenario-filtering-help)
+- [Scenario: matching help](#scenario-matching-help)
+- [Scenario: others help](#scenario-others-help)
+- [Scenario: On\_All help](#scenario-on_all-help)
 
 ### Background:
 - Given the file `base_help.txt` 
