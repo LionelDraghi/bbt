@@ -52,6 +52,6 @@ private package BBT.Scenarios is
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       A      :        Line_Attributes);
-   -- To be moved as dispatching in Writers
+   -- Fixme: To be moved as dispatching in Writers
 
 end BBT.Scenarios;

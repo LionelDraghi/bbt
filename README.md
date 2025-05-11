@@ -130,13 +130,14 @@ And this is what gives the ability to write steps in almost natural language.
 
 [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available on Windows, Linux and Darwin thanks to the Alire package manager:
 
-1. Install Alire : [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/alire-badge.json)](https://alire.ada.dev/)
+1. Install [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/alire-badge.json)](https://alire.ada.dev/)
 
-2. Run :
+2. Install bbt :
+   
    ```sh
    alr install bbt
    ```
-   The exe will be moved in ~/.alire/bin.  
+   The exe should be in ~/.alire/bin.  
    
    Alternatively, you may choose another installation directory with:
    ```sh
