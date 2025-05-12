@@ -9,25 +9,46 @@ class:
 - noinvert
 - lead
 footer: "bbt AEiC 2025 - Ada Developers Workshop - 13 june 2025"
-header: "[Introduction to bbt](https://github.com/LionelDraghi/bbt)"
+header: "[Introduction to bbt](https://github.com/LionelDraghi/bbt) ---- [part 1](#current-state) | [Part 2](#example-of-ambiguity-detected-by-bbt)"
 transition: fade
 
+style: |
+   section {padding: auto;}
+   .small-text {font-size: 0.75rem;}
+   .center {text-align: center;}
+   h1 {text-align: center;
+       font-size: 2rem;}
+   h2 {font-size: 1.5rem;}
 ---
+
 <!-- color: navy -->
+# Using natural language for test specification, is that really wise:question:
+# <div class="center"></div>
+# An introduction to bbt
+
+
+---
+
+## Part 1 : [Introduction to bbt](#please-install-bbt-now)
+####  Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
+####  Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)
+
+---
+
+
 # Introduction to bbt
 
 ---
-
-# Install bbt now 
+## Please install bbt now! 
 
 (We will use it during the presentation) 
 
-- Stable version :arrow_right:
+- Stable version
   ~~~sh
   alr install bbt
   ~~~
 
-- Latest version, AppImage :arrow_right: 
+- Latest version, AppImage
 https://github.com/LionelDraghi/bbt#installation
 
 <!-- 
@@ -36,43 +57,43 @@ https://github.com/LionelDraghi/bbt#installation
 -->
 
 ---
-# Whoami
+## Whoami
 
 ### Lionel Draghi
 
 <small>
 
-- 15 years as Ada software dev
+- 15 years as Ada software developper
 - Retired from software dev in 2007
-- Author of brilliant softwares that no one uses: Archicheck (acc), smk
-- Author of bbt, not yet released from quantum indeterminacy (useful or useless?)
-![bg right:40% w:500](rpl_example.png)
+- Author of softwares that no one uses: Archicheck, smk
+  (https://github.com/LionelDraghi)
+- And author of bbt, which, by comparison, made a thunderous debut with 3 contributors and the Ada Crate of the Year award!
 
-:arrow_right: https://github.com/LionelDraghi
-https://www.printables.com/@LionelDraghi_1580331/models
-https://www.lairdubois.fr/@lioneldraghi
-
+![bg right:40% 80%](portrait.jpg)
 </small>
 
 <!-- 
-While some of you are installing bbt, the least important part of the presentation
+While you install the software, I'll continue with the least important part of the presentation
+I used to be a senior software developer, I am now much more a senior than a software developper.
 -->
 
 ---
-# What is bbt?
-`bbt` is a tool to 
-- describe command line apps behavior
-- and check that the app comply with that behavior
 
-Typical use case : Apps reading some input, and writing some output...
-That is, a **vast majority of command line apps!**
+## What is bbt?
+* `bbt` is a dead-simple tool to test your command line apps.
+
+* From an external point of view, it looks like `bbt` is executing the test documentation
+
+* Typical use case : Apps reading some input, and writing some output...
+  That is, a **vast majority of command line apps and utilities!**
 
 <!-- 
 To get it more concrete, I propose to make a first demo.
 -->
 
 ---
-# Live demo
+
+# Live demo - Getting started
 
 <!-- 
 1. check that bbt is in your PATH
@@ -81,7 +102,18 @@ To get it more concrete, I propose to make a first demo.
 -->
 
 ---
-# Demo 2: let's "run" a User Guide 
+
+## <!-- fit --> What is a "bbt document"?
+1) A normal markdown file
+2) Embedding Gherkin descriptions using the MDG (Markdown in Gherkin) format
+3) With steps written in english 
+   :arrow_right: **this is where the magic is**
+
+![bg right:50% 110%](rpl_example.png)
+
+---
+
+# <!-- fit --> Live demo 2 - L   et's create a runnable User Guide 
 <!-- 
 - Let's ask to some LLM :
 > could you write a simple user guide for the rpl utility (string replace), with some use examples, in markdown, with a toc, some table and a mermaid diagram?
@@ -92,14 +124,270 @@ To get it more concrete, I propose to make a first demo.
 - run du test !
 -->
 
----
-# <!-- fit --> What is a "bbt document"?
-1) A normal markdown file
-2) Embedding Gherkin descriptions using the MDG (Markdown in Gherkin) format
-3) With steps written in english :arrow_left: **this is where the magic is**
-![bg right:50% w:600](rpl_example.png)
 
 ---
+
+# <!-- fit --> bbt Give back to documentation its rightful importance! 
+
+And then just 
+
+# #runthedoc
+
+---
+
+#### Part 1 : [Introduction to bbt](#please-install-bbt-now)
+##   Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
+#### Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)
+
+
+---
+## A word on Shallow parsing (aka Partial parsing)
+
+In the NLP field, **Shallow parsing**, also known as **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
+- deep parsing and understanding is not always needed (or even possible)
+- shallow parsing is simpler and faster, but possibly ambiguous and not precise
+
+---
+## <!-- fit --> Shallow parsing is based on word spotting
+
+![bg right:40% w:500](44129332940.jpg)
+
+<small> 
+
+Example: *Eliza* (1966), the famous psychotherapist emulator
+
+* The logic behind may be as simple as
+  ~~~Ada
+  if Answer.Contains ("you") then
+     Ask ("You're not really talking about me, are you?");
+
+  elsif Answer.Start_With ("no") then
+     Ask ("Why not?");
+  ...
+
+  else
+     Ask ("I see.");
+  ~~~
+* But it can still be very wise
+  ~~~Ada
+  elsif Answer.Contains ("rust") then   
+     Ask ("What's your problem with Ada???");
+  ~~~
+
+</small>
+
+---
+
+## bbt simplified implementation (1/3)
+
+<small> 
+
+**Consider the step :**
+~~~md
+- Given there is no existing `.config` file
+~~~
+
+1) **Tokenization**
+   Given | there | is | no | existing | `` `.config` `` | file
+   ------|-------|----|----|----------|-----------------|-----
+   keyword|*ignored*|keyword|keyword|*ignored*|parameter|keyword
+
+2) No real **Part_Of_Speech tagging**  
+But verbs have a special role : **is, run, contains, get, matches...**
+Nouns : **file, directory, output, error...**
+Adjectives or determiners : **new, no, not...** 
+
+</small>
+
+<!-- 
+1. the no need for Part of Speech Tagging. In the code, there are subtypes of the token enums named adjectives, preposition, etc. 
+But actually The only phrase that need to be identify is the verb phrase
+2. And that's because of the chunking
+-->
+
+---
+## bbt simplified implementation (2/3)
+
+<small> 
+
+3) **Chunking** 
+Very simple in bbt, always the same chunks in the same order: 
+before the verb, it's the subject chunk, after the verb it's the object chunk.
+
+
+   Chunk: | Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
+   -------|-------------|----------------|---------------------|-------------|---------------|--------------------
+   Token: | *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
+
+</small>
+
+<!-- 
+Parameters, between backticks in Markdown, are easy to identify (`` `.config` ``)
+For french people, beware of the false friend : verb phrase means groupe verbal 
+-->
+
+---
+## bbt simplified implementation (3/3)
+
+<small> 
+
+4) **Grammar** 
+   The Grammar is a table of actions indexed by (preposition, Subject, Verb, Object...)
+   
+   For example here : 
+   ~~~Ada
+   Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_No_File; 
+   ~~~
+   Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
+   
+1) The Action and the parameters are stored in a Tree that represent a bbt document (that is a list of features containing a list of scenarios, etc.) 
+   ~~~Ada
+   Setup_No_File (Subject_Param => "", Object_Param => ".config");
+   ~~~
+
+</small>
+
+<!-- 
+-->
+
+---
+## Current State
+- Token : less than 40
+- Grammar definition : about 50 lines 
+- 640 SLOC of code for lexing and parsing 
+
+Not at all a code I am proud of yet (could be easier to read and more robust), but it is able to "understand" sentences like :
+~~~
+- Then the resulting `log.txt` file does not contain any `Error:`
+~~~
+
+---
+
+#### Part 1 : [Introduction to bbt](#please-install-bbt-now)
+#### Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
+##   Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt )
+
+---
+## Example of Ambiguity detected by bbt
+
+~~~md
+- given there is no `config` file in the current directory
+~~~
+:bomb: In the Object chunk, there is both `file` and `directory` keywords...
+
+
+~~~md
+- then the output contains what is in the file `simple.ads`. 
+~~~
+:bomb: two verbs `contains` and `is`...
+
+### May be detected because both word are in bbt's vocabulary
+
+<!-- 
+-->
+
+---
+## Worst case example : bbt understand the opposite of what is said
+
+~~~md
+- then the output never contains `Error`
+~~~
+
+:bomb: `never` is not a keyword, this will indeed check that the output contains `error`
+
+### Can't be detected because one of the word is ignored by bbt
+
+<!-- 
+-->
+
+---
+
+## In practice, error are very unlikely
+
+* At test creation, it means that you didn't check the real output
+* If the test exists and is OK, this is a "only" a documentation problem
+
+<!-- 
+-->
+
+---
+# <!-- fit --> Not a problem in real life, if you stick to usual good specification practices 
+
+* Be clear and concise
+- Avoid double negation
+- Be consistent, don't innovate on formulations (yes, **repeat yourself**! :smile:)
+- etc.
+* Put complex comments on separate lines, not in the steps
+* Uses `bbt explain` in case of doubt
+
+:pen:
+
+<!-- 
+-->
+
+---
+
+### Many thanks to the early contributor
+
+- Paul   (https://github.com/pyjarrett)
+- Manuel (https://github.com/mgrojo/coap_spark)
+- Simon  (https://github.com/simonjwright/ada_caser)
+
+### Many thanks to AdaCore for awarding bbt Crate of the word 2024
+
+##### Slides made with marp https://marp.app/
+
+<!-- 
+-->
+
+---
+# <!-- fit --> Q & MA
+# (Questions and Maybe Answers)
+
+---
+# Annexes
+
+
+
+
+---
+# <!-- fit --> tres tres tres tres tres tres tres long long long titre 
+# <!-- fit --> Gros titre
+# Gros titre (sans "fit")
+![bg right:50% w:600](bbt/docs/rpl_example.png)
+<!-- _backgroundColor: palegreen -->
+<!-- _color: navy -->
+
+<!-- 
+-->
+
+---
+# Difference between Gherkin and bbt 1/2
+
+<small>
+
+Gherkin | bbt
+------|-----
+One feature per file | Zero, one or more feature per file. The only constraint : there should be at least one scenario 
+Max one background per feature, apply to every scenario | Idem, and also a background per document (apply to each feature) ==> meaning that there may be two background per scenario    
+Tags apply to feature, scenario and background | Tags apply also to steps
+Tags have the "@tag" syntax, and must be provided on the line before | Tags are whatever string, and must be in the feature/scenario/step/etc. line  
+
+</small>
+
+---
+# Difference between Gherkin and bbt 2/2
+
+<small>
+
+BDD | Test use 
+------|-----
+A scenario should focus on a single behavior, and so multiple *when* should be avoided | A non regression test should make explicit the chain of user action leading to the problem, and so there will be a sequence of *when* 
+Sequence of *when*/*then*/*when*/*then* should be split in several scenarios| See above
+
+</small>
+
+# Short version : bbt is more flexible
 
 # <!-- fit --> Where does bbt come from?  
 
@@ -160,238 +448,4 @@ This utility produce a nice Markdown file, but the content has no more velue tha
 In one word 
 
 # <!-- fit --> bbt Make Documentation Great Again! 
-
----
-
-OK, let's retry: 
-
-# <!-- fit --> bbt Give back to documentation its rightful importance! 
-
-And then just 
-
-# #runthedoc
-
----
-# A word on Shallow parsing (aka Partial parsing)
-
-In the NLP field, **Shallow parsing**, also known as **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
-- deep parsing and understanding is not always needed (or even possible)
-- shallow parsing is simpler and faster, but possibly ambiguous and not precise
-
----
-# <!-- fit --> Shallow parsing is based on word spotting
-
-![bg right:40% w:500](44129332940.jpg)
-
-<small> 
-
-Example: *Eliza* (1966), the famous psychotherapist emulator
-
-* The logic behind may be as simple as
-  ~~~Ada
-  if Answer.Contains ("you") then
-     Ask ("You're not really talking about me, are you?");
-
-  elsif Answer.Start_With ("no") then
-     Ask ("Why not?");
-  ...
-
-  else
-     Ask ("I see.");
-  ~~~
-* But it can still be very wise
-  ~~~Ada
-  elsif Answer.Contains ("rust") then   
-     Ask ("What's your problem with Ada???");
-  ~~~
-
-</small>
-
----
-# bbt simplified implementation (1/3)
-
-<small> 
-
-**Consider the step :**
-~~~md
-- Given there is no existing `.config` file
-~~~
-
-1) **Tokenization**
-   Given | there | is | no | existing | `` `.config` `` | file
-   ------|-------|----|----|----------|-----------------|-----
-   keyword|*ignored*|keyword|keyword|*ignored*|parameter|keyword
-
-2) No real **Part_Of_Speech tagging**  
-But verbs have a special role : **is, run, contains, get, matches...**
-Nouns : **file, directory, output, error...**
-Adjectives or determiners : **new, no, not...** 
-
-</small>
-
-<!-- 
-1. the no need for Part of Speech Tagging. In the code, there are subtypes of the token enums named adjectives, preposition, etc. 
-But actually The only phrase that need to be identify is the verb phrase
-2. And that's because of the chunking
--->
-
----
-# bbt simplified implementation (2/3)
-
-<small> 
-
-3) **Chunking** 
-Very simple in bbt, always the same chunks in the same order: 
-before the verb, it's the subject chunk, after the verb it's the object chunk.
-
-
-   Chunk: | Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
-   -------|-------------|----------------|---------------------|-------------|---------------|--------------------
-   Token: | *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
-
-</small>
-
-<!-- 
-Parameters, between backticks in Markdown, are easy to identify (`` `.config` ``)
-For french people, beware of the false friend : verb phrase means groupe verbal 
--->
-
----
-# bbt simplified implementation (3/3)
-
-<small> 
-
-4) **Grammar** 
-   The Grammar is a table of actions indexed by (preposition, Subject, Verb, Object...)
-   
-   For example here : 
-   ~~~Ada
-   Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_No_File; 
-   ~~~
-   Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
-   
-1) The Action and the parameters are stored in a Tree that represent a bbt document (that is a list of features containing a list of scenarios, etc.) 
-   ~~~Ada
-   Setup_No_File (Subject_Param => "", Object_Param => ".config");
-   ~~~
-
-</small>
-
-<!-- 
--->
-
----
-# Current State
-- Token : less than 40
-- Grammar definition : about 50 lines 
-- 640 SLOC of code for lexing and parsing 
-
-Not at all a code I am proud of yet (could be easier to read and more robust), but it is able to "understand" sentences like :
-~~~
-- Then the resulting `log.txt` file does not contain any `Error:`
-~~~
-
----
-# Example of Ambiguity detected by bbt
-
-~~~md
-- given there is no `config` file in the current directory
-~~~
-
-:bomb: In the Object chunk, there is both `file` and `directory` keywords...
-
-~~~md
-- then the output contains what is in the file `simple.ads`. 
-~~~
-
-:bomb: two verbs `contains` and `is`...
-
-<!-- 
--->
-
----
-# <!-- fit --> Worst case example : bbt understand the opposite of what is said
-
-~~~md
-- then the output never contains `Error`
-~~~
-
-:bomb: `never` is not a keyword, this will indeed check that the output contains `error`
-
-<!-- 
--->
-
----
-# <!-- fit --> Not a problem in real life, if you stick to usual good specification practices 
-
-- Be clear and concise
-- Avoid double negation
-- Be consistent, don't innovate on formulations (yes, **repeat yourself**! :smile:)
-- etc.
-- And put complex comments on separate lines, not in the steps
-
-:pen:
-
-<!-- 
--->
-
----
-### Many thanks to the early contributor
-
-- Paul   (https://github.com/pyjarrett)
-- Manuel (https://github.com/mgrojo/coap_spark)
-- Simon  (https://github.com/simonjwright/ada_caser)
-
-### Many thanks to AdaCore for awarding bbt Crate of the word 2024
-
-##### Slides made with marp https://marp.app/
-
-<!-- 
--->
-
----
-# <!-- fit --> Q & MA
-# (Questions and Maybe Answers)
-
-
-
-
----
-# <!-- fit --> tres tres tres tres tres tres tres long long long titre 
-# <!-- fit --> Gros titre
-# Gros titre (sans "fit")
-![bg right:50% w:600](bbt/docs/rpl_example.png)
-<!-- _backgroundColor: palegreen -->
-<!-- _color: navy -->
-
-<!-- 
--->
-
----
-# Difference between Gherkin and bbt 1/2
-
-<small>
-
-Gherkin | bbt
-------|-----
-One feature per file | Zero, one or more feature per file. The only constraint : there should be at least one scenario 
-Max one background per feature, apply to every scenario | Idem, and also a background per document (apply to each feature) ==> meaning that there may be two background per scenario    
-Tags apply to feature, scenario and background | Tags apply also to steps
-Tags have the "@tag" syntax, and must be provided on the line before | Tags are whatever string, and must be in the feature/scenario/step/etc. line  
-
-</small>
-
----
-# Difference between Gherkin and bbt 2/2
-
-<small>
-
-BDD | Test use 
-------|-----
-A scenario should focus on a single behavior, and so multiple *when* should be avoided | A non regression test should make explicit the chain of user action leading to the problem, and so there will be a sequence of *when* 
-Sequence of *when*/*then*/*when*/*then* should be split in several scenarios| See above
-
-</small>
-
-# Short version : bbt is more flexible
 
