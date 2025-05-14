@@ -11,19 +11,22 @@ class:
 footer: "bbt AEiC 2025 - Ada Developers Workshop - 13 june 2025"
 header: "[Introduction to bbt](https://github.com/LionelDraghi/bbt) ---- [part 1](#current-state) | [Part 2](#example-of-ambiguity-detected-by-bbt)"
 transition: fade
-
 style: |
    section {padding: auto;}
    .small-text {font-size: 0.75rem;}
    .center {text-align: center;}
+   .flex-container {display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    height: 100%;}
    h1 {text-align: center;
        font-size: 2rem;}
    h2 {font-size: 1.5rem;}
 ---
 
 <!-- color: navy -->
-# Using natural language for test specification, is that really wise:question:
-# <div class="center"></div>
+# Using natural language for test specification, is that really wise?
+# <div></div>
 # An introduction to bbt
 
 
@@ -52,8 +55,6 @@ style: |
 https://github.com/LionelDraghi/bbt#installation
 
 <!-- 
-1. test first is not about test
-2. Lazy : for example writing a test doc that repeats what's in the specification or in the user guide, or writing test scripts that repeats what's in the test plan, or writing comments in the that repeat things that are elsewhere.
 -->
 
 ---
@@ -75,17 +76,22 @@ https://github.com/LionelDraghi/bbt#installation
 <!-- 
 While you install the software, I'll continue with the least important part of the presentation
 I used to be a senior software developer, I am now much more a senior than a software developper.
+I am the author of those brilliant and useless software, whose merit will have been to give rise to BBT.
+Will bbt be another tombstone in the middle of the giant software graveyard that is GitHub?
 -->
 
 ---
 
 ## What is bbt?
-* `bbt` is a dead-simple tool to test your command line apps.
 
-* From an external point of view, it looks like `bbt` is executing the test documentation
+* `bbt` is a dead-simple tool to test your command line apps
 
 * Typical use case : Apps reading some input, and writing some output...
-  That is, a **vast majority of command line apps and utilities!**
+  It's not suitable for all cases, but who has never had to test an app of this type?
+
+* `bbt` uses a markdown description of the expected behavior, within a Gherkin framework, fully in natural language **including the steps** 
+
+* From a practical point of view, you really run the doc : `bbt my_spec.md`
 
 <!-- 
 To get it more concrete, I propose to make a first demo.
@@ -98,25 +104,36 @@ To get it more concrete, I propose to make a first demo.
 <!-- 
 1. check that bbt is in your PATH
 1. creation d'un repertoire + fichier demo.md
-2. creation test git --version
+1. lancer bbt avant qu'il y ait un scenario
+1. lancer bbt avant qu'il y ait un step
+1. creation test grep -i Rose flower.list
 -->
 
 ---
 
-## <!-- fit --> What is a "bbt document"?
-1) A normal markdown file
-2) Embedding Gherkin descriptions using the MDG (Markdown in Gherkin) format
-3) With steps written in english 
-   :arrow_right: **this is where the magic is**
+## Let's make documentation great again!  
 
-![bg right:50% 110%](rpl_example.png)
+# <div></div>
+
+* **Put things in the right order**
+  If the doc is the source of truth, then tests should come from it, not the other way round.
+    
+# <div></div>
+
+* **Whatever the documentation**, specifications, acceptance test, user guide, readme file... They are all valid source of truth. 
+
+
+<!-- 
+Part of the truth is in the User Guide, part is in the sources comments, part is in the tests definition, etc. Truth is a distributed system!
+If it's true for litterate programming, it's also true for testing.
+-->
 
 ---
 
-# <!-- fit --> Live demo 2 - L   et's create a runnable User Guide 
+# <!-- fit --> Live demo 2 - Let's create a runnable User Guide 
 <!-- 
 - Let's ask to some LLM :
-> could you write a simple user guide for the rpl utility (string replace), with some use examples, in markdown, with a toc, some table and a mermaid diagram?
+> could you write a simple user guide for the rpl utility (string replace), with some use examples, in Markdown, with a toc, some table and a mermaid diagram?
 - [backup file](./rpl_ug.md)
 - paste dans vscode, vision en markdown
 - run avec bbt, ne doit rien faire
@@ -126,10 +143,6 @@ To get it more concrete, I propose to make a first demo.
 
 
 ---
-
-# <!-- fit --> bbt Give back to documentation its rightful importance! 
-
-And then just 
 
 # #runthedoc
 
@@ -143,7 +156,7 @@ And then just
 ---
 ## A word on Shallow parsing (aka Partial parsing)
 
-In the NLP field, **Shallow parsing**, also known as **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
+In the NLP field, **Shallow parsing**, also known as **partial parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
 - deep parsing and understanding is not always needed (or even possible)
 - shallow parsing is simpler and faster, but possibly ambiguous and not precise
 
@@ -168,34 +181,59 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
   else
      Ask ("I see.");
   ~~~
-* But it can still be very wise
+* But nevetheless very wise
   ~~~Ada
   elsif Answer.Contains ("rust") then   
-     Ask ("What's your problem with Ada???");
+     Ask ("What's your problem with Ada?");
   ~~~
 
 </small>
 
 ---
 
-## bbt simplified implementation (1/3)
+## bbt is a simple application case for partial parsing
+
+<small> 
+
+**Consider the steps :**
+~~~gherkin
+- Given   there                is no      existing `.config` file
+- When    I                    run        `my_app --init` 
+- Then    there                is         a `.config` file
+- And     the file `.config`   contains   `autosave = true`
+~~~
+
+* All sentences have the same simple structure, in the same order
+  **preposition + subject phrase + verb phrase + object phrase**
+
+* The Markdown syntax is helping : no need for NER (Named Entity Recognition), parameters are between backtick, no possible confusion with keywords
+
+* Very small vocabulary: about 20 keywords to build all the possible sentences
+
+* And sentences are very repetivite! 
+
+</small>
+
+<!-- 
+-->
+---
+
+## bbt implementation (1/4) : Tokenization
 
 <small> 
 
 **Consider the step :**
-~~~md
+~~~gherkin
 - Given there is no existing `.config` file
 ~~~
 
-1) **Tokenization**
-   Given | there | is | no | existing | `` `.config` `` | file
-   ------|-------|----|----|----------|-----------------|-----
-   keyword|*ignored*|keyword|keyword|*ignored*|parameter|keyword
+# <div></div>
 
-2) No real **Part_Of_Speech tagging**  
-But verbs have a special role : **is, run, contains, get, matches...**
-Nouns : **file, directory, output, error...**
-Adjectives or determiners : **new, no, not...** 
+**Tokenization**
+
+   Given  |  there  | is    | no    | existing | `` `.config` `` | file
+   -------|---------|-------|-------|----------|-----------------|-----
+   keyword|*ignored*|keyword|keyword|*ignored* |parameter      |keyword
 
 </small>
 
@@ -206,18 +244,19 @@ But actually The only phrase that need to be identify is the verb phrase
 -->
 
 ---
-## bbt simplified implementation (2/3)
+
+## bbt implementation (2/4) : Chunking
 
 <small> 
 
-3) **Chunking** 
-Very simple in bbt, always the same chunks in the same order: 
-before the verb, it's the subject chunk, after the verb it's the object chunk.
+Before the verb, it's the subject chunk, after the verb it's the object chunk.
+And if it's a Markdown code span (or a code block), it's a parameter.
 
+# <div></div>
 
-   Chunk: | Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
-   -------|-------------|----------------|---------------------|-------------|---------------|--------------------
-   Token: | *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
+Chunk: | Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
+-------|-------------|----------------|---------------------|-------------|---------------|--------------------
+Token: | *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
 
 </small>
 
@@ -227,23 +266,42 @@ For french people, beware of the false friend : verb phrase means groupe verbal
 -->
 
 ---
-## bbt simplified implementation (3/3)
+## bbt implementation (3/4) : Grammar
 
 <small> 
 
-4) **Grammar** 
-   The Grammar is a table of actions indexed by (preposition, Subject, Verb, Object...)
+The Grammar is a table of actions indexed by (preposition, Subject, Verb, Object...)
    
-   For example here : 
-   ~~~Ada
-   Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_No_File; 
-   ~~~
-   Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
-   
-1) The Action and the parameters are stored in a Tree that represent a bbt document (that is a list of features containing a list of scenarios, etc.) 
-   ~~~Ada
-   Setup_No_File (Subject_Param => "", Object_Param => ".config");
-   ~~~
+For example here : 
+~~~Ada
+Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_No_File; 
+~~~
+
+# <div></div>
+
+Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
+
+</small>
+
+<!-- 
+-->
+
+---
+## bbt implementation (4/4) : Actions
+
+<small> 
+
+* The action and the parameters are stored in a Tree that represent a bbt document (that is a list of features containing a list of scenarios, containing etc.) 
+
+* When all documents are parsed, a runner walk through and run actions in sequence.
+  For that precise step:
+  ~~~Ada
+  Setup_No_File (Subject_Param => "", Object_Param => ".config");
+  ~~~
+
+# <div></div>
+
+Note: there is a dry run mode `bbt ex` (or `bbt explain`)
 
 </small>
 
@@ -256,7 +314,11 @@ For french people, beware of the false friend : verb phrase means groupe verbal
 - Grammar definition : about 50 lines 
 - 640 SLOC of code for lexing and parsing 
 
-Not at all a code I am proud of yet (could be easier to read and more robust), but it is able to "understand" sentences like :
+# <div></div>
+
+Not at all a code I am proud of yet (could be easier to read and more robust)
+
+But it is able to "understand" sentences like:
 ~~~
 - Then the resulting `log.txt` file does not contain any `Error:`
 ~~~
@@ -270,16 +332,19 @@ Not at all a code I am proud of yet (could be easier to read and more robust), b
 ---
 ## Example of Ambiguity detected by bbt
 
+# <div></div>
+
 ~~~md
 - given there is no `config` file in the current directory
 ~~~
 :bomb: In the Object chunk, there is both `file` and `directory` keywords...
 
+# <div></div>
 
 ~~~md
 - then the output contains what is in the file `simple.ads`. 
 ~~~
-:bomb: two verbs `contains` and `is`...
+:bomb: two verbs, `contains` and `is`...
 
 ### May be detected because both word are in bbt's vocabulary
 
@@ -288,11 +353,13 @@ Not at all a code I am proud of yet (could be easier to read and more robust), b
 
 ---
 ## Worst case example : bbt understand the opposite of what is said
+# <div></div>
 
 ~~~md
 - then the output never contains `Error`
 ~~~
 
+# <div></div>
 :bomb: `never` is not a keyword, this will indeed check that the output contains `error`
 
 ### Can't be detected because one of the word is ignored by bbt
@@ -302,150 +369,64 @@ Not at all a code I am proud of yet (could be easier to read and more robust), b
 
 ---
 
-## In practice, error are very unlikely
+## In practice, it's very unlikely if you stick to the usual best practices for writing specifications: 
+* Be clear and **concise**, avoid double negation, be consistent (don't innovate on formulations), etc.
 
-* At test creation, it means that you didn't check the real output
-* If the test exists and is OK, this is a "only" a documentation problem
-
-<!-- 
--->
-
----
-# <!-- fit --> Not a problem in real life, if you stick to usual good specification practices 
-
-* Be clear and concise
-- Avoid double negation
-- Be consistent, don't innovate on formulations (yes, **repeat yourself**! :smile:)
-- etc.
+Plus:
 * Put complex comments on separate lines, not in the steps
 * Uses `bbt explain` in case of doubt
+* Check at least once the real output!!
 
-:pen:
+<!-- 
+-->
+
+---
+
+# But the Ambiguithon is still open: find a more serious error case and be awarded!
+
+# <div></div>
+
+<center>
+https://github.com/LionelDraghi/bbt/issues
 
 <!-- 
 -->
 
 ---
 
-### Many thanks to the early contributor
+### A big thank to AdaCore :heart: for awarding bbt _Crate of the word 2024_
 
-- Paul   (https://github.com/pyjarrett)
-- Manuel (https://github.com/mgrojo/coap_spark)
-- Simon  (https://github.com/simonjwright/ada_caser)
+# <div></div>
 
-### Many thanks to AdaCore for awarding bbt Crate of the word 2024
+### A big thank to the early adopters and contributors
 
-##### Slides made with marp https://marp.app/
+- :heart: Paul   (https://github.com/pyjarrett)
+- :heart: Manuel (https://github.com/mgrojo/coap_spark)
+- :heart: Simon  (https://github.com/simonjwright/ada_caser)
+
+# <div></div>
+
+### Still considered as a prototype: everything is open to discussion
+https://github.com/LionelDraghi/bbt/discussions 
 
 <!-- 
 -->
 
 ---
-# <!-- fit --> Q & MA
+# Q & MA
 # (Questions and Maybe Answers)
 
 ---
-# Annexes
+# And now, go #runthedoc!
 
-
-
-
----
-# <!-- fit --> tres tres tres tres tres tres tres long long long titre 
-# <!-- fit --> Gros titre
-# Gros titre (sans "fit")
-![bg right:50% w:600](bbt/docs/rpl_example.png)
-<!-- _backgroundColor: palegreen -->
-<!-- _color: navy -->
-
-<!-- 
--->
-
----
-# Difference between Gherkin and bbt 1/2
+# <div></div>
+# <div></div>
 
 <small>
 
-Gherkin | bbt
-------|-----
-One feature per file | Zero, one or more feature per file. The only constraint : there should be at least one scenario 
-Max one background per feature, apply to every scenario | Idem, and also a background per document (apply to each feature) ==> meaning that there may be two background per scenario    
-Tags apply to feature, scenario and background | Tags apply also to steps
-Tags have the "@tag" syntax, and must be provided on the line before | Tags are whatever string, and must be in the feature/scenario/step/etc. line  
+Slides made with marp https://marp.app/
+Available in https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
 
 </small>
 
----
-# Difference between Gherkin and bbt 2/2
-
-<small>
-
-BDD | Test use 
-------|-----
-A scenario should focus on a single behavior, and so multiple *when* should be avoided | A non regression test should make explicit the chain of user action leading to the problem, and so there will be a sequence of *when* 
-Sequence of *when*/*then*/*when*/*then* should be split in several scenarios| See above
-
-</small>
-
-# Short version : bbt is more flexible
-
-# <!-- fit --> Where does bbt come from?  
-
-![bg right:50% w:600](Acc_test.png)
-
-* Maintenance of `Archicheck` tests was becoming... uncomfortable
-* The generated doc is a rewrite of the real input, real command run and real expected results
-* Depends on sort, sdiff, and an Ada test utility
-* :arrow_right: About 3 500 lines of Makefile of this kind
-
-<!-- 
-From the make file, I call a "Test_Report" utility, aliased TR here.
-The test has a classical structure, with setup / run / assert.
-This utility produce a nice Markdown file, but the content has no more velue than whatever comment : input files, run command and output files are copy of the real one. 
--->
-
----
-# bbt was designed to make my life easier
-* **Test First** is my favorite way to **design** and **document**
-
-* **I'm lazy**, I hate writing the things twice, and I hate wasting time making what could be done better and quicker by tools
-
-* **I don't remember what I have learned 6 months ago**, I don't remember how my own code works, I don't remember my own utilities features.
-  I need a **simple** tool with... no learning curve!
-
-* I want the results of tests to be generated as a Markdown file that can be directly inserted in the documentation
-
-<!-- 
-1. note that test first is not about test. It means for me starting by writing some description. Not code. And not even test code. Description
-   
-2. Lazy : for example writing a test doc that repeats what's in the specification or in the user guide, or writing test scripts that repeats what's in the test plan, or writing comments in the that repeat things that are elsewhere.
--->
-    
-
----
-
-# The design principle  
-
-* **Put things in the right order**
-  Doc should be **the** source of truth. Tests should come from it, not the other way round.
-    
-* **Whatever the documentation**, specifications, acceptance test, user guide, readme file... They are all valid source of truth. 
-
-* **Don't repeat yourself**
-  Neither in documentation, nor in code.
-
-* **Don't repeat yourself**
-  Don't.
-
-<!-- 
-1. Meaning, minimal constraint on documentation. Markdown format is an easy choice for me. Kind of literate testing?
-   
--->
-
-
----
-
-In one word 
-
-# <!-- fit --> bbt Make Documentation Great Again! 
 
