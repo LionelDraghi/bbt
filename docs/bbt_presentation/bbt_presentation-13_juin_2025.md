@@ -8,8 +8,6 @@ paginate: true
 class: 
 - noinvert
 - lead
-footer: "bbt AEiC 2025 - Ada Developers Workshop - 13 june 2025"
-header: "[Introduction to bbt](https://github.com/LionelDraghi/bbt) ---- [part 1](#current-state) | [Part 2](#example-of-ambiguity-detected-by-bbt)"
 transition: fade
 style: |
    section {padding: auto;}
@@ -25,12 +23,21 @@ style: |
 ---
 
 <!-- color: navy -->
+
 # Using natural language for test specification, is that really wise?
+
 # <div></div>
+
 # An introduction to bbt
+
+# <div></div>
+
+# <!-- fit --> Lionel Draghi - AEiC 2025 - Ada Developers Workshop - 13 june 2025
 
 
 ---
+
+<!-- footer: "[Using natural language for test specification, is that really wise?](https://github.com/LionelDraghi/bbt) - Lionel Draghi - AEiC 2025 - Ada Developers Workshop - 13 june 2025" -->  
 
 ## Part 1 : [Introduction to bbt](#please-install-bbt-now)
 ####  Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
@@ -42,6 +49,9 @@ style: |
 # Introduction to bbt
 
 ---
+
+<!-- header: "[Introduction to bbt](#please-install-bbt-now)" -->
+
 ## Please install bbt now! 
 
 (We will use it during the presentation) 
@@ -84,16 +94,17 @@ Will bbt be another tombstone in the middle of the giant software graveyard that
 
 ## What is bbt?
 
-* `bbt` is a dead-simple tool to test your command line apps
+* `bbt` is a dead-simple tool for _user point of view_ test your command line apps
 
-* Typical use case : Apps reading some input, and writing some output...
-  It's not suitable for all cases, but who has never had to test an app of this type?
+* It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
+  Not suitable for UI testing, unit testing, etc.
 
-* `bbt` uses a markdown description of the expected behavior, within a Gherkin framework, fully in natural language **including the steps** 
+* `bbt` inputs are markdown files, embedding descriptions of an expected behavior in Gherkin format, **with the steps in natural language** 
 
 * From a practical point of view, you really run the doc : `bbt my_spec.md`
 
 <!-- 
+suitable for all cases, but who has never had to test an app of this type?
 To get it more concrete, I propose to make a first demo.
 -->
 
@@ -111,21 +122,40 @@ To get it more concrete, I propose to make a first demo.
 
 ---
 
-## Let's make documentation great again!  
+## What I wanted to achieve: to be consistent  
 
-# <div></div>
+<small>
 
-* **Put things in the right order**
-  If the doc is the source of truth, then tests should come from it, not the other way round.
+* **A single source of truth**, minimizing overlaping definitions
+  Initialy, behavior is defined in some docs, and further refined in tests description. 
+  But quickly, the tests evolve independently because the developer is focused on them, and they end up contradicting the readme file or the user guide.
     
-# <div></div>
-
+* **Put things in the right order**
+  If the doc is the source of truth, then tests should come from it, not the other way around.
+    
 * **Whatever the documentation**, specifications, acceptance test, user guide, readme file... They are all valid source of truth. 
+
+  Even those slides! (written in Markdown, using Marp)
+
+</small>
+
+<!-- 
+The inconsistencies are an epidemic in the software world, sometimes with benign effects (e.g., an error in an example), and sometimes with more serious consequences.
+Why is it so? Because the truth of our software is in the User Guide, is in the sources comments, is in the tests definition, etc. 
+Truth is a complex distributed system!
+All systems end up with discrepancies, because we, developpers, are mostly focused on tests and code. But we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
+For example, examples in the user guide, are they up to date?
+
+If it's true for litterate programming, it's also true for testing.
+-->
+
+---
+
+In one word:
+# Let's make documentation great again!  
 
 
 <!-- 
-Part of the truth is in the User Guide, part is in the sources comments, part is in the tests definition, etc. Truth is a distributed system!
-If it's true for litterate programming, it's also true for testing.
 -->
 
 ---
@@ -154,6 +184,10 @@ If it's true for litterate programming, it's also true for testing.
 
 
 ---
+
+<!-- header: "[Introduction to bbt](#please-install-bbt-now) - **[Partial parsing](#a-word-on-shallow-parsing-aka-partial-parsing)** - [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)" -->
+
+
 ## A word on Shallow parsing (aka Partial parsing)
 
 In the NLP field, **Shallow parsing**, also known as **partial parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
@@ -161,6 +195,7 @@ In the NLP field, **Shallow parsing**, also known as **partial parsing**, **ligh
 - shallow parsing is simpler and faster, but possibly ambiguous and not precise
 
 ---
+
 ## <!-- fit --> Shallow parsing is based on word spotting
 
 ![bg right:40% w:500](44129332940.jpg)
@@ -398,16 +433,23 @@ https://github.com/LionelDraghi/bbt/issues
 
 # <div></div>
 
-### A big thank to the early adopters and contributors
+### Special thanks to the early adopters and contributors
 
 - :heart: Paul   (https://github.com/pyjarrett)
 - :heart: Manuel (https://github.com/mgrojo/coap_spark)
 - :heart: Simon  (https://github.com/simonjwright/ada_caser)
 
+<!-- 
+-->
+
+---
+
+## Feel free to propose changes and features here
+https://github.com/LionelDraghi/bbt/discussions 
+
 # <div></div>
 
-### Still considered as a prototype: everything is open to discussion
-https://github.com/LionelDraghi/bbt/discussions 
+## Everything is open to discussion
 
 <!-- 
 -->
