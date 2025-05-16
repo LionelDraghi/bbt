@@ -13,10 +13,6 @@ style: |
    section {padding: auto;}
    .small-text {font-size: 0.75rem;}
    .center {text-align: center;}
-   .flex-container {display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-                    height: 100%;}
    h1 {text-align: center;
        font-size: 2rem;}
    h2 {font-size: 1.5rem;}
@@ -25,32 +21,29 @@ style: |
 <!-- color: navy -->
 
 # Using natural language for test specification, is that really wise?
-
 # <div></div>
-
 # An introduction to bbt
-
 # <div></div>
-
-# <!-- fit --> Lionel Draghi - AEiC 2025 - Ada Developers Workshop - 13 june 2025
-
+# <!-- fit --> Lionel Draghi - Ada Developers Workshop - 13 june 2025
 
 ---
 
-<!-- footer: "[Using natural language for test specification, is that really wise?](https://github.com/LionelDraghi/bbt) - Lionel Draghi - AEiC 2025 - Ada Developers Workshop - 13 june 2025" -->  
+<!-- footer: "Lionel Draghi - AEiC 2025 / Ada Developers Workshop - 13 june 2025" -->
 
-## Part 1 : [Introduction to bbt](#please-install-bbt-now)
-####  Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
-####  Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)
-
----
-
-
-# Introduction to bbt
+# Agenda
+## Part 1 - Introduction to bbt
+## Part 2 - Partial Parsing
+## Part 3 - Surviving an ambiguous world
+## Conclusion
 
 ---
 
-<!-- header: "[Introduction to bbt](#please-install-bbt-now)" -->
+<!-- header: "**[Introduction to bbt](#part-1---introduction-to-bbt-1)** | [Partial parsing](#part-2---partial-parsing-1) | [Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1) | [Conclusion](#conclusion-1)" -->
+
+
+# Part 1 - Introduction to bbt
+
+---
 
 ## Please install bbt now! 
 
@@ -68,6 +61,7 @@ https://github.com/LionelDraghi/bbt#installation
 -->
 
 ---
+
 ## Whoami
 
 ### Lionel Draghi
@@ -94,7 +88,7 @@ Will bbt be another tombstone in the middle of the giant software graveyard that
 
 ## What is bbt?
 
-* `bbt` is a dead-simple tool for _user point of view_ test your command line apps
+* `bbt` is a dead-simple tool for _end-to-end_ testing of your command line apps
 
 * It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
   Not suitable for UI testing, unit testing, etc.
@@ -122,7 +116,7 @@ To get it more concrete, I propose to make a first demo.
 
 ---
 
-## What I wanted to achieve: to be consistent  
+## What I wanted to achieve  
 
 <small>
 
@@ -135,7 +129,9 @@ To get it more concrete, I propose to make a first demo.
     
 * **Whatever the documentation**, specifications, acceptance test, user guide, readme file... They are all valid source of truth. 
 
-  Even those slides! (written in Markdown, using Marp)
+  :arrow_right: Even those slides! (written in Markdown, using Marp)
+
+<!-- ![bg right:30% 80%](acc_test.png) -->
 
 </small>
 
@@ -149,18 +145,11 @@ For example, examples in the user guide, are they up to date?
 If it's true for litterate programming, it's also true for testing.
 -->
 
----
-
-In one word:
-# Let's make documentation great again!  
-
-
-<!-- 
--->
 
 ---
 
 # <!-- fit --> Live demo 2 - Let's create a runnable User Guide 
+
 <!-- 
 - Let's ask to some LLM :
 > could you write a simple user guide for the rpl utility (string replace), with some use examples, in Markdown, with a toc, some table and a mermaid diagram?
@@ -171,26 +160,17 @@ In one word:
 - run du test !
 -->
 
-
 ---
 
-# #runthedoc
+<!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | **[Partial parsing](#part-2---partial-parsing-1)** | [Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1) | [Conclusion](#conclusion-1)" -->
+
+# Part 2 - Partial Parsing
 
 ---
-
-#### Part 1 : [Introduction to bbt](#please-install-bbt-now)
-##   Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
-#### Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)
-
-
----
-
-<!-- header: "[Introduction to bbt](#please-install-bbt-now) - **[Partial parsing](#a-word-on-shallow-parsing-aka-partial-parsing)** - [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt)" -->
-
 
 ## A word on Shallow parsing (aka Partial parsing)
 
-In the NLP field, **Shallow parsing**, also known as **partial parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
+In the NLP field, **partial parsing**, also known as **shallow parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
 - deep parsing and understanding is not always needed (or even possible)
 - shallow parsing is simpler and faster, but possibly ambiguous and not precise
 
@@ -360,11 +340,12 @@ But it is able to "understand" sentences like:
 
 ---
 
-#### Part 1 : [Introduction to bbt](#please-install-bbt-now)
-#### Part 2 : [Shallow Parsing](#part-2--shallow-parsing)
-##   Part 3 : [Surviving an ambiguous world](#example-of-ambiguity-detected-by-bbt )
+<!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | [Partial parsing](#part-2---partial-parsing-1) | **[Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1)** | [Conclusion](#conclusion-1)" -->
+
+# Part 3 - Surviving an ambiguous world
 
 ---
+
 ## Example of Ambiguity detected by bbt
 
 # <div></div>
@@ -429,46 +410,61 @@ https://github.com/LionelDraghi/bbt/issues
 
 ---
 
-### A big thank to AdaCore :heart: for awarding bbt _Crate of the word 2024_
+<!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | [Partial parsing](#part-2---partial-parsing-1) | [Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1) | **[Conclusion](#conclusion-1)**" -->
 
-# <div></div>
+# Conclusion
 
-### Special thanks to the early adopters and contributors
+---
 
-- :heart: Paul   (https://github.com/pyjarrett)
-- :heart: Manuel (https://github.com/mgrojo/coap_spark)
-- :heart: Simon  (https://github.com/simonjwright/ada_caser)
+# Special thanks to
+
+* ## AdaCore 
+
+   - :heart: For awarding bbt __Ada Crate of the word 2024__ (https://blog.adacore.com/)
+
+* ## The early adopters and contributors
+
+   - :heart: Paul   (https://github.com/pyjarrett)
+   - :heart: Manuel (https://github.com/mgrojo/coap_spark)
+   - :heart: Simon  (https://github.com/simonjwright/ada_caser)
 
 <!-- 
 -->
 
+
 ---
 
-## Feel free to propose changes and features here
-https://github.com/LionelDraghi/bbt/discussions 
+# Let's make documentation great again!  
 
 # <div></div>
 
-## Everything is open to discussion
+# #runthedoc
 
 <!-- 
+The final word is not mine
 -->
 
 ---
-# Q & MA
-# (Questions and Maybe Answers)
 
----
-# And now, go #runthedoc!
+# <div></div>
 
+# Q & A
+
+# <div></div>
 # <div></div>
 # <div></div>
 
 <small>
 
-Slides made with marp https://marp.app/
-Available in https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
+Ideas and features are welcome at https://github.com/LionelDraghi/bbt/discussions 
+
+Slides made with [marp](https://marp.app/) available here https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
 
 </small>
+
+<!-- 
+Everything is open to discussion!
+-->
+
 
 
