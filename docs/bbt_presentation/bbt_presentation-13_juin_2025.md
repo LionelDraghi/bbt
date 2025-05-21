@@ -9,13 +9,18 @@ class:
 - noinvert
 - lead
 transition: fade
+
 style: |
    section {padding: auto;}
    .small-text {font-size: 0.75rem;}
    .center {text-align: center;}
    h1 {text-align: center;
-       font-size: 2rem;}
-   h2 {font-size: 1.5rem;}
+       font-size: 2rem;
+       font-weight: medium;
+       text-shadow: 3px 3px 2px rgba(49, 165, 159, 0.5);}
+   h2 {font-size: 1.5rem;}   
+   h3 {font-size: 1.2rem;
+       font-weight: normal;}   
 ---
 
 <!-- color: navy -->
@@ -24,7 +29,7 @@ style: |
 # <div></div>
 # An introduction to bbt
 # <div></div>
-# <!-- fit --> Lionel Draghi - Ada Developers Workshop - 13 june 2025
+# <!-- fit --> Lionel Draghi - Ada Developers Workshop - 13 June 2025
 
 ---
 
@@ -91,7 +96,7 @@ Will bbt be another tombstone in the middle of the giant software graveyard that
 * `bbt` is a dead-simple tool for _end-to-end_ testing of your command line apps
 
 * It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
-  Not suitable for UI testing, unit testing, etc.
+  :warning: Not suitable for UI testing, unit testing, etc.
 
 * `bbt` inputs are markdown files, embedding descriptions of an expected behavior in Gherkin format, **with the steps in natural language** 
 
@@ -209,12 +214,25 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 ---
 
-## bbt is a simple application case for partial parsing
+## Consider those bbt steps:
+
+~~~
+- Given there is no existing `.config` file
+- When I run `my_app --init` 
+- Then there is a `.config` file
+- And the file `.config` contains `autosave = true`
+~~~
+
+# <div></div>
+
+##  It may seem complex at first glance, but is it?
+
+---
 
 <small> 
 
-**Consider the steps :**
-~~~gherkin
+**The same steps :**
+~~~md
 - Given   there                is no      existing `.config` file
 - When    I                    run        `my_app --init` 
 - Then    there                is         a `.config` file
@@ -224,16 +242,20 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 * All sentences have the same simple structure, in the same order
   **preposition + subject phrase + verb phrase + object phrase**
 
-* The Markdown syntax is helping : no need for NER (Named Entity Recognition), parameters are between backtick, no possible confusion with keywords
+* The Markdown syntax is helping : parameters are between backticks, no possible confusion with keywords
 
-* Very small vocabulary: about 20 keywords to build all the possible sentences
+* A small lexicon: about 20 keywords to build all the possible sentences
 
-* And sentences are very repetivite! 
+* And sentences are very repetitive! 
+
+* ## In fact, bbt is a perfect fit for partial parsing
 
 </small>
 
 <!-- 
+no need for NER (Named Entity Recognition)
 -->
+
 ---
 
 ## bbt implementation (1/4) : Tokenization
@@ -371,7 +393,7 @@ But it is able to "understand" sentences like:
 -->
 
 ---
-## Worst case example : bbt understand the opposite of what is said
+## <!-- fit --> The worst case : bbt understand the opposite of what is said
 # <div></div>
 
 ~~~md
