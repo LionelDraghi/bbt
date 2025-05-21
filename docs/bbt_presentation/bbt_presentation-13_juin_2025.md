@@ -168,11 +168,14 @@ If it's true for litterate programming, it's also true for testing.
 
 ---
 
-## A word on Shallow parsing (aka Partial parsing)
+## A word on Partial parsing
+
+# <div></div>
 
 In the NLP field, **partial parsing**, also known as **shallow parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
-- deep parsing and understanding is not always needed (or even possible)
-- shallow parsing is simpler and faster, but possibly ambiguous and not precise
+- Deep parsing and understanding can be complex and is not always necessary
+- Shallow parsing is simpler and faster
+- However, it may be ambiguous and lack precision
 
 ---
 
