@@ -50,7 +50,7 @@ style: |
 
 ---
 
-## Please install bbt now! 
+## Feel free to install bbt now! 
 
 (We will use it during the presentation) 
 
@@ -73,11 +73,11 @@ https://github.com/LionelDraghi/bbt#installation
 
 <small>
 
-- 15 years as Ada software developper
+- 15 years as Ada software developer
 - Retired from software dev in 2007
-- Author of softwares that no one uses: Archicheck, smk
-  (https://github.com/LionelDraghi)
-- And author of bbt, which, by comparison, made a thunderous debut with 3 contributors and the Ada Crate of the Year award!
+- Author of Archicheck and smk
+  (https://github.com/LionelDraghi), brilliant apps that no one uses
+- but whose merit is being the origin of the creation of bbt
 
 ![bg right:40% 80%](portrait.jpg)
 </small>
@@ -173,11 +173,11 @@ If it's true for litterate programming, it's also true for testing.
 
 ---
 
-## A word on Shallow parsing (aka Partial parsing)
+## A word on Partial parsing
 
 In the NLP field, **partial parsing**, also known as **shallow parsing**, **light parsing** or **chunking**, occupies a position between simple tokenization and full syntactic parsing.
 - deep parsing and understanding is not always needed (or even possible)
-- shallow parsing is simpler and faster, but possibly ambiguous and not precise
+- partial parsing is simpler and faster, but possibly ambiguous and not precise
 
 ---
 
@@ -245,7 +245,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 * And sentences are very repetitive! 
 
-* ## In fact, bbt is a perfect fit for partial parsing
+* ## In fact, partial parsing is a perfect fit for bbt 
 
 </small>
 
