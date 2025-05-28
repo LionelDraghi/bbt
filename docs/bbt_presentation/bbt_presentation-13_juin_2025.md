@@ -50,6 +50,7 @@ style: |
 
 ---
 
+## Feel free to install bbt now! 
 
 (We will use it during the presentation) 
 
@@ -72,10 +73,11 @@ https://github.com/LionelDraghi/bbt#installation
 
 <small>
 
+- 15 years as Ada software developer
 - Retired from software dev in 2007
-- Author of softwares that no one uses: Archicheck, smk
-  (https://github.com/LionelDraghi)
-- And author of bbt, which, by comparison, made a thunderous debut with 3 contributors and the Ada Crate of the Year award!
+- Author of Archicheck and smk
+  (https://github.com/LionelDraghi), brilliant apps that no one uses
+- but whose merit is being the origin of the creation of bbt
 
 ![bg right:40% 80%](portrait.jpg)
 </small>
@@ -95,6 +97,7 @@ Let's see that together.
 ## What is bbt?
 
 * `bbt` is a dead-simple tool for _black box_ testing your command line apps 
+  (**not unit or integration testing**)
 
 * It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
 
