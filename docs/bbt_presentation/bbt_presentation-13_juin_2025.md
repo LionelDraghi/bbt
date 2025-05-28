@@ -50,7 +50,6 @@ style: |
 
 ---
 
-## Please install bbt now! 
 
 (We will use it during the presentation) 
 
@@ -73,7 +72,6 @@ https://github.com/LionelDraghi/bbt#installation
 
 <small>
 
-- 15 years as Ada software developper
 - Retired from software dev in 2007
 - Author of softwares that no one uses: Archicheck, smk
   (https://github.com/LionelDraghi)
@@ -86,26 +84,30 @@ https://github.com/LionelDraghi/bbt#installation
 While you install the software, I'll continue with the least important part of the presentation
 I used to be a senior software developer, I am now much more a senior than a software developper.
 I am the author of those brilliant and useless software, whose merit will have been to give rise to BBT.
+
+
 Will bbt be another tombstone in the middle of the giant software graveyard that is GitHub?
+Let's see that together.
 -->
 
 ---
 
 ## What is bbt?
 
-* `bbt` is a dead-simple tool for _end-to-end_ testing of your command line apps
+* `bbt` is a dead-simple tool for _black box_ testing your command line apps 
 
 * It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
-  :warning: Not suitable for UI testing, unit testing, etc.
 
 * `bbt` inputs are markdown files, embedding descriptions of an expected behavior in Gherkin format, **with the steps in natural language** 
 
 * From a practical point of view, you really run the doc : `bbt my_spec.md`
 
 <!-- 
-suitable for all cases, but who has never had to test an app of this type?
-To get it more concrete, I propose to make a first demo.
+So this is the story of an experiment that turn to actually be usefull.
+
+Not suitable for all test cases, but who has never had to test an CLI app?
 -->
+
 
 ---
 
@@ -121,28 +123,25 @@ To get it more concrete, I propose to make a first demo.
 
 ---
 
-## What I wanted to achieve  
+## Where does bbt come from?
 
 <small>
 
-* **A single source of truth**, minimizing overlaping definitions
-  Initialy, behavior is defined in some docs, and further refined in tests description. 
-  But quickly, the tests evolve independently because the developer is focused on them, and they end up contradicting the readme file or the user guide.
-    
-* **Put things in the right order**
-  If the doc is the source of truth, then tests should come from it, not the other way around.
-    
-* **Whatever the documentation**, specifications, acceptance test, user guide, readme file... They are all valid source of truth. 
+- acc and smk are CLI apps, mostly tested with black box testing
+* Initially Easy to do within a Makefile
+* Started to become complex and error-prone when adding the documentation generation
+* And did not prevent discrepancies between the generated documentation and what is really run.
+  For example here : documented command line (line 60) vs really run (line 74)
 
-  :arrow_right: Even those slides! (written in Markdown, using Marp)
-
-<!-- ![bg right:30% 80%](acc_test.png) -->
+![bg right:40% w:500](acc_test.png)
 
 </small>
 
 <!-- 
 The inconsistencies are an epidemic in the software world, sometimes with benign effects (e.g., an error in an example), and sometimes with more serious consequences.
 Why is it so? Because the truth of our software is in the User Guide, is in the sources comments, is in the tests definition, etc. 
+Initialy, behavior is defined in some docs, and further refined in tests description. 
+But quickly, the tests evolve independently because the developer is focused on them, and they end up contradicting the readme file or the user guide.
 Truth is a complex distributed system!
 All systems end up with discrepancies, because we, developpers, are mostly focused on tests and code. But we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
 For example, examples in the user guide, are they up to date?
@@ -150,10 +149,33 @@ For example, examples in the user guide, are they up to date?
 If it's true for litterate programming, it's also true for testing.
 -->
 
+---
+## What I wanted to achieve  
+
+<small>
+
+* **The documentation is really the _single source of truth_** 
+  - **_Single_** means _Never repeat yourself_
+  - **_Source_** means that tests comes from documentation, not the other way around
+  - **_Truth_** means If it says that the app is run with that command line, then it is!
+    
+* **Whatever the documentation**
+  Specifications, acceptance test, user guide, readme file... They are all valid source of truth
+ 
+<!-- ![bg right:30% 80%](acc_test.png) -->
+
+</small>
+
+<!-- 
+source of truth : litteraly, that is not just "doc as code", but "doc is code", a kind of litterate testing
+
+Whatever the doc : Even those slides, written in Markdown using Marp, are a valid source of thruth
+
+-->
 
 ---
 
-# <!-- fit --> Live demo 2 - Let's create a runnable User Guide 
+# <!-- fit --> Live demo 2 - Let's create a runnable README file 
 
 <!-- 
 - Let's ask to some LLM :
@@ -214,18 +236,18 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 ---
 
-## Consider those bbt steps:
+* Consider those bbt steps:
 
-~~~
-- Given there is no existing `.config` file
-- When I run `my_app --init` 
-- Then there is a `.config` file
-- And the file `.config` contains `autosave = true`
-~~~
+  ~~~
+  - Given there is no existing `.config` file
+  - When I run `my_app --init` 
+  - Then there is a `.config` file
+  - And the file `.config` contains `autosave = true`
+  ~~~
 
 # <div></div>
 
-##  It may seem complex at first glance, but is it?
+* It may seem complex at first glance, but is it?
 
 ---
 
@@ -246,9 +268,9 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 * A small lexicon: about 20 keywords to build all the possible sentences
 
-* And sentences are very repetitive! 
+* And very repetitive sentences! 
 
-* ## In fact, bbt is a perfect fit for partial parsing
+* ### In fact, it's a fairly simple use case for partial parsing 
 
 </small>
 
@@ -259,6 +281,8 @@ no need for NER (Named Entity Recognition)
 ---
 
 ## bbt implementation (1/4) : Tokenization
+
+# <div></div>
 
 <small> 
 
@@ -319,7 +343,7 @@ Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_
 
 # <div></div>
 
-Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
+* Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
 
 </small>
 
@@ -334,14 +358,14 @@ Note : you can display the grammar with `bbt lg` (or `bbt list_grammar`)
 * The action and the parameters are stored in a Tree that represent a bbt document (that is a list of features containing a list of scenarios, containing etc.) 
 
 * When all documents are parsed, a runner walk through and run actions in sequence.
-  For that precise step:
+  Could be:
   ~~~Ada
   Setup_No_File (Subject_Param => "", Object_Param => ".config");
   ~~~
 
 # <div></div>
 
-Note: there is a dry run mode `bbt ex` (or `bbt explain`)
+* Note: there is a dry run mode: `bbt ex` (or `bbt explain`)
 
 </small>
 
@@ -363,6 +387,11 @@ But it is able to "understand" sentences like:
 - Then the resulting `log.txt` file does not contain any `Error:`
 ~~~
 
+<!-- 
+And this is making me happy!
+
+But before concluding that bbt is a success, let's face the ambiguity question.
+-->
 ---
 
 <!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | [Partial parsing](#part-2---partial-parsing-1) | **[Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1)** | [Conclusion](#conclusion-1)" -->
@@ -371,59 +400,51 @@ But it is able to "understand" sentences like:
 
 ---
 
-## Example of Ambiguity detected by bbt
+<small>
+
+* Example of a detected Ambiguity
+  ~~~md
+  - given there is no `config` file in the current directory
+  ~~~
+
+  - :bomb: In the Object chunk, there is both `file` and `directory` keywords...
+  - May be detected because both word are in bbt's vocabulary
 
 # <div></div>
 
-~~~md
-- given there is no `config` file in the current directory
-~~~
-:bomb: In the Object chunk, there is both `file` and `directory` keywords...
+* Example of an undetected ambiguity, where bbt understand the opposite of what is said!
+  ~~~md
+  - then the output never contains `Error`
+  ~~~
 
-# <div></div>
+  - :bomb: `never` is not a keyword, this will indeed check that the output contains `error`
+  - Can't be detected because `never` is ignored by bbt
 
-~~~md
-- then the output contains what is in the file `simple.ads`. 
-~~~
-:bomb: two verbs, `contains` and `is`...
-
-### May be detected because both word are in bbt's vocabulary
-
-<!-- 
--->
-
----
-## <!-- fit --> The worst case : bbt understand the opposite of what is said
-# <div></div>
-
-~~~md
-- then the output never contains `Error`
-~~~
-
-# <div></div>
-:bomb: `never` is not a keyword, this will indeed check that the output contains `error`
-
-### Can't be detected because one of the word is ignored by bbt
+</small>
 
 <!-- 
 -->
 
 ---
 
-## In practice, it's very unlikely if you stick to the usual best practices for writing specifications: 
-* Be clear and **concise**, avoid double negation, be consistent (don't innovate on formulations), etc.
+## In practice, it's very unlikely if... 
 
-Plus:
-* Put complex comments on separate lines, not in the steps
-* Uses `bbt explain` in case of doubt
-* Check at least once the real output!!
+* you stick to the usual best practices for writing specifications: 
+  - Be clear and **concise**, avoid double negation, be consistent (don't innovate on formulations), etc.
+
+* Plus:
+  - Put complex comments on separate lines, not in the steps
+  - Check at least once the real output!!
+  - Uses `bbt explain` in case of doubt
+
+* And why not add a feature to rewrite the steps in a standardized way? (`bbt rewrite scenario.md`)
 
 <!-- 
 -->
 
 ---
 
-# But the Ambiguithon is still open: find a more serious error case and be awarded!
+# But the challenge is still open: find a more serious error case and be awarded!
 
 # <div></div>
 
@@ -438,6 +459,18 @@ https://github.com/LionelDraghi/bbt/issues
 <!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | [Partial parsing](#part-2---partial-parsing-1) | [Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1) | **[Conclusion](#conclusion-1)**" -->
 
 # Conclusion
+
+# <div></div>
+
+# Let's make documentation great again!  
+
+# Better than _doc as code_, _doc is code_!
+
+# #runthedoc #bbt
+<!-- 
+As a conclusion, bbt seems to be a usefull tools, and i don't see for now any drawback in using it.
+I hoppe you'll give it a try, and that you'll find it usefull too.
+-->
 
 ---
 
@@ -459,11 +492,7 @@ https://github.com/LionelDraghi/bbt/issues
 
 ---
 
-# Let's make documentation great again!  
 
-# <div></div>
-
-# #runthedoc
 
 <!-- 
 The final word is not mine
