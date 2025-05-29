@@ -50,15 +50,23 @@ You can continue a list of Given / When / Then with "And" or "But":
 ## Expected output  
 Expected output is given in three possible ways :  
   1. as a string:
-     > - Then I get `string`
+     ~~~md
+     - Then I get `string`
+     ~~~
+
   2. as a code fenced block:
-     > - Then I get
+     ~~~md
+     - Then I get
      ```
      This is my multi-line
      file content
      ```
+     ~~~
+
   3. in an external file:
-     > - Then I get file `expected.txt`  
+     ~~~md
+     - Then I get file `expected.txt`  
+     ~~~
 
      Note in that case the mandatory "file" keyword  
 

@@ -17,7 +17,7 @@ style: |
    h1 {text-align: center;
        font-size: 2rem;
        font-weight: medium;
-       text-shadow: 3px 3px 2px rgba(49, 165, 159, 0.5);}
+       text-shadow: 2px 2px 2px rgba(49, 165, 159, 0.5);}
    h2 {font-size: 1.5rem;}   
    h3 {font-size: 1.2rem;
        font-weight: normal;}   
@@ -52,8 +52,6 @@ style: |
 
 ## Feel free to install bbt now! 
 
-(We will use it during the presentation) 
-
 - Stable version
   ~~~sh
   alr install bbt
@@ -62,6 +60,9 @@ style: |
 - Latest version, AppImage
 https://github.com/LionelDraghi/bbt#installation
 
+# <div></div>
+
+(And if my presentation is boring : `bbt ct` create a file containing a short tutorial!)
 <!-- 
 -->
 
@@ -84,7 +85,7 @@ https://github.com/LionelDraghi/bbt#installation
 
 <!-- 
 While you install the software, I'll continue with the least important part of the presentation
-I used to be a senior software developer, I am now much more a senior than a software developper.
+I used to be a senior software developer, I am now much more a senior than a software développer.
 I am the author of those brilliant and useless software, whose merit will have been to give rise to BBT.
 
 
@@ -96,7 +97,7 @@ Let's see that together.
 
 ## What is bbt?
 
-* `bbt` is a dead-simple tool for _black box_ testing your command line apps 
+- `bbt` is a dead-simple tool for _black box_ testing your command line apps 
   (**not unit or integration testing**)
 
 * It targets Apps reading some input and writing some output, like for example `grep` or `gcc` 
@@ -106,7 +107,7 @@ Let's see that together.
 * From a practical point of view, you really run the doc : `bbt my_spec.md`
 
 <!-- 
-So this is the story of an experiment that turn to actually be usefull.
+So this is the story of an experiment that turn to actually be useful.
 
 Not suitable for all test cases, but who has never had to test an CLI app?
 -->
@@ -121,7 +122,12 @@ Not suitable for all test cases, but who has never had to test an CLI app?
 1. creation d'un repertoire + fichier demo.md
 1. lancer bbt avant qu'il y ait un scenario
 1. lancer bbt avant qu'il y ait un step
-1. creation test grep -i Rose flower.list
+1. creation test grep --version
+1. feature Case sensitivity
+1. creation scenario test grep Rose flower.list
+2. rerun pour montrer --yes
+3. creation example  test grep -i Rose flower.list
+4. --cleanup
 -->
 
 ---
@@ -143,36 +149,41 @@ Not suitable for all test cases, but who has never had to test an CLI app?
 <!-- 
 The inconsistencies are an epidemic in the software world, sometimes with benign effects (e.g., an error in an example), and sometimes with more serious consequences.
 Why is it so? Because the truth of our software is in the User Guide, is in the sources comments, is in the tests definition, etc. 
-Initialy, behavior is defined in some docs, and further refined in tests description. 
+Initially, behavior is defined in some docs, and further refined in tests description. 
 But quickly, the tests evolve independently because the developer is focused on them, and they end up contradicting the readme file or the user guide.
 Truth is a complex distributed system!
-All systems end up with discrepancies, because we, developpers, are mostly focused on tests and code. But we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
+All systems end up with discrepancies, because we, developers, are mostly focused on tests and code. But we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
 For example, examples in the user guide, are they up to date?
 
-If it's true for litterate programming, it's also true for testing.
+If it's true for literate programming, it's also true for testing.
 -->
 
 ---
-## What I wanted to achieve  
+## Design principles
 
 <small>
 
+# <div></div>
+
 * **The documentation is really the _single source of truth_** 
-  - **_Single_** means _Never repeat yourself_
-  - **_Source_** means that tests comes from documentation, not the other way around
-  - **_Truth_** means If it says that the app is run with that command line, then it is!
+  - **_Single_**: _Never repeat yourself_
+  - **_Source_**: Tests comes from documentation, not the other way around
+  - **_Truth_**: If it says that the app is run with that command line, then it is!
+
+# <div></div>
     
 * **Whatever the documentation**
-  Specifications, acceptance test, user guide, readme file... They are all valid source of truth
+  Specifications, acceptance test, user guide, readme file... 
+  They are all valid source of truth
  
 <!-- ![bg right:30% 80%](acc_test.png) -->
 
 </small>
 
 <!-- 
-source of truth : litteraly, that is not just "doc as code", but "doc is code", a kind of litterate testing
+source of truth : literally, that is not just "doc as code", but "doc is code", a kind of literate testing
 
-Whatever the doc : Even those slides, written in Markdown using Marp, are a valid source of thruth
+Whatever the doc : Even those slides, written in Markdown using Marp, are a valid source of truth
 
 -->
 
@@ -185,7 +196,7 @@ Whatever the doc : Even those slides, written in Markdown using Marp, are a vali
 > could you write a simple user guide for the rpl utility (string replace), with some use examples, in Markdown, with a toc, some table and a mermaid diagram?
 - [backup file](./rpl_ug.md)
 - paste dans vscode, vision en markdown
-- run avec bbt, ne doit rien faire
+- run avec bbt avant modifs
 - transformation des exemples en script bbt
 - run du test !
 -->
@@ -229,7 +240,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
   else
      Ask ("I see.");
   ~~~
-* But nevetheless very wise
+* But nevertheless very wise
   ~~~Ada
   elsif Answer.Contains ("rust") then   
      Ask ("What's your problem with Ada?");
@@ -239,7 +250,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 ---
 
-* Consider those bbt steps:
+## Consider those bbt steps:
 
   ~~~
   - Given there is no existing `.config` file
@@ -250,7 +261,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 
 # <div></div>
 
-* It may seem complex at first glance, but is it?
+## It may seem complex at first glance, but is it?
 
 ---
 
@@ -264,7 +275,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 - And     the file `.config`   contains   `autosave = true`
 ~~~
 
-* All sentences have the same simple structure, in the same order
+- All sentences have the same simple structure, in the same order
   **preposition + subject phrase + verb phrase + object phrase**
 
 * The Markdown syntax is helping : parameters are between backticks, no possible confusion with keywords
@@ -298,9 +309,9 @@ no need for NER (Named Entity Recognition)
 
 **Tokenization**
 
-   Given  |  there  | is    | no    | existing | `` `.config` `` | file
-   -------|---------|-------|-------|----------|-----------------|-----
-   keyword|*ignored*|keyword|keyword|*ignored* |parameter      |keyword
+  |  Given  |  there  |    is   |    no   | existing | `` `.config` `` |  file   |
+  |:-------:|:-------:|:-------:|:-------:|:--------:|:---------------:|:-------:|
+  | keyword |    -    | keyword | keyword |    -     |     parameter   | keyword |
 
 </small>
 
@@ -317,13 +328,14 @@ But actually The only phrase that need to be identify is the verb phrase
 <small> 
 
 Before the verb, it's the subject chunk, after the verb it's the object chunk.
+
 And if it's a Markdown code span (or a code block), it's a parameter.
 
 # <div></div>
 
-Chunk: | Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
--------|-------------|----------------|---------------------|-------------|---------------|--------------------
-Token: | *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
+| Preposition | Subject phrase | *Subject parameter* | Verb phrase | object phrase | *Object Parameter*
+|:-----------:|:--------------:|:-------------------:|:-----------:|:-------------:|:------------------:
+| *Given*     |                |                     | *Is_No*     | *File_Name*   | *.config*
 
 </small>
 
@@ -376,16 +388,18 @@ Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_
 -->
 
 ---
-## Current State
-- Token : less than 40
-- Grammar definition : about 50 lines 
-- 640 SLOC of code for lexing and parsing 
+### Current State
+- Token: less than 40
+- Grammar definition: about 50 lines 
+- Total lines of code for lexing and parsing: 640
 
 # <div></div>
 
-Not at all a code I am proud of yet (could be easier to read and more robust)
+### WIP (the code could be simpler, easier to read and more robust)
 
-But it is able to "understand" sentences like:
+# <div></div>
+
+### But it is able to "understand" sentences like:
 ~~~
 - Then the resulting `log.txt` file does not contain any `Error:`
 ~~~
@@ -410,8 +424,8 @@ But before concluding that bbt is a success, let's face the ambiguity question.
   - given there is no `config` file in the current directory
   ~~~
 
-  - :bomb: In the Object chunk, there is both `file` and `directory` keywords...
-  - May be detected because both word are in bbt's vocabulary
+  * :bomb: In the Object chunk, there is both `file` and `directory` keywords...
+  * May be detected because both word are in bbt's vocabulary
 
 # <div></div>
 
@@ -420,8 +434,8 @@ But before concluding that bbt is a success, let's face the ambiguity question.
   - then the output never contains `Error`
   ~~~
 
-  - :bomb: `never` is not a keyword, this will indeed check that the output contains `error`
-  - Can't be detected because `never` is ignored by bbt
+  * :bomb: `never` is not a keyword, this will indeed check that the output contains `error`
+  * Can't be detected because `never` is ignored by bbt
 
 </small>
 
@@ -471,8 +485,8 @@ https://github.com/LionelDraghi/bbt/issues
 
 # #runthedoc #bbt
 <!-- 
-As a conclusion, bbt seems to be a usefull tools, and i don't see for now any drawback in using it.
-I hoppe you'll give it a try, and that you'll find it usefull too.
+As a conclusion, bbt seems to be a useful tools, and i don't see for now any drawback in using it.
+I hoppe you'll give it a try, and that you'll find it useful too.
 -->
 
 ---
