@@ -110,6 +110,8 @@ Let's see that together.
 So this is the story of an experiment that turn to actually be useful.
 
 Not suitable for all test cases, but who has never had to test an CLI app?
+
+The rest will be easier if you have an initial idea of what the tool is, so let's start right away with a demo.
 -->
 
 
@@ -120,7 +122,7 @@ Not suitable for all test cases, but who has never had to test an CLI app?
 <!-- 
 1. check that bbt is in your PATH
 1. creation d'un repertoire + fichier demo.md
-1. lancer bbt avant qu'il y ait un scenario
+1. lancer bbt avant qu'il y ait un scenario dans le fichier
 1. lancer bbt avant qu'il y ait un step
 1. creation test grep --version
 1. feature Case sensitivity
@@ -163,20 +165,20 @@ If it's true for literate programming, it's also true for testing.
 
 <small>
 
-# <div></div>
+* **The documentation is the _single source of truth_** 
+  **_Single_**: _Never repeat yourself_
+  **_Source_**: Tests comes from documentation, not the other way around
+  **_Truth_**: If it says that the app is run with that command line, then it is!
 
-* **The documentation is really the _single source of truth_** 
-  - **_Single_**: _Never repeat yourself_
-  - **_Source_**: Tests comes from documentation, not the other way around
-  - **_Truth_**: If it says that the app is run with that command line, then it is!
-
-# <div></div>
+## <div></div>
     
 * **Whatever the documentation**
   Specifications, acceptance test, user guide, readme file... 
   They are all valid source of truth
  
-<!-- ![bg right:30% 80%](acc_test.png) -->
+## <div></div>
+    
+* **Do not let tests implementation details show through in the documentation**
 
 </small>
 
@@ -184,7 +186,6 @@ If it's true for literate programming, it's also true for testing.
 source of truth : literally, that is not just "doc as code", but "doc is code", a kind of literate testing
 
 Whatever the doc : Even those slides, written in Markdown using Marp, are a valid source of truth
-
 -->
 
 ---
@@ -380,7 +381,8 @@ Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_
 
 # <div></div>
 
-* Note: there is a dry run mode: `bbt ex` (or `bbt explain`)
+* Wan't to know what will be done? 
+  There is a dry run mode: `bbt ex` (or `bbt explain`)
 
 </small>
 
@@ -393,11 +395,11 @@ Grammar (Preposition => Given, Verb => Is_No, Obj_Attrib => File, ...) := Setup_
 - Grammar definition: about 50 lines 
 - Total lines of code for lexing and parsing: 640
 
-# <div></div>
+## <div></div>
 
-### WIP (the code could be simpler, easier to read and more robust)
+### WIP! The code could be simpler, easier to read and more robust...
 
-# <div></div>
+## <div></div>
 
 ### But it is able to "understand" sentences like:
 ~~~
@@ -457,33 +459,31 @@ But before concluding that bbt is a success, let's face the ambiguity question.
 * And why not add a feature to rewrite the steps in a standardized way? (`bbt rewrite scenario.md`)
 
 <!-- 
--->
-
----
-
-# But the challenge is still open: find a more serious error case and be awarded!
-
-# <div></div>
-
-<center>
-https://github.com/LionelDraghi/bbt/issues
-
-<!-- 
+But the challenge is still open: find a more serious error case and be awarded!
 -->
 
 ---
 
 <!-- header: "[Introduction to bbt](#part-1---introduction-to-bbt-1) | [Partial parsing](#part-2---partial-parsing-1) | [Surviving an ambiguous world](#part-3---surviving-an-ambiguous-world-1) | **[Conclusion](#conclusion-1)**" -->
 
-# Conclusion
+<small>
+
+# Special thanks
+
+* ### to AdaCore 
+
+   - :heart: For awarding bbt __Ada Crate of the word 2024__ (https://blog.adacore.com/)
 
 # <div></div>
 
-# Let's make documentation great again!  
+* ### to the early adopters and contributors
 
-# Better than _doc as code_, _doc is code_!
+   - :heart: Paul   (https://github.com/pyjarrett)
+   - :heart: Manuel (https://github.com/mgrojo/coap_spark)
+   - :heart: Simon  (https://github.com/simonjwright/ada_caser)
 
-# #runthedoc #bbt
+</small>
+
 <!-- 
 As a conclusion, bbt seems to be a useful tools, and i don't see for now any drawback in using it.
 I hoppe you'll give it a try, and that you'll find it useful too.
@@ -491,28 +491,25 @@ I hoppe you'll give it a try, and that you'll find it useful too.
 
 ---
 
-# Special thanks to
+# Conclusion
 
-* ## AdaCore 
+# <div></div>
 
-   - :heart: For awarding bbt __Ada Crate of the word 2024__ (https://blog.adacore.com/)
+Ideas and features are welcome https://github.com/LionelDraghi/bbt/discussions 
 
-* ## The early adopters and contributors
+# <div></div>
 
-   - :heart: Paul   (https://github.com/pyjarrett)
-   - :heart: Manuel (https://github.com/mgrojo/coap_spark)
-   - :heart: Simon  (https://github.com/simonjwright/ada_caser)
+<small>
 
-<!-- 
--->
+Slides made with [Marp](https://marp.app/) available here https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
 
-
----
-
-
+</small>
 
 <!-- 
-The final word is not mine
+As a conclusion, bbt seems to be a useful tools, and i don't see for now any drawback in using it.
+I hoppe you'll give it a try, and that you'll find it useful too.
+
+Everything is open to discussion, so feel free to contribute your ideas and features.
 -->
 
 ---
@@ -522,19 +519,8 @@ The final word is not mine
 # Q & A
 
 # <div></div>
-# <div></div>
-# <div></div>
-
-<small>
-
-Ideas and features are welcome at https://github.com/LionelDraghi/bbt/discussions 
-
-Slides made with [marp](https://marp.app/) available here https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
-
-</small>
 
 <!-- 
-Everything is open to discussion!
 -->
 
 
