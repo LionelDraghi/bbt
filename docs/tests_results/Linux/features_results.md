@@ -439,7 +439,11 @@
   ### Feature: missing or erroneous code blocks  
   - [X] scenario [Code block missing at the end of the file](../../features/C070_missing_code_block.md) pass  
 
-  - [X] scenario [closing code block mark missing](../../features/C070_missing_code_block.md) pass  
+  - [X] scenario [Code block missing while reaching next step](../../features/C070_missing_code_block.md) pass  
+
+  - [X] scenario [Code block missing while reaching next scenario](../../features/C070_missing_code_block.md) pass  
+
+  - [X] scenario [Closing code block mark missing](../../features/C070_missing_code_block.md) pass  
 
 ## [C080_missing_scenario.md](../../features/C080_missing_scenario.md)  
   ### Feature:   
@@ -455,11 +459,11 @@
   - [X] scenario [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md) pass  
 
 
-## Summary : **Success**, 125 scenarios OK
+## Summary : **Success**, 127 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 125   |
+| Successful | 127   |
 | Empty      | 0     |
 

@@ -18,19 +18,23 @@ package body FSM is
    pragma Warnings (Off, Put_Debug_Line);
 
    -- -----------------------------------------------------------------------
-   Internal_State            : States            := In_Document;
+   Internal_State            : States      := In_Document;
    Internal_Previous_State   : States;
    Internal_Step_State       : Step_States;
-   Internal_Background       : Backgrounds       := Doc;
-   Internal_Doc_State        : Doc_States        := In_Document;
+   Internal_Background       : Backgrounds := Doc;
+   Internal_Doc_State        : Doc_States  := In_Document;
 
    -- Code blocks management :
-   CB_Set                    : Boolean           := False;
-   CB_Missing                : Boolean           := False;
-   Previous_Step_CB_Expected : Boolean           := False;
+   CB_Set                    : Boolean     := False;
+   CB_Missing                : Boolean     := False;
+   Previous_Step_CB_Expected : Boolean     := False;
 
    -- --------------------------------------------------------------------------
-   function Current_State  return States is (Internal_State);
+   function Current_State return States is (Internal_State);
+
+   -- --------------------------------------------------------------------------
+   function In_File_Content return Boolean is
+     (Current_State = In_File_Content);
 
    procedure Restore_Previous_State is
    begin
@@ -91,6 +95,9 @@ package body FSM is
    end Set_State;
 
    -- --------------------------------------------------------------------------
+   function In_A_Code_Block return Boolean is (In_File_Content);
+
+   -- --------------------------------------------------------------------------
    function Current_Doc_State  return Doc_States  is (Internal_Doc_State);
    function Current_Background return Backgrounds is (Internal_Background);
    function Current_Step_State return Step_States is (Internal_Step_State);
@@ -104,7 +111,11 @@ package body FSM is
    end Set_Step_State;
 
    -- --------------------------------------------------------------------------
-   function Code_Block_Already_Set return Boolean is (CB_Set);
+   function Code_Block_Expected return Boolean is
+     (Current_State = In_Step and Previous_Step_CB_Expected);
+
+   -- --------------------------------------------------------------------------
+   function Code_Block_Already_Provided return Boolean is (CB_Set);
 
    -- --------------------------------------------------------------------------
    function Code_Block_Missing return Boolean is

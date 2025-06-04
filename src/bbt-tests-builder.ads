@@ -29,9 +29,10 @@ package BBT.Tests.Builder is
                              Code_Block_Expected :        Boolean;
                              Cmd_List            :        Steps.Cmd_List;
                              Loc                 : Location_Type);
-   procedure Add_Line       (Line : String);
+   procedure Add_Line       (Line : String;
+                             Loc  : Location_Type);
    procedure Add_Code_Fence (Loc : Location_Type);
-   function In_File_Content return Boolean;
+   -- function In_File_Content return Boolean;
    -- Return true if we are in a code block (between code fences)
 
    procedure End_Of_Scenario (Loc : Location_Type);

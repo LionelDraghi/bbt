@@ -82,7 +82,7 @@ If what you want is just test that the output contains something, then use the "
 
 If what you want is search for some pattern, then use the "matches" keyword, followed by a regexp :  
 
-    - Then output **matches** `sut version [0-9]+\.[0-9]+\.[0-9]+`  
+    - Then output **matches** `sut version v[0-9]+\.[0-9]+\.[0-9]+`  
 
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  
@@ -101,8 +101,8 @@ To get a complete (although less friendly) view on the grammar:
 
     bbt list_grammar  
 
-And the to get the list of keywords:  
+To check your scenario with a dry run:  
 
-    bbt list_keywords  
+    bbt explain scenario.md  
 
 More features here : https://github.com/LionelDraghi/bbt/tree/main#bbt-readme-
