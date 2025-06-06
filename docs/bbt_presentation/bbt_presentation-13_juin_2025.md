@@ -17,6 +17,7 @@ style: |
    h1 {text-align: center;
        font-size: 2rem;
        font-weight: medium;
+       font-weight: 700;
        text-shadow: 2px 2px 2px rgba(49, 165, 159, 0.5);}
    h2 {font-size: 1.6rem;;
        font-weight: 600;}   
