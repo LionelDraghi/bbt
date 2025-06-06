@@ -232,15 +232,11 @@ package body BBT.Scenarios.Files is
                   Tests.Builder.Add_Code_Fence (Loc);
 
                when Text_Line =>
-                  if Tests.Builder.In_File_Content then
-                     Put_Debug_Line ("File content " & Filler & Line, Loc);
-                  else
-                     Put_Debug_Line ("Ignored      " & Filler & Line, Loc);
-                  end if;
-                  Tests.Builder.Add_Line (To_String (Attrib.Line));
+                  Put_Debug_Line ("File content " & Filler & Line, Loc);
+                  Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);
 
                when Empty_Line =>
-                  Tests.Builder.Add_Line (Line);
+                  Tests.Builder.Add_Line (Line, Loc);
 
             end case;
 

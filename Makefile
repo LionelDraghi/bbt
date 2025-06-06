@@ -3,6 +3,8 @@ PLATFORM = $(shell uname -s)
 .SILENT:
 all: build check doc
 
+bbt: build
+
 build:
 	echo
 	echo === build #=# and instrument bbt

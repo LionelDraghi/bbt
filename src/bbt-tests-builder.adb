@@ -53,7 +53,9 @@ package body BBT.Tests.Builder is
       function Current_State return States;
       procedure Set_State (To_State    : States;
                            CB_Expected : Boolean := False);
-      procedure Restore_Previous_State;
+      procedure Restore_Previous_State; 
+      -- Restore_State_Before_In_Step;
+      -- When exiting the File content state, it restore the previous one
 
       function Current_Doc_State return Doc_States;
       function Current_Background return Backgrounds;
@@ -62,7 +64,13 @@ package body BBT.Tests.Builder is
       procedure Set_Step_State (To_State            : Step_States;
                                 Code_Block_Expected : Boolean);
 
-      function Code_Block_Already_Set return Boolean;
+      function In_A_Code_Block return Boolean;
+
+      function Code_Block_Expected return Boolean;
+      -- Tell if we are processing a step and that if that step is
+      -- expecting a code block.
+
+      function Code_Block_Already_Provided return Boolean;
       -- Tell if a code block has already been provided in that step.
       -- Reset when calling Set_State (In_Step),
       -- that is when a new step starts.
@@ -76,6 +84,7 @@ package body BBT.Tests.Builder is
 
    package body FSM is separate;
 
+   Code_BLock_Expected_Line,
    Opening_Marker_Line : Ada.Text_IO.Count := 0;
 
    use FSM;
@@ -84,11 +93,12 @@ package body BBT.Tests.Builder is
    procedure Check_Missing_Code_Block (Loc : Location_Type) is
    begin
       if Code_Block_Missing then
-         Put_Error ("missing expected Code Block", Loc);
+         Put_Error ("Missing expected Code Block expected line"
+                    & Code_BLock_Expected_Line'Image, Loc);
       end if;
    end Check_Missing_Code_Block;
 
-    -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Last_Scenario return Scenario_Maybe is
    begin
       case Current_Doc_State is
@@ -231,6 +241,11 @@ package body BBT.Tests.Builder is
    begin
       --  Put_Debug_Line ("Add_Step " & Step'Image, Step.Location,
       --            Verbosity => IO.Debug);
+      if Code_Block_Expected then
+         Code_BLock_Expected_Line := Line (Loc);
+         --** Put_Line ("Code block expected " & Code_BLock_Expected_Line'Image);
+      end if;
+
       if Current_State = In_Document or Current_State = In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step """ &
            To_String (Step_Info.Src_Code)
@@ -247,10 +262,12 @@ package body BBT.Tests.Builder is
          when Given_Step =>
             if Settings.Strict_Gherkin then
                if Current_Step_State = In_When_Step then
-                  IO.Put_Warning ("Given step """ & To_String (Step_Info.Src_Code) &
-                                    """ appears after a ""When""", Loc);
+                  IO.Put_Warning
+                    ("Given step """ & To_String (Step_Info.Src_Code) &
+                       """ appears after a ""When""", Loc);
                elsif Current_Step_State = In_Then_Step then
-                  IO.Put_Warning ("Given step """ & To_String (Step_Info.Src_Code) &
+                  IO.Put_Warning
+                    ("Given step """ & To_String (Step_Info.Src_Code) &
                                     """ appears after a ""Then""", Loc);
                end if;
             end if;
@@ -276,16 +293,19 @@ package body BBT.Tests.Builder is
 
       case Current_Background is
          when Doc     =>
-            Put_Debug_Line ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
-                      Verbosity => IO.Debug);
+            Put_Debug_Line
+              ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
+               Verbosity => IO.Debug);
             Append_Step (Current_Doc.Background);
          when Feature =>
-            Put_Debug_Line ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
-                      Verbosity => IO.Debug);
+            Put_Debug_Line
+              ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
+               Verbosity => IO.Debug);
             Append_Step (Last_Feature.Background);
          when None    =>
-            Put_Debug_Line ("Add_Step in Scenario : " & Step_Info.Src_Code'Image,
-                            Verbosity => IO.Debug);
+            Put_Debug_Line
+              ("Add_Step in Scenario : " & Step_Info.Src_Code'Image,
+               Verbosity => IO.Debug);
             if Last_Scenario = null then
                Put_Error
                  ("Adding step to doc, but there is no scenario yet", Loc);
@@ -306,11 +326,12 @@ package body BBT.Tests.Builder is
    -- is restored.
    begin
       -- Put_Debug_Line ("Add_Code_Block, Current_State = ",
-      --  Loc, Verbosity => IO.Debug);
+      --                 Loc, Verbosity => IO.Debug);
+
       case Current_State is
          when In_Step =>
             Opening_Marker_Line := Line (Loc);
-            if Code_Block_Already_Set then
+            if Code_Block_Already_Provided then
                Put_Warning
                  ("File content already provided, ignoring this code fence",
                   Loc);
@@ -321,11 +342,13 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Exiting code block
+            --** Set_State (In_Step);
             Opening_Marker_Line := 0;
             Restore_Previous_State;
-            Put_Debug_Line ("Add_Code_Block, exiting code block. File_Content = "
-                            & Last_Step.Data.File_Content'Image,
-                            Loc, Verbosity => IO.Debug);
+            Put_Debug_Line
+              ("Add_Code_Fence, exiting code block. File_Content = "
+               & Last_Step.Data.File_Content'Image,
+               Loc, Verbosity => IO.Debug);
 
          when In_Document =>
             Current_Doc.Comment.Append ("```");
@@ -339,7 +362,7 @@ package body BBT.Tests.Builder is
          when In_Background =>
             case Current_Background is
                when None =>
-                  Put_Error ("No Doc or Feature Background??");
+                  Put_Error ("No Doc or Feature Background???");
                when Doc =>
                   Current_Doc.Comment.Append ("```");
                when Feature =>
@@ -350,7 +373,7 @@ package body BBT.Tests.Builder is
    end Add_Code_Fence;
 
    -- --------------------------------------------------------------------------
-   function In_File_Content return Boolean is (Current_State = In_File_Content);
+   -- function In_File_Content return Boolean is (Current_State = In_File_Content);
 
    -- --------------------------------------------------------------------------
    procedure End_Of_Scenario (Loc : Location_Type) is
@@ -359,13 +382,15 @@ package body BBT.Tests.Builder is
       if Current_State = In_File_Content then
          Put_Error ("Code fenced block opened line"
                     & Opening_Marker_Line'Image &
-                      ", but not not closed", Loc);
+                      ", but not closed", Loc);
       end if;
    end End_Of_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Add_Line (Line : String) is
+   procedure Add_Line (Line : String;
+                       Loc  : Location_Type) is
    begin
+      --** Put_Line ("*** Add_Line, State = " & Current_State'Image);
       case Current_State is
          when In_Document =>
             Current_Doc.Comment.Append (Line);
