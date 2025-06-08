@@ -53,7 +53,7 @@ package body BBT.Tests.Builder is
       function Current_State return States;
       procedure Set_State (To_State    : States;
                            CB_Expected : Boolean := False);
-      procedure Restore_Previous_State; 
+      procedure Restore_Previous_State;
       -- Restore_State_Before_In_Step;
       -- When exiting the File content state, it restore the previous one
 
@@ -389,6 +389,8 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String;
                        Loc  : Location_Type) is
+
+      pragma Unreferenced (Loc);
    begin
       --** Put_Line ("*** Add_Line, State = " & Current_State'Image);
       case Current_State is

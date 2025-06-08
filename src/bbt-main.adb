@@ -167,9 +167,18 @@ begin
       Ada.Text_IO.Put_Line ("bbt version " & Settings.BBT_Version);
 
    when Help =>
-      Cmd_Line.Put_Help (Settings.Current_Topic);
-      -- Fixme: what if there is multiple topics ont the cmd line?
+      --  if Settings.Current_Topic = Tutorial then
+      --     Status_Bar.Put_Activity ("Creating tutorial");
+      --     Cmd_Line.Create_Template;
+      --
+      --  elsif Settings.Current_Topic = Example then
+      --     Status_Bar.Put_Activity ("Creating example");
+      --     Cmd_Line.Create_Example;
+      --
+      --  else
+         Cmd_Line.Put_Help (Settings.Current_Topic);
 
+      --  end if;
    end case;
 
    -- --------------------------------------------------------------------

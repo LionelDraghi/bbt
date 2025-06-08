@@ -24,6 +24,8 @@ Basic commands:
   ct | create_template   : create a commented example of rules file
   he | help [topic]      : base help, or more on one of the topic listed below
   he | help on_all       : full online help
+  he | help tutorial     : create a tutorial in bbt_tutorial.md
+  he | help example      : create a scenario example in bbt_example.md
 
 Help topics:
   filtering : --select --exclude --include

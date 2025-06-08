@@ -20,6 +20,7 @@ generate_C = false
 
 [[depends-on]]
 ansiada = "^1.0.0"
+## gnat="^15.1.2"
 
 # [[test]]
 # command = ["make", "build", "check"]

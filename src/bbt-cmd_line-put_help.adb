@@ -38,6 +38,8 @@ begin
          Put_Line ("  ct | create_template   : create a commented example of rules file");
          Put_Line ("  he | help [topic]      : base help, or more on one of the topic listed below");
          Put_Line ("  he | help on_all       : full online help");
+         Put_Line ("  he | help tutorial     : create a tutorial in " & Tutorial_Name);
+         Put_Line ("  he | help example      : create a scenario example in " & Example_Name);
          New_Line;
          Put_Line ("Help topics:");
          Put_Line ("  filtering : --select --exclude --include");

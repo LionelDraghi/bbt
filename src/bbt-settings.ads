@@ -31,6 +31,8 @@ private package BBT.Settings is
                        Matching,
                        Other,
                        Debug,
+                     --    Tutorial,
+                     --    Example,
                        On_All);
    -- Topics are given in importance order, because this order is used when
    -- printing full help with command 'help on_all'
@@ -61,6 +63,8 @@ private package BBT.Settings is
    -- except those provided with --select or --include.
 
    Template_Name : constant String := "bbt_template.md";
+   Tutorial_Name : constant String := "bbt_tutorial.md";
+   Example_Name  : constant String := "bbt_example.md";
 
    -- --------------------------------------------------------------------------
    function Launch_Directory return String;

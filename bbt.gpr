@@ -20,6 +20,7 @@ project BBT is
                                 "-gnateE",
                                 "-gnatVa",
                                 "-gnatwa",
+                                "-gnatX0",
                                 "-gnatyabefhiklnprtx");
       -- -gnatQ : Don't quit
       -- -gnatf : Full errors
@@ -29,6 +30,7 @@ project BBT is
       -- -gnateE : extra infos in exception messages
       -- -gnatVa : all validity checks
       -- -gnatwa : activate most optional warning messages
+      -- -gnatX0 : experimental extensions (for External_Initialization aspect)
       --
       -- Style checking :
       -- a : Check attribute casing
