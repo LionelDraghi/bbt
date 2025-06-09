@@ -567,7 +567,7 @@ Ideas and features are welcome https://github.com/LionelDraghi/bbt/discussions
 
 <small>
 
-Slides made with [Marp](https://marp.app/) available here https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_presentation/
+Slides made with [Marp](https://marp.app/) available here https://github.com/LionelDraghi/bbt/blob/main/docs/AEiC_2025_presentation/
 
 </small>
 
