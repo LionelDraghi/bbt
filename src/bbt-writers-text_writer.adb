@@ -184,6 +184,15 @@ package body BBT.Writers.Text_Writer is
    end Put_Step;
 
    -- --------------------------------------------------------------------------
+   overriding procedure Explain (Writer : Text_Writer;
+                                  Step   : Step_Type'Class) is
+   begin
+      Put_Line (Step.Location'Image & " Step """ &
+                (+Step.Data.Src_Code) & """");
+      Put_Line (Inline_Image (Step));
+   end Explain;
+
+   -- --------------------------------------------------------------------------
    overriding procedure Put_Scenario_Title (Writer : Text_Writer;
                                             S      : String) is
    begin

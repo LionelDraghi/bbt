@@ -10,12 +10,22 @@
 ## [sut_version.md](../../examples/sut_version.md)  
   - [X] scenario [I want to know sut version](../../examples/sut_version.md) pass  
 
+## [example.md](../../../src/help/example.md)  
+  ### Feature: grep matching may be case insensitive  
+  - [X] scenario [](../../../src/help/example.md) pass  
 
-## Summary : **Success**, 4 scenarios OK
+  - [X] scenario [default case sensitive matching](../../../src/help/example.md) pass  
+
+  - [X] scenario [](../../../src/help/example.md) pass  
+
+  - [X] scenario [case insensitive matching](../../../src/help/example.md) pass  
+
+
+## Summary : **Success**, 6 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 4     |
+| Successful | 6     |
 | Empty      | 0     |
 

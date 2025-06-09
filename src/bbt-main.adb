@@ -134,7 +134,7 @@ begin
       -- Let's display our rebuild of the original test definition
       -- file comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
-      Writers.Put_Document_List (Model.Documents.The_Tests_List.all);
+      Writers.Explain (Model.Documents.The_Tests_List.all);
 
    when List =>
       Status_Bar.Put_Activity ("Analyzing documents");

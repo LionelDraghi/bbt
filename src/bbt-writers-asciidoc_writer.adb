@@ -162,6 +162,15 @@ package body BBT.Writers.Asciidoc_Writer is
    end Put_Step;
 
    -- --------------------------------------------------------------------------
+   overriding procedure Explain (Writer : Asciidoc_Writer;
+                                 Step   : Step_Type'Class) is
+   begin
+      Put_Line (Line (Step.Location)'Image & ": Step """ &
+                (+Step.Data.Src_Code) & """");
+      Put_Line (Inline_Image (Step));
+   end Explain;
+
+   -- --------------------------------------------------------------------------
    overriding procedure Put_Scenario_Title (Writer : Asciidoc_Writer;
                                             S      : String) is
    begin

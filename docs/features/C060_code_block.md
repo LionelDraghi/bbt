@@ -77,11 +77,7 @@ Popy
 - And output contains  
 ```
 lot_of_code_blocks.md:36: Warning : File content already provided, ignoring this code fence  
-lot_of_code_blocks.md:39: Warning : File content already provided, ignoring this code fence  
-lot_of_code_blocks.md:40: Warning : File content already provided, ignoring this code fence  
-lot_of_code_blocks.md:43: Warning : File content already provided, ignoring this code fence  
 lot_of_code_blocks.md:58: Warning : File content already provided, ignoring this code fence  
-lot_of_code_blocks.md:63: Warning : File content already provided, ignoring this code fence  
 ```
 - And output contains  
 ```

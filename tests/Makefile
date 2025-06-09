@@ -85,7 +85,7 @@ check: setup ./bbt ./sut
 	@ echo 2. examples check ================
 	@ ./bbt --yes -k -c -q -sb -hm \
 	-o $(RESULTS_DIR)/examples_results.md \
-	../docs/examples || echo KO, check the availability of gcc and rpl on your platform "********"
+	../docs/examples ../src/help/example.md || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests

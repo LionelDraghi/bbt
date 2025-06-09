@@ -52,7 +52,8 @@ package body BBT.Tests.Builder is
 
       function Current_State return States;
       procedure Set_State (To_State    : States;
-                           CB_Expected : Boolean := False);
+                           CB_Expected : Boolean := False;
+                           Loc         : Location_Type);
       procedure Restore_Previous_State;
       -- Restore_State_Before_In_Step;
       -- When exiting the File content state, it restore the previous one
@@ -62,23 +63,35 @@ package body BBT.Tests.Builder is
       function Current_Step_State return Step_States;
 
       procedure Set_Step_State (To_State            : Step_States;
-                                Code_Block_Expected : Boolean);
-
-      function In_A_Code_Block return Boolean;
+                                Code_Block_Expected : Boolean;
+                                Loc                 : Location_Type);
 
       function Code_Block_Expected return Boolean;
       -- Tell if we are processing a step and that if that step is
       -- expecting a code block.
 
-      function Code_Block_Already_Provided return Boolean;
-      -- Tell if a code block has already been provided in that step.
-      -- Reset when calling Set_State (In_Step),
-      -- that is when a new step starts.
-
       function Code_Block_Missing return Boolean;
       -- Tell if a code block is missing in a Step needing one.
       -- WARNING : this function has side effect, to avoid multiple
       -- error reporting, it will return True only once;
+
+      -- --------------------------------------------------------------------------
+      package Code_Block_Marks is
+
+         procedure Reset_Count;
+         procedure Add_Mark;
+         -- Incremented Count
+         -- Count = 0, 2, 4, etc. => not in Code_Block
+         -- Count = 1, 3, 5, etc. =>     in Code_Block
+
+         -- --------------------------------------------------------------------------
+         function Count return Natural;
+
+         function In_The_First_Code_Block return Boolean;
+         function In_A_Code_Block return Boolean;
+         function Code_Block_Already_Provided return Boolean;
+
+      end Code_Block_Marks;
 
    end FSM;
 
@@ -129,7 +142,7 @@ package body BBT.Tests.Builder is
       The_Tests_List.Append
         (Create_Document (Name     => To_Unbounded_String (Name),
                           Location => Location (Name, 0)));
-      Set_State (In_Document);
+      Set_State (In_Document, Loc => IO.No_Location);
    end Add_Document;
 
    -- --------------------------------------------------------------------------
@@ -140,7 +153,7 @@ package body BBT.Tests.Builder is
         (Create_Feature (Name       => To_Unbounded_String (Name),
                          Parent     => Current_Doc,
                          Location   => Loc));
-      Set_State (In_Feature);
+      Set_State (In_Feature, Loc => Loc);
       Check_Missing_Code_Block (Loc);
    end Add_Feature;
 
@@ -163,7 +176,7 @@ package body BBT.Tests.Builder is
                                 Parent   => Node_Access (Last_Feature),
                                 Location => Loc));
       end case;
-      Set_State (In_Scenario);
+      Set_State (In_Scenario, Loc => Loc);
       Check_Missing_Code_Block (Loc);
    end Add_Scenario;
 
@@ -194,7 +207,7 @@ package body BBT.Tests.Builder is
                           Loc);
       end case;
 
-      Set_State (In_Background);
+      Set_State (In_Background, Loc => Loc);
       Check_Missing_Code_Block (Loc);
 
    end Add_Background;
@@ -271,7 +284,7 @@ package body BBT.Tests.Builder is
                                     """ appears after a ""Then""", Loc);
                end if;
             end if;
-            Set_Step_State (In_Given_Step, Code_Block_Expected);
+            Set_Step_State (In_Given_Step, Code_Block_Expected, Loc);
 
          when When_Step  =>
             if Settings.Strict_Gherkin then
@@ -284,10 +297,10 @@ package body BBT.Tests.Builder is
                                   & To_String (Step_Info.Src_Code), Loc);
                end if;
             end if;
-            Set_Step_State (In_When_Step, Code_Block_Expected);
+            Set_Step_State (In_When_Step, Code_Block_Expected, Loc);
 
          when Then_Step  =>
-            Set_Step_State (In_Then_Step, Code_Block_Expected);
+            Set_Step_State (In_Then_Step, Code_Block_Expected, Loc);
 
       end case;
 
@@ -327,17 +340,24 @@ package body BBT.Tests.Builder is
    begin
       -- Put_Debug_Line ("Add_Code_Block, Current_State = ",
       --                 Loc, Verbosity => IO.Debug);
+      Code_Block_Marks.Add_Mark;
 
       case Current_State is
          when In_Step =>
             Opening_Marker_Line := Line (Loc);
-            if Code_Block_Already_Provided then
-               Put_Warning
-                 ("File content already provided, ignoring this code fence",
-                  Loc);
-               Last_Step.Comment.Append ("```");
+            if FSM.Code_Block_Marks.Count = 1 and Code_Block_Expected then
+               Set_State (In_File_Content, Loc => Loc);
+
             else
-               Set_State (In_File_Content);
+               Last_Step.Comment.Append ("```");
+
+               if FSM.Code_Block_Marks.Count = 3 then
+                  -- We report the warning only on the first unexpected mark
+                  Put_Warning
+                    ("File content already provided, ignoring this code fence",
+                     Loc);
+               end if;
+
             end if;
 
          when In_File_Content =>
@@ -373,9 +393,6 @@ package body BBT.Tests.Builder is
    end Add_Code_Fence;
 
    -- --------------------------------------------------------------------------
-   -- function In_File_Content return Boolean is (Current_State = In_File_Content);
-
-   -- --------------------------------------------------------------------------
    procedure End_Of_Scenario (Loc : Location_Type) is
    begin
       Check_Missing_Code_Block (Loc);
@@ -389,10 +406,9 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String;
                        Loc  : Location_Type) is
-
-      pragma Unreferenced (Loc);
    begin
-      --** Put_Line ("*** Add_Line, State = " & Current_State'Image);
+      Put_Debug_Line ("*** Add_Line, State = " & Current_State'Image,
+                      Location => Loc);
       case Current_State is
          when In_Document =>
             Current_Doc.Comment.Append (Line);

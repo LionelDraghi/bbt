@@ -56,13 +56,13 @@ package body BBT.Model.Steps is
       return
         ("'" & (+Step.Data.Src_Code) & "', Action = " & Step.Data.Action'Image
          & (if Step.Data.Subject_String /= Null_Unbounded_String
-           then (", Subject = """ & (+Step.Data.Subject_String) & """")
+           then (", Subject parameter = """ & (+Step.Data.Subject_String) & """")
            else "")
          & (if Step.Filtered
            then (", Filtered " & (+Step.Data.Subject_String))
            else "")
          & (if Step.Data.Object_String /= Null_Unbounded_String
-           then (", Object = """ & (+Step.Data.Object_String) & """")
+           then (", Object parameter = """ & (+Step.Data.Object_String) & """")
            else "")
          & (if Step.Data.Object_File_Name /= Null_Unbounded_String
            then (if Step.Data.File_Type = Directory

@@ -79,7 +79,7 @@ To compile a C program with optimization, use:
 
 - When I successfully run `./optimize`
   
-- Then the output is  `The sum is: 4950` 
+- Then the output is `The sum is: 4950` 
 
 
 

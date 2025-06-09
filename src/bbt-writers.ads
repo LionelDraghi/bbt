@@ -65,8 +65,12 @@ private package BBT.Writers is
 
 
    -- -------------------------------------------------------------------------
-   -- Output of the scenario as understood and stored by bbt
+   -- Output of the scenario as stored by bbt
    procedure Put_Document_List (Doc_List : Documents.List);
+
+   -- -------------------------------------------------------------------------
+   -- Output of the scenario as understood by bbt
+   procedure Explain (Doc_List : Documents.List);
 
 private
    -- -------------------------------------------------------------------------
@@ -111,6 +115,8 @@ private
    -- Output of the scenario as understood and stored by bbt
    procedure Put_Step (Writer : Abstract_Writer;
                        Step   : Step_Type'Class) is abstract;
+   procedure Explain (Writer : Abstract_Writer;
+                      Step   : Step_Type'Class) is abstract;
    procedure Put_Scenario_Title (Writer : Abstract_Writer;
                                  S      : String) is abstract;
    procedure Put_Feature_Title (Writer : Abstract_Writer;
