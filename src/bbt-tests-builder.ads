@@ -28,14 +28,15 @@ package BBT.Tests.Builder is
    procedure Add_Step       (Step_Info           : in out Steps.Step_Data;
                              Code_Block_Expected :        Boolean;
                              Cmd_List            :        Steps.Cmd_List;
-                             Loc                 : Location_Type);
+                             Loc                 : Location_Type;
+                             Syntax_Error        : Boolean := False);
    procedure Add_Line       (Line : String;
                              Loc  : Location_Type);
    procedure Add_Code_Fence (Loc : Location_Type);
    -- function In_File_Content return Boolean;
    -- Return true if we are in a code block (between code fences)
 
-   procedure End_Of_Scenario (Loc : Location_Type);
+   procedure Close_Document (Loc : Location_Type);
 
    -- --------------------------------------------------------------------------
    procedure Duplicate_Multiple_Run;

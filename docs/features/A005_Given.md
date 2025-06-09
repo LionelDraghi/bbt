@@ -21,7 +21,6 @@ _Table of Contents:_
 
 ### Scenario: Checking that there is some dir
 - Given the directory `dir2`
-
 - Then there is a dir `dir2`
 
 ### Scenario: Checking that there is a file with some content

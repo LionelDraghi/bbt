@@ -218,13 +218,11 @@ package body BBT.Scenarios.Files is
                         Code_Block_Expected,
                         Cmd_List);
                   begin
-                     --  Put_Debug_Line ("             " & Filler & "  "
-                     --                  & Inline_Image (S), Loc);
-                     if No_Error then
-                        -- If the step was not clearly interpreted, let's ignore it
-                        Tests.Builder.Add_Step
-                          (S, Code_Block_Expected, Cmd_List, Loc);
-                     end if;
+                     --  If No_Error then
+                     Tests.Builder.Add_Step
+                       (S, Code_Block_Expected, Cmd_List, Loc,
+                        Syntax_Error => Some_Error);
+                     --  end if;
                   end;
 
                when Code_Fence =>
@@ -244,7 +242,7 @@ package body BBT.Scenarios.Files is
 
       end loop;
 
-      Tests.Builder.End_Of_Scenario (Loc);
+      Tests.Builder.Close_Document (Loc);
 
       -- And finally, let's record the document
       Close (Input);

@@ -108,6 +108,10 @@ package body BBT.Tests.Builder is
       if Code_Block_Missing then
          Put_Error ("Missing expected Code Block expected line"
                     & Code_BLock_Expected_Line'Image, Loc);
+      elsif Current_State = In_File_Content then
+         Put_Error ("Code fenced block opened line"
+                    & Opening_Marker_Line'Image &
+                      ", but not closed", Loc);
       end if;
    end Check_Missing_Code_Block;
 
@@ -216,7 +220,8 @@ package body BBT.Tests.Builder is
    procedure Add_Step (Step_Info           : in out Steps.Step_Data;
                        Code_Block_Expected : Boolean;
                        Cmd_List            : Steps.Cmd_List;
-                       Loc                 : Location_Type)
+                       Loc                 : Location_Type;
+                       Syntax_Error        : Boolean := False)
    is
       -- -----------------------------------------------------------------------
       procedure Append_Step (Scen : Scenario_Access) is
@@ -309,12 +314,28 @@ package body BBT.Tests.Builder is
             Put_Debug_Line
               ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
                Verbosity => IO.Debug);
-            Append_Step (Current_Doc.Background);
+            if Syntax_Error then
+               -- If there is a syntax error, it's useless to register the step
+               -- but we don't want the error to be ignored and have a final
+               -- count with no error.
+               Current_Doc.Background.Failed_Step_Count := @ + 1;
+            else
+               Append_Step (Current_Doc.Background);
+            end if;
+
          when Feature =>
             Put_Debug_Line
               ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
                Verbosity => IO.Debug);
-            Append_Step (Last_Feature.Background);
+            if Syntax_Error then
+               -- If there is a syntax error, it's useless to register the step
+               -- but we don't want the error to be ignored and have a final
+               -- count with no error.
+               Last_Feature.Background.Failed_Step_Count := @ + 1;
+            else
+               Append_Step (Last_Feature.Background);
+            end if;
+
          when None    =>
             Put_Debug_Line
               ("Add_Step in Scenario : " & Step_Info.Src_Code'Image,
@@ -323,7 +344,14 @@ package body BBT.Tests.Builder is
                Put_Error
                  ("Adding step to doc, but there is no scenario yet", Loc);
             else
-               Append_Step (Scenario_Access (Last_Scenario));
+               if Syntax_Error then
+                  -- If there is a syntax error, it's useless to register the step
+                  -- but we don't want the error to be ignored and have a final
+                  -- count with no error.
+                  Scenario_Access (Last_Scenario).Failed_Step_Count := @ + 1;
+               else
+                  Append_Step (Scenario_Access (Last_Scenario));
+               end if;
             end if;
 
       end case;
@@ -337,6 +365,7 @@ package body BBT.Tests.Builder is
    -- comments at the right level.
    -- At the end of the code block section, the previous Step state
    -- is restored.
+
    begin
       -- Put_Debug_Line ("Add_Code_Block, Current_State = ",
       --                 Loc, Verbosity => IO.Debug);
@@ -386,15 +415,10 @@ package body BBT.Tests.Builder is
    end Add_Code_Fence;
 
    -- --------------------------------------------------------------------------
-   procedure End_Of_Scenario (Loc : Location_Type) is
+   procedure Close_Document (Loc : Location_Type) is
    begin
       Check_Missing_Code_Block (Loc);
-      if Current_State = In_File_Content then
-         Put_Error ("Code fenced block opened line"
-                    & Opening_Marker_Line'Image &
-                      ", but not closed", Loc);
-      end if;
-   end End_Of_Scenario;
+   end Close_Document;
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String;

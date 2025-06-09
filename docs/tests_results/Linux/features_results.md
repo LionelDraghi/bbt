@@ -1,3 +1,8 @@
+../docs/features/C120_Ill_Formated_Steps.md:2: Error : File name expected in subject phrase
+../docs/features/C120_Ill_Formated_Steps.md:3: Error : Dir name expected in subject phrase
+../docs/features/C120_Ill_Formated_Steps.md:5: Error : File name expected in object phrase
+../docs/features/C120_Ill_Formated_Steps.md:6: Error : Dir name expected in object phrase
+../docs/features/C120_Ill_Formated_Steps.md:9: Error : Missing expected Code Block expected line 7
 ## [A005_Given.md](../../features/A005_Given.md)  
   ### Feature:   
   - [X] scenario [Checking that there is no file or dir](../../features/A005_Given.md) pass  
@@ -458,12 +463,18 @@
 ## [C110_Two_Verbs_In_The_Step.md](../../features/C110_Two_Verbs_In_The_Step.md)  
   - [X] scenario [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md) pass  
 
+## [C120_Ill_Formated_Steps.md](../../features/C120_Ill_Formated_Steps.md)  
+  - [ ] scenario [knowing grep version](../../features/C120_Ill_Formated_Steps.md) fails  
 
-## Summary : **Success**, 127 scenarios OK
+  - [X] scenario [no problem](../../features/C120_Ill_Formated_Steps.md) pass  
+
+
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 127   |
+| Failed     | 1     |
+| Successful | 128   |
 | Empty      | 0     |
+| Skipped    | 0     |
 

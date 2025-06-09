@@ -316,6 +316,13 @@ package body BBT.Scenarios.Step_Parser is
       -- by default, order of expected output is significant
       Executable       : Boolean                  := False;
 
+      function Is_Null (S : in Unbounded_String) return Boolean is
+        (S = Null_Unbounded_String);
+      function No_Subject_String return Boolean is
+        (Is_Null (Subject_String));
+      function No_Object_File_Name return Boolean is
+        (Is_Null (Object_File_Name));
+
       use Chunk;
 
       Tmp : aliased constant String := To_String (Line);
@@ -599,19 +606,61 @@ package body BBT.Scenarios.Step_Parser is
             end if;
          end;
 
-         --  Ada.Text_IO.Put_Line ("Prep         = " & Prep'Image);
-         --  Ada.Text_IO.Put_Line ("Subject_Attr = " & Subject_Attr'Image);
-         --  Ada.Text_IO.Put_Line ("Subject      = " & Subject'Image);
-         --  Ada.Text_IO.Put_Line ("Verb         = " & Verb'Image);
-         --  Ada.Text_IO.Put_Line ("Object       = " & Object'Image);
-
          Action := The_Grammar
            (Prep, Subject_Attr, Subject, Verb, Object).Action;
          Code_Block_Expected := The_Grammar
            (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
 
+         --  Ada.Text_IO.Put_Line ("Prep         = " & Prep'Image);
+         --  Ada.Text_IO.Put_Line ("Subject_Attr = " & Subject_Attr'Image);
+         --  Ada.Text_IO.New_Line;
+         --  Ada.Text_IO.Put_Line (Subject'Image & " " & Subject_String'Image
+         --                        & " / " & Verb'Image & " / S ="
+         --                        & Object'Image & " " & Object_String'Image
+         --                        & " File Name =" & Object_File_Name'Image);
          --  Ada.Text_IO.Put_Line ("Action       = " & Action'Image);
          --  Ada.Text_IO.Put_Line ("Code_Block_Expected = " & Code_Block_Expected'Image);
+
+         case Subject is
+            when No_Subject | Output_Subj | Subject_Text =>
+               null;
+
+            when Subject_File =>
+               if No_Subject_String then
+                  IO.Put_Error ("File name expected in subject phrase", Loc);
+                  Code_Block_Expected := False;
+                  -- No sense to have a random error after a syntax error
+               end if;
+
+            when Dir_Subject =>
+               if No_Subject_String then
+                  IO.Put_Error ("Dir name expected in subject phrase", Loc);
+                  Code_Block_Expected := False;
+                  -- No sense to have a random error after a syntax error
+               end if;
+
+         end case;
+
+         case Object is
+            when No_Object | Output_Obj | Obj_Text | Command_List | Error =>
+               null;
+
+            when Obj_File_Name =>
+               if No_Object_File_Name then
+                  IO.Put_Error ("File name expected in object phrase", Loc);
+                  Code_Block_Expected := False;
+                  -- No sense to have a random error after a syntax error
+               end if;
+
+            when Obj_Dir_Name =>
+               if No_Object_File_Name then
+                  IO.Put_Error ("Dir name expected in object phrase", Loc);
+                  Code_Block_Expected := False;
+                  -- No sense to have a random error after a syntax error
+               end if;
+
+         end case;
+
 
          Previous_Step_Kind := Cat;
 
