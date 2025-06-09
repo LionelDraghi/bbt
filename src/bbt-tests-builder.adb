@@ -351,13 +351,6 @@ package body BBT.Tests.Builder is
             else
                Last_Step.Comment.Append ("```");
 
-               if FSM.Code_Block_Marks.Count = 3 then
-                  -- We report the warning only on the first unexpected mark
-                  Put_Warning
-                    ("File content already provided, ignoring this code fence",
-                     Loc);
-               end if;
-
             end if;
 
          when In_File_Content =>

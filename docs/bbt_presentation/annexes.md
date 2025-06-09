@@ -29,7 +29,7 @@ style: |
 # <!-- fit --> tres tres tres tres tres tres tres long long long titre 
 # <!-- fit --> Gros titre
 # Gros titre (sans "fit")
-![bg right:50% w:600](bbt/docs/rpl_example.png)
+![bg right:50% w:600](../rpl_example.png)
 <!-- _backgroundColor: palegreen -->
 <!-- _color: navy -->
 
@@ -67,7 +67,7 @@ Sequence of *when*/*then*/*when*/*then* should be split in several scenarios| Se
 
 # <!-- fit --> Where does bbt come from?  
 
-![bg right:50% w:600](Acc_test.png)
+![bg right:50% w:600](acc_test.png)
 
 * Maintenance of `Archicheck` tests was becoming... uncomfortable
 * The generated doc is a rewrite of the real input, real command run and real expected results

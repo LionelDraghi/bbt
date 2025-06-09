@@ -74,10 +74,6 @@ Popy
 
 - When I run `./bbt -c lot_of_code_blocks.md`
 - Then I get no error
-- And output contains  
-```
-lot_of_code_blocks.md:36: Warning : File content already provided, ignoring this code fence  
-lot_of_code_blocks.md:58: Warning : File content already provided, ignoring this code fence  
 ```
 - And output contains  
 ```
