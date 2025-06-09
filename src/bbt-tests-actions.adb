@@ -111,19 +111,21 @@ package body BBT.Tests.Actions is
          then
             -- IO.Put_Line ("not exec", Verbosity => IO.Normal);
             Spawn_OK := False;
-            Put_Step_Result (Step     => Step,
-                             Success  => Spawn_OK,
-                             Fail_Msg => Spawn_Arg.all (1).all & " not executable",
-                             Loc      => Step.Location);
+            Put_Step_Result
+              (Step     => Step,
+               Success  => Spawn_OK,
+               Fail_Msg => Spawn_Arg.all (1).all & " not executable",
+               Loc      => Step.Location);
             return;
 
          elsif Full_Path = null then
             -- IO.Put_Line ("not found", Verbosity => IO.Normal);
             Spawn_OK := False;
-            Put_Step_Result (Step     => Step,
-                             Success  => Spawn_OK,
-                             Fail_Msg => Spawn_Arg.all (1).all & " not found",
-                             Loc      => Step.Location);
+            Put_Step_Result
+              (Step     => Step,
+               Success  => Spawn_OK,
+               Fail_Msg => Spawn_Arg.all (1).all & " not found",
+               Loc      => Step.Location);
             return;
 
          else
@@ -162,15 +164,16 @@ package body BBT.Tests.Actions is
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
 
-      Put_Step_Result (Step     => Step,
-                       Success  => Spawn_OK,
-                       Fail_Msg => "Couldn't run " & Cmd,
-                       Loc      => Step.Location);
       if Spawn_OK and then Check_Result then
          Put_Step_Result (Step     => Step,
                           Success  => Is_Success (Return_Code),
                           Fail_Msg => "Unsuccessfully run " &
                             Step.Data.Object_String'Image,
+                          Loc      => Step.Location);
+      else
+         Put_Step_Result (Step     => Step,
+                          Success  => Spawn_OK,
+                          Fail_Msg => "Couldn't run " & Cmd,
                           Loc      => Step.Location);
       end if;
 

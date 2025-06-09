@@ -97,7 +97,7 @@ package body BBT.Writers is
                               Loc      : BBT.IO.Location_Type) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
-         Put_Debug_Line (Inline_Image (Step));
+         Put_Debug_Line ("Put_Step_Result :" & Inline_Image (Step), Loc);
          Put_Step_Result (Writer_List (W).all,
                           Step,
                           Success,
