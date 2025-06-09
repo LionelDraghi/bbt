@@ -2,6 +2,10 @@
 ## Feature : The keyword `Example` is a synonym of the keyword `Scenario`.
 
 To comply with Gherkin habits, both `Example` and `Scenario` are interchangeable.
+(see https://cucumber.io/docs/gherkin/reference#example)
+
+> [!Note] 
+> `Examples` (plural) and `Scenarios` are a different concept in Gherkin
 
 _Table of Contents:_
 - [Scenario : NOK return code](#scenario--nok-return-code)

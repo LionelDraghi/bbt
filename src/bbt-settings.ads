@@ -31,8 +31,8 @@ private package BBT.Settings is
                        Matching,
                        Other,
                        Debug,
-                     --    Tutorial,
-                     --    Example,
+                       Tutorial,
+                       Example,
                        On_All);
    -- Topics are given in importance order, because this order is used when
    -- printing full help with command 'help on_all'
