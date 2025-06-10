@@ -162,53 +162,39 @@ The rest will be easier if you have an initial idea of what the tool is, so let'
 
 <small>
 
-- acc and smk are CLI apps, mostly tested with black box testing
-* Initially Easy to do within a Makefile
-* Started to become complex and error-prone when adding the documentation generation
-* And did not prevent discrepancies between the generated documentation and what is really run.
-  For example here : documented command line (line 60) vs really run (line 74)
-
+- Initial black box testing is easy to do within a Makefile
+* Become complex and error-prone when adding the documentation generation
+* More general discrepancies problem due to overlapping info from readme, code, tests...
+* How do you ensure that all examples in the user guide still work as expected?
 ![bg right:40% w:500](acc_test.png)
 
 </small>
 
 <!-- 
-
-reorg autour de deux points :
-1. l'exemple des makefile qui deviennent trop complexes et error prone, a cause du besoin de générer la doc
-2. du problème plus général des infos qui se marchent sur le pieds parce que partiellement définies à plusieurs endroits
-3. du problème des exemples ou tutoriels obsolètes 
-
 The inconsistencies are an epidemic in the software world, sometimes with benign effects (e.g., an error in an example), and sometimes with more serious consequences.
 Why is it so? Because the truth of our software is in the User Guide, is in the sources comments, is in the tests definition, etc. 
 Initially, behavior is defined in some docs, and further refined in tests description. 
 But quickly, the tests evolve independently because the developer is focused on them, and they end up contradicting the readme file or the user guide.
-Truth is a complex distributed system!
-All systems end up with discrepancies, because we, developers, are mostly focused on tests and code. But we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
 For example, examples in the user guide, are they up to date?
-
-When I looked at what was available, I found plenty of tools that did the job, but all required the use of a scripting language, sometimes specific to the tool.
-
-If it's true for literate programming, it's also true for testing.
+And generally we have no easy way to check that the whole existing documentation is compliant with the latest state of the software. 
+Truth is a complex distributed system.
 -->
 
 ---
-## Design principles
+## Design principles and attributes
 
 <small>
 
-## <div></div>
-    
-* **The documentation is the _single source of truth_** 
-  - **_Single_**: _Never repeat yourself_
-  - **_Source_**: Tests comes from documentation, not the other way around
-  - **_Truth_**: If it says that the app is run with that command line, then it is!
+* **Simple and obvious**
 
-## <div></div>
+* **The documentation is the _single source of truth_** 
+  - _Never repeat yourself_
+  - Tests comes from documentation, not the other way around
+  - If it says that the app is run with that command line, then it is!
     
 * **Whatever the documentation**
-  Specifications, acceptance test, user guide, readme file... they are all valid source of truth
-  (even those slides could be) 
+  Specifications, tests, user guide, slides, readme... all are valid source of truth
+
 </small>
 
 <!-- 
@@ -220,7 +206,7 @@ Do not lets implementation details show through the documentation.
 Whatever the doc : Even those slides, written in Markdown using Marp, are a valid source of truth
 And so bbt imposes almost no constraints on the documentation and its organization.
 
-Whithout constraints: means that the documentation is written using the business domain language, without test domain tags or whatsoever.
+Without constraints: means that the documentation is written using the business domain language, without test domain tags or whatsoever.
 
 -->
 
