@@ -1,8 +1,3 @@
-../docs/features/C120_Ill_Formated_Steps.md:2: Error : File name expected in subject phrase
-../docs/features/C120_Ill_Formated_Steps.md:3: Error : Dir name expected in subject phrase
-../docs/features/C120_Ill_Formated_Steps.md:5: Error : File name expected in object phrase
-../docs/features/C120_Ill_Formated_Steps.md:6: Error : Dir name expected in object phrase
-../docs/features/C120_Ill_Formated_Steps.md:9: Error : Missing expected Code Block expected line 7
 ## [A005_Given.md](../../features/A005_Given.md)  
   ### Feature:   
   - [X] scenario [Checking that there is no file or dir](../../features/A005_Given.md) pass  
@@ -464,17 +459,15 @@
   - [X] scenario [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md) pass  
 
 ## [C120_Ill_Formated_Steps.md](../../features/C120_Ill_Formated_Steps.md)  
-  - [ ] scenario [knowing grep version](../../features/C120_Ill_Formated_Steps.md) fails  
+  ### Feature: bbt is providing helpful messages on ill formatted step lines  
+  - [X] scenario [](../../features/C120_Ill_Formated_Steps.md) pass  
 
-  - [X] scenario [no problem](../../features/C120_Ill_Formated_Steps.md) pass  
 
-
-## Summary : **Fail**
+## Summary : **Success**, 128 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
+| Failed     | 0     |
 | Successful | 128   |
 | Empty      | 0     |
-| Skipped    | 0     |
 
