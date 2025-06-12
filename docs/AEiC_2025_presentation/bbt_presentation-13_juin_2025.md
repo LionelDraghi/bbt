@@ -251,7 +251,7 @@ In the NLP field, **partial parsing**, also known as **shallow parsing**, **ligh
 
 ## <!-- fit --> Partial parsing is based on word spotting
 
-![bg right:40% w:500](44129332940.jpg)
+![bg right:40% w:500](Video_Game_Museum_in_Berlin_44129332940.jpg)
 
 <small> 
 

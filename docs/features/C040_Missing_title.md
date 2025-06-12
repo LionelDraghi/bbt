@@ -4,7 +4,7 @@
 Titles are not mandatory for feature, background and scenario Header.
 Report will obviously be less readable, but it should not prevent to run the test.
 
-- Given the new file `no_title.input`
+- Given the new file `no_title.md`
 ```
 ## Feature
 
@@ -17,13 +17,12 @@ No Tittle Scenario
 - When I successfully run `./sut -v`
 ```
 
-- When I run `./bbt no_title.input`
+- When I run `./bbt no_title.md`
 - Then output contains 
 ```
-## [no_title.input](no_title.input)  
+## [no_title.md](no_title.md)  
   ### Feature:   
-  - [X] scenario [](no_title.input) pass  
-  - [X] scenario [](no_title.input) pass 
+  - [X] scenario [](no_title.md) pass 
 ```
 - And output contains 
 ```

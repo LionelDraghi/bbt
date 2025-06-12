@@ -160,7 +160,8 @@ package body BBT.Writers.Text_Writer is
         := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
       use Tests.Results;
    begin
-      case Tests.Results.Result (Scen) is
+      if not Scen.Is_Background then
+         case Tests.Results.Result (Scen) is
          when Empty =>
             Put_Line ("  - [ ] scenario " & Link_Image &
                         " is empty, nothing tested  ",
@@ -171,7 +172,8 @@ package body BBT.Writers.Text_Writer is
          when Skipped | Failed =>
             Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
                       Verbosity => Quiet);
-      end case;
+         end case;
+      end if;
    end Put_Scenario_Result;
 
    -- --------------------------------------------------------------------------

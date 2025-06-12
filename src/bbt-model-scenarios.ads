@@ -17,7 +17,7 @@ package BBT.Model.Scenarios is
    type Scenario_Maybe  is          access all Scenario_Type;
 
    -- --------------------------------------------------------------------------
-   type Scenario_Type is new Non_Root_Node with record
+   type Scenario_Type (Is_Background : Boolean) is new Non_Root_Node with record
       Step_List             : Steps.List        := Step_Lists.Empty_Vector;
       Has_Run               : Boolean           := False;
       Failed_Step_Count     : Natural           := 0;
@@ -36,7 +36,8 @@ package BBT.Model.Scenarios is
    function Create_Scenario
      (Name     : String;
       Parent   : Node_Access;
-      Location : Location_Type) return Scenario_Type;
+      Location : Location_Type;
+      Is_Background : Boolean := False) return Scenario_Type;
 
    -- --------------------------------------------------------------------------
    function Is_In_Feature

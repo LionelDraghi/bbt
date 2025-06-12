@@ -193,17 +193,19 @@ package body BBT.Tests.Builder is
             Put_Debug_Line ("Add_Background in Doc " & Name'Image,
                       Verbosity => IO.Debug);
             Current_Doc.Background := new Scenario_Type'
-              (Create_Scenario (Name     => Name,
-                                Parent   => Node_Access (Current_Doc),
-                                Location => Loc));
+              (Create_Scenario (Name          => Name,
+                                Parent        => Node_Access (Current_Doc),
+                                Location      => Loc,
+                                Is_Background => True));
 
          when In_Feature =>
             Put_Debug_Line ("Add_Background in Feature " & Name'Image,
                       Verbosity => IO.Debug);
-            Last_Feature.Background := new Scenario_Type'(
-              Create_Scenario (Name           => Name,
-                               Parent         => Node_Access (Last_Feature),
-                               Location       => Loc));
+            Last_Feature.Background := new Scenario_Type'
+              (Create_Scenario (Name          => Name,
+                                Parent        => Node_Access (Last_Feature),
+                                Location      => Loc,
+                                Is_Background => True));
 
          when others =>
             IO.Put_Error ("Background should be declared at document"
