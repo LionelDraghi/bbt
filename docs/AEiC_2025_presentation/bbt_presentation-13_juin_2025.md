@@ -272,7 +272,7 @@ Example: *Eliza* (1966), the famous psychotherapist emulator
 * But nevertheless very wise
   ~~~Ada
   elsif Answer.Contains ("rust") then   
-     Ask ("What's your problem with Ada?");
+     Ask ("What's your problem with Ada???");
   ~~~
 
 </small>
