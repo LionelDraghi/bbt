@@ -524,7 +524,7 @@ But the challenge is still open: find a more serious error case and be awarded!
 
 * ### to AdaCore 
 
-   - :heart: For awarding bbt __Ada Crate of the word 2024__ (https://blog.adacore.com/)
+   - :heart: For awarding bbt __Ada Crate of the year 2024__ (https://blog.adacore.com/)
 
 # <div></div>
 
