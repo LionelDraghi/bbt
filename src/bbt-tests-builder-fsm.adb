@@ -88,9 +88,10 @@ package body FSM is
       Internal_State          := To_State;
 
       Put_Debug_Line
-        ("State : " & Internal_Previous_State'Image & " --> " &
-           Internal_State'Image & "   CB_Expected : " & CB_Expected'Image
-         & "   CB_Missing : " & CB_Missing'Image, Loc);
+        ("State: " & Internal_Previous_State'Image & " --> " &
+           Internal_State'Image
+         & (if CB_Expected then ", Code Block Expected " else "")
+         & (if CB_Missing  then ", Code Block Missing "  else ""), Loc);
 
       -- When living the In_Step state, check that the expected code block
       -- was provided

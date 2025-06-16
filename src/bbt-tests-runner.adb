@@ -81,6 +81,14 @@ package body BBT.Tests.Runner is
          return;
       end if;
 
+      if Step.Has_Syntax_Error then
+      -- Fixme: defensive code that should be replaced by
+      -- an assertion.
+         Put_Warning ("Skipping step with syntax error", Step.Location);
+         Run_Error := True;
+         return;
+      end if;
+
       Put_Debug_Line ("  ====== Running Step " & Step.Data.Src_Code'Image);
 
       case Step.Data.Action is
@@ -92,7 +100,7 @@ package body BBT.Tests.Runner is
                      Check_Result => False,
                      Spawn_OK     => Spawn_OK,
                      Return_Code  => Return_Code);
-            Run_Error := not (Spawn_OK and Is_Success (Return_Code));
+            Run_Error := not (Spawn_OK);
 
          when Run_Without_Error =>
             Created_File_List.Add (Output);
@@ -102,7 +110,7 @@ package body BBT.Tests.Runner is
                      Check_Result => True,
                      Spawn_OK     => Spawn_OK,
                      Return_Code  => Return_Code);
-            Run_Error := not (Spawn_OK and Is_Success (Return_Code));
+            Run_Error := not (Spawn_OK);
 
          when Error_Return_Code =>
             Return_Error (Return_Code, Step);
@@ -118,12 +126,10 @@ package body BBT.Tests.Runner is
               (Get_Text (Output), Step);
 
          when Output_Contains =>
-            -- example : Then the output contains `--version`
             Output_Contains
               (Get_Text (Output), Step);
 
          when Output_Matches =>
-            -- example : Then the output contains `--version`
             Output_Matches
               (Get_Text (Output), Step);
 
@@ -190,8 +196,9 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    procedure Run_Scenario (Scen : in out Scenario_Type'Class) is
-      Spawn_OK : Boolean := False;
-
+      Run_Error : Boolean := False;
+      Verbosity : constant Verbosity_Levels :=
+                    (if Scen.Is_Background then Verbose else Normal);
    begin
       Reset_Error_Counts;
       if Scen.Filtered then
@@ -202,21 +209,18 @@ package body BBT.Tests.Runner is
          Put_Debug_Line ("  ====== Running Scen " & Scen.Name'Image);
          Scen.Has_Run := True;
 
-         Put_Scenario_Start (Scen);
+         Put_Scenario_Start (Scen, Verbosity);
 
          Step_Processing : for Step of Scen.Step_List loop
-            Run_Step (Step, Spawn_OK);
+            Run_Step (Step      => Step,
+                      Run_Error => Run_Error);
+            Add_Result (Success => (not Run_Error) and IO.No_Error,
+                        To      => Scen);
+            exit Step_Processing when IO.Some_Error and Settings.Stop_On_Error;
 
-            if IO.Some_Error then
-               Add_Result (False, Scen);
-            end if;
-
-            if IO.Some_Error and not Settings.Keep_Going then
-               exit Step_Processing;
-            end if;
          end loop Step_Processing;
 
-         Put_Scenario_Result (Scen);
+         Put_Scenario_Result (Scen, Verbosity);
 
       end if;
 
@@ -330,7 +334,7 @@ package body BBT.Tests.Runner is
          -- Run scenarios directly attached to the document
          -- (that is not in a Feature)
          Run_Scenario_List (Doc.Scenario_List);
-         if IO.Some_Error and not Settings.Keep_Going then
+         if IO.Some_Error and Settings.Stop_On_Error then
             return;
          end if;
 
@@ -345,7 +349,7 @@ package body BBT.Tests.Runner is
             else
                Run_Scenario_List (F.Scenario_List);
 
-               if IO.Some_Error and not Settings.Keep_Going then
+               if IO.Some_Error and Settings.Stop_On_Error then
                   return;
                end if;
             end if;
@@ -364,15 +368,13 @@ package body BBT.Tests.Runner is
          Put_Exception (Ada.Exceptions.Exception_Message (E)
                         & GNAT.Traceback.Symbolic.Symbolic_Traceback (E));
          Put_Debug_Line
-           ("  exception in Run_Doc (" & (+Doc.Name) &
-              ") ", IO.No_Location);
+           ("  exception in Run_Doc (" & (+Doc.Name) & ") ",
+            IO.No_Location);
    end Run_Doc;
 
    -- --------------------------------------------------------------------------
    procedure Run_All is
-      -- use File_Utilities;
-      File_Count : constant Natural :=
-                     Natural (The_Tests_List.Length);
+      File_Count : constant Natural := Natural (Doc_List.Length);
       -- package CVer is new GNAT.Compiler_Version;
 
    begin
@@ -393,10 +395,10 @@ package body BBT.Tests.Runner is
       -- Put_Line ("GNAT version: " & CVer.Version);
 
       -- let's run the test
-      for D of The_Tests_List.all loop
+      for D of Doc_List.all loop
          Run_Doc (D);
 
-         if IO.Some_Error and not Settings.Keep_Going then
+         if IO.Some_Error and Settings.Stop_On_Error then
             exit;
          end if;
 

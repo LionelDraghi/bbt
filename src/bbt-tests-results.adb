@@ -24,7 +24,7 @@ package body BBT.Tests.Results is
       elsif Scenario.Successful_Step_Count > 0 then
          return Successful;
       elsif not Scenario.Has_Run then
-         return Skipped;
+         return Not_Run;
       else
          return Empty;
       end if;
@@ -65,7 +65,10 @@ package body BBT.Tests.Results is
 
    -- --------------------------------------------------------------------------
    function Success return Boolean is
-     (Results (Failed) = 0 and Results (Empty) = 0);
+     (Results (Successful) /= 0 and
+          Results (Failed) = 0 and
+          Results (Empty) = 0 and
+          Results (Not_Run) = 0);
 
    function No_Fail return Boolean is (Results (Failed) = 0);
 

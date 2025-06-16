@@ -48,17 +48,17 @@ procedure BBT.Main is
 
          for File of Scenarios.Files.Document_List loop
             Scenarios.Files.Analyze_Document (File);
-            exit when IO.Some_Error and not Settings.Keep_Going;
+            return when IO.Some_Error and Settings.Stop_On_Error;
             -- If there is some error during the file analysis, we don't go
             -- further except if the Keep_Going option is set.
             Tests.Builder.Duplicate_Multiple_Run;
             -- Process in all recorded scenario the
             -- duplication of the "run X or Y" steps.
          end loop;
+
+         Model.Documents.Apply_Filters;
+
       end if;
-
-      Model.Documents.Apply_Filters;
-
    end Analyze_Documents;
 
 begin
@@ -72,8 +72,15 @@ begin
 
    Cmd_Line.Analyze;
 
+   if IO.Some_Error then
+      -- If some error occurs during command line analysis, stop here,
+      -- even if Ignore_Errors or Keep_Going is set
+      Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+      return;
+   end if;
+
    if No_Output_Format_Enabled then
-      Writers.Enable_Output (For_Format => Txt);
+      Writers.Enable_Output (For_Format => Markdown);
       -- Default, for when there is no explicit --output
    end if;
 
@@ -89,13 +96,6 @@ begin
    IO.Set_Reference_Directory (Settings.Launch_Directory);
    --  To get the file name relative to the start dir, and not
    --  absolute Path.
-
-   if IO.Some_Error then
-      -- If some error occurs during command line analysis, stop here,
-      -- even if Ignore_Errors or Keep_Going is set
-      Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
-      return;
-   end if;
 
    --  if Settings.No_File_Given then
    --     Scenarios.Files.Find_BBT_Files (Settings.Recursive);
@@ -128,19 +128,19 @@ begin
       -- return;
 
    when Explain =>
+      -- Dry run:
       Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
-      -- Dry run --
-      -- Let's display our rebuild of the original test definition
-      -- file comment lines are filtered out.
+      -- Let's display our rebuild of the original test definition.
+      -- File comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
-      Writers.Explain (Model.Documents.The_Tests_List.all);
+      Writers.Explain (Model.Documents.Doc_List.all);
 
    when List =>
       Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
       Status_Bar.Put_Activity ("Display non filtered items");
-      Writers.Put_Document_List (Model.Documents.The_Tests_List.all);
+      Writers.Put_Document_List (Model.Documents.Doc_List.all);
 
    when Run | Settings.None =>
       -- Run is the default command, so None => Run
@@ -151,12 +151,13 @@ begin
          -- Real run --
          Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;
-      end if;
-      Tests.Results.Sum_Results (Model.Documents.The_Tests_List.all);
-      Writers.Put_Overall_Results;
+         Tests.Results.Sum_Results (Model.Documents.Doc_List.all);
+         Writers.Put_Overall_Results;
 
-      if Settings.Generate_Badge then
-         Tests.Results.Generate_Badge;
+         if Settings.Generate_Badge then
+            Tests.Results.Generate_Badge;
+         end if;
+
       end if;
 
    when Create_Template =>

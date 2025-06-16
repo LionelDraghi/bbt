@@ -161,8 +161,10 @@ private package BBT.IO is
    -- --------------------------------------------------------------------------
    -- Some_Error return True if some error occurred, or if some Warning
    -- occurred and option to treat warning as error is set.
-   function Some_Error return Boolean;
-   function No_Error return Boolean is (not Some_Error);
+   function Some_Warning return Boolean is (Warning_Count /= 0);
+   function Some_Error   return Boolean is (Error_Count /= 0);
+   function No_Error   return Boolean is (not Some_Error);
+   function No_Warning return Boolean is (not Some_Warning);
 
    -- --------------------------------------------------------------------------
    function Image (Time : Ada.Calendar.Time) return String;
@@ -185,7 +187,7 @@ private package BBT.IO is
 
 private
    type Location_Type is record
-      File   : File_Name         := No_Name;
+      File   : File_Name     := No_Name;
       Line   : Text_IO.Count := 1;
       Column : Text_IO.Count := 0;
    end record;

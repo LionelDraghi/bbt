@@ -83,36 +83,50 @@ package body BBT.Writers is
    end Put_Feature_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Start (Scen : Scenario_Type'Class) is
+   procedure Put_Scenario_Start
+     (Scen      : Scenario_Type'Class;
+      Verbosity : Verbosity_Levels := Normal) is
    begin
-      for W in Writer_List'Range when Enabled (W) loop
-         Put_Scenario_Start (Writer_List (W).all, Scen);
-      end loop;
+      if Is_Authorized (Verbosity) then
+         for W in Writer_List'Range when Enabled (W) loop
+            Put_Scenario_Start (Writer_List (W).all, Scen);
+         end loop;
+      end if;
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Step_Result (Step     : Step_Type'Class;
-                              Success  : Boolean;
-                              Fail_Msg : String;
-                              Loc      : BBT.IO.Location_Type) is
+   procedure Put_Step_Result
+     (Step      : Step_Type'Class;
+      Success   : Boolean;
+      Fail_Msg  : String;
+      Loc       : BBT.IO.Location_Type;
+      Verbosity : Verbosity_Levels := Normal) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Debug_Line ("Put_Step_Result :" & Inline_Image (Step), Loc);
-         Put_Step_Result (Writer_List (W).all,
-                          Step,
-                          Success,
-                          Fail_Msg,
-                          Loc);
+         if Is_Authorized (Verbosity) or not Success then
+            -- When error, details should be printed
+            -- When no error, it depends on if verbose mode is selected
+            Put_Step_Result (Writer_List (W).all,
+                             Step,
+                             Success,
+                             Fail_Msg,
+                             Loc);
+         end if;
          Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       end loop;
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario_Result (Scen : Scenario_Type'Class) is
+   procedure Put_Scenario_Result
+     (Scen      : Scenario_Type'Class;
+      Verbosity : Verbosity_Levels := Normal) is
    begin
-      for W in Writer_List'Range when Enabled (W) loop
-         Put_Scenario_Result (Writer_List (W).all, Scen);
-      end loop;
+      if Is_Authorized (Verbosity) then
+         for W in Writer_List'Range when Enabled (W) loop
+            Put_Scenario_Result (Writer_List (W).all, Scen);
+         end loop;
+      end if;
    end Put_Scenario_Result;
 
    -- --------------------------------------------------------------------------

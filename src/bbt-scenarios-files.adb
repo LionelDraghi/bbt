@@ -41,12 +41,17 @@ package body BBT.Scenarios.Files is
       use Ada.Directories;
       Name : constant String := Full_Name (File_Name);
    begin
-      if Name /= Full_Name (Settings.Template_Name)
-        and then Name /= Result_File_Name
+      if Name = Full_Name (Settings.Template_Name)
+        or Name = Result_File_Name
       then
          --  Filters the md file created with --create-template, that is
          --  not supposed to be executed, and the output file if any.
+         Put_Warning ("Ignoring file " & Name'Image);
+         -- Fixme: need a test
+         
+      else
          The_List.Append (File_Name);
+
       end if;
    end Add_Document;
 
@@ -161,11 +166,13 @@ package body BBT.Scenarios.Files is
       File_Format : constant Valid_Input_Format := Readers.Format (File_Name);
 
    begin
-      Put_Debug_Line ("==== Loading " & File_Name);
-      Put_Debug_Line ("     Format = " & File_Format'Image);
       Open (Input,
             Mode => In_File,
             Name => File_Name);
+
+      Put_Debug_Line ("Loading " & File_Format'Image
+                      & " file " & File_Name'Image,
+                      Location (Input));
 
       Tests.Builder.Add_Document (File_Name);
       -- The doc name is the file name, it is not in the file content
@@ -174,43 +181,40 @@ package body BBT.Scenarios.Files is
       while not End_Of_File (Input) loop
          Reset_Error_Counts;
 
-         Loc := Location (File_Name, Line (Input));
+         Loc := Location (Input);
          -- To be done before the Get_Line, otherwise Line is already
          -- on the next one.
 
          Line_Processing :
          declare
-            Line     : aliased constant String  := Get_Line (Input);
-            Cmd_List : Steps.Cmd_List;
-            Filler   : constant String :=
-                         (if BBT.IO.Line (Loc) in 1 .. 9
-                          then "  | "
-                          elsif BBT.IO.Line (Loc) in 10 .. 99
-                          then " | "
-                          else "| ");
+            Line                : aliased constant String := Get_Line (Input);
+            Cmd_List            : Steps.Cmd_List;
             Code_Block_Expected : Boolean;
             Attrib              : constant Line_Attributes := Parse_Line
               (Line'Access, File_Format, Lexer_Context, Loc);
 
+            generic
+               type Enum_Type is (<>);
+            function Padding (E : Enum_Type) return String;
+            function Padding (E : Enum_Type) return String is
+              (String'(1 .. Enum_Type'Width - E'Image'Length => ' '));
+
+            function Attrib_Padding is new Padding (Line_Kind);
+
          begin
-            -- Put_Debug_Line ("Line   = " & Line);
-            -- Put_Debug_Line ("Attrib = " & Attrib'Image);
+            Put_Debug_Line (Attrib.Kind'Image & Attrib_Padding (Attrib.Kind)
+                            & Line'Image, Loc);
             case Attrib.Kind is
                when Feature_Line =>
-                  Put_Debug_Line ("Feature      " & Filler & Line, Loc);
                   Tests.Builder.Add_Feature (To_String (Attrib.Name), Loc);
 
                when Scenario_Line =>
-                  Put_Debug_Line ("Scenario     " & Filler & Line, Loc);
                   Tests.Builder.Add_Scenario (To_String (Attrib.Name), Loc);
 
                when Background_Line =>
-                  Put_Debug_Line ("Background   " & Filler & Line, Loc);
-                  Tests.Builder.Add_Background
-                    (To_String (Attrib.Name), Loc);
+                  Tests.Builder.Add_Background (To_String (Attrib.Name), Loc);
 
                when Step_Line =>
-                  Put_Debug_Line ("Step         " & Filler & Line, Loc);
                   declare
                      S : Steps.Step_Data := Scenarios.Step_Parser.Parse
                        (Attrib.Step_Ln,
@@ -218,25 +222,23 @@ package body BBT.Scenarios.Files is
                         Code_Block_Expected,
                         Cmd_List);
                   begin
-                     --  If No_Error then
                      Tests.Builder.Add_Step
                        (S, Code_Block_Expected, Cmd_List, Loc,
                         Syntax_Error => Some_Error);
-                     --  end if;
                   end;
 
                when Code_Fence =>
-                  Put_Debug_Line ("Code fence   " & Filler & Line, Loc);
                   Tests.Builder.Add_Code_Fence (Loc);
 
                when Text_Line =>
-                  Put_Debug_Line ("File content " & Filler & Line, Loc);
                   Tests.Builder.Add_Line (To_String (Attrib.Line), Loc);
 
                when Empty_Line =>
                   Tests.Builder.Add_Line (Line, Loc);
 
             end case;
+
+            exit when IO.Some_Error and Settings.Stop_On_Error;
 
          end Line_Processing;
 
@@ -253,8 +255,7 @@ package body BBT.Scenarios.Files is
                            & ASCII.LF
                            & GNAT.Traceback.Symbolic.Symbolic_Traceback (E),
                            Loc);
-         if not Settings.Keep_Going then raise;
-         end if;
+         if Settings.Stop_On_Error then raise; end if;
 
    end Analyze_Document;
 

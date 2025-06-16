@@ -5,8 +5,6 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Settings;
-
 with File_Utilities;       use File_Utilities;
 
 with Ada.Calendar.Formatting;
@@ -119,7 +117,7 @@ package body BBT.IO is
                             Location : Location_Type := No_Location) is
    begin
       Warnings_Count := @ + 1;
-      Put_Line ("Warning : " & Msg, Location);
+      Put_Line ("Warning: " & Msg, Location);
       -- Uses the local version of Put_Line, and not the Ada.Text_IO one,
       -- so that Warning messages are also ignored when --quiet.
    end Put_Warning;
@@ -129,7 +127,7 @@ package body BBT.IO is
                             Location : Location_Type := No_Location) is
    begin
       Errors_Count := @ + 1;
-      Put_Line ("Error : " & Msg, Location, Verbosity => Quiet);
+      Put_Line ("Error: " & Msg, Location, Verbosity => Quiet);
       -- Quiet because Error Msg should not be ignored
    end Put_Error;
 
@@ -138,7 +136,7 @@ package body BBT.IO is
                             Location : Location_Type := No_Location) is
    begin
       Text_IO.Put_Line (Text_IO.Standard_Error,
-                        Image (Location) & "Exception : " & Msg);
+                        Image (Location) & " Exception : " & Msg);
    end Put_Exception;
 
    -- --------------------------------------------------------------------------
@@ -166,8 +164,6 @@ package body BBT.IO is
    -- --------------------------------------------------------------------------
    function Error_Count   return Natural is (Errors_Count);
    function Warning_Count return Natural is (Warnings_Count);
-   function Some_Error return Boolean is
-     (Errors_Count /= 0 or (Settings.Warnings_As_Errors and Warnings_Count /= 0));
 
    procedure Reset_Error_Counts is
    begin
@@ -293,8 +289,6 @@ package body BBT.IO is
                   Topic     : Extended_Topics  := None) is
       Print_On_Standard_Output : constant Boolean
         := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
-      --  Print_In_Tee_File        : constant Boolean := Tee_Enabled
-      --    and then (Verbosity >= Tee_File_Verbosity or else Is_Enabled (Topic));
       Prefix                   : constant String
         := (if Location'Image = "" then "" else Location'Image & " ");
    begin

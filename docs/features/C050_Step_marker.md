@@ -10,32 +10,32 @@ _Table of Contents:_
 
 ### Scenario:
 - Given the file `step_markers.md`
-~~~
-# Scenario:
-- Given the `config.ini` file
-  ```
-  ignore_hidden=true
-  ```
+  ~~~
+  # Scenario:
+  - Given the `config.ini` file
+    ```
+    ignore_hidden=true
+    ```
 
-- Then `config.ini` contains `ignore_hidden=true`  
-  This first step should succeed
-
-+ Then `config.ini` contains `whatever`  
-  (this comment line, if considered erroneously as a step, should cause the test to fail)
-+ other list item
+  - Then `config.ini` contains `ignore_hidden=true`  
+    This first step should succeed
   
-* first list item
-* Then `config.ini` contains `whatever`  
-  (this comment line, if considered erroneously as a step, should cause the test to fail)
-* other list item
-~~~
+  + Then `config.ini` contains `whatever`  
+    (this comment line, if considered erroneously as a step, should cause the test to fail)
+  + other list item
+  
+  * first list item
+  * Then `config.ini` contains `whatever`  
+    (this comment line, if considered erroneously as a step, should cause the test to fail)
+  * other list item
+  ~~~
 
 - When I run `./bbt -c step_markers.md`
 - Then I get no error
 - And the output is
-~~~
-## [step_markers.md](step_markers.md)  
-  - [X] scenario [](step_markers.md) pass  
-
-Success, 1 scenarios OK
-~~~
+  ~~~
+  ## [step_markers.md](step_markers.md)    
+    - [X] scenario   [](step_markers.md) pass    
+  
+  ## Summary : **Success**, 1 scenarios OK
+  ~~~

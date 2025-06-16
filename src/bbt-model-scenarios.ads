@@ -34,9 +34,9 @@ package BBT.Model.Scenarios is
 
    -- --------------------------------------------------------------------------
    function Create_Scenario
-     (Name     : String;
-      Parent   : Node_Access;
-      Location : Location_Type;
+     (Name          : String;
+      Parent        : Node_Access;
+      Location      : Location_Type;
       Is_Background : Boolean := False) return Scenario_Type;
 
    -- --------------------------------------------------------------------------

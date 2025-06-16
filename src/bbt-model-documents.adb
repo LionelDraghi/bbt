@@ -17,7 +17,7 @@ package body BBT.Model.Documents is
    The_Doc_List : aliased Vector := Empty_Vector;
 
    -- --------------------------------------------------------------------------
-   function The_Tests_List return access Documents_Lists.Vector is
+   function Doc_List return access Documents_Lists.Vector is
      (The_Doc_List'Access);
 
    -- --------------------------------------------------------------------------

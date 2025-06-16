@@ -12,7 +12,7 @@ use  BBT.Model;
 
 package BBT.Tests.Results is
 
-   type Test_Result is (Skipped, Failed, Empty, Successful)
+   type Test_Result is (Not_Run, Failed, Empty, Successful)
      with Default_Value => Empty;
 
    type Test_Results_Count is private;
@@ -25,10 +25,11 @@ package BBT.Tests.Results is
    procedure Sum_Results (Docs : Documents.List);
    -- Walk through the Document list to sum all scenarios result's.
 
-   -- function Overall_Results return Test_Results_Count;
-   -- function Success (Results : Test_Results_Count) return Boolean;
    function Success return Boolean;
    function No_Fail return Boolean;
+   -- Success ensure that there is successfully run tests, and
+   -- no empty/error/not run tests
+   -- No_Fail **just** check that there is no fail test.
 
    procedure Generate_Badge;
 

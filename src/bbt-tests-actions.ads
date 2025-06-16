@@ -16,6 +16,8 @@ with Text_Utilities; use Text_Utilities;
 private package BBT.Tests.Actions is
 
    function Is_Success (I : Integer) return Boolean;
+   function Is_Failure (I : Integer) return Boolean is
+     (not Is_Success (I));
 
    procedure Run_Cmd (Step         :     Step_Type'Class;
                       Cmd          :     String;

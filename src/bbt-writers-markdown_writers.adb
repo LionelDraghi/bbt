@@ -100,10 +100,10 @@ package body BBT.Writers.Markdown_Writers is
                 Verbosity => Verbosity_Level);
       Put_Line ("| Empty      |" & Count_String_Image (Empty) & "|",
                 Verbosity => Verbosity_Level);
-      if Count (Failed) /= 0 then
-         Put_Line ("| Skipped    |" & Count_String_Image (Skipped) & "|",
-                   Verbosity => Verbosity_Level);
-      end if;
+      --  if Count (Not_Run) /= 0 then
+      Put_Line ("| Not Run    |" & Count_String_Image (Not_Run) & "|",
+                Verbosity => Verbosity_Level);
+      --  end if;
       New_Line (Verbosity => Verbosity_Level);
    end Put_Detailed_Results;
 
@@ -174,20 +174,27 @@ package body BBT.Writers.Markdown_Writers is
       Link_Image    : constant String
         := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
       use Tests.Results;
+      Scen_Kind     : constant String :=
+                        (if Scen.Is_Background
+                         then " background "
+                         else " scenario   ");
    begin
       case Tests.Results.Result (Scen) is
          when Empty =>
             -- Note the two spaces at the end of each line, to cause a
             -- new line in Markdown format when this line is followed
             -- by an error message.
-            Put_Line ("  - [ ] scenario " & Link_Image &
+            Put_Line ("  - [ ]" & Scen_Kind & Link_Image &
                         " is empty, nothing tested  ",
                       Verbosity => Normal);
          when Successful =>
-            Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
+            Put_Line ("  - [X]" & Scen_Kind & Link_Image & " pass  ",
                       Verbosity => Normal);
-         when Skipped | Failed =>
-            Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+         when Failed =>
+            Put_Line ("  - [ ]" & Scen_Kind & Link_Image & " fails  ",
+                      Verbosity => Quiet);
+         when Not_Run =>
+            Put_Line ("  - [ ]" & Scen_Kind & Link_Image & " not run  ",
                       Verbosity => Quiet);
       end case;
 

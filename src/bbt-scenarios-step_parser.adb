@@ -661,24 +661,21 @@ package body BBT.Scenarios.Step_Parser is
 
          end case;
 
-
          Previous_Step_Kind := Cat;
 
       end if;
 
-      return -- Create_Step
-        (Cat              => Cat,
-         Action           => Action,
-         Src_Code         => Src_Code,
-         -- Location         => Loc,
-         -- Comment          => Empty_Text,
-         Subject_String   => Subject_String,
-         Object_String    => Object_String,
-         Object_File_Name => Object_File_Name,
-         File_Type        => File_Type,
-         Executable_File  => Executable,
-         Ignore_Order     => Ignore_Order,
-         File_Content     => Empty_Text);
+      return (Cat              => Cat,
+              Action           => Action,
+              Src_Code         => Src_Code,
+              Subject_String   => Subject_String,
+              Object_String    => Object_String,
+              Object_File_Name => Object_File_Name,
+              File_Type        => File_Type,
+              Executable_File  => Executable,
+              Ignore_Order     => Ignore_Order,
+              File_Content     => Empty_Text,
+              Syntax_Error     => IO.Some_Error);
 
    end Parse;
 

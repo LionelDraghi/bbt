@@ -20,7 +20,8 @@ package body BBT.Model.Steps is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type) is
    begin
-      Output.Put ("   Location         = " & Image (S.Location));
+      --  Output.New_Line;
+      --  Output.Put ("   Location         = " & Image (S.Location));
       Output.New_Line;
       Put_Image (Output, S.Data);
    end Put_Image;
@@ -100,6 +101,19 @@ package body BBT.Model.Steps is
                       & ", To => " & Filtered'Image);
       S.Filtered := Filtered;
    end Set_Filter;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Has_Syntax_Error (S         : in out Step_Type'Class;
+                                   Has_Error :        Boolean) is
+   begin
+      Put_Debug_Line ("Set_Has_Syntax_Error (Step => " & (+S.Data.Src_Code)
+                      & ", To => " & Has_Error'Image);
+      S.Data.Syntax_Error := Has_Error;
+   end Set_Has_Syntax_Error;
+
+   -- --------------------------------------------------------------------------
+   function Has_Syntax_Error (S : in out Step_Type'Class) return Boolean is
+      (S.Data.Syntax_Error);
 
    -- --------------------------------------------------------------------------
    overriding procedure Apply_Filters_To (S : in out Step_Type) is

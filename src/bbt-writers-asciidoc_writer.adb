@@ -88,9 +88,9 @@ package body BBT.Writers.Asciidoc_Writer is
       Put_Line ("| Failed     |" & Count_String_Image (Failed) & "|", Verbosity => Verbosity_Level);
       Put_Line ("| Successful |" & Count_String_Image (Successful) & "|", Verbosity => Verbosity_Level);
       Put_Line ("| Empty      |" & Count_String_Image (Empty) & "|", Verbosity => Verbosity_Level);
-      if Count (Failed) /= 0 then
-         Put_Line ("| Skipped    |" & Count_String_Image (Skipped) & "|", Verbosity => Verbosity_Level);
-      end if;
+      --  if Count (Not_Run) /= 0 then
+      Put_Line ("| Not Run    |" & Count_String_Image (Not_Run) & "|", Verbosity => Verbosity_Level);
+      --  end if;
       Put_Line ("|============", Verbosity => Verbosity_Level);
       New_Line (Verbosity => Verbosity_Level);
    end Put_Detailed_Results;

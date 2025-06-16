@@ -67,6 +67,9 @@ private package BBT.Settings is
    Example_Name  : constant String := "bbt_example.md";
 
    -- --------------------------------------------------------------------------
+   function Stop_On_Error return Boolean is (not Keep_Going);
+
+   -- --------------------------------------------------------------------------
    function Launch_Directory return String;
    -- Returns Ada.Directories.Current_Directory at bbt launch.
 

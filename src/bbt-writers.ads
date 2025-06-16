@@ -53,14 +53,22 @@ private package BBT.Writers is
    -- During test run, each event result in a call on those procedure, that
    -- will be dispatch on each enabled Formatter
    -- procedure Put_Summary;
-   procedure Put_Document_Start (Doc : Document_Type'Class);
-   procedure Put_Feature_Start (Feat : Feature_Type'Class);
-   procedure Put_Scenario_Start (Scen : Scenario_Type'Class);
-   procedure Put_Step_Result (Step     : Step_Type'Class;
-                              Success  : Boolean;
-                              Fail_Msg : String;
-                              Loc      : IO.Location_Type);
-   procedure Put_Scenario_Result (Scen : Scenario_Type'Class);
+   procedure Put_Document_Start
+     (Doc : Document_Type'Class);
+   procedure Put_Feature_Start
+     (Feat : Feature_Type'Class);
+   procedure Put_Scenario_Start
+     (Scen      : Scenario_Type'Class;
+      Verbosity : Verbosity_Levels := Normal);
+   procedure Put_Step_Result
+     (Step      : Step_Type'Class;
+      Success   : Boolean;
+      Fail_Msg  : String;
+      Loc       : IO.Location_Type;
+      Verbosity : Verbosity_Levels := Normal);
+   procedure Put_Scenario_Result
+     (Scen      : Scenario_Type'Class;
+      Verbosity : Verbosity_Levels := Normal);
    procedure Put_Overall_Results;
 
 

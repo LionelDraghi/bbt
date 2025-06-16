@@ -93,10 +93,8 @@ package body BBT.Writers.Text_Writer is
                 Verbosity => Verbosity_Level);
       Put_Line ("| Empty      |" & Count_String_Image (Empty) & "|",
                 Verbosity => Verbosity_Level);
-      if Count (Failed) /= 0 then
-         Put_Line ("| Skipped    |" & Count_String_Image (Skipped) & "|",
-                   Verbosity => Verbosity_Level);
-      end if;
+      Put_Line ("| Not Run    |" & Count_String_Image (Not_Run) & "|",
+                Verbosity => Verbosity_Level);
       New_Line (Verbosity_Level);
    end Put_Detailed_Results;
 
@@ -169,8 +167,11 @@ package body BBT.Writers.Text_Writer is
          when Successful =>
             Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
                       Verbosity => Normal);
-         when Skipped | Failed =>
+         when Failed =>
             Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+                      Verbosity => Quiet);
+         when Not_Run =>
+            Put_Line ("  - [ ] scenario " & Link_Image & " not run  ",
                       Verbosity => Quiet);
          end case;
       end if;

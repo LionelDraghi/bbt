@@ -22,8 +22,8 @@ bbt is using quotes for joining arguments as the shell, but the quotes should no
 ([Issue #11](https://github.com/LionelDraghi/bbt/issues/11))
 
 - Given the new file `tmp.txt`
-~~~
-~~~
+  ~~~
+  ~~~
   
 - When I run `./sut append "Hello world" tmp.txt`
 - Then I get no error
@@ -32,7 +32,7 @@ bbt is using quotes for joining arguments as the shell, but the quotes should no
 - When I run `./sut append Bye tmp.txt`
 - Then I get no error
 - And file `tmp.txt` is 
-~~~
-Hello world
-Bye
-~~~
+  ~~~
+  Hello world
+  Bye
+  ~~~

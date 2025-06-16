@@ -19,11 +19,11 @@ _Table of Contents:_
 - Given there is no `dir2` dir
 
 - Given the file `scen1.md`
-~~~
-# Scenario: 
-- When I run `./sut create tmp.txt`
-- Then there is a `tmp.txt` file
-~~~
+  ~~~
+  # Scenario: 
+  - When I run `./sut create tmp.txt`
+  - Then there is a `tmp.txt` file
+  ~~~
 
 ### Scenario: Current dir, no cleanup
 - When I run `./bbt scen1.md` 

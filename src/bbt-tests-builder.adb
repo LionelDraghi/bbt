@@ -75,7 +75,7 @@ package body BBT.Tests.Builder is
       -- WARNING : this function has side effect, to avoid multiple
       -- error reporting, it will return True only once;
 
-      -- --------------------------------------------------------------------------
+      -- -----------------------------------------------------------------------
       package Code_Block_Marks is
 
          procedure Reset_Count;
@@ -84,7 +84,7 @@ package body BBT.Tests.Builder is
          -- Count = 0, 2, 4, etc. => not in Code_Block
          -- Count = 1, 3, 5, etc. =>     in Code_Block
 
-         -- --------------------------------------------------------------------------
+         -- --------------------------------------------------------------------
          function Count return Natural;
 
          function In_The_First_Code_Block return Boolean;
@@ -106,7 +106,7 @@ package body BBT.Tests.Builder is
    procedure Check_Missing_Code_Block (Loc : Location_Type) is
    begin
       if Code_Block_Missing then
-         Put_Error ("Missing expected Code Block expected line"
+         Put_Error ("Missing Code Block expected line"
                     & Code_BLock_Expected_Line'Image, Loc);
       elsif Current_State = In_File_Content then
          Put_Error ("Code fenced block opened line"
@@ -142,17 +142,17 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Document (Name : String) is
    begin
-      Put_Debug_Line ("Add_Document " & Name'Image, Verbosity => IO.Debug);
-      The_Tests_List.Append
+      Put_Debug_Line ("Add_Document " & Name'Image, Location (Name, 1));
+      Doc_List.Append
         (Create_Document (Name     => To_Unbounded_String (Name),
                           Location => Location (Name, 0)));
-      Set_State (In_Document, Loc => IO.No_Location);
+      Set_State (In_Document, Loc => Location (Name, 0));
    end Add_Document;
 
    -- --------------------------------------------------------------------------
    procedure Add_Feature (Name : String; Loc : Location_Type) is
    begin
-      Put_Debug_Line ("Add_Feature " & Name'Image, Verbosity => IO.Debug);
+      Put_Debug_Line ("Add_Feature " & Name'Image, Loc);
       Current_Doc.Feature_List.Append
         (Create_Feature (Name       => To_Unbounded_String (Name),
                          Parent     => Current_Doc,
@@ -166,15 +166,15 @@ package body BBT.Tests.Builder is
    begin
       case Current_Doc_State is
          when In_Document =>
-            Put_Debug_Line ("Add_Scenario in Doc " & Name'Image,
-                      Verbosity => IO.Debug);
+            Put_Debug_Line ("Add_Scenario " & Name'Image & " in doc "
+                            & Current_Doc.Name'Image, Loc);
             Current_Doc.Scenario_List.Append
               (Create_Scenario (Name     => Name,
                                 Parent   => Node_Access (Current_Doc),
                                 Location => Loc));
          when In_Feature =>
-            Put_Debug_Line ("Add_Scenario in Feature " & Name'Image,
-                      Verbosity => IO.Debug);
+            Put_Debug_Line ("Add_Scenario " & Name'Image & " in feature"
+                            & Last_Feature.Name'Image, Loc);
             Last_Feature.Scenario_List.Append
               (Create_Scenario (Name     => Name,
                                 Parent   => Node_Access (Last_Feature),
@@ -191,7 +191,7 @@ package body BBT.Tests.Builder is
       case Current_State is
          when In_Document =>
             Put_Debug_Line ("Add_Background in Doc " & Name'Image,
-                      Verbosity => IO.Debug);
+                            Loc);
             Current_Doc.Background := new Scenario_Type'
               (Create_Scenario (Name          => Name,
                                 Parent        => Node_Access (Current_Doc),
@@ -200,7 +200,7 @@ package body BBT.Tests.Builder is
 
          when In_Feature =>
             Put_Debug_Line ("Add_Background in Feature " & Name'Image,
-                      Verbosity => IO.Debug);
+                            Loc);
             Last_Feature.Background := new Scenario_Type'
               (Create_Scenario (Name          => Name,
                                 Parent        => Node_Access (Last_Feature),
@@ -226,12 +226,13 @@ package body BBT.Tests.Builder is
                        Syntax_Error        : Boolean := False)
    is
       -- -----------------------------------------------------------------------
-      procedure Append_Step (Scen : Scenario_Access) is
-         Step : constant Step_Type := Create_Step (Step_Info, Loc, Scen);
+      procedure Append_And_Duplicate_Step (Scen : Scenario_Access) is
+         Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
       begin
+         Step.Set_Has_Syntax_Error (Syntax_Error);
          if Cmd_List.Is_Empty then
             -- normal case, there is no "or"
-            Scen.Step_List.Append (Step);
+            Scen.Add_Step (Step);
             --  declare
             --     S2 : Step_Type := Step;
             --  begin
@@ -244,7 +245,7 @@ package body BBT.Tests.Builder is
             -- cmd
 
             -- the existing scenario will receive the first cmd
-            Scen.Step_List.Append (Step);
+            Scen.Add_Step (Step);
 
             --  for S in 1 .. Cmd_List.Count - 1 loop
             --     Scen.Step_List
@@ -256,39 +257,37 @@ package body BBT.Tests.Builder is
             -- the one we want to store as containing the command list.
             -- NB : there can't be two "or" per scenario, only one.
          end if;
-      end Append_Step;
+         -- Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
+      end Append_And_Duplicate_Step;
 
    begin
-      --  Put_Debug_Line ("Add_Step " & Step'Image, Step.Location,
-      --            Verbosity => IO.Debug);
       if Code_Block_Expected then
          Code_BLock_Expected_Line := Line (Loc);
-         --** Put_Line ("Code block expected " & Code_BLock_Expected_Line'Image);
       end if;
 
-      if Current_State = In_Document or Current_State = In_Feature then
-         raise Missing_Scenario with "Prefix & Premature Step """ &
-           To_String (Step_Info.Src_Code)
-           & """ declaration, should be in Scenario or Background";
+      if Current_State in In_Document | In_Feature then
+         raise Missing_Scenario with "Prefix & Premature Step " &
+           Step_Info.Src_Code'Image
+           & " declaration, should be in Scenario or Background";
       end if;
 
       case Step_Info.Cat is
          when Unknown =>
             if Step_Info.Action = None then
-               IO.Put_Error ("No context to determine step kind of '"
-                             & To_String (Step_Info.Src_Code) & "'", Loc);
+               IO.Put_Error ("No context to determine step kind of "
+                             & Step_Info.Src_Code'Image, Loc);
             end if;
 
          when Given_Step =>
             if Settings.Strict_Gherkin then
                if Current_Step_State = In_When_Step then
                   IO.Put_Warning
-                    ("Given step """ & To_String (Step_Info.Src_Code) &
-                       """ appears after a ""When""", Loc);
+                    ("Given step " & Step_Info.Src_Code'Image &
+                       " appears after a ""When""", Loc);
                elsif Current_Step_State = In_Then_Step then
                   IO.Put_Warning
-                    ("Given step """ & To_String (Step_Info.Src_Code) &
-                                    """ appears after a ""Then""", Loc);
+                    ("Given step " & Step_Info.Src_Code'Image &
+                       " appears after a ""Then""", Loc);
                end if;
             end if;
             Set_Step_State (In_Given_Step, Code_Block_Expected, Loc);
@@ -296,12 +295,12 @@ package body BBT.Tests.Builder is
          when When_Step  =>
             if Settings.Strict_Gherkin then
                if Current_Step_State = In_Then_Step then
-                  IO.Put_Warning ("When step """
-                                  & To_String (Step_Info.Src_Code)
-                                  & """ appears after a ""Then""", Loc);
+                  IO.Put_Warning ("When step "
+                                  & Step_Info.Src_Code'Image
+                                  & " appears after a ""Then""", Loc);
                elsif Current_Step_State = In_When_Step then
-                  IO.Put_Warning ("Multiple When in the same Scenario """
-                                  & To_String (Step_Info.Src_Code), Loc);
+                  IO.Put_Warning ("Multiple When in the same Scenario "
+                                  & Step_Info.Src_Code'Image, Loc);
                end if;
             end if;
             Set_Step_State (In_When_Step, Code_Block_Expected, Loc);
@@ -315,45 +314,24 @@ package body BBT.Tests.Builder is
          when Doc     =>
             Put_Debug_Line
               ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
-               Verbosity => IO.Debug);
-            if Syntax_Error then
-               -- If there is a syntax error, it's useless to register the step
-               -- but we don't want the error to be ignored and have a final
-               -- count with no error.
-               Current_Doc.Background.Failed_Step_Count := @ + 1;
-            else
-               Append_Step (Current_Doc.Background);
-            end if;
+               Loc);
+               Append_And_Duplicate_Step (Current_Doc.Background);
 
          when Feature =>
             Put_Debug_Line
               ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
-               Verbosity => IO.Debug);
-            if Syntax_Error then
-               -- If there is a syntax error, it's useless to register the step
-               -- but we don't want the error to be ignored and have a final
-               -- count with no error.
-               Last_Feature.Background.Failed_Step_Count := @ + 1;
-            else
-               Append_Step (Last_Feature.Background);
-            end if;
+               Loc);
+               Append_And_Duplicate_Step (Last_Feature.Background);
 
          when None    =>
-            Put_Debug_Line
-              ("Add_Step in Scenario : " & Step_Info.Src_Code'Image,
-               Verbosity => IO.Debug);
             if Last_Scenario = null then
                Put_Error
                  ("Adding step to doc, but there is no scenario yet", Loc);
             else
-               if Syntax_Error then
-                  -- If there is a syntax error, it's useless to register the step
-                  -- but we don't want the error to be ignored and have a final
-                  -- count with no error.
-                  Scenario_Access (Last_Scenario).Failed_Step_Count := @ + 1;
-               else
-                  Append_Step (Scenario_Access (Last_Scenario));
-               end if;
+               Put_Debug_Line
+                 ("Add_Step " & Step_Info.Src_Code'Image & " in scenario "
+                  & Last_Scenario.Name'Image, Loc);
+               Append_And_Duplicate_Step (Scenario_Access (Last_Scenario));
             end if;
 
       end case;
@@ -386,13 +364,11 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Exiting code block
-            --** Set_State (In_Step);
             Opening_Marker_Line := 0;
             Restore_Previous_State;
             Put_Debug_Line
               ("Add_Code_Fence, exiting code block. File_Content = "
-               & Last_Step.Data.File_Content'Image,
-               Loc, Verbosity => IO.Debug);
+               & Last_Step.Data.File_Content'Image, Loc);
 
          when In_Document =>
             Current_Doc.Comment.Append ("```");
@@ -424,10 +400,10 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String;
-                       Loc  : Location_Type) is
+                       Loc  : Location_Type)
+   is
+      pragma Unreferenced (Loc);
    begin
-      Put_Debug_Line ("*** Add_Line, State = " & Current_State'Image,
-                      Location => Loc);
       case Current_State is
          when In_Document =>
             Current_Doc.Comment.Append (Line);
@@ -476,7 +452,7 @@ package body BBT.Tests.Builder is
    begin
       --  Put_Debug_Line ("Duplicate_Multiple_Run =============");
 
-      for D of The_Tests_List.all loop
+      for D of Doc_List.all loop
          for S of D.Scenario_List loop
             Duplicate (S);
          end loop;

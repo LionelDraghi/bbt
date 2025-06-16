@@ -64,7 +64,7 @@ package BBT.Model.Documents is
       return Document_Access;
 
    -- --------------------------------------------------------------------------
-   function The_Tests_List return access Documents_Lists.Vector;
+   function Doc_List return access Documents_Lists.Vector;
 
    procedure Apply_Filters; -- Apply recursively on the whole tree
 

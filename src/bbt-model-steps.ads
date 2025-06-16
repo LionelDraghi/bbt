@@ -74,27 +74,13 @@ package BBT.Model.Steps is
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;
+      Syntax_Error     : Boolean                   := False;
    end record with Put_Image => Put_Image;
 
    -- --------------------------------------------------------------------------
    type Step_Type is new Non_Root_Node with record
       Data : Step_Data;
    end record with Put_Image => Put_Image;
-
-   --  -- --------------------------------------------------------------------------
-   --  function Create_Step (Cat              : Extended_Step_Categories;
-   --                        Action           : Actions;
-   --                        Src_Code         : Unbounded_String;
-   --                        Location         : Location_Type;
-   --                        Comment          : Text;
-   --                        Subject_String   : Unbounded_String;
-   --                        Object_String    : Unbounded_String;
-   --                        Object_File_Name : Unbounded_String;
-   --                        File_Type        : Ada.Directories.File_Kind;
-   --                        Executable_File  : Boolean;
-   --                        Ignore_Order     : Boolean;
-   --                        File_Content     : Text)
-   --                        return Step_Type;
 
    -- --------------------------------------------------------------------------
    function Create_Step (Info            : Step_Data;
@@ -126,11 +112,17 @@ package BBT.Model.Steps is
                          Filtered :        Boolean);
 
    -- --------------------------------------------------------------------------
+   procedure Set_Has_Syntax_Error (S         : in out Step_Type'Class;
+                                   Has_Error :        Boolean);
+   function Has_Syntax_Error (S : in out Step_Type'Class) return Boolean;
+
+   -- --------------------------------------------------------------------------
    package Step_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Step_Type'Class);
    subtype List is Step_Lists.Vector;
    Empty_Step_List : List renames Step_Lists.Empty_Vector;
 
+   -- --------------------------------------------------------------------------
    function Last_Step
      (S : in out Step_Lists.Vector) return Step_Maybe;
 

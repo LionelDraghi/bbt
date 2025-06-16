@@ -24,4 +24,4 @@ We create a scenario with multiple When, and run it with the "strict" option, in
   ```
 
 - When I successfully run `./bbt --strict t1.md`
-- Then the output matches `t1.md:[0-9]*: Warning : Multiple When in the same Scenario.*`
+- Then the output matches `t1.md:[0-9]*: Warning: Multiple When in the same Scenario.*`

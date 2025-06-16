@@ -14,7 +14,7 @@ use BBT.Model.Features,
 
 package body BBT.Model.Scenarios is
 
-    -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Has_Cmd_List
      (Scen : Scenario_Type) return Boolean
    is
@@ -73,8 +73,8 @@ package body BBT.Model.Scenarios is
             Put_Debug_Line ("Scenario selected : '" & (+Scen.Name) & "'");
             Unfilter_Parents (Scen);
             Unfilter_Tree (Scen);
-            -- if scenario is selected, we must mark the parent feature or
-            -- document as selected, and possibly Background, etc.
+            -- If scenario is selected, we must mark the parent feature
+            -- or document as selected, and possibly Background, etc.
 
          when No_Match => null;
             Put_Debug_Line ("Scenario ignored : '" & (+Scen.Name) & "'");
