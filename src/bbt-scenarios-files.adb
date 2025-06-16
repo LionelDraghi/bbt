@@ -48,7 +48,7 @@ package body BBT.Scenarios.Files is
          --  not supposed to be executed, and the output file if any.
          Put_Warning ("Ignoring file " & Name'Image);
          -- Fixme: need a test
-         
+
       else
          The_List.Append (File_Name);
 
