@@ -53,7 +53,7 @@ Here is a minimal example:
 
 The behavior is described in almost natural English, using the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) / [Gherkin](https://en.wikipedia.org/wiki/Cucumber_(software)#Gherkin_language) usual pattern *Given / When / Then*.  
 
-It's in Markdown [^1], and render as:
+It's in Markdown [^1], so that the text above render as:
 
 ---
 ### Scenario: I want to know gcc version  <!-- omit from toc -->
