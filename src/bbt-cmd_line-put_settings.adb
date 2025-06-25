@@ -28,7 +28,7 @@ begin
              & (if Current_Command = Help and Current_Topic /= Base
                then " " & Current_Topic'Image
                else ""));
-   Put_Line ("   Verbosity             : " & IO.Current_Verbosity'Image);
+   Put_Line ("   Verbosity             : " & IO.Verbosity_Threshold'Image);
    if IO.Enabled_Topic_List_Image /= "" then
       Put_Line ("   debug traces enabled for : " & IO.Enabled_Topic_List_Image);
    end if;

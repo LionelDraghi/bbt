@@ -16,7 +16,7 @@ private package BBT.IO is
 
    -- --------------------------------------------------------------------------
    type Verbosity_Levels is (Quiet, Normal, Verbose, Debug);
-   -- NB : order is significant, X is more verbose thant X'Pred!
+   -- NB : order is significant, X is more verbose than X'Pred!
    -- Default: Normal messages are displayed, verbose messages are not
    --          displayed.
    -- Quiet:   Neither normal messages nor verbose messages are displayed.
@@ -26,12 +26,12 @@ private package BBT.IO is
    function Is_Authorized (Verbosity : Verbosity_Levels) return Boolean;
    -- return True if Verbosity is >= to current setting.
 
-   function Current_Verbosity return Verbosity_Levels;
-   procedure Set_Verbosity (To : Verbosity_Levels);
-   function Debug_Mode   return Boolean is (Current_Verbosity = Debug);
-   function Verbose_Mode return Boolean is (Current_Verbosity = Verbose);
-   function Normal_Mode  return Boolean is (Current_Verbosity = Normal);
-   function Quiet_Mode   return Boolean is (Current_Verbosity = Quiet);
+   function Verbosity_Threshold return Verbosity_Levels;
+   procedure Set_Verbosity_Threshold (To : Verbosity_Levels);
+   function Debug_Mode   return Boolean is (Verbosity_Threshold = Debug);
+   function Verbose_Mode return Boolean is (Verbosity_Threshold = Verbose);
+   function Normal_Mode  return Boolean is (Verbosity_Threshold = Normal);
+   function Quiet_Mode   return Boolean is (Verbosity_Threshold = Quiet);
 
    -- --------------------------------------------------------------------------
    -- Observability! (kind of a tentative of...)

@@ -26,58 +26,70 @@ _Table of Contents:_
 
 ### Background: setup
 - Given the file `feature1.md`
-```
-### Scenario 1
-- When I run `./sut -h`
-- Then I get no error
+  ```
+  ### Scenario 1
+  - When I run `./sut -h`
+  - Then I get no error
+  
+  ### Scenario 2
+  - When I `./sut -h`   
+    --> ** bbt syntax error here (the verb is missing)**
+  
+  - Then I get no error 
+    --> if run, this line should fail
 
-### Scenario 2
-- When I `./sut -h`   
-  --> ** bbt syntax error here (the verb is missing)**
-
-- Then I get no error 
-  --> if run, this line should fail
-
-### Scenario 3
-- When I run `./sut -v`
-- Then I get no error
-```
+  ### Scenario 3
+  - When I run `./sut -v`
+  - Then I get no error
+  ```
 
 # Scenario: with `-k`
 - When I run `./bbt -k feature1.md`
 - then output is
-```
-## [feature1.md](feature1.md)  
-  - [X] scenario [1](feature1.md) pass  
-feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "
-  - [ ] scenario [2](feature1.md) fails  
-  - [X] scenario [3](feature1.md) pass  
+  ```
+  # Document: [feature1.md](feature1.md)    
+   ### Scenario: [1](feature1.md):   
+   - OK : When I run `./sut -h`    
+   - OK : Then I get no error    
+   - [X] scenario   [1](feature1.md) pass    
+   ### Scenario: [2](feature1.md):   
+  feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
+   - OK : Then I get no error     
+   - [ ] scenario   [2](feature1.md) **fails**    
+   ### Scenario: [3](feature1.md):   
+   - OK : When I run `./sut -v`    
+   - OK : Then I get no error    
+   - [X] scenario   [3](feature1.md) pass 
+  
+  ## Summary : **Fail**
 
-## Summary : **Fail**
-
-| Status     | Count |
-|------------|-------|
-| Failed     | 1     |
-| Successful | 2     |
-| Empty      | 0     |
-| Not Run    | 0     |
-```
+  | Status     | Count |
+  |------------|-------|
+  | Failed     | 1     |
+  | Successful | 2     |
+  | Empty      | 0     |
+  | Not Run    | 0     |
+  ```
 
 # Scenario: without `-k`
 - When I run `./bbt feature1.md`
 - then output is
-```
-## [feature1.md](feature1.md)  
-  - [X] scenario [1](feature1.md) pass  
-feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "
-  - [ ] scenario [2](feature1.md) fails  
-
-## Summary : **Fail**
-
-| Status     | Count |
-|------------|-------|
-| Failed     | 1     |
-| Successful | 1     |
-| Empty      | 0     |
-| Not Run    | 1     |
-```
+  ```
+  # Document: [feature1.md](feature1.md)    
+    ### Scenario: [1](feature1.md):   
+    - OK : When I run `./sut -h`    
+    - OK : Then I get no error    
+    - [X] scenario   [1](feature1.md) pass    
+    ### Scenario: [2](feature1.md):   
+  feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
+    - [ ] scenario   [2](feature1.md) **fails**    
+  
+  ## Summary : **Fail**  
+  
+  | Status     | Count |  
+  |------------|-------|  
+  | Failed     | 1     |  
+  | Successful | 1     |  
+  | Empty      | 0     |  
+  | Not Run    | 1     |  
+  ```

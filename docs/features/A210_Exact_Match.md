@@ -30,41 +30,41 @@ _Table of Contents_:
 ### Background:
 
 - Given the file `text.ref`
-```
-Rose
-Tulip
-```
+  ```
+  Rose
+  Tulip
+  ```
 
 - Given the file `text.1`
-```
-rose
-Tulip
-```
+  ```
+  rose
+  Tulip
+  ```
 
 - Given the file `text.2`
-```
-Rose
-  Tulip
-```
+  ```
+  Rose
+    Tulip
+  ```
 
 - Given the file `text.3`
-```
-
+  ```
   
-Rose
-
-Tulip
-```
+    
+  Rose
+  
+  Tulip
+  ```
 
 - Given the `compare.md` file
-~~~
-# Scenario 1:
-- Then `text.ref` is equal to file `text.1`
-# Scenario 2:
-- Then `text.ref` is equal to file `text.2`
-# Scenario 3:
-- Then `text.ref` is equal to file `text.3`
-~~~
+  ~~~
+  # Scenario 1:
+  - Then `text.ref` is equal to file `text.1`
+  # Scenario 2:
+  - Then `text.ref` is equal to file `text.2`
+  # Scenario 3:
+  - Then `text.ref` is equal to file `text.3`
+  ~~~
 
 ### Scenario: Human match
 
@@ -80,17 +80,19 @@ Tulip
 - Then I get an error
   The three tests should fail :
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.1` (compare.md:2:)    
-~~~
+  ```
+  - **NOK** : Then `text.ref` is equal to file `text.1` (compare.md:2:) 
+  ```
+
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.2` (compare.md:4:)    
-~~~
+  ```
+  - **NOK** : Then `text.ref` is equal to file `text.2` (compare.md:4:)    
+  ```
+
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.3` (compare.md:6:)    
-~~~
+  ```
+  - **NOK** : Then `text.ref` is equal to file `text.3` (compare.md:6:)    
+  ```
 
 ### Scenario: exact match except for casing
 
@@ -98,17 +100,17 @@ Tulip
 - Then I get an error
   Two of the three tests should fail :
 - And output contains
-~~~
+  ~~~
   - [X] scenario [1:](compare.md) pass    
-~~~
+  ~~~
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.2` (compare.md:4:)    
-~~~
+  ~~~
+  - **NOK** : Then `text.ref` is equal to file `text.2` (compare.md:4:)    
+  ~~~
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.3` (compare.md:6:)    
-~~~
+  ~~~
+  - **NOK** : Then `text.ref` is equal to file `text.3` (compare.md:6:)    
+  ~~~
 
 ### Scenario: exact match except for casing and blank lines
 
@@ -116,14 +118,14 @@ Tulip
 - Then I get an error
   Two of the three tests should fail :
 - And output contains
-~~~
+  ~~~
   - [X] scenario [1:](compare.md) pass    
-~~~
+  ~~~
 - And output contains
-~~~
-*** NOK : Then `text.ref` is equal to file `text.2` (compare.md:4:)    
-~~~
+  ~~~
+  - **NOK** : Then `text.ref` is equal to file `text.2` (compare.md:4:)  
+  ~~~
 - And output contains
-~~~
+  ~~~
   - [X] scenario [3:](compare.md) pass    
-~~~
+  ~~~

@@ -38,10 +38,15 @@ _Table of Contents:_
 
 - When I run `./bbt OK_scen.md`
 
-- Then the output contains
+- Then the output is
   ~~~
-  ## [OK_scen.md](OK_scen.md)    
-    - [X] scenario [](OK_scen.md) pass    
+  # Document: [OK_scen.md](OK_scen.md)    
+  ### Scenario: [](OK_scen.md):   
+  - OK : When I run `./sut -v`  
+  - OK : Then I get `sut version 1.0`  
+  - [X] scenario   [](OK_scen.md) pass    
+  
+  ## Summary : **Success**, 1 scenarios OK
   ~~~
 
 ### Scenario: verbose mode run
@@ -50,11 +55,21 @@ _Table of Contents:_
 
 - Then the output contains
   ~~~
-  ## [OK_scen.md](OK_scen.md)    
+  # Document: [OK_scen.md](OK_scen.md)    
+  ### Scenario: [](OK_scen.md):   
+  -  OK : When I run `./sut -v`    
+  -  OK : Then I get `sut version 1.0`    
+  - [X] scenario   [](OK_scen.md) pass    
   
-    OK  : When I run `./sut -v`  
-    OK  : Then I get `sut version 1.0`  
-    - [X] scenario [](OK_scen.md) pass    
+  
+  ## Summary : **Success**, 1 scenarios OK  
+  
+  | Status     | Count |  
+  |------------|-------|  
+  | Failed     | 0     |  
+  | Successful | 1     |  
+  | Empty      | 0     |  
+  | Not Run    | 0     |  
   ~~~
 
 ### Scenario: run with an error
@@ -63,18 +78,18 @@ _Table of Contents:_
 
 - Then the output contains
   ```
-  Output:    
+  NOK_scen.md:3: Error: Output:    
   ~~~  
   sut version 1.0  
   ~~~  
   not equal to expected:    
   ~~~  
   v3.1  
-  ~~~   
+  ~~~    
   ```
 
 - And the output contains
   ```
-    - [ ] scenario [](NOK_scen.md) fails
+    - [ ] scenario [](NOK_scen.md) **fails**
   ```
 

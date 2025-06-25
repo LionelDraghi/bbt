@@ -55,7 +55,8 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    procedure Run_Step (Step      : in out Step_Type'Class;
-                       Run_Error :    out Boolean);
+                       Run_Error :    out Boolean;
+                       Verbosity : Verbosity_Levels);
    procedure Run_Scenario (Scen : in out Scenario_Type'Class);
    -- run only the scenario, not Doc and / or Feature Background.
    procedure Run_Background (Scen : in out Scenario_Type'Class);
@@ -66,7 +67,8 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    procedure Run_Step (Step      : in out Step_Type'Class;
-                       Run_Error :    out Boolean)
+                       Run_Error :    out Boolean;
+                       Verbosity : Verbosity_Levels)
    is
       Spawn_OK    : Boolean;
       Return_Code : Integer;
@@ -98,6 +100,7 @@ package body BBT.Tests.Runner is
                      Cmd          => To_String (Step.Data.Object_String),
                      Output_Name  => Output,
                      Check_Result => False,
+                     Verbosity    => Verbosity,
                      Spawn_OK     => Spawn_OK,
                      Return_Code  => Return_Code);
             Run_Error := not (Spawn_OK);
@@ -108,74 +111,75 @@ package body BBT.Tests.Runner is
                      Cmd          => To_String (Step.Data.Object_String),
                      Output_Name  => Output,
                      Check_Result => True,
+                     Verbosity    => Verbosity,
                      Spawn_OK     => Spawn_OK,
                      Return_Code  => Return_Code);
             Run_Error := not (Spawn_OK);
 
          when Error_Return_Code =>
-            Return_Error (Return_Code, Step);
+            Return_Error (Return_Code, Step, Verbosity);
 
          when No_Error_Return_Code =>
-            Return_No_Error (Return_Code, Step);
+            Return_No_Error (Return_Code, Step, Verbosity);
 
          when Output_Is =>
-            Output_Is (Get_Text (Output), Step);
+            Output_Is (Get_Text (Output), Step, Verbosity);
 
          when No_Output =>
             Check_No_Output
-              (Get_Text (Output), Step);
+              (Get_Text (Output), Step, Verbosity);
 
          when Output_Contains =>
             Output_Contains
-              (Get_Text (Output), Step);
+              (Get_Text (Output), Step, Verbosity);
 
          when Output_Matches =>
             Output_Matches
-              (Get_Text (Output), Step);
+              (Get_Text (Output), Step, Verbosity);
 
          when Output_Does_Not_Contain =>
             Output_Does_Not_Contain
-              (Get_Text (Output), Step);
+              (Get_Text (Output), Step, Verbosity);
 
          when Output_Does_Not_Match =>
             Output_Does_Not_Match
-              (Get_Text (Output), Step);
+              (Get_Text (Output), Step, Verbosity);
 
          when File_Is =>
-            Files_Is (Step);
+            Files_Is (Step, Verbosity);
 
          when File_Is_Not =>
-            Files_Is_Not (Step);
+            Files_Is_Not (Step, Verbosity);
 
          when File_Contains =>
-            File_Contains (Step);
+            File_Contains (Step, Verbosity);
 
          when File_Does_Not_Contain =>
-            File_Does_Not_Contain (Step);
+            File_Does_Not_Contain (Step, Verbosity);
 
          when Check_No_File =>
-            Check_No_File (Subject_Or_Object_String (Step), Step);
+            Check_No_File (Subject_Or_Object_String (Step), Step, Verbosity);
 
          when Check_No_Dir =>
-            Check_No_Dir (Subject_Or_Object_String (Step), Step);
+            Check_No_Dir (Subject_Or_Object_String (Step), Step, Verbosity);
 
          when Check_File_Existence =>
-            Check_File_Existence (Subject_Or_Object_String (Step), Step);
+            Check_File_Existence (Subject_Or_Object_String (Step), Step, Verbosity);
 
          when Check_Dir_Existence =>
-            Check_Dir_Existence (Subject_Or_Object_String (Step), Step);
+            Check_Dir_Existence (Subject_Or_Object_String (Step), Step, Verbosity);
 
          when Create_If_None =>
-            Create_If_None (Step);
+            Create_If_None (Step, Verbosity);
 
          when Erase_And_Create =>
-            Erase_And_Create (Step);
+            Erase_And_Create (Step, Verbosity);
 
          when Setup_No_File =>
-            Setup_No_File (Step);
+            Setup_No_File (Step, Verbosity);
 
          when Setup_No_Dir =>
-            Setup_No_Dir (Step);
+            Setup_No_Dir (Step, Verbosity);
 
          when None =>
             IO.Put_Error ("Unrecognized step " & Step.Data.Src_Code'Image,
@@ -213,7 +217,8 @@ package body BBT.Tests.Runner is
 
          Step_Processing : for Step of Scen.Step_List loop
             Run_Step (Step      => Step,
-                      Run_Error => Run_Error);
+                      Run_Error => Run_Error,
+                      Verbosity => Verbosity);
             Add_Result (Success => (not Run_Error) and IO.No_Error,
                         To      => Scen);
             exit Step_Processing when IO.Some_Error and Settings.Stop_On_Error;

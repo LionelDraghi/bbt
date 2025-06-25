@@ -195,7 +195,7 @@ package body BBT.Cmd_Line is
 
                   else
                      IO.Put_Error
-                       ("Unkwnow format for file """ & File_Name & """");
+                       ("Unknown format for file """ & File_Name & """");
 
                   end if;
                end;
@@ -241,13 +241,13 @@ package body BBT.Cmd_Line is
                Settings.Yes := True;
 
             elsif Cmd = "-v" or Cmd = "--verbose" then
-               IO.Set_Verbosity (Verbose);
+               IO.Set_Verbosity_Threshold (Verbose);
 
             elsif Cmd = "-V" or Cmd = "--version" then
                Set_Cmd (Version);
 
             elsif Cmd = "-q" or Cmd = "--quiet" then
-               IO.Set_Verbosity (Quiet);
+               IO.Set_Verbosity_Threshold (Quiet);
 
             elsif Cmd = "--strict" then
                Settings.Strict_Gherkin := True;
@@ -299,7 +299,7 @@ package body BBT.Cmd_Line is
                      Enable_Topic (Topic => Topics'Value (Current_Arg));
                   else
                      -- there is only -d
-                     Set_Verbosity (Debug);
+                     Set_Verbosity_Threshold (Debug);
                      Go_Back_Previous_Arg;
                   end if;
                end if;

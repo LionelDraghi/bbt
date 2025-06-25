@@ -37,9 +37,11 @@ private
                                          Step     : Step_Type'Class;
                                          Success  : Boolean;
                                          Fail_Msg : String;
-                                         Loc      : IO.Location_Type);
-   overriding procedure Put_Scenario_Result (Writer : Asciidoc_Writer;
-                                             Scen   : Scenario_Type'Class);
+                                         Loc       : IO.Location_Type;
+                                         Verbosity : Verbosity_Levels);
+   overriding procedure Put_Scenario_Result (Writer    : Asciidoc_Writer;
+                                             Scen      : Scenario_Type'Class;
+                                             Verbosity : Verbosity_Levels);
    overriding procedure Put_Summary (Writer : Asciidoc_Writer);
    overriding procedure Put_Detailed_Results (Writer : Asciidoc_Writer);
 

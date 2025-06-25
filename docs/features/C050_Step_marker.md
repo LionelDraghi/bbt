@@ -30,12 +30,9 @@ _Table of Contents:_
   * other list item
   ~~~
 
-- When I run `./bbt -c step_markers.md`
+- When I run `./bbt -c -q step_markers.md`
 - Then I get no error
 - And the output is
   ~~~
-  ## [step_markers.md](step_markers.md)    
-    - [X] scenario   [](step_markers.md) pass    
-  
   ## Summary : **Success**, 1 scenarios OK
   ~~~

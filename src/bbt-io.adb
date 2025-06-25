@@ -22,17 +22,18 @@ package body BBT.IO is
    Was_Tee_Enabled    : Boolean          := False;
    Tee_File_Verbosity : Verbosity_Levels := Normal;
    Tee_File           : Text_IO.File_Type;
-   Current_Level      : Verbosity_Levels := Normal;
+   Threshold_Level    : Verbosity_Levels := Normal;
 
    -- --------------------------------------------------------------------------
    function Is_Authorized (Verbosity : Verbosity_Levels) return Boolean is
-     (Verbosity <= Current_Level);
+     (Verbosity <= Threshold_Level);
 
-   function Current_Verbosity return Verbosity_Levels is (Current_Level);
-   procedure Set_Verbosity (To : Verbosity_Levels) is
+   function Verbosity_Threshold return Verbosity_Levels is (Threshold_Level);
+
+   procedure Set_Verbosity_Threshold (To : Verbosity_Levels) is
    begin
-      Current_Level := To;
-   end Set_Verbosity;
+      Threshold_Level := To;
+   end Set_Verbosity_Threshold;
 
    -- --------------------------------------------------------------------------
    Enabled_Topics : array (Extended_Topics) of Boolean := [others => False];

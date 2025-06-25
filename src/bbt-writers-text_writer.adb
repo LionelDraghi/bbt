@@ -130,26 +130,25 @@ package body BBT.Writers.Text_Writer is
                                          Step      : Step_Type'Class;
                                          Success   : Boolean;
                                          Fail_Msg  : String;
-                                         Loc       : BBT.IO.Location_Type) is
+                                         Loc       : BBT.IO.Location_Type;
+                                         Verbosity : Verbosity_Levels) is
       Pre  : constant String := Pref (Success);
    begin
       Put_Debug_Line ("Put_Step_Result = " & Step'Image);
       if Success then
-         IO.Pause_Tee; --  We don't want this level of detail in the
-         --  generated test index.
          IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",
-                      Verbosity => IO.Verbose);
-         IO.Restore_Tee;
+                      Verbosity => Verbosity);
       else
          IO.Put_Line (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
-                      Verbosity => IO.Normal);
+                      Verbosity => Verbosity);
          IO.Put_Error (Fail_Msg & "  ", Loc);
       end if;
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   overriding procedure Put_Scenario_Result (Writer : Text_Writer;
-                                             Scen   : Scenario_Type'Class)
+   overriding procedure Put_Scenario_Result (Writer    : Text_Writer;
+                                             Scen      : Scenario_Type'Class;
+                                             Verbosity : Verbosity_Levels)
    is
       Path_To_Scen  : constant String
         := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,

@@ -129,27 +129,30 @@ package body BBT.Writers.Asciidoc_Writer is
                                          Step     : Step_Type'Class;
                                          Success  : Boolean;
                                          Fail_Msg : String;
-                                         Loc      : BBT.IO.Location_Type)
+                                         Loc       : BBT.IO.Location_Type;
+                                         Verbosity : Verbosity_Levels)
    is
       Pre  : constant String := Pref (Success);
    begin
       if Success then
          IO.Pause_Tee;
          IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",
-                      Verbosity => IO.Verbose);
+                      Verbosity => Verbosity);
          IO.Restore_Tee;
       else
          IO.Put_Line (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
-                      Verbosity => IO.Normal);
+                      Verbosity => Verbosity);
       end if;
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------
-   overriding procedure Put_Scenario_Result (Writer : Asciidoc_Writer;
-                                             Scen   : Scenario_Type'Class) is
+   overriding procedure Put_Scenario_Result (Writer    : Asciidoc_Writer;
+                                             Scen      : Scenario_Type'Class;
+                                             Verbosity : Verbosity_Levels) is
    begin
       Put_Scenario_Result (Get_Writer (For_Format => Markdown).all,
-                           Scen);
+                           Scen,
+                           Verbosity);
    end Put_Scenario_Result;
 
    -- --------------------------------------------------------------------------

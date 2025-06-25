@@ -40,7 +40,7 @@ Tulip
 - Then I get an error
 - And output contains 
 ```
-*** NOK : Then output doesn't contain `Rose` (failed_doesnt_1.md:3:)    
+  - **NOK** : Then output doesn't contain `Rose` (failed_doesnt_1.md:3:)    
 ```
 - And output contains 
 ```

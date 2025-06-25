@@ -35,14 +35,14 @@ _Table of Contents:_
   ~~~
   # Feature : Getting info
   ## Background: setup
-     - When I run `./sut --help`
-     - Then the output contains `Return code:`
+  - When I run `./sut --help`
+  - Then the output contains `Return code:`
   ## Scenario : Getting the version
-     - When I run `./sut -v`
-     - Then I get `sut version 1.0`
+  - When I run `./sut -v`
+  - Then I get `sut version 1.0`
   ## Scenario : Getting help
-     - When I run `./sut -h`
-     - Then output contains `Usage:`
+  - When I run `./sut -h`
+  - Then output contains `Usage:`
   ~~~
 
 - Given the file `NOK_scen.md`
@@ -64,11 +64,17 @@ _Table of Contents:_
 
 - Then the output is
   ~~~
-  ## [OK_scen.md](OK_scen.md)  
-    ### Feature: Getting info    
-    - [X] scenario [Getting the version](OK_scen.md) pass  
-    - [X] scenario [Getting help](OK_scen.md) pass  
-
+  # Document: [OK_scen.md](OK_scen.md)    
+  ## Feature: Getting info    
+  ### Scenario: [Getting the version](OK_scen.md):   
+  - OK : When I run `./sut -v`  
+  - OK : Then I get `sut version 1.0`  
+  - [X] scenario   [Getting the version](OK_scen.md) pass  
+  ### Scenario: [Getting help](OK_scen.md): 
+  - OK : When I run `./sut -h`  
+  - OK : Then output contains `Usage:`  
+  - [X] scenario   [Getting help](OK_scen.md) pass    
+  
   ## Summary : **Success**, 2 scenarios OK
   ~~~
 
@@ -78,32 +84,37 @@ _Table of Contents:_
 
 - Then the output is
   ~~~
-  ## [OK_scen.md](OK_scen.md)  
-    ### Feature: Getting info    
-      OK  : When I run `./sut --help`    
-      OK  : Then the output contains `Return code:`    
-    - [X] background [setup](OK_scen.md) pass    
+  # Document: [OK_scen.md](OK_scen.md)    
+  ## Feature: Getting info    
+  ### Background: [setup](OK_scen.md):   
+  -  OK : When I run `./sut --help`    
+  -  OK : Then the output contains `Return code:`    
+  - [X] background [setup](OK_scen.md) pass    
   
-      OK  : When I run `./sut -v`  
-      OK  : Then I get `sut version 1.0`  
-    - [X] scenario [Getting the version](OK_scen.md) pass    
+  ### Scenario: [Getting the version](OK_scen.md):   
+  -  OK : When I run `./sut -v`    
+  -  OK : Then I get `sut version 1.0`    
+  - [X] scenario   [Getting the version](OK_scen.md) pass    
   
-      OK  : When I run `./sut --help`    
-      OK  : Then the output contains `Return code:`    
-    - [X] background [setup](OK_scen.md) pass    
+  ### Background: [setup](OK_scen.md):   
+  -  OK : When I run `./sut --help`    
+  -  OK : Then the output contains `Return code:`    
+  - [X] background [setup](OK_scen.md) pass    
   
-      OK  : When I run `./sut -h`    
-      OK  : Then output contains `Usage:`    
-    - [X] scenario [Getting help](OK_scen.md) pass    
-
-  ## Summary : **Success**, 2 scenarios OK
-
-  | Status     | Count |
-  |------------|-------|
-  | Failed     | 0     |
-  | Successful | 2     |
-  | Empty      | 0     |
-  | Not Run    | 0     |
+  ### Scenario: [Getting help](OK_scen.md):   
+  -  OK : When I run `./sut -h`    
+  -  OK : Then output contains `Usage:`    
+  - [X] scenario   [Getting help](OK_scen.md) pass    
+  
+  
+  ## Summary : **Success**, 2 scenarios OK  
+  
+  | Status     | Count |  
+  |------------|-------|  
+  | Failed     | 0     |  
+  | Successful | 2     |  
+  | Empty      | 0     |  
+  | Not Run    | 0     |  
   ~~~
 
 ### Scenario: Normal mode with an error
@@ -113,8 +124,10 @@ _Table of Contents:_
 - Then there is an error
 - And  the output is
   ```
-  ## [NOK_scen.md](NOK_scen.md)  
-  *** NOK : Then I get `v3.1` (NOK_scen.md:3:)  
+  # Document: [NOK_scen.md](NOK_scen.md)  
+  ### Scenario: [sut version](NOK_scen.md):   
+  - OK : When I run `./sut -v`  
+  - **NOK** : Then I get `v3.1` (NOK_scen.md:3:) 
   NOK_scen.md:3: Error: Output:  
   ~~~
   sut version 1.0
@@ -124,7 +137,7 @@ _Table of Contents:_
   v3.1
   ~~~
   
-    - [ ] scenario   [sut version](NOK_scen.md) fails  
+  - [ ] scenario   [sut version](NOK_scen.md) **fails**    
 
   ## Summary : **Fail**
 
@@ -145,6 +158,7 @@ When there is an error, even if quiet mode is specified, we output all info.
 - Then there is an error
 - And  the output is
   ```
+  - **NOK** : Then I get `v3.1` (NOK_scen.md:3:)  
   NOK_scen.md:3: Error: Output:  
   ~~~
   sut version 1.0

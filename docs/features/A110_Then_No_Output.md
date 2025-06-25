@@ -19,14 +19,14 @@ _Table of Contents:_
 
 - Given the new `file.txt` file containing `text2`
 - Given the new file `no_output.input`
-```
-# Scenario:
-- When I run `./sut read file.txt`
-- Then there is no output
-```
+  ```
+  # Scenario:
+  - When I run `./sut read file.txt`
+  - Then there is no output
+  ```
 
 - When I run `./bbt -c no_output.input`
 
 - Then I get an error
-- And output contains `NOK : Then there is no output`
+- And output contains `**NOK** : Then there is no output`
 - And output contains `output not null`

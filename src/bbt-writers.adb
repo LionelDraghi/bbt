@@ -85,7 +85,7 @@ package body BBT.Writers is
    -- --------------------------------------------------------------------------
    procedure Put_Scenario_Start
      (Scen      : Scenario_Type'Class;
-      Verbosity : Verbosity_Levels := Normal) is
+      Verbosity : Verbosity_Levels) is
    begin
       if Is_Authorized (Verbosity) then
          for W in Writer_List'Range when Enabled (W) loop
@@ -100,19 +100,19 @@ package body BBT.Writers is
       Success   : Boolean;
       Fail_Msg  : String;
       Loc       : BBT.IO.Location_Type;
-      Verbosity : Verbosity_Levels := Normal) is
+      Verbosity : Verbosity_Levels) is
    begin
       for W in Writer_List'Range when Enabled (W) loop
          Put_Debug_Line ("Put_Step_Result :" & Inline_Image (Step), Loc);
-         if Is_Authorized (Verbosity) or not Success then
-            -- When error, details should be printed
-            -- When no error, it depends on if verbose mode is selected
-            Put_Step_Result (Writer_List (W).all,
-                             Step,
-                             Success,
-                             Fail_Msg,
-                             Loc);
-         end if;
+         Put_Step_Result
+           (Writer_List (W).all,
+            Step,
+            Success,
+            Fail_Msg,
+            Loc,
+            Verbosity => (if Success then Verbosity else Quiet));
+         -- When error, details should be printed whatever the verbosity.
+         -- When no error, it depends on the selected verbose mode.
          Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       end loop;
    end Put_Step_Result;
@@ -120,13 +120,11 @@ package body BBT.Writers is
    -- --------------------------------------------------------------------------
    procedure Put_Scenario_Result
      (Scen      : Scenario_Type'Class;
-      Verbosity : Verbosity_Levels := Normal) is
+      Verbosity : Verbosity_Levels) is
    begin
-      if Is_Authorized (Verbosity) then
-         for W in Writer_List'Range when Enabled (W) loop
-            Put_Scenario_Result (Writer_List (W).all, Scen);
-         end loop;
-      end if;
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Scenario_Result (Writer_List (W).all, Scen, Verbosity);
+      end loop;
    end Put_Scenario_Result;
 
    -- --------------------------------------------------------------------------
@@ -155,7 +153,6 @@ package body BBT.Writers is
                Put_Step (Writer.all, Step);
             end if;
          end loop;
-         -- New_Line;
       end if;
    end Put_Scenario;
 
@@ -176,7 +173,6 @@ package body BBT.Writers is
                Explain (Writer.all, Step);
             end if;
          end loop;
-         -- New_Line;
       end if;
    end Explain;
 
@@ -198,7 +194,6 @@ package body BBT.Writers is
          for Scenario of Feature.Scenario_List loop
             Put_Scenario (Writer, Scenario);
          end loop;
-         New_Line;
       end if;
    end Put_Feature;
 
@@ -220,7 +215,6 @@ package body BBT.Writers is
          for Scenario of Feature.Scenario_List loop
             Explain (Writer, Scenario);
          end loop;
-         New_Line;
       end if;
    end Explain;
 
@@ -231,7 +225,6 @@ package body BBT.Writers is
       if Doc.Filtered then
          Put_Debug_Line ("Document " & (+Doc.Name) & " is filtered");
       else
-         New_Line;
          if Doc.Background /= null then
             Put_Scenario (Writer, Doc.Background.all);
          end if;
@@ -253,7 +246,6 @@ package body BBT.Writers is
       if Doc.Filtered then
          Put_Debug_Line ("Document " & (+Doc.Name) & " is filtered");
       else
-         New_Line;
          if Doc.Background /= null then
             Explain (Writer, Doc.Background.all);
          end if;
@@ -297,6 +289,5 @@ package body BBT.Writers is
 
    function Get_Writer (For_Format : Output_Format) return Interface_Access is
      (Writer_List (For_Format));
-
 
 end BBT.Writers;

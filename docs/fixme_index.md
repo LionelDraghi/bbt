@@ -11,9 +11,11 @@ Location | Text
 [src/bbt-cmd_line.ads](../src/bbt-cmd_line.ads):28|   procedure Create_Template; --  shouldn't be here
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):48|     (D : in out Document_Type); --  should be private
 [src/bbt-scenarios.ads](../src/bbt-scenarios.ads):55|   --  To be moved as dispatching in Writers
+[src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):50|         --  need a test
 [src/bbt-scenarios-step_parser.adb](../src/bbt-scenarios-step_parser.adb):137|                                                                                                   --  we currently do not check if the existing file contains
 [src/bbt-settings.ads](../src/bbt-settings.ads):89|   procedure Set_Result_File (File_Name : String); --  utile?
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
-[src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):85|      --  defensive code that should be replaced by
-[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):172|      --  should be in parameters to avoid recomputing
+[src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):87|      --  defensive code that should be replaced by
+[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):164|      --  Path_To_Scen should be in Scenario_Type to avoid
+[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):214|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

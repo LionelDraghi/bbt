@@ -5,7 +5,6 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO;
 with BBT.Settings;
 with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Writers;                       use BBT.Writers;
@@ -83,6 +82,7 @@ package body BBT.Tests.Actions is
                       Cmd          :     String;
                       Output_Name  :     String;
                       Check_Result :     Boolean;
+                      Verbosity    :     Verbosity_Levels;
                       Spawn_OK     : out Boolean;
                       Return_Code  : out Integer) is
       use GNAT.OS_Lib;
@@ -112,20 +112,22 @@ package body BBT.Tests.Actions is
             -- IO.Put_Line ("not exec", Verbosity => IO.Normal);
             Spawn_OK := False;
             Put_Step_Result
-              (Step     => Step,
-               Success  => Spawn_OK,
-               Fail_Msg => Spawn_Arg.all (1).all & " not executable",
-               Loc      => Step.Location);
+              (Step      => Step,
+               Success   => Spawn_OK,
+               Fail_Msg  => Spawn_Arg.all (1).all & " not executable",
+               Loc       => Step.Location,
+               Verbosity => Verbosity);
             return;
 
          elsif Full_Path = null then
             -- IO.Put_Line ("not found", Verbosity => IO.Normal);
             Spawn_OK := False;
             Put_Step_Result
-              (Step     => Step,
-               Success  => Spawn_OK,
-               Fail_Msg => Spawn_Arg.all (1).all & " not found",
-               Loc      => Step.Location);
+              (Step      => Step,
+               Success   => Spawn_OK,
+               Fail_Msg  => Spawn_Arg.all (1).all & " not found",
+               Loc       => Step.Location,
+               Verbosity => Verbosity);
             return;
 
          else
@@ -169,18 +171,21 @@ package body BBT.Tests.Actions is
                           Success  => Is_Success (Return_Code),
                           Fail_Msg => "Unsuccessfully run " &
                             Step.Data.Object_String'Image,
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          Put_Step_Result (Step     => Step,
                           Success  => Spawn_OK,
                           Fail_Msg => "Couldn't run " & Cmd,
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       end if;
 
    end Run_Cmd;
 
    -- --------------------------------------------------------------------------
-   procedure Erase_And_Create (Step : Step_Type'Class) is
+   procedure Erase_And_Create (Step         : Step_Type'Class;
+                               Verbosity    :     Verbosity_Levels) is
       File_Name  : constant String := To_String (Step.Data.Subject_String);
       Parent_Dir : constant String :=
                      Directories.Containing_Directory (File_Name);
@@ -202,20 +207,22 @@ package body BBT.Tests.Actions is
             Create_File (File_Name    => File_Name,
                          With_Content => Get_Expected (Step),
                          Executable   => Step.Data.Executable_File);
-            Put_Step_Result (Step     => Step,
-                             Success  => File_Exists (File_Name),
-                             Fail_Msg => "File " & File_Name'Image &
+            Put_Step_Result (Step      => Step,
+                             Success   => File_Exists (File_Name),
+                             Fail_Msg  => "File " & File_Name'Image &
                                " creation failed",
-                             Loc      => Step.Location);
+                             Loc       => Step.Location,
+                             Verbosity => Verbosity);
          when Directory =>
             if not Exists (File_Name) then
                Directories.Create_Path (File_Name);
             end if;
-            Put_Step_Result (Step     => Step,
-                             Success  => Dir_Exists (File_Name),
-                             Fail_Msg => "Couldn't create directory " &
+            Put_Step_Result (Step      => Step,
+                             Success   => Dir_Exists (File_Name),
+                             Fail_Msg  => "Couldn't create directory " &
                                File_Name'Image,
-                             Loc      => Step.Location);
+                             Loc       => Step.Location,
+                             Verbosity => Verbosity);
          when others =>
             -- don't mess around with special files!
             null;
@@ -224,7 +231,8 @@ package body BBT.Tests.Actions is
    end Erase_And_Create;
 
    -- --------------------------------------------------------------------------
-   procedure Create_If_None (Step : Step_Type'Class) is
+   procedure Create_If_None (Step      : Step_Type'Class;
+                             Verbosity : Verbosity_Levels) is
       File_Name : constant String := To_String (Step.Data.Subject_String);
    begin
       Put_Debug_Line ("Create_New " & File_Name);
@@ -242,7 +250,8 @@ package body BBT.Tests.Actions is
                              Success  => File_Exists (File_Name),
                              Fail_Msg => "File " & File_Name'Image &
                                " creation failed",
-                             Loc      => Step.Location);
+                             Loc       => Step.Location,
+                             Verbosity => Verbosity);
          when Directory =>
             if not Exists (File_Name) then
                Created_File_List.Add (File_Name);
@@ -253,7 +262,8 @@ package body BBT.Tests.Actions is
                              Success  => Dir_Exists (File_Name),
                              Fail_Msg => "Couldn't create directory " &
                                File_Name'Image,
-                             Loc      => Step.Location);
+                             Loc       => Step.Location,
+                             Verbosity => Verbosity);
          when others =>
             -- don't mess around with special files!
             null;
@@ -262,30 +272,35 @@ package body BBT.Tests.Actions is
 
    -- --------------------------------------------------------------------------
    procedure Return_Error (Last_Returned_Code : Integer;
-                           Step               : Step_Type'Class) is
+                           Step               : Step_Type'Class;
+                           Verbosity          : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Return_Error " & Last_Returned_Code'Image);
       Put_Step_Result (Step     => Step,
                        Success  => not Is_Success (Last_Returned_Code),
                        Fail_Msg => "Expected error code, got no error",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Return_Error;
 
    -- --------------------------------------------------------------------------
    procedure Return_No_Error (Last_Returned_Code : Integer;
-                              Step               : Step_Type'Class) is
+                              Step               : Step_Type'Class;
+                              Verbosity          : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Return_No_Error " & Last_Returned_Code'Image);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Success (Last_Returned_Code),
                        Fail_Msg => "No error expected, but got one (" &
                          Last_Returned_Code'Image & ")",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Return_No_Error;
 
    -- --------------------------------------------------------------------------
    procedure Check_File_Existence (File_Name : String;
-                                   Step      : Step_Type'Class) is
+                                   Step      : Step_Type'Class;
+                                   Verbosity : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Check_File_Existence " & File_Name);
       if Entry_Exists (File_Name) then
@@ -293,19 +308,22 @@ package body BBT.Tests.Actions is
                           Success  => Kind (File_Name) = Ordinary_File,
                           Fail_Msg => File_Name'Image &
                             " exists but its a dir and not a file as expected",
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          Put_Step_Result (Step     => Step,
                           Success  => False,
                           Fail_Msg => "Expected file " &
                             File_Name'Image & " doesn't exists",
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       end if;
    end Check_File_Existence;
 
    -- --------------------------------------------------------------------------
    procedure Check_Dir_Existence (Dir_Name : String;
-                                  Step     : Step_Type'Class) is
+                                  Step      : Step_Type'Class;
+                                  Verbosity : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Check_Dir_Existence " & Dir_Name);
       if Entry_Exists (Dir_Name) then
@@ -313,54 +331,63 @@ package body BBT.Tests.Actions is
                           Success  => Kind (Dir_Name) = Directory,
                           Fail_Msg => "File " & Dir_Name'Image &
                             " exists but isn't a dir as expected",
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          Put_Step_Result (Step     => Step,
                           Success  => False,
                           Fail_Msg => "Expected dir " &
                             Dir_Name'Image & " doesn't exists in Exec_Dir "
                           & Settings.Exec_Dir,
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       end if;
    end Check_Dir_Existence;
 
    -- --------------------------------------------------------------------------
    procedure Check_No_File (File_Name : String;
-                            Step      : Step_Type'Class) is
+                            Step      : Step_Type'Class;
+                            Verbosity : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Check_No_File " & File_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not File_Exists (File_Name),
                        Fail_Msg => "file " &
                          File_Name'Image & " shouldn't exists",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Check_No_File;
 
    -- --------------------------------------------------------------------------
    procedure Check_No_Dir (Dir_Name : String;
-                           Step     : Step_Type'Class) is
+                           Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels) is
    begin
       Put_Debug_Line ("Check_No_Dir " & Dir_Name);
       Put_Step_Result (Step     => Step,
                        Success  => not Dir_Exists (Dir_Name),
                        Fail_Msg => "dir " &
                          Dir_Name'Image & " shouldn't exists",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Check_No_Dir;
 
    -- --------------------------------------------------------------------------
    procedure Check_No_Output (Output : Text;
-                              Step   : Step_Type'Class) is
+                              Step      : Step_Type'Class;
+                              Verbosity : Verbosity_Levels) is
       use Texts;
    begin
       Put_Step_Result (Step     => Step,
                        Success  => Output = Empty_Text,
                        Fail_Msg => "output not null : " & Output'Image,
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Check_No_Output;
 
    -- --------------------------------------------------------------------------
-   procedure Setup_No_File (Step : Step_Type'Class) is
+   procedure Setup_No_File (Step      : Step_Type'Class;
+                            Verbosity : Verbosity_Levels) is
       File_Name : constant String :=
                     +Step.Data.Subject_String & (+Step.Data.Object_File_Name);
    begin
@@ -369,11 +396,13 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => not File_Exists (File_Name),
                        Fail_Msg => "file " & File_Name'Image & " not deleted",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Setup_No_File;
 
    -- --------------------------------------------------------------------------
-   procedure Setup_No_Dir (Step : Step_Type'Class) is
+   procedure Setup_No_Dir (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels) is
       Dir_Name : constant String :=
                    +Step.Data.Subject_String & (+Step.Data.Object_File_Name);
    begin
@@ -382,12 +411,14 @@ package body BBT.Tests.Actions is
       Put_Step_Result (Step     => Step,
                        Success  => not Dir_Exists (Dir_Name),
                        Fail_Msg => "dir " & Dir_Name'Image & " not deleted",
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Setup_No_Dir;
 
    -- --------------------------------------------------------------------------
    procedure Output_Is (Output : Text;
-                        Step   : Step_Type'Class) is
+                        Step      : Step_Type'Class;
+                        Verbosity : Verbosity_Levels) is
       use Texts;
       T2 : constant Text := Get_Expected (Step);
    begin
@@ -401,12 +432,14 @@ package body BBT.Tests.Actions is
                           Sort_Texts         => Step.Data.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "not equal to expected:  " & Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Output_Is;
 
    -- --------------------------------------------------------------------------
    procedure Output_Contains (Output : Text;
-                              Step   : Step_Type'Class) is
+                              Step      : Step_Type'Class;
+                              Verbosity : Verbosity_Levels) is
       T2  : constant Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("Output_Contains ");
@@ -420,12 +453,14 @@ package body BBT.Tests.Actions is
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not contain expected:  " &
                          Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Output_Contains;
 
    -- --------------------------------------------------------------------------
    procedure Output_Does_Not_Contain (Output : Text;
-                                      Step   : Step_Type'Class) is
+                                      Step      : Step_Type'Class;
+                                      Verbosity : Verbosity_Levels) is
       T2  : constant Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("Output_Does_Not_Contain ");
@@ -438,12 +473,14 @@ package body BBT.Tests.Actions is
                           Sort_Texts         => Step.Data.Ignore_Order),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "contains unexpected:  " & Code_Fenced_Image (T2),
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Output_Does_Not_Contain;
 
    -- --------------------------------------------------------------------------
    procedure Output_Matches (Output : Text;
-                             Step   : Step_Type'Class) is
+                             Step      : Step_Type'Class;
+                             Verbosity : Verbosity_Levels) is
       Regexp : constant String := Get_Expected (Step) (1);
    begin
       Put_Debug_Line ("Output_Matches ");
@@ -451,12 +488,14 @@ package body BBT.Tests.Actions is
                        Success  => Text_Utilities.Matches (Output, Regexp),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "does not match expected:  " & Regexp,
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Output_Matches;
 
    -- --------------------------------------------------------------------------
    procedure Output_Does_Not_Match (Output : Text;
-                                    Step   : Step_Type'Class) is
+                                    Step      : Step_Type'Class;
+                                    Verbosity : Verbosity_Levels) is
       Regexp : constant String := Get_Expected (Step) (1);
    begin
       Put_Debug_Line ("Output_Does_Not_Match ");
@@ -464,11 +503,13 @@ package body BBT.Tests.Actions is
                        Success  => not Text_Utilities.Matches (Output, Regexp),
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
                          "match unexpected:  " & Regexp,
-                       Loc      => Step.Location);
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
    end Output_Does_Not_Match;
 
    -- --------------------------------------------------------------------------
-   procedure Files_Is (Step : Step_Type'Class) is
+   procedure Files_Is (Step      : Step_Type'Class;
+                       Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
@@ -485,14 +526,16 @@ package body BBT.Tests.Actions is
                              Sort_Texts         => Step.Data.Ignore_Order),
                           Fail_Msg =>  File_Name &
                             " not equal to expected:  " & Code_Fenced_Image (T2),
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end Files_Is;
 
    -- --------------------------------------------------------------------------
-   procedure Files_Is_Not (Step : Step_Type'Class) is
+   procedure Files_Is_Not (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
@@ -509,14 +552,16 @@ package body BBT.Tests.Actions is
                              Sort_Texts         => Step.Data.Ignore_Order),
                           Fail_Msg => File_Name & " expected to be different from " &
                             Code_Fenced_Image (T2),
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end Files_Is_Not;
 
    -- --------------------------------------------------------------------------
-   procedure File_Contains (Step : Step_Type'Class) is
+   procedure File_Contains (Step      : Step_Type'Class;
+                            Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
@@ -536,14 +581,16 @@ package body BBT.Tests.Actions is
                           Fail_Msg => File_Name &
                             " does not contain expected:  " &
                             Code_Fenced_Image (T2),
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end File_Contains;
 
    -- --------------------------------------------------------------------------
-   procedure File_Does_Not_Contain (Step : Step_Type'Class) is
+   procedure File_Does_Not_Contain (Step      : Step_Type'Class;
+                                    Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
       T2        : constant Text   := Get_Expected (Step);
@@ -560,7 +607,8 @@ package body BBT.Tests.Actions is
                              Sort_Texts         => Step.Data.Ignore_Order),
                           Fail_Msg => File_Name &
                             " shouldn't contain :  " & Code_Fenced_Image (T2),
-                          Loc      => Step.Location);
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;

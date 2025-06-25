@@ -1,10 +1,14 @@
 {
-    "plantuml.diagramsRoot": "docs",
-    "plantuml.exportFormat": "png",
-    "plantuml.exportIncludeFolderHeirarchy": false,
-    "plantuml.exportOutDir": "docs",
-    "plantuml.exportSubFolder": false,
-    "plantuml.render": "PlantUMLServer",
-    "plantuml.server": "https://www.plantuml.com/plantuml",
-    "sarif-viewer.connectToGithubCodeScanning": "off"
+    "ada.projectFile": "bbt.gpr",
+    "ada.renameInComments": true,
+    "[ada]": {
+        "editor.rulers": [80],
+        "files.trimTrailingWhitespace": true
+    },
+    "[gpr]": {
+        "editor.rulers": [80],
+        "files.trimTrailingWhitespace": true
+    },
+    "editor.guides.bracketPairs": "active",
+    "editor.bracketPairColorization.enabled": true,
 }

@@ -40,9 +40,11 @@ private
       Step     : Step_Type'Class;
       Success  : Boolean;
       Fail_Msg : String;
-      Loc      : BBT.IO.Location_Type);
+      Loc       : BBT.IO.Location_Type;
+      Verbosity : Verbosity_Levels);
    overriding procedure Put_Scenario_Result (Writer : Text_Writer;
-                                             Scen   : Scenario_Type'Class);
+                                             Scen      : Scenario_Type'Class;
+                                             Verbosity : Verbosity_Levels);
    overriding procedure Put_Summary
      (Writer    : Text_Writer);
    overriding procedure Put_Detailed_Results

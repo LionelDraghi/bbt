@@ -59,16 +59,16 @@ private package BBT.Writers is
      (Feat : Feature_Type'Class);
    procedure Put_Scenario_Start
      (Scen      : Scenario_Type'Class;
-      Verbosity : Verbosity_Levels := Normal);
+      Verbosity : Verbosity_Levels);
    procedure Put_Step_Result
      (Step      : Step_Type'Class;
       Success   : Boolean;
       Fail_Msg  : String;
       Loc       : IO.Location_Type;
-      Verbosity : Verbosity_Levels := Normal);
+      Verbosity : Verbosity_Levels);
    procedure Put_Scenario_Result
      (Scen      : Scenario_Type'Class;
-      Verbosity : Verbosity_Levels := Normal);
+      Verbosity : Verbosity_Levels);
    procedure Put_Overall_Results;
 
 
@@ -111,9 +111,11 @@ private
                               Step      : Step_Type'Class;
                               Success   : Boolean;
                               Fail_Msg  : String;
-                              Loc       : IO.Location_Type) is abstract;
-   procedure Put_Scenario_Result (Writer : Abstract_Writer;
-                                  Scen   : Scenario_Type'Class) is abstract;
+                              Loc       : IO.Location_Type;
+                              Verbosity : Verbosity_Levels) is abstract;
+   procedure Put_Scenario_Result (Writer    : Abstract_Writer;
+                                  Scen      : Scenario_Type'Class;
+                                  Verbosity : Verbosity_Levels) is abstract;
    procedure Put_Summary (Writer : Abstract_Writer) is abstract;
    procedure Put_Detailed_Results (Writer : Abstract_Writer) is abstract;
 
