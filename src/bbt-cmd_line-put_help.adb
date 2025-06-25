@@ -45,7 +45,7 @@ begin
          Put_Line ("  filtering : --select --exclude --include");
          Put_Line ("  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines");
          Put_Line ("  other     : list_files list_keywords list_grammar explain create_template");
-         Put_Line ("              --strict --output file.md --exec_dir --tmp_dir --generate_badge");
+         Put_Line ("              --strict --index file.md --exec_dir --tmp_dir --generate_badge");
          Put_Line ("  debug     : -d tt -ls -t");
          New_Line;
          Put_Line ("bbt version " & Settings.BBT_Version);
@@ -93,7 +93,7 @@ begin
          New_Line;
          Put_Line ("Other options:");
          Put_Line ("        --strict         : warn when not strictly following Gherkin common guidelines");
-         Put_Line ("  -o  | --output file.md : create an md file with test results");
+         Put_Line ("        --index file.md  : create an md file with test results");
          Put_Line ("                           that indexes all scenarios run.");
          Put_Line ("                           This file will contain the normal bbt output,");
          Put_Line ("                           whatever are the verbosity settings (-q, -v, etc.)");

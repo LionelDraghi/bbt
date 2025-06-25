@@ -119,10 +119,11 @@ package body BBT.Writers.Text_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Scenario_Start (Writer : Text_Writer;
-                                            Scen   : Scenario_Type'Class) is
+                                            Scen      : Scenario_Type'Class;
+                                            Verbosity : Verbosity_Levels) is
    begin
-      null;
-      -- IO.Put_Line ("  - Scen start: " & (+Scen.Name) & "  ");
+      IO.Put_Line ("  - Scen start: " & (+Scen.Name) & "  ",
+                   Verbosity => Verbosity);
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
@@ -151,7 +152,7 @@ package body BBT.Writers.Text_Writer is
                                              Verbosity : Verbosity_Levels)
    is
       Path_To_Scen  : constant String
-        := File_Utilities.Short_Path (From_Dir => Settings.Result_Dir,
+        := File_Utilities.Short_Path (From_Dir => Settings.Index_Dir,
                                       To_File  => (+Parent_Doc (Scen).Name));
       Link_Image    : constant String
         := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");

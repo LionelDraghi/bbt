@@ -31,7 +31,7 @@ Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
   other     : list_files list_keywords list_grammar explain create_template
-              --strict --output file.md --exec_dir --tmp_dir --generate_badge
+              --strict --index file.md --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
 bbt version 0.2.0-dev
@@ -73,7 +73,7 @@ Other commands:
 
 Other options:
         --strict         : warn when not strictly following Gherkin common guidelines
-  -o  | --output file.md : create an md file with test results
+        --index file.md  : create an md file with test results
                            that indexes all scenarios run.
                            This file will contain the normal bbt output,
                            whatever are the verbosity settings (-q, -v, etc.)

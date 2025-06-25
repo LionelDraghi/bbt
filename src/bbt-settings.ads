@@ -84,12 +84,13 @@ private package BBT.Settings is
 
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String;
+   -- Each spawned command outputs will be output here
 
    -- --------------------------------------------------------------------------
-   procedure Set_Result_File (File_Name : String); -- Fixme: utile?
-   function Result_File_Name return String;
-   function Result_Dir       return String;
-   -- returns the containing directory of the file_name
+   -- Operation related to the index file of all run scenarios
+   procedure Set_Index_File (File_Name : String);
+   function Index_File_Name return String;
+   function Index_Dir       return String;
 
    -- --------------------------------------------------------------------------
    procedure Set_Badge_File_Name (File_Name : String);

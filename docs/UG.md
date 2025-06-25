@@ -92,7 +92,7 @@ bbt --exclude "For Windows only" tests
 Run all Scenarios/Steps/Features except those for Windows.
 
 ```sh
-bbt list --Select "For Windows only" --exclude "@long_test" tests
+bbt list --select "For Windows only" --exclude "@long_test" tests
 ```
 
 List scenarios for Windows, unless too long.
@@ -201,7 +201,7 @@ To see what files, use `bbt --list_files`, possibly with `--recurse`.
 
 But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you wish.
 
-As a special rule, two specific files will be ignored even if they are in the search path: the template file (`bbt_template.md`), and the output file if the `-o` option is used. The first is not supposed to be run, and the second is probably a consequence of a previous run. 
+As a special rule, two specific files will be ignored even if they are in the search path: the template file (`bbt_template.md`), and the index file if the `--index` option is used. The first is not supposed to be run, and the second is probably a consequence of a previous run. 
 
 ## Tips
 
@@ -251,7 +251,7 @@ you'll see that the second field has changed from UNKNOWN to FILE_CREATION, and 
 
 ### Test in place
 
-The `--output` option creates a test results file, in Markdown format, that cross-references all executed files.
+The `--index` option creates a single test results file, in Markdown format, that cross-references all executed files.
 Meaning that if the result file is in the `web` sub-directory, and the scenarios in the `tests` sub-directory, link will be for example `../tests/scenario_1.md`. 
 Be aware of that if you move the files into another dir after the run: move both scenarios and results files in a coherent way.
 
@@ -272,7 +272,7 @@ For example, if you have:
 the command could be:
 ```sh
 cd tests  
-bbt --output ../docs/test_run/results.md ../docs/features/*.md
+bbt --index ../docs/test_run/results.md ../docs/features/*.md
 ```
 
 ### Avoiding ambiguities
@@ -297,7 +297,7 @@ More generally, this is specification, make short sentences and go straight to t
 ### Command line examples
 
 ```sh
-bbt --exec_dir /tmp --output docs/results.md tests/scenario.md 
+bbt --exec_dir /tmp --index docs/results.md tests/scenario.md 
 ```
 
 This example illustrates the control you have on execution, by choosing the scenario in one directory, executing in another, and putting the results in a third one.

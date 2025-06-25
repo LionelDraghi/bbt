@@ -87,11 +87,9 @@ package body BBT.Writers is
      (Scen      : Scenario_Type'Class;
       Verbosity : Verbosity_Levels) is
    begin
-      if Is_Authorized (Verbosity) then
-         for W in Writer_List'Range when Enabled (W) loop
-            Put_Scenario_Start (Writer_List (W).all, Scen);
-         end loop;
-      end if;
+      for W in Writer_List'Range when Enabled (W) loop
+         Put_Scenario_Start (Writer_List (W).all, Scen, Verbosity);
+      end loop;
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
@@ -137,8 +135,8 @@ package body BBT.Writers is
    end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
-   procedure Put_Scenario (Writer     : Interface_Access;
-                           Scenario   : Scenario_Type'Class) is
+   procedure Put_Scenario (Writer   : Interface_Access;
+                           Scenario : Scenario_Type'Class) is
    begin
       if Scenario.Filtered then
          Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
@@ -157,8 +155,8 @@ package body BBT.Writers is
    end Put_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Explain (Writer     : Interface_Access;
-                           Scenario   : Scenario_Type'Class) is
+   procedure Explain (Writer   : Interface_Access;
+                      Scenario : Scenario_Type'Class) is
    begin
       if Scenario.Filtered then
          Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
@@ -198,8 +196,8 @@ package body BBT.Writers is
    end Put_Feature;
 
    -- --------------------------------------------------------------------------
-   procedure Explain (Writer     : Interface_Access;
-                          Feature    : Feature_Type'Class) is
+   procedure Explain (Writer  : Interface_Access;
+                      Feature : Feature_Type'Class) is
    begin
       if Feature.Filtered then
          Put_Debug_Line ("Feature " & (+Feature.Name) & " is filtered");

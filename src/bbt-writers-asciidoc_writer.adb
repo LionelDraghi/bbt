@@ -118,10 +118,12 @@ package body BBT.Writers.Asciidoc_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
-                                            Scen   : Scenario_Type'Class) is
+                                            Scen      : Scenario_Type'Class;
+                                            Verbosity : Verbosity_Levels) is
    begin
       Put_Scenario_Start (Get_Writer (For_Format => Markdown).all,
-                          Scen);
+                          Scen,
+                          Verbosity);
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------

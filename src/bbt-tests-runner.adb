@@ -320,10 +320,9 @@ package body BBT.Tests.Runner is
          return;
       end if;
 
-
       declare
          Path_To_Scen  : constant String
-           := Short_Path (From_Dir => Settings.Result_Dir,
+           := Short_Path (From_Dir => Settings.Index_Dir,
                           To_File  => (+Doc.Name));
       begin
          Put_Document_Start (Doc);

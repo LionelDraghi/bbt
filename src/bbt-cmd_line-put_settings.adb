@@ -36,8 +36,8 @@ begin
    Put_Line ("   Initial directory     : " & Launch_Directory);
    Put_Line ("   Exec    directory     : " & Settings.Exec_Dir);
    Put_Line ("   Output file directory : " & Settings.Output_File_Dir);
-   Put_Line ("   Result directory      : " & Result_Dir);
-   Put_Line ("   Result file           : " & Result_File_Name);
+   Put_Line ("   Index directory       : " & Index_Dir);
+   Put_Line ("   Index file            : " & Index_File_Name);
    Put_Line ("   Template_Name         : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Keep_Going) & " Keep_Going");

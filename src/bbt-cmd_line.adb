@@ -134,6 +134,12 @@ package body BBT.Cmd_Line is
             use Tests.Filter_List;
 
          begin
+
+            -- First check obsolete options
+            if Cmd = "-o" or Cmd = "--output" then
+               Put_Warning ("-o and --output options deprecated, use --index instead");
+            end if;
+
             -- Commands --------------------------------------------------------
             if Cmd in "list" | "ls" then
                Set_Cmd (List);
@@ -173,18 +179,19 @@ package body BBT.Cmd_Line is
                Set_Cmd (Create_Template);
 
                -- Options ------------------------------------------------------
-            elsif Cmd = "-o" or Cmd = "--output" then
+            elsif Cmd = "-o" or Cmd = "--output" or Cmd = "--index"
+            then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a file name");
                else
                   Go_Next_Arg;
-                  Settings.Set_Result_File (Current_Arg);
+                  Settings.Set_Index_File (Current_Arg);
                end if;
 
                declare
                   Writer_Found : Boolean := False;
                   Format       : Writers.Output_Format;
-                  File_Name    : constant String := Settings.Result_File_Name;
+                  File_Name    : constant String := Settings.Index_File_Name;
                begin
                   Writers.File_Format (File_Name    => File_Name,
                                        Found        => Writer_Found,
@@ -199,11 +206,6 @@ package body BBT.Cmd_Line is
 
                   end if;
                end;
-
-               --  IO.Enable_Tee (Settings.Result_File_Name,
-               --                 Verbosity => Verbose);
-               -- Verbose is the right detail level for the Markdown output file,
-               -- even if --quiet or -- verbose is set.
 
                --  elsif Arg = "-ot" or Arg = "--output_tag" then
                --     Next_Arg;

@@ -63,15 +63,15 @@ package body BBT.Settings is
    function Output_File_Dir return String renames Tmp_Dir;
 
    -- --------------------------------------------------------------------------
-   procedure Set_Result_File (File_Name : String) is
+   procedure Set_Index_File (File_Name : String) is
    begin
       Outfile_Name := new String'(File_Name);
-   end Set_Result_File;
+   end Set_Index_File;
 
-   function Result_File_Name return String is
+   function Index_File_Name return String is
     (if Outfile_Name = null then "" else Outfile_Name.all);
 
-   function Result_Dir return String is
+   function Index_Dir return String is
     (if Outfile_Name = null then Ada.Directories.Current_Directory
        else Ada.Directories.Containing_Directory (Outfile_Name.all));
 

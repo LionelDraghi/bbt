@@ -33,8 +33,9 @@ private
                                             Doc    : Document_Type'Class);
    overriding procedure Put_Feature_Start (Writer  : Markdown_Writer;
                                            Feat    : Feature_Type'Class);
-   overriding procedure Put_Scenario_Start (Writer : Markdown_Writer;
-                                            Scen   : Scenario_Type'Class);
+   overriding procedure Put_Scenario_Start (Writer    : Markdown_Writer;
+                                            Scen      : Scenario_Type'Class;
+                                            Verbosity : Verbosity_Levels);
    overriding procedure Put_Step_Result
      (Writer   : Markdown_Writer;
       Step     : Step_Type'Class;

@@ -42,7 +42,7 @@ package body BBT.Scenarios.Files is
       Name : constant String := Full_Name (File_Name);
    begin
       if Name = Full_Name (Settings.Template_Name)
-        or Name = Result_File_Name
+        or Name = Index_File_Name
       then
          --  Filters the md file created with --create-template, that is
          --  not supposed to be executed, and the output file if any.

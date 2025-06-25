@@ -106,7 +106,8 @@ private
    procedure Put_Feature_Start (Writer    : Abstract_Writer;
                                 Feat      : Feature_Type'Class) is abstract;
    procedure Put_Scenario_Start (Writer    : Abstract_Writer;
-                                 Scen      : Scenario_Type'Class) is abstract;
+                                 Scen      : Scenario_Type'Class;
+                                 Verbosity : Verbosity_Levels) is abstract;
    procedure Put_Step_Result (Writer    : Abstract_Writer;
                               Step      : Step_Type'Class;
                               Success   : Boolean;

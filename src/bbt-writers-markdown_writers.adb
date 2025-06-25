@@ -131,7 +131,7 @@ package body BBT.Writers.Markdown_Writers is
    is
       Path_To_Scen : constant String :=
         File_Utilities.Short_Path
-          (From_Dir => Settings.Result_Dir, To_File => (+Doc.Name));
+          (From_Dir => Settings.Index_Dir, To_File => (+Doc.Name));
       Verbosity    : constant Verbosity_Levels := Normal;
    begin
       New_Line (Verbosity);
@@ -155,11 +155,13 @@ package body BBT.Writers.Markdown_Writers is
    -- --------------------------------------------------------------------------
    overriding
    procedure Put_Scenario_Start
-     (Writer : Markdown_Writer; Scen : Scenario_Type'Class)
+     (Writer    : Markdown_Writer;
+      Scen      : Scenario_Type'Class;
+      Verbosity : Verbosity_Levels)
    is
       Path_To_Scen : constant String :=
         File_Utilities.Short_Path
-          (From_Dir => Settings.Result_Dir,
+          (From_Dir => Settings.Index_Dir,
            To_File  => (+Parent_Doc (Scen).Name));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid
       -- recomputing when looping on the writers
@@ -170,7 +172,7 @@ package body BBT.Writers.Markdown_Writers is
          then "### Background: "
          else "### Scenario: ");
    begin
-      IO.Put_Line (Scen_Kind & Link_Image & ": ", Verbosity => Quiet);
+      IO.Put_Line (Scen_Kind & Link_Image & ": ", Verbosity => Verbosity);
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
@@ -209,7 +211,7 @@ package body BBT.Writers.Markdown_Writers is
    is
       Path_To_Scen : constant String :=
         File_Utilities.Short_Path
-          (From_Dir => Settings.Result_Dir,
+          (From_Dir => Settings.Index_Dir,
            To_File  => (+Parent_Doc (Scen).Name));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid recomputing
       -- when looping on the writers

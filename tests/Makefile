@@ -77,14 +77,14 @@ check: setup ./bbt ./sut
 	--cleanup $(EXCLUDE) \
 	-q -sb --human_match \
 	--generate_badge $(RESULTS_DIR)/badge.url \
-	--output $(RESULTS_DIR)/features_results.md \
+	--index $(RESULTS_DIR)/features_results.md \
 	../docs/features 
 	@ echo
 
 	@ # Check examples
 	@ echo 2. examples check ================
 	@ ./bbt --yes -k -c -q -sb -hm \
-	-o $(RESULTS_DIR)/examples_results.md \
+	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../src/help/example.md || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
@@ -92,7 +92,7 @@ check: setup ./bbt ./sut
 	@ echo 3. non regression tests ==========
 	@ ./bbt --yes --keep_going --cleanup -q -sb \
 	--human_match \
-	--output $(RESULTS_DIR)/non_reg_tests.md \
+	--index $(RESULTS_DIR)/non_reg_tests.md \
 	../tests/non_reg_tests 
 	@ echo
 
@@ -109,7 +109,7 @@ doc: $(RESULTS_DIR)
 	@ wget -q "`cat $(RESULTS_DIR)/badge.url`" -O $(RESULTS_DIR)/badge.svg
 
 clean:
-	@ - rm -f *.out main bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt
+	@ - rm -f *.out main bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	
