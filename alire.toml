@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Black box test runner"
-version = "0.2.0-dev"
+version = "0.2.0"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
@@ -22,13 +22,13 @@ generate_C = false
 ansiada = "^1.0.0"
 ## gnat="^15.1.2"
 
-# [[test]]
-# command = ["make", "build", "check"]
+[[test]]
+command = ["make", "build", "check"]
 
-# [[test]]
-# id = "examples"
+# [[test]]
+# id = "examples"
 # directory = "tests/"
-# command = ["./bbt", "-c", "-q", "-sb", "--yes", "../docs/examples/"]
+# command = ["./bbt", "-c", "-q", "-sb", "--yes", "../docs/examples/"]
 
 # [[test]]
 # id = "features"

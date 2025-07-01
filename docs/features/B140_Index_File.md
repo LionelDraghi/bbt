@@ -106,28 +106,28 @@ _Table of Contents:_
 
 ### Scenario: Quiet mode run
 
-- When I successfully run `./bbt -q OK_scen.md  --index index_1.md`
+- When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`
 - Then `index_1.md` is equal to file `verbose_output_OK.md`
   
-- When I run `./bbt -q NOK_scen.md --index index_2.md`
+- When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`
 - Then I get an error
 - And `index_2.md` is equal to file `verbose_output_NOK.md`
 
 ### Scenario: Default mode run
 
-- When I successfully run `./bbt    OK_scen.md  --index index_3.md`
+- When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`
 - Then `index_3.md` is equal to file `verbose_output_OK.md`
 
-- When I  run `./bbt    NOK_scen.md --index index_4.md`
+- When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`
 - Then  I get an error
 - And `index_4.md` is equal to file `verbose_output_NOK.md`
 
 ### Scenario: Verbose mode run
 
-- When I successfully run `./bbt -v OK_scen.md  --index index_5.md`
+- When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`
 - Then `index_5.md` is equal to file `verbose_output_OK.md`
 
-- When I run `./bbt -v NOK_scen.md --index index_6.md`
+- When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`
 - Then I get an error
 - And `index_6.md` is equal to file `verbose_output_NOK.md`
 

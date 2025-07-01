@@ -10,7 +10,7 @@ bbt should warn the user if an option should be removed in the future, and sugge
   - When I successfully run `./sut -v`
   ~~~
 
-- When I run `./bbt ver.md --output tmp.md` 
+- When I run `./bbt -c --yes ver.md --output tmp.md` 
 
 - Then the output contains 
   ~~~

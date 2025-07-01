@@ -101,6 +101,8 @@ check: setup ./bbt ./sut
 	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK || echo ***** KO
 	@ echo
 
+	@ - rm *.out main tmp.txt output2.txt tmp.md index_*.md
+
 doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) --directory=file_utilities_tests
 	

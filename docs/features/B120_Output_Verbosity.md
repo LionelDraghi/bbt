@@ -54,13 +54,13 @@ _Table of Contents:_
 
 ### Scenario: Quiet mode run
 
-- When I successfully run `./bbt -q OK_scen.md`
+- When I successfully run `./bbt -c --yes -q OK_scen.md`
 
 - Then the output is `## Summary : **Success**, 2 scenarios OK`
 
 ### Scenario: Default mode run
 
-- When I successfully run `./bbt OK_scen.md`
+- When I successfully run `./bbt -c --yes OK_scen.md`
 
 - Then the output is
   ~~~
@@ -80,7 +80,7 @@ _Table of Contents:_
 
 ### Scenario: Verbose mode run
 
-- When I successfully run `./bbt -v OK_scen.md`
+- When I successfully run `./bbt -c --yes -v OK_scen.md`
 
 - Then the output is
   ~~~
@@ -119,7 +119,7 @@ _Table of Contents:_
 
 ### Scenario: Normal mode with an error
 
-- When I run `./bbt NOK_scen.md`
+- When I run `./bbt -c --yes NOK_scen.md`
 
 - Then there is an error
 - And  the output is
@@ -153,7 +153,7 @@ _Table of Contents:_
 
 When there is an error, even if quiet mode is specified, we output all info.
 
-- When I run `./bbt --quiet NOK_scen.md`
+- When I run `./bbt -c --yes --quiet NOK_scen.md`
 
 - Then there is an error
 - And  the output is

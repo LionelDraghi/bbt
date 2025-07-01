@@ -36,7 +36,7 @@ _Table of Contents:_
 
 ### Scenario: default mode run
 
-- When I run `./bbt OK_scen.md`
+- When I run `./bbt -c --yes OK_scen.md`
 
 - Then the output is
   ~~~
@@ -51,7 +51,7 @@ _Table of Contents:_
 
 ### Scenario: verbose mode run
 
-- When I run `./bbt -v OK_scen.md`
+- When I run `./bbt -v -c --yes OK_scen.md`
 
 - Then the output contains
   ~~~
@@ -74,7 +74,7 @@ _Table of Contents:_
 
 ### Scenario: run with an error
 
-- When I run `./bbt NOK_scen.md`
+- When I run `./bbt -c --yes NOK_scen.md`
 
 - Then the output contains
   ```

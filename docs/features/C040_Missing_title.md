@@ -17,7 +17,7 @@ Report will obviously be less readable, but it should not prevent to run the tes
   - When I successfully run `./sut -v`
   ```
 
-- When I run `./bbt no_title.md`
+- When I run `./bbt -c --yes no_title.md`
 - Then output is
   ```md
   # Document: [no_title.md](no_title.md)

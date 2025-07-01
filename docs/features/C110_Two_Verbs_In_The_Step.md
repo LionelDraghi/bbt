@@ -12,7 +12,7 @@ Here, bbt id going to recognize both 'contains' and 'is' verb.
 If it take contains, the test will be OK. 
 If it takes 'is', the test will fail because the version number is missing in the expected text.
 
-- When I run `./bbt too_much_verbs_in_step.md`
+- When I run `./bbt -c --yes too_much_verbs_in_step.md`
 Then I have no error
 - then the output contains 
 ```

@@ -6,14 +6,16 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[Latest] - 2025-??-??**
+- **[Latest] - 2025--**
+
+- **[0.2.0] - 2025-07-02**
   - [Changed] `--output` is now deprecated and replaced with `--index` 
   - [Changed] Removed option form of commands : "help" is a command, "-h" is removed (as announced in 0.1.0)
   - [Changed] The non essential explanation in the online help have bee moved to separate topics
   - [Added]   Close #21, first implementation of documents/features/scenario/steps selection through `--select` `--exclude` `--include` options.
   - [Added]   AppImage generation added by @mgrojo
   - [Fixed]   --cleanup now correctly removes directories tree (fixes #3)
-  - [Added]   Processing of Asciidoc input (.adoc files) added
+  - [Added]   Processing of Asciidoc input (.adoc files) added (proto)
 
 - **[0.1.0] - 2025-03-03**
   - [changed] option and command on command line now accept both '_' and '-' separator (you can use both `--keep_going` and `--keep-going`)

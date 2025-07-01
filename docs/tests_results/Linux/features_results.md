@@ -1008,7 +1008,7 @@
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [default mode run](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : When I run `./bbt OK_scen.md`  
+   - OK : When I run `./bbt -c --yes OK_scen.md`  
    - OK : Then the output is  
    - [X] scenario   [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
@@ -1018,7 +1018,7 @@
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : When I run `./bbt -v OK_scen.md`  
+   - OK : When I run `./bbt -v -c --yes OK_scen.md`  
    - OK : Then the output contains  
    - [X] scenario   [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
@@ -1028,7 +1028,7 @@
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [run with an error](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : When I run `./bbt NOK_scen.md`  
+   - OK : When I run `./bbt -c --yes NOK_scen.md`  
    - OK : Then the output contains  
    - OK : And the output contains  
    - [X] scenario   [run with an error](../../features/B100_Results_Output_In_MD_Format.md) pass  
@@ -1061,7 +1061,7 @@
    - [X] background [](../../features/B120_Output_Verbosity.md) pass  
 
    ### Scenario: [Quiet mode run](../../features/B120_Output_Verbosity.md): 
-   - OK : When I successfully run `./bbt -q OK_scen.md`  
+   - OK : When I successfully run `./bbt -c --yes -q OK_scen.md`  
    - OK : Then the output is `## Summary : **Success**, 2 scenarios OK`  
    - [X] scenario   [Quiet mode run](../../features/B120_Output_Verbosity.md) pass  
 
@@ -1071,7 +1071,7 @@
    - [X] background [](../../features/B120_Output_Verbosity.md) pass  
 
    ### Scenario: [Default mode run](../../features/B120_Output_Verbosity.md): 
-   - OK : When I successfully run `./bbt OK_scen.md`  
+   - OK : When I successfully run `./bbt -c --yes OK_scen.md`  
    - OK : Then the output is  
    - [X] scenario   [Default mode run](../../features/B120_Output_Verbosity.md) pass  
 
@@ -1081,7 +1081,7 @@
    - [X] background [](../../features/B120_Output_Verbosity.md) pass  
 
    ### Scenario: [Verbose mode run](../../features/B120_Output_Verbosity.md): 
-   - OK : When I successfully run `./bbt -v OK_scen.md`  
+   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md`  
    - OK : Then the output is  
    - [X] scenario   [Verbose mode run](../../features/B120_Output_Verbosity.md) pass  
 
@@ -1091,7 +1091,7 @@
    - [X] background [](../../features/B120_Output_Verbosity.md) pass  
 
    ### Scenario: [Normal mode with an error](../../features/B120_Output_Verbosity.md): 
-   - OK : When I run `./bbt NOK_scen.md`  
+   - OK : When I run `./bbt -c --yes NOK_scen.md`  
    - OK : Then there is an error  
    - OK : And  the output is  
    - [X] scenario   [Normal mode with an error](../../features/B120_Output_Verbosity.md) pass  
@@ -1102,7 +1102,7 @@
    - [X] background [](../../features/B120_Output_Verbosity.md) pass  
 
    ### Scenario: [Quiet mode with an error](../../features/B120_Output_Verbosity.md): 
-   - OK : When I run `./bbt --quiet NOK_scen.md`  
+   - OK : When I run `./bbt -c --yes --quiet NOK_scen.md`  
    - OK : Then there is an error  
    - OK : And  the output is  
    - [X] scenario   [Quiet mode with an error](../../features/B120_Output_Verbosity.md) pass  
@@ -1190,9 +1190,9 @@
    - [X] background [](../../features/B140_Index_File.md) pass  
 
    ### Scenario: [Quiet mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -q OK_scen.md  --index index_1.md`  
+   - OK : When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`  
    - OK : Then `index_1.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -q NOK_scen.md --index index_2.md`  
+   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`  
    - OK : Then I get an error  
    - OK : And `index_2.md` is equal to file `verbose_output_NOK.md`  
    - [X] scenario   [Quiet mode run](../../features/B140_Index_File.md) pass  
@@ -1205,9 +1205,9 @@
    - [X] background [](../../features/B140_Index_File.md) pass  
 
    ### Scenario: [Default mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt    OK_scen.md  --index index_3.md`  
+   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`  
    - OK : Then `index_3.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I  run `./bbt    NOK_scen.md --index index_4.md`  
+   - OK : When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`  
    - OK : Then  I get an error  
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
    - [X] scenario   [Default mode run](../../features/B140_Index_File.md) pass  
@@ -1220,9 +1220,9 @@
    - [X] background [](../../features/B140_Index_File.md) pass  
 
    ### Scenario: [Verbose mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -v OK_scen.md  --index index_5.md`  
+   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`  
    - OK : Then `index_5.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -v NOK_scen.md --index index_6.md`  
+   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`  
    - OK : Then I get an error  
    - OK : And `index_6.md` is equal to file `verbose_output_NOK.md`  
    - [X] scenario   [Verbose mode run](../../features/B140_Index_File.md) pass  
@@ -1232,7 +1232,7 @@
   ## Feature: Deprecated and no more supported options  
    ### Scenario: [--output option](../../features/B150_Deprecated_Options.md): 
    - OK : Given the new `ver.md` file  
-   - OK : When I run `./bbt ver.md --output tmp.md`   
+   - OK : When I run `./bbt -c --yes ver.md --output tmp.md`   
    - OK : Then the output contains   
    - [X] scenario   [--output option](../../features/B150_Deprecated_Options.md) pass  
 
@@ -1297,7 +1297,7 @@
 # Document: [C040_Missing_title.md](../../features/C040_Missing_title.md)  
    ### Scenario: [Missing tittle in scenario, background and feature](../../features/C040_Missing_title.md): 
    - OK : Given the new file `no_title.md`  
-   - OK : When I run `./bbt no_title.md`  
+   - OK : When I run `./bbt -c --yes no_title.md`  
    - OK : Then output is  
    - [X] scenario   [Missing tittle in scenario, background and feature](../../features/C040_Missing_title.md) pass  
 
@@ -1384,7 +1384,7 @@
 # Document: [C110_Two_Verbs_In_The_Step.md](../../features/C110_Two_Verbs_In_The_Step.md)  
    ### Scenario: [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md): 
    - OK : Given the new file `too_much_verbs_in_step.md`  
-   - OK : When I run `./bbt too_much_verbs_in_step.md`  
+   - OK : When I run `./bbt -c --yes too_much_verbs_in_step.md`  
    - OK : then the output contains   
    - [X] scenario   [Detection of ambiguous use of multiple recognized verbs in the same Step](../../features/C110_Two_Verbs_In_The_Step.md) pass  
 
@@ -1393,7 +1393,7 @@
   ## Feature: bbt is providing helpful messages on ill formatted step lines  
    ### Scenario: [](../../features/C120_Ill_Formated_Steps.md): 
    - OK : Given the file `bad_steps.md`  
-   - OK : When I run `./bbt -k bad_steps.md`  
+   - OK : When I run `./bbt -k -c bad_steps.md`  
    - OK : Then the output contains   
    - OK : And the output contains  
    - OK : And I get an error  

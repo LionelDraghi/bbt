@@ -28,7 +28,7 @@
   - then I get no error
   ~~~
 
-- When I run `./bbt -k bad_steps.md`
+- When I run `./bbt -k -c bad_steps.md`
 
 - Then the output contains 
   ~~~
