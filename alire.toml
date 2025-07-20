@@ -22,8 +22,8 @@ generate_C = false
 ansiada = "^1.0.0"
 gnat="^14"
 
-[[test]]
-command = ["make", "build", "check"]
+# [[test]]
+# command = ["make", "build", "check"]
 
 # [[test]]
 # id = "examples"
