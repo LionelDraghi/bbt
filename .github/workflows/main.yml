@@ -19,3 +19,5 @@ jobs:
          uses: actions/checkout@v2
        - name: alr2appimage-action
          uses: mgrojo/alr2appimage-action@main
+         with:
+             alireVersion: "nightly"
