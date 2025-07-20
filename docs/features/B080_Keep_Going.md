@@ -45,17 +45,31 @@ _Table of Contents:_
 
 # Scenario: with `-k`
 - When I run `./bbt -k feature1.md`
-- then output is
+- then output contains
   ```
   # Document: [feature1.md](feature1.md)    
    ### Scenario: [1](feature1.md):   
    - OK : When I run `./sut -h`    
    - OK : Then I get no error    
-   - [X] scenario   [1](feature1.md) pass    
-   ### Scenario: [2](feature1.md):   
-  feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
-   - OK : Then I get no error     
-   - [ ] scenario   [2](feature1.md) **fails**    
+   - [X] scenario   [1](feature1.md) pass
+  ```  
+
+- and output contains
+  ~~~
+    ### Scenario: [2](feature1.md):
+  feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "
+  - **NOK** : Then I get no error  (feature1.md:9:)
+  ~~~  
+
+- and output matches `feature1.md:9: Error: No error expected, but got one.*`
+  
+- and output contains
+  ```
+  - [ ] scenario   [2](feature1.md) **fails**
+  ```
+
+- and output contains
+  ```
    ### Scenario: [3](feature1.md):   
    - OK : When I run `./sut -v`    
    - OK : Then I get no error    
