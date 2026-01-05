@@ -10,7 +10,7 @@ _Table of Contents:_
 
 ### Scenario:
 - Given the file `step_markers.md`
-  ~~~
+  ~~~md
   # Scenario:
   - Given the `config.ini` file
     ```
