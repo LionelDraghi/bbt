@@ -187,15 +187,6 @@ Additional **hidden robustness tests** (not in any student-provided file) will a
 For the complete definition of the `bbt` test format and options, refer to the official repository:  
 <https://github.com/LionelDraghi/bbt>
 
-
-Je vais proposer une **version révisée** de la partie tests de `cs215_assignment.md`, en corrigeant uniquement les scénarios pour qu’ils soient :
-
-- en anglais naturel,
-- conformes à la grammaire bbt,
-- avec les bonnes formulations pour succès / erreur / fichiers / output.
-
-Je ne réécris pas tout l’énoncé, seulement les Features/Scenarios (section 4.1) et les phrases d’erreur qui y sont liées.
-
 ---
 
 ## 4.1 `weblogstat` public test suite (version révisée)
