@@ -234,7 +234,7 @@ bbt is in an early stage, meaning that interface and behavior are subject to cha
 Feel free to make features suggestions [in bbt discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
 The code has grown fast in 2024, and is far from being clean.  
-Nevertheless, bbt is working, and has as a serious [test base](docs/tests_results/Linux/features_results.md).  
+Nevertheless, bbt is working, and has a serious [test base](docs/tests_results/Linux/features_results.md).  
 
 A very conclusive test on the effectiveness of bbt as being conducted on [the day 4 of Advent of Code 2024's challenges](https://github.com/LionelDraghi/Advent_of_code_2024/blob/main/day_04_tests.md).   
 Tests where easy and fast to setup, allowing to stay most of the time focus on coding.
