@@ -168,14 +168,13 @@ ln -s bbt-0.1.0-x86_64.AppImage bbt
 
 ## First use
 
-Start your own scenario file with one of the examples here: https://github.com/LionelDraghi/bbt/tree/main/docs/examples
-
-Then run 
+To get started, you can either draw inspiration from one of the [examples](https://github.com/LionelDraghi/bbt/tree/main/docs/examples), or have bbt generate a template for you :
 ```
 bbt create_template
 ```
-This will create a `bbt_template.md` file, which is both a template and a quick reference card.  
-Note : bbt recognize it's own template and doesn't run it, so that you can keep it with your scenarios.
+This will create a `bbt_template.md` file, which is both a template and a short tutorial.
+
+Dont' forget to rename it, by default bbt recognize it's own template and doesn't run it, so that you can keep it with your scenarios.
 
 A good example to start simple is given by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project : there is just a scenarios file called `tests.md`.
 
