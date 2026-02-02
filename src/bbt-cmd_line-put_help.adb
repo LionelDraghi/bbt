@@ -35,7 +35,7 @@ begin
          Put_Line ("Basic commands:");
          Put_Line ("       run               : the default command");
          Put_Line ("  ls | list              : list selected items");
-         Put_Line ("  ct | create_template   : create a commented example of rules file");
+         Put_Line ("  ct | create_template   : create a commented example of input file");
          Put_Line ("  he | help [topic]      : base help, or more on one of the topic listed below");
          Put_Line ("  he | help on_all       : full online help");
          Put_Line ("  he | help tutorial     : create a tutorial in " & Tutorial_Name);
@@ -87,7 +87,7 @@ begin
          Put_Line ("Other commands:");
          Put_Line ("  lf | list_files      : list Scenario files found");
          Put_Line ("  lk | list_keywords   : list Step keywords");
-         Put_Line ("  lg | list_grammar    : list rules for Step analysis");
+         Put_Line ("  lg | list_grammar    : list possible Steps syntax and associated action");
          Put_Line ("  ex | explain         : explain what bbt understands from Scenarios files");
          Put_Line ("                         (do not run the scenarios)");
          New_Line;
