@@ -1,6 +1,6 @@
 name = "sut"
 description = ""
-version = "0.1.0-dev"
+version = "0.1.0"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]

@@ -935,8 +935,74 @@
 
    ### Scenario: [with `-k`](../../features/B080_Keep_Going.md): 
    - OK : When I run `./bbt -k feature1.md`  
-   - OK : then output is  
-   - [X] scenario   [with `-k`](../../features/B080_Keep_Going.md) pass  
+   - OK : then output contains  
+   - **NOK** : and output contains (../docs/features/B080_Keep_Going.md:57:)  
+../docs/features/B080_Keep_Going.md:57: Error: Output:  
+~~~
+  
+# Document: [feature1.md](feature1.md)    
+   ### Scenario: [1](feature1.md):   
+   - OK : When I run `./sut -h`    
+   - OK : Then I get no error    
+   - [X] scenario   [1](feature1.md) pass    
+   ### Scenario: [2](feature1.md):   
+feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
+   - OK : Then I get no error     
+   - [ ] scenario   [2](feature1.md) **fails**    
+   ### Scenario: [3](feature1.md):   
+   - OK : When I run `./sut -v`    
+   - OK : Then I get no error    
+   - [X] scenario   [3](feature1.md) pass    
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 2     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+    ### Scenario: [2](feature1.md):  
+  feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
+  - **NOK** : Then I get no error  (feature1.md:9:)
+~~~
+  
+   - **NOK** : and output matches `feature1.md:9: Error: No error expected, but got one.*` (../docs/features/B080_Keep_Going.md:64:)  
+../docs/features/B080_Keep_Going.md:64: Error: Output:  
+~~~
+  
+# Document: [feature1.md](feature1.md)    
+   ### Scenario: [1](feature1.md):   
+   - OK : When I run `./sut -h`    
+   - OK : Then I get no error    
+   - [X] scenario   [1](feature1.md) pass    
+   ### Scenario: [2](feature1.md):   
+feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "  
+   - OK : Then I get no error     
+   - [ ] scenario   [2](feature1.md) **fails**    
+   ### Scenario: [3](feature1.md):   
+   - OK : When I run `./sut -v`    
+   - OK : Then I get no error    
+   - [X] scenario   [3](feature1.md) pass    
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 2     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not match expected:  feature1.md:9: Error: No error expected, but got one.*  
+   - OK : and output contains  
+   - OK : and output contains  
+   - [ ] scenario   [with `-k`](../../features/B080_Keep_Going.md) **fails**  
 
    ### Background: [setup](../../features/B080_Keep_Going.md): 
    - OK : Given the file `feature1.md`  
@@ -1400,12 +1466,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 132 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 132   |
+| Failed     | 1     |
+| Successful | 131   |
 | Empty      | 0     |
 | Not Run    | 0     |
 
