@@ -77,6 +77,7 @@ check: setup ./bbt ./sut
 	--cleanup $(EXCLUDE) \
 	-q -sb --human_match \
 	--generate_badge $(RESULTS_DIR)/badge.url \
+	--junit features.xml \
 	--index $(RESULTS_DIR)/features_results.md \
 	../docs/features 
 	@ echo
@@ -101,7 +102,7 @@ check: setup ./bbt ./sut
 	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK || echo ***** KO
 	@ echo
 
-	@ - rm *.out main tmp.txt output2.txt tmp.md index_*.md
+	@ - rm -f *.out main tmp.txt output2.txt tmp.md index_*.md
 
 doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) --directory=file_utilities_tests

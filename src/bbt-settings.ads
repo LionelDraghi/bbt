@@ -11,7 +11,7 @@ private package BBT.Settings is
 -- Purpose:
 --   This package manages global settings, hard coded or from cmd line.
 
-   -- --------------------------------------------------------------------------
+      -- --------------------------------------------------------------------------
    BBT_Version : constant String := Bbt_Config.Crate_Version;
 
    type Command is (Run,
@@ -48,6 +48,8 @@ private package BBT.Settings is
    Yes                : Boolean    := False;
    Cleanup            : Boolean    := False;
    Strict_Gherkin     : Boolean    := False;
+
+   Generate_JUnit_Report : Boolean := False;
    Status_Bar         : Boolean    := False;
    Generate_Badge     : Boolean    := False;
    Ignore_Whitespaces : Boolean    := True;
@@ -81,6 +83,9 @@ private package BBT.Settings is
    procedure Set_Tmp_Dir (Dir_Name : String);
    function Tmp_Dir return String;
    -- Dir where bbt created tmp files are stored.
+
+   procedure Set_JUnit_File (File_Name : String);
+   function JUnit_File return String;
 
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String;

@@ -6,8 +6,9 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[0.2.1-dev] - 2025--**
-
+- **[0.2.1-dev] - 2026--**
+  - [Added]   Feature #28: production of a junit.xml file through --junit option
+  
 - **[0.2.0] - 2025-07-02**
   - [Changed] `--output` is now deprecated and replaced with `--index` 
   - [Changed] Removed option form of commands : "help" is a command, "-h" is removed (as announced in 0.1.0)

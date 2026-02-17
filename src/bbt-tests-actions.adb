@@ -148,7 +148,7 @@ package body BBT.Tests.Actions is
                                         else Tmp'First);
             I2  : constant Natural := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
                                        else Tmp'Last);
-            -- uggly and buggy
+            -- ugly and buggy
          begin
             Free (Spawn_Arg.all (I));
             Spawn_Arg.all (I) := new String'(Tmp (I1 .. I2));

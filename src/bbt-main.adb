@@ -15,12 +15,12 @@ with BBT.IO,
      BBT.Settings,
      BBT.Status_Bar,
      BBT.Tests.Builder,
-     BBT.Tests.Results,
      BBT.Tests.Runner,
      BBT.Writers,
      BBT.Writers.Text_Writer,
      BBT.Writers.Markdown_Writers,
-     BBT.Writers.Asciidoc_Writer;
+     BBT.Writers.Asciidoc_Writer,
+     BBT.JUnit_Writer;
 
 with Ada.Command_Line,
 --  Ada.Calendar,
@@ -30,7 +30,6 @@ with Ada.Command_Line,
 use BBT,
     BBT.Scenarios.Readers,
     BBT.Settings,
-    BBT.Tests.Results,
     BBT.Writers;
 
 procedure BBT.Main is
@@ -151,11 +150,17 @@ begin
          -- Real run --
          Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;
-         Tests.Results.Sum_Results (Model.Documents.Doc_List.all);
+         Model.Documents.Sum_Results (Model.Documents.Doc_List.all);
          Writers.Put_Overall_Results;
 
          if Settings.Generate_Badge then
-            Tests.Results.Generate_Badge;
+            Model.Documents.Generate_Badge;
+         end if;
+
+         if Settings.Generate_JUnit_Report then
+            JUnit_Writer.Generate_Report
+              (File_Name => Settings.JUnit_File,
+               Docs      => Model.Documents.Doc_List.all);
          end if;
 
       end if;
@@ -178,7 +183,7 @@ begin
    -- --------------------------------------------------------------------
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
-     or else not Tests.Results.No_Fail
+     or else not Model.Documents.No_Fail
    then
       Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
    end if;

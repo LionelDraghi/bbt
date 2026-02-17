@@ -36,7 +36,9 @@ _Table of Contents:_
     --> ** bbt syntax error here (the verb is missing)**
   
   - Then I get no error 
-    --> if run, this line should fail
+    If run, should this line failed? Not obvious, because actually nothing was run.
+    --> the current implementation, by far the easiest, doesn't raise an error.
+    Not need to change, an error is already raised on the previous step.
 
   ### Scenario 3
   - When I run `./sut -v`
@@ -58,11 +60,8 @@ _Table of Contents:_
   ~~~
     ### Scenario: [2](feature1.md):
   feature1.md:6: Error: Unrecognized step "When I `./sut -h`   "
-  - **NOK** : Then I get no error  (feature1.md:9:)
   ~~~  
 
-- and output matches `feature1.md:9: Error: No error expected, but got one.*`
-  
 - and output contains
   ```
   - [ ] scenario   [2](feature1.md) **fails**

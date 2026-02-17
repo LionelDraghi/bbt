@@ -1,0 +1,487 @@
+# *bbt* LLM Reference Guide
+
+**Purpose**: This document provides all necessary information for LLM agents to generate valid, effective *bbt* scenarios from natural language inputs while respecting *bbt*'s syntax rules and parsing constraints.
+
+**Target Audience**: LLM only - not specifically done to be human-readable.
+
+## Syntax Rules
+
+### Grammar Reference Table
+
+This table provides a comprehensive reference of all *bbt* syntax patterns, their corresponding actions, and whether they expect code blocks:
+
+| Preposition  |         |Subject |       Verb       | Object |         Action          | Code block expected on following lines |
+|-------|---------|--------|------------------|--------|-------------------------|------------|
+| Given |         |        | run              | `text` | RUN_CMD                 |            |
+| Given |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |
+| Given |         |        | is               | `file` | CHECK_FILE_EXISTENCE    |            |
+| Given |         |        | is               | `dir`  | CHECK_DIR_EXISTENCE     |            |
+| Given |         |        | is no            | `file` | SETUP_NO_FILE           |            |
+| Given |         |        | is no            | `dir`  | SETUP_NO_DIR            |            |
+| Given |         | `dir`  |                  |        | CREATE_IF_NONE          |            |
+| Given |         | `file` |                  |        | ERASE_AND_CREATE        |     X      |
+| Given |         | `file` | containing       |        | CREATE_IF_NONE          |     X      |
+| Given |         | `file` | containing       | `text` | CREATE_IF_NONE          |            |
+| Given | new     | `dir`  |                  |        | ERASE_AND_CREATE        |            |
+| Given | new     | `file` |                  |        | ERASE_AND_CREATE        |     X      |
+| Given | new     | `file` | containing       |        | ERASE_AND_CREATE        |     X      |
+| Given | new     | `file` | containing       | `text` | ERASE_AND_CREATE        |            |
+| When  |         |        | run              | `text` | RUN_CMD                 |            |
+| When  |         |        | run              | `cmd`  | RUN_CMD                 |            |
+| When  |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |
+| When  |         |        | successfully run | `cmd`  | RUN_WITHOUT_ERROR       |            |
+| Then  |         |        | get              |        | OUTPUT_IS               |     X      |
+| Then  |         |        | get              | `file` | OUTPUT_IS               |            |
+| Then  |         |        | get              | `text` | OUTPUT_IS               |            |
+| Then  |         |        | get              | error  | ERROR_RETURN_CODE       |            |
+| Then  |         |        | get no           | output | NO_OUTPUT               |            |
+| Then  |         |        | get no           | error  | NO_ERROR_RETURN_CODE    |            |
+| Then  |         |        | is               | `file` | CHECK_FILE_EXISTENCE    |            |
+| Then  |         |        | is               | `dir`  | CHECK_DIR_EXISTENCE     |            |
+| Then  |         |        | is               | error  | ERROR_RETURN_CODE       |            |
+| Then  |         |        | is no            | output | NO_OUTPUT               |            |
+| Then  |         |        | is no            | `file` | CHECK_NO_FILE           |            |
+| Then  |         |        | is no            | `dir`  | CHECK_NO_DIR            |            |
+| Then  |         |        | is no            | error  | NO_ERROR_RETURN_CODE    |            |
+| Then  |         | `file` | does not contain |        | FILE_DOES_NOT_CONTAIN   |     X      |
+| Then  |         | `file` | does not contain | `file` | FILE_DOES_NOT_CONTAIN   |            |
+| Then  |         | `file` | does not contain | `text` | FILE_DOES_NOT_CONTAIN   |            |
+| Then  |         | `file` | contains         |        | FILE_CONTAINS           |     X      |
+| Then  |         | `file` | contains         | `file` | FILE_CONTAINS           |            |
+| Then  |         | `file` | contains         | `text` | FILE_CONTAINS           |            |
+| Then  |         | `file` | is               |        | FILE_IS                 |     X      |
+| Then  |         | `file` | is               | `file` | FILE_IS                 |            |
+| Then  |         | `file` | is               | `text` | FILE_IS                 |            |
+| Then  |         | `file` | is no            | `file` | FILE_IS_NOT             |            |
+| Then  |         | output | does not contain |        | OUTPUT_DOES_NOT_CONTAIN |     X      |
+| Then  |         | output | does not contain | `file` | OUTPUT_DOES_NOT_CONTAIN |            |
+| Then  |         | output | does not contain | `text` | OUTPUT_DOES_NOT_CONTAIN |            |
+| Then  |         | output | contains         |        | OUTPUT_CONTAINS         |     X      |
+| Then  |         | output | contains         | `file` | OUTPUT_CONTAINS         |            |
+| Then  |         | output | contains         | `text` | OUTPUT_CONTAINS         |            |
+| Then  |         | output | matches          | `text` | OUTPUT_MATCHES          |            |
+| Then  |         | output | does not match   | `text` | OUTPUT_DOES_NOT_MATCH   |            |
+| Then  |         | output | is               |        | OUTPUT_IS               |     X      |
+| Then  |         | output | is               | `file` | OUTPUT_IS               |            |
+| Then  |         | output | is               | `text` | OUTPUT_IS               |            |
+
+### bbt Input files
+
+*bbt* inputs are documentation files, using a structured text format, primarily Markdown.
+
+Those files may use whatever Markdown or Markdown extension features.
+
+*bbt* only interpret specific header (Feature | Scenario | Example | Background), whatever the level of the header.
+
+Within Scenario / Example / Background section, *bbt* only interpret steps, that is a list Item beginning with Given | When | Then | And | But 
+Some steps may require a file content, and so must be followed by a code block.
+
+Example is a synonym of Scenario, and Background is a special kind of Scenario. 
+The three contain steps with the following structure:
+
+```
+- [Given|When|Then] <step_content>
+- [And|But] <step_content>  # Must follow a Given/When/Then
+```
+
+Where:
+- `Given`: Setup conditions (can start a scenario)
+- `When`: Actions to perform (can start a scenario)  
+- `Then`: Expected results (can start a scenario)
+- `And`: Continuation of previous step (CANNOT start a scenario)
+- `But`: Continuation of previous step (CANNOT start a scenario)
+
+**Important Rules**:
+1. Scenarios MUST start with Given, When, or Then. And/But can only be used as continuations.
+2. `And` and `But` have identical semantics for *bbt* - they both continue the previous step.
+3. LLM should choose between `And` and `But` based on natural language flow, not technical differences.
+
+### Document Structure
+
+```
+[OPTIONAL] # Feature: <feature_name>
+[OPTIONAL] {
+  ## Background: <description>
+  [Scenario Contents]  # Required if Background exists
+}
+
+[## Scenario: | ## Example:] <test_case_name>
+[Scenario Contents]
+
+[## Scenario: | ## Example:] <test_case_name>
+[Scenario Contents]
+```
+
+**Structure Rules**:
+- Background header and its contents form an optional block
+- If Background header exists, Scenario Contents must be present
+- Scenario Contents cannot exist without a Background header
+- Scenarios always require Scenario Contents
+
+### Background Scope and Execution Order
+
+Backgrounds are special scenarios that run before each regular scenario. They can contain any step type.
+
+1. **Multiple Features**: Each document can contain multiple Features
+2. **Background Scope**:
+   - Document-level Background (before any Feature): Applies to all Scenarios in the document
+   - Feature-level Background (within a Feature): Applies only to Scenarios in that Feature
+3. **Execution Order**:
+   - Document Background executes first
+   - Then Feature Background (if present)
+   - Then the Scenario itself
+4. **Background Chaining**: No Background executes before another Background
+5. **Per-Scenario Execution**: Backgrounds run before EACH Scenario, not once per document
+
+### Parameter Formats
+
+*bbt* supports two parameter types with distinct syntax and usage:
+
+#### 1. Inline Parameters
+
+Enclosed in backticks, used for:
+- Command names and arguments
+- Filenames (simple reference)
+- Short expected outputs
+- Any single-line value
+
+**Syntax**: `` `parameter_content` ``
+
+**Examples**:
+```markdown
+- When I run `gcc --version`
+- Then file `output.txt` contains `success`
+- Given the file `config.ini` containing `key=value`
+```
+
+#### Special Case: File Content Reference
+
+When using the `file` keyword, the inline parameter specifies the filename containing the expected content:
+
+```markdown
+- Then I get file `expected_output.txt`
+- Then file `config.ini` is file `expected_config.ini`
+- Then output contains file `partial_match.txt`
+```
+
+#### 2. Multiline Parameters (Code Blocks)
+
+Used for:
+- File contents
+- Expected multiline output
+- Command scripts
+- Any content requiring multiple lines
+
+**Syntax**: Fenced code block immediately following the step
+
+**Examples**:
+~~~markdown
+- Given the file `script.sh`
+```bash
+#!/bin/bash
+echo "Hello"
+exit 0
+```
+
+- Then I get
+```json
+{
+  "status": "success",
+  "data": [1, 2, 3]
+}
+```
+~~~
+
+
+**Important Rules**:
+1. Inline parameters must be on the same line as the step
+2. Multiline parameters must appear before the next item (step, scenario, feature, and so on) or before the end of file.
+3. `file` keyword changes parameter interpretation from literal to reference
+4. Backticks in inline parameters must be escaped or avoided
+
+## *bbt* Parsing Tolerance
+
+**General Rule**: *bbt* is tolerant with whitespace and markdown elements between interpreted lines. Blank lines and markdown comments can appear:
+- Between headers (Feature, Scenario, Background)
+- Between steps
+- Between a step and its multiline parameter (code block)
+- Between any interpreted element and the next
+
+**Examples of Valid Tolerance**:
+~~~markdown
+
+Valid place for a comment or a blank line
+
+# Feature with blank lines 
+
+Valid place for a comment or a blank line
+
+## Scenario: Example with spacing 
+
+Valid place for a comment or a blank line
+
+- Given the file `data.txt`  
+
+  Valid place for a comment or a blank line
+
+  ```
+  content here
+  ```  
+  Valid place for a comment or a blank line
+ 
+- When I run `process data.txt` 
+
+  Valid place for a comment or a blank line
+  <!-- Comment between steps --> 
+
+  Valid place for a comment or a blank line
+
+- Then output contains `result`  
+   Valid place for a comment or a blank line
+
+~~~
+
+**Key Points**:
+- Tolerance applies to ALL interpreted elements, not just parameters
+- Blank lines and comments are ignored by *bbt* parser
+- Structure must still be logically correct (steps in right order, etc.)
+- This tolerance makes *bbt* files more readable and maintainable
+
+**LLM-Specific Notes for Parameter Formatting**:
+1. When documenting multiline parameters in examples, use `~~~` for outer markdown and ``` for inner content
+2. Avoid nesting code blocks more than 2 levels deep
+3. For inline parameters containing backticks, use HTML entities: `` `file_`name` `` becomes `` `file_&#96;name` ``
+4. Choose parameter style based on content length: inline for short text (single line), multiline for longer content (2+ lines)
+5. *bbt* is tolerant: multiline parameters can have blank lines or comments between step and code block
+
+## Keyword Reference
+
+### Step Keywords
+- given
+- when
+- then
+- and
+- but
+
+### Action Keywords
+- run
+- running
+- executable
+- get
+- new
+- no
+- not
+- dont
+- doesnt
+- doesn't
+- error
+- is
+- output
+- contain
+- contains
+- containing
+- matches
+- match
+- successfully
+- file
+- dir
+- directory
+- unordered
+
+### Natural Language Guidelines
+- Never use *bbt* keywords in decorative text (will cause parsing errors)
+- Ensure decorative text doesn't contradict *bbt* interpretation:
+  ```markdown
+  - Then the output should get the result
+    # BAD: "get" is a keyword in free text
+  ```
+- Keep steps simple and focused
+- Move comments to separate lines to avoid parsing issues
+- Exception to the previous rule : tags used for filtering *must* be on the line of the concerned item.
+For example, to be be able to ignore all scenarios of a Windows specific feature by filtering on the Windows_Only tag, the tag must be on the feature header line: "# Scenario: UNC file name management, Windows_Only" 
+
+## Transformation Rules
+
+### From README to *bbt*
+
+**Pattern**: "To [achieve goal]: 1. [setup], 2. [action], 3. [result]"
+→ `- Given <setup>`
+→ `- When <action>`
+→ `- Then <result>`
+
+### From Requirements to *bbt*
+
+**Complete Pattern**: "System shall [behavior] when [condition]"
+→ Requires comprehensive testing with:
+
+1. **Background** with all preconditions (except the condition being tested):
+```markdown
+## Background: Common setup
+- Given <precondition_1>
+- Given <precondition_2>
+```
+
+2. **Positive scenario** verifying behavior when condition is met:
+```markdown
+## Scenario: Behavior when condition is true
+- Given <condition>
+- When <trigger>
+- Then output contains <behavior_indicator>
+```
+
+3. **Negative scenario** verifying error/absence when condition is not met:
+```markdown
+## Scenario: No behavior when condition is false
+- Given not <condition>
+- When <trigger>
+- [OPTIONAL] Then I get an error
+- And output does not contain <behavior_indicator>
+```
+
+## Validation Rules
+
+### Syntax Validation
+1. Each scenario must have at least one Given, When, and Then
+2. Parameters must be in backticks or code blocks
+3. File operations must specify filenames
+4. Commands must be in backticks
+
+### Semantic Validation
+1. Given steps must precede When steps
+2. When steps must precede Then steps
+3. File references must be consistent
+4. Commands must be executable strings
+5. Scenarios must start with Given, When, or Then (not And/But)
+
+## Command Generation Rules
+
+### Basic Execution
+```bash
+*bbt* <scenario_file.md>
+```
+
+### Recursive Execution
+```bash
+*bbt* -r <directory>/
+```
+
+### Verbose Output
+```bash
+*bbt* -v <scenario_file.md>
+```
+
+### Filtering
+```bash
+*bbt* --select "<pattern>" <directory>/
+*bbt* --exclude "<pattern>" <directory>/
+```
+
+### Output Control
+```bash
+*bbt* --index <output_file.md> <scenario_file.md>
+```
+
+### Match behavior
+```bash
+*bbt* --exact_match <scenario_file.md>
+```
+
+## Transformation Examples
+
+### Example 1: Simple Command
+**Input**: "Test that gcc shows version"
+**Output**:
+```markdown
+## Scenario: GCC version check
+- When I run `gcc --version`
+- Then output contains `14.2.0`
+
+# Alternative using Example keyword
+## Example: GCC version check
+- When I run `gcc --version`
+- Then output contains `14.2.0`
+```
+
+### Example 2: File Processing
+**Input**: "Convert input.txt to output.txt and verify content"
+**Output**:
+```markdown
+- Given the file `input.txt` containing `raw data`
+- When I run `converter input.txt output.txt`
+- Then file `output.txt` contains `processed data`
+```
+
+### Example 3: Error Handling
+**Input**: "System should fail gracefully with invalid input"
+**Output**:
+```markdown
+- Given the file `invalid.txt` containing `bad data`
+- When I run `validator invalid.txt`
+- Then I get an error
+- And output contains `Invalid format`
+```
+
+### Example 4: Complex Workflow
+**Input**: "Test compilation and execution of Ada program"
+**Output**:
+```markdown
+- Given the file `program.adb` containing
+```ada
+with Ada.Text_IO; use Ada.Text_IO;
+procedure Program is
+begin
+   Put_Line("Hello");
+end Program;
+```
+- When I successfully run `gcc -c program.adb`
+- Then there is a file `program.o`
+- And I get no error
+```
+
+## Validation Commands
+
+```bash
+# Check scenario understanding
+*bbt* explain <scenario.md>
+
+# List valid keywords
+*bbt* list_keywords
+
+# Show complete grammar
+*bbt* list_grammar
+
+# Run with verbose output
+*bbt* -v <scenario.md>
+```
+
+## LLM Generation Rules
+
+1. **Identify test objective** from user input
+2. **Extract parameters** (filenames, commands, expected outputs)
+3. **Map to *bbt* keywords** using grammar rules
+4. **Add natural decoration** without keyword conflicts
+5. **Validate structure** (Given→When→Then order)
+6. **Check parameter formatting** (backticks/code blocks)
+7. **Avoid ambiguity** in file references and commands
+
+## Error Recovery Patterns
+
+### Missing Parameters
+- Add required parameters in backticks
+- Use generic names if not specified: `input.txt`, `output.txt`
+
+### Ambiguous Steps
+- Break into multiple clear steps
+- Specify exact filenames and content
+
+### Keyword Conflicts
+- Replace conflicting decoration words
+- Use synonyms that don't conflict with *bbt* keywords
+
+## Performance Optimization
+
+- Group related tests in same feature
+- Use background for common setup
+- Keep steps focused and specific
+- Avoid redundant file operations
+

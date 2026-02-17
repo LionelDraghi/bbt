@@ -40,7 +40,7 @@ The outstanding feature of btt is that **it directly uses your documentation in 
 There is no script nor other file to write.
 
 bbt doesn't care about the type of document: call it Acceptance test, feature or behavior description, test scenario, README file or user guide, that's the same.  
-bbt make no difference between runing a scenario in a test file and checking an example given in a README file, as long as it recognizes a behavior description in it.
+bbt make no difference between running a scenario in a test file and checking an example given in a README file, as long as it recognizes a behavior description in it.
 
 ### What does the behavior description look like?
 

@@ -9,6 +9,9 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 separate (BBT.Cmd_Line)
 
+-- NB: when changing the texts hereafter, don't forget to update
+--     the B130_Cmd_Line_Help.md test.
+
 -- -----------------------------------------------------------------------------
 procedure Put_Help (Topic : Settings.Help_Topic) is
 begin
@@ -45,7 +48,7 @@ begin
          Put_Line ("  filtering : --select --exclude --include");
          Put_Line ("  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines");
          Put_Line ("  other     : list_files list_keywords list_grammar explain create_template");
-         Put_Line ("              --strict --index file.md --exec_dir --tmp_dir --generate_badge");
+         Put_Line ("              --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge");
          Put_Line ("  debug     : -d tt -ls -t");
          New_Line;
          Put_Line ("bbt version " & Settings.BBT_Version);
@@ -98,6 +101,7 @@ begin
          Put_Line ("                           This file will contain the normal bbt output,");
          Put_Line ("                           whatever are the verbosity settings (-q, -v, etc.)");
          Put_Line ("                           for standard output.");
+         Put_Line ("        --junit file.xml : generate a JUnit XML report file");
          -- Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
          Put_Line ("  -ed | --exec_dir 'dir' : run command in dir instead of current dir");
          Put_Line ("  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir");

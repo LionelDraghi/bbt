@@ -46,6 +46,11 @@ package BBT.Model.Scenarios is
      (Scen : Scenario_Type) return Boolean;
    procedure Add_Result
      (Success : Boolean; To : in out Scenario_Type);
+   function Result (Scenario : Scenario_Type'Class)
+                    return Test_Result;
+   function Get_Results
+      (Scen : Scenario_Type) return Test_Results_Count;
+
    procedure Unfilter_Tree
      (Scen : in out Scenario_Type);
    procedure Filter_Tree

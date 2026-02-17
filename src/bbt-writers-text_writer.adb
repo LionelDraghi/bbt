@@ -6,8 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Settings,
-     BBT.Tests.Results;
+     BBT.Settings;
 
 use BBT.IO,
     BBT.Settings;
@@ -62,10 +61,9 @@ package body BBT.Writers.Text_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Summary (Writer : Text_Writer) is
-      use all type Tests.Results.Test_Result;
    begin
       New_Line (Quiet);
-      if Tests.Results.Success then
+      if Success then
          Put_Line ("Success,"
                    & Count (Successful)'Image & " scenarios OK"
                    & (if Count (Empty) = 0
@@ -80,7 +78,6 @@ package body BBT.Writers.Text_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Detailed_Results (Writer : Text_Writer) is
-      use Tests.Results;
       Verbosity_Level : constant Verbosity_Levels
         := (if Success then Verbose else Quiet);
    begin
@@ -156,10 +153,9 @@ package body BBT.Writers.Text_Writer is
                                       To_File  => (+Parent_Doc (Scen).Name));
       Link_Image    : constant String
         := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
-      use Tests.Results;
    begin
       if not Scen.Is_Background then
-         case Tests.Results.Result (Scen) is
+         case Model.Scenarios.Result (Scen) is
          when Empty =>
             Put_Line ("  - [ ] scenario " & Link_Image &
                         " is empty, nothing tested  ",

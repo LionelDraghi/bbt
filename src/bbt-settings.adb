@@ -19,7 +19,8 @@ package body BBT.Settings is
    Outfile_Name,
    Exec_Dir_Name,
    Tmp_Dir_Name,
-   Badge_Name   : access String := null;
+   Badge_Name,
+   JUnit_File_Name : access String := null;
 
    -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
@@ -48,6 +49,14 @@ package body BBT.Settings is
    function Exec_Dir return String is
     (if Exec_Dir_Name = null then Ada.Directories.Current_Directory
        else Exec_Dir_Name.all);
+
+   -- --------------------------------------------------------------------------
+   procedure Set_JUnit_File (File_Name : String) is
+   begin
+      JUnit_File_Name := new String'(File_Name);
+   end Set_JUnit_File;
+
+   function JUnit_File return String is (JUnit_File_Name.all);
 
    -- --------------------------------------------------------------------------
    procedure Set_Tmp_Dir (Dir_Name : String) is

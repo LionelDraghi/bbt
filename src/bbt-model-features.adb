@@ -26,6 +26,25 @@ package body BBT.Model.Features is
      (F.Background);
 
    -- -------------------------------------------------------------------------
+   function Get_Results
+     (F : Feature_Type) return Test_Results_Count is
+   begin
+      if F.Scenario_List.Is_Empty then
+         return [Not_Run => 0, Failed => 0, Empty => 1, Successful => 0];
+      else
+         declare
+            Total : Test_Results_Count :=
+             [Not_Run => 0, Failed => 0, Empty => 0, Successful => 0];
+         begin
+            for Scen of F.Scenario_List loop
+               Total := @ + Get_Results (Scen);
+            end loop;
+            return Total;
+         end;
+      end if;
+   end Get_Results;
+
+      -- -------------------------------------------------------------------------
    function Create_Feature
      (Name     : Unbounded_String;
       Parent   : Documents.Document_Access;

@@ -6,8 +6,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Settings,
-     BBT.Tests.Results;
+     BBT.Settings;
 
 use BBT,
     BBT.IO,
@@ -66,10 +65,9 @@ package body BBT.Writers.Markdown_Writers is
    -- --------------------------------------------------------------------------
    overriding
    procedure Put_Summary (Writer : Markdown_Writer) is
-      use all type Tests.Results.Test_Result;
    begin
       New_Line (Verbosity => Quiet);
-      if Tests.Results.Success then
+      if Documents.Success then
          Put_Line
            ("## Summary : **Success**,"
             & Count (Successful)'Image
@@ -86,7 +84,6 @@ package body BBT.Writers.Markdown_Writers is
    -- --------------------------------------------------------------------------
    overriding
    procedure Put_Detailed_Results (Writer : Markdown_Writer) is
-      use Tests.Results;
       Verbosity_Level : constant Verbosity_Levels :=
         (if Success then Verbose else Quiet);
    begin
@@ -217,13 +214,12 @@ package body BBT.Writers.Markdown_Writers is
       -- when looping on the writers
       Link_Image   : constant String :=
         ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
-      use Tests.Results;
       Scen_Kind    : constant String :=
         (if Scen.Is_Background then " background " else " scenario   ");
       Spaces : constant String := Indent (Scenario);
 
    begin
-      case Tests.Results.Result (Scen) is
+      case Model.Scenarios.Result (Scen) is
          when Empty =>
             -- Note the two spaces at the end of each line, to cause a
             -- new line in Markdown format when this line is followed

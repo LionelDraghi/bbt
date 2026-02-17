@@ -34,6 +34,36 @@ package body BBT.Model.Scenarios is
    end Add_Result;
 
    -- --------------------------------------------------------------------------
+   function Result (Scenario : Scenario_Type'Class)
+                    return Test_Result is
+   begin
+      if Scenario.Failed_Step_Count > 0 then
+         return Failed;
+      elsif Scenario.Successful_Step_Count > 0 then
+         return Successful;
+      elsif not Scenario.Has_Run then
+         return Not_Run;
+      else
+         return Empty;
+      end if;
+   end Result;
+
+   -- --------------------------------------------------------------------------
+   function Get_Results
+      (Scen : Scenario_Type) return Test_Results_Count is
+   begin
+      if Scen.Failed_Step_Count > 0 then
+         return [Failed => 1, others => 0];
+      elsif Scen.Successful_Step_Count > 0 then
+         return [Successful => 1, others => 0];
+      elsif not Scen.Has_Run then
+         return [Not_Run => 1, others => 0];
+      else
+         return [Empty => 1, others => 0];
+      end if;
+   end Get_Results;
+
+   -- --------------------------------------------------------------------------
    function Is_In_Feature (Scen : Scenario_Type) return Boolean is
      (Scen.Parent.all in Feature_Type);
 

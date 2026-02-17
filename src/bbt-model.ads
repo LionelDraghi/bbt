@@ -5,19 +5,17 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO,
+with Ada.Strings.Unbounded,
+     BBT.IO,
      BBT.Settings,
      Text_Utilities;
 
-use BBT.IO,
+use Ada.Strings.Unbounded,
+    BBT.IO,
     Text_Utilities;
 
-with Ada.Strings.Unbounded;
-
-use Ada.Strings.Unbounded;
-
 private package BBT.Model is
--- Defines the main bbt internal data structure, wich is essentialy a tree
+-- Defines the main bbt internal data structure, which is essentially a tree
 -- of Documents containing Features containing Scenario containing steps.
 -- This structure is a a simplified subset of Gerkhin AST :
 -- https://github.com/cucumber/gherkin?tab=readme-ov-file#abstract-syntax-tree-ast
@@ -63,6 +61,17 @@ private package BBT.Model is
 
    procedure Unfilter_Parents
      (N : in out Non_Root_Node'Class);
+
+   -- --------------------------------------------------------------------------
+   type Test_Result is (Not_Run, Failed, Empty, Successful)
+     with Default_Value => Empty;
+   type Test_Results_Count is array (Test_Result) of Natural
+     with Default_Component_Value => 0;
+   function "+" (A, B : Test_Results_Count) return Test_Results_Count is
+     ([Not_Run => A (Not_Run) + B (Not_Run),
+       Failed => A (Failed) + B (Failed),
+       Empty => A (Empty) + B (Empty),
+       Successful => A (Successful) + B (Successful)]);
 
 private
    -- --------------------------------------------------------------------------

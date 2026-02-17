@@ -5,8 +5,7 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.IO,
-     BBT.Tests.Results;
+with BBT.IO;
 
 use BBT,
     BBT.IO;
@@ -60,7 +59,6 @@ package body BBT.Writers.Asciidoc_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Summary (Writer    : Asciidoc_Writer) is
-      use Tests.Results;
    begin
       if Success then
          Put_Line ("## Summary : **Success**,"
@@ -77,7 +75,6 @@ package body BBT.Writers.Asciidoc_Writer is
 
    -- --------------------------------------------------------------------------
    overriding procedure Put_Detailed_Results (Writer    : Asciidoc_Writer) is
-      use Tests.Results;
       Verbosity_Level : constant Verbosity_Levels
         := (if Success then Verbose else Quiet);
    begin

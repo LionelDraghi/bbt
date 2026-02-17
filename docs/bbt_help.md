@@ -21,7 +21,7 @@ Basic options:
 Basic commands:
        run               : the default command
   ls | list              : list selected items
-  ct | create_template   : create a commented example of rules file
+  ct | create_template   : create a commented example of input file
   he | help [topic]      : base help, or more on one of the topic listed below
   he | help on_all       : full online help
   he | help tutorial     : create a tutorial in bbt_tutorial.md
@@ -31,10 +31,10 @@ Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
   other     : list_files list_keywords list_grammar explain create_template
-              --strict --index file.md --exec_dir --tmp_dir --generate_badge
+              --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
-bbt version 0.2.0-dev
+bbt version 0.2.1-dev
 https://github.com/LionelDraghi/bbt/
 
 Filtering:
@@ -67,7 +67,7 @@ Human vs exact matching:
 Other commands:
   lf | list_files      : list Scenario files found
   lk | list_keywords   : list Step keywords
-  lg | list_grammar    : list rules for Step analysis
+  lg | list_grammar    : list possible Steps syntax and associated action
   ex | explain         : explain what bbt understands from Scenarios files
                          (do not run the scenarios)
 
@@ -78,6 +78,7 @@ Other options:
                            This file will contain the normal bbt output,
                            whatever are the verbosity settings (-q, -v, etc.)
                            for standard output.
+        --junit file.xml : generate a JUnit XML report file
   -ed | --exec_dir 'dir' : run command in dir instead of current dir
   -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
   -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)

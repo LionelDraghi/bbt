@@ -7,7 +7,9 @@
 
 with BBT.Tests.Filter_List,
      File_Utilities,
-     Ada.Directories;
+     Ada.Directories,
+     Ada.Strings.Fixed,
+     Ada.Text_IO;
 
 use BBT.Tests.Filter_List;
 
@@ -139,6 +141,90 @@ package body BBT.Model.Documents is
      (Last_Feature (D.Feature_List));
 
    -- --------------------------------------------------------------------------
+   Results : Test_Results_Count;
+
+   -- --------------------------------------------------------------------------
+   function Count (Test : Test_Result) return Natural is (Results (Test));
+
+   -- --------------------------------------------------------------------------
+   function Success return Boolean is
+     (Results (Successful) /= 0 and
+          Results (Failed) = 0 and
+          Results (Empty) = 0 and
+          Results (Not_Run) = 0);
+
+   function No_Fail return Boolean is (Results (Failed) = 0);
+
+   -- --------------------------------------------------------------------------
+   procedure Sum_Results (Docs : List) is
+   begin
+      for D of Docs loop
+         Results := @ + Documents.Get_Results (D);
+      end loop;
+   end Sum_Results;
+
+   -- --------------------------------------------------------------------------
+   function Get_Results (D : Document_Type) return Test_Results_Count is
+   begin
+      declare
+         Total : Test_Results_Count := [Successful => 0,
+                                        Failed     => 0,
+                                        Empty      => 0,
+                                        Not_Run    => 0];
+      begin
+         if D.Feature_List.Is_Empty and D.Scenario_List.Is_Empty then
+            -- Empty Doc should be reported
+            Total (Empty) := @ + 1;
+         end if;
+
+         for Scen of D.Scenario_List loop
+            Total := @ + Scenarios.Get_Results (Scen);
+         end loop;
+
+         for F of D.Feature_List loop
+            if F.Scenario_List.Is_Empty then
+               -- Empty Feature should be reported
+               Total (Empty) := @ + 1;
+            end if;
+
+            for Scen of F.Scenario_List loop
+               Total := @ + Scenarios.Get_Results (Scen);
+            end loop;
+
+         end loop;
+
+         return Total;
+      end;
+   end Get_Results;
+
+   -- --------------------------------------------------------------------------
+   function Get_Results
+     (DL : List) return Test_Results_Count is
+   begin
+      declare
+         Total : Test_Results_Count := [Successful => 0,
+                                        Failed     => 0,
+                                        Empty      => 0,
+                                        Not_Run    => 0];
+      begin
+         for Doc of DL loop
+            Total := @ + Get_Results (Doc);
+         end loop;
+         return Total;
+      end;
+      -- Fixme: to be replaced with a Reduce?
+   end Get_Results;
+
+   -- --------------------------------------------------------------------------
+   function Count_String_Image (Test : Test_Result) return Count_String is
+      Img : constant String := Results (Test)'Image;
+   begin
+      return Ada.Strings.Fixed.Overwrite (Source   => Blank_Image,
+                                          Position => 1,
+                                          New_Item => Img);
+   end Count_String_Image;
+
+   -- --------------------------------------------------------------------------
    function Background
      (D : in out Document_Type) return Scenario_Maybe is
      (D.Background);
@@ -170,5 +256,38 @@ package body BBT.Model.Documents is
            Ada.Directories.Simple_Name (To_String (D.Name)) & ".out";
       end if;
    end Output_File_Name;
+
+   -- --------------------------------------------------------------------------
+   procedure Generate_Badge is
+
+      function Generate_URL return String is
+         use Ada.Strings;
+         use Ada.Strings.Fixed;
+         Passed_Text : constant String :=
+                         Trim (Natural'Image (Results (Successful)),
+                               Side => Left);
+         Failed_Text : constant String :=
+                         Trim (Natural'Image (Results (Failed)),
+                               Side => Left);
+         Empty_Text  : constant String :=
+                         Trim (Natural'Image (Results (Empty)),
+                               Side => Left);
+         Color       : constant String :=
+                         (if Results (Failed) > 0 then "red"
+                          else (if Results (Empty) > 0 then "orange"
+                            else "blue"));
+      begin
+         return "https://img.shields.io/badge/bbt-"
+           & Passed_Text & "_tests_passed_|_"
+           & Failed_Text & "_failed_|_"
+           & Empty_Text & "_empty-"
+           & Color & ".svg?style=flat-square";
+      end Generate_URL;
+      File : Ada.Text_IO.File_Type;
+   begin
+      Ada.Text_IO.Create   (File, Name => BBT.Settings.Badge_File_Name);
+      Ada.Text_IO.Put_Line (File, Generate_URL);
+      Ada.Text_IO.Close    (File);
+   end Generate_Badge;
 
 end BBT.Model.Documents;

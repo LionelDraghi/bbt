@@ -22,7 +22,7 @@ To run the test, you have to :
 2. write in some programming language the matching steps; 
 3. And to have a nice doc, you further need to integrate the Gherkin snippet (usually .feature files) in you documentation.
 
-The start of [Behave](https://behave.readthedocs.io/en/stable/tutorial.html) (one of the Cucumber implementations) tutorial make it crystal clear :
+The start of [Behave](https://behave.readthedocs.io/en/latest/tutorial/) (one of the Cucumber implementations) tutorial make it crystal clear :
 
 > First, install behave.
 

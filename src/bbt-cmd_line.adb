@@ -23,6 +23,9 @@ use BBT.Cmd_Line,
 
 package body BBT.Cmd_Line is
 
+   -- NB: when changing the options in this package,
+   --      do not forget to update the Put_Help child procedure accordingly.
+
    -- --------------------------------------------------------------------------
    Arg_Counter : Natural := 1;
 
@@ -210,6 +213,15 @@ package body BBT.Cmd_Line is
                --  elsif Arg = "-ot" or Arg = "--output_tag" then
                --     Next_Arg;
                --     -- Fixme: opt -ot / --output_tag not yet coded
+
+            elsif Cmd = "--junit" then
+               if On_Last_Arg then
+                  IO.Put_Error (Cmd & " must be followed by a file name");
+               else
+                  Go_Next_Arg;
+                  Settings.Generate_JUnit_Report := True;
+                  Settings.Set_JUnit_File (Current_Arg);
+               end if;
 
             elsif Cmd = "-ed" or Cmd = "--exec_dir" then
                if On_Last_Arg then

@@ -14,6 +14,7 @@ use BBT.Model.Features,
 
 package BBT.Model.Documents is
 
+   -- --------------------------------------------------------------------------
    type Document_Type;
    type Document_Access is not null access all Document_Type;
 
@@ -54,18 +55,37 @@ package BBT.Model.Documents is
      (D : in out Document_Type) return Scenario_Maybe;
    function Last_Feature
      (D : in out Document_Type) return Feature_Maybe;
+   function Get_Results (D : Document_Type) return Test_Results_Count;
 
    package Documents_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, Document_Type'Class);
    subtype List is Documents_Lists.Vector;
 
+   -- --------------------------------------------------------------------------
    function Last_Doc
-     (D : in out Documents_Lists.Vector)
+     (D : in out Documents_Lists.Vector) -- Fixme: should be type List
       return Document_Access;
 
-   -- --------------------------------------------------------------------------
    function Doc_List return access Documents_Lists.Vector;
 
+   -- --------------------------------------------------------------------------
+   function Count (Test : Test_Result) return Natural;
+   -- Walk through the Document list to sum all scenarios result's.
+   function Success return Boolean;
+   function No_Fail return Boolean;
+   -- Success ensure that there is successfully run tests, and
+   -- no empty/error/not run tests
+   -- No_Fail **just** check that there is no fail test.
+   procedure Sum_Results (Docs : List);
+   function Get_Results (DL : List) return Test_Results_Count;
+   -- -----------------------------------------------------------------------
+   subtype Count_String is String (1 .. 7);
+   Blank_Image : constant Count_String := [others => ' '];
+   function Count_String_Image (Test : Test_Result) return Count_String;
+   -- Warning, image is cut if it does not fit
+
    procedure Apply_Filters; -- Apply recursively on the whole tree
+
+   procedure Generate_Badge;
 
 end BBT.Model.Documents;

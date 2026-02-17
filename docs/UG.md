@@ -23,12 +23,12 @@ User Guide  <!-- omit from toc -->
 
 ## Where to start
 
-The quickest way to get started is to read the [scenario template](https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_template.md) generated with `bbt create_template`. It is both a template and a short tutorial.
+The quickest way to get started is to read the [scenario template](https://github.com/LionelDraghi/bbt/tree/main/docs/bbt_template.md) generated with `bbt create_template`. It is both a template and a short tutorial.
 That's enough to start playing.
 
-However, it is also highly recommended to read the [*bbt* README](https://github.com/LionelDraghi/bbt/blob/main/README.md) to grasp the tool’s core concepts and design philosophy.
+However, it is also highly recommended to read the [*bbt* README](https://github.com/LionelDraghi/bbt/tree/main/README.md) to grasp the tool’s core concepts and design philosophy.
 
-A few examples can be found here : [template of scenario](https://github.com/LionelDraghi/bbt/blob/main/examples).
+A few examples can be found [here](https://github.com/LionelDraghi/bbt/tree/main/docs/examples).
  
 And finally, to have an overview of the available commands run `bbt` without arguments.
 

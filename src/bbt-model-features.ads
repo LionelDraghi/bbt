@@ -42,6 +42,9 @@ package BBT.Model.Features is
      (F : in out Feature_Type);
    function Background
      (F : in out Feature_Type) return Scenario_Maybe;
+   function Get_Results
+      (F : Feature_Type) return Test_Results_Count;
+
    -- -------------------------------------------------------------------------
    procedure Set_Filter (F        : in out Feature_Type'Class;
                          Filtered :        Boolean);

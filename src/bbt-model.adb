@@ -20,7 +20,6 @@ package body BBT.Model is
       N.Filtered := False;
    end Unfilter;
 
-
    -- --------------------------------------------------------------------------
    procedure Unfilter_Parents (N : in out Non_Root_Node'Class) is
    begin
