@@ -9,9 +9,9 @@ ifeq ($(OS), Windows_NT)
 	# to change with the MSYS or Windows version number.
 	# This is why I override it on Windows:
 	PLATFORM := Windows
-	EXEC_SUFFIX := .exe
+	EXE_SUFFIX := .exe
 else
-	EXEC_SUFFIX :=
+	EXE_SUFFIX :=
 endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
