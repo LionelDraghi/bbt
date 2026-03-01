@@ -9,6 +9,9 @@ ifeq ($(OS), Windows_NT)
 	# to change with the MSYS or Windows version number.
 	# This is why I override it on Windows:
 	PLATFORM := Windows
+	EXEC_SUFFIX := .exe
+else
+	EXEC_SUFFIX :=
 endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
@@ -30,21 +33,17 @@ build:
 	@ $(MAKE) -s build --directory=file_utilities_tests
 
 setup:
+	@ln -fs ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
+	@ln -fs ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
 # Manage differences between Windows and Unix
 ifeq ($(PLATFORM), Windows)
-	@ln -fs ../sut sut.exe
-	@ln -fs ../bbt bbt.exe
 EXCLUDE := --exclude Unix_Only
 
 else ifeq ($(PLATFORM), Darwin)
 	export GNAT_FILE_NAME_CASE_SENSITIVE=1
-	@ln -fs ../sut sut
-	@ln -fs ../bbt bbt
 EXCLUDE := --exclude Windows_Only
 
 else ifeq ($(PLATFORM), Linux)
-	@ln -fs ../sut sut
-	@ln -fs ../bbt bbt
 	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 	@ln -fs /usr/bin/rpl rpl
@@ -56,7 +55,7 @@ else
 
 endif
 
-check: setup ./bbt ./sut
+check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	mkdir -p $(RESULTS_DIR)
     
 	@ # Some examples rely on external exe : 

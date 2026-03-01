@@ -1,0 +1,66 @@
+name: Build and test
+on:                    # Run the workflow for each of the following events:
+  push:                # - The main branch is pushed or updated.
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+  pull_request:        # - A pull-request is opened or updated.
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
+  release:
+    types: [created]   # - A release is created.
+
+jobs:
+  main:
+    strategy:
+      fail-fast: false # Don't stop all the workflows when one of them fails.
+    
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest] # List of GitHub Actions platform to run the workflow on
+    env:
+      #  set the value of the environment variable OS_PLATFORM according to the runner OS
+      OS_PLATFORM: ${{ matrix.os == 'windows-latest' && 'Windows' || matrix.os == 'ubuntu-latest' && 'Linux' || matrix.os == 'macos-latest' && 'Darwin' || 'Unknown' }}
+    runs-on: ${{ matrix.os }} # Run the continuous integration workflow on each OS listed in the matrix.
+    
+    steps:
+        # Check-out the repository
+      - uses: actions/checkout@v2
+
+        # Install and setup Alire package manager
+      - uses: alire-project/setup-alire@v2
+        with:
+          version: 2.1.0 # Remove this option to use the default (latest stable release)
+            
+      - name: Setup `rpl` (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # Use a direct SourceForge download link and bypass the interstitial page
+          $rplUrl = "https://downloads.sourceforge.net/project/gnuwin32/rpl/1.4.1/rpl-1.4.1-bin.zip"
+          Invoke-WebRequest -Uri $rplUrl -OutFile rpl.zip -UseBasicParsing -UserAgent "curl/7.68.0"
+          Expand-Archive -Path rpl.zip -DestinationPath C:\GnuWin32
+          echo "C:\GnuWin32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      # Install packages (needed by `make check`) on every platform
+      - name: Install packages
+        shell: bash
+        run: |
+          cargo install mlc
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y rpl
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew update
+            brew install rpl
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            choco install -y wget
+          fi
+
+      - name: Run build and checks
+        run: make -k
+        
+      - name: Save summary
+        run: cat docs/tests_results/${OS_PLATFORM}/features_results.md > ${GITHUB_STEP_SUMMARY}
+        shell: bash

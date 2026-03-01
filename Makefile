@@ -8,7 +8,7 @@ bbt: build
 build:
 	echo
 	echo === build #=# and instrument bbt
-	alr build --development
+	alr --non-interactive build --development
 	# Alire profiles : --release --validation --development (default)
 	
 	#=# alr gnatcov instrument --level=stmt --dump-trigger=atexit --projects=bbt.gpr --ignore-source-files=bbt-main*.ad? 
