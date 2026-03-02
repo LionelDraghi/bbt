@@ -26,6 +26,13 @@ use BBT.Scenarios.Step_Parser.Lexer,
 
 package body BBT.Scenarios.Step_Parser is
 
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.Step_Parser)
+                             renames BBT.IO.Put_Line;
+   pragma Warnings (Off, Put_Debug_Line);
+
    type Tokens is ( -- Prepositions -----------------------------------------
                     Given,
                     When_P,
@@ -174,6 +181,8 @@ package body BBT.Scenarios.Step_Parser is
       G (Then_P, No_SA, Output_Subj,  Does_Not_Contain, No_Object)     := (Output_Does_Not_Contain, True); -- then output does not contain followed by code fenced content
       G (Then_P, No_SA, Output_Subj,  Matches,  Obj_Text)              := (Output_Matches, False); -- then output matches `[:digit:]*.[:digit:]*`
       G (Then_P, No_SA, Output_Subj,  Does_Not_Match,  Obj_Text)       := (Output_Does_Not_Match, False); -- then output does not match `[:digit:]*.[:digit:]*`
+      G (Then_P, No_SA, Subject_File, Matches,  Obj_Text)              := (File_Matches, False); -- then file `list` matches `*.string.*`
+      G (Then_P, No_SA, Subject_File, Does_Not_Match,  Obj_Text)       := (File_Does_Not_Match, False); -- then file `list` does not match `*.string.*`
       G (Then_P, No_SA, Subject_File, Is_V,     Obj_Text)              := (File_Is, False); -- then `config.ini` is `mode=silent`
       G (Then_P, No_SA, Subject_File, Is_V,     Obj_File_Name)         := (File_Is, False); -- then `config.ini` is equal to file `expected/config.ini`
       G (Then_P, No_SA, Subject_File, Is_V,     No_Object)             := (File_Is, True); -- then `config.ini` is followed by code fenced content
@@ -332,6 +341,8 @@ package body BBT.Scenarios.Step_Parser is
       Src_Code := Line;
       Cmd_List := Cmd_Lists.Empty_Vector;
 
+      Put_Debug_Line (+Line, Loc);
+
       Initialize_Lexer;
       Chunk.Initialize;
 
@@ -398,12 +409,15 @@ package body BBT.Scenarios.Step_Parser is
                   begin
                      if Lower_Keyword = "executable" then
                         Executable := True;
+                        Put_Debug_Line ("  Executable = True", Loc);
 
                      elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
                         if Successfully_Met then
                            Set_Verb (Successful_Run);
+                           Put_Debug_Line ("  Verb = Successful_Run", Loc);
                         else
                            Set_Verb (Run);
+                           Put_Debug_Line ("  Verb = Run", Loc);
                         end if;
 
                      elsif Lower_Keyword = "or" then
@@ -418,9 +432,11 @@ package body BBT.Scenarios.Step_Parser is
 
                      elsif Lower_Keyword = "get" then
                         Set_Verb (Get);
+                        Put_Debug_Line ("  Verb = Get", Loc);
 
                      elsif Lower_Keyword = "is" then
                         Set_Verb (Is_V);
+                        Put_Debug_Line ("  Verb = Is", Loc);
 
                      elsif Lower_Keyword = "no"
                        or Lower_Keyword = "not"
@@ -431,21 +447,27 @@ package body BBT.Scenarios.Step_Parser is
                         Not_Met := True;
                         if Verb = Is_V then
                            Set_Verb (Is_No);
+                           Put_Debug_Line ("  Verb = Is_No", Loc);
                         elsif Verb = Get then
                            Set_Verb (Get_No);
+                          Put_Debug_Line ("  Verb = Get_No", Loc);
                         end if;
 
                      elsif Lower_Keyword = "successfully" then
                         Successfully_Met := True;
+                        Put_Debug_Line ("  Successfully_Met = True", Loc);
 
                      elsif Lower_Keyword = "error" then
                         Object := Error;
+                        Put_Debug_Line ("  Object = Error", Loc);
 
                      elsif Lower_Keyword = "output" then
                         if In_Subject_Part then
                            Subject := Output_Subj;
+                           Put_Debug_Line ("  Subject = Output_Subj", Loc);
                         else
                            Object := Output_Obj;
+                           Put_Debug_Line ("  Object = Output_Obj", Loc);
                         end if;
 
                      elsif Lower_Keyword = "contains" or
@@ -453,8 +475,10 @@ package body BBT.Scenarios.Step_Parser is
                      then
                         if Not_Met then
                            Set_Verb (Does_Not_Contain);
+                           Put_Debug_Line ("  Verb = Does_Not_Contain", Loc);
                         else
                            Set_Verb (Contains);
+                           Put_Debug_Line ("  Verb = Contains", Loc);
                         end if;
 
                      elsif Lower_Keyword = "match" or
@@ -462,15 +486,19 @@ package body BBT.Scenarios.Step_Parser is
                      then
                         if Not_Met then
                            Set_Verb (Does_Not_Match);
+                           Put_Debug_Line ("  Verb = Does_Not_Match", Loc);
                         else
                            Set_Verb (Matches);
+                           Put_Debug_Line ("  Verb = Matches", Loc);
                         end if;
 
                      elsif Lower_Keyword = "containing" then
                         Set_Verb (Containing);
+                        Put_Debug_Line ("  Verb = Containing", Loc);
 
                      elsif Lower_Keyword = "new" then
                         Subject_Attr := New_SA;
+                        Put_Debug_Line ("  Subject_Attr = New_SA", Loc);
 
                      elsif Lower_Keyword = "directory" or Lower_Keyword = "dir"
                      then
@@ -478,9 +506,11 @@ package body BBT.Scenarios.Step_Parser is
 
                         if In_Subject_Part then
                            Subject := Dir_Subject;
+                           Put_Debug_Line ("  Subject = Dir_Subject", Loc);
 
                         elsif In_Object_Part then
                            Object := Obj_Dir_Name;
+                           Put_Debug_Line ("  Object = Obj_Dir_Name", Loc);
 
                            Object_File_Name := Object_String;
                            Object_String    := Null_Unbounded_String;
@@ -488,13 +518,15 @@ package body BBT.Scenarios.Step_Parser is
 
                      elsif Lower_Keyword = "file" then
                         File_Type := Ordinary_File;
+                        Put_Debug_Line ("  File_Type = Ordinary_File", Loc);
 
                         if In_Subject_Part then
                            Subject := Subject_File;
+                           Put_Debug_Line ("  Subject = Subject_File", Loc);
 
                         elsif In_Object_Part then
                            Object := Obj_File_Name;
-                           -- If file name was given before keyword "file",
+                           Put_Debug_Line ("  Object = Obj_File_Name", Loc);
                            -- then it was considered an Object_String,
                            -- let's update that:
                            Object_File_Name := Object_String;
@@ -503,6 +535,7 @@ package body BBT.Scenarios.Step_Parser is
 
                      elsif Lower_Keyword = "unordered" then
                         Ignore_Order := True;
+                        Put_Debug_Line ("  Subject = Subject_File", Loc);
 
                      end if;
                   end;
@@ -514,26 +547,32 @@ package body BBT.Scenarios.Step_Parser is
                when Code_Span =>
                   if In_Subject_Part then
                      Subject_String := To_Unbounded_String (Tok);
+                     Put_Debug_Line ("  Subject_String = " & Tok, Loc);
 
                   else
                      if Object = Obj_File_Name or Object = Obj_Dir_Name then
                         -- "file" or "dir" keyword already meet
                         Object_File_Name := To_Unbounded_String (Tok);
+                        Put_Debug_Line ("  Object_File_Name = " & Tok, Loc);
                      else
                         -- Otherwise, we don't know yet if the Code_Span is
                         -- a simple string or a file name.
                         Object_String := To_Unbounded_String (Tok);
+                        Put_Debug_Line ("  Object_String = " & Tok, Loc);
                      end if;
                   end if;
 
                   if Object = Command_List then
                      Cmd_List.Append (Tok);
+                     Put_Debug_Line ("  Command_List.Append : " & Tok, Loc);
 
                   elsif In_Subject_Part and then Subject = No_Subject then
                      if File_Type = Directory then
                         Subject := Dir_Subject;
+                        Put_Debug_Line ("  Subject = Dir_Subject", Loc);
                      else
                         Subject := Subject_File;
+                        Put_Debug_Line ("  Subject = Subject_File", Loc);
                      end if;
 
                   elsif In_Object_Part and then Object = No_Object then
@@ -543,8 +582,10 @@ package body BBT.Scenarios.Step_Parser is
                            -- Those verbs are always followed by a file/dir
                            if File_Type = Directory then
                               Object := Obj_Dir_Name;
+                              Put_Debug_Line ("  Object = Obj_Dir_Name", Loc);
                            else
                               Object := Obj_File_Name;
+                              Put_Debug_Line ("  Object = Obj_File_Name", Loc);
                            end if;
 
                         when Run              |
@@ -558,6 +599,7 @@ package body BBT.Scenarios.Step_Parser is
                              Containing       =>
                            -- Those verbs are always followed by a text
                            Object := Obj_Text;
+                           Put_Debug_Line ("  Object = Obj_Text", Loc);
 
                         when Is_V =>
                            -- Complex case where it depends not only on the
@@ -566,8 +608,10 @@ package body BBT.Scenarios.Step_Parser is
                               -- Example : Given there is a `config.ini` file
                               if File_Type = Directory then
                                  Object := Obj_Dir_Name;
+                                 Put_Debug_Line ("  Object = Obj_Dir_Name", Loc);
                               else
                                  Object := Obj_File_Name;
+                                 Put_Debug_Line ("  Object = Obj_File_Name", Loc);
                               end if;
 
                            else
@@ -575,6 +619,7 @@ package body BBT.Scenarios.Step_Parser is
                               -- or
                               -- Then `file` is xxxx
                               Object := Obj_Text;
+                              Put_Debug_Line ("  Object = Obj_Text", Loc);
 
                            end if;
                      end case;
@@ -608,6 +653,8 @@ package body BBT.Scenarios.Step_Parser is
 
          Action := The_Grammar
            (Prep, Subject_Attr, Subject, Verb, Object).Action;
+         Put_Debug_Line ("  Action = " & Action'Image, Loc);
+
          Code_Block_Expected := The_Grammar
            (Prep, Subject_Attr, Subject, Verb, Object).Code_Block_Expected;
 

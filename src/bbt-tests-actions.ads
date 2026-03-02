@@ -79,7 +79,10 @@ private package BBT.Tests.Actions is
    procedure Output_Does_Not_Match (Output : Text;
                                     Step      : Step_Type'Class;
                                     Verbosity : Verbosity_Levels);
-
+   procedure File_Matches (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels);
+   procedure File_Does_Not_Match (Step      : Step_Type'Class;
+                                  Verbosity : Verbosity_Levels);
    procedure Files_Is (Step      : Step_Type'Class;
                        Verbosity : Verbosity_Levels);
    procedure Files_Is_Not (Step      : Step_Type'Class;

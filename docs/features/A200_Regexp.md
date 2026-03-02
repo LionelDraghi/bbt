@@ -12,8 +12,9 @@ Note that the regexp should match the whole line :
 _Table of Contents:_
 - [scenario: version number match](#scenario-version-number-match)
 - [scenario: version number mismatch](#scenario-version-number-mismatch)
-- [Scenario: Test of "does not match"](#scenario-test-of-does-not-match)
-- [Scenario: Test of "does not match" that indeed matches](#scenario-test-of-does-not-match-that-indeed-matches)
+- [Scenario: Test of "output does not match"](#scenario-test-of-output-does-not-match)
+- [Scenario: Test of "output does not match" that indeed matches](#scenario-test-of-output-does-not-match-that-indeed-matches)
+- [Scenario: test of "file match"](#scenario-test-of-file-match)
 
 # scenario: version number match
 
@@ -38,13 +39,13 @@ sut version 1.0
 does not match expected:  sut version [0-9]+\.[0-9]+\.[0-9]+    
 ```
 
-# Scenario: Test of "does not match" 
+# Scenario: Test of "output does not match" 
 
 - When I run `./sut -v`
 Let's check that the number is of the form "major.minor" and not "major.minor.patch"
 - Then output does not match `sut version [0-9]+\.[0-9]+\.[0-9]+`
 
-# Scenario: Test of "does not match" that indeed matches
+# Scenario: Test of "output does not match" that indeed matches
 
 - Given the new file `wrong_regexp.md`
 ~~~
@@ -60,3 +61,17 @@ sut version 1.0
 ~~~  
 match unexpected:  sut version [0-9]+\.[0-9]+
 ```
+
+# Scenario: test of "file match" 
+
+- Given the new file `Cities.txt`
+~~~
+London
+Roma
+Teheran
+Rabat
+~~~
+
+- Then `Cities.txt` match `.*ehera.*`
+- And  `Cities.txt` does not match `.*York.*`
+

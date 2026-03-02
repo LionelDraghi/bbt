@@ -504,17 +504,23 @@
    - OK : and output contains   
    - [X] scenario   [version number mismatch](../../features/A200_Regexp.md) pass  
 
-   ### Scenario: [Test of "does not match"](../../features/A200_Regexp.md): 
+   ### Scenario: [Test of "output does not match"](../../features/A200_Regexp.md): 
    - OK : When I run `./sut -v`  
    - OK : Then output does not match `sut version [0-9]+\.[0-9]+\.[0-9]+`  
-   - [X] scenario   [Test of "does not match"](../../features/A200_Regexp.md) pass  
+   - [X] scenario   [Test of "output does not match"](../../features/A200_Regexp.md) pass  
 
-   ### Scenario: [Test of "does not match" that indeed matches](../../features/A200_Regexp.md): 
+   ### Scenario: [Test of "output does not match" that indeed matches](../../features/A200_Regexp.md): 
    - OK : Given the new file `wrong_regexp.md`  
    - OK : When I run `./bbt wrong_regexp.md`  
    - OK : Then I get an error  
    - OK : and output contains   
-   - [X] scenario   [Test of "does not match" that indeed matches](../../features/A200_Regexp.md) pass  
+   - [X] scenario   [Test of "output does not match" that indeed matches](../../features/A200_Regexp.md) pass  
+
+   ### Scenario: [test of "file match"](../../features/A200_Regexp.md): 
+   - OK : Given the new file `Cities.txt`  
+   - OK : Then `Cities.txt` match `.*ehera.*`  
+   - OK : And  `Cities.txt` does not match `.*York.*`  
+   - [X] scenario   [test of "file match"](../../features/A200_Regexp.md) pass  
 
 
 # Document: [A210_Exact_Match.md](../../features/A210_Exact_Match.md)  
@@ -1318,7 +1324,8 @@
    - OK : Given there is no file `time_attribute.xml`  
    - OK : Given the file `time_attribute.md` containing  
    - OK : When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`  
-../docs/features/B160_JUnit_XML_Export.md:172: Error: Unrecognized step "Then file `time_attribute.xml` matches `<testsuites name=""time_attribute"" .* time=""1.5[0-9]*"">`"
+   - **NOK** : Then file `time_attribute.xml` matches `<testsuites name="time_attribute" .* time="1.5[0-9]*">` (../docs/features/B160_JUnit_XML_Export.md:172:)  
+../docs/features/B160_JUnit_XML_Export.md:172: Error: File:  time_attribute.xml does not match expected:  <testsuites name="time_attribute" .* time="1.5[0-9]*">  
    - [ ] scenario   [](../../features/B160_JUnit_XML_Export.md) **fails**  
 
 
@@ -1490,7 +1497,7 @@
 | Status     | Count |
 |------------|-------|
 | Failed     | 5     |
-| Successful | 132   |
+| Successful | 133   |
 | Empty      | 0     |
 | Not Run    | 0     |
 

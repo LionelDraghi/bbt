@@ -508,6 +508,48 @@ package body BBT.Tests.Actions is
    end Output_Does_Not_Match;
 
    -- --------------------------------------------------------------------------
+   procedure File_Matches (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels) is
+      Regexp    : constant String := Get_Expected (Step) (1);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
+   begin
+      Put_Debug_Line ("File_Matches ");
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => Text_Utilities.Matches (T1, Regexp),
+                          Fail_Msg => "File:  " & File_Name &
+                            " does not match expected:  " & Regexp,
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
+   end File_Matches;
+
+   -- --------------------------------------------------------------------------
+   procedure File_Does_Not_Match (Step      : Step_Type'Class;
+                                  Verbosity : Verbosity_Levels) is
+      Regexp    : constant String := Get_Expected (Step) (1);
+      File_Name : constant String := +Step.Data.Subject_String;
+      T1        : Text;
+   begin
+      Put_Debug_Line ("File_Does_Not_Match ");
+      if Exists (File_Name) then
+         T1 := Get_Text (File_Name);
+         Put_Step_Result (Step     => Step,
+                          Success  => not Text_Utilities.Matches (T1, Regexp),
+                          Fail_Msg => "File:  " & File_Name &
+                            " should not match:  " & Regexp,
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+      else
+         IO.Put_Error ("No file " & File_Name, Step.Location);
+      end if;
+   end File_Does_Not_Match;
+
+   -- --------------------------------------------------------------------------
    procedure Files_Is (Step      : Step_Type'Class;
                        Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;

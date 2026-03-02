@@ -112,6 +112,7 @@ doc: $(RESULTS_DIR)
 
 clean:
 	@ - rm -f *.out main bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md
+	@ - rm -f all_results.xml result2.xml time_attribute.xml features.xml result.xml windows_results.xml file1.tmp
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	

@@ -135,17 +135,23 @@ package body BBT.Tests.Runner is
             Output_Contains
               (Get_Text (Output), Step, Verbosity);
 
-         when Output_Matches =>
-            Output_Matches
-              (Get_Text (Output), Step, Verbosity);
-
          when Output_Does_Not_Contain =>
             Output_Does_Not_Contain
+              (Get_Text (Output), Step, Verbosity);
+
+         when Output_Matches =>
+            Output_Matches
               (Get_Text (Output), Step, Verbosity);
 
          when Output_Does_Not_Match =>
             Output_Does_Not_Match
               (Get_Text (Output), Step, Verbosity);
+
+         when File_Matches =>
+            File_Matches (Step, Verbosity);
+
+         when File_Does_Not_Match =>
+            File_Does_Not_Match (Step, Verbosity);
 
          when File_Is =>
             Files_Is (Step, Verbosity);

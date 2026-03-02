@@ -36,6 +36,8 @@ package BBT.Model.Steps is
       Error_Return_Code,
       File_Contains,
       File_Does_Not_Contain,
+      File_Matches,
+      File_Does_Not_Match,
       File_Is,
       File_Is_Not,
       No_Error_Return_Code,

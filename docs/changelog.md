@@ -8,6 +8,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - **[0.2.1-dev] - 2026--**
   - [Added]   Feature #28: production of a junit.xml file through --junit option
+  - [Added]   new `then file matches regexp` syntax
   
 - **[0.2.0] - 2025-07-02**
   - [Changed] `--output` is now deprecated and replaced with `--index` 

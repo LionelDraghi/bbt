@@ -40,15 +40,15 @@ begin
       New_Line;
       Put_Line ("## File Structure  ");
       New_Line;
-      Put_Line ("[# Background] (at most one per file));"
+      Put_Line ("[# Background] (at most one per file))");
       New_Line;
-      Put_Line ("[# Feature] (any number of features per file));"
+      Put_Line ("[# Feature] (any number of features per file)");
       New_Line;
-      Put_Line ("[# Background] (at most one per Feature));"
+      Put_Line ("[# Background] (at most one per Feature)");
       New_Line;
-      Put_Line ("# Scenario 1 (any number of scenarios per feature));"
-      Put_Line ("- Given/When/Then step);"
-      Put_Line ("[- Given/When/Then/And/But step] (any number of steps per scenario));"
+      Put_Line ("# Scenario 1 (any number of scenarios per feature)");
+      Put_Line ("- Given/When/Then step");
+      Put_Line ("[- Given/When/Then/And/But step] (any number of steps per scenario)");
       New_Line;
       Put_Line ("Example :  ");
       New_Line;
@@ -105,9 +105,9 @@ begin
       Put_Line ("### Steps  ");
       New_Line;
       Put_Line ("Steps are the most important part of bbt files, they perform the actions and checks.  ");
-      Put_Line ("- Given [setup condition]  ");"
-      Put_Line ("- When [action to perform]  ");"
-      Put_Line ("- Then [expected result]  ");
+      Put_Line ("- Given [setup condition]  ");
+      Put_Line ("- When  [action to perform]  ");
+      Put_Line ("- Then  [expected result]  ");
       New_Line;
       Put_Line ("Examples of steps:  ");
       New_Line;
