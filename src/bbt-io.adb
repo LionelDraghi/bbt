@@ -310,4 +310,12 @@ package body BBT.IO is
          Time_Zone             => Ada.Calendar.Time_Zones.UTC_Time_Offset);
    end Image;
 
+   -- --------------------------------------------------------------------------
+   function Image (Elapsed_Time : Duration) return String is
+   begin
+      return Ada.Calendar.Formatting.Image
+        (Elapsed_Time          => Elapsed_Time,
+         Include_Time_Fraction => True);
+   end Image;
+
 end BBT.IO;

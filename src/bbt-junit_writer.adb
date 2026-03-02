@@ -5,7 +5,8 @@
 -- SPDX-FileCopyrightText: 2026, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Text_IO,
+with Ada.Directories,
+     Ada.Text_IO,
      Ada.Strings.Unbounded,
      Ada.Strings.Fixed;
 
@@ -15,9 +16,11 @@ with BBT.Model.Scenarios,
 
 package body BBT.JUnit_Writer is
 
+   use Ada.Directories;
    use Ada.Text_IO;
    use Ada.Strings;
    use Ada.Strings.Unbounded;
+   use Ada.Strings.Fixed;
    use BBT.Model;
 
    -- --------------------------------------------------------------------------
@@ -71,20 +74,40 @@ package body BBT.JUnit_Writer is
    end Escape_XML;
 
    -- --------------------------------------------------------------------------
+   -- Helper function to generate XML attributes in the format name="value"
+   -- Automatically trims the value and escapes XML special characters
+   -- --------------------------------------------------------------------------
+   function Attrib (Name, Value : String) return String is
+   begin
+      return Name & "=""" & Escape_XML (Trim (Value, Ada.Strings.Both)) & """";
+   end Attrib;
+
+   function Time_Attrib (Time : Duration) return String is
+   begin
+      return "time=""" & Trim (Duration'Image (Time), Ada.Strings.Left) & """";
+   end Time_Attrib;
+
+   -- --------------------------------------------------------------------------
    procedure Generate_Report (File_Name : String;
                               Docs      : BBT.Model.Documents.List) is
       XML_File : File_Type;
 
-      -- --------------------------------------------------------------------------
+      -- -----------------------------------------------------------------------
       procedure Write_Test_Case (XML_File : File_Type;
                                  Scen     : BBT.Model.Scenarios.Scenario_Type'Class;
                                  Suite_Name : String) is
       begin
-         -- Put opening tag and closing tag on the same line for simple testcases
          if Scen.Failed_Step_Count = 0 then
-            Put_Line (XML_File, "    <testcase name=""" & Escape_XML (To_String (Scen.Name)) & """ classname=""" & Suite_Name & """/>");
+            -- Put opening tag and closing tag on the same line for simple testcases
+            Put_Line (XML_File, "    <testcase " &
+                      Attrib ("name", To_String (Scen.Name)) & " " &
+                      Attrib ("classname", Suite_Name) & " " &
+                      Time_Attrib (Elapsed_Time (Scen)) & "/>");
          else
-            Put_Line (XML_File, "    <testcase name=""" & Escape_XML (To_String (Scen.Name)) & """ classname=""" & Suite_Name & """>");
+            Put_Line (XML_File, "    <testcase " &
+                      Attrib ("name", To_String (Scen.Name)) & " " &
+                      Attrib ("classname", Suite_Name) & " " &
+                      Time_Attrib (Elapsed_Time (Scen)) & ">");
             Put_Line (XML_File, "      <failure message=""Test failed"">");
             Put (XML_File, "        Failed steps: " & Scen.Failed_Step_Count'Image);
             Put_Line (XML_File, "      </failure>");
@@ -103,15 +126,15 @@ package body BBT.JUnit_Writer is
       declare
          Total_Results : constant Test_Results_Count := BBT.Model.Documents.Get_Results (Docs);
       begin
-         -- Extract filename without extension for testsuites name
-         Last_Dot : constant Natural := Ada.Strings.Fixed.Index (File_Name, ".", Going => Backward);
-         Suite_Name : constant String := (if Last_Dot = 0 then File_Name else File_Name (File_Name'First .. Last_Dot - 1));
+         Suite_Name : constant String := Base_Name (File_Name);
          -- Use the XML filename (without extension) as the testsuites name
-         Put_Line (XML_File, "<testsuites name=""" & Suite_Name & """ tests=""" &
-                   To_String (Trim (To_Unbounded_String (Total_Test_Count (Total_Results)'Image), Left))
-                   & """ failures=""" &
-                   To_String (Trim (To_Unbounded_String (Total_Failure_Count (Total_Results)'Image), Left)) & """ errors=""0"" skipped=""" &
-                   To_String (Trim (To_Unbounded_String (Total_Skipped_Count (Total_Results)'Image), Left)) & """>");
+         Put_Line (XML_File, "<testsuites " &
+                   Attrib ("name", Suite_Name) & " " &
+                   Attrib ("tests", Total_Test_Count (Total_Results)'Image) & " " &
+                   Attrib ("failures", Total_Failure_Count (Total_Results)'Image) & " " &
+                   Attrib ("errors", "0") & " " &
+                   Attrib ("skipped", Total_Skipped_Count (Total_Results)'Image) & " " &
+                   Time_Attrib (Elapsed_Time (Docs.First_Element)) & ">"); -- FIXME: total time for all docs not implemented
       end;
 
       -- Process all documents
@@ -136,7 +159,13 @@ package body BBT.JUnit_Writer is
                declare
                   Doc_Results : constant Test_Results_Count := BBT.Model.Documents.Get_Results (Doc);
                begin
-                  Put_Line (XML_File, "  <testsuite name=""" & Suite_Name & """ tests=""" & To_String (Trim (To_Unbounded_String (Total_Test_Count (Doc_Results)'Image), Left)) & """ failures=""" & To_String (Trim (To_Unbounded_String (Total_Failure_Count (Doc_Results)'Image), Left)) & """ errors=""0"" skipped=""" & To_String (Trim (To_Unbounded_String (Total_Skipped_Count (Doc_Results)'Image), Left)) & """>");
+                  Put_Line (XML_File, "  <testsuite " &
+                    Attrib ("name", Suite_Name) & " " &
+                    Attrib ("tests", Total_Test_Count (Doc_Results)'Image) & " " &
+                    Attrib ("failures", Total_Failure_Count (Doc_Results)'Image) & " " &
+                    Attrib ("errors", "0") & " " &
+                    Attrib ("skipped", Total_Skipped_Count (Doc_Results)'Image) & " " &
+                    Time_Attrib (Elapsed_Time (Doc)) & ">");
                end;
 
                -- Write testcases from features
@@ -165,6 +194,5 @@ package body BBT.JUnit_Writer is
       Put_Line (XML_File, "</testsuites>");
       Close (XML_File);
    end Generate_Report;
-
 
 end BBT.JUnit_Writer;

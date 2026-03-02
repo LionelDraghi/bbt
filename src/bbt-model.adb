@@ -21,6 +21,20 @@ package body BBT.Model is
    end Unfilter;
 
    -- --------------------------------------------------------------------------
+   procedure Set_Start_Time (N : in out Root_Node) is
+   begin
+      Put_Debug_Line ("Set_Start_Time for '" & (+N.Name) & "'");
+      N.Start_Time := Ada.Calendar.Clock;
+   end Set_Start_Time;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_End_Time (N : in out Root_Node) is
+   begin
+      Put_Debug_Line ("Set_End_Time for '" & (+N.Name) & "'");
+      N.End_Time := Ada.Calendar.Clock;
+   end Set_End_Time;
+
+   -- --------------------------------------------------------------------------
    procedure Unfilter_Parents (N : in out Non_Root_Node'Class) is
    begin
       Put_Debug_Line ("Unfilter_Parents '" & (+N.Name) & "'");
@@ -34,5 +48,13 @@ package body BBT.Model is
          Unfilter_Parents (Non_Root_Node'Class (N.Parent.all));
       end if;
    end Unfilter_Parents;
+
+   -- --------------------------------------------------------------------------
+   -- Calculate the elapsed time (duration) between Start_Time and End_Time
+   -- --------------------------------------------------------------------------
+   function Elapsed_Time (N : Root_Node'Class) return Duration is
+   begin
+      return N.End_Time - N.Start_Time;
+   end Elapsed_Time;
 
 end BBT.Model;

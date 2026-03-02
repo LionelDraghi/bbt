@@ -9,6 +9,7 @@ with Ada.Strings.Text_Buffers;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;              use Ada.Text_IO;
 with Ada.Calendar;
+with Ada.Calendar.Formatting;
 
 use Ada;
 
@@ -168,7 +169,8 @@ private package BBT.IO is
 
    -- --------------------------------------------------------------------------
    function Image (Time : Ada.Calendar.Time) return String;
-   -- To ensure common options to call to Ada.Calendar.Formatting.Image,
+   function Image (Elapsed_Time : Duration)  return String;
+  -- To ensure common options to call to Ada.Calendar.Formatting.Image,
    -- that is:
    -- 1. Include_Time_Fraction => True,
    --    to get hundredths of a second printed in the hope that

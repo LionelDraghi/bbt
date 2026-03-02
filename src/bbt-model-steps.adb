@@ -86,12 +86,14 @@ package body BBT.Model.Steps is
                          Loc             : Location_Type;
                          Parent_Scenario : Scenarios.Scenario_Access)
                          return Step_Type
-   is (Filtered => <>,
-       Location => Loc,
-       Comment  => <>,
-       Name     => To_Unbounded_String ("step"),
-       Data     => Info,
-       Parent   => Node_Access (Parent_Scenario));
+   is (Filtered    => <>,
+       Location    => Loc,
+       Comment     => <>,
+       Name        => To_Unbounded_String ("step"),
+       Start_Time  => <>,
+       End_Time    => <>,
+       Data        => Info,
+       Parent      => Node_Access (Parent_Scenario));
 
    -- --------------------------------------------------------------------------
    procedure Set_Filter (S        : in out Step_Type'Class;

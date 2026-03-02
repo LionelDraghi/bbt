@@ -44,6 +44,8 @@ _Table of Contents_:
     - [Scenario 2 : one scenario is skipped](#scenario-2--one-scenario-is-skipped)
   - [Feature : xml robustness](#feature--xml-robustness)
 - [Scenario: Test XML escaping with special characters](#scenario-test-xml-escaping-with-special-characters)
+  - [Feature : Time Attribute](#feature--time-attribute)
+    - [Scenario:](#scenario)
 
 ## Scenario 1 : Basic file with only a single scenario
 
@@ -61,11 +63,9 @@ _Table of Contents_:
 - And file `result.xml` contains
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="result" tests="1" failures="0" errors="0" skipped="0">
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0">
-    <testcase name="Passing test" classname=""/>
-  </testsuite>
-</testsuites> 
+<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="0.0"
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"
+    <testcase name="Passing test" classname="" time="0.0"
 ```
 
 ### Feature : Skipped tests count
@@ -93,7 +93,7 @@ _Table of Contents_:
 - Then I get no error
 - And file `all_results.xml` contains
 ```xml
-<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0">
+<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="0.0">
 ```
 
 ### Scenario 2 : one scenario is skipped
@@ -104,7 +104,7 @@ _Table of Contents_:
 
 - Then file `windows_results.xml` contains
 ```xml
-<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1">
+<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="0.0">
 ```
 
 ## Feature : xml robustness 
@@ -127,9 +127,46 @@ The Feature and the Scenario name are included in the xml syntax, and so special
 - And file `result2.xml` contains
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="result2" tests="1" failures="0" errors="0" skipped="0">
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0">
-    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname=""/>
+<testsuites name="result2" tests="1" failures="0" errors="0" skipped="0" time="0.0"
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"
+    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="0.0"/>
   </testsuite>
 </testsuites> 
 ```
+
+## Feature : Time Attribute
+
+This feature tests that timestamp fields are properly included in JUnit XML output at all levels.
+This test is using sut capability to wait before returning according to a command line parameter thanks to the `delay` command.
+
+### Scenario: 
+- Given there is no file `time_attribute.xml`
+- Given the file `time_attribute.md` containing
+```md
+# Feature: F1
+## Scenario: S1
+- When I run `./sut delay 0.1`
+- Then I get no error
+
+# Feature: F2
+## Scenario: S2
+- When I run `./sut delay 0.2`
+- And  I run `./sut delay 0.4`
+- Then I get no error
+## Scenario: S3
+- When I run `./sut delay 0.3`
+- And  I run `./sut delay 0.5`
+- Then I get no error
+```
+
+So that :
+* total should be around 1.5s
+* total F1 = total S1 = 0.1s
+* total F2 = 1.4
+* total S2 = 0.6
+* total S3 = 0.8
+FIXME: robustness fail when using '-' 
+
+- When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`
+
+- Then file `time_attribute.xml` matches `<testsuites name="time_attribute" .* time="1.5[0-9]*">`

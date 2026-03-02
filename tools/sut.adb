@@ -1,6 +1,7 @@
 -- SPDX-License-Identifier: Apache-2.0
 
-with Ada.Command_Line,
+with Ada.Calendar,
+     Ada.Command_Line,
      Ada.Directories,
      Ada.Environment_Variables,
      Ada.Strings.Unbounded,
@@ -23,7 +24,8 @@ procedure sut is
       Put_Line ("   sut create|read        file_name");
       Put_Line ("   sut append      ""Text"" file_name");
       Put_Line ("   sut delete             file_name   : prompt user to confirm deletion");
-      Put_Line ("   sut read_env           var_name    : display environment variable");
+      Put_Line ("   sut read_env    var_name           : display environment variable");
+      Put_Line ("   sut delay       n [return_code]    : wait for n seconds before returning code, success if none");
       Put_Line ("   sut -h | --help or no command line : display this message");
       Put_Line ("   sut -v | --version                 : display a version string");
       New_Line;
@@ -45,6 +47,7 @@ procedure sut is
    use Ada.Command_Line;
 
    -- --------------------------------------------------------------------------
+   Start_Time : constant Ada.Calendar.Time := Ada.Calendar.Clock;
    Arg_Index : Positive := 1;
    File      : File_Type;
    File_Name : Unbounded_String;
@@ -69,7 +72,7 @@ begin
                if No_More_Arg then
                   Put_Line (Standard_Error, "Missing file name");
                else
-                  Arg_Index := Arg_Index + 1;
+                  Arg_Index := @ + 1;
                   File_Name := To_Unbounded_String (Argument (Arg_Index));
                   Create (File => File,
                           Mode => Out_File,
@@ -81,7 +84,7 @@ begin
                if No_More_Arg then
                   Put_Line (Standard_Error, "Missing file name");
                else
-                  Arg_Index := Arg_Index + 1;
+                  Arg_Index := @ + 1;
                   File_Name := To_Unbounded_String (Argument (Arg_Index));
                   Open (File => File,
                         Mode => In_File,
@@ -101,7 +104,7 @@ begin
                   if No_More_Arg then
                      Put_Line (Standard_Error, "Missing file name");
                   else
-                     Arg_Index := Arg_Index + 1;
+                     Arg_Index := @ + 1;
                      File_Name := To_Unbounded_String (Argument (Arg_Index));
                      if Exists (To_String (File_Name)) and then
                        Kind (To_String (File_Name)) = Ordinary_File
@@ -141,7 +144,7 @@ begin
                      Put_Line (Standard_Error,
                                "Missing environment variable name");
                   else
-                     Arg_Index := Arg_Index + 1;
+                     Arg_Index := @ + 1;
                      Var_Name := To_Unbounded_String (Argument (Arg_Index));
                      if Exists (To_String (Var_Name)) then
                         Put_Line (Value (To_String (Var_Name)));
@@ -165,8 +168,28 @@ begin
                         Name => Argument (Arg_Index + 2));
                   Put_Line (File, Argument (Arg_Index + 1));
                   Close (File);
-                  Arg_Index := Arg_Index + 2;
+                  Arg_Index := @ + 2;
                   Set_Exit_Status (Success);
+               end if;
+
+            elsif Opt = "delay" then ------------------------------------------
+               if No_More_Arg then
+                  Put_Line (Standard_Error, "Missing duration");
+               else
+                  Arg_Index := @ + 1;
+                  declare
+                     Wait_For : constant Duration := Duration'Value (Argument (Arg_Index));
+                     use Ada.Calendar;
+                     Time : constant Ada.Calendar.Time := Start_Time + Wait_For;
+                  begin
+                     if No_More_Arg then
+                        Set_Exit_Status (Success);
+                     else
+                        Arg_Index := @ + 1;
+                        Set_Exit_Status (Exit_Status'Value (Argument (Arg_Index)));
+                     end if;
+                     delay until Time;
+                  end;
                end if;
 
             elsif Opt = "-v" or Opt = "--version" then  ------------------------
@@ -184,7 +207,7 @@ begin
             end if;
 
          end;
-         Arg_Index := Arg_Index + 1;
+         Arg_Index := @ + 1;
       end loop;
 
    end if;

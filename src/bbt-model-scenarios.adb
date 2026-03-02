@@ -152,6 +152,8 @@ package body BBT.Model.Scenarios is
       Location              => Location,
       Comment               => <>,
       Name                  => To_Unbounded_String (Name),
+      Start_Time            => <>,
+      End_Time              => <>,
       Parent                => Parent,
       Step_List             => <>,
       Has_Run               => <>,

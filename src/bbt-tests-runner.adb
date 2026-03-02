@@ -83,6 +83,8 @@ package body BBT.Tests.Runner is
          return;
       end if;
 
+      Set_Start_Time (Step);
+
       if Step.Has_Syntax_Error then
       -- Fixme: defensive code that should be replaced by
       -- an assertion.
@@ -186,6 +188,7 @@ package body BBT.Tests.Runner is
                           Step.Location);
 
       end case;
+      Set_End_Time (Step);
 
    exception
       when E : others =>
@@ -213,6 +216,8 @@ package body BBT.Tests.Runner is
          Put_Debug_Line ("  ====== Running Scen " & Scen.Name'Image);
          Scen.Has_Run := True;
 
+         Set_Start_Time (Scen);
+
          Put_Scenario_Start (Scen, Verbosity);
 
          Step_Processing : for Step of Scen.Step_List loop
@@ -226,12 +231,28 @@ package body BBT.Tests.Runner is
          end loop Step_Processing;
 
          Put_Scenario_Result (Scen, Verbosity);
+         Set_End_Time (Scen);
 
       end if;
 
       IO.New_Line (Verbosity => Verbose);
 
    end Run_Scenario;
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Feature (F : in out Feature_Type'Class) is
+   begin
+      Writers.Put_Feature_Start (F);
+      Set_Start_Time (F);
+
+      if F.Scenario_List.Is_Empty then
+         Put_Warning ("No scenario in feature " & F.Name'Image & "  ",
+                      F.Location);
+      else
+         Run_Scenario_List (F.Scenario_List);
+      end if;
+      Set_End_Time (F);
+   end Run_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Run_Background (Scen : in out Scenario_Type'Class) is
@@ -320,6 +341,8 @@ package body BBT.Tests.Runner is
          return;
       end if;
 
+      Set_Start_Time (Doc);
+
       declare
          Path_To_Scen  : constant String
            := Short_Path (From_Dir => Settings.Index_Dir,
@@ -339,28 +362,23 @@ package body BBT.Tests.Runner is
          -- (that is not in a Feature)
          Run_Scenario_List (Doc.Scenario_List);
          if IO.Some_Error and Settings.Stop_On_Error then
+            Set_End_Time (Doc);
             return;
          end if;
 
          for F of Doc.Feature_List loop
             -- Then run scenarios attached to each Feature
-            Writers.Put_Feature_Start (F);
-
-            if F.Scenario_List.Is_Empty then
-               Put_Warning
-                 ("No scenario in feature " & F.Name'Image & "  ",
-                  F.Location);
-            else
-               Run_Scenario_List (F.Scenario_List);
-
-               if IO.Some_Error and Settings.Stop_On_Error then
-                  return;
-               end if;
+            Run_Feature (F);
+            if IO.Some_Error and Settings.Stop_On_Error then
+               Set_End_Time (Doc);
+               return;
             end if;
 
          end loop;
 
       end;
+
+      Set_End_Time (Doc);
 
       Created_File_List.Delete_All;
       -- All files and dir created during bbt run of this document

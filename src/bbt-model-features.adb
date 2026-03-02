@@ -54,6 +54,8 @@ package body BBT.Model.Features is
       Location      => Location,
       Comment       => <>,
       Name          => Name,
+      Start_Time    => <>,
+      End_Time      => <>,
       Parent        => Node_Access (Parent),
       Scenario_List => <>,
       Background    => <>);

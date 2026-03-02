@@ -54,6 +54,8 @@ package body BBT.Model.Documents is
       Location        => Location,
       Comment         => Comment,
       Name            => Name,
+      Start_Time      => <>,
+      End_Time        => <>,
       Scenario_List   => <>,
       Feature_List    => <>,
       Background      => <>);

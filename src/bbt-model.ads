@@ -5,12 +5,14 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Strings.Unbounded,
+with Ada.Calendar,
+     Ada.Strings.Unbounded,
      BBT.IO,
      BBT.Settings,
      Text_Utilities;
 
-use Ada.Strings.Unbounded,
+use Ada.Calendar,
+    Ada.Strings.Unbounded,
     BBT.IO,
     Text_Utilities;
 
@@ -36,10 +38,12 @@ private package BBT.Model is
 
    -- --------------------------------------------------------------------------
    type Root_Node is abstract tagged record
-      Filtered : Boolean          := Filtered_By_Default;
-      Location : Location_Type    := No_Location;
-      Comment  : Text             := Empty_Text;
-      Name     : Unbounded_String := Null_Unbounded_String;
+      Filtered   : Boolean           := Filtered_By_Default;
+      Location   : Location_Type     := No_Location;
+      Comment    : Text              := Empty_Text;
+      Name       : Unbounded_String  := Null_Unbounded_String;
+      Start_Time : Ada.Calendar.Time := Ada.Calendar.Clock;
+      End_Time   : Ada.Calendar.Time := Ada.Calendar.Clock;
    end record;
 
    type Node_Access is not null access all Root_Node'Class;
@@ -48,7 +52,17 @@ private package BBT.Model is
      (N : in out Root_Node);
    procedure Unfilter
      (N : in out Root_Node);
-   -- Mark the item as filtered
+    procedure Set_Start_Time
+     (N : in out Root_Node);
+    procedure Set_End_Time
+     (N : in out Root_Node);
+
+   -- --------------------------------------------------------------------------
+   -- Calculate the elapsed time (duration) between Start_Time and End_Time
+   -- --------------------------------------------------------------------------
+   function Elapsed_Time (N : Root_Node'Class) return Duration;
+
+  -- Mark the item as filtered
    procedure Apply_Filters_To
      (N : in out Root_Node) is abstract;
    function Has_Background
