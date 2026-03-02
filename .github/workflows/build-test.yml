@@ -70,7 +70,7 @@ jobs:
         if: always()  # even if tests fails
         with:
           name: test-results
-          path: docs/tests_results/Linux/features_results.xml
+          path: docs/tests_results/${OS_PLATFORM}/features_results.xml
           
       - name: tests results publishing
         uses: mikepenz/action-junit-report@v4
