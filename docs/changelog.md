@@ -8,7 +8,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - **[0.2.1-dev] - 2026--**
   - [Added]   Feature #28: production of a junit.xml file through --junit option
-  - [Added]   new `then file matches regexp` syntax
+  - [Added]   new `file matches regexp` syntax
   
 - **[0.2.0] - 2025-07-02**
   - [Changed] `--output` is now deprecated and replaced with `--index` 
@@ -30,25 +30,26 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
   - [changed] Close #9  (error code block fenced instead of line prefixed with "|")
   - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
+  - [Added]   `Output matches regexp` syntax added.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
-  - [Added]   `Given the file containing` now accept code fenced block content .
+  - [Added]   `Given the file containing` now accept code fenced block content.
   - [Changed] The template file (produce with -ct) is now more complete, so that a user could start with it without reading the doc.
   - [Added]   Added robustness tests on missing code block marks in scenario files.
   - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
   - [Added]   First implementation of a progress bar, `-sb` option
   - [Changed] On the command line, commands no more start with '-' or '--' (previous form still taken into account for now)
   - [Fixed]   Fixes #7 
-  - [Added]   "not equal to file" form added
+  - [Added]   "not equal to file" syntax added
 
 - **[0.0.6] - 2024-14-12**
   - [Fixed]   Ambiguity in all steps with a `string` object : if there is the `file` keyword in the object
               part of the step, then the expected output is in the file, otherwise, it's the string.
   - [Fixed]   `explain` output is now readable!
   - [Added]   `-k` | `--keep_going` implemented. Without, bbt stop when a test fails.
-  - [Added]   *file is equal to file* form added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
+  - [Added]   *file is equal to file* syntax added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Added]   `--strict` implemented to get warning on steps not in GWT order
-  - [Added]   *output|file doesn't contain* form added
+  - [Added]   *output|file doesn't contain* syntax added
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
   - [Fixed]   .out files not removed when using `--cleanup`
   - [Fixed]   Incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax

@@ -1253,16 +1253,12 @@
    - OK : Given the file `simple_test.md` containing  
    - OK : When I run `./bbt --junit result.xml simple_test.md`  
    - OK : Then I get no error  
-   - **NOK** : And file `result.xml` contains (../docs/features/B160_JUnit_XML_Export.md:63:)  
-../docs/features/B160_JUnit_XML_Export.md:63: Error: result.xml does not contain expected:  
-~~~
-<?xml version="1.0" encoding="UTF-8"?>  
-<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="0.0"  
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"  
-    <testcase name="Passing test" classname="" time="0.0"
-~~~
-  
-   - [ ] scenario   [1 : Basic file with only a single scenario](../../features/B160_JUnit_XML_Export.md) **fails**  
+   - OK : And file `result.xml` contains `<?xml version="1.0" encoding="UTF-8"?>`  
+   - OK : And file `result.xml` matches `<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - OK : And file `result.xml` matches `  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - OK : And file `result.xml` matches `    <testcase name="Passing test" classname="" time="[0-9]*\.[0-9]*"/>`  
+   - OK : And file `result.xml` contains  
+   - [X] scenario   [1 : Basic file with only a single scenario](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: Skipped tests count  
    ### Background: [](../../features/B160_JUnit_XML_Export.md): 
@@ -1275,13 +1271,8 @@
    - OK : Given there is no `all_results.xml` file  
    - OK : When I successfully run `./bbt --junit all_results.xml skipped_count_test.md`  
    - OK : Then I get no error  
-   - **NOK** : And file `all_results.xml` contains (../docs/features/B160_JUnit_XML_Export.md:94:)  
-../docs/features/B160_JUnit_XML_Export.md:94: Error: all_results.xml does not contain expected:  
-~~~
-<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="0.0">
-~~~
-  
-   - [ ] scenario   [1: both scenario are run](../../features/B160_JUnit_XML_Export.md) **fails**  
+   - OK : And file `all_results.xml` matches `<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - [X] scenario   [1: both scenario are run](../../features/B160_JUnit_XML_Export.md) pass  
 
    ### Background: [](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `file1` file  
@@ -1292,13 +1283,8 @@
    ### Scenario: [2 : one scenario is skipped](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `windows_results.xml` file  
    - OK : When I successfully run `./bbt --junit windows_results.xml --select @Windows_Specific skipped_count_test.md`  
-   - **NOK** : Then file `windows_results.xml` contains (../docs/features/B160_JUnit_XML_Export.md:105:)  
-../docs/features/B160_JUnit_XML_Export.md:105: Error: windows_results.xml does not contain expected:  
-~~~
-<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="0.0">
-~~~
-  
-   - [ ] scenario   [2 : one scenario is skipped](../../features/B160_JUnit_XML_Export.md) **fails**  
+   - OK : Then file `windows_results.xml` matches `<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="[0-9]*\.[0-9]*">`  
+   - [X] scenario   [2 : one scenario is skipped](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: xml robustness  
    ### Scenario: [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md): 
@@ -1306,27 +1292,20 @@
    - OK : Given the file `escape_test.md` containing  
    - OK : When I run `./bbt --junit result2.xml escape_test.md`  
    - OK : Then I get no error  
-   - **NOK** : And file `result2.xml` contains (../docs/features/B160_JUnit_XML_Export.md:127:)  
-../docs/features/B160_JUnit_XML_Export.md:127: Error: result2.xml does not contain expected:  
-~~~
-<?xml version="1.0" encoding="UTF-8"?>  
-<testsuites name="result2" tests="1" failures="0" errors="0" skipped="0" time="0.0"  
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"  
-    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="0.0"/>  
-  </testsuite>  
-</testsuites> 
-~~~
-  
-   - [ ] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) **fails**  
+   - OK : And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`  
+   - [X] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: Time Attribute  
    ### Scenario: [](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no file `time_attribute.xml`  
    - OK : Given the file `time_attribute.md` containing  
    - OK : When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`  
-   - **NOK** : Then file `time_attribute.xml` matches `<testsuites name="time_attribute" .* time="1.5[0-9]*">` (../docs/features/B160_JUnit_XML_Export.md:172:)  
-../docs/features/B160_JUnit_XML_Export.md:172: Error: File:  time_attribute.xml does not match expected:  <testsuites name="time_attribute" .* time="1.5[0-9]*">  
-   - [ ] scenario   [](../../features/B160_JUnit_XML_Export.md) **fails**  
+   - OK : Then file `time_attribute.xml` matches `<testsuites .* time="1.6[0-9]*">`  
+   - OK : And  file `time_attribute.xml` matches ` *<testsuite .* time="1.6[0-9]*">`  
+   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S1" .* time="0.1[0-9]*"/>`  
+   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S2" .* time="0.6[0-9]*"/>`  
+   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S3" .* time="0.8[0-9]*"/>`  
+   - [X] scenario   [](../../features/B160_JUnit_XML_Export.md) pass  
 
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
@@ -1492,12 +1471,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 138 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 5     |
-| Successful | 133   |
+| Failed     | 0     |
+| Successful | 138   |
 | Empty      | 0     |
 | Not Run    | 0     |
 

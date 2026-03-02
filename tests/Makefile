@@ -76,7 +76,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	--cleanup $(EXCLUDE) \
 	-q -sb --human_match \
 	--generate_badge $(RESULTS_DIR)/badge.url \
-	--junit features.xml \
+	--junit $(RESULTS_DIR)/features_results.xml \
 	--index $(RESULTS_DIR)/features_results.md \
 	../docs/features 
 	@ echo
@@ -112,7 +112,8 @@ doc: $(RESULTS_DIR)
 
 clean:
 	@ - rm -f *.out main bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md
-	@ - rm -f all_results.xml result2.xml time_attribute.xml features.xml result.xml windows_results.xml file1.tmp
+	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
+	@ - rm -f time_attribute.md escape_test.md simple_test.md
 	@ - rm -rf dir*
 	@ $(MAKE) clean --directory=file_utilities_tests
 	

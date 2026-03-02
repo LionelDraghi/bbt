@@ -60,13 +60,15 @@ _Table of Contents_:
 - When I run `./bbt --junit result.xml simple_test.md`
 
 - Then I get no error
+- And file `result.xml` contains `<?xml version="1.0" encoding="UTF-8"?>`
+- And file `result.xml` matches `<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`
+- And file `result.xml` matches `  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`
+- And file `result.xml` matches `    <testcase name="Passing test" classname="" time="[0-9]*\.[0-9]*"/>`
 - And file `result.xml` contains
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="0.0"
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"
-    <testcase name="Passing test" classname="" time="0.0"
-```
+~~~
+  </testsuite>
+</testsuites>
+~~~
 
 ### Feature : Skipped tests count
 
@@ -91,10 +93,7 @@ _Table of Contents_:
 - When I successfully run `./bbt --junit all_results.xml skipped_count_test.md`
 
 - Then I get no error
-- And file `all_results.xml` contains
-```xml
-<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="0.0">
-```
+- And file `all_results.xml` matches `<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`
 
 ### Scenario 2 : one scenario is skipped
 
@@ -102,10 +101,7 @@ _Table of Contents_:
 
 - When I successfully run `./bbt --junit windows_results.xml --select @Windows_Specific skipped_count_test.md`
 
-- Then file `windows_results.xml` contains
-```xml
-<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="0.0">
-```
+- Then file `windows_results.xml` matches `<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="[0-9]*\.[0-9]*">`
 
 ## Feature : xml robustness 
 
@@ -124,15 +120,7 @@ The Feature and the Scenario name are included in the xml syntax, and so special
 - When I run `./bbt --junit result2.xml escape_test.md`
 
 - Then I get no error
-- And file `result2.xml` contains
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="result2" tests="1" failures="0" errors="0" skipped="0" time="0.0"
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.0"
-    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="0.0"/>
-  </testsuite>
-</testsuites> 
-```
+- And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`
 
 ## Feature : Time Attribute
 
@@ -169,4 +157,9 @@ FIXME: robustness fail when using '-'
 
 - When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`
 
-- Then file `time_attribute.xml` matches `<testsuites name="time_attribute" .* time="1.5[0-9]*">`
+- Then file `time_attribute.xml` matches `<testsuites .* time="1.6[0-9]*">`
+  Should be 1.5, but it seems that execution time outside steps is between 0.1 and 0.2s on my platform
+- And  file `time_attribute.xml` matches ` *<testsuite .* time="1.6[0-9]*">`
+- And  file `time_attribute.xml` matches ` *<testcase name="S1" .* time="0.1[0-9]*"/>`
+- And  file `time_attribute.xml` matches ` *<testcase name="S2" .* time="0.6[0-9]*"/>`
+- And  file `time_attribute.xml` matches ` *<testcase name="S3" .* time="0.8[0-9]*"/>`

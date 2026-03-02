@@ -37,6 +37,8 @@
 | Then  |         | `file` | contains         |        | FILE_CONTAINS           |     X      |  
 | Then  |         | `file` | contains         | `file` | FILE_CONTAINS           |            |  
 | Then  |         | `file` | contains         | `text` | FILE_CONTAINS           |            |  
+| Then  |         | `file` | matches          | `text` | FILE_MATCHES            |            |  
+| Then  |         | `file` | does not match   | `text` | FILE_DOES_NOT_MATCH     |            |  
 | Then  |         | `file` | is               |        | FILE_IS                 |     X      |  
 | Then  |         | `file` | is               | `file` | FILE_IS                 |            |  
 | Then  |         | `file` | is               | `text` | FILE_IS                 |            |  

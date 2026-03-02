@@ -8,26 +8,83 @@ A bbt file contains at least :
 1. a Scenario header, that is a line starting with "# Scenario : "  
 2. some Steps, that is lines starting with "- Given", "- When" or "- Then"  
 
-Minimal example :  
-
+**Example :**  
     ## Scenario : getting gcc version  
     - When I run `gcc --version`  
     - Then I get `14.2.0`  
 
-## Structure of the file  
+## File Structure  
 
-Several scenarios may be organized in "Feature".  
+    [# Background] (at most one per file))
+
+    [# Feature] (any number of features per file)
+
+    [# Background] (at most one per Feature)
+
+    # Scenario 1 (any number of scenarios per feature)
+    - Given/When/Then step
+    [- Given/When/Then/And/But step] (any number of steps per scenario)
+
+**Example :**  
+
+    # Feature : Case sensitivity control 
+
+    ## Scenario : default behavior, no option  
+    - When I run `grep xyz input.txt`  
+    - Then ...  
+
+    ## Scenario : case insensitive search  
+    - When I run `grep -i xyz input.txt`  
+    - Then ...  
+
+### Background  
+
+Preconditions common to several scenarios may be put in a Background section, before scenarios :  
+
+    ### Background:  
+    - Given there is no `input.txt` file  
+    - Given there is a `tmp` dir  
+
+Background scope is logical : if it appears at the beginning of the file, it applies to all  
+scenario in the file, if it appears at the beginning of a feature, it apply only  
+to the scenarios of this feature.  
+If there is both, Backgrounds are run in appearance order.  
+
+**Example :**  
+
+    ## Background 1 
+    - Given there is no `config.ini` file  
+    - Given ...  
+
+    # Feature A  
+
+    ## Scenario A.1  
+    Background 1 will run here  
+    - When I run `grep -i xyz input.txt`  
+    - Then ...  
+
+    # Feature B  
+
+    ## Background 2 
+    - Given ...  
+
+    ## Scenario B.1  
+    Background 1 run here  
+    Background 2 run here  
+    - When ...  
+
 Note that the only headers reserved for bbt uses are "Feature", "Scenario" or "Example", and "Background"  
-Other header will be ignored by bbt.  
+(Example is a synonym for Scenario).  
+Header level is not taken into account : `# Scenario` is equivalent to `#### Scenario`.  
 
-## Steps  
+### Steps  
 
-Steps are the most important part of bbt files.  
-- "Given" steps put the system in a known state  
-- "When"  steps run defined actions  
-- "Then"  steps observes outcomes  
+Steps are the most important part of bbt files, they perform the actions and checks.  
+- Given [setup condition]  
+- When  [action to perform]  
+- Then  [expected result]  
 
-Examples of steps:  
+**Examples of steps:**  
 
     - Given there is no `.config` dir
     - Given the `config.ini` file
@@ -44,7 +101,6 @@ Examples of steps:
       (Equivalent to both lines "- When I run `xxx`" and "- Then I Get No Error")
     - Then there is no output
     - Then I get no error
-    - Then I get an error
     - Then output is `sut v0.1.0` (Equivalent "Then I get...")
 
 You can continue a list of Given / When / Then with "And" or "But":  
@@ -54,9 +110,11 @@ You can continue a list of Given / When / Then with "And" or "But":
     - But  output doesn't contain `Warning:`
     - And  output does not contain `Error:`  
 
-## Expected output  
+*And* and *But* are synonymous of the *Given* / *When* / *Then* that preceedes.  
 
-Expected output is given in three possible ways :  
+### Parameters  
+
+Parameters are given in three possible ways :  
   1. as a string:
 
     - Then I get `string`
@@ -71,9 +129,11 @@ Expected output is given in three possible ways :
 
   3. in an external file:
 
-    - Then I get file `expected.txt`  
+    - Then I get the content of file `expected.txt`  
 
      Note in that case the mandatory "file" keyword  
+
+### Matching level  
 
 Above forms test that the output is exactly what is given.  
 If what you want is just test that the output contains something, then use the "contains" keyword:  
@@ -87,13 +147,14 @@ If what you want is search for some pattern, then use the "matches" keyword, fol
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  
 
-## Background  
+### Other content of the file  
 
-Preconditions common to several scenarios may be put in a Background section, before scenarios :  
-
-    ### Background:  
-    - Given there is no `input.txt` file  
-    - Given there is a `tmp` dir  
+bbt tries not to interfere with file editing and leaves as much flexibility as possible to the writer :  
+- Headers other than Feature / Background / Scenario / Example are ignored by bbt  
+  and there content treated as comment.  
+- meaning that bullet point starting with Given / When / Then / And / But may be used outside of the  
+  considered Headers.  
+- Comments may apper between Header and Steps or even between Steps and code blocks.  
 
 ## Help  
 
