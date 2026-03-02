@@ -189,7 +189,7 @@ For the complete definition of the `bbt` test format and options, refer to the o
 
 ---
 
-## 4.1 `weblogstat` public test suite (version révisée)
+## 4.1 `weblogstat` public test suite
 
 > Reminder: you can run all these tests with:  
 > `bbt cs215_assignment.md`

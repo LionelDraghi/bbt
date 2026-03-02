@@ -6,37 +6,45 @@ metadata:
   author: lionel-draghi
 ---
 
-
 # Purpose
 `bbt` is both:
 1. a format for embedding test scenarios in almost natural english within Markdown documentation;
 2. a tool to run those tests.
 
+# Installation
+1. `alr` : to check if Alire is available
+   - If not, follow instructions at https://www.getada.dev/ 
+
+2. `bbt help` : to check if bbt is available.
+   - If not, `alr get bbt`
+
 # running tests with *bbt* 
 - `bbt help` : shows the help message with all options
+- `bbt help filtering | matching | other` : shows an extended help on the provided topic
+
 - `bbt [run] README.md` : runs all scenarios in the README.md file
-- `bbt --recursive <dir>` : runs all scenarios in all .md files in the given directory
-- `bbt --keep_going <files>` : runs all scenarios in the given files without stopping on the first error
+- `bbt --recursive <dir>` : runs scenarios in all .md files in the given directory
+- `bbt --keep_going <files>` : runs scenarios in the given files without stopping on the first error
 - `bbt --cleanup <files>` : runs scenarios and silently remove input and output files created during the test
-- `bbt --yes <files>` : runs scenarios in the given files, and answer "yes" to all prompts
+- `bbt --yes <files>` : runs scenarios in batch mode, answer "yes" to all prompts
+
 - `bbt README.md --select 'Sanity Check' <files>` : runs only the scenario named "Sanity Check"
 - `bbt README.md --exclude 'Windows_Only' <files>` : do not run scenarios whose title contains Windows_Only
 
 - `bbt --human_match <files>` : (default behavior) ignore casing, white space and empty lines when comparing output to expected output 
 - `bbt --exact_match <files>` : expect exactly the same output
 
+# Fine-tuning scenarios
+- `bbt explain <file>` : explain what bbt undestand from the file, and announce what will be done if the file is "run"
+
 # Writing tests with `bbt` format
 
-`bbt`scenarios are characterized by a Gherkin structure, embedded within whatever structured text file (Markdown, restructured text, etc.).
+`bbt` scenarios are characterized by a Gherkin structure, embedded within structured text file, mainly Markdown, but also restructured text and Asciidoc.
 
-It means that `bbt` will only consider :
-- header starting with **Feature** / **Scenario** / **Example** / **Background**
-- within **Scenario** / **Example** / **Background** section : steps, that is only bullet point starting with **Given** / **When** / **Then** / **And** / **But**.  
-Some of those steps may be followed by a code block, which is considered as part of the step. 
+`bbt create_template` generate a comprehensive description of the file structure in a file named `bbt_template.md`
+(this file is also available at https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_template.md)
 
-All other lines are ignored.
-
-Here is a File example, with comment starting with "-->" at the end of each line to explain how `bbt` will interpret it: 
+Here is a File example, with comments starting with "-->" at the end of each line to explain how `bbt` will interpret it: 
 
 ~~~markdown
 # gcc simple sanity tests  --> ignored by bbt
@@ -72,56 +80,9 @@ Sanity check of a complete compile / link / run sequence : --> ignored by bbt
 - Then the output is `Hello, World!`    --> Step
 ~~~
 
-- Header level is not significant:  
-`# Scenario : `  
-is equal to  
-`### Scenario : `
 
-- *Example* and *Scenario* are synonymous
+****************************************
 
-- If *background* is defined before a *Feature*, it apply to all scenarios of the following features
-
-- If *background* is defined within a *Feature*, it apply to the scenarios of this feature only
-
-- There is max one *background* per *Feature*
-
-- There is max one *background* per *Feature*
-
-- Scenarios must start with Given/When/Then, and And/But can only be used to continue a previous step.
-
-### Scenario structure :
-~~~md
-[# Background] (at most one per file)
-
-[# Feature] (any number of features per file)
-
-   [# Background] (at most one per Feature)
-
-   # Scenario 1 (any number of scenarios per feature)
-
-      - Given/When/Then step
-
-      [- Given/When/Then/And/But step] (any number of steps per scenario) 
-~~~
-
-### Steps structure :
-
-- Given [setup condition]
-- When [action to perform]  
-- Then [expected result]
-
-*And* and *But* are synonymous of the previous *Given* / *When* / *Then*.  
-
-Meaning that 
-~~~md
-- Given [condition 1]
-- And   [condition 2]
-~~~
-is equal to
-~~~md
-- Given [condition 1]
-- Given [condition 2]
-~~~
 
 ### Parameter formatting
 

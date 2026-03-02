@@ -5,6 +5,7 @@
 - [Issues and discussions](#issues-and-discussions)
 - [Development Status](#development-status)
 - [Development environment](#development-environment)
+- [External dependencies](#external-dependencies)
 
 
 ## Design overview
@@ -79,11 +80,13 @@ All test results per platform are then available in docs/tests_results/Windows|L
 - [Discussions](https://github.com/LionelDraghi/bbt/discussions)
 
 ## Development Status
+
 - [Changelog](changelog.md)
 - [Fixme](fixme_index.md)
 - [References to issue in code and tests](issues_index.md)
 
 ## Development environment
+
 Some external tools are required to fully run the Makefile, and 
 I don't know whether they are available on Windows, Mac-OS or even on all Linux distributions.  
 I try to minimise the number of those dependencies, and also try to choose widely available tools.
@@ -92,7 +95,7 @@ No external tools are required to compile and run all tests (within docs/feature
 To avoid external dependencies, a false exe named `sut` (that means Software Under Test) is used for `bbt` tests own needs.  
 Sources of `sut` are in the `tools` sub-directory.
 
-External dependencies:
+## External dependencies
 
 1. For the sake of clarity, the examples (within docs/examples) use a real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.
