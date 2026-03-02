@@ -66,14 +66,14 @@ jobs:
         shell: bash
 
       - name: tests results publishing
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()  # even if tests fails
         with:
           name: test-results
           path: docs/tests_results/Linux/features_results.xml
           
       - name: tests results publishing
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
           report_paths: 'docs/tests_results/Linux/features_results.xml'
