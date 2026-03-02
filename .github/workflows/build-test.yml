@@ -64,3 +64,16 @@ jobs:
       - name: Save summary
         run: cat docs/tests_results/${OS_PLATFORM}/features_results.md > ${GITHUB_STEP_SUMMARY}
         shell: bash
+
+      - name: tests results publishing
+        uses: actions/upload-artifact@v3
+        if: always()  # even if tests fails
+        with:
+          name: test-results
+          path: docs/tests_results/Linux/features_results.xml
+          
+      - name: tests results publishing
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: 'docs/tests_results/Linux/features_results.xml'
