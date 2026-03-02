@@ -9,7 +9,6 @@ with Ada.Strings.Text_Buffers;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;              use Ada.Text_IO;
 with Ada.Calendar;
-with Ada.Calendar.Formatting;
 
 use Ada;
 

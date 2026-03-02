@@ -19,7 +19,8 @@ Usage:
    sut create|read        file_name
    sut append      "Text" file_name
    sut delete             file_name   : prompt user to confirm deletion
-   sut read_env           var_name    : display environment variable
+   sut read_env    var_name           : display environment variable
+   sut delay       n [return_code]    : wait for n seconds before returning code, success if none
    sut -h | --help or no command line : display this message
    sut -v | --version                 : display a version string
 
