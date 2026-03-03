@@ -10,13 +10,11 @@ Meaning that you can have `--quiet` and no standard output, the index file will 
 
 In this test, a scenario is run in quiet / normal / verbose mode while writing an index, and check that the index file is always equal to the verbose output.
 
-_Table of Contents:_
-- [Background:](#background)
-- [Scenario: Quiet mode run](#scenario-quiet-mode-run)
-- [Scenario: Default mode run](#scenario-default-mode-run)
-- [Scenario: Verbose mode run](#scenario-verbose-mode-run)
+- [Scenario: Successful run index file](#scenario-successful-run-index-file)
+- [Scenario: Unsuccessful run index file](#scenario-unsuccessful-run-index-file)
 
-### Background:
+
+### Scenario: Successful run index file
 
 - Given the file `OK_scen.md`
   ~~~md
@@ -31,6 +29,23 @@ _Table of Contents:_
   - When I run `./sut -h`
   - Then output contains `Usage:`
   ~~~
+- And there is no `index1.md` file
+- And there is no `index2.md` file
+- And there is no `verbose_output_OK.md` file
+
+Reference output production in verbose mode
+- When I successfully run `./bbt -c --yes -v OK_scen.md --index verbose_output_OK.md`
+
+Compare with quiet mode output
+- When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`
+- Then `index_1.md` is equal to file `verbose_output_OK.md`
+  
+Compare with default mode output
+- When I successfully run `./bbt -c --yes    OK_scen.md --index index_2.md`
+- Then `index_2.md` is equal to file `verbose_output_OK.md`
+
+
+### Scenario: Unsuccessful run index file
 
 - Given the file `NOK_scen.md`
   ~~~md
@@ -38,96 +53,20 @@ _Table of Contents:_
   - When I run `./sut -v`
   - Then I get `v3.1`
   ~~~
+- And there is no `index3.md` file
+- And there is no `index4.md` file
+- And there is no `verbose_output_NOK.md` file
 
-- Given the file `verbose_output_OK.md`
-  ~~~md
-  
- # Document: [OK_scen.md](OK_scen.md)  
-  ## Feature: Getting info  
-   ### Background: [setup](OK_scen.md): 
-   - OK : When I run `./sut --help`  
-   - OK : Then the output contains `Return code:`  
-   - [X] background [setup](OK_scen.md) pass  
-
-   ### Scenario: [Getting the version](OK_scen.md): 
-   - OK : When I run `./sut -v`  
-   - OK : Then I get `sut version 1.0`  
-   - [X] scenario   [Getting the version](OK_scen.md) pass  
-
-   ### Background: [setup](OK_scen.md): 
-   - OK : When I run `./sut --help`  
-   - OK : Then the output contains `Return code:`  
-   - [X] background [setup](OK_scen.md) pass  
-
-   ### Scenario: [Getting help](OK_scen.md): 
-   - OK : When I run `./sut -h`  
-   - OK : Then output contains `Usage:`  
-   - [X] scenario   [Getting help](OK_scen.md) pass  
-
-
-## Summary : **Success**, 2 scenarios OK
-
-| Status     | Count |
-|------------|-------|
-| Failed     | 0     |
-| Successful | 2     |
-| Empty      | 0     |
-| Not Run    | 0     |
-
-  ~~~
-
-- Given the file `verbose_output_NOK.md`
-  ```md
-  # Document: [NOK_scen.md](NOK_scen.md)  
-   ### Scenario: [sut version](NOK_scen.md): 
-   - OK : When I run `./sut -v`  
-   - **NOK** : Then I get `v3.1` (NOK_scen.md:3:)  
-  NOK_scen.md:3: Error: Output:  
-  ~~~
-  sut version 1.0
-  ~~~
-  not equal to expected:  
-  ~~~
-  v3.1
-  ~~~
-  
-   - [ ] scenario   [sut version](NOK_scen.md) **fails**  
-
-
-  ## Summary : **Fail**
-
-  | Status     | Count |
-  |------------|-------|
-  | Failed     | 1     |
-  | Successful | 0     |
-  | Empty      | 0     |
-  | Not Run    | 0     |
-  ```
-
-### Scenario: Quiet mode run
-
-- When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`
-- Then `index_1.md` is equal to file `verbose_output_OK.md`
-  
-- When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`
+Reference output production in verbose mode
+- When I run `./bbt -c --yes -v NOK_scen.md --index verbose_output_NOK.md`
 - Then I get an error
-- And `index_2.md` is equal to file `verbose_output_NOK.md`
 
-### Scenario: Default mode run
+- When I run `./bbt -c --yes -q NOK_scen.md --index index_3.md`
+- Then I get an error
+- And `index_3.md` is equal to file `verbose_output_NOK.md`
 
-- When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`
-- Then `index_3.md` is equal to file `verbose_output_OK.md`
-
+Compare with default mode output
 - When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`
 - Then  I get an error
 - And `index_4.md` is equal to file `verbose_output_NOK.md`
-
-### Scenario: Verbose mode run
-
-- When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`
-- Then `index_5.md` is equal to file `verbose_output_OK.md`
-
-- When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`
-- Then I get an error
-- And `index_6.md` is equal to file `verbose_output_NOK.md`
 

@@ -1191,50 +1191,32 @@
 
 
 # Document: [B140_Index_File.md](../../features/B140_Index_File.md)  
-   ### Background: [](../../features/B140_Index_File.md): 
+   ### Scenario: [Successful run index file](../../features/B140_Index_File.md): 
    - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Quiet mode run](../../features/B140_Index_File.md): 
+   - OK : And there is no `index1.md` file  
+   - OK : And there is no `index2.md` file  
+   - OK : And there is no `verbose_output_OK.md` file  
+   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index verbose_output_OK.md`  
    - OK : When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`  
    - OK : Then `index_1.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`  
-   - OK : Then I get an error  
-   - OK : And `index_2.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Quiet mode run](../../features/B140_Index_File.md) pass  
+   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_2.md`  
+   - OK : Then `index_2.md` is equal to file `verbose_output_OK.md`  
+   - [X] scenario   [Successful run index file](../../features/B140_Index_File.md) pass  
 
-   ### Background: [](../../features/B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
+   ### Scenario: [Unsuccessful run index file](../../features/B140_Index_File.md): 
    - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Default mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`  
-   - OK : Then `index_3.md` is equal to file `verbose_output_OK.md`  
+   - OK : And there is no `index3.md` file  
+   - OK : And there is no `index4.md` file  
+   - OK : And there is no `verbose_output_NOK.md` file  
+   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index verbose_output_NOK.md`  
+   - OK : Then I get an error  
+   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_3.md`  
+   - OK : Then I get an error  
+   - OK : And `index_3.md` is equal to file `verbose_output_NOK.md`  
    - OK : When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`  
    - OK : Then  I get an error  
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Default mode run](../../features/B140_Index_File.md) pass  
-
-   ### Background: [](../../features/B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Verbose mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`  
-   - OK : Then `index_5.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`  
-   - OK : Then I get an error  
-   - OK : And `index_6.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Verbose mode run](../../features/B140_Index_File.md) pass  
+   - [X] scenario   [Unsuccessful run index file](../../features/B140_Index_File.md) pass  
 
 
 # Document: [B150_Deprecated_Options.md](../../features/B150_Deprecated_Options.md)  
@@ -1456,12 +1438,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 137 scenarios OK
+## Summary : **Success**, 136 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 137   |
+| Successful | 136   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

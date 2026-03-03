@@ -81,6 +81,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	--index $(RESULTS_DIR)/features_results.md  \
 	../docs/features 
 	@ echo
+	@ - rm -f verbose_output_NOK.md verbose_output_OK.md
 
 	@ # Check examples
 	@ echo 2. examples check ================
