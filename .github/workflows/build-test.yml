@@ -30,8 +30,8 @@ jobs:
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v2
-        with:
-          version: 2.1.0 # Remove this option to use the default (latest stable release)
+        # with:
+        #   version: 2.1.0 # Remove this option to use the default (latest stable release)
             
       - name: Setup `rpl` (Windows)
         if: runner.os == 'Windows'
@@ -47,6 +47,7 @@ jobs:
       - name: Install packages
         shell: bash
         run: |
+          rustup update
           cargo install mlc
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
@@ -78,4 +79,4 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: 'docs/tests_results/Linux/features_results.xml'
+          report_paths: 'docs/tests_results/${OS_PLATFORM}/features_results.xml'

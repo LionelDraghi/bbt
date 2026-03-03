@@ -1296,17 +1296,6 @@
    - [X] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
-   ### Scenario: [](../../features/B160_JUnit_XML_Export.md): 
-   - OK : Given there is no file `time_attribute.xml`  
-   - OK : Given the file `time_attribute.md` containing  
-   - OK : When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`  
-   - OK : Then file `time_attribute.xml` matches `<testsuites .* time="1.6[0-9]*">`  
-   - OK : And  file `time_attribute.xml` matches ` *<testsuite .* time="1.6[0-9]*">`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S1" .* time="0.1[0-9]*"/>`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S2" .* time="0.6[0-9]*"/>`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S3" .* time="0.8[0-9]*"/>`  
-   - [X] scenario   [](../../features/B160_JUnit_XML_Export.md) pass  
-
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test](../../features/C010_Empty_scenarios.md): 
@@ -1467,12 +1456,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 138 scenarios OK
+## Summary : **Success**, 137 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 138   |
+| Successful | 137   |
 | Empty      | 0     |
-| Not Run    | 0     |
+| Not Run    | 1     |
 

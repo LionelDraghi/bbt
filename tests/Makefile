@@ -73,11 +73,12 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ # Then test all the features
 	@ echo 1. features tests ================
 	@ ./bbt --yes --keep_going \
+	--exclude @Flaky     \
 	--cleanup $(EXCLUDE) \
 	-q -sb --human_match \
-	--generate_badge $(RESULTS_DIR)/badge.url \
+	--generate_badge $(RESULTS_DIR)/badge.url   \
 	--junit $(RESULTS_DIR)/features_results.xml \
-	--index $(RESULTS_DIR)/features_results.md \
+	--index $(RESULTS_DIR)/features_results.md  \
 	../docs/features 
 	@ echo
 
