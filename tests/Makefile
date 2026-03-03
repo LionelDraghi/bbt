@@ -98,13 +98,13 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 
 	@ # Unit testing
 	@ echo 4. unit testing ==================
-	@ $(MAKE) -s check --directory=file_utilities_tests && echo OK || echo ***** KO
+	@ $(MAKE) -s check EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests && echo OK || echo ***** KO
 	@ echo
 
 	@ - rm -f *.out main tmp.txt output2.txt tmp.md index_*.md
 
 doc: $(RESULTS_DIR)
-	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) --directory=file_utilities_tests
+	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
 	
 	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	echo wget badge ...

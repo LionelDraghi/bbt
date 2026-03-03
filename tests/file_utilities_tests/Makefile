@@ -1,6 +1,6 @@
-# doc target needs $(DOC_DIR)
+# doc target needs $(DOC_DIR) and $(EXE_SUFFIX)
 # Should be called with 
-# 	@ $(MAKE) doc DOC_DIR=$(RESULTS_DIR) --directory=file_utilities_tests 
+# 	@ $(MAKE) doc DOC_DIR=$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests 
 
 .PHONY : clean test_file_utilities
 
@@ -12,11 +12,7 @@ build:
 test_file_utilities: build
 
 check: test_file_utilities
-ifeq ($(PLATFORM), Windows)
-	@ ./test_file_utilities.exe > test_file_utilities.md
-else
-	@ ./test_file_utilities > test_file_utilities.md
-endif
+	@ ./test_file_utilities$(EXE_SUFFIX) > test_file_utilities.md
 	@ echo
 	
 test_file_utilities.md: check

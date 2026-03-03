@@ -59,6 +59,8 @@ jobs:
           fi
 
       - name: Run build and checks
+        env:
+          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ matrix.os == 'macos-latest' && '1' || '' }}
         run: make -k
         
       - name: Save summary
