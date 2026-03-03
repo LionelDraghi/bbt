@@ -47,14 +47,13 @@ jobs:
       - name: Install packages
         shell: bash
         run: |
-          ## rustup update
           cargo install mlc
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
             sudo apt-get install -y rpl
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            brew update
-            brew upgrade
+            ## brew update
+            ## brew upgrade
             brew install rpl
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
             choco install -y wget
