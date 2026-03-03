@@ -1295,7 +1295,7 @@
    - OK : And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`  
    - [X] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) pass  
 
-  ## Feature: Time Attribute  
+  ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
    ### Scenario: [](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no file `time_attribute.xml`  
    - OK : Given the file `time_attribute.md` containing  
@@ -1313,7 +1313,6 @@
    - OK : Given the `no_step_in_scenario.input` file  
    - OK : When I run `./bbt no_step_in_scenario.input`   
    - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And  I get no error  
    - [X] scenario   [No step test](../../features/C010_Empty_scenarios.md) pass  
 
@@ -1321,7 +1320,6 @@
    - OK : Given the `no_step_or_scenario_in_feature.input` file  
    - OK : When I run `./bbt no_step_or_scenario_in_feature.input`   
    - OK : Then the output contains `Warning : No scenario in feature "My_Feature"`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And I get no error  
    - [X] scenario   [No scenario in Feature](../../features/C010_Empty_scenarios.md) pass  
 
@@ -1432,14 +1430,12 @@
    - OK : Given the file `No_Scenario.md`  
    - OK : When I run `./bbt No_Scenario.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Steps without scenario header](../../features/C080_missing_scenario.md) pass  
 
    ### Scenario: [Empty file](../../features/C080_missing_scenario.md): 
    - OK : Given the file `empty.md`  
    - OK : When I run `./bbt empty.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Empty file](../../features/C080_missing_scenario.md) pass  
 
 

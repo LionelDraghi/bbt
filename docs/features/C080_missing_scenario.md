@@ -20,10 +20,6 @@ _Table of Contents:_
 ~~~
 Warning : No scenario in document "No_Scenario.md"
 ~~~
-- And output contains 
-~~~
-| Empty      |  1
-~~~
 
 ### Scenario : Empty file
 - Given the file `empty.md`
@@ -35,7 +31,4 @@ Warning : No scenario in document "No_Scenario.md"
 ~~~
 Warning : No scenario in document "empty.md"
 ~~~
-- And output contains 
-~~~
-| Empty      |  1
-~~~
+

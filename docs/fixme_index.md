@@ -9,7 +9,7 @@ Location | Text
 [docs/proposed_features/contains_line.md](../docs/proposed_features/contains_line.md):5| not yet implemented.
 [src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):215|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-cmd_line.ads](../src/bbt-cmd_line.ads):28|   procedure Create_Template; --  shouldn't be here
-[src/bbt-model-documents.adb](../src/bbt-model-documents.adb):217|      --  to be replaced with a Reduce?
+[src/bbt-model-documents.adb](../src/bbt-model-documents.adb):213|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):50|         --  need a test

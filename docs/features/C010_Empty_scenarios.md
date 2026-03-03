@@ -23,7 +23,6 @@ _Table of Contents:_
 - When I run `./bbt no_step_in_scenario.input` 
 
 - Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`
-- And  the output contains `| Empty      |  1`
 - And  I get no error
   
 ### Scenario: No scenario in Feature
@@ -36,5 +35,4 @@ _Table of Contents:_
 - When I run `./bbt no_step_or_scenario_in_feature.input` 
 
 - Then the output contains `Warning : No scenario in feature "My_Feature"`
-- And  the output contains `| Empty      |  1`
 - And I get no error

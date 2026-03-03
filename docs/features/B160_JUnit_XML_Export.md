@@ -44,7 +44,7 @@ _Table of Contents_:
     - [Scenario 2 : one scenario is skipped](#scenario-2--one-scenario-is-skipped)
   - [Feature : xml robustness](#feature--xml-robustness)
 - [Scenario: Test XML escaping with special characters](#scenario-test-xml-escaping-with-special-characters)
-  - [Feature : Time Attribute](#feature--time-attribute)
+  - [Feature : Time Attribute (@Flaky results depends on execution time on the plafform)](#feature--time-attribute-flaky-results-depends-on-execution-time-on-the-plafform)
     - [Scenario:](#scenario)
 
 ## Scenario 1 : Basic file with only a single scenario
@@ -122,7 +122,7 @@ The Feature and the Scenario name are included in the xml syntax, and so special
 - Then I get no error
 - And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`
 
-## Feature : Time Attribute
+## Feature : Time Attribute (@Flaky results depends on execution time on the plafform) 
 
 This feature tests that timestamp fields are properly included in JUnit XML output at all levels.
 This test is using sut capability to wait before returning according to a command line parameter thanks to the `delay` command.

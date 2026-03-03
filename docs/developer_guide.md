@@ -73,6 +73,8 @@ Tests are run in the tests directory, so that docs will not be polluted with pos
 
 All test results per platform are then available in docs/tests_results/Windows|Linux|Darwin
 
+ > [!NOTE] On Mac, GNAT_FILE_NAME_CASE_SENSITIVE must be set to 1 (refer to https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) othwise some tests will fail. 
+
 
 ## Issues and discussions
 
