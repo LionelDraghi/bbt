@@ -482,17 +482,23 @@
    - OK : and output contains   
    - [X] scenario   [version number mismatch](..\..\features\A200_Regexp.md) pass  
 
-   ### Scenario: [Test of "does not match"](..\..\features\A200_Regexp.md): 
+   ### Scenario: [Test of "output does not match"](..\..\features\A200_Regexp.md): 
    - OK : When I run `./sut -v`  
    - OK : Then output does not match `sut version [0-9]+\.[0-9]+\.[0-9]+`  
-   - [X] scenario   [Test of "does not match"](..\..\features\A200_Regexp.md) pass  
+   - [X] scenario   [Test of "output does not match"](..\..\features\A200_Regexp.md) pass  
 
-   ### Scenario: [Test of "does not match" that indeed matches](..\..\features\A200_Regexp.md): 
+   ### Scenario: [Test of "output does not match" that indeed matches](..\..\features\A200_Regexp.md): 
    - OK : Given the new file `wrong_regexp.md`  
    - OK : When I run `./bbt wrong_regexp.md`  
    - OK : Then I get an error  
    - OK : and output contains   
-   - [X] scenario   [Test of "does not match" that indeed matches](..\..\features\A200_Regexp.md) pass  
+   - [X] scenario   [Test of "output does not match" that indeed matches](..\..\features\A200_Regexp.md) pass  
+
+   ### Scenario: [test of "file match"](..\..\features\A200_Regexp.md): 
+   - OK : Given the new file `Cities.txt`  
+   - OK : Then `Cities.txt` match `.*ehera.*`  
+   - OK : And  `Cities.txt` does not match `.*York.*`  
+   - [X] scenario   [test of "file match"](..\..\features\A200_Regexp.md) pass  
 
 
 # Document: [A210_Exact_Match.md](..\..\features\A210_Exact_Match.md)  
@@ -915,7 +921,6 @@
    - OK : When I run `./bbt -k feature1.md`  
    - OK : then output contains  
    - OK : and output contains  
-   - OK : and output matches `feature1.md:9: Error: No error expected, but got one.*`  
    - OK : and output contains  
    - OK : and output contains  
    - [X] scenario   [with `-k`](..\..\features\B080_Keep_Going.md) pass  
@@ -1202,12 +1207,62 @@
    - [X] scenario   [--output option](..\..\features\B150_Deprecated_Options.md) pass  
 
 
+# Document: [B160_JUnit_XML_Export.md](..\..\features\B160_JUnit_XML_Export.md)  
+  ## Feature: JUnit XML Export  
+   ### Scenario: [1 : Basic file with only a single scenario](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no file `result.xml`  
+   - OK : Given the file `simple_test.md` containing  
+   - OK : When I run `./bbt --junit result.xml simple_test.md`  
+   - OK : Then I get no error  
+   - OK : And file `result.xml` contains `<?xml version="1.0" encoding="UTF-8"?>`  
+   - OK : And file `result.xml` matches `<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - OK : And file `result.xml` matches `  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - OK : And file `result.xml` matches `    <testcase name="Passing test" classname="" time="[0-9]*\.[0-9]*"/>`  
+   - OK : And file `result.xml` contains  
+   - [X] scenario   [1 : Basic file with only a single scenario](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+  ## Feature: Skipped tests count  
+   ### Background: [](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no `file1` file  
+   - OK : Given there is no `file2` file  
+   - OK : Given the scenarios file `skipped_count_test.md`   
+   - [X] background [](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+   ### Scenario: [1: both scenario are run](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no `all_results.xml` file  
+   - OK : When I successfully run `./bbt --junit all_results.xml skipped_count_test.md`  
+   - OK : Then I get no error  
+   - OK : And file `all_results.xml` matches `<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - [X] scenario   [1: both scenario are run](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+   ### Background: [](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no `file1` file  
+   - OK : Given there is no `file2` file  
+   - OK : Given the scenarios file `skipped_count_test.md`   
+   - [X] background [](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+   ### Scenario: [2 : one scenario is skipped](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no `windows_results.xml` file  
+   - OK : When I successfully run `./bbt --junit windows_results.xml --select @Windows_Specific skipped_count_test.md`  
+   - OK : Then file `windows_results.xml` matches `<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="[0-9]*\.[0-9]*">`  
+   - [X] scenario   [2 : one scenario is skipped](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+  ## Feature: xml robustness  
+   ### Scenario: [Test XML escaping with special characters](..\..\features\B160_JUnit_XML_Export.md): 
+   - OK : Given there is no file `result2.xml`  
+   - OK : Given the file `escape_test.md` containing  
+   - OK : When I run `./bbt --junit result2.xml escape_test.md`  
+   - OK : Then I get no error  
+   - OK : And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`  
+   - [X] scenario   [Test XML escaping with special characters](..\..\features\B160_JUnit_XML_Export.md) pass  
+
+  ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
+
 # Document: [C010_Empty_scenarios.md](..\..\features\C010_Empty_scenarios.md)  
    ### Scenario: [No step test](..\..\features\C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
    - OK : When I run `./bbt no_step_in_scenario.input`   
    - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And  I get no error  
    - [X] scenario   [No step test](..\..\features\C010_Empty_scenarios.md) pass  
 
@@ -1215,7 +1270,6 @@
    - OK : Given the `no_step_or_scenario_in_feature.input` file  
    - OK : When I run `./bbt no_step_or_scenario_in_feature.input`   
    - OK : Then the output contains `Warning : No scenario in feature "My_Feature"`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And I get no error  
    - [X] scenario   [No scenario in Feature](..\..\features\C010_Empty_scenarios.md) pass  
 
@@ -1326,14 +1380,12 @@
    - OK : Given the file `No_Scenario.md`  
    - OK : When I run `./bbt No_Scenario.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Steps without scenario header](..\..\features\C080_missing_scenario.md) pass  
 
    ### Scenario: [Empty file](..\..\features\C080_missing_scenario.md): 
    - OK : Given the file `empty.md`  
    - OK : When I run `./bbt empty.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Empty file](..\..\features\C080_missing_scenario.md) pass  
 
 
@@ -1365,12 +1417,12 @@
    - [X] scenario   [](..\..\features\C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 132 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 127   |
+| Successful | 132   |
 | Empty      | 0     |
-| Not Run    | 5     |
+| Not Run    | 6     |
 
