@@ -69,13 +69,6 @@ jobs:
         shell: bash
 
       - name: tests results publishing
-        uses: actions/upload-artifact@v4
-        if: always()  # even if tests fails
-        with:
-          name: test-results
-          path: docs/tests_results/${OS_PLATFORM}/features_results.xml
-          
-      - name: tests results publishing
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
