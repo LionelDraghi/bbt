@@ -47,7 +47,7 @@ jobs:
       - name: Install packages
         shell: bash
         run: |
-          rustup update
+          ## rustup update
           cargo install mlc
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
