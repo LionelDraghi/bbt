@@ -1191,50 +1191,32 @@
 
 
 # Document: [B140_Index_File.md](../../features/B140_Index_File.md)  
-   ### Background: [](../../features/B140_Index_File.md): 
+   ### Scenario: [Successful run index file](../../features/B140_Index_File.md): 
    - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Quiet mode run](../../features/B140_Index_File.md): 
+   - OK : And there is no `index1.md` file  
+   - OK : And there is no `index2.md` file  
+   - OK : And there is no `verbose_output_OK.md` file  
+   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index verbose_output_OK.md`  
    - OK : When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`  
    - OK : Then `index_1.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`  
-   - OK : Then I get an error  
-   - OK : And `index_2.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Quiet mode run](../../features/B140_Index_File.md) pass  
+   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_2.md`  
+   - OK : Then `index_2.md` is equal to file `verbose_output_OK.md`  
+   - [X] scenario   [Successful run index file](../../features/B140_Index_File.md) pass  
 
-   ### Background: [](../../features/B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
+   ### Scenario: [Unsuccessful run index file](../../features/B140_Index_File.md): 
    - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Default mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`  
-   - OK : Then `index_3.md` is equal to file `verbose_output_OK.md`  
+   - OK : And there is no `index3.md` file  
+   - OK : And there is no `index4.md` file  
+   - OK : And there is no `verbose_output_NOK.md` file  
+   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index verbose_output_NOK.md`  
+   - OK : Then I get an error  
+   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_3.md`  
+   - OK : Then I get an error  
+   - OK : And `index_3.md` is equal to file `verbose_output_NOK.md`  
    - OK : When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`  
    - OK : Then  I get an error  
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Default mode run](../../features/B140_Index_File.md) pass  
-
-   ### Background: [](../../features/B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](../../features/B140_Index_File.md) pass  
-
-   ### Scenario: [Verbose mode run](../../features/B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`  
-   - OK : Then `index_5.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`  
-   - OK : Then I get an error  
-   - OK : And `index_6.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Verbose mode run](../../features/B140_Index_File.md) pass  
+   - [X] scenario   [Unsuccessful run index file](../../features/B140_Index_File.md) pass  
 
 
 # Document: [B150_Deprecated_Options.md](../../features/B150_Deprecated_Options.md)  
@@ -1295,25 +1277,13 @@
    - OK : And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`  
    - [X] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) pass  
 
-  ## Feature: Time Attribute  
-   ### Scenario: [](../../features/B160_JUnit_XML_Export.md): 
-   - OK : Given there is no file `time_attribute.xml`  
-   - OK : Given the file `time_attribute.md` containing  
-   - OK : When I successfully run `./bbt --junit time_attribute.xml time_attribute.md`  
-   - OK : Then file `time_attribute.xml` matches `<testsuites .* time="1.6[0-9]*">`  
-   - OK : And  file `time_attribute.xml` matches ` *<testsuite .* time="1.6[0-9]*">`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S1" .* time="0.1[0-9]*"/>`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S2" .* time="0.6[0-9]*"/>`  
-   - OK : And  file `time_attribute.xml` matches ` *<testcase name="S3" .* time="0.8[0-9]*"/>`  
-   - [X] scenario   [](../../features/B160_JUnit_XML_Export.md) pass  
-
+  ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
    - OK : When I run `./bbt no_step_in_scenario.input`   
    - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And  I get no error  
    - [X] scenario   [No step test](../../features/C010_Empty_scenarios.md) pass  
 
@@ -1321,7 +1291,6 @@
    - OK : Given the `no_step_or_scenario_in_feature.input` file  
    - OK : When I run `./bbt no_step_or_scenario_in_feature.input`   
    - OK : Then the output contains `Warning : No scenario in feature "My_Feature"`  
-   - OK : And  the output contains `| Empty      |  1`  
    - OK : And I get no error  
    - [X] scenario   [No scenario in Feature](../../features/C010_Empty_scenarios.md) pass  
 
@@ -1432,14 +1401,12 @@
    - OK : Given the file `No_Scenario.md`  
    - OK : When I run `./bbt No_Scenario.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Steps without scenario header](../../features/C080_missing_scenario.md) pass  
 
    ### Scenario: [Empty file](../../features/C080_missing_scenario.md): 
    - OK : Given the file `empty.md`  
    - OK : When I run `./bbt empty.md`  
    - OK : Then output contains   
-   - OK : And output contains   
    - [X] scenario   [Empty file](../../features/C080_missing_scenario.md) pass  
 
 
@@ -1471,12 +1438,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 138 scenarios OK
+## Summary : **Success**, 136 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 138   |
+| Successful | 136   |
 | Empty      | 0     |
-| Not Run    | 0     |
+| Not Run    | 1     |
 
