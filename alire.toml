@@ -34,5 +34,4 @@ command = ["../bbt", "-c", "-q", "-sb", "--yes", "../docs/examples/"]
 [[actions]]
 type = "test"
 directory = "tests/file_utilities_tests/"
-runner = "alire"
 command = ["./test_file_utilities", "-q"]
