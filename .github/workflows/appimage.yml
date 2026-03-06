@@ -15,6 +15,7 @@ permissions: write-all
 jobs:
   release:
     name: Continuous
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04 # Use the oldest supported ubuntu version for greater compatibility.
     steps:
        - name: Checkout
@@ -23,3 +24,4 @@ jobs:
          uses: mgrojo/alr2appimage-action@main
          with:
              alireVersion: "nightly"
+             ### tagName: "${{ github.ref_name }}-continuous
