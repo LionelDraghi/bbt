@@ -72,4 +72,4 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: docs/tests_results/${OS_PLATFORM}/features_results.xml
+          report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/features_results.xml
