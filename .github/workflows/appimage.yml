@@ -5,7 +5,7 @@ on:                    # Run the workflow for each of the following events:
   push:                # - A branch is pushed or updated.
     branches:
       - main
-  pull_request:        # - A pull-request is opened or updated.
+  ### pull_request:        # - A pull-request is opened or updated.
   workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
   release:
     types: [created]   # - A release is created.
@@ -15,7 +15,6 @@ permissions: write-all
 jobs:
   release:
     name: Continuous
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-22.04 # Use the oldest supported ubuntu version for greater compatibility.
     steps:
        - name: Checkout
