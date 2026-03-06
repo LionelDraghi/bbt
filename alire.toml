@@ -24,14 +24,5 @@ gnat="^14"
 
 [[actions]]
 type = "test"
-command = ["alr", "build", "--development"]
+command = ["make"]
 
-[[actions]]
-type = "test"
-directory = "tests/"
-command = ["../bbt", "-c", "-q", "-sb", "--yes", "../docs/examples/"]
-
-[[actions]]
-type = "test"
-directory = "tests/file_utilities_tests/"
-command = ["./test_file_utilities", "-q"]

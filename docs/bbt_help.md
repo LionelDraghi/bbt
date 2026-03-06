@@ -34,7 +34,7 @@ Help topics:
               --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
-bbt version 0.2.1
+bbt version 0.3.0-dev
 https://github.com/LionelDraghi/bbt/
 
 Filtering:
