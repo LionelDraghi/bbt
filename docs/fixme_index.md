@@ -14,7 +14,7 @@ Location | Text
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios.ads](../src/bbt-scenarios.ads):55|   --  To be moved as dispatching in Writers
 [src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):50|         --  need a test
-[src/bbt-scenarios-step_parser.adb](../src/bbt-scenarios-step_parser.adb):144|                                                                                                   --  we currently do not check if the existing file contains
+[src/bbt-scenarios-steps-create_grammar.adb](../src/bbt-scenarios-steps-create_grammar.adb):18|                                                                                                --  we currently do not check if the existing file contains
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):89|      --  defensive code that should be replaced by
 [src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):163|      --  Path_To_Scen should be in Scenario_Type to avoid

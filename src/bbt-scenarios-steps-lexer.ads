@@ -7,7 +7,7 @@
 
 with Text_Utilities; use Text_Utilities;
 
-private package BBT.Scenarios.Step_Parser.Lexer is
+private package BBT.Scenarios.Steps.Lexer is
 
    type Token_Type is (Keyword, Identifier, Code_Span, Empty);
    -- In Markdown, Code_Span denote a word or phrase enclosed in
@@ -28,4 +28,4 @@ private package BBT.Scenarios.Step_Parser.Lexer is
 
    procedure Put_Keywords;
 
-end BBT.Scenarios.Step_Parser.Lexer;
+end BBT.Scenarios.Steps.Lexer;

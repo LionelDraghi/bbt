@@ -50,7 +50,7 @@ private package BBT.IO is
                             Spawn,
                             Step_Actions,
                             Step_Lexer,
-                            Step_Parser,
+                            Steps,
                             Tests_Builder,
                             Writers);
    subtype Topics is Extended_Topics range

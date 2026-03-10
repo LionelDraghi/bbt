@@ -23,35 +23,37 @@ package BBT.Model.Steps is
      Extended_Step_Categories'Succ (Unknown) ..
      Extended_Step_Categories'Last;
 
-   type Actions is
-     (None,
-      Check_File_Existence,
-      Check_Dir_Existence,
-      Check_No_File,
-      Check_No_Dir,
-      Create_If_None,
-      Erase_And_Create,
-      Setup_No_File,
-      Setup_No_Dir,
-      Error_Return_Code,
-      File_Contains,
-      File_Does_Not_Contain,
-      File_Matches,
-      File_Does_Not_Match,
-      File_Is,
-      File_Is_Not,
-      No_Error_Return_Code,
-      Output_Contains,
-      Output_Matches,
-      Output_Does_Not_Contain,
-      Output_Does_Not_Match,
-      Output_Is,
-      No_Output,
-      Run_Cmd,
-      Run_Without_Error);
+     type Actions is (None,
+                    -- Setup actions
+                    Setup_No_File,
+                    Setup_No_Dir,
+                    Check_File_Existence,
+                    Check_Dir_Existence,
+                    Erase_And_Create,
+                    Create_If_None,
+                    -- Run actions
+                    Run_Cmd,
+                    Run_Without_Error,
+                    -- Check actions
+                    Check_No_File,
+                    Check_No_Dir,
+                    Error_Return_Code,
+                    No_Error_Return_Code,
+                    Output_Is,
+                    Output_Contains,
+                    Output_Does_Not_Contain,
+                    Output_Matches,
+                    Output_Does_Not_Match,
+                    File_Matches,
+                    File_Does_Not_Match,
+                    File_Is,
+                    File_Is_Not,
+                    File_Contains,
+                    File_Does_Not_Contain,
+                    No_Output);
 
    type Step_Type;
-   type Step_Maybe      is          access all Step_Type;
+   type Step_Maybe is access all Step_Type;
 
    package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
      (Positive, String);

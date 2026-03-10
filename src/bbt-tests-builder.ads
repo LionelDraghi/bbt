@@ -25,9 +25,9 @@ package BBT.Tests.Builder is
                              Loc  : Location_Type);
    procedure Add_Background (Name : String;
                              Loc  : Location_Type);
-   procedure Add_Step       (Step_Info           : in out Steps.Step_Data;
+   procedure Add_Step       (Step_Info           : in out Model.Steps.Step_Data;
                              Code_Block_Expected :        Boolean;
-                             Cmd_List            :        Steps.Cmd_List;
+                             Cmd_List            :        Model.Steps.Cmd_List;
                              Loc                 : Location_Type;
                              Syntax_Error        : Boolean := False);
    procedure Add_Line       (Line : String;

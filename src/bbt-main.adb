@@ -11,7 +11,7 @@ with BBT.IO,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
      BBT.Scenarios.Readers.MDG_Reader,
-     BBT.Scenarios.Step_Parser,
+     BBT.Scenarios.Steps,
      BBT.Settings,
      BBT.Status_Bar,
      BBT.Tests.Builder,
@@ -112,12 +112,12 @@ begin
 
    when List_Keywords =>
       Status_Bar.Put_Activity ("Listing keywords");
-      Scenarios.Step_Parser.Put_Keywords;
+      Scenarios.Steps.Put_Keywords;
       return;
 
    when List_Grammar =>
       Status_Bar.Put_Activity ("Listing grammar");
-      BBT.Scenarios.Step_Parser.Put_Grammar;
+      BBT.Scenarios.Steps.Put_Grammar;
 
    when List_Files =>
       Status_Bar.Put_Activity ("Listing files");

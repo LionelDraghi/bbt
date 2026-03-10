@@ -14,7 +14,7 @@ with BBT.Model.Steps;
 with BBT.Model;                         use BBT.Model;
 with BBT.IO;
 with BBT.Scenarios.Readers;             use BBT.Scenarios.Readers;
-with BBT.Scenarios.Step_Parser;
+with BBT.Scenarios.Steps;
 with BBT.Settings;                      use BBT.Settings;
 with BBT.Tests.Builder;                 use BBT.Tests.Builder;
 
@@ -188,7 +188,7 @@ package body BBT.Scenarios.Files is
          Line_Processing :
          declare
             Line                : aliased constant String := Get_Line (Input);
-            Cmd_List            : Steps.Cmd_List;
+            Cmd_List            : BBT.Model.Steps.Cmd_List;
             Code_Block_Expected : Boolean;
             Attrib              : constant Line_Attributes := Parse_Line
               (Line'Access, File_Format, Lexer_Context, Loc);
@@ -216,7 +216,7 @@ package body BBT.Scenarios.Files is
 
                when Step_Line =>
                   declare
-                     S : Steps.Step_Data := Scenarios.Step_Parser.Parse
+                     S : BBT.Model.Steps.Step_Data := Scenarios.Steps.Parse
                        (Attrib.Step_Ln,
                         Loc,
                         Code_Block_Expected,

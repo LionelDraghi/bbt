@@ -14,7 +14,7 @@ with Ada.Characters.Latin_1,
 
 use Ada.Strings.Fixed;
 
-package body BBT.Scenarios.Step_Parser.Lexer is
+package body BBT.Scenarios.Steps.Lexer is
 
    Cursor         : Natural := 1;
    Line_Finished  : Boolean := False;
@@ -195,4 +195,4 @@ package body BBT.Scenarios.Step_Parser.Lexer is
       end loop;
    end Put_Keywords;
 
-end BBT.Scenarios.Step_Parser.Lexer;
+end BBT.Scenarios.Steps.Lexer;
