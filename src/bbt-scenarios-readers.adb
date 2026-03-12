@@ -164,6 +164,11 @@ package body BBT.Scenarios.Readers is
                Put_Line ("Header = """ & Header'Image & """ ignored by bbt",
                          Location  => Loc,
                          Verbosity => IO.Debug);
+               Context := Initialize_Context;
+               -- Any non processed header cause the context to be reset,
+               -- so that the following lines are interpreted as pertaining
+               -- to the previous scenario. (#37)
+
             end if;
          end;
       end if;

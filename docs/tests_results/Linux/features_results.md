@@ -1280,18 +1280,22 @@
   ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
-   ### Scenario: [No step test](../../features/C010_Empty_scenarios.md): 
+   ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
-   - OK : When I run `./bbt no_step_in_scenario.input`   
+   - OK : When I successfully run `./bbt no_step_in_scenario.input`   
    - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`  
-   - OK : And  I get no error  
-   - [X] scenario   [No step test](../../features/C010_Empty_scenarios.md) pass  
+   - [X] scenario   [No step test A](../../features/C010_Empty_scenarios.md) pass  
+
+   ### Scenario: [No step test B](../../features/C010_Empty_scenarios.md): 
+   - OK : Given the `no_step_in_scenario_b.input` file  
+   - OK : When I successfully run `./bbt no_step_in_scenario_b.input`   
+   - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario_b.input) is empty, nothing tested`  
+   - [X] scenario   [No step test B](../../features/C010_Empty_scenarios.md) pass  
 
    ### Scenario: [No scenario in Feature](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_or_scenario_in_feature.input` file  
-   - OK : When I run `./bbt no_step_or_scenario_in_feature.input`   
+   - OK : When I successfully run `./bbt no_step_or_scenario_in_feature.input`   
    - OK : Then the output contains `Warning : No scenario in feature "My_Feature"`  
-   - OK : And I get no error  
    - [X] scenario   [No scenario in Feature](../../features/C010_Empty_scenarios.md) pass  
 
 
@@ -1344,12 +1348,19 @@
 
 # Document: [C050_Step_marker.md](../../features/C050_Step_marker.md)  
   ## Feature:   
-   ### Scenario: [](../../features/C050_Step_marker.md): 
+   ### Scenario: [Different markers within the scenario](../../features/C050_Step_marker.md): 
    - OK : Given the file `step_markers.md`  
    - OK : When I run `./bbt -c -q step_markers.md`  
    - OK : Then I get no error  
    - OK : And the output is  
-   - [X] scenario   [](../../features/C050_Step_marker.md) pass  
+   - [X] scenario   [Different markers within the scenario](../../features/C050_Step_marker.md) pass  
+
+   ### Scenario: [Step analysis is interrupted when exiting the section (#37)](../../features/C050_Step_marker.md): 
+   - OK : Given there is no `config.ini` file  
+   - OK : Given the file `step_markers2.md`  
+   - OK : When I successfully run `./bbt -c step_markers2.md`  
+   - OK : Then the output contains `- [ ] scenario [1](step_markers2.md) is empty, nothing tested`  
+   - [X] scenario   [Step analysis is interrupted when exiting the section (#37)](../../features/C050_Step_marker.md) pass  
 
 
 # Document: [C060_code_block.md](../../features/C060_code_block.md)  
@@ -1438,12 +1449,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 136 scenarios OK
+## Summary : **Success**, 138 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 136   |
+| Successful | 138   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

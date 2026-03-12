@@ -9,7 +9,6 @@ And note that on Unix, without the +x you cannot run "./cmd.txt", but you still 
 
 _Table of Contents:_
 - [Scenario: trying to run a script without the executable keyword should fail](#scenario-trying-to-run-a-script-without-the-executable-keyword-should-fail)
-  - [Notes on shebang : #!/bin/bash](#notes-on-shebang--binbash)
 - [Scenario: trying to run the same script created with the executable attribute should succeed](#scenario-trying-to-run-the-same-script-created-with-the-executable-attribute-should-succeed)
 
 ### Scenario: trying to run a script without the executable keyword should fail
@@ -20,7 +19,8 @@ _Table of Contents:_
 echo "bbt rules!"
 ~~~
 
-#### Notes on shebang : #!/bin/bash
+**Notes on shebang** : #!/bin/bash
+
 /bin/bash on MacOS
 /usr/bin/bash on Windows, but useless
 Note that there is a shebang utility on https://github.com/insomnimus/shebang to interpret the shebang prefix on Windows, but as said before, this feature is useless on Windows.
