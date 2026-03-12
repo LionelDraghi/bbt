@@ -32,7 +32,28 @@ jobs:
       - uses: alire-project/setup-alire@v5
         # with:
         #   version: 2.1.0 # Remove this option to use the default (latest stable release)
-            
+
+      - name: Cache Alire dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/alire
+            ~/.local/share/alire
+          key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-alire-
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-mlc
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Setup `rpl` (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
