@@ -26,7 +26,7 @@ jobs:
     
     steps:
         # Check-out the repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
@@ -68,7 +68,12 @@ jobs:
       - name: Install packages
         shell: bash
         run: |
-          cargo install mlc
+          if ! command -v mlc >/dev/null 2>&1; then
+            cargo install --locked mlc
+          else
+            echo "mlc already installed"
+          fi
+
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
             sudo apt-get install -y rpl
