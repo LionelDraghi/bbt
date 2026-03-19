@@ -23,7 +23,7 @@ package BBT.Model.Steps is
      Extended_Step_Categories'Succ (Unknown) ..
      Extended_Step_Categories'Last;
 
-     type Actions is (None,
+   type Actions is (None,
                     -- Setup actions
                     Setup_No_File,
                     Setup_No_Dir,

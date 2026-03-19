@@ -5,6 +5,13 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with Ada.Directories;
+with Ada.Strings.Unbounded;
+
+with List_Image;
+with List_Image.Unix_Predefined_Styles;
+with Text_Utilities;
+
 package body BBT.Writers is
 
    -- --------------------------------------------------------------------------
@@ -135,6 +142,72 @@ package body BBT.Writers is
    end Put_Overall_Results;
 
    -- --------------------------------------------------------------------------
+   procedure Explain (Step : Step_Type'Class) is
+      use Ada.Directories;
+      use Ada.Strings.Unbounded;
+      use Text_Utilities;
+      use Text_Utilities.Texts;
+      Prefix       : constant String := "| ";
+      Filtered     : constant String := Prefix & "Filtered          = ";
+      Step_Cat     : constant String := Prefix & "Step              = ";
+      Sub_Param    : constant String := Prefix & "Subject parameter = """;
+      Action       : constant String := Prefix & "Action            = ";
+      Obj_Param    : constant String := Prefix & "Object parameter  = """;
+      File_Content : constant String := Prefix & "File content      :  ";
+      Executable   : constant String := Prefix & "Executable        = ";
+      Ignore_Order : constant String := Prefix & "Ignore order      = ";
+      Dir          : constant String := Prefix & "dir               = """;
+      File         : constant String := Prefix & "File              = """;
+
+      -- use List_Image;
+      use List_Image.Unix_Predefined_Styles;
+      package Indented_Style is new List_Image.Image_Style
+        (Prefix           =>              "|  ",
+         Separator        => "  " & EOL & "|  ",
+         Postfix          => "  ");
+      -- use Indented_Style;
+      function Indented_Image is new List_Image.Image
+        (Cursors => Text_Cursors,
+         Style   => Indented_Style);
+
+   begin
+      New_Line;
+      Put_Line (Line (Step.Location)'Image &
+                ": Step """ & (+Step.Data.Src_Code) & """");
+      if Step.Data.Syntax_Error then
+         Put_Line ("   ! This step has syntax error");
+      end if;
+      if Step.Filtered then
+         Put_Line (Filtered & Step.Filtered'Image);
+      end if;
+      Put_Line (Step_Cat & Step.Data.Cat'Image);
+      if Step.Data.Subject_String /= Null_Unbounded_String then
+         Put_Line (Sub_Param & (+Step.Data.Subject_String) & """");
+      end if;
+      Put_Line (Action & Step.Data.Action'Image);
+      if Step.Data.Object_String /= Null_Unbounded_String then
+         Put_Line (Obj_Param & (+Step.Data.Object_String) & """");
+      end if;
+      if Step.Data.Object_File_Name /= Null_Unbounded_String then
+         if Step.Data.File_Type = Directory then
+            Put_Line (Dir & (+Step.Data.Object_File_Name) & """");
+         else
+            Put_Line (File & (+Step.Data.Object_File_Name) & """");
+         end if;
+      end if;
+      if Step.Data.File_Content /= Text_Utilities.Empty_Text then
+         Put_Line (File_Content);
+         Put_Line (Indented_Image (Step.Data.File_Content));
+      end if;
+      if Step.Data.Executable_File then
+         Put_Line (Executable   & Step.Data.Executable_File'Image);
+      end if;
+      if Step.Data.Ignore_Order then
+         Put_Line (Ignore_Order & Step.Data.Ignore_Order'Image);
+      end if;
+   end Explain;
+
+   -- --------------------------------------------------------------------------
    procedure Put_Scenario (Writer   : Interface_Access;
                            Scenario : Scenario_Type'Class) is
    begin
@@ -155,23 +228,14 @@ package body BBT.Writers is
    end Put_Scenario;
 
    -- --------------------------------------------------------------------------
-   procedure Explain (Writer   : Interface_Access;
-                      Scenario : Scenario_Type'Class) is
+   procedure Explain (Scenario : Scenario_Type'Class) is
    begin
-      if Scenario.Filtered then
-         Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
-      else
-         Put_Scenario_Title (Writer.all,
-                             Scenario.Location'Image & " Scenario """ &
-                             (+Scenario.Name) & """");
-         for Step of Scenario.Step_List loop
-            if Step.Filtered then
-               Put_Debug_Line ("Filtered Step " & (+Step.Data.Src_Code));
-            else
-               Explain (Writer.all, Step);
-            end if;
-         end loop;
-      end if;
+      New_Line;
+      Put_Line (Line (Scenario.Location)'Image & ": Scenario """ & (+Scenario.Name) &
+         (if Scenario.Filtered then """ is filtered" else """"));
+      for Step of Scenario.Step_List loop
+         Explain (Step);
+      end loop;
    end Explain;
 
    -- --------------------------------------------------------------------------
@@ -181,6 +245,9 @@ package body BBT.Writers is
       if Feature.Filtered then
          Put_Debug_Line ("Feature " & (+Feature.Name) & " is filtered");
       else
+         New_Line;
+         Put_Line (Line (Feature.Location)'Image &
+                   ": Feature """ & (+Feature.Name) & """");
          Put_Feature_Title (Writer.all,
                             Feature.Location'Image & " Feature """ &
                             (+Feature.Name) & """");
@@ -199,21 +266,18 @@ package body BBT.Writers is
    procedure Explain (Writer  : Interface_Access;
                       Feature : Feature_Type'Class) is
    begin
-      if Feature.Filtered then
-         Put_Debug_Line ("Feature " & (+Feature.Name) & " is filtered");
-      else
-         Put_Feature_Title (Writer.all,
-                            Feature.Location'Image & " Feature """ &
-                            (+Feature.Name) & """");
+      New_Line;
+      Put_Line (Line (Feature.Location)'Image & ": Feature """ & (+Feature.Name) & """" &
+        (if Feature.Filtered then " is filtered" else ""));
 
-         if Feature.Background /= null then
-            Put_Scenario (Writer, Feature.Background.all);
-         end if;
-
-         for Scenario of Feature.Scenario_List loop
-            Explain (Writer, Scenario);
-         end loop;
+      if Feature.Background /= null then
+         Explain (Feature.Background.all);
       end if;
+
+      for Scenario of Feature.Scenario_List loop
+         Explain (Scenario);
+      end loop;
+
    end Explain;
 
    -- --------------------------------------------------------------------------
@@ -241,21 +305,20 @@ package body BBT.Writers is
    procedure Explain (Writer     : Interface_Access;
                       Doc        : Document_Type'Class) is
    begin
-      if Doc.Filtered then
-         Put_Debug_Line ("Document " & (+Doc.Name) & " is filtered");
-      else
-         if Doc.Background /= null then
-            Explain (Writer, Doc.Background.all);
-         end if;
-
-         for S of Doc.Scenario_List loop
-            Explain (Writer, S);
-         end loop;
-
-         for Feature of Doc.Feature_List loop
-            Explain (Writer, Feature);
-         end loop;
+      New_Line;
+      Put_Line ("Document """ & (+Doc.Name) & """" &
+        (if Doc.Filtered then " is filtered" else ""));
+      if Doc.Background /= null then
+         Explain (Doc.Background.all);
       end if;
+
+      for S of Doc.Scenario_List loop
+         Explain (S);
+      end loop;
+
+      for Feature of Doc.Feature_List loop
+         Explain (Writer, Feature);
+      end loop;
    end Explain;
 
    -- --------------------------------------------------------------------------

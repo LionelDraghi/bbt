@@ -50,9 +50,6 @@ private
    overriding procedure Put_Step
      (Writer : Asciidoc_Writer;
       Step   : Step_Type'Class);
-   overriding procedure Explain
-     (Writer : Asciidoc_Writer;
-      Step   : Step_Type'Class);
    overriding procedure Put_Scenario_Title
      (Writer : Asciidoc_Writer; S : String);
    overriding procedure Put_Feature_Title

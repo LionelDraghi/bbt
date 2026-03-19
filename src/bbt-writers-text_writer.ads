@@ -55,9 +55,6 @@ private
    overriding procedure Put_Step
      (Writer : Text_Writer;
       Step   : Step_Type'Class);
-   overriding procedure Explain
-     (Writer : Text_Writer;
-      Step   : Step_Type'Class);
    overriding procedure Put_Scenario_Title
      (Writer : Text_Writer; S : String);
    overriding procedure Put_Feature_Title

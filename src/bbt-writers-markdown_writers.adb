@@ -7,16 +7,13 @@
 
 with BBT.IO,
      BBT.Settings;
+with File_Utilities;
+with Ada.Directories;
+with GNAT.Regexp;
 
 use BBT,
     BBT.IO,
     BBT.Settings;
-
-with File_Utilities;
-
-with Ada.Directories;
-
-with GNAT.Regexp;
 
 package body BBT.Writers.Markdown_Writers is
 
@@ -260,17 +257,6 @@ package body BBT.Writers.Markdown_Writers is
          & """");
    -- Put_Line (Step'Image);
    end Put_Step;
-
-   overriding
-   procedure Explain (Writer : Markdown_Writer; Step : Step_Type'Class) is
-   begin
-      Put_Line
-        (Line (Step.Location)'Image
-         & ": Step """
-         & (+Step.Data.Src_Code)
-         & """");
-      Put_Line (Inline_Image (Step));
-   end Explain;
 
    overriding
    procedure Put_Scenario_Title (Writer : Markdown_Writer; S : String) is

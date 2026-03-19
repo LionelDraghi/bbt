@@ -120,14 +120,10 @@ private
    procedure Put_Summary (Writer : Abstract_Writer) is abstract;
    procedure Put_Detailed_Results (Writer : Abstract_Writer) is abstract;
 
-
-
    -- -------------------------------------------------------------------------
    -- Output of the scenario as understood and stored by bbt
    procedure Put_Step (Writer : Abstract_Writer;
                        Step   : Step_Type'Class) is abstract;
-   procedure Explain (Writer : Abstract_Writer;
-                      Step   : Step_Type'Class) is abstract;
    procedure Put_Scenario_Title (Writer : Abstract_Writer;
                                  S      : String) is abstract;
    procedure Put_Feature_Title (Writer : Abstract_Writer;

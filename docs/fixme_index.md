@@ -17,6 +17,6 @@ Location | Text
 [src/bbt-scenarios-steps-create_grammar.adb](../src/bbt-scenarios-steps-create_grammar.adb):19|                                                                                                --  we currently do not check if the existing file contains
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):89|      --  defensive code that should be replaced by
-[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):163|      --  Path_To_Scen should be in Scenario_Type to avoid
-[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):213|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
+[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):168|      --  Path_To_Scen should be in Scenario_Type to avoid
+[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):218|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

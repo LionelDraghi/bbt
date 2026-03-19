@@ -55,9 +55,6 @@ private
    overriding procedure Put_Step
      (Writer : Markdown_Writer;
       Step   : Step_Type'Class);
-   overriding procedure Explain
-     (Writer : Markdown_Writer;
-      Step   : Step_Type'Class);
    overriding procedure Put_Scenario_Title
      (Writer : Markdown_Writer; S : String);
    overriding procedure Put_Feature_Title
