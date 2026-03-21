@@ -73,6 +73,8 @@ private package BBT.IO is
    function File   (Loc : Location_Type) return String;
    function Line   (Loc : Location_Type) return Text_IO.Count;
    function Column (Loc : Location_Type) return Text_IO.Count;
+   function Line   (Loc : Location_Type) return String; -- trimmed image
+   function Column (Loc : Location_Type) return String; -- trimmed image
 
    -- --------------------------------------------------------------------------
    function Image (Loc : Location_Type) return String;

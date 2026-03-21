@@ -2,7 +2,6 @@
 # Document: [gcc_hello_word.md](../../examples/gcc_hello_word.md)  
    ### Scenario: [gcc version?](../../examples/gcc_hello_word.md): 
    - OK : When I run `gcc -v`  
-   - OK : Then the output contains `version `  
    - OK : Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
    - [X] scenario   [gcc version?](../../examples/gcc_hello_word.md) pass  
 

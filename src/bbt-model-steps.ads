@@ -99,9 +99,9 @@ package BBT.Model.Steps is
       S      :        Step_Data);
    -- Put_Image returns the full image
 
-   function Inline_Image
+   function Explain
      (Step : Step_Type) return String;
-   -- Short_Line_Image returns a single line image with main non null fields.
+   -- returns an explanation of the step in natural language
 
    overriding procedure Apply_Filters_To
      (S : in out Step_Type);

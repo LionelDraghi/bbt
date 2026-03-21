@@ -71,7 +71,6 @@ private package BBT.Writers is
       Verbosity : Verbosity_Levels);
    procedure Put_Overall_Results;
 
-
    -- -------------------------------------------------------------------------
    -- Output of the scenario as stored by bbt
    procedure Put_Document_List (Doc_List : Documents.List);

@@ -63,6 +63,10 @@ package body BBT.IO is
    function File   (Loc : Location_Type) return String        is (+Loc.File);
    function Line   (Loc : Location_Type) return Text_IO.Count is (Loc.Line);
    function Column (Loc : Location_Type) return Text_IO.Count is (Loc.Column);
+   function Line   (Loc : Location_Type) return String is
+     (Strings.Fixed.Trim (Loc.Line'Image,   Side => Strings.Left));
+   function Column (Loc : Location_Type) return String is
+     (Strings.Fixed.Trim (Loc.Column'Image, Side => Strings.Left));
 
    -- --------------------------------------------------------------------------
    -- Function: GNU_Prefix
@@ -81,11 +85,6 @@ package body BBT.IO is
    --  function GNU_Prefix (File : String;
    --                       Line : Text_IO.Count := 0) return String
    --  is
-   --     use Ada.Strings;
-   --     use Ada.Strings.Fixed;
-   --     Trimmed_File   : constant String := Trim (File, Side => Both);
-   --     Trimmed_Line   : constant String := Trim (Text_IO.Count'Image (Line),
-   --                                               Side => Both);
    --     Common_Part   : constant String := "bbt:" & Trimmed_File;
    --  begin
    --     if File = "" then
@@ -93,23 +92,19 @@ package body BBT.IO is
    --     elsif Line = 0 then
    --        return Common_Part & " ";
    --     else
-   --        return Common_Part & ":" & Trimmed_Line & ": ";
+   --        return Common_Part & ":" & Line (Loc) & ": ";
    --     end if;
    --  end GNU_Prefix;
 
    -- --------------------------------------------------------------------------
    function Image (Loc : Location_Type) return String is
-      use Strings;
-      use Strings.Fixed;
-      Trimmed_Line   : constant String := Trim (Loc.Line'Image,   Side => Left);
-      Trimmed_Column : constant String := Trim (Loc.Column'Image, Side => Left);
    begin
       if Loc.File = "" then
          return "";
       elsif Loc.Column = 0 or Loc.Column = 1 then
-         return +Loc.File & ":" & Trimmed_Line & ":";
+         return +Loc.File & ":" & Line (Loc) & ":";
       else
-         return +Loc.File & ":" & Trimmed_Line & "." & Trimmed_Column & ":";
+         return +Loc.File & ":" & Line (Loc) & "." & Column (Loc) & ":";
       end if;
    end Image;
 

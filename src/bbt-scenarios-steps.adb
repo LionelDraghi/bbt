@@ -93,9 +93,9 @@ package body BBT.Scenarios.Steps is
                           Subjects, Verbs, Objects) of Grammar_Items;
 
    -- Create the complete BBT grammar
-   function Create_Grammar return Grammar is separate;
+   procedure Initialize_Grammar (G : in out Grammar) is separate;
 
-   The_Grammar : constant Grammar := Create_Grammar;
+   The_Grammar : Grammar;
 
    -- Type to hold parsing state for separate procedures
    type Parse_State is record
@@ -180,7 +180,6 @@ package body BBT.Scenarios.Steps is
    -- between calls to Parse.
 
    -- --------------------------------------------------------------------------
-
    procedure Put_Grammar is
    begin
       Ada.Text_IO.Put_Line ("| Prep  |         |Subject |       Verb       | Object |         Action          | Code block expected |  ");
@@ -363,5 +362,8 @@ package body BBT.Scenarios.Steps is
               File_Content     => Empty_Text,
               Syntax_Error     => IO.Some_Error);
    end Parse;
+
+begin
+ Initialize_Grammar (The_Grammar);
 
 end BBT.Scenarios.Steps;

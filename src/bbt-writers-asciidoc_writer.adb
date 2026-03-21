@@ -158,7 +158,7 @@ package body BBT.Writers.Asciidoc_Writer is
    overriding procedure Put_Step (Writer : Asciidoc_Writer;
                                   Step   : Step_Type'Class) is
    begin
-      Put_Line (Line (Step.Location)'Image & ": Step """ &
+      Put_Line (Line (Step.Location) & ": Step """ &
                 (+Step.Data.Src_Code) & """");
       Put_Line (Step'Image);
    end Put_Step;

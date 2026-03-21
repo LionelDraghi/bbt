@@ -251,7 +251,7 @@ package body BBT.Writers.Markdown_Writers is
    procedure Put_Step (Writer : Markdown_Writer; Step : Step_Type'Class) is
    begin
       Put_Line
-        (Line (Step.Location)'Image
+        (Line (Step.Location)
          & ": Step """
          & (+Step.Data.Src_Code)
          & """");

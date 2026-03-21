@@ -607,112 +607,124 @@
 # Document: [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
   ## Feature: Filter  
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [no filtering](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `filtered_step.md`  
-   - OK : When I run `./bbt filtered_step.md`    
-   - OK : Then file `output.txt` is  
+   - OK : When I run `./bbt suite_1.md`    
+   - OK : Then file `output_1.txt` is  
    - [X] scenario   [no filtering](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [step filtering](../../features/A230_select_exclude_include.md): 
-   - OK : When I run `./bbt --exclude Windows filtered_step.md`    
-   - OK : Then file `output.txt` is  
+   - OK : When I run `./bbt --exclude Windows suite_1.md`    
+   - OK : Then file `output_1.txt` is  
    - [X] scenario   [step filtering](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [step selection](../../features/A230_select_exclude_include.md): 
-   - OK : When I run `./bbt --select create filtered_step.md`    
-   - OK : Then file `output.txt` contains  
+   - OK : When I run `./bbt --select create suite_1.md`    
+   - OK : Then file `output_1.txt` contains  
    - [X] scenario   [step selection](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [Selecting a scenario](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select Robustness filtered_step.md robustness.md`    
-   - OK : Then there is no file `output.txt`  
-   - OK : And `output2.txt` is  
+   - OK : When I run `./bbt --select Robustness suite_1.md suite_2.md`    
+   - OK : Then there is no file `output_1.txt`  
+   - OK : And `output_2.txt` is  
    - [X] scenario   [Selecting a scenario](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [selection is empty](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select xzscskfjhs filtered_step.md robustness.md`    
-   - OK : Then there is no file `output.txt`  
-   - OK : And  there is no file `output2.txt`  
+   - OK : When I run `./bbt --select xzscskfjhs suite_1.md suite_2.md`    
+   - OK : Then there is no file `output_1.txt`  
+   - OK : And  there is no file `output_2.txt`  
    - [X] scenario   [selection is empty](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [Selecting a Background only](../../features/A230_select_exclude_include.md): 
    - OK : Given the file `background.md`  
    - OK : When I run `./bbt --select new_file background.md`    
    - OK : Then there is no file `input.txt`  
-   - OK : And  there is no file `output2.txt`  
+   - OK : And  there is no file `output_2.txt`  
    - [X] scenario   [Selecting a Background only](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [Select followed by an exclude](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select Robustness --exclude Linux robustness.md`  
-   - OK : Then `output2.txt` is  
+   - OK : When I run `./bbt --select Robustness --exclude Linux suite_2.md`  
+   - OK : Then `output_2.txt` is  
    - [X] scenario   [Select followed by an exclude](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [scenario Excluded followed by an include of a step inside](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --exclude Sanity --include create --include Linux robustness.md`    
-   - OK : Then `output2.txt` is  
+   - OK : When I run `./bbt --exclude Robustness --include create --include Linux suite_2.md`    
+   - OK : Then `output_2.txt` is  
    - [X] scenario   [scenario Excluded followed by an include of a step inside](../../features/A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](../../features/A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](../../features/A230_select_exclude_include.md) pass  
 
    ### Scenario: [Exclude by file name](../../features/A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --exclude robustness.md robustness.md`    
-   - OK : Then there is no `output2.txt` file  
+   - OK : When I run `./bbt --exclude suite_2.md suite_2.md`    
+   - OK : Then there is no `output_2.txt` file  
    - [X] scenario   [Exclude by file name](../../features/A230_select_exclude_include.md) pass  
 
 
@@ -920,17 +932,6 @@
    - OK : When I run `./bbt --cleanup wrong_and_good_option.md`  
    - OK : Then I get an error  
    - [X] scenario   [return code when one fail and the other succeed](../../features/B060_Return_code_on_test_failure.md) pass  
-
-
-# Document: [B070_Mandatory_new_bug.md](../../features/B070_Mandatory_new_bug.md)  
-   ### Background: [](../../features/B070_Mandatory_new_bug.md): 
-   - OK : Given the file `whatever.txt`  
-   - [X] background [](../../features/B070_Mandatory_new_bug.md) pass  
-
-   ### Scenario: [](../../features/B070_Mandatory_new_bug.md): 
-   - OK : Given the file `whatever.txt`  
-   - OK : Then `whatever.txt` contains  
-   - [X] scenario   [](../../features/B070_Mandatory_new_bug.md) pass  
 
 
 # Document: [B080_Keep_Going.md](../../features/B080_Keep_Going.md)  
@@ -1279,6 +1280,117 @@
 
   ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
 
+# Document: [B170_Explain.md](../../features/B170_Explain.md)  
+  ## Feature: Explain  
+   ### Scenario: [explain elements other than steps](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain elements other than steps](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Setup_No_File](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Setup_No_File](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Setup_No_Dir](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Setup_No_Dir](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_File_Existence](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_File_Existence](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_Dir_Existence](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_Dir_Existence](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Erase_And_Create](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Erase_And_Create](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Create_If_None](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Create_If_None](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Run](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Run](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Run_Without_Error](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Run_Without_Error](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_No_File](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_No_File](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_No_Dir](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_No_Dir](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Error_Return_Code and No_Error_Return_Code](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Error_Return_Code and No_Error_Return_Code](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output_Is](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output_Is](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output_Contains and Output_Does_Not_Contain](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output_Contains and Output_Does_Not_Contain](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output|File_Matches and Output|File_Does_Not_Match](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output|File_Matches and Output|File_Does_Not_Match](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action File_Is and File_Is_Not](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action File_Is and File_Is_Not](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action File_Contains and File_Does_Not_Contain](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action File_Contains and File_Does_Not_Contain](../../features/B170_Explain.md) pass  
+
+   ### Scenario: [explain action No_Output](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action No_Output](../../features/B170_Explain.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -1449,12 +1561,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 138 scenarios OK
+## Summary : **Success**, 155 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 138   |
+| Successful | 155   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

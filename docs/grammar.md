@@ -7,7 +7,7 @@
 | Given |         |        | is no            | `file` | SETUP_NO_FILE           |            |  
 | Given |         |        | is no            | `dir`  | SETUP_NO_DIR            |            |  
 | Given |         | `dir`  |                  |        | CREATE_IF_NONE          |            |  
-| Given |         | `file` |                  |        | ERASE_AND_CREATE        |     X      |  
+| Given |         | `file` |                  |        | CREATE_IF_NONE          |     X      |  
 | Given |         | `file` | containing       |        | CREATE_IF_NONE          |     X      |  
 | Given |         | `file` | containing       | `text` | CREATE_IF_NONE          |            |  
 | Given | new     | `dir`  |                  |        | ERASE_AND_CREATE        |            |  
@@ -15,9 +15,7 @@
 | Given | new     | `file` | containing       |        | ERASE_AND_CREATE        |     X      |  
 | Given | new     | `file` | containing       | `text` | ERASE_AND_CREATE        |            |  
 | When  |         |        | run              | `text` | RUN_CMD                 |            |  
-| When  |         |        | run              | `cmd`  | RUN_CMD                 |            |  
 | When  |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |  
-| When  |         |        | successfully run | `cmd`  | RUN_WITHOUT_ERROR       |            |  
 | Then  |         |        | get              |        | OUTPUT_IS               |     X      |  
 | Then  |         |        | get              | `file` | OUTPUT_IS               |            |  
 | Then  |         |        | get              | `text` | OUTPUT_IS               |            |  
