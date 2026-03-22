@@ -144,6 +144,8 @@ package Text_Utilities is
 
    function Image (C : Cursor) return String is (Element (C));
 
+   -- Markdown stuff -----------------------------------------------------------
+
    -- To get a normal image, and not all lines concatenated
    -- on the same line as when using 'Image
    function Text_Image is new List_Image.Image
@@ -162,5 +164,8 @@ package Text_Utilities is
       Style   => Code_Fenced_Style);
    -- Fixme : this, and all dependencies to List_Image, should be moved
    -- to a child package Markdown_Images
+
+   function Wrap_In_Backticks (S : String) return String is
+     ('`' & S & '`');
 
 end Text_Utilities;

@@ -207,7 +207,7 @@ For the complete definition of the `bbt` test format and options, refer to the o
 2024-09-21T13:45:26Z 192.168.0.3 GET /index.html 404 210ms
 ```
 - When I run `weblogstat log.1`
-- Then the command should complete with no error
+- Then there is no error
 - And the output is
 ```
 Total requests: 4
@@ -234,7 +234,7 @@ MALFORMED LINE WITHOUT ENOUGH FIELDS
 2024-09-21T13:45:25Z 10.0.0.4 GET /ok 500 notams
 ```
 - When I run `weblogstat log.2`
-- Then the command should complete with no error
+- Then there is no error
 - And the output is
 ```
 Total requests: 3
@@ -256,7 +256,7 @@ ALSO BAD
 INVALID 10.0.0.1 GET /ok 200
 ```
 - When I run `weblogstat log.3`
-- Then the command should complete with no error
+- Then I get no error
 - And the output is
 ```
 Total requests: 0
@@ -276,7 +276,7 @@ Malformed lines: 4
 #### Scenario: Missing input file shows error and usage
 - Given there is no `does_not_exist.log` file
 - When I run `weblogstat does_not_exist.log`
-- Then the command should end with an error
+- Then I get no error
 - And the output contains `Error: cannot open input file 'does_not_exist.log'`
 - And the output contains `Usage: weblogstat <input_log_file> [--output <output_file>]`
 
@@ -287,7 +287,7 @@ Malformed lines: 4
 ```
 - Given there is no `result.txt` file
 - When I run `weblogstat log.4 --output result.txt`
-- Then the command should complete with no error
+- Then I get no error
 - And the output is
 ```
 Total requests: 1
@@ -324,7 +324,7 @@ Malformed lines: 0
 2024-09-21T13:45:25Z 10.0.0.3 GET /c 404 400ms
 ```
 - When I run `weblogstat log.5`
-- Then the command should complete with no error
+- Then I get no error
 - And the output is
 ```
 Total requests: 4
@@ -359,7 +359,7 @@ Top 5 paths:
 2024-09-21T13:45:25Z 10.0.0.4 GET /error 500 250ms
 ```
 - When I run `weblogstat log.8`
-- Then the command should complete with no error
+- Then I get no error
 - And the output is
 ```
 Total requests: 4
@@ -391,7 +391,7 @@ Malformed lines: 0
 2024-09-21T13:45:24Z 10.0.0.3 PATCH /resource 418 200ms
 ```
 - When I run `weblogstat log.6`
-- Then the command should complete with no error
+- Then I get no error
 - And the output is
 ```
 Total requests: 3

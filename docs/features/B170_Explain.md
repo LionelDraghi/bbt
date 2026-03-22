@@ -3,9 +3,9 @@
 <!-- omit from toc -->
 ## Description
 
-This feature output what is understood by `bbt` in natural language.
-Line that are not used by bbt are ignored.
-There is one scenario per Action, cf `bbt list_grammar` for the list (that is defined in package bbt-model.steps.ads).
+This feature output what is understood by `bbt` in natural language.  
+Line that are not used by bbt are ignored.  
+There is one scenario per Action, cf `bbt list_grammar` for the list (that is defined in package bbt-model.steps.ads).  
 
 --- 
 
@@ -29,11 +29,12 @@ _Table of Contents_:
   - [Scenario explain action File\_Is and File\_Is\_Not](#scenario-explain-action-file_is-and-file_is_not)
   - [Scenario explain action File\_Contains and File\_Does\_Not\_Contain](#scenario-explain-action-file_contains-and-file_does_not_contain)
   - [Scenario explain action No\_Output](#scenario-explain-action-no_output)
+  - [Scenario explain Invalid Step](#scenario-explain-invalid-step)
 
 ## Scenario explain elements other than steps
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Ignored header
 
 - ignored bullet point
@@ -58,7 +59,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Setup_No_File
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is no `config.ini` file
 ~~~
@@ -75,7 +76,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Setup_No_Dir
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is no `dir1` directory
 ~~~
@@ -92,7 +93,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Check_File_Existence
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is a `config.ini` file
 - Then  there is a `config.ini` file
@@ -111,7 +112,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Check_Dir_Existence
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is a `dir1` directory
 - Then there is a `dir1` directory
@@ -129,7 +130,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Erase_And_Create
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given the new `dir1` directory
 - Given the new `file1` file containing `string_A`
@@ -144,19 +145,18 @@ line_A
 ```
 Document `scenario_to_explain.md`  
 1: Scenario `1`  
-2: - Ensure that there is a new directory named `dir1`(create if none, overwrite otherwise)  
-3: - Ensure that there is a new file named `file1` containing `string_A`(create if none, overwrite otherwise)  
-4: - Ensure that there is a new file named `file2` containing   
+2: - Create a new directory (overwrite if existing) named `dir1`  
+3: - Create a new file (overwrite if existing) named `file1` containing `string_A`  
+4: - Create a new file (overwrite if existing) named `file2` containing   
 ~~~  
 line_A  
 ~~~  
-(create if none, overwrite otherwise)  
 ```
 
 ## Scenario explain action Create_If_None
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given the dir `dir1`
 - Given the `file1` file containing `string_A`
@@ -172,19 +172,18 @@ line_A
 ```
 Document `scenario_to_explain.md`  
 1: Scenario `1`  
-2: - Ensure that there is a directory named `dir1`(create if none, fail otherwise)  
-3: - Ensure that there is a file named `file1` containing `string_A`(create if none, fail otherwise)  
-4: - Ensure that there is a file named `file2` containing   
+2: - Create a directory (fail if already existing) named `dir1`  
+3: - Create a file (fail if already existing) named `file1` containing `string_A`  
+4: - Create a file (fail if already existing) named `file2` containing   
 ~~~  
 line_A  
 ~~~  
-(create if none, fail otherwise)
 ```
 
 ## Scenario explain action Run
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given I run `sut --help` 
 - When  I run `sut --help` 
@@ -203,7 +202,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Run_Without_Error
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given I successfully run `sut --help` 
 - When  I successfully run `sut --help` 
@@ -222,7 +221,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Check_No_File
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is no `config.ini` file
 - Then  there is no `config.ini` file
@@ -241,7 +240,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Check_No_Dir
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Given there is no `dir1` directory
 - Then  there is no `dir1` directory
@@ -259,7 +258,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Error_Return_Code and No_Error_Return_Code
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - Then there is no error
 - Then I get    no error
@@ -282,7 +281,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action Output_Is
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then output is file `expected.txt`
 - then output is 
@@ -319,7 +318,7 @@ line_B
 ## Scenario explain action Output_Contains and Output_Does_Not_Contain
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then output contains `text`
 - then output contains `expected.txt` file
@@ -358,7 +357,7 @@ line_B
 ## Scenario explain action Output|File_Matches and Output|File_Does_Not_Match
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then `config.ini` matches `regexp`
 - then `config.ini` does not match `regexp`
@@ -381,7 +380,7 @@ Document `scenario_to_explain.md`
 ## Scenario explain action File_Is and File_Is_Not
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then `config.ini` is `mode=silent`
 - then `config.ini` is equal to file `expected/config.ini`
@@ -400,19 +399,19 @@ Document `scenario_to_explain.md`
   
 1: Scenario `1`  
 2: - Check that file `config.ini` content is exactly `mode=silent`  
-3: - Check that file `config.ini` content is exactly `expected/config.ini` file content  
+3: - Check that file `config.ini` content is exactly `expected/config.ini` 
 4: - Check that file `config.ini` content is exactly   
 ~~~  
 line_A  
 ~~~  
   
-8: - Check that file `config.ini` content is not exactly ``previous_config.ini` file content
+8: - Check that file `config.ini` is different from `previous_config.ini`
 ```
 
 ## Scenario explain action File_Contains and File_Does_Not_Contain
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then `config.ini` contains `mode=silent`
 - then `config.ini` contains file `snippet.txt`
@@ -435,16 +434,16 @@ line_B
 Document `scenario_to_explain.md`  
   
 1: Scenario `1`  
-2: - Check that file `config.ini contains `mode=silent`  
-3: - Check that file `config.ini contains `snippet.txt` file content  
-4: - Check that file `config.ini contains   
+2: - Check that file `config.ini` contains `mode=silent`  
+3: - Check that file `config.ini` contains `snippet.txt`  
+4: - Check that file `config.ini` contains   
 ~~~  
 line_A  
 ~~~  
   
-8: - Check that file `config.ini does not contain `mode=silent`  
-9: - Check that file `config.ini does not contain `snippet.txt` file content  
-10: - Check that file `config.ini does not contain   
+8: - Check that file `config.ini` does not contain `mode=silent`  
+9: - Check that file `config.ini` does not contain `snippet.txt`  
+10: - Check that file `config.ini` does not contain   
 ~~~  
 line_B  
 ~~~  
@@ -452,7 +451,7 @@ line_B
 ## Scenario explain action No_Output
 
 - Given the new file `scenario_to_explain.md` 
-~~~
+~~~md
 ## Scenario 1  
 - then I get no output
 - then there is no output
@@ -469,3 +468,27 @@ Document `scenario_to_explain.md`
 3: - Check that last command produces no output
 ```
 
+## Scenario explain Invalid Step
+
+Ensure that there is a clear output on a malformed step, even when running with -q option
+
+- Given the new file `scenario_to_explain.md` 
+~~~md
+## Scenario 1  
+- Then the command should complete with no error
+~~~
+
+- When I run `./bbt explain scenario_to_explain.md`
+
+- Then the output contains
+~~~
+scenario_to_explain.md:2: Error: Unrecognized Step `Then the command should complete with no error`  
+2: - Check *** Unrecognized step **** 
+~~~
+
+- When I run `./bbt -q explain scenario_to_explain.md`
+
+- Then I get 
+~~~
+scenario_to_explain.md:2: Error: Unrecognized Step `Then the command should complete with no error`  
+~~~

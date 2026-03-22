@@ -71,81 +71,94 @@ package body BBT.Model.Steps is
       File_Name_Available    : constant Boolean := Step.Data.Object_File_Name /= "";
       File_Content_Available : constant Boolean := not Is_Empty (Step.Data.File_Content);
 
+      function Object_File_Name return String is
+         (Wrap_In_Backticks (+Step.Data.Object_File_Name));
+      function Object_String return String is
+         (Wrap_In_Backticks (+Step.Data.Object_String));
+      function Subject_String return String is
+         (Wrap_In_Backticks (+Step.Data.Subject_String));
+      function Code_Fenced_File_Content return String is
+         (Code_Fenced_Image (Step.Data.File_Content));
+
       function Optional_Content (Prefix_If_Found : String;
                                  If_Not_Found    : String := "") return String is
-         (if    Obj_String_Available   then Prefix_If_Found & "`" & (+Step.Data.Object_String) & "`"
-          elsif File_Name_Available    then Prefix_If_Found & "`" & (+Step.Data.Object_File_Name) & "` file content"
-          elsif File_Content_Available then Prefix_If_Found & Code_Fenced_Image (Step.Data.File_Content)
+         (if    Obj_String_Available   then Prefix_If_Found & Object_String
+          elsif File_Name_Available    then Prefix_If_Found & Object_File_Name
+          elsif File_Content_Available then Prefix_If_Found & Code_Fenced_File_Content
           else If_Not_Found);
 
       function Output_Is return String is
-         (if    Obj_String_Available   then "that output is `" & (+Step.Data.Object_String) & "`"
-          elsif File_Content_Available then "that output is " & Code_Fenced_Image (Step.Data.File_Content)
-          else " that output is as in file `" & (+Step.Data.Object_File_Name) & "`");
+         (if    Obj_String_Available   then
+           "that output is " & Object_String
+          elsif File_Content_Available then
+            "that output is " & Code_Fenced_File_Content
+          else
+            " that output is as in file " & Object_File_Name);
 
       function Output_Contains return String is
-         (if    Obj_String_Available   then "that output contains `" & (+Step.Data.Object_String) & "`"
-          elsif File_Content_Available then "that output contains " & Code_Fenced_Image (Step.Data.File_Content)
-          else " that output contains as in file `" & (+Step.Data.Object_File_Name) & "`");
+         (if    Obj_String_Available   then
+           "that output contains " & Object_String
+          elsif File_Content_Available then
+            "that output contains " & Code_Fenced_File_Content
+          else
+            " that output contains as in file " & Object_File_Name);
 
       function Output_Does_Not_Contain return String is
-         (if    Obj_String_Available   then "that output does not contain `" & (+Step.Data.Object_String) & "`"
-          elsif File_Content_Available then "that output does not contain " & Code_Fenced_Image (Step.Data.File_Content)
-          else " that output does not contain as in file `" & (+Step.Data.Object_File_Name) & "`");
+         (if    Obj_String_Available   then
+            "that output does not contain " & Object_String
+          elsif File_Content_Available then
+            "that output does not contain " & Code_Fenced_File_Content
+          else
+            " that output does not contain as in file " & Object_File_Name);
 
    begin
-      -- Put_Line ("File_Content_Available = " & File_Content_Available'Image & " Optional_Containing " & Code_Fenced_Image (Step.Data.File_Content));
-
       case Step.Data.Action is
-      when None => return Prefix & "Uninitialized Step ???";
+      when None =>
+         Put_Error (Msg      => "Unrecognized Step "
+                                & Wrap_In_Backticks (+Step.Data.Src_Code),
+                    Location => Step.Location);
+         return Prefix & "*** Unrecognized step **** ";
 
       -- Setup actions
       when Setup_No_File =>
-         return Prefix & "that there is no file `"
-                & (+Step.Data.Object_File_Name) & "` (erase it if needed)";
+         return Prefix & "that there is no file " & Object_File_Name
+                & " (erase it if needed)";
 
       when Setup_No_Dir =>
-        return Prefix & "that there is no directory `"
-               & (+Step.Data.Object_File_Name)  & "` (erase it if needed)";
+        return Prefix & "that there is no directory " & Object_File_Name
+               & " (erase it if needed)";
 
       when Check_File_Existence =>
-         return Prefix & "that file `" & (+Step.Data.Object_File_Name)
-                & "` exists";
+         return Prefix & "that file " & Object_File_Name & " exists";
 
       when Check_Dir_Existence  =>
-        return Prefix & "that directory `" & (+Step.Data.Object_File_Name)
-               & "` exists";
+        return Prefix & "that directory " & Object_File_Name & " exists";
 
       when Erase_And_Create     =>
-        return Prefix & "that there is a new " & File_Kind
-               & " named `" & (+Step.Data.Subject_String) & "`"
-               & Optional_Content (Prefix_If_Found => " containing ")
-               & "(create if none, overwrite otherwise)";
+        return Prefix_Start & "Create a new " & File_Kind
+               & " (overwrite if existing) named " & Subject_String
+               & Optional_Content (Prefix_If_Found => " containing ");
 
       when Create_If_None       =>
-        return Prefix & "that there is a " & File_Kind
-               & " named `" & (+Step.Data.Subject_String) & "`"
-               & Optional_Content (Prefix_If_Found => " containing ")
-               & "(create if none, fail otherwise)";
+        return Prefix_Start & "Create a " & File_Kind
+               & " (fail if already existing) named " & Subject_String
+               & Optional_Content (Prefix_If_Found => " containing ");
 
       -- Run actions
       when Run_Cmd              =>
-         return Prefix_Start & "Run command `" & (+Step.Data.Object_String) & "`"
-                & Executable;
+         return Prefix_Start & "Run command " & Object_String & Executable;
 
       when Run_Without_Error =>
-        return Prefix_Start & "Run command `" & (+Step.Data.Object_String) & "`"
-               & Executable
-               & "and check that it does not return an error";
+        return Prefix_Start & "Run command " & Object_String & Executable
+               & " and check that it does not return an error";
 
       -- Check actions
       when Check_No_File =>
-        return Prefix & "that file `" & (+Step.Data.Object_File_Name)
-               & "` does not exist";
+        return Prefix & "that file " & Object_File_Name & " does not exist";
 
       when Check_No_Dir =>
-        return Prefix & "that directory `" & (+Step.Data.Object_File_Name)
-               & "` does not exist";
+        return Prefix & "that directory " & Object_File_Name
+               & " does not exist";
 
       when Error_Return_Code =>
         return Prefix & "that command returns an error";
@@ -163,40 +176,39 @@ package body BBT.Model.Steps is
          return Prefix & Output_Does_Not_Contain;
 
       when Output_Matches =>
-         return Prefix & "that command output matches regex `"
-                & (+Step.Data.Object_String) & "`";
+         return Prefix & "that command output matches regex " & Object_String;
 
       when Output_Does_Not_Match =>
-         return Prefix & "that command output does not match regex `"
-                & (+Step.Data.Object_String) & "`";
+         return Prefix & "that command output does not match regex "
+                & Object_String;
 
       when File_Matches =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String)
-                & "` content matches regex `" & (+Step.Data.Object_String) & "`";
+         return Prefix & "that file " & Subject_String
+                & " content matches regex " & Object_String;
 
       when File_Does_Not_Match =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String)
-                & "` content does not match regex `"
-                & (+Step.Data.Object_String) & "`";
+         return Prefix & "that file " & Subject_String
+                & " content does not match regex " & Object_String;
 
       when File_Is =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String) & "`"
+         return Prefix & "that file " & Subject_String
                 & Optional_Content (Prefix_If_Found => " content is exactly ",
                                     If_Not_Found    => " ?????????? exists");
 
       when File_Is_Not =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String)
-                & Optional_Content (Prefix_If_Found => "` content is not exactly `",
-                                    If_Not_Found    => " ??????????? exists");
+         return Prefix & "that file " & Subject_String & Optional_Content
+                  (Prefix_If_Found => " is different from ",
+                   If_Not_Found    => " ??????????? exists");
 
       when File_Contains =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String)
+         return Prefix & "that file "
+                & Subject_String
                 & (if Step.Data.Ignore_Order then " (ignoring lines order)"
                    else "")
                 & Optional_Content (Prefix_If_Found => " contains ");
 
       when File_Does_Not_Contain =>
-         return Prefix & "that file `" & (+Step.Data.Subject_String)
+         return Prefix & "that file " & Subject_String
                 & (if Step.Data.Ignore_Order then " (ignoring lines order)"
                    else "")
                 & Optional_Content (Prefix_If_Found => " does not contain ");
@@ -254,7 +266,7 @@ package body BBT.Model.Steps is
             Put_Debug_Line ("Step selected : '" & (+S.Data.Src_Code) & "'");
             Unfilter_Parents (S);
             Unfilter (S);
-            -- if One step is selected, we must mark the parent scenario
+            -- If One step is selected, we must mark the parent scenario
             -- as selected, and possibly Background, etc.
 
          when  Filtered =>

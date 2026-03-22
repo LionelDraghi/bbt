@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.3.0-dev] - 2026--**
+  - [Added]   `explain` command rewritten and tested, now usable 
   
 - **[0.2.1] - 2026-06-13**
   - [Added]   Feature #28: production of a junit.xml file through --junit option

@@ -1390,6 +1390,14 @@
    - OK : Then I get   
    - [X] scenario   [explain action No_Output](../../features/B170_Explain.md) pass  
 
+   ### Scenario: [explain Invalid Step](../../features/B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then the output contains  
+   - OK : When I run `./bbt -q explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain Invalid Step](../../features/B170_Explain.md) pass  
+
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
@@ -1561,12 +1569,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 155 scenarios OK
+## Summary : **Success**, 156 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 155   |
+| Successful | 156   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
