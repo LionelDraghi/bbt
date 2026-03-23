@@ -160,8 +160,8 @@ alr build
 #### AppImage (Linux only)
 Download the AppImage [here](https://github.com/LionelDraghi/bbt/releases), and:  
 ```sh
-chmod +x bbt-0.1.0-x86_64.AppImage
-ln -s bbt-0.1.0-x86_64.AppImage bbt
+chmod +x bbt-0.3.0-dev-x86_64.AppImage
+ln -s bbt-0.3.0-dev-x86_64.AppImage bbt
 ```
 
 (Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
