@@ -4,22 +4,28 @@
 This is a template bbt file, generated with BBT 0.3.0-dev  
 (It's also the shortest possible bbt tutorial!)
 
-A bbt file contains at least :  
+A bbt file contains:  
+1. text that is ignored
+2. scenarios that are interpreted
+ 
+A Scenario minimal structure is:  
 1. a Scenario header, that is a line starting with "# Scenario : "  
-2. some Steps, that is lines starting with "- Given", "- When" or "- Then"  
+2. One or more Steps, that is lines starting with "- Given", "- When" or "- Then"  
 
 **Example :**  
-    ## Scenario : getting gcc version  
+    ## Scenario : get gcc version  
     - When I run `gcc --version`  
     - Then I get `14.2.0`  
 
-## File Structure  
+## Scenarios structure   
+
+The complete scenarios structure is heavily inspired by Gherkin files, with a few nuances. 
 
     [# Background] (at most one per file))
 
     [# Feature] (any number of features per file)
 
-    [# Background] (at most one per Feature)
+    [# Background] (at most    per Feature)
 
     # Scenario 1 (any number of scenarios per feature)
     - Given/When/Then step
@@ -36,6 +42,16 @@ A bbt file contains at least :
     ## Scenario : case insensitive search  
     - When I run `grep -i xyz input.txt`  
     - Then ...  
+
+The only headers reserved for bbt uses are "Feature", "Scenario" or "Example", and "Background"  
+(Example is a synonym for Scenario).  
+Header level is not taken into account : `# Scenario` is equivalent to `#### Scenario`.  
+
+### Non interpreted content
+
+Outside previously mentionned headers and steps, lines are ignored by bbt, that is considered as comments.
+Meanning that you can interleave Scenarios with comments as you want: comments may appear between Header and Steps or even between Steps and code blocks.  
+In case of doubt, just run `bbt explain` on your scenario to ensure that the file is understud the way you want.  
 
 ### Background  
 
@@ -72,10 +88,6 @@ If there is both, Backgrounds are run in appearance order.
     Background 1 run here  
     Background 2 run here  
     - When ...  
-
-Note that the only headers reserved for bbt uses are "Feature", "Scenario" or "Example", and "Background"  
-(Example is a synonym for Scenario).  
-Header level is not taken into account : `# Scenario` is equivalent to `#### Scenario`.  
 
 ### Steps  
 
@@ -142,19 +154,10 @@ If what you want is just test that the output contains something, then use the "
 
 If what you want is search for some pattern, then use the "matches" keyword, followed by a regexp :  
 
-    - Then output **matches** `sut version v[0-9]+\.[0-9]+\.[0-9]+`  
+    - Then output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`  
 
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  
-
-### Other content of the file  
-
-bbt tries not to interfere with file editing and leaves as much flexibility as possible to the writer :  
-- Headers other than Feature / Background / Scenario / Example are ignored by bbt  
-  and there content treated as comment.  
-- meaning that bullet point starting with Given / When / Then / And / But may be used outside of the  
-  considered Headers.  
-- Comments may apper between Header and Steps or even between Steps and code blocks.  
 
 ## Help  
 
