@@ -1,6 +1,6 @@
 # gcc simple sanity tests
 
-## Scenario: gcc version?
+## Scenario 1 : get gcc version
   
   On Linux or Windows, the output is something like: 
   > gcc version 14.2.0 (Debian 14.2.0-16)  
@@ -13,7 +13,7 @@ Let's use a regexp to test both:
 - When I run `gcc -v`
 - Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
 
-## Scenario: compiling and executing an hello word
+## Scenario 1 : compiling and executing an hello word
 
 Sanity check of a complete compile / link / run sequence :
 
