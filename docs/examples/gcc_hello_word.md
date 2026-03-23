@@ -13,7 +13,7 @@ Let's use a regexp to test both:
 - When I run `gcc -v`
 - Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
 
-## Scenario 1 : compiling and executing an hello word
+## Scenario 2 : compiling and executing an hello word
 
 Sanity check of a complete compile / link / run sequence :
 
