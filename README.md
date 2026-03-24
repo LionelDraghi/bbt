@@ -168,15 +168,17 @@ ln -s bbt-0.3.0-dev-x86_64.AppImage bbt
 
 ## First use
 
-To get started, you can either draw inspiration from one of the [examples](https://github.com/LionelDraghi/bbt/tree/main/docs/examples), or have bbt generate a template for you :
+To get started, you can either draw inspiration from one of the [examples](https://github.com/LionelDraghi/bbt/tree/main/docs/examples), or have bbt generate a sample scenario for you :
 ```
-bbt create_template
+bbt help example > my_scen.md
 ```
-This will create a `bbt_template.md` file, which is both a template and a short tutorial.
 
-Dont' forget to rename it, by default bbt recognize it's own template and doesn't run it, so that you can keep it with your scenarios.
+A short but pretty exaustive tutorial may be generated with 
+```
+bbt help tutorial 
+```
 
-A good example to start simple is given by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project : there is just a scenarios file called `tests.md`.
+A good example of a real use is given by Simon in it's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project : there is just a scenarios file called `tests.md`.
 
 ## Why should I use bbt?
 
@@ -205,8 +207,8 @@ Nice consequence, bbt scenarios may be written by non coders people.
 bbt Steps uses a limited English subset, with a vocabulary dedicated to test with no-surprise keywords like *run*, *output*, *contains*, etc.  
 
 Although simple, you don't have to learn this subset by heart, you may :
-- ask for a template scenario by running `bbt create_template` (short form `bbt ct`), or
-- ask for the complete grammar with `bbt list_grammar` (short form `bbt lg`).  
+- ask for a example scenario by running `bbt help example`, 
+- ask for a short but pretty comprehensive tutorial with `bbt help tutorial`.  
 
 ### No-fuss no-wait run
 

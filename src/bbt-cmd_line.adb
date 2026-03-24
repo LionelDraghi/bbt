@@ -103,7 +103,7 @@ package body BBT.Cmd_Line is
    procedure Put_Settings                           is separate;
    procedure Put_Help (Topic : Settings.Help_Topic) is separate;
    procedure Put_Trace_Topics                       is separate;
-   procedure Create_Template                        is separate;
+   -- procedure Create_Template                        is separate;
 
    -- --------------------------------------------------------------------------
    procedure Analyze is
@@ -141,6 +141,10 @@ package body BBT.Cmd_Line is
             -- First check obsolete options
             if Cmd = "-o" or Cmd = "--output" then
                Put_Warning ("-o and --output options deprecated, use --index instead");
+
+            elsif Cmd in "create_template" | "ct" then
+               Put_Warning ("ct and create_template commands deprecated, use `help example` or `help tutorial` instead");
+
             end if;
 
             -- Commands --------------------------------------------------------
@@ -178,8 +182,8 @@ package body BBT.Cmd_Line is
             elsif Cmd in "list_grammar" | "lg" then
                Set_Cmd (List_Grammar);
 
-            elsif Cmd in "create_template" | "ct" then
-               Set_Cmd (Create_Template);
+            --  elsif Cmd in "create_template" | "ct" then
+               --  Set_Cmd (Create_Template);
 
                -- Options ------------------------------------------------------
             elsif Cmd = "-o" or Cmd = "--output" or Cmd = "--index"

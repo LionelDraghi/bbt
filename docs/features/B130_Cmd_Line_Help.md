@@ -1,16 +1,18 @@
 <!-- omit from toc -->
-## Feature: Clear command line help 
+# Feature: Clear command line help 
 
 bbt goal to have an almost zero effort learning curve rely on a clear command line help.
 
 _Table of Contents:_
+- [Background:](#background)
 - [Scenario: calling bbt without parameter or with -h put the normal help](#scenario-calling-bbt-without-parameter-or-with--h-put-the-normal-help)
 - [Scenario: filtering help](#scenario-filtering-help)
 - [Scenario: matching help](#scenario-matching-help)
 - [Scenario: others help](#scenario-others-help)
 - [Scenario: On\_All help](#scenario-on_all-help)
+- [Scenario: generated tutorial is OK](#scenario-generated-tutorial-is-ok)
 
-### Background:
+## Background:
 - Given the file `base_help.txt` 
 ~~~
 Usage : bbt [Options]* [Command] file*  
@@ -33,7 +35,6 @@ Basic options:
 Basic commands:  
        run               : the default command  
   ls | list              : list selected items  
-  ct | create_template   : create a commented example of input file  
   he | help [topic]      : base help, or more on one of the topic listed below  
   he | help on_all       : full online help  
   he | help tutorial     : create a tutorial in bbt_tutorial.md  
@@ -106,7 +107,7 @@ Other options:
 ~~~
 
 
-# Scenario: calling bbt without parameter or with -h put the normal help
+## Scenario: calling bbt without parameter or with -h put the normal help
 - When I run `./bbt` 
 - then the output contains file `base_help.txt`
 - And the output contains 
@@ -128,21 +129,30 @@ https://github.com/LionelDraghi/bbt/
 https://github.com/LionelDraghi/bbt/  
 ~~~
 
-# Scenario: filtering help
+## Scenario: filtering help
 - When I run `./bbt he filtering` 
 - then the output is file `filtering.txt`
 
-# Scenario: matching help
+## Scenario: matching help
 - When I run `./bbt help matching` 
 - then the output is file `matching.txt`
 
-# Scenario: others help
+## Scenario: others help
 - When I run `./bbt help other` 
 - then the output is file `other.txt`
 
-# Scenario: On_All help
+## Scenario: On_All help
 - When I run `./bbt help on_all` 
 - then the output contains file `base.txt`
 - and  the output contains file `filtering.txt`
 - and  the output contains file `matching.txt`
 - and  the output contains file `other.txt`
+
+## Scenario: generated tutorial is OK
+
+Testing that the generated tutorial works is the bare minimum
+
+- When I run `./bbt help tutorial > tutorial.md` 
+- And  I run `./bbt -c tutorial.md`
+- Then there is no error
+

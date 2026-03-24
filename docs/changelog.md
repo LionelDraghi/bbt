@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.3.0-dev] - 2026--**
-  - [Added]   `explain` command rewritten and tested, now usable 
+  - [Added]   `explain` command rewritten and tested, now usable
+  - [Changed] the `create_template` command is replaced with `help tutorial` and `help example` 
   
 - **[0.2.1] - 2026-06-13**
   - [Added]   Feature #28: production of a junit.xml file through --junit option

@@ -1,8 +1,7 @@
 
 ## Introduction  
 
-This is a template bbt file, generated with BBT 0.3.0-dev  
-(It's also the shortest possible bbt tutorial!)
+This is a bbt tutorial, generated with BBT 0.3.0-dev  
 
 A bbt file contains:  
 1. text that is ignored

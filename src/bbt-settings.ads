@@ -21,7 +21,7 @@ private package BBT.Settings is
                     List_Keywords,
                     List_Grammar,
                     List_Files,
-                    Create_Template,
+                    -- Create_Template,
                     Help,
                     Version,
                     None);
@@ -64,9 +64,9 @@ private package BBT.Settings is
    -- Selection_Mode will be set, and all items will be filtered
    -- except those provided with --select or --include.
 
-   Template_Name : constant String := "bbt_template.md";
-   Tutorial_Name : constant String := "bbt_tutorial.md";
-   Example_Name  : constant String := "bbt_example.md";
+   --  Template_Name : constant String := "bbt_template.md";
+   --  Tutorial_Name : constant String := "bbt_tutorial.md";
+   --  Example_Name  : constant String := "bbt_example.md";
 
    -- --------------------------------------------------------------------------
    function Stop_On_Error return Boolean is (not Keep_Going);

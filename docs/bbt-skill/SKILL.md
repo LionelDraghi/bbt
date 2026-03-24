@@ -41,8 +41,7 @@ metadata:
 
 `bbt` scenarios are characterized by a Gherkin structure, embedded within structured text file, mainly Markdown, but also restructured text and Asciidoc.
 
-`bbt create_template` generate a comprehensive description of the file structure in a file named `bbt_template.md`
-(this file is also available at https://github.com/LionelDraghi/bbt/blob/main/docs/bbt_template.md)
+`bbt help tutorial` generate a comprehensive description of the file structure, also available at https://github.com/LionelDraghi/bbt/blob/main/docs/tutorial.md
 
 Here is a File example, with comments starting with "-->" at the end of each line to explain how `bbt` will interpret it: 
 

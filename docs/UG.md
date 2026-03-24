@@ -23,7 +23,7 @@ User Guide  <!-- omit from toc -->
 
 ## Where to start
 
-The quickest way to get started is to read the [scenario template](https://github.com/LionelDraghi/bbt/tree/main/docs/bbt_template.md) generated with `bbt create_template`. It is both a template and a short tutorial.
+The quickest way to get started is to generate the short tutorial with `bbt help tutorial`, and the scenario example with `bbt help example`.
 That's enough to start playing.
 
 However, it is also highly recommended to read the [*bbt* README](https://github.com/LionelDraghi/bbt/tree/main/README.md) to grasp the tool’s core concepts and design philosophy.
@@ -203,7 +203,7 @@ To see what files, use `bbt --list_files`, possibly with `--recurse`.
 
 But if you specify the files, even using wildcards, like in `bbt tests/robustness*`, then bbt will consider that you know what you do, maybe you have a different naming convention, and will try to run each of them. So that you can name your file `.bbt`, or `.gmd` as you wish.
 
-As a special rule, two specific files will be ignored even if they are in the search path: the template file (`bbt_template.md`), and the index file if the `--index` option is used. The first is not supposed to be run, and the second is probably a consequence of a previous run. 
+As a special rule, a file will be ignored even if in the search path: the index file if the `--index` option is used, as it is probably a consequence of a previous run. 
 
 ## Tips
 

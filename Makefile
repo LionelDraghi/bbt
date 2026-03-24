@@ -37,9 +37,9 @@ doc: ./bbt
 	./bbt list_grammar  > docs/grammar.md
 	./bbt list_keywords > docs/keywords.md
 
-	./bbt create_template
-	mv bbt_template.md docs/
-
+	./bbt help tutorial  > docs/tutorial.md
+	./bbt help example   > docs/example.md -- Fixme: add a test of generated scenarios
+	
 	> docs/bbt_help.md
 	echo "# Command line help" >> docs/bbt_help.md
 	echo '```'                 >> docs/bbt_help.md

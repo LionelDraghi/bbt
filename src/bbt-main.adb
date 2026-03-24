@@ -165,9 +165,9 @@ begin
 
       end if;
 
-   when Create_Template =>
-      Status_Bar.Put_Activity ("Creating template");
-      Cmd_Line.Create_Template;
+   --  when Create_Template =>
+   --     Status_Bar.Put_Activity ("Creating template");
+   --     Cmd_Line.Create_Template;
 
    when Version =>
       Ada.Text_IO.Put_Line ("bbt version " & Settings.BBT_Version);

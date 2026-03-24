@@ -21,7 +21,6 @@ Basic options:
 Basic commands:
        run               : the default command
   ls | list              : list selected items
-  ct | create_template   : create a commented example of input file
   he | help [topic]      : base help, or more on one of the topic listed below
   he | help on_all       : full online help
   he | help tutorial     : create a tutorial in bbt_tutorial.md
@@ -30,8 +29,8 @@ Basic commands:
 Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
-  other     : list_files list_keywords list_grammar explain create_template
-              --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
+  other     : list_files list_keywords list_grammar explain --strict
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
 bbt version 0.3.0-dev
