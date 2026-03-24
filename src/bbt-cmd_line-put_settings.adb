@@ -38,7 +38,6 @@ begin
    Put_Line ("   Output file directory : " & Settings.Output_File_Dir);
    Put_Line ("   Index directory       : " & Index_Dir);
    Put_Line ("   Index file            : " & Index_File_Name);
-   Put_Line ("   Template_Name         : " & Template_Name);
    New_Line;
    Put_Line ("   " & Checkbox (Keep_Going) & " Keep_Going");
    Put_Line ("   " & Checkbox (Ignore_Errors) & " Ignore_Errors");

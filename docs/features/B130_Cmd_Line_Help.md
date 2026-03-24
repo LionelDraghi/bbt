@@ -36,16 +36,19 @@ Basic commands:
        run               : the default command  
   ls | list              : list selected items  
   he | help [topic]      : base help, or more on one of the topic listed below  
-  he | help on_all       : full online help  
-  he | help tutorial     : create a tutorial in bbt_tutorial.md  
-  he | help example      : create a scenario example in bbt_example.md  
+  he | help on_all       : help on all topics  
+  he | help tutorial     : create a tutorial  
+  he | help example      : create a scenario example in   
   
 Help topics:  
   filtering : --select --exclude --include  
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
-  other     : list_files list_keywords list_grammar explain create_template  
+  other     : list_files list_keywords list_grammar explain  
               --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
   debug     : -d tt -ls -t  
+  
+bbt version 0.3.0-dev  
+https://github.com/LionelDraghi/bbt/
 ~~~
 
 - Given the file `filtering.txt`
@@ -152,7 +155,7 @@ https://github.com/LionelDraghi/bbt/
 
 Testing that the generated tutorial works is the bare minimum
 
-- When I run `./bbt help tutorial > tutorial.md` 
-- And  I run `./bbt -c tutorial.md`
+- When I run `./bbt help example > example.md` 
+- And  I run `./bbt -c example.md`
 - Then there is no error
 

@@ -16,7 +16,7 @@ separate (BBT.Cmd_Line)
 procedure Put_Help (Topic : Settings.Help_Topic) is
 begin
    case Topic is
-      when Base =>
+      when Base => -- Put_Line (Base_Help);
          New_Line;
          Put_Line ("Usage : bbt [Options]* [Command] file*");
          New_Line;
@@ -41,8 +41,8 @@ begin
          -- Put_Line ("  ct | create_template   : create a commented example of input file");
          Put_Line ("  he | help [topic]      : base help, or more on one of the topic listed below");
          Put_Line ("  he | help on_all       : help on all topics");
-         Put_Line ("  he | help tutorial     : create a tutorial in " & Tutorial_Name);
-         Put_Line ("  he | help example      : create a scenario example in " & Example_Name);
+         Put_Line ("  he | help tutorial     : create a tutorial");
+         Put_Line ("  he | help example      : create a scenario example in ");
          New_Line;
          Put_Line ("Help topics:");
          Put_Line ("  filtering : --select --exclude --include");

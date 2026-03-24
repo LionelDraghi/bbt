@@ -27,6 +27,6 @@ Basic commands:
 Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
-  other     : list_files list_keywords list_grammar explain
-              --strict --index file.md --exec_dir --tmp_dir --junit --generate_badge
+  other     : list_files list_keywords list_grammar explain --strict
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
