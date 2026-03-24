@@ -81,12 +81,14 @@ package body BBT.Scenarios.Steps is
    -- Convert token to string representation
    function Image (T : Tokens) return String is separate;
 
+   type Example_String is access String;
+
    -- Grammar item definition
    type Grammar_Items is record
       Action              : Actions := None;
       Code_Block_Expected : Boolean := False;
       -- set when a code fenced block is expected after the step line
-      Example             : access String;
+      Example             : Example_String := new String'("");
    end record;
 
    -- Full grammar definition, with default "no action" values
@@ -171,7 +173,7 @@ package body BBT.Scenarios.Steps is
                           (if A.Code_Block_Expected then "    X" else ""));
          C := @ + 13; Set_Col (C);
 
-         Ada.Text_IO.Put_Line (" | " & A.Example);
+         Ada.Text_IO.Put_Line (" | " & A.Example.all);
 
          Ada.Text_IO.Put_Line (" |  ");
       end if;

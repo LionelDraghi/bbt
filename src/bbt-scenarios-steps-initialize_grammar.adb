@@ -26,12 +26,12 @@ procedure Initialize_Grammar (G : in out Grammar) is
    end Set;
 
 begin
-   Set (Given, No_SA,  No_Subject,   Is_No,      Obj_File_Name, (Setup_No_File, False, new String'("- Given there is no `config.ini` file"));
-   Set (Given, No_SA,  No_Subject,   Is_No,      Obj_Dir_Name,  (Setup_No_Dir, False, new String'("- Given there is no `dir1` directory"));
-   Set (Given, No_SA,  No_Subject,   Is_V,       Obj_File_Name, (Check_File_Existence, False, new String'("- Given there is a `config.ini` file")));
-   Set (Given, No_SA,  No_Subject,   Is_V,       Obj_Dir_Name, (Check_Dir_Existence, False, new String'("- Given there is a `dir1` directory")));
-   Set (Given, New_SA, Subject_File, Containing, Obj_Text,     (Erase_And_Create, False, new String'("- Given the new file `config.ini` containing `lang=it`")));
-   Set (Given, No_SA,  Subject_File, Containing, Obj_Text,     (Create_If_None, False, new String'("- Given the file `config.ini` containing `lang=it`")));
+   Set (Given, No_SA,  No_Subject,   Is_No,      Obj_File_Name, (Setup_No_File, False, new String'("- Given there is no `config.ini` file")));
+   Set (Given, No_SA,  No_Subject,   Is_No,      Obj_Dir_Name,  (Setup_No_Dir, False, new String'("- Given there is no `dir1` directory")));
+   Set (Given, No_SA,  No_Subject,   Is_V,       Obj_File_Name, (Check_File_Existence, False, new String'("- Given there is a `config.ini`   file")));
+   Set (Given, No_SA,  No_Subject,   Is_V,       Obj_Dir_Name, (Check_Dir_Existence, False, new String'("- Given there is a `dir1` directory"   )));
+   Set (Given, New_SA, Subject_File, Containing, Obj_Text,     (Erase_And_Create, False, new String'("- Given the new file `config.ini` containi   ng `lang=it`")));
+   Set (Given, No_SA,  Subject_File, Containing, Obj_Text,     (Create_If_None, False, new String'("- Given the file `config.ini` containing `lang=   it`")));
                                                                                          -- Fixme: we currently do not check if the existing file contains
                                                                                          --  what is expected
    Set (Given, New_SA, Subject_File, Containing, No_Object, (Erase_And_Create, True, new String'("- Given the new file `config.ini` containing followed by code fenced content"))); -- Given the new file `config.ini` containing followed by code fenced content
