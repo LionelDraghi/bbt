@@ -111,7 +111,7 @@ doc: $(RESULTS_DIR)
 	
 	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	echo wget badge ...
-	@ wget -q '$(BADGE_URL)' -O $(RESULTS_DIR)/badge.svg
+	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 
 clean:
 	@ - rm -f *.out main bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md

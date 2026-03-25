@@ -38,17 +38,16 @@ begin
          Put_Line ("Basic commands:");
          Put_Line ("       run               : the default command");
          Put_Line ("  ls | list              : list selected items");
-         -- Put_Line ("  ct | create_template   : create a commented example of input file");
          Put_Line ("  he | help [topic]      : base help, or more on one of the topic listed below");
          Put_Line ("  he | help on_all       : help on all topics");
          Put_Line ("  he | help tutorial     : create a tutorial");
-         Put_Line ("  he | help example      : create a scenario example in ");
+         Put_Line ("  he | help example      : create an example scenario");
          New_Line;
          Put_Line ("Help topics:");
          Put_Line ("  filtering : --select --exclude --include");
          Put_Line ("  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines");
-         Put_Line ("  other     : list_files list_keywords list_grammar explain");
-         Put_Line ("              --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge");
+         Put_Line ("  other     : list_files list_keywords list_grammar explain --strict ");
+         Put_Line ("              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge");
          Put_Line ("  debug     : -d tt -ls -t");
          New_Line;
          Put_Line ("bbt version " & Settings.BBT_Version);
@@ -266,7 +265,7 @@ begin
       when On_All =>
          -- First the base, then topics
          Put_Help (Base);
-         for Topic in Help_Topic when Topic not in On_All | Base loop
+         for Topic in Help_Topic when Topic not in On_All | Base | Tutorial | Example loop
             -- Recursive call on all but this topic
             Put_Help (Topic);
          end loop;

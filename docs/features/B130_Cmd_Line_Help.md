@@ -39,13 +39,13 @@ Basic commands:
   he | help [topic]      : base help, or more on one of the topic listed below  
   he | help on_all       : help on all topics  
   he | help tutorial     : create a tutorial  
-  he | help example      : create a scenario example in   
+  he | help example      : create an example scenario   
   
 Help topics:  
   filtering : --select --exclude --include  
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
-  other     : list_files list_keywords list_grammar explain  
-              --strict --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
   debug     : -d tt -ls -t  
   
 bbt version 0.3.0-dev  

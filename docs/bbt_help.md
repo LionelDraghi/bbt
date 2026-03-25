@@ -22,14 +22,14 @@ Basic commands:
        run               : the default command
   ls | list              : list selected items
   he | help [topic]      : base help, or more on one of the topic listed below
-  he | help on_all       : full online help
-  he | help tutorial     : create a tutorial in bbt_tutorial.md
-  he | help example      : create a scenario example in bbt_example.md
+  he | help on_all       : help on all topics
+  he | help tutorial     : create a tutorial
+  he | help example      : create an example scenario
 
 Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
-  other     : list_files list_keywords list_grammar explain --strict
+  other     : list_files list_keywords list_grammar explain --strict 
               --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 

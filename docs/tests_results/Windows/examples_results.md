@@ -1,18 +1,18 @@
 
-# Document: [gcc_hello_word.md](..\..\examples\gcc_hello_word.md)  
-   ### Scenario: [gcc version?](..\..\examples\gcc_hello_word.md): 
+# Document: [gcc_hello_world.md](..\..\examples\gcc_hello_world.md)  
+   ### Scenario: [gcc version?](..\..\examples\gcc_hello_world.md): 
    - OK : When I run `gcc -v`  
    - OK : Then the output contains `version `  
    - OK : Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
-   - [X] scenario   [gcc version?](..\..\examples\gcc_hello_word.md) pass  
+   - [X] scenario   [gcc version?](..\..\examples\gcc_hello_world.md) pass  
 
-   ### Scenario: [compiling and executing an hello word](..\..\examples\gcc_hello_word.md): 
+   ### Scenario: [compiling and executing an hello word](..\..\examples\gcc_hello_world.md): 
    - OK : Given the new file `main.c`  
    - OK : And given there is no `./main` file  
    - OK : When I successfully run `gcc main.c -o main`  
    - OK : And  I run `./main`  
    - OK : Then the output is `Hello, World!`  
-   - [X] scenario   [compiling and executing an hello word](..\..\examples\gcc_hello_word.md) pass  
+   - [X] scenario   [compiling and executing an hello word](..\..\examples\gcc_hello_world.md) pass  
 
 
 # Document: [rpl_case_insensitivity.md](..\..\examples\rpl_case_insensitivity.md)  

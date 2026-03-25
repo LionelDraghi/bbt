@@ -38,17 +38,9 @@ doc: ./bbt
 	./bbt list_keywords > docs/keywords.md
 
 	./bbt help tutorial  > docs/tutorial.md
-	./bbt help example   > docs/example.md -- Fixme: add a test of generated scenarios
-	
-	> docs/bbt_help.md
-	echo "# Command line help" >> docs/bbt_help.md
-	echo '```'                 >> docs/bbt_help.md
-	./bbt help                 >> docs/bbt_help.md
-	./bbt help filtering       >> docs/bbt_help.md
-	./bbt help matching        >> docs/bbt_help.md
-	./bbt help other           >> docs/bbt_help.md
-	echo '```'                 >> docs/bbt_help.md
-	
+	./bbt help example   > docs/example.md 
+	./bbt help on_all    > docs/bbt_help.md 
+
 	echo 'Fixme in current version'	>  fixme_index.md
 	echo '------------------------'	>> fixme_index.md
 	echo                            >> fixme_index.md
