@@ -1,5 +1,3 @@
-# Command line help
-```
 
 Usage : bbt [Options]* [Command] file*
 
@@ -84,4 +82,13 @@ Other options:
   -gb | --generate_badge badge.url : create a text file containing
                            a shields.io URL to get a svg badge
                            with tests results summary.
-```
+
+Debug command:
+   tt             : list trace topics
+Debug options:
+   -ls            : list settings
+   -d             : very very verbose output
+   -d trace_topic : activate debug traces for the topic
+
+Friends are here : https://github.com/LionelDraghi/bbt/Issues
+Good luck :-)

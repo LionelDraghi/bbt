@@ -223,7 +223,7 @@ package body BBT.Model.Steps is
    -- --------------------------------------------------------------------------
    function Create_Step (Info            : Step_Data;
                          Loc             : Location_Type;
-                         Parent_Scenario : Scenarios.Scenario_Access)
+                         Parent_Scenario : access Scenarios.Scenario_Type)
                          return Step_Type
    is (Filtered    => <>,
        Location    => Loc,

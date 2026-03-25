@@ -16,9 +16,9 @@ package BBT.Model.Steps is
 -- --------------------------------------------------------------------------
    type Extended_Step_Categories is
      (Unknown,
-      Given_Step, -- Precond, -- Given
-      When_Step,  -- Action,  -- When
-      Then_Step); -- Checks); -- Then
+      Given_Step, -- Precond
+      When_Step,  -- Action
+      Then_Step); -- Checks
    subtype Step_Categories is Extended_Step_Categories range
      Extended_Step_Categories'Succ (Unknown) ..
      Extended_Step_Categories'Last;
@@ -89,7 +89,7 @@ package BBT.Model.Steps is
    -- --------------------------------------------------------------------------
    function Create_Step (Info            : Step_Data;
                          Loc             : Location_Type;
-                         Parent_Scenario : Scenarios.Scenario_Access)
+                         Parent_Scenario : access Scenarios.Scenario_Type)
                          return Step_Type;
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

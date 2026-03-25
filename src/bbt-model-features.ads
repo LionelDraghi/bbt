@@ -29,7 +29,7 @@ package BBT.Model.Features is
    -- --------------------------------------------------------------------------
    function Create_Feature
      (Name     : Unbounded_String;
-      Parent   : Documents.Document_Access;
+      Parent   : access Documents.Document_Type;
       Location : Location_Type) return Feature_Type;
    overriding function Has_Background
      (F : Feature_Type) return Boolean;
