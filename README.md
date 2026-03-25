@@ -5,7 +5,7 @@
 [![image](https://img.shields.io/badge/-inside-blue?logo=ada&logoColor=white&labelColor=grey&logoSize=auto&style=flat-square)](https://ada-lang.io/)
 [![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-blue?style=flat-square)](https://blog.adacore.com/ada-spark-crate-of-the-year-2024-winners-announced) 
 
-![(docs/tests_results/Linux/badge.svg)](docs/tests_results/Linux/features_results.md) ![](docs/tests_results/Windows/badge.svg) ![](docs/tests_results/Darwin/badge.svg)
+![](docs/tests_results/Linux/badge.svg) ![](docs/tests_results/Windows/badge.svg) ![](docs/tests_results/Darwin/badge.svg)
 
 ---
 - [Overview](#overview)
