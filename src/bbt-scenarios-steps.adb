@@ -173,9 +173,7 @@ package body BBT.Scenarios.Steps is
                           (if A.Code_Block_Expected then "    X" else ""));
          C := @ + 13; Set_Col (C);
 
-         Ada.Text_IO.Put_Line (" | " & A.Example.all);
-
-         Ada.Text_IO.Put_Line (" |  ");
+         Ada.Text_IO.Put_Line (" | " & A.Example.all & " |  ");
       end if;
    end Put_Rule;
 
