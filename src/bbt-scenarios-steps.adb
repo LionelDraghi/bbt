@@ -314,7 +314,7 @@ package body BBT.Scenarios.Steps is
             begin
                case TT is
                when Keyword =>
-                  Process_Keyword (Tok, State, Loc); --, Cmd_List);
+                  Process_Keyword (Tok, Loc, State); --, Cmd_List);
 
                when Identifier =>
                   null;
@@ -342,13 +342,13 @@ package body BBT.Scenarios.Steps is
          declare
             Code_Block_Expected_Local : Boolean;
          begin
-            Validate_Step_State (State,
-                                 Loc,
+            Validate_Step_State (Loc,
                                  -- Cmd_List,
                                  Chunk.Verb,
                                  No_Subject_String,
                                  No_Object_File_Name,
-                                 Code_Block_Expected_Local);
+                                 Code_Block_Expected_Local,
+                                 State);
             Code_Block_Expected := Code_Block_Expected_Local;
          end;
 

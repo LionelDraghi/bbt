@@ -187,7 +187,7 @@ package body BBT.Scenarios.Files is
          Line_Processing :
          declare
             Line                : aliased constant String := Get_Line (Input);
-            Cmd_List            : BBT.Model.Steps.Cmd_List;
+            -- Cmd_List            : BBT.Model.Steps.Cmd_List;
             Code_Block_Expected : Boolean;
             Attrib              : constant Line_Attributes := Parse_Line
               (Line'Access, File_Format, Lexer_Context, Loc);

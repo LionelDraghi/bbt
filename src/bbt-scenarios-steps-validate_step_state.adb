@@ -83,12 +83,12 @@ begin
 
    end case;
 
-   if Parse_State.Cat = Run_Step and then
-      (State.Cmd_List.Length + 1 /= Or_Met) then
+   if State.Cat = Run_Step and then
+      (State.Cmd_List.Length + 1 /= State.Or_Met) then
       IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
    end if;
 
    Put_Debug_Line ("  0r_Met = " & State.Or_Met'Image &
-                   ", Cmd_List = " & State.Commands'Image,  Loc);
+                   ", Cmd_List = " & State.Cmd_List'Image,  Loc);
 
 end Validate_Step_State;
