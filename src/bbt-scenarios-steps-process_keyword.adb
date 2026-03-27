@@ -8,8 +8,8 @@
 separate (BBT.Scenarios.Steps)
 
 procedure Process_Keyword (Tok      : String;
-                           State    : in out Parse_State;
-                           Loc      : Location_Type) is
+                           Loc      : Location_Type;
+                           State    : in out Parse_State) is
                            -- Cmd_List : in out Model.Steps.Cmd_List) is
 
    use Ada.Strings.Maps.Constants;

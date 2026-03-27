@@ -321,8 +321,8 @@ package body BBT.Scenarios.Steps is
 
                when Code_Span =>
                   Process_Code_Span (Tok,
-                                     State,
                                      Loc,
+                                     State,
                                      -- Cmd_List,
                                      Chunk.In_Subject_Part,
                                      Chunk.In_Object_Part,
@@ -363,7 +363,7 @@ package body BBT.Scenarios.Steps is
               Object_String    => State.Object_String,
               Object_File_Name => State.Object_File_Name,
               File_Type        => State.File_Type,
-              Cmd_List         => State.Cmd_List,
+              Commands         => State.Cmd_List,
               Executable_File  => State.Executable,
               Ignore_Order     => State.Ignore_Order,
               File_Content     => Empty_Text,
