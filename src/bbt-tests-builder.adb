@@ -38,7 +38,7 @@ package body BBT.Tests.Builder is
                    In_Scenario,
                    In_Background,
                    In_Step,
-                   In_File_Content) with default Not_In_Document;
+                   In_File_Content) with default_Value => Not_In_Document;
 
    subtype Doc_States is States range In_Document .. In_Feature;
 
@@ -222,14 +222,14 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step_Info           : in out Model.Steps.Step_Data;
                        Code_Block_Expected : Boolean;
-                       Cmd_List            : Model.Steps.Cmd_List;
+                       -- Cmd_List            : Model.Steps.Cmd_List;
                        Loc                 : Location_Type;
                        Syntax_Error        : Boolean := False)
    is
       -- -----------------------------------------------------------------------
       procedure Append_And_Duplicate_Step (Scen : Scenario_Access) is
       begin
-         if Step_Info.Cmd_List.Is_Empty then
+         if Step_Info.Commands.Is_Empty then
             -- normal case, there is no "or"
             declare
                Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
@@ -239,24 +239,20 @@ package body BBT.Tests.Builder is
             end;
 
          else
-            for Cmd of Step_Info.Cmd_List loop
+            for Cmd of Step_Info.Commands loop
                Put_Debug_Line
                  ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
                declare
-                  Scen : Model.Scenario : Create_Scenario
-                    (Name          => " x/y " & Scen.Name,
-                     Parent        => Scen.Parent,
-                     Location      => Scen.Location);
+                  Scen_B : Model.Scenarios.Scenario_Type :=
+                    Model.Scenarios.Create_Scenario
+                      (Name     => " x/y " & Scen.Name,
+                       Parent   => Scen.Parent,
+                       Location => Scen.Location);
                begin
-                  Location      : Location_Type;
-                  Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
-               -- "or" case, we will duplicate the whole scenario, except the
-               -- cmd
-               begin
-                  -- the existing scenario will receive the first cmd
-                  Step.Set_Has_Syntax_Error (Syntax_Error);
-
-                  Scen.Add_Step (Step);
+                  null;
+                  -- 1. repérer le step à modifier
+                  --  2. changer la commande dnas le step en question
+                  --  3. insérer le scenario créé derriere celui dupliqué
 
                   --  for S in 1 .. Cmd_List.Count - 1 loop
                   --     Scen.Step_List
@@ -267,7 +263,7 @@ package body BBT.Tests.Builder is
                   -- By definition, the Last_Index point to the current Step,
                   -- the one we want to store as containing the command list.
                   -- NB : there can't be two "or" per scenario, only one.
-               end if;
+               end;
             end loop;
             --  Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
          end;
@@ -417,9 +413,7 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Line (Line : String;
-                       Loc  : Location_Type)
-   is
-      pragma Unreferenced (Loc);
+                       Loc  : Location_Type) is
    begin
       case Current_State is
          when In_Document =>
