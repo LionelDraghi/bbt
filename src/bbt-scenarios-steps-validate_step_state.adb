@@ -83,7 +83,7 @@ begin
 
    end case;
 
-   if not Is_Empty (State.Cmd_List.Length)
+   if not State.Cmd_List.Is_Empty
       -- This is a "cmd1 or cmd2 or cmd3" Step
       and Natural (State.Cmd_List.Length) /= (State.Or_Met + 1))
       -- But the number of commands does not match the number of "or"
