@@ -84,9 +84,9 @@ begin
    end case;
 
    if not Is_Empty (State.Cmd_List.Length)
-      -- This is a " cmd1 or cmd2" step
+      -- This is a "cmd1 or cmd2 or cmd3" Step
       and Natural (State.Cmd_List.Length) /= (State.Or_Met + 1))
-      -- But the number of commands does not match )
+      -- But the number of commands does not match the number of "or"
    then
       IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
       IO.Put_Error ("  0r_Met = " & State.Or_Met'Image &
