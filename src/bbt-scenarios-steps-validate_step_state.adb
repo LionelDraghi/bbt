@@ -89,6 +89,6 @@ begin
    end if;
 
    Put_Debug_Line ("  0r_Met = " & State.Or_Met'Image &
-                   ", Cmd_List = " & State.Cmd_List'Image,  Loc);
+                   ", Cmd_List = " & State.Commands'Image,  Loc);
 
 end Validate_Step_State;
