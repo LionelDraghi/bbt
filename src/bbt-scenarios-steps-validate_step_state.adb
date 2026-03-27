@@ -83,8 +83,8 @@ begin
 
    end case;
 
-   if State.Cat = Run_Step and then
-      (State.Cmd_List.Length + 1 /= State.Or_Met) then
+   if State.Action = Run_Cmd and then
+      (Natural (State.Cmd_List.Length) /= (State.Or_Met + 1)) then
       IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
    end if;
 

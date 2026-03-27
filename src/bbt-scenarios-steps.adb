@@ -322,11 +322,11 @@ package body BBT.Scenarios.Steps is
                when Code_Span =>
                   Process_Code_Span (Tok,
                                      Loc,
-                                     State,
                                      -- Cmd_List,
                                      Chunk.In_Subject_Part,
                                      Chunk.In_Object_Part,
-                                     Chunk.Verb);
+                                     Chunk.Verb,
+                                     State);
 
                when Empty =>
                   null;
@@ -342,13 +342,13 @@ package body BBT.Scenarios.Steps is
          declare
             Code_Block_Expected_Local : Boolean;
          begin
-            Validate_Step_State (Loc,
+            Validate_Step_State (State,
+                                 Loc,
                                  -- Cmd_List,
                                  Chunk.Verb,
                                  No_Subject_String,
                                  No_Object_File_Name,
-                                 Code_Block_Expected_Local,
-                                 State);
+                                 Code_Block_Expected_Local);
             Code_Block_Expected := Code_Block_Expected_Local;
          end;
 
