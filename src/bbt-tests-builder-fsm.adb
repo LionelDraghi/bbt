@@ -108,9 +108,9 @@ package body FSM is
               In_Feature    |
               In_Scenario   |
               In_Background => Internal_Step_State := In_Given_Step;
-         when In_Step             |
-              In_File_Content     |
-              Not_In_File_Content => null;
+         when In_Step         |
+              In_File_Content |
+              Not_In_Document => null;
       end case;
 
       case To_State is
