@@ -38,7 +38,7 @@ begin
       if State.Object /= Command_List then
          State.Object := Command_List;
          -- there should already be a code span, let's
-         -- store it in the list
+         -- move it in the list
          Cmd_List.Append (To_String (State.Object_String));
          State.Object_String := Null_Unbounded_String;
       end if;
