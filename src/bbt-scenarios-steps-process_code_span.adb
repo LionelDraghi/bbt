@@ -50,7 +50,7 @@ begin
       case Current_Verb is
          when No_Verb |
               Is_No   =>
-            -- Those verbs are always followed by a file/dir
+            -- Those verbs are always followed by a file/dir name
             if State.File_Type = Directory then
                State.Object := Obj_Dir_Name;
                Put_Debug_Line ("  Object = Obj_Dir_Name", Loc);
