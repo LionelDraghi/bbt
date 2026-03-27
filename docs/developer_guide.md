@@ -55,7 +55,7 @@ One of the component of the scenario file will be further analyzed, it’s the s
 ## Tests
 
 `make` or `make check` run different kind of tests :
-1. First of all, this is bbt vocation, all feature descriptions in docs/features
+1. First of all, this is what it was designed to achive, all feature descriptions in docs/features
 
 2. Examples from the documentation in docs/examples
 
