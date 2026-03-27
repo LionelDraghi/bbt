@@ -245,7 +245,7 @@ package body BBT.Tests.Builder is
                declare
                   Scen_B : Model.Scenarios.Scenario_Type :=
                     Model.Scenarios.Create_Scenario
-                      (Name     => " x/y " & Scen.Name,
+                      (Name     => " x/y " & (+Scen.Name),
                        Parent   => Scen.Parent,
                        Location => Scen.Location);
                begin
@@ -266,7 +266,7 @@ package body BBT.Tests.Builder is
                end;
             end loop;
             --  Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
-         end;
+         end if;
       end Append_And_Duplicate_Step;
 
    begin

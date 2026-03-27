@@ -104,12 +104,13 @@ package body FSM is
       end if;
 
       case To_State is
-         when In_Document     |
-              In_Feature      |
-              In_Scenario     |
-              In_Background   => Internal_Step_State := In_Given_Step;
-         when In_Step         |
-              In_File_Content => null;
+         when In_Document   |
+              In_Feature    |
+              In_Scenario   |
+              In_Background => Internal_Step_State := In_Given_Step;
+         when In_Step             |
+              In_File_Content     |
+              Not_In_File_Content => null;
       end case;
 
       case To_State is

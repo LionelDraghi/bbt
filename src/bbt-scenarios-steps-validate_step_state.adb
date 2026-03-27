@@ -84,7 +84,8 @@ begin
    end case;
 
    if State.Action = Run_Cmd and
-      (Natural (State.Cmd_List.Length) /= (State.Or_Met + 1)) then
+      Natural (State.Cmd_List.Length) /= (State.Or_Met + 1)
+   then
       IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
    end if;
 
