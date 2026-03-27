@@ -102,14 +102,14 @@ package body BBT.Scenarios.Steps is
 
    -- Type to hold parsing state for separate procedures
    type Parse_State is record
-      Successfully_Met : Boolean        := False;
-      Or_Met           : Natural        := 0;
-      Not_Met          : Boolean        := False;
-      Prep             : Prepositions   := Prepositions'First;
-      Subject_Attr     : Subject_Attrib := No_SA;
-      Subject          : Subjects       := No_Subject;
-      Object           : Objects        := No_Object;
-      File_Type        : File_Kind      := Ordinary_File;
+      Successfully_Met : Boolean                  := False;
+      Or_Met           : Natural                  := 0;
+      Not_Met          : Boolean                  := False;
+      Prep             : Prepositions             := Prepositions'First;
+      Subject_Attr     : Subject_Attrib           := No_SA;
+      Subject          : Subjects                 := No_Subject;
+      Object           : Objects                  := No_Object;
+      File_Type        : File_Kind                := Ordinary_File;
       Cat              : Extended_Step_Categories := Unknown;
       Action           : Actions                  := None;
       Subject_String   : Unbounded_String         := Null_Unbounded_String;
@@ -201,7 +201,6 @@ package body BBT.Scenarios.Steps is
             end loop;
          end loop;
       end loop;
-      -- Ada.Text_IO.Put_Line ("|-------|-----|--------|------------------|-------------------|----------------------|");
    end Put_Grammar;
 
    -- --------------------------------------------------------------------------
@@ -264,7 +263,6 @@ package body BBT.Scenarios.Steps is
       Put_Debug_Line (To_String (Line), Loc);
 
       Initialize_Lexer;
-      -- Chunk.Initialize will be added later
 
       -- First token processing
       declare
@@ -286,13 +284,10 @@ package body BBT.Scenarios.Steps is
             State.Cat  := Then_Step;
             State.Prep := Then_P;
 
-         elsif Lower_Keyword = "and" or else
-           Lower_Keyword = "but"
-         then
+         elsif Lower_Keyword = "and" or else Lower_Keyword = "but" then
             State.Cat := Previous_Step_Kind;
-            -- Inherited from the context
             case Previous_Step_Kind is
-               when Unknown    => null;
+               when Unknown    => null; -- Fixme: should be an explicit error message?
                when Given_Step => State.Prep := Given;
                when When_Step  => State.Prep := When_P;
                when Then_Step  => State.Prep := Then_P;
@@ -336,7 +331,6 @@ package body BBT.Scenarios.Steps is
 
          end loop Line_Processing;
 
-         -- State.Action and Code_Block_Expected will be set later when Verb is available
          State.Action := The_Grammar
            (State.Prep, State.Subject_Attr, State.Subject, Chunk.Verb, State.Object).Action;
 
