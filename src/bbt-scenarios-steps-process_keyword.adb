@@ -9,8 +9,8 @@ separate (BBT.Scenarios.Steps)
 
 procedure Process_Keyword (Tok      : String;
                            State    : in out Parse_State;
-                           Loc      : Location_Type;
-                           Cmd_List : in out Model.Steps.Cmd_List) is
+                           Loc      : Location_Type) is
+                           -- Cmd_List : in out Model.Steps.Cmd_List) is
 
    use Ada.Strings.Maps.Constants;
    use Chunk;
@@ -37,9 +37,9 @@ begin
       State.Or_Met := @ + 1;
       if State.Object /= Command_List then
          State.Object := Command_List;
-         -- there should already be a code span, let's
+         -- There should already be a code span, let's
          -- move it in the list
-         Cmd_List.Append (To_String (State.Object_String));
+         State.Cmd_List.Append (To_String (State.Object_String));
          State.Object_String := Null_Unbounded_String;
       end if;
 

@@ -8,12 +8,12 @@
 separate (BBT.Scenarios.Steps)
 
 procedure Process_Code_Span (Tok             : String;
-                           State           : in out Parse_State;
-                           Loc             : Location_Type;
-                           Cmd_List        : in out Model.Steps.Cmd_List;
-                           In_Subject_Part : Boolean;
-                           In_Object_Part : Boolean;
-                           Current_Verb   : Verbs) is
+                             Loc             : Location_Type;
+                             In_Subject_Part : Boolean;
+                             In_Object_Part  : Boolean;
+                             Current_Verb    : Verbs;
+                             State           : in out Parse_State) is
+                             -- Cmd_List        : in out Model.Steps.Cmd_List) is
 
 begin
    if In_Subject_Part then
@@ -34,8 +34,8 @@ begin
    end if;
 
    if State.Object = Command_List then
-      Cmd_List.Append (Tok);
-      Put_Debug_Line ("  Command_List.Append : " & Tok, Loc);
+      State.Cmd_List.Append (Tok);
+      Put_Debug_Line ("  Cmd_List.Append : " & Tok, Loc);
 
    elsif In_Subject_Part and then State.Subject = No_Subject then
       if State.File_Type = Directory then

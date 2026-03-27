@@ -266,14 +266,11 @@ package body BBT.Tests.Runner is
       if Scen.Filtered then
          Put_Debug_Line ("  ====== Skipping background of filtered scen " & Scen.Name'Image);
          return;
-
       else
          -- Run background scenarios
          Run_Doc_Background     (Scen);
          Run_Feature_Background (Scen);
-
       end if;
-
    end Run_Background;
 
    -- --------------------------------------------------------------------------

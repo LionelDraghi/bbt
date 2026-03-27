@@ -11,7 +11,6 @@ with BBT.Model.Features,
 use BBT.Model.Features,
     BBT.Tests.Filter_List;
 
-
 package body BBT.Model.Scenarios is
 
    -- --------------------------------------------------------------------------

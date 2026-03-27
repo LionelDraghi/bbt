@@ -104,6 +104,7 @@ package body BBT.Scenarios.Steps is
    type Parse_State is record
       Successfully_Met : Boolean                  := False;
       Or_Met           : Natural                  := 0;
+      Cmd_List         : Model.Steps.Cmd_List     := Model.Steps.Empty_Cmd_List;
       Not_Met          : Boolean                  := False;
       Prep             : Prepositions             := Prepositions'First;
       Subject_Attr     : Subject_Attrib           := No_SA;
@@ -212,25 +213,25 @@ package body BBT.Scenarios.Steps is
    -- --------------------------------------------------------------------------
    -- Process a keyword token during parsing
    procedure Process_Keyword (Tok      : String;
-                              State    : in out Parse_State;
                               Loc      : Location_Type;
-                              Cmd_List : in out Model.Steps.Cmd_List) is separate;
+                              State    : in out Parse_State) is separate;
+                              -- Cmd_List : in out Model.Steps.Cmd_List) is separate;
 
    -- --------------------------------------------------------------------------
    -- Process a code span token during parsing
-   procedure Process_Code_Span (Tok            : String;
-                               State           : in out Parse_State;
-                               Loc             : Location_Type;
-                               Cmd_List        : in out Model.Steps.Cmd_List;
-                               In_Subject_Part : Boolean;
-                               In_Object_Part  : Boolean;
-                               Current_Verb    : Verbs) is separate;
+   procedure Process_Code_Span (Tok             : String;
+                                Loc             : Location_Type;
+                                In_Subject_Part : Boolean;
+                                In_Object_Part  : Boolean;
+                                Current_Verb    : Verbs;
+                                -- Cmd_List        : in out Model.Steps.Cmd_List;
+                                State           : in out Parse_State) is separate;
 
    -- --------------------------------------------------------------------------
    -- Validate the semantic consistency of the parsed step state
    procedure Validate_Step_State (State               : Parse_State;
                                   Loc                 : Location_Type;
-                                  Cmd_List            : Model.Steps.Cmd_List;
+                                  -- Cmd_List            : Model.Steps.Cmd_List;
                                   Verb                : Verbs;
                                   No_Subject_String   : Boolean;
                                   No_Object_File_Name : Boolean;
@@ -239,14 +240,15 @@ package body BBT.Scenarios.Steps is
    -- --------------------------------------------------------------------------
    function Parse (Line                :        Unbounded_String;
                    Loc                 : in out Location_Type;
-                   Code_Block_Expected :    out Boolean;
-                   Cmd_List            :    out Model.Steps.Cmd_List)
+                   Code_Block_Expected :    out Boolean)
+                   -- Cmd_List            :    out Model.Steps.Cmd_List)
                    return Model.Steps.Step_Data
    is
-      State : Parse_State;
-      Src_Code         : Unbounded_String         := Null_Unbounded_String;
+      State    : Parse_State;
+      Src_Code : Unbounded_String     := Null_Unbounded_String;
+      -- Cmd_List : Model.Steps.Cmd_List := Cmd_Lists.Empty_Vector;
 
-      function Is_Null (S : in Unbounded_String) return Boolean is
+      function Is_Null (S : in Unbounded_String) return Boolean is --Fixme: ca n'esiste pas déjà dans Unbounded_String?
         (S = Null_Unbounded_String);
       function No_Subject_String return Boolean is
         (Is_Null (State.Subject_String));
@@ -258,7 +260,7 @@ package body BBT.Scenarios.Steps is
 
    begin
       Src_Code := Line;
-      Cmd_List := Cmd_Lists.Empty_Vector;
+      -- Cmd_List := Cmd_Lists.Empty_Vector;
 
       Put_Debug_Line (To_String (Line), Loc);
 
@@ -312,16 +314,19 @@ package body BBT.Scenarios.Steps is
             begin
                case TT is
                when Keyword =>
-                  Process_Keyword (Tok, State, Loc, Cmd_List);
+                  Process_Keyword (Tok, State, Loc); --, Cmd_List);
 
                when Identifier =>
                   null;
 
                when Code_Span =>
-                  Process_Code_Span (Tok, State, Loc, Cmd_List,
-                                   Chunk.In_Subject_Part,
-                                   Chunk.In_Object_Part,
-                                   Chunk.Verb);
+                  Process_Code_Span (Tok,
+                                     State,
+                                     Loc,
+                                     -- Cmd_List,
+                                     Chunk.In_Subject_Part,
+                                     Chunk.In_Object_Part,
+                                     Chunk.Verb);
 
                when Empty =>
                   null;
@@ -337,9 +342,13 @@ package body BBT.Scenarios.Steps is
          declare
             Code_Block_Expected_Local : Boolean;
          begin
-            Validate_Step_State (State, Loc, Cmd_List, Chunk.Verb,
-                               No_Subject_String, No_Object_File_Name,
-                               Code_Block_Expected_Local);
+            Validate_Step_State (State,
+                                 Loc,
+                                 -- Cmd_List,
+                                 Chunk.Verb,
+                                 No_Subject_String,
+                                 No_Object_File_Name,
+                                 Code_Block_Expected_Local);
             Code_Block_Expected := Code_Block_Expected_Local;
          end;
 
@@ -354,6 +363,7 @@ package body BBT.Scenarios.Steps is
               Object_String    => State.Object_String,
               Object_File_Name => State.Object_File_Name,
               File_Type        => State.File_Type,
+              Cmd_List         => State.Cmd_List,
               Executable_File  => State.Executable,
               Ignore_Order     => State.Ignore_Order,
               File_Content     => Empty_Text,

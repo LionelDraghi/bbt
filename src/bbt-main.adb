@@ -50,10 +50,11 @@ procedure BBT.Main is
             return when IO.Some_Error and Settings.Stop_On_Error;
             -- If there is some error during the file analysis, we don't go
             -- further except if the Keep_Going option is set.
-            Tests.Builder.Duplicate_Multiple_Run;
-            -- Process in all recorded scenario the
-            -- duplication of the "run X or Y" steps.
          end loop;
+
+         Tests.Builder.Duplicate_Multiple_Run;
+         -- Process in all recorded scenario the
+         -- duplication of the "run X or Y" steps.
 
          Model.Documents.Apply_Filters;
 

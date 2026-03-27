@@ -55,8 +55,11 @@ package BBT.Model.Steps is
    type Step_Type;
    type Step_Maybe is access all Step_Type;
 
+   --  -------------------------------------------------------------------------
+   --  A step may include multiple commands with the syntax
+   --  "-When I run "cmd1" or "cmd2" or "cmd3" ..."
    package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
-     (Positive, String);
+   (Positive, String);
    subtype Cmd_List is Cmd_Lists.Vector;
    Empty_Cmd_List : Cmd_Lists.Vector := Cmd_Lists.Empty_Vector;
 
@@ -75,6 +78,7 @@ package BBT.Model.Steps is
       Object_String    : Unbounded_String          := Null_Unbounded_String;
       Object_File_Name : Unbounded_String          := Null_Unbounded_String;
       File_Type        : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+      Cmd_List         : Cmd_List                  := Empty_Cmd_List;
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;

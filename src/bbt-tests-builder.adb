@@ -32,20 +32,21 @@ package body BBT.Tests.Builder is
                              renames BBT.IO.Put_Line;
 
    -- --------------------------------------------------------------------------
-   type States is (In_Document,
+   type States is (Not_In_Document,
+                   In_Document,
                    In_Feature,
                    In_Scenario,
                    In_Background,
                    In_Step,
-                   In_File_Content);
+                   In_File_Content) with default Not_In_Document;
+
+   subtype Doc_States is States range In_Document .. In_Feature;
 
    type Step_States is (In_Given_Step,
                         In_When_Step,
                         In_Then_Step);
 
    type Backgrounds is (None, Doc, Feature);
-
-   subtype Doc_States is States range In_Document .. In_Feature;
 
    -- --------------------------------------------------------------------------
    package FSM is
@@ -227,37 +228,49 @@ package body BBT.Tests.Builder is
    is
       -- -----------------------------------------------------------------------
       procedure Append_And_Duplicate_Step (Scen : Scenario_Access) is
-         Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
       begin
-         Step.Set_Has_Syntax_Error (Syntax_Error);
-         if Cmd_List.Is_Empty then
+         if Step_Info.Cmd_List.Is_Empty then
             -- normal case, there is no "or"
-            Scen.Add_Step (Step);
-            --  declare
-            --     S2 : Step_Type := Step;
-            --  begin
-            --     S2.Parent_Scenario := Scen;
-            --     Scen.Step_List.Append ((S2));
-            --  end;
+            declare
+               Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
+            begin
+               Step.Set_Has_Syntax_Error (Syntax_Error);
+               Scen.Add_Step (Step);
+            end;
 
          else
-            -- "or" case, we will duplicate the whole scenario, except the
-            -- cmd
+            for Cmd of Step_Info.Cmd_List loop
+               Put_Debug_Line
+                 ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
+               declare
+                  Scen : Model.Scenario : Create_Scenario
+                    (Name          => " x/y " & Scen.Name,
+                     Parent        => Scen.Parent,
+                     Location      => Scen.Location);
+               begin
+                  Location      : Location_Type;
+                  Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
+               -- "or" case, we will duplicate the whole scenario, except the
+               -- cmd
+               begin
+                  -- the existing scenario will receive the first cmd
+                  Step.Set_Has_Syntax_Error (Syntax_Error);
 
-            -- the existing scenario will receive the first cmd
-            Scen.Add_Step (Step);
+                  Scen.Add_Step (Step);
 
-            --  for S in 1 .. Cmd_List.Count - 1 loop
-            --     Scen.Step_List
-            --  end loop;
-            --
-            --  Scen.Cmd_List := Cmd_List;
-            --  Scen.Cmd_List_Step_Index := Scen.Step_List.Last_Index;
-            -- By definition, the Last_Index point to the current Step,
-            -- the one we want to store as containing the command list.
-            -- NB : there can't be two "or" per scenario, only one.
-         end if;
-         -- Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
+                  --  for S in 1 .. Cmd_List.Count - 1 loop
+                  --     Scen.Step_List
+                  --  end loop;
+                  --
+                  --  Scen.Cmd_List := Cmd_List;
+                  --  Scen.Cmd_List_Step_Index := Scen.Step_List.Last_Index;
+                  -- By definition, the Last_Index point to the current Step,
+                  -- the one we want to store as containing the command list.
+                  -- NB : there can't be two "or" per scenario, only one.
+               end if;
+            end loop;
+            --  Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
+         end;
       end Append_And_Duplicate_Step;
 
    begin
@@ -265,7 +278,7 @@ package body BBT.Tests.Builder is
          Code_BLock_Expected_Line := Line (Loc);
       end if;
 
-      if Current_State in In_Document | In_Feature then
+      if Current_State in Not_In_Document | In_Document | In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step " &
            Step_Info.Src_Code'Image
            & " declaration, should be in Scenario or Background";
@@ -389,6 +402,9 @@ package body BBT.Tests.Builder is
                   Last_Feature.Comment.Append ("```");
             end case;
 
+         when Not_In_Document =>
+            Put_Error ("Code fence outside of document???", Loc);
+
       end case;
    end Add_Code_Fence;
 
@@ -396,6 +412,7 @@ package body BBT.Tests.Builder is
    procedure Close_Document (Loc : Location_Type) is
    begin
       Check_Missing_Code_Block (Loc);
+      Set_State (Not_In_Document, Loc => No_Location);
    end Close_Document;
 
    -- --------------------------------------------------------------------------
@@ -430,6 +447,9 @@ package body BBT.Tests.Builder is
          when In_File_Content =>
             -- Not a comment, we are in a file content description
             Last_Step.Data.File_Content.Append (Line);
+
+        when Not_In_Document =>
+            Put_Error ("Add Line outside of document???", Loc);
 
       end case;
    end Add_Line;

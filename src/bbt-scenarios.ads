@@ -27,7 +27,8 @@ private package BBT.Scenarios is
             --   ### Kind : Name
             -- For example, for
             --   # Feature: Staying alive
-            -- Kind will be Feature_Line and Name "Staying alive"
+            -- Kind will be "Feature_Line" and Name "Staying alive"
+            -- (For Markdown spaces and ':' are considered as separators)
             Name : Unbounded_String := Null_Unbounded_String;
 
          when Step_Line =>

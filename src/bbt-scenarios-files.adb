@@ -218,11 +218,13 @@ package body BBT.Scenarios.Files is
                      S : BBT.Model.Steps.Step_Data := Scenarios.Steps.Parse
                        (Attrib.Step_Ln,
                         Loc,
-                        Code_Block_Expected,
-                        Cmd_List);
+                        Code_Block_Expected);
+                        -- Cmd_List);
                   begin
                      Tests.Builder.Add_Step
-                       (S, Code_Block_Expected, Cmd_List, Loc,
+                       (S,
+                        Code_Block_Expected, -- Cmd_List,
+                        Loc,
                         Syntax_Error => Some_Error);
                   end;
 

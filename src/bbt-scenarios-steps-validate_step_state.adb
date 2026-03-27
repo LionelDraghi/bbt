@@ -9,28 +9,26 @@ separate (BBT.Scenarios.Steps)
 
 procedure Validate_Step_State (State               : Parse_State;
                                Loc                 : Location_Type;
-                               Cmd_List            : Model.Steps.Cmd_List;
+                               -- Cmd_List            : Model.Steps.Cmd_List;
                                Verb                : Verbs;
                                No_Subject_String   : Boolean;
                                No_Object_File_Name : Boolean;
                                Code_Block_Expected : out Boolean) is
-   pragma Unreferenced (Cmd_List);
+   -- pragma Unreferenced (Cmd_List);
 
    -- Check for multiple verbs in the step
-   Verb_Count : Natural := 0;
+   --  Verb_Count : Natural := 0;
 
 begin
-   -- Count all possible verbs in the grammar for this step
-   for V in Verbs'Range loop
-      if The_Grammar (State.Prep, State.Subject_Attr, State.Subject, V, State.Object).Action /= None then
-         Verb_Count := Verb_Count + 1;
-      end if;
-   end loop;
-
+   --  -- Count all possible verbs in the grammar for this step
+   --  for V in Verbs'Range loop
+   --     if The_Grammar (State.Prep, State.Subject_Attr, State.Subject, V, State.Object).Action /= None then
+   --        Verb_Count := Verb_Count + 1;
+   --     end if;
+   --  end loop;
    -- Warn if multiple verbs are found (excluding the actual verb used)
    -- Note: This warning is now handled by the Set_Verb procedure,
    -- so we don't need to generate it here to avoid duplicate warnings.
-   null;
 
    Code_Block_Expected := The_Grammar
      (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
@@ -59,8 +57,8 @@ begin
       when Dir_Subject =>
          if No_Subject_String then
             IO.Put_Error ("Dir name expected in subject phrase", Loc);
-            Code_Block_Expected := False;
-            -- No sense to have a random error after a syntax error
+            --  Code_Block_Expected := False;
+            --  -- No sense to have a random error after a syntax error
          end if;
 
    end case;
@@ -79,10 +77,18 @@ begin
       when Obj_Dir_Name =>
          if No_Object_File_Name then
             IO.Put_Error ("Dir name expected in object phrase", Loc);
-            Code_Block_Expected := False;
-            -- No sense to have a random error after a syntax error
+            --  Code_Block_Expected := False;
+            --  -- No sense to have a random error after a syntax error
          end if;
 
    end case;
+
+   if Parse_State.Cat = Run_Step and then
+      (State.Cmd_List.Length + 1 /= Or_Met) then
+      IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
+   end if;
+
+   Put_Debug_Line ("  0r_Met = " & State.Or_Met'Image &
+                   ", Cmd_List = " & State.Cmd_List'Image,  Loc);
 
 end Validate_Step_State;
