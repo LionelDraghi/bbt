@@ -131,6 +131,17 @@ package body FSM is
          when others          => Code_Block_Marks.Reset_Count;
       end case;
 
+      case To_State is
+         when Not_In_Document =>
+            -- Let's reset all variables related to the previous document.
+            Code_Block_Marks.Reset_Count;
+            Internal_Background       := None;
+            CB_Missing                := False;
+            Previous_Step_CB_Expected := False;
+
+         when others => null;
+      end case;
+
       Previous_Step_CB_Expected := CB_Expected;
 
    end Set_State;

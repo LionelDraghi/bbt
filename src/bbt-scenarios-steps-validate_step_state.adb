@@ -87,6 +87,9 @@ begin
       Natural (State.Cmd_List.Length) /= (State.Or_Met + 1)
    then
       IO.Put_Error ("Missing command in 'run cmd1 or cmd2'", Loc);
+      IO.Put_Error ("  0r_Met = " & State.Or_Met'Image &
+                    ", Cmd_List_Length = " & State.Cmd_List.Length'Image &
+                    ", Cmd_List = " & State.Cmd_List'Image,  Loc);
    end if;
 
    Put_Debug_Line ("  0r_Met = " & State.Or_Met'Image &
