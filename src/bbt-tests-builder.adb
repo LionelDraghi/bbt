@@ -222,52 +222,26 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step_Info           : in out Model.Steps.Step_Data;
                        Code_Block_Expected : Boolean;
-                       -- Cmd_List            : Model.Steps.Cmd_List;
                        Loc                 : Location_Type;
                        Syntax_Error        : Boolean := False)
    is
       -- -----------------------------------------------------------------------
-      procedure Append_And_Duplicate_Step (Scen : Scenario_Access) is
+      procedure Append_Step (Scen : Scenario_Access) is
+         Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
       begin
-         if Step_Info.Commands.Is_Empty then
-            -- normal case, there is no "or"
-            declare
-               Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
-            begin
-               Step.Set_Has_Syntax_Error (Syntax_Error);
-               Scen.Add_Step (Step);
-            end;
-
-         else
-            for Cmd of Step_Info.Commands loop
-               Put_Debug_Line
-                 ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
-               declare
-                  Scen_B : Model.Scenarios.Scenario_Type :=
-                    Model.Scenarios.Create_Scenario
-                      (Name     => " x/y " & (+Scen.Name),
-                       Parent   => Scen.Parent,
-                       Location => Scen.Location);
-               begin
-                  null;
-                  -- 1. repérer le step à modifier
-                  --  2. changer la commande dnas le step en question
-                  --  3. insérer le scenario créé derriere celui dupliqué
-
-                  --  for S in 1 .. Cmd_List.Count - 1 loop
-                  --     Scen.Step_List
-                  --  end loop;
-                  --
-                  --  Scen.Cmd_List := Cmd_List;
-                  --  Scen.Cmd_List_Step_Index := Scen.Step_List.Last_Index;
-                  -- By definition, the Last_Index point to the current Step,
-                  -- the one we want to store as containing the command list.
-                  -- NB : there can't be two "or" per scenario, only one.
-               end;
-            end loop;
-            --  Put_Debug_Line ("Step list = " & Scen.Step_List'Image, Loc);
+         Step.Set_Has_Syntax_Error (Syntax_Error);
+         Scen.Add_Step (Step);
+         if not Step_Info.Commands.Is_Empty then
+            if Scen.Cmd_List.Is_Empty then
+               Scen.Cmd_List := Step_Info.Commands;
+               -- We store the index of the Step that contain several commands
+               Scen.Cmd_List_Step_Index := Last_Step_Index (Scen.all);
+            else
+               Put_Error ("Only one Step with ' cmd1 or cmd2' allowed per Scenario");
+               Put_Error ("Step number " & Scen.Cmd_List_Step_Index'Image & " has it already");
+            end if;
          end if;
-      end Append_And_Duplicate_Step;
+      end Append_Step;
 
    begin
       if Code_Block_Expected then
@@ -324,13 +298,13 @@ package body BBT.Tests.Builder is
             Put_Debug_Line
               ("Add_Step in Doc's Background : " & Step_Info.Src_Code'Image,
                Loc);
-               Append_And_Duplicate_Step (Current_Doc.Background);
+               Append_Step (Current_Doc.Background);
 
          when Feature =>
             Put_Debug_Line
               ("Add_Step in Feature's Background : " & Step_Info.Src_Code'Image,
                Loc);
-               Append_And_Duplicate_Step (Last_Feature.Background);
+               Append_Step (Last_Feature.Background);
 
          when None    =>
             if Last_Scenario = null then
@@ -340,7 +314,7 @@ package body BBT.Tests.Builder is
                Put_Debug_Line
                  ("Add_Step " & Step_Info.Src_Code'Image & " in scenario "
                   & Last_Scenario.Name'Image, Loc);
-               Append_And_Duplicate_Step (Scenario_Access (Last_Scenario));
+               Append_Step (Scenario_Access (Last_Scenario));
             end if;
 
       end case;
@@ -450,31 +424,58 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Duplicate_Multiple_Run is
-      procedure Duplicate (Scen : in out Scenario_Type'Class) is
+
+      procedure Duplicate (L : in out Scenarios.List) is
+         use Scenario_Lists;
+         C, To_Be_Split : Cursor := L.First;
       begin
-         if Has_Cmd_List (Scen) then
-            -- Put_Debug_Line ("Has_Cmd_List = true =============");
-            for Cmd of Scen.Cmd_List loop
-               Put_Debug_Line
-                 ("Cmd list item = " & Cmd'Image, Verbosity => IO.Verbose);
-            end loop;
-         --  else
-         --     Put_Debug_Line ("Has_Cmd_List = false =============");
-         end if;
+         while Has_Element (C) loop
+            declare
+               Scen : Scenario_Type'Class := Element (C);
+               Idx : Positive := 1;
+
+            begin
+               Put_Debug_Line ("********** Index (Scen) = " & To_Index (C)'Image);
+               --  Put_Debug_Line ("In Duplicate, Scenario " & Scen.Name'Image &
+               --                     " has Cmd_List = " & Scen.Cmd_List'Image);
+               if not Scen.Cmd_List.Is_Empty then
+                  To_Be_Split := C;
+                  for Cmd of Scen.Cmd_List loop
+                     Put_Debug_Line ("---------- Cmd list item = " & Cmd'Image,
+                                     Verbosity => IO.Verbose);
+                     declare
+                        Scen_B : Scenario_Type'Class := Scen;
+                     begin
+                        -- Scen_B.Name := Index (Cmd)'Image;
+                        Scen_B.Cmd_List := Empty_Cmd_List;
+                        Scen_B.Step_List (Scen_B.Cmd_List_Step_Index).
+                          Data.Commands := Model.Steps.Empty_Cmd_List;
+                        Scen_B.Step_List (Scen_B.Cmd_List_Step_Index).
+                          Data.Object_String := +Cmd;
+                        Scen_B.Name := @ & Idx'Image & "/" & Scen.Cmd_List.Length'Image;
+                        Idx := @ + 1;
+                        -- Put_Debug_Line ("===== Creating copy : " & Scen_B'Image);
+                        -- Put_Debug_Line ("*************** Insert in Index = " & To_Index (Next (C))'Image);
+                        L.Append (New_Item => Scen_B);
+                        -- Put_Debug_Line ("===== L after insertion : " & L'Image);
+                        Put_Debug_Line ("C = " & To_Index (C)'Image);
+                        -- Put_Debug_Line ("N = " & To_Index (N)'Image);
+                        C := Next (C);
+                     end;
+                  end loop;
+                  L.Delete (To_Be_Split);
+               end if;
+            end;
+            Next (C);
+         end loop;
       end Duplicate;
 
    begin
-      --  Put_Debug_Line ("Duplicate_Multiple_Run =============");
-
       for D of Doc_List.all loop
-         for S of D.Scenario_List loop
-            Duplicate (S);
-         end loop;
+         Duplicate (D.Scenario_List);
 
          for F of D.Feature_List loop
-            for S of F.Scenario_List loop
-               Duplicate (S);
-            end loop;
+            Duplicate (F.Scenario_List);
          end loop;
       end loop;
    end Duplicate_Multiple_Run;

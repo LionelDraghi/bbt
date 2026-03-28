@@ -11,7 +11,6 @@ package body Chunk is
 
    -- Internal state for chunk parsing
    Current_Verb      : Verbs          := No_Verb;
-   -- Current_Location  : Location_Type  := No_Location; -- Not currently used
    Subject_Part_Ended : Boolean        := False;
    Object_Part_Ended  : Boolean        := False;
 
@@ -19,7 +18,6 @@ package body Chunk is
    procedure Initialize is
    begin
       Current_Verb      := No_Verb;
-      -- Current_Location  := No_Location; -- Not currently used
       Subject_Part_Ended := False;
       Object_Part_Ended  := False;
    end Initialize;
@@ -49,12 +47,6 @@ package body Chunk is
             Loc);
       end if;
    end Set_Verb;
-
-   -- --------------------------------------------------------------------------
-   procedure Set_Loc (L : Location_Type) is
-   begin
-      null; -- Location not currently used in chunk processing
-   end Set_Loc;
 
    -- --------------------------------------------------------------------------
    function Verb return Verbs is

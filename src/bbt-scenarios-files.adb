@@ -187,7 +187,6 @@ package body BBT.Scenarios.Files is
          Line_Processing :
          declare
             Line                : aliased constant String := Get_Line (Input);
-            -- Cmd_List            : BBT.Model.Steps.Cmd_List;
             Code_Block_Expected : Boolean;
             Attrib              : constant Line_Attributes := Parse_Line
               (Line'Access, File_Format, Lexer_Context, Loc);
@@ -197,7 +196,7 @@ package body BBT.Scenarios.Files is
             function Padding (E : Enum_Type) return String;
             function Padding (E : Enum_Type) return String is
               (String'(1 .. Enum_Type'Width - E'Image'Length => ' '));
-
+            -- Fixme: to be moved in Text_Utilities or so
             function Attrib_Padding is new Padding (Line_Kind);
 
          begin
@@ -219,11 +218,10 @@ package body BBT.Scenarios.Files is
                        (Attrib.Step_Ln,
                         Loc,
                         Code_Block_Expected);
-                        -- Cmd_List);
                   begin
                      Tests.Builder.Add_Step
                        (S,
-                        Code_Block_Expected, -- Cmd_List,
+                        Code_Block_Expected,
                         Loc,
                         Syntax_Error => Some_Error);
                   end;

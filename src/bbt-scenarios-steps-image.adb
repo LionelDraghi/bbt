@@ -38,7 +38,7 @@ begin
       when Obj_File_Name    => return "`file`";
       when Obj_Dir_Name     => return "`dir`";
       when Obj_Text         => return "`text`";
-      when Command_List     => return "`cmd`"; -- [or `cmd`]*";
+      when Command_List     => return "`cmd` [or `cmd`]*";
       when Error            => return "error";
       when Unordered        => return "unordered";
    end case;

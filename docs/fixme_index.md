@@ -11,8 +11,10 @@ Location | Text
 [src/bbt-model-documents.adb](../src/bbt-model-documents.adb):213|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
-[src/bbt-scenarios.ads](../src/bbt-scenarios.ads):55|   --  To be moved as dispatching in Writers
+[src/bbt-scenarios.ads](../src/bbt-scenarios.ads):56|   --  To be moved as dispatching in Writers
 [src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):49|         --  need a test
+[src/bbt-scenarios-steps.adb](../src/bbt-scenarios-steps.adb):248|      -- ca n'existe pas déjà dans Unbounded_String?
+[src/bbt-scenarios-steps.adb](../src/bbt-scenarios-steps.adb):288|               when Unknown    => null; --  should be an explicit error message?
 [src/bbt-scenarios-steps-initialize_grammar.adb](../src/bbt-scenarios-steps-initialize_grammar.adb):35|                                                                                         --  we currently do not check if the existing file contains
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):89|      --  defensive code that should be replaced by

@@ -105,6 +105,7 @@ package body BBT.Scenarios.Steps is
       Successfully_Met : Boolean                  := False;
       Or_Met           : Natural                  := 0;
       Cmd_List         : Model.Steps.Cmd_List     := Model.Steps.Empty_Cmd_List;
+      Cmd_Expected     : Boolean                  := False;
       Not_Met          : Boolean                  := False;
       Prep             : Prepositions             := Prepositions'First;
       Subject_Attr     : Subject_Attrib           := No_SA;
@@ -125,7 +126,6 @@ package body BBT.Scenarios.Steps is
    package Chunk is
       procedure Initialize;
       procedure Set_Verb (V : Verbs; Loc : Location_Type := No_Location);
-      procedure Set_Loc (L : Location_Type);
       function Verb return Verbs;
       function In_Subject_Part return Boolean;
       function In_Object_Part  return Boolean;
@@ -215,7 +215,6 @@ package body BBT.Scenarios.Steps is
    procedure Process_Keyword (Tok      : String;
                               Loc      : Location_Type;
                               State    : in out Parse_State) is separate;
-                              -- Cmd_List : in out Model.Steps.Cmd_List) is separate;
 
    -- --------------------------------------------------------------------------
    -- Process a code span token during parsing
@@ -224,14 +223,12 @@ package body BBT.Scenarios.Steps is
                                 In_Subject_Part : Boolean;
                                 In_Object_Part  : Boolean;
                                 Current_Verb    : Verbs;
-                                -- Cmd_List        : in out Model.Steps.Cmd_List;
                                 State           : in out Parse_State) is separate;
 
    -- --------------------------------------------------------------------------
    -- Validate the semantic consistency of the parsed step state
    procedure Validate_Step_State (State               : Parse_State;
                                   Loc                 : Location_Type;
-                                  -- Cmd_List            : Model.Steps.Cmd_List;
                                   Verb                : Verbs;
                                   No_Subject_String   : Boolean;
                                   No_Object_File_Name : Boolean;
@@ -241,14 +238,13 @@ package body BBT.Scenarios.Steps is
    function Parse (Line                :        Unbounded_String;
                    Loc                 : in out Location_Type;
                    Code_Block_Expected :    out Boolean)
-                   -- Cmd_List            :    out Model.Steps.Cmd_List)
                    return Model.Steps.Step_Data
    is
       State    : Parse_State;
       Src_Code : Unbounded_String     := Null_Unbounded_String;
-      -- Cmd_List : Model.Steps.Cmd_List := Cmd_Lists.Empty_Vector;
 
-      function Is_Null (S : in Unbounded_String) return Boolean is --Fixme: ca n'esiste pas déjà dans Unbounded_String?
+      function Is_Null (S : in Unbounded_String) return Boolean is
+      --Fixme: To move in Text_Utilities
         (S = Null_Unbounded_String);
       function No_Subject_String return Boolean is
         (Is_Null (State.Subject_String));
@@ -260,9 +256,8 @@ package body BBT.Scenarios.Steps is
 
    begin
       Src_Code := Line;
-      -- Cmd_List := Cmd_Lists.Empty_Vector;
 
-      Put_Debug_Line (To_String (Line), Loc);
+      Put_Debug_Line ("In Parse, Line = " & To_String (Line), Loc);
 
       Initialize_Lexer;
 
@@ -304,7 +299,6 @@ package body BBT.Scenarios.Steps is
       if No_Error then
 
          Chunk.Initialize;
-         Chunk.Set_Loc (Loc);
 
          Line_Processing : while More_Token loop
 
@@ -312,9 +306,10 @@ package body BBT.Scenarios.Steps is
                Tok : constant String := Next_Token (Tmp'Access, TT);
 
             begin
+               -- Put_Debug_Line ("   In Parse, Token = " & Tok, Loc);
                case TT is
                when Keyword =>
-                  Process_Keyword (Tok, Loc, State); --, Cmd_List);
+                  Process_Keyword (Tok, Loc, State);
 
                when Identifier =>
                   null;
@@ -322,7 +317,6 @@ package body BBT.Scenarios.Steps is
                when Code_Span =>
                   Process_Code_Span (Tok,
                                      Loc,
-                                     -- Cmd_List,
                                      Chunk.In_Subject_Part,
                                      Chunk.In_Object_Part,
                                      Chunk.Verb,
@@ -336,15 +330,17 @@ package body BBT.Scenarios.Steps is
 
          end loop Line_Processing;
 
-         State.Action := The_Grammar
-           (State.Prep, State.Subject_Attr, State.Subject, Chunk.Verb, State.Object).Action;
+         State.Action := The_Grammar (State.Prep,
+                                      State.Subject_Attr,
+                                      State.Subject,
+                                      Chunk.Verb,
+                                      State.Object).Action;
 
          declare
             Code_Block_Expected_Local : Boolean;
          begin
             Validate_Step_State (State,
                                  Loc,
-                                 -- Cmd_List,
                                  Chunk.Verb,
                                  No_Subject_String,
                                  No_Object_File_Name,

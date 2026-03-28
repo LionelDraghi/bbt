@@ -42,7 +42,7 @@ package body BBT.Scenarios.Steps.Lexer is
          "doesn't",
          "error",
          "is",
-         -- "or",
+         "or",
          "output",
          "contain",
          "contains",
@@ -74,7 +74,6 @@ package body BBT.Scenarios.Steps.Lexer is
         (Source  => Trimmed,
          Mapping => Ada.Strings.Maps.Constants.Lower_Case_Map);
    begin
-      -- Put_Line ("K = " & S.all (First .. Last) & ", Trimmed = " & Trimmed);
       return Keywords.Contains (Lower);
    end Is_A_Keyword;
 
@@ -86,9 +85,7 @@ package body BBT.Scenarios.Steps.Lexer is
 
    -- -----------------------------------------------------------------------
    function Next_Token (Line     : access constant String;
-                        Tok_Type :    out Token_Type
-                       -- Loc      : in out Location_Type
-                       ) return String
+                        Tok_Type :    out Token_Type) return String
    is
       First : Positive;      -- Index of first character in token
       Last  : Natural := 0;  -- Index of last character in token
@@ -111,9 +108,8 @@ package body BBT.Scenarios.Steps.Lexer is
                   Test   => Ada.Strings.Outside,
                   First  => First,
                   Last   => Last);
-      --  Put_Line ("processing token = """ & Filler & Line.all (First .. Last) &
-      --              """ in " & Filler & Line.all,
-      --            Verbosity => IO.Debug);
+      -- Put_Line ("processing token = """ & Line.all (First .. Last),
+      --          Verbosity => IO.Debug);
       Cursor := (Natural'Min (Line.all'Length, Last + 1));
       -- Jump to next char unless already on the last
       if Is_A_Keyword (Line, First, Last) then
@@ -155,10 +151,6 @@ package body BBT.Scenarios.Steps.Lexer is
          Tok_Type := Identifier;
 
       end if;
-
-      --  Loc := Location (Name   => File (@),
-      --                   Line   => IO.Line (@),
-      --                   Column => Ada.Text_IO.Count (First));
 
       if Cursor >= Line.all'Last then
          -- It's the end of line

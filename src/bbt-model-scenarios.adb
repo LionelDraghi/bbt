@@ -14,13 +14,8 @@ use BBT.Model.Features,
 package body BBT.Model.Scenarios is
 
    -- --------------------------------------------------------------------------
-   function Has_Cmd_List
-     (Scen : Scenario_Type) return Boolean
-   is
-      use type Step_Lists.Cursor;
-   begin
-      return Scen.Cmd_List_Step_Index /= Step_Lists.No_Element;
-   end Has_Cmd_List;
+   function Has_Cmd_List (Scen : Scenario_Type) return Boolean is
+     (not Scen.Cmd_List.Is_Empty);
 
    -- --------------------------------------------------------------------------
    procedure Add_Result (Success : Boolean; To : in out Scenario_Type) is

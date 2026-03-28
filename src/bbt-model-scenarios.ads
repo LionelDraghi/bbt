@@ -28,8 +28,9 @@ package BBT.Model.Scenarios is
       -- by Cmd, and the Cmd_List is emptied.
       -- Each scenario will be identical, except for the run command, that will
       -- be in Object_String, one by Cmd_List item.
-      Cmd_List_Step_Index   : Step_Lists.Cursor := Step_Lists.No_Element;
+      Cmd_List_Step_Index   : Natural := 0;
       -- Store the index in Step_List where the cmd_list was found
+      --  /= 0 if Cmd_List is not Empty
    end record;
 
    -- --------------------------------------------------------------------------
@@ -64,6 +65,9 @@ package BBT.Model.Scenarios is
    procedure Add_Step
      (Scen : in out Scenario_Type;
       Step :        Step_Type'Class);
+   function Last_Step_Index
+     (Scen : Scenario_Type) return Natural
+     is (Scen.Step_List.Last_Index);
    function Last_Step
      (Scen : in out Scenario_Type) return Step_Maybe;
 
