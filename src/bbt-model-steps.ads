@@ -78,7 +78,19 @@ package BBT.Model.Steps is
       Object_String    : Unbounded_String          := Null_Unbounded_String;
       Object_File_Name : Unbounded_String          := Null_Unbounded_String;
       File_Type        : Ada.Directories.File_Kind := Ada.Directories.Ordinary_File;
+
       Commands         : Cmd_List                  := Empty_Cmd_List;
+      Code_Span_First  : Natural                   := 0;
+      Code_Span_Last   : Natural                   := 0;
+      -- Code_Span_First and Code_Span_Last point in Src_Code to the "or" part that should
+      -- be replaced when duplicating code.
+      -- "- When I run `cmd1` or `cmd2` or `cmd3` whatever comment"
+      --                ^ Code_Span_First      ^ Code_Span_Last
+      -- That will ultimately be displayed as
+      -- "- When I run `cmd1`  whatever comment"
+      -- "- When I run `cmd2`  whatever comment"
+      -- "- When I run `cmd3`  whatever comment"
+
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       File_Content     : Text                      := Empty_Text;

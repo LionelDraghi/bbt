@@ -17,10 +17,9 @@ use BBT.Model.Steps,
     BBT.Settings,
     BBT.Model.Documents;
 
-with Text_Utilities; use Text_Utilities;
-
-with Ada.Text_IO;
+with Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
 package body BBT.Tests.Builder is
 
@@ -425,48 +424,83 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Duplicate_Multiple_Run is
 
+      -- -----------------------------------------------------------------------
       procedure Duplicate (L : in out Scenarios.List) is
+         -- --------------------------------------------------------------------
+         function Copy_Scenario (Source   : in     Scenario_Type'Class;
+                               --   Target   :    out Scenario_Type'Class;
+                                  With_Cmd : in     String) return
+                                  Scenario_Type'Class
+         is
+         -- copy A to B neutralizing the Step_List, replaced with a single Cmd
+            Target : Scenario_Type'Class := Source;
+            Step : Step_Data renames
+              Target.Step_List (Target.Cmd_List_Step_Index).Data;
+         begin
+            Target.Cmd_List    := Empty_Cmd_List;
+            Step.Commands      := Model.Steps.Empty_Cmd_List;
+            Step.Object_String := +With_Cmd;
+            Replace_Slice (Source => Step.Src_Code,
+                           Low    => Step.Code_Span_First,
+                           High   => Step.Code_Span_Last,
+                           By     => With_Cmd);
+            return Target;
+         end Copy_Scenario;
+
+         -- --------------------------------------------------------------------
+         procedure Prefix_Name (S : in out Scenario_Type'Class;
+                              A : Positive;
+                              B : Ada.Containers.Count_Type) is
+         -- Prefix the scenario name with " A/B "
+            use Ada.Strings;
+         begin
+            S.Name := @ & A'Image & "/" & Trim (Source => +B'Image,
+                                                Side   => Left);
+         end Prefix_Name;
+
          use Scenario_Lists;
-         C, To_Be_Split : Cursor := L.First;
+         Scen_Cursor, To_Be_Split : Cursor := L.First;
+
       begin
-         while Has_Element (C) loop
+         while Has_Element (Scen_Cursor) loop
             declare
-               Scen : Scenario_Type'Class := Element (C);
-               Idx : Positive := 1;
+               Scen : constant Scenario_Type'Class := Element (Scen_Cursor);
+               Cmd_Idx : Positive := 1;
 
             begin
-               Put_Debug_Line ("********** Index (Scen) = " & To_Index (C)'Image);
-               --  Put_Debug_Line ("In Duplicate, Scenario " & Scen.Name'Image &
-               --                     " has Cmd_List = " & Scen.Cmd_List'Image);
                if not Scen.Cmd_List.Is_Empty then
-                  To_Be_Split := C;
+                  -- This scenario has an "cmd1 or cmd2"
+                  -- It will be copied/modified for each cmd,
+                  -- and deleted at the end:
+                  --   Scen A with "cmd1 or cmd2"
+                  --     |
+                  --     V
+                  --   Scen A with "cmd1 or cmd2"
+                  --   Scen A 1/2 with "cmd1"
+                  --   Scen A 2/2 with "cmd2"
+                  --     |
+                  --     V
+                  --   Scen A 1/2 with "cmd1"
+                  --   Scen A 2/2 with "cmd2"
+
+                  To_Be_Split := Scen_Cursor;
                   for Cmd of Scen.Cmd_List loop
-                     Put_Debug_Line ("---------- Cmd list item = " & Cmd'Image,
-                                     Verbosity => IO.Verbose);
                      declare
-                        Scen_B : Scenario_Type'Class := Scen;
+                        Scen_B : Scenario_Type'Class := Copy_Scenario
+                          (Source   => Scen,
+                           With_Cmd => Cmd);
                      begin
-                        -- Scen_B.Name := Index (Cmd)'Image;
-                        Scen_B.Cmd_List := Empty_Cmd_List;
-                        Scen_B.Step_List (Scen_B.Cmd_List_Step_Index).
-                          Data.Commands := Model.Steps.Empty_Cmd_List;
-                        Scen_B.Step_List (Scen_B.Cmd_List_Step_Index).
-                          Data.Object_String := +Cmd;
-                        Scen_B.Name := @ & Idx'Image & "/" & Scen.Cmd_List.Length'Image;
-                        Idx := @ + 1;
-                        -- Put_Debug_Line ("===== Creating copy : " & Scen_B'Image);
-                        -- Put_Debug_Line ("*************** Insert in Index = " & To_Index (Next (C))'Image);
+                        Prefix_Name (Scen_B, Cmd_Idx, Scen.Cmd_List.Length);
                         L.Append (New_Item => Scen_B);
-                        -- Put_Debug_Line ("===== L after insertion : " & L'Image);
-                        Put_Debug_Line ("C = " & To_Index (C)'Image);
-                        -- Put_Debug_Line ("N = " & To_Index (N)'Image);
-                        C := Next (C);
+
+                        Cmd_Idx := @ + 1;
+                        Scen_Cursor := Next (Scen_Cursor);
                      end;
                   end loop;
                   L.Delete (To_Be_Split);
                end if;
             end;
-            Next (C);
+            Next (Scen_Cursor);
          end loop;
       end Duplicate;
 

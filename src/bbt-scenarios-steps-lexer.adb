@@ -89,7 +89,16 @@ package body BBT.Scenarios.Steps.Lexer is
    is
       First : Positive;      -- Index of first character in token
       Last  : Natural := 0;  -- Index of last character in token
+   begin
+      return Next_Token (Line, First, Last, Tok_Type);
+   end Next_Token;
 
+   -- -----------------------------------------------------------------------
+   function Next_Token (Line     : access constant String;
+                        First    :    out Positive; -- Index of first character in token
+                        Last     :    out Natural;  -- Index of last character in token
+                        Tok_Type :    out Token_Type) return String
+   is
       -- Note that Cursor is >= Last
       -- Cursor is the point where next call to Next_Token will start,
       -- Last is the last character of the Token

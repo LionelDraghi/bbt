@@ -33,19 +33,19 @@ begin
    Set (Given, New_SA, Subject_File, Containing, Obj_Text,     (Erase_And_Create, False, new String'("- Given the new file `config.ini` containing `lang=it`")));
    Set (Given, No_SA,  Subject_File, Containing, Obj_Text,     (Create_If_None, False, new String'("- Given the file `config.ini` containing `lang=it`")));
                                                                                          -- Fixme: we currently do not check if the existing file contains
-                                                                                         --  what is expected
+                                                                                         -- what is expected
    Set (Given, New_SA, Subject_File, Containing, No_Object, (Erase_And_Create, True, new String'("- Given the new file `config.ini` containing <followed by code fenced lines>")));
-   Set (Given, No_SA,  Subject_File, Containing, No_Object, (Create_If_None, True, new String'("- Given the file `config.ini` containing <followed by code fenced lines>")));
+   Set (Given, No_SA,  Subject_File, Containing, No_Object, (Create_If_None,   True, new String'("- Given the file `config.ini` containing <followed by code fenced lines>")));
                                                                                        -- Fixme : we currently do not check if the existing file contains
-                                                                                       --  what is expected
+                                                                                       -- what is expected
    Set (Given, New_SA, Subject_File, No_Verb,    No_Object, (Erase_And_Create, True, new String'("- Given the new file `config.ini` <followed by code fenced lines>")));
    Set (Given, No_SA,  Subject_File, No_Verb,    No_Object, (Create_If_None, True, new String'("- Given the file `config.ini` <followed by code fenced lines>")));
    Set (Given, New_SA, Dir_Subject,  No_Verb,    No_Object, (Erase_And_Create, False, new String'("- Given the new directory `dir1`")));
    Set (Given, No_SA,  Dir_Subject,  No_Verb,    No_Object, (Create_If_None, False, new String'("- Given the directory `dir1`")));
-   Set (Given, No_SA,  No_Subject,   Run,            Obj_Text, (Run_Cmd, False, new String'("- Given I run `cmd`")));
+   Set (Given, No_SA,  No_Subject,   Run,            Obj_Text, (Run_Cmd,           False, new String'("- Given I run `cmd`")));
    Set (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Given I successfully run `cmd`")));
 
-   Set (When_P, No_SA, No_Subject, Run,            Obj_Text,     (Run_Cmd,     False, new String'("- When I run `cmd`")));
+   Set (When_P, No_SA, No_Subject, Run,            Obj_Text,     (Run_Cmd,           False, new String'("- When I run `cmd`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Obj_Text,     (Run_Without_Error, False, new String'("- When I successfully run `cmd`")));
    Set (When_P, No_SA, No_Subject, Run,            Command_List, (Run_Cmd,           False, new String'("- When I run `cmd` or `cmd2` or `cmd3`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Command_List, (Run_Without_Error, False, new String'("- When I successfully run `cmd` or `cmd2` or `cmd3`")));
@@ -58,9 +58,9 @@ begin
    Set (Then_P, No_SA, No_Subject,   Get_No,   Error, (No_Error_Return_Code, False, new String'("- Then I get no error")));
    Set (Then_P, No_SA, No_Subject,   Is_V,     Error, (Error_Return_Code,    False, new String'("- Then there is an error")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Error, (No_Error_Return_Code, False, new String'("- Then there is no error")));
-   Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_Text,      (Output_Is, False, new String'("- Then output is `msg`")));
-   Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_File_Name, (Output_Is, False, new String'("- Then output is equal to file `expected.txt`")));
-   Set (Then_P, No_SA, Output_Subj,  Is_V,     No_Object,     (Output_Is, True,  new String'("- Then output is equal to<followed by code fenced lines>")));
+   Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_Text,      (Output_Is, False, new String'("- Then the output is `msg`")));
+   Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_File_Name, (Output_Is, False, new String'("- Then the output is equal to file `expected.txt`")));
+   Set (Then_P, No_SA, Output_Subj,  Is_V,     No_Object,     (Output_Is, True,  new String'("- Then the output is equal to<followed by code fenced lines>")));
    Set (Then_P, No_SA, No_Subject,   Get,      Obj_Text,      (Output_Is, False, new String'("- Then I get `msg`")));
    Set (Then_P, No_SA, No_Subject,   Get,      Obj_File_Name, (Output_Is, False, new String'("- Then I get file `flowers2.txt`")));
    Set (Then_P, No_SA, No_Subject,   Get,      No_Object,     (Output_Is, True,  new String'("- Then I get <followed by code fenced lines>")));

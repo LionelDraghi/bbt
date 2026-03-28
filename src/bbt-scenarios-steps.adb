@@ -103,9 +103,13 @@ package body BBT.Scenarios.Steps is
    -- Type to hold parsing state for separate procedures
    type Parse_State is record
       Successfully_Met : Boolean                  := False;
+
       Or_Met           : Natural                  := 0;
       Cmd_List         : Model.Steps.Cmd_List     := Model.Steps.Empty_Cmd_List;
       Cmd_Expected     : Boolean                  := False;
+      Code_Span_First  : Natural                  := 0; -- = 0 until first Code_Span is meet
+      Code_Span_Last   : Natural                  := 0; -- = 0 until first Code_Span is meet
+
       Not_Met          : Boolean                  := False;
       Prep             : Prepositions             := Prepositions'First;
       Subject_Attr     : Subject_Attrib           := No_SA;
@@ -165,7 +169,7 @@ package body BBT.Scenarios.Steps is
          C := @ + Verbs'Width + 3; Set_Col (C);
 
          Ada.Text_IO.Put (" | " & Image (O));
-         C := @ + 9; Set_Col (C);
+         C := @ + 20; Set_Col (C);
 
          Ada.Text_IO.Put (" | " & A.Action'Image);
          C := @ + Actions'Width + 3; Set_Col (C);
@@ -303,7 +307,9 @@ package body BBT.Scenarios.Steps is
          Line_Processing : while More_Token loop
 
             declare
-               Tok : constant String := Next_Token (Tmp'Access, TT);
+               First : Natural;
+               Last  : Natural;
+               Tok : constant String := Next_Token (Tmp'Access, First, Last, TT);
 
             begin
                -- Put_Debug_Line ("   In Parse, Token = " & Tok, Loc);
@@ -315,6 +321,14 @@ package body BBT.Scenarios.Steps is
                   null;
 
                when Code_Span =>
+                  if State.Code_Span_First = 0 then
+                     State.Code_Span_First := First;
+                  end if;
+                  State.Code_Span_Last := Last;
+                  -- Put_Debug_Line ("   In Parse, Code Span from " & State.Code_Span_First'Image & " to" & Last'Image, Loc);
+                  Put_Debug_Line ("   In Parse, Line    = >" & Tmp & "<", Loc);
+                  Put_Debug_Line ("   In Parse, Or zone = >" & Tmp (State.Code_Span_First .. Last) & "<", Loc);
+
                   Process_Code_Span (Tok,
                                      Loc,
                                      Chunk.In_Subject_Part,
@@ -360,6 +374,8 @@ package body BBT.Scenarios.Steps is
               Object_File_Name => State.Object_File_Name,
               File_Type        => State.File_Type,
               Commands         => State.Cmd_List,
+              Code_Span_First  => State.Code_Span_First,
+              Code_Span_Last   => State.Code_Span_Last,
               Executable_File  => State.Executable,
               Ignore_Order     => State.Ignore_Order,
               File_Content     => Empty_Text,

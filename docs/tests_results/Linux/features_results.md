@@ -490,6 +490,45 @@
    - [X] scenario   [the command is not executable (Unix_Only)](../../features/A190_Run.md) pass  
 
 
+# Document: [A195_Run_Or.md](../../features/A195_Run_Or.md)  
+  ## Feature: “when I run X or Y” test  
+   ### Scenario: [normal use case](../../features/A195_Run_Or.md): 
+   - OK : Given the new file `simple_or.md`   
+   - OK : When I run `./bbt simple_or.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains  
+   - [X] scenario   [normal use case](../../features/A195_Run_Or.md) pass  
+
+   ### Scenario: [the last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md): 
+   - OK : Given the new file `erroneous_or.md`   
+   - OK : When I run `./bbt -c erroneous_or.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains  
+   - [X] scenario   [the last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md) pass  
+
+  ## Feature: Syntactic and Semantic error related to "or" should be detected  
+   ### Scenario: [Missing command before "or"](../../features/A195_Run_Or.md): 
+   - OK : Given the new file `erroneous1.md`   
+   - OK : When I run `./bbt -c erroneous1.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains  
+   - [X] scenario   [Missing command before "or"](../../features/A195_Run_Or.md) pass  
+
+   ### Scenario: [Missing command after "or"](../../features/A195_Run_Or.md): 
+   - OK : Given the new file `erroneous2.md`   
+   - OK : When I run `./bbt -c erroneous2.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains  
+   - [X] scenario   [Missing command after "or"](../../features/A195_Run_Or.md) pass  
+
+   ### Scenario: [Two consecutive "or"](../../features/A195_Run_Or.md): 
+   - OK : Given the new file `erroneous3.md`   
+   - OK : When I run `./bbt -c erroneous3.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains  
+   - [X] scenario   [Two consecutive "or"](../../features/A195_Run_Or.md) pass  
+
+
 # Document: [A200_Regexp.md](../../features/A200_Regexp.md)  
   ## Feature: identifying expected output with regexp  
    ### Scenario: [version number match](../../features/A200_Regexp.md): 
@@ -1596,12 +1635,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 158 scenarios OK
+## Summary : **Success**, 163 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 158   |
+| Successful | 163   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

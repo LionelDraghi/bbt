@@ -32,14 +32,26 @@ begin
       end if;
 
    elsif Lower_Keyword = "or" then
-      State.Or_Met := @ + 1;
-      State.Cmd_Expected := True;
-      if State.Object /= Command_List then
-         State.Object := Command_List;
-         -- There should already be a code span, let's
-         -- move it in the list
-         State.Cmd_List.Append (To_String (State.Object_String));
-         State.Object_String := Null_Unbounded_String;
+      if State.Cmd_Expected then
+      -- If there is two consecutive, let's warn the user.
+         Put_Warning ("Command missing between 'or' ?", Loc);
+
+      elsif State.Object_String = Null_Unbounded_String then
+         null;
+      -- If there is no Code Span when the first or is met, let's consider
+      -- it's not an error, but just or that is used in a comment.
+
+      else
+         State.Or_Met := @ + 1;
+         State.Cmd_Expected := True;
+         if State.Object /= Command_List then
+            State.Object := Command_List;
+            -- There should already be a code span, let's
+            -- move it in the list
+            State.Cmd_List.Append (To_String (State.Object_String));
+            State.Object_String := Null_Unbounded_String;
+         end if;
+
       end if;
 
    elsif Lower_Keyword = "get" then

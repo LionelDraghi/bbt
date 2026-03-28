@@ -20,6 +20,11 @@ private package BBT.Scenarios.Steps.Lexer is
    procedure Initialize_Lexer;
 
    function Next_Token (Line     : access constant String;
+                        First    :    out Positive; -- Index of first character in token
+                        Last     :    out Natural;  -- Index of last character in token
+                        Tok_Type :    out Token_Type) return String;
+
+   function Next_Token (Line     : access constant String;
                         Tok_Type :    out Token_Type) return String;
 
    function More_Token return Boolean;
