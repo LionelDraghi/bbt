@@ -28,7 +28,7 @@ package BBT.Model.Scenarios is
       -- by Cmd, and the Cmd_List is emptied.
       -- Each scenario will be identical, except for the run command, that will
       -- be in Object_String, one by Cmd_List item.
-      Cmd_List_Step_Index   : Natural := 0;
+      Cmd_List_Step_Index   : Natural           := 0;
       -- Store the index in Step_List where the cmd_list was found
       --  /= 0 if Cmd_List is not Empty
    end record;

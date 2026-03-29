@@ -9,6 +9,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 - **[0.3.0-dev] - 2026--**
   - [Added]   `explain` command rewritten and tested, now usable
   - [Changed] `create_template` deprecated and replaced with `help tutorial` and `help example` 
+  - [Added]   `Then I successfully run` syntax added
   
 - **[0.2.1] - 2026-06-13**
   - [Added]   Feature #28: production of a junit.xml file through --junit option

@@ -86,5 +86,6 @@ begin
    Set (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object,     (File_Does_Not_Contain, True, new String'("- Then the file `list` does not contain <followed by code fenced lines>")));
    Set (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj, (No_Output, False, new String'("- Then there is no output")));
+   Set (Then_P, No_SA, No_Subject, Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Then I successfully run `cmd`")));
 
 end Initialize_Grammar;

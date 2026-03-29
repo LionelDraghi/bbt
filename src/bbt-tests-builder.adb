@@ -427,10 +427,9 @@ package body BBT.Tests.Builder is
       -- -----------------------------------------------------------------------
       procedure Duplicate (L : in out Scenarios.List) is
          -- --------------------------------------------------------------------
-         function Copy_Scenario (Source   : in     Scenario_Type'Class;
-                               --   Target   :    out Scenario_Type'Class;
-                                  With_Cmd : in     String) return
-                                  Scenario_Type'Class
+         function Copy_Scenario
+           (Source   : in Scenario_Type'Class;
+            With_Cmd : in String) return Scenario_Type'Class
          is
          -- copy A to B neutralizing the Step_List, replaced with a single Cmd
             Target : Scenario_Type'Class := Source;
@@ -449,8 +448,8 @@ package body BBT.Tests.Builder is
 
          -- --------------------------------------------------------------------
          procedure Prefix_Name (S : in out Scenario_Type'Class;
-                              A : Positive;
-                              B : Ada.Containers.Count_Type) is
+                                A : Positive;
+                                B : Ada.Containers.Count_Type) is
          -- Prefix the scenario name with " A/B "
             use Ada.Strings;
          begin
