@@ -27,6 +27,8 @@ package body FSM is
    -- Code blocks management :
    CB_Missing                : Boolean     := False;
    Previous_Step_CB_Expected : Boolean     := False;
+   Code_BLock_Start_Line,
+   Code_BLock_Expected_Line  : Ada.Text_IO.Count := 0;
 
    -- --------------------------------------------------------------------------
    package body Code_Block_Marks is
@@ -69,16 +71,19 @@ package body FSM is
    end Code_Block_Marks;
 
 
-
    -- --------------------------------------------------------------------------
    function Current_State return States is (Internal_State);
 
    -- --------------------------------------------------------------------------
-   procedure Restore_Previous_State is
+   procedure Exit_Code_Block is
    begin
-      Internal_State := Internal_Previous_State;
-   end Restore_Previous_State;
+      Internal_State           := Internal_Previous_State;
+      CB_Missing               := False;
+      Code_BLock_Expected_Line := 0;
+      Code_BLock_Start_Line    := 0;
+   end Exit_Code_Block;
 
+   -- --------------------------------------------------------------------------
    procedure Set_State (To_State    : States;
                         CB_Expected : Boolean := False;
                         Loc         : Location_Type) is
@@ -86,6 +91,12 @@ package body FSM is
       -- Stack new state
       Internal_Previous_State := Internal_State;
       Internal_State          := To_State;
+
+      if CB_Expected then
+         Code_BLock_Expected_Line := Line (Loc);
+      elsif To_State = In_File_Content then
+         Code_BLock_Start_Line := Line (Loc);
+      end if;
 
       Put_Debug_Line
         ("State: " & Internal_Previous_State'Image & " --> " &
@@ -96,11 +107,21 @@ package body FSM is
       -- When living the In_Step state, check that the expected code block
       -- was provided
       if Internal_Previous_State = In_Step
-        and then To_State /= In_File_Content
         and then Previous_Step_CB_Expected
         and then not Code_Block_Marks.Code_Block_Already_Provided
+        and then To_State /= In_File_Content
       then
          CB_Missing := True;
+         Put_Error ("Missing Code Block expected line"
+                    & Code_BLock_Expected_Line'Image, Loc);
+      end if;
+
+      -- When living the In_Step state, check that the expected code block
+      -- was provided
+      if Internal_Previous_State = In_File_Content then
+         Put_Error ("Code Block started line"
+                    & Code_BLock_Start_Line'Image
+                    & ", not closed", Loc);
       end if;
 
       case To_State is
@@ -164,15 +185,5 @@ package body FSM is
    function Code_Block_Expected return Boolean is
      (Current_State = In_Step and Previous_Step_CB_Expected);
 
-   -- --------------------------------------------------------------------------
-   function Code_Block_Missing return Boolean is
-   begin
-      if CB_Missing then
-         CB_Missing := False;
-         return True;
-      else
-         return False;
-      end if;
-   end Code_Block_Missing;
 
 end FSM;

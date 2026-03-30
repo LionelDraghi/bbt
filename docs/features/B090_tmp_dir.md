@@ -18,7 +18,7 @@ _Table of Contents:_
 - Given there is no `dir1` dir
 - Given there is no `dir2` dir
 
-- Given the file `scen1.md`
+- Given the new file `scen1.md`
   ~~~
   # Scenario: 
   - When I run `./sut create tmp.txt`

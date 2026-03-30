@@ -114,9 +114,6 @@ package body BBT.Model.Steps is
    begin
       case Step.Data.Action is
       when None =>
-         Put_Error (Msg      => "Unrecognized Step "
-                                & Wrap_In_Backticks (+Step.Data.Src_Code),
-                    Location => Step.Location);
          return Prefix & "*** Unrecognized step **** ";
 
       -- Setup actions
@@ -269,7 +266,7 @@ package body BBT.Model.Steps is
             -- If One step is selected, we must mark the parent scenario
             -- as selected, and possibly Background, etc.
 
-         when  Filtered =>
+         when Filtered =>
             Put_Debug_Line ("Step filtered : '" & (+S.Data.Src_Code) & "'");
             Filter (S);
 

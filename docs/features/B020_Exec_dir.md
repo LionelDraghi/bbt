@@ -7,8 +7,8 @@ bbt is able to run a scenario in a specific directory, provided on the command l
 
 _Table of Contents_:
 - [Background: create some dir and file](#background-create-some-dir-and-file)
-- [Scenario: Lets run `create_tree` in the current dir](#scenario-lets-run-create_tree-in-the-current-dir)
-- [Scenario: Lets run `create_tree` in ./dir2](#scenario-lets-run-create_tree-in-dir2)
+- [Scenario: Lets run "create\_tree.md" in the current dir](#scenario-lets-run-create_treemd-in-the-current-dir)
+- [Scenario: Lets run "create\_tree.md" in ./dir2](#scenario-lets-run-create_treemd-in-dir2)
 
 ### Background: create some dir and file
 
@@ -19,16 +19,19 @@ _Table of Contents_:
 # Scenario:
 - Given the dir `dir1`
 - Given the file `dir1/file1` 
+~~~
+content
+~~~
 ```
 
-### Scenario: Lets run `create_tree` in the current dir
+### Scenario: Lets run "create_tree.md" in the current dir
 
 - When I run `./bbt create_tree.md`
 
 - Then there is a `dir1` dir
 - And there is a `dir1/file1` file
 
-### Scenario: Lets run `create_tree` in ./dir2
+### Scenario: Lets run "create_tree.md" in ./dir2
 
 - Given the new `dir2` directory
 

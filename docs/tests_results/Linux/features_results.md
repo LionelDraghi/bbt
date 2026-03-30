@@ -499,12 +499,12 @@
    - OK : And the output contains  
    - [X] scenario   [normal use case](../../features/A195_Run_Or.md) pass  
 
-   ### Scenario: [the last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md): 
+   ### Scenario: [The last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md): 
    - OK : Given the new file `erroneous_or.md`   
    - OK : When I run `./bbt -c erroneous_or.md`  
    - OK : Then I get an error  
    - OK : And the output contains  
-   - [X] scenario   [the last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md) pass  
+   - [X] scenario   [The last command does not meet expectation (test should fail)](../../features/A195_Run_Or.md) pass  
 
   ## Feature: Syntactic and Semantic error related to "or" should be detected  
    ### Scenario: [Missing command before "or"](../../features/A195_Run_Or.md): 
@@ -767,6 +767,13 @@
    - [X] scenario   [Exclude by file name](../../features/A230_select_exclude_include.md) pass  
 
 
+# Document: [A240_Then_I_Succesfully_Run.md](../../features/A240_Then_I_Succesfully_Run.md)  
+   ### Scenario: [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md): 
+   - OK : Given the new file `simple.xml`  
+   - OK : Then I successfully run `xmllint simple.xml`   
+   - [X] scenario   [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -806,11 +813,11 @@
    - OK : Given the new `create_tree.md` file  
    - [X] background [create some dir and file](../../features/B020_Exec_dir.md) pass  
 
-   ### Scenario: [Lets run `create_tree` in the current dir](../../features/B020_Exec_dir.md): 
+   ### Scenario: [Lets run "create_tree.md" in the current dir](../../features/B020_Exec_dir.md): 
    - OK : When I run `./bbt create_tree.md`  
    - OK : Then there is a `dir1` dir  
    - OK : And there is a `dir1/file1` file  
-   - [X] scenario   [Lets run `create_tree` in the current dir](../../features/B020_Exec_dir.md) pass  
+   - [X] scenario   [Lets run "create_tree.md" in the current dir](../../features/B020_Exec_dir.md) pass  
 
    ### Background: [create some dir and file](../../features/B020_Exec_dir.md): 
    - OK : Given there is no `dir1` directory  
@@ -818,13 +825,13 @@
    - OK : Given the new `create_tree.md` file  
    - [X] background [create some dir and file](../../features/B020_Exec_dir.md) pass  
 
-   ### Scenario: [Lets run `create_tree` in ./dir2](../../features/B020_Exec_dir.md): 
+   ### Scenario: [Lets run "create_tree.md" in ./dir2](../../features/B020_Exec_dir.md): 
    - OK : Given the new `dir2` directory  
    - OK : When I run `./bbt create_tree.md --exec_dir dir2`  
    - OK : Then there is a `dir2/dir1` dir  
    - OK : And there is a `dir2/dir1/file1` file  
    - OK : And there is no `dir1` dir  
-   - [X] scenario   [Lets run `create_tree` in ./dir2](../../features/B020_Exec_dir.md) pass  
+   - [X] scenario   [Lets run "create_tree.md" in ./dir2](../../features/B020_Exec_dir.md) pass  
 
 
 # Document: [B030_File_creation_in_Given_steps.md](../../features/B030_File_creation_in_Given_steps.md)  
@@ -976,25 +983,69 @@
 # Document: [B080_Keep_Going.md](../../features/B080_Keep_Going.md)  
   ## Feature: on error, Keep going or stop  
    ### Background: [setup](../../features/B080_Keep_Going.md): 
-   - OK : Given the file `feature1.md`  
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
    - [X] background [setup](../../features/B080_Keep_Going.md) pass  
 
-   ### Scenario: [with `-k`](../../features/B080_Keep_Going.md): 
-   - OK : When I run `./bbt -k feature1.md`  
+   ### Scenario: [scenario_with_syntax_error run without `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [scenario_with_syntax_error run without `-k`](../../features/B080_Keep_Going.md) pass  
+
+   ### Background: [setup](../../features/B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](../../features/B080_Keep_Going.md) pass  
+
+   ### Scenario: [scenario_with_syntax_error run with `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k scenario_with_syntax_error.md`  
    - OK : then output contains  
    - OK : and output contains  
    - OK : and output contains  
    - OK : and output contains  
-   - [X] scenario   [with `-k`](../../features/B080_Keep_Going.md) pass  
+   - OK : and output contains  
+   - OK : and output contains  
+   - [X] scenario   [scenario_with_syntax_error run with `-k`](../../features/B080_Keep_Going.md) pass  
 
    ### Background: [setup](../../features/B080_Keep_Going.md): 
-   - OK : Given the file `feature1.md`  
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
    - [X] background [setup](../../features/B080_Keep_Going.md) pass  
 
-   ### Scenario: [without `-k`](../../features/B080_Keep_Going.md): 
-   - OK : When I run `./bbt feature1.md`  
+   ### Scenario: [scenario_with_assertion_error run without `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt scenario_with_assertion_error.md`  
    - OK : then output is  
-   - [X] scenario   [without `-k`](../../features/B080_Keep_Going.md) pass  
+   - [X] scenario   [scenario_with_assertion_error run without `-k`](../../features/B080_Keep_Going.md) pass  
+
+   ### Background: [setup](../../features/B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](../../features/B080_Keep_Going.md) pass  
+
+   ### Scenario: [scenario_with_assertion_error run with `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k scenario_with_assertion_error.md`  
+   - OK : then output is  
+   - [X] scenario   [scenario_with_assertion_error run with `-k`](../../features/B080_Keep_Going.md) pass  
+
+   ### Background: [setup](../../features/B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](../../features/B080_Keep_Going.md) pass  
+
+   ### Scenario: [explain scenario_with_syntax_error without `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt ex scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [explain scenario_with_syntax_error without `-k`](../../features/B080_Keep_Going.md) pass  
+
+   ### Background: [setup](../../features/B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](../../features/B080_Keep_Going.md) pass  
+
+   ### Scenario: [explain scenario_with_syntax_error with `-k`](../../features/B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k ex scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [explain scenario_with_syntax_error with `-k`](../../features/B080_Keep_Going.md) pass  
 
 
 # Document: [B090_tmp_dir.md](../../features/B090_tmp_dir.md)  
@@ -1003,7 +1054,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](../../features/B090_tmp_dir.md) pass  
 
    ### Scenario: [Current dir, no cleanup](../../features/B090_tmp_dir.md): 
@@ -1015,7 +1066,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](../../features/B090_tmp_dir.md) pass  
 
    ### Scenario: [Current dir, with cleanup](../../features/B090_tmp_dir.md): 
@@ -1027,7 +1078,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](../../features/B090_tmp_dir.md) pass  
 
    ### Scenario: [Within dir1, no cleanup](../../features/B090_tmp_dir.md): 
@@ -1040,7 +1091,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](../../features/B090_tmp_dir.md) pass  
 
    ### Scenario: [Within dir1, with cleanup](../../features/B090_tmp_dir.md): 
@@ -1460,6 +1511,7 @@
    - OK : Given the new file `scenario_to_explain.md`   
    - OK : When I run `./bbt explain scenario_to_explain.md`  
    - OK : Then the output contains  
+   - OK : And the output contains  
    - OK : When I run `./bbt -q explain scenario_to_explain.md`  
    - OK : Then I get   
    - [X] scenario   [explain Invalid Step](../../features/B170_Explain.md) pass  
@@ -1560,32 +1612,32 @@
 # Document: [C070_missing_code_block.md](../../features/C070_missing_code_block.md)  
   ## Feature: missing or erroneous code blocks  
    ### Scenario: [Code block missing at the end of the file](../../features/C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_at_EOF.md`  
+   - OK : Given the new file `code_block_missing_at_EOF.md`  
    - OK : When I run `./bbt -c code_block_missing_at_EOF.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing at the end of the file](../../features/C070_missing_code_block.md) pass  
 
    ### Scenario: [Code block missing while reaching next step](../../features/C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_in_step.md`  
+   - OK : Given the new file `code_block_missing_in_step.md`  
    - OK : When I run `./bbt -c code_block_missing_in_step.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing while reaching next step](../../features/C070_missing_code_block.md) pass  
 
    ### Scenario: [Code block missing while reaching next scenario](../../features/C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_in_scenario.md`  
+   - OK : Given the new file `code_block_missing_in_scenario.md`  
    - OK : When I run `./bbt -c code_block_missing_in_scenario.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing while reaching next scenario](../../features/C070_missing_code_block.md) pass  
 
    ### Scenario: [Closing code block mark missing](../../features/C070_missing_code_block.md): 
-   - OK : Given the file `code_block_not_closed.md`  
+   - OK : Given the new file `code_block_not_closed.md`  
    - OK : When I run `./bbt -c code_block_not_closed.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
-   - OK : Given the file `code_block_not_closed2.md`  
+   - OK : Given the new file `code_block_not_closed2.md`  
    - OK : When I run `./bbt -c code_block_not_closed2.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
@@ -1630,17 +1682,92 @@
    - OK : Given the file `bad_steps.md`  
    - OK : When I run `./bbt -k -c bad_steps.md`  
    - OK : Then the output contains   
+   - **NOK** : And the output contains  (../docs/features/C120_Ill_Formated_Steps.md:51:)  
+../docs/features/C120_Ill_Formated_Steps.md:51: Error: Output:  
+~~~
+bad_steps.md:2: Error: File name expected in subject phrase (should be between backticks)  
+bad_steps.md:5: Error: Dir name expected in subject phrase (should be between backticks)  
+bad_steps.md:8: Error: Unrecognized step "when I run "  
+bad_steps.md:11: Error: File name expected in object phrase (should be between backticks)  
+bad_steps.md:14: Error: Unrecognized step "then I get dir"  
+bad_steps.md:20: Error: Missing Code Block expected line 17  
+  
+# Document: [bad_steps.md](bad_steps.md)    
+   ### Scenario: [knowing grep version](bad_steps.md):   
+bad_steps.md:2: Warning: Skipping step with syntax error  
+bad_steps.md:5: Warning: Skipping step with syntax error  
+bad_steps.md:8: Warning: Skipping step with syntax error  
+bad_steps.md:11: Warning: Skipping step with syntax error  
+bad_steps.md:14: Warning: Skipping step with syntax error  
+bad_steps.md:17: Exception : while processing step BBT.MODEL.STEPS.STEP_TYPE'  
+   Step type        = THEN_STEP,   
+   Action           = OUTPUT_CONTAINS  
+   Src_Code         = "then the output should contain ""grep version"""  
+   Subject string   = ""  
+   Object_String    = ""  
+   Object_File_Name = ""  
+   File_Type        = ORDINARY_FILE  
+   Ignore order     = FALSE  
+   File_Content     =   
+~~~  
+~~~  
+  
+ : ADA.IO_EXCEPTIONS.NAME_ERROR /home/lionel/prj/bbt/tests/bad_steps.md.out: No such file or directoryLoad address: 0x55e722c00000  
+[/home/lionel/prj/bbt/tests/bbt]  
+0x55e722dd5b54 System.File_Io.Open at s-fileio.adb:1140  
+0x55e722dce10b Ada.Text_Io.Open at a-textio.adb:1208  
+0x55e722c6755a Text_Utilities.Get_Text at text_utilities.adb:168  
+0x55e722d955f4 Bbt.Tests.Runner.Run_Step at bbt-tests-runner.adb:136  
+0x55e722d97d7b Bbt.Tests.Runner.Run_Scenario at bbt-tests-runner.adb:234  
+0x55e722d99fb0 Bbt.Tests.Runner.Run_Scenario_List at bbt-tests-runner.adb:331  
+0x55e722d9a73a Bbt.Tests.Runner.Run_Doc at bbt-tests-runner.adb:370  
+0x55e722d9b896 Bbt.Tests.Runner.Run_All at bbt-tests-runner.adb:428  
+0x55e722c1dfeb Bbt.Main at bbt-main.adb:153  
+0x55e722c1effd Main at b__bbt-main.adb:588  
+[/usr/lib/x86_64-linux-gnu/libc.so.6]  
+0x7f567c47bf73  
+0x7f567c47c025  
+[/home/lionel/prj/bbt/tests/bbt]  
+0x55e722c1d0cf _start at ???  
+0xfffffffffffffffe  
+  
+   - [ ] scenario   [knowing grep version](bad_steps.md) **fails**    
+   ### Scenario: [no problem](bad_steps.md):   
+   - OK : when I run `grep --version`    
+   - OK : then I get no error    
+   - [X] scenario   [no problem](bad_steps.md) pass    
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 1     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+  bad_steps.md:2: Warning: Skipping step with syntax error    
+  bad_steps.md:5: Warning: Skipping step with syntax error    
+  bad_steps.md:8: Warning: Skipping step with syntax error    
+  bad_steps.md:11: Warning: Skipping step with syntax error    
+  bad_steps.md:14: Warning: Skipping step with syntax error   
+  bad_steps.md:20: Warning: Skipping step with syntax error
+~~~
+  
    - OK : And the output contains  
    - OK : And I get an error  
-   - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
+   - [ ] scenario   [](../../features/C120_Ill_Formated_Steps.md) **fails**  
 
 
-## Summary : **Success**, 163 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 163   |
+| Failed     | 1     |
+| Successful | 167   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

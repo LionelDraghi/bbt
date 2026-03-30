@@ -482,7 +482,10 @@ Ensure that there is a clear output on a malformed step, even when running with 
 
 - Then the output contains
 ~~~
-scenario_to_explain.md:2: Error: Unrecognized Step `Then the command should complete with no error`  
+scenario_to_explain.md:2: Error: Unrecognized Step "Then the command should complete with no error"  
+~~~
+- And the output contains
+~~~
 2: - Check *** Unrecognized step **** 
 ~~~
 
@@ -490,5 +493,5 @@ scenario_to_explain.md:2: Error: Unrecognized Step `Then the command should comp
 
 - Then I get 
 ~~~
-scenario_to_explain.md:2: Error: Unrecognized Step `Then the command should complete with no error`  
+scenario_to_explain.md:2: Error: Unrecognized Step "Then the command should complete with no error"  
 ~~~

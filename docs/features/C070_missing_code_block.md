@@ -11,7 +11,7 @@ _Table of Contents:_
 
 ## Scenario: Code block missing at the end of the file
 
-- Given the file `code_block_missing_at_EOF.md`
+- Given the new file `code_block_missing_at_EOF.md`
   ~~~
   # Scenario
   - When I run `./sut --version`
@@ -28,7 +28,7 @@ _Table of Contents:_
 
 ## Scenario: Code block missing while reaching next step
 
-- Given the file `code_block_missing_in_step.md`
+- Given the new file `code_block_missing_in_step.md`
   ~~~
   # Scenario
   - When I run `./sut --version`
@@ -45,13 +45,13 @@ _Table of Contents:_
 
 ## Scenario: Code block missing while reaching next scenario
 
-- Given the file `code_block_missing_in_scenario.md`
+- Given the new file `code_block_missing_in_scenario.md`
   ~~~
   # Scenario 1
   - When I run `./sut --version`
   - Then output is
 
-# Scenario 2
+  # Scenario 2
   ~~~
 
   - When I run `./bbt -c code_block_missing_in_scenario.md`
@@ -61,11 +61,10 @@ _Table of Contents:_
     code_block_missing_in_scenario.md:5: Error : missing Code Block expected line 3
     ```
 
-  ## Scenario: Closing code block mark missing 
+## Scenario: Closing code block mark missing 
 
-  - Given the file `code_block_not_closed.md`
+  - Given the new file `code_block_not_closed.md`
   ~~~
-
 # Scenario
 - When I run `./sut --version`
 - Then output is
@@ -78,10 +77,10 @@ _Table of Contents:_
 - Then there is an error 
 - And  the output contains 
   ```
-  code_block_not_closed.md:7: Error : Code fenced block opened line 5, but not closed
+  code_block_not_closed.md:6: Error: Code Block started line 4, not closed
   ```
 
-- Given the file `code_block_not_closed2.md`
+- Given the new file `code_block_not_closed2.md`
   ~~~
   # Scenario
   - When I run `./sut --version`
@@ -95,5 +94,5 @@ _Table of Contents:_
 - Then there is an error 
 - And  the output contains 
   ```
-  code_block_not_closed2.md:6: Error : Code fenced block opened line 5, but not closed
+  code_block_not_closed2.md:6: Error: Code Block started line 5, not closed
   ```

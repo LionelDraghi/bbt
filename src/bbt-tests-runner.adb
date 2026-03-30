@@ -192,6 +192,10 @@ package body BBT.Tests.Runner is
          when None =>
             IO.Put_Error ("Unrecognized step " & Step.Data.Src_Code'Image,
                           Step.Location);
+            IO.Put_Error ("Internal error, should have been identified in Validate_Step_State and Has_Syntax_Error set.",
+                          Step.Location);
+            IO.Put_Error ("Please report the step line and your bbt version to maintainer at https://github.com/LionelDraghi/bbt/issues",
+                          Step.Location);
 
       end case;
       Set_End_Time (Step);

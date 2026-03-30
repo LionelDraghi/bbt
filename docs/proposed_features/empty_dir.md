@@ -3,7 +3,7 @@
 
 ## Scenario: no Dir1, test creation
 
-- Given there is no `dir1`
+- Given there is no dir `dir1`
 - Given the new directory `dir1`
 - Then there is a directory `dir1`
 

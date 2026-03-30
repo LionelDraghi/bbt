@@ -7,8 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.3.0-dev] - 2026--**
-  - [Added]   `explain` command rewritten and tested, now usable
-  - [Changed] `create_template` deprecated and replaced with `help tutorial` and `help example` 
+  - [Added]   `bbt explain` command rewritten and tested, now usable
+  - [Changed] `bbt create_template` deprecated and replaced with `bbt help tutorial` and `bbt help example` 
+  - [Changed] `bbt lg | list_grammar` now produce a Markdown table **with an example** for each recognized syntax
   - [Added]   `Then I successfully run` syntax added
   
 - **[0.2.1] - 2026-06-13**
@@ -17,11 +18,11 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
 
 - **[0.2.0] - 2025-07-02**
   - [Changed] `--output` is now deprecated and replaced with `--index` 
-  - [Changed] Removed option form of commands : "help" is a command, "-h" is removed (as announced in 0.1.0)
+  - [Changed] Removed option form of commands : `help` is a command, `-h` is removed (as announced in 0.1.0)
   - [Changed] The non essential explanation in the online help have bee moved to separate topics
   - [Added]   Close #21, first implementation of documents/features/scenario/steps selection through `--select` `--exclude` `--include` options.
   - [Added]   AppImage generation added by @mgrojo
-  - [Fixed]   --cleanup now correctly removes directories tree (fixes #3)
+  - [Fixed]   `--cleanup` now correctly removes directories tree (fixes #3)
   - [Added]   Processing of Asciidoc input (.adoc files) added (proto)
 
 - **[0.1.0] - 2025-03-03**
@@ -37,7 +38,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
   - [Added]   `Output matches regexp` syntax added.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
-  - [Added]   `Given the file containing` now accept code fenced block content.
+  - [Added]   `-Given the file containing` now accept code fenced block content.
   - [Changed] The template file (produce with -ct) is now more complete, so that a user could start with it without reading the doc.
   - [Added]   Added robustness tests on missing code block marks in scenario files.
   - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
@@ -54,14 +55,14 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   *file is equal to file* syntax added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Added]   `--strict` implemented to get warning on steps not in GWT order
-  - [Added]   *output|file doesn't contain* syntax added
+  - [Added]   `output|file doesn't contain` syntax added
   - [Fixed]   .out files sometimes created in .md dir and not in Exec_Dir
   - [Fixed]   .out files not removed when using `--cleanup`
   - [Fixed]   Incoherencies between documentation removed regarding Markdown syntax and bbt step's syntax
-  - [Fixed]   Normal output verbosity is now more balanced (it was pretty much identical to --verbose)  
+  - [Fixed]   Normal output verbosity is now more balanced (it was pretty much identical to `--verbose`)  
   - [Changed] "uut" renamed "sut", because bbt is precisely not about Unit Under Test, but Software Under Test.
   - [Added]   "sut" augmented to be able to check future feature about Environment variable and user prompting.
-  - [Changed] Files are now processed in alphabetic order, and displayed accordingly by --list_file
+  - [Changed] Files are now processed in alphabetic order, and displayed accordingly by  `--list_file`
   - [Changed] Big Features renaming and reorg
 
 - **[0.0.5] - 2024-10-17**
@@ -80,14 +81,14 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Removed] due to the new `--yes` option, `--auto_delete` is removed
   
 - **[0.0.3] - 2024-06-30**
-  - [Added] text file creation
+  - [Added]   text file creation
 
 - **[0.0.2] - 2024-06-04** 
-  - [Added] automatically delete files and directories if needed in "Given" steps
+  - [Added]   automatically delete files and directories if needed in "Given" steps
     
 - **[0.0.1] - 2024-05-13**
-  - [Added] `background` feature
-  - [Added] bbt `directory` keyword and related creation/check operations
+  - [Added]   `background` feature
+  - [Added]   bbt `directory` keyword and related creation/check operations
 
 - **[0.0.0] - 2024-05-04**
   - Initial release  

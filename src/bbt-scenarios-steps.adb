@@ -10,14 +10,12 @@ with BBT.Model.Steps,
 
 with Text_Utilities;
 
--- with Ada.Containers;
 with Ada.Directories;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Ada.Strings.Maps;
-
 
 use BBT.Scenarios.Steps.Lexer,
     BBT.Model.Steps,
@@ -234,8 +232,6 @@ package body BBT.Scenarios.Steps is
    procedure Validate_Step_State (State               : Parse_State;
                                   Loc                 : Location_Type;
                                   Verb                : Verbs;
-                                  No_Subject_String   : Boolean;
-                                  No_Object_File_Name : Boolean;
                                   Code_Block_Expected : out Boolean) is separate;
 
    -- --------------------------------------------------------------------------
@@ -246,14 +242,6 @@ package body BBT.Scenarios.Steps is
    is
       State    : Parse_State;
       Src_Code : Unbounded_String     := Null_Unbounded_String;
-
-      function Is_Null (S : in Unbounded_String) return Boolean is
-      --Fixme: To move in Text_Utilities
-        (S = Null_Unbounded_String);
-      function No_Subject_String return Boolean is
-        (Is_Null (State.Subject_String));
-      function No_Object_File_Name return Boolean is
-        (Is_Null (State.Object_File_Name));
 
       Tmp : aliased constant String := To_String (Line);
       TT  : Token_Type;
@@ -349,19 +337,22 @@ package body BBT.Scenarios.Steps is
                                       State.Subject,
                                       Chunk.Verb,
                                       State.Object).Action;
+         Put_Debug_Line ("---- Prep = " & State.Prep'Image
+                         & ", Subject = " & State.Subject'Image
+                         & ", Attr = " & State.Subject_Attr'Image
+                         & ", Verb = " & Chunk.Verb'Image
+                         & ", Object = " & State.Object'Image, Loc);
+         Put_Debug_Line ("---- Action set to " & State.Action'Image, Loc);
 
-         declare
-            Code_Block_Expected_Local : Boolean;
-         begin
+         if State.Action = None then
+            IO.Put_Error ("Unrecognized step """ & To_String (Line) & """", Loc);
+
+         else
             Validate_Step_State (State,
                                  Loc,
                                  Chunk.Verb,
-                                 No_Subject_String,
-                                 No_Object_File_Name,
-                                 Code_Block_Expected_Local);
-            Code_Block_Expected := Code_Block_Expected_Local;
-         end;
-
+                                 Code_Block_Expected);
+         end if;
          Previous_Step_Kind := State.Cat;
 
       end if;

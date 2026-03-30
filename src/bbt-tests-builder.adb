@@ -54,7 +54,7 @@ package body BBT.Tests.Builder is
       procedure Set_State (To_State    : States;
                            CB_Expected : Boolean := False;
                            Loc         : Location_Type);
-      procedure Restore_Previous_State;
+      procedure Exit_Code_Block;
       -- Restore_State_Before_In_Step;
       -- When exiting the File content state, it restore the previous one
 
@@ -69,11 +69,6 @@ package body BBT.Tests.Builder is
       function Code_Block_Expected return Boolean;
       -- Tell if we are processing a step and that if that step is
       -- expecting a code block.
-
-      function Code_Block_Missing return Boolean;
-      -- Tell if a code block is missing in a Step needing one.
-      -- WARNING : this function has side effect, to avoid multiple
-      -- error reporting, it will return True only once;
 
       -- -----------------------------------------------------------------------
       package Code_Block_Marks is
@@ -97,23 +92,7 @@ package body BBT.Tests.Builder is
 
    package body FSM is separate;
 
-   Code_BLock_Expected_Line,
-   Opening_Marker_Line : Ada.Text_IO.Count := 0;
-
    use FSM;
-
-   -- --------------------------------------------------------------------------
-   procedure Check_Missing_Code_Block (Loc : Location_Type) is
-   begin
-      if Code_Block_Missing then
-         Put_Error ("Missing Code Block expected line"
-                    & Code_BLock_Expected_Line'Image, Loc);
-      elsif Current_State = In_File_Content then
-         Put_Error ("Code fenced block opened line"
-                    & Opening_Marker_Line'Image &
-                      ", but not closed", Loc);
-      end if;
-   end Check_Missing_Code_Block;
 
    -- --------------------------------------------------------------------------
    function Last_Scenario return Scenario_Maybe is
@@ -158,7 +137,6 @@ package body BBT.Tests.Builder is
                          Parent     => Current_Doc,
                          Location   => Loc));
       Set_State (In_Feature, Loc => Loc);
-      Check_Missing_Code_Block (Loc);
    end Add_Feature;
 
    -- --------------------------------------------------------------------------
@@ -181,7 +159,6 @@ package body BBT.Tests.Builder is
                                 Location => Loc));
       end case;
       Set_State (In_Scenario, Loc => Loc);
-      Check_Missing_Code_Block (Loc);
    end Add_Scenario;
 
    -- --------------------------------------------------------------------------
@@ -214,7 +191,6 @@ package body BBT.Tests.Builder is
       end case;
 
       Set_State (In_Background, Loc => Loc);
-      Check_Missing_Code_Block (Loc);
 
    end Add_Background;
 
@@ -243,10 +219,6 @@ package body BBT.Tests.Builder is
       end Append_Step;
 
    begin
-      if Code_Block_Expected then
-         Code_BLock_Expected_Line := Line (Loc);
-      end if;
-
       if Current_State in Not_In_Document | In_Document | In_Feature then
          raise Missing_Scenario with "Prefix & Premature Step " &
            Step_Info.Src_Code'Image
@@ -317,7 +289,7 @@ package body BBT.Tests.Builder is
             end if;
 
       end case;
-      Check_Missing_Code_Block (Loc);
+
    end Add_Step;
 
    -- --------------------------------------------------------------------------
@@ -335,7 +307,6 @@ package body BBT.Tests.Builder is
 
       case Current_State is
          when In_Step =>
-            Opening_Marker_Line := Line (Loc);
             if FSM.Code_Block_Marks.Count = 1 and Code_Block_Expected then
                Set_State (In_File_Content, Loc => Loc);
 
@@ -346,8 +317,7 @@ package body BBT.Tests.Builder is
 
          when In_File_Content =>
             -- Exiting code block
-            Opening_Marker_Line := 0;
-            Restore_Previous_State;
+            Exit_Code_Block;
             Put_Debug_Line
               ("Add_Code_Fence, exiting code block. File_Content = "
                & Last_Step.Data.File_Content'Image, Loc);
@@ -380,8 +350,7 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Close_Document (Loc : Location_Type) is
    begin
-      Check_Missing_Code_Block (Loc);
-      Set_State (Not_In_Document, Loc => No_Location);
+      Set_State (Not_In_Document, Loc => Loc);
    end Close_Document;
 
    -- --------------------------------------------------------------------------

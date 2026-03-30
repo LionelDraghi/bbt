@@ -1,4 +1,4 @@
-## Feature : “when I run X or Y” test
+## Feature: “when I run X or Y” test
 
 Test the ability to duplicate a test thanks to "When I run X or Y" form.
 
@@ -22,7 +22,7 @@ Test the ability to duplicate a test thanks to "When I run X or Y" form.
    - [X] scenario   [A 2/2](simple_or.md) pass  
 ~~~
 
-### Scenario : the last command does not meet expectation (test should fail)
+### Scenario: The last command does not meet expectation (test should fail)
 - Given the new file `erroneous_or.md` 
 ~~~
 # Scenario B
