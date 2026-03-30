@@ -71,10 +71,10 @@ package BBT.Model.Documents is
    -- --------------------------------------------------------------------------
    function Count (Test : Test_Result) return Natural;
    -- Walk through the Document list to sum all scenarios result's.
-   function Success return Boolean;
    function No_Fail return Boolean;
-   -- As per #32, both Success and No_Fail have the same semantics,
-   -- and **just** check that there is no fail test.
+   -- As per Issue #32, both Success and No_Fail have the same semantics,
+   -- and **just** check that there is no fail test. As a consequence,
+   -- Success is removed.
    procedure Sum_Results (Docs : List);
    function Get_Results (DL : List) return Test_Results_Count;
    -- -----------------------------------------------------------------------

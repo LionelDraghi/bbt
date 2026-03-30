@@ -165,7 +165,6 @@ package body BBT.Scenarios.Steps.Lexer is
          -- It's the end of line
          -- -> next line.
          Finish_Line;
-         -- Put_Line ("EOL");
       end if;
 
       if Last = 0 then

@@ -8,7 +8,7 @@ Location | Text
 [docs/proposed_features/error_output_contains.md](../docs/proposed_features/error_output_contains.md):3| not yet implemented.
 [docs/UG.md](../docs/UG.md):174|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
 [src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):219|               --     --  opt -ot / --output_tag not yet coded
-[src/bbt-model-documents.adb](../src/bbt-model-documents.adb):213|      --  to be replaced with a Reduce?
+[src/bbt-model-documents.adb](../src/bbt-model-documents.adb):212|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios.ads](../src/bbt-scenarios.ads):56|   --  To be moved as dispatching in Writers

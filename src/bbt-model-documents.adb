@@ -149,8 +149,6 @@ package body BBT.Model.Documents is
    function Count (Test : Test_Result) return Natural is (Results (Test));
 
    -- --------------------------------------------------------------------------
-   function Success return Boolean is (Results (Failed) = 0); -- fixes #32
-
    function No_Fail return Boolean is (Results (Failed) = 0);
 
    -- --------------------------------------------------------------------------

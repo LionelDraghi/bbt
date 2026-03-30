@@ -32,6 +32,7 @@ Markdown with Gherkin (MDG) [definitions](https://github.com/cucumber/gherkin/bl
 _Table of Contents:_
 - [Scenario: Heading variations](#scenario-heading-variations)
 - [Scenario: Missing heading marker](#scenario-missing-heading-marker)
+- [Scenario: Steps using Emphasis and strong emphasis](#scenario-steps-using-emphasis-and-strong-emphasis)
   
 ### Scenario: Heading variations
 
@@ -91,3 +92,35 @@ Background:
 - Then output contain `Warning : No scenario in document "no_heading_marker.input`
 - And  output contain `Empty       =  1`
 ```
+
+### Scenario: Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)
+
+Check that steps are not sensitive to italic and bold marks
+
+- Given the new file `italic_and_bold_in_steps.md`
+~~~
+# Scenario
+- Given the new file `Cities.lst`
+```
+Paris
+Roma
+London
+```
+-   When     I     run   `grep -i rom Cities.lst`
+-   Then     I     get   `Roma`
+-  *When*   *I*   *run*  `grep -i rom Cities.lst`
+- **Then** **I** **get** `Roma`
+-  _When_   _I_   _run_  `grep -i rom Cities.lst`
+- __Then__ __I__ __get__ `Roma`
+~~~
+
+- When I successfully run `./bbt explain italic_and_bold_in_steps.md`
+- Then the output contains
+```
+8: - Run command `grep -i rom Cities.lst`   
+9: - Check that output is `Roma`
+10: - Run command `grep -i rom Cities.lst`   
+11: - Check that output is `Roma`
+12: - Run command `grep -i rom Cities.lst`   
+13: - Check that output is `Roma`
+``` 

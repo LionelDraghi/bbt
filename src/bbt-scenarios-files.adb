@@ -222,8 +222,7 @@ package body BBT.Scenarios.Files is
                      Tests.Builder.Add_Step
                        (S,
                         Code_Block_Expected,
-                        Loc,
-                        Syntax_Error => Some_Error);
+                        Loc);
                   end;
 
                when Code_Fence =>

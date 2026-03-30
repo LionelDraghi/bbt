@@ -111,9 +111,14 @@ package body FSM is
         and then not Code_Block_Marks.Code_Block_Already_Provided
         and then To_State /= In_File_Content
       then
-         CB_Missing := True;
-         Put_Error ("Missing Code Block expected line"
+         -- Subtlety here, as the error is related to the previous step,
+         -- we don't want to call Put_Error, as it will results in
+         -- having the current step reported as erroneous, and thus not run.
+         -- So, we imitate the error message, and manually set the error flag
+         -- on the previous step.
+         Put_Line ("Error: Missing Code Block expected line"
                     & Code_BLock_Expected_Line'Image, Loc);
+         Last_Step.Set_Has_Syntax_Error (True);
       end if;
 
       -- When living the In_Step state, check that the expected code block
@@ -184,6 +189,5 @@ package body FSM is
    -- --------------------------------------------------------------------------
    function Code_Block_Expected return Boolean is
      (Current_State = In_Step and Previous_Step_CB_Expected);
-
 
 end FSM;

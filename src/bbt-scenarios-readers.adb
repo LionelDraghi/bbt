@@ -167,7 +167,7 @@ package body BBT.Scenarios.Readers is
                Context := Initialize_Context;
                -- Any non processed header cause the context to be reset,
                -- so that the following lines are interpreted as pertaining
-               -- to the previous scenario. (#37)
+               -- to the previous scenario. (Issue #37)
 
             end if;
          end;

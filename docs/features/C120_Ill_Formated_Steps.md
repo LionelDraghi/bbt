@@ -6,7 +6,7 @@ Here are some detected problem.
 
 # Scenario:
 
-- Given the file `bad_steps.md`
+- Given the new file `bad_steps.md`
   ~~~md
   ## Scenario: knowing grep version
   - Given the file
@@ -49,15 +49,19 @@ Here are some detected problem.
   ~~~
 
 - And the output contains 
-  We also check that when using --keep_going option, skipped steps are explicit
+  We also check that when using --keep_going option, skipped steps are explicit.
+  Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20. 
+  But the erroneous step that is skipped is the one line 17.
+  The step line 20 is run.
   ~~~
   bad_steps.md:2: Warning: Skipping step with syntax error  
   bad_steps.md:5: Warning: Skipping step with syntax error  
   bad_steps.md:8: Warning: Skipping step with syntax error  
   bad_steps.md:11: Warning: Skipping step with syntax error  
   bad_steps.md:14: Warning: Skipping step with syntax error 
-  bad_steps.md:20: Warning: Skipping step with syntax error
-  ~~~
+  bad_steps.md:17: Warning: Skipping step with syntax error  
+  - OK : when I run `grep --version`  
+~~~
 
 - And the output contains
   ~~~  

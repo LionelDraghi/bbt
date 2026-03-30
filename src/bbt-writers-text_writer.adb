@@ -63,7 +63,7 @@ package body BBT.Writers.Text_Writer is
    overriding procedure Put_Summary (Writer : Text_Writer) is
    begin
       New_Line (Quiet);
-      if Success then
+      if No_Fail then
          Put_Line ("Success,"
                    & Count (Successful)'Image & " scenarios OK"
                    & (if Count (Empty) = 0
@@ -79,7 +79,7 @@ package body BBT.Writers.Text_Writer is
    -- --------------------------------------------------------------------------
    overriding procedure Put_Detailed_Results (Writer : Text_Writer) is
       Verbosity_Level : constant Verbosity_Levels
-        := (if Success then Verbose else Quiet);
+        := (if No_Fail then Verbose else Quiet);
    begin
       New_Line (Verbosity_Level);
       Put_Line ("| Status     | Count |", Verbosity => Verbosity_Level);

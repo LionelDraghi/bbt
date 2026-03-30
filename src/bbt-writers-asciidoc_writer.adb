@@ -60,7 +60,7 @@ package body BBT.Writers.Asciidoc_Writer is
    -- --------------------------------------------------------------------------
    overriding procedure Put_Summary (Writer    : Asciidoc_Writer) is
    begin
-      if Success then
+      if No_Fail then
          Put_Line ("## Summary : **Success**,"
                    & Count (Successful)'Image & " scenarios OK"
                    & (if Count (Empty) = 0
@@ -76,7 +76,7 @@ package body BBT.Writers.Asciidoc_Writer is
    -- --------------------------------------------------------------------------
    overriding procedure Put_Detailed_Results (Writer    : Asciidoc_Writer) is
       Verbosity_Level : constant Verbosity_Levels
-        := (if Success then Verbose else Quiet);
+        := (if No_Fail then Verbose else Quiet);
    begin
       New_Line (Verbosity => Verbosity_Level);
       Put_Line ("|============", Verbosity => Verbosity_Level);
@@ -85,9 +85,7 @@ package body BBT.Writers.Asciidoc_Writer is
       Put_Line ("| Failed     |" & Count_String_Image (Failed) & "|", Verbosity => Verbosity_Level);
       Put_Line ("| Successful |" & Count_String_Image (Successful) & "|", Verbosity => Verbosity_Level);
       Put_Line ("| Empty      |" & Count_String_Image (Empty) & "|", Verbosity => Verbosity_Level);
-      --  if Count (Not_Run) /= 0 then
       Put_Line ("| Not Run    |" & Count_String_Image (Not_Run) & "|", Verbosity => Verbosity_Level);
-      --  end if;
       Put_Line ("|============", Verbosity => Verbosity_Level);
       New_Line (Verbosity => Verbosity_Level);
    end Put_Detailed_Results;

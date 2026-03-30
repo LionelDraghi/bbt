@@ -64,7 +64,7 @@ package body BBT.Writers.Markdown_Writers is
    procedure Put_Summary (Writer : Markdown_Writer) is
    begin
       New_Line (Verbosity => Quiet);
-      if Documents.Success then
+      if Documents.No_Fail then
          Put_Line
            ("## Summary : **Success**,"
             & Count (Successful)'Image
@@ -82,7 +82,7 @@ package body BBT.Writers.Markdown_Writers is
    overriding
    procedure Put_Detailed_Results (Writer : Markdown_Writer) is
       Verbosity_Level : constant Verbosity_Levels :=
-        (if Success then Verbose else Quiet);
+        (if Documents.No_Fail then Verbose else Quiet);
    begin
       New_Line (Verbosity => Verbosity_Level);
       Put_Line ("| Status     | Count |", Verbosity => Verbosity_Level);

@@ -48,6 +48,10 @@ package body BBT.Tests.Builder is
    type Backgrounds is (None, Doc, Feature);
 
    -- --------------------------------------------------------------------------
+   function Last_Scenario return Scenario_Maybe;
+   function Last_Step     return Step_Maybe;
+
+   -- --------------------------------------------------------------------------
    package FSM is
 
       function Current_State return States;
@@ -197,14 +201,13 @@ package body BBT.Tests.Builder is
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step_Info           : in out Model.Steps.Step_Data;
                        Code_Block_Expected : Boolean;
-                       Loc                 : Location_Type;
-                       Syntax_Error        : Boolean := False)
+                       Loc                 : Location_Type)
    is
       -- -----------------------------------------------------------------------
       procedure Append_Step (Scen : Scenario_Access) is
          Step : Step_Type := Create_Step (Step_Info, Loc, Scen);
       begin
-         Step.Set_Has_Syntax_Error (Syntax_Error);
+         Step.Set_Has_Syntax_Error (Some_Error);
          Scen.Add_Step (Step);
          if not Step_Info.Commands.Is_Empty then
             if Scen.Cmd_List.Is_Empty then

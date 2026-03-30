@@ -1575,6 +1575,12 @@
    - OK : When I run `./bbt -d no_heading_marker.input`  
    - [X] scenario   [Missing heading marker](../../features/C030_Markdown_syntax.md) pass  
 
+   ### Scenario: [Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)](../../features/C030_Markdown_syntax.md): 
+   - OK : Given the new file `italic_and_bold_in_steps.md`  
+   - OK : When I successfully run `./bbt explain italic_and_bold_in_steps.md`  
+   - OK : Then the output contains  
+   - [X] scenario   [Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)](../../features/C030_Markdown_syntax.md) pass  
+
 
 # Document: [C040_Missing_title.md](../../features/C040_Missing_title.md)  
    ### Scenario: [Missing tittle in scenario, background and feature](../../features/C040_Missing_title.md): 
@@ -1592,13 +1598,6 @@
    - OK : Then I get no error  
    - OK : And the output is  
    - [X] scenario   [Different markers within the scenario](../../features/C050_Step_marker.md) pass  
-
-   ### Scenario: [Step analysis is interrupted when exiting the section (#37)](../../features/C050_Step_marker.md): 
-   - OK : Given there is no `config.ini` file  
-   - OK : Given the file `step_markers2.md`  
-   - OK : When I successfully run `./bbt -c step_markers2.md`  
-   - OK : Then the output contains `- [ ] scenario [1](step_markers2.md) is empty, nothing tested`  
-   - [X] scenario   [Step analysis is interrupted when exiting the section (#37)](../../features/C050_Step_marker.md) pass  
 
 
 # Document: [C060_code_block.md](../../features/C060_code_block.md)  
@@ -1679,95 +1678,21 @@
 # Document: [C120_Ill_Formated_Steps.md](../../features/C120_Ill_Formated_Steps.md)  
   ## Feature: bbt is providing helpful messages on ill formatted step lines  
    ### Scenario: [](../../features/C120_Ill_Formated_Steps.md): 
-   - OK : Given the file `bad_steps.md`  
+   - OK : Given the new file `bad_steps.md`  
    - OK : When I run `./bbt -k -c bad_steps.md`  
    - OK : Then the output contains   
-   - **NOK** : And the output contains  (../docs/features/C120_Ill_Formated_Steps.md:51:)  
-../docs/features/C120_Ill_Formated_Steps.md:51: Error: Output:  
-~~~
-bad_steps.md:2: Error: File name expected in subject phrase (should be between backticks)  
-bad_steps.md:5: Error: Dir name expected in subject phrase (should be between backticks)  
-bad_steps.md:8: Error: Unrecognized step "when I run "  
-bad_steps.md:11: Error: File name expected in object phrase (should be between backticks)  
-bad_steps.md:14: Error: Unrecognized step "then I get dir"  
-bad_steps.md:20: Error: Missing Code Block expected line 17  
-  
-# Document: [bad_steps.md](bad_steps.md)    
-   ### Scenario: [knowing grep version](bad_steps.md):   
-bad_steps.md:2: Warning: Skipping step with syntax error  
-bad_steps.md:5: Warning: Skipping step with syntax error  
-bad_steps.md:8: Warning: Skipping step with syntax error  
-bad_steps.md:11: Warning: Skipping step with syntax error  
-bad_steps.md:14: Warning: Skipping step with syntax error  
-bad_steps.md:17: Exception : while processing step BBT.MODEL.STEPS.STEP_TYPE'  
-   Step type        = THEN_STEP,   
-   Action           = OUTPUT_CONTAINS  
-   Src_Code         = "then the output should contain ""grep version"""  
-   Subject string   = ""  
-   Object_String    = ""  
-   Object_File_Name = ""  
-   File_Type        = ORDINARY_FILE  
-   Ignore order     = FALSE  
-   File_Content     =   
-~~~  
-~~~  
-  
- : ADA.IO_EXCEPTIONS.NAME_ERROR /home/lionel/prj/bbt/tests/bad_steps.md.out: No such file or directoryLoad address: 0x55e722c00000  
-[/home/lionel/prj/bbt/tests/bbt]  
-0x55e722dd5b54 System.File_Io.Open at s-fileio.adb:1140  
-0x55e722dce10b Ada.Text_Io.Open at a-textio.adb:1208  
-0x55e722c6755a Text_Utilities.Get_Text at text_utilities.adb:168  
-0x55e722d955f4 Bbt.Tests.Runner.Run_Step at bbt-tests-runner.adb:136  
-0x55e722d97d7b Bbt.Tests.Runner.Run_Scenario at bbt-tests-runner.adb:234  
-0x55e722d99fb0 Bbt.Tests.Runner.Run_Scenario_List at bbt-tests-runner.adb:331  
-0x55e722d9a73a Bbt.Tests.Runner.Run_Doc at bbt-tests-runner.adb:370  
-0x55e722d9b896 Bbt.Tests.Runner.Run_All at bbt-tests-runner.adb:428  
-0x55e722c1dfeb Bbt.Main at bbt-main.adb:153  
-0x55e722c1effd Main at b__bbt-main.adb:588  
-[/usr/lib/x86_64-linux-gnu/libc.so.6]  
-0x7f567c47bf73  
-0x7f567c47c025  
-[/home/lionel/prj/bbt/tests/bbt]  
-0x55e722c1d0cf _start at ???  
-0xfffffffffffffffe  
-  
-   - [ ] scenario   [knowing grep version](bad_steps.md) **fails**    
-   ### Scenario: [no problem](bad_steps.md):   
-   - OK : when I run `grep --version`    
-   - OK : then I get no error    
-   - [X] scenario   [no problem](bad_steps.md) pass    
-  
-## Summary : **Fail**  
-  
-| Status     | Count |  
-|------------|-------|  
-| Failed     | 1     |  
-| Successful | 1     |  
-| Empty      | 0     |  
-| Not Run    | 0     |  
-
-~~~
-does not contain expected:  
-~~~
-  bad_steps.md:2: Warning: Skipping step with syntax error    
-  bad_steps.md:5: Warning: Skipping step with syntax error    
-  bad_steps.md:8: Warning: Skipping step with syntax error    
-  bad_steps.md:11: Warning: Skipping step with syntax error    
-  bad_steps.md:14: Warning: Skipping step with syntax error   
-  bad_steps.md:20: Warning: Skipping step with syntax error
-~~~
-  
+   - OK : And the output contains   
    - OK : And the output contains  
    - OK : And I get an error  
-   - [ ] scenario   [](../../features/C120_Ill_Formated_Steps.md) **fails**  
+   - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 168 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 167   |
+| Failed     | 0     |
+| Successful | 168   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

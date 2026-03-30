@@ -47,6 +47,8 @@ package body BBT.Model.Steps is
       Output.New_Line;
       Output.Put ("   File_Content     = " & Code_Fenced_Image (S.File_Content));
       Output.New_Line;
+      Output.Put ("   Syntax_Error     = " & S.Syntax_Error'Image);
+      Output.New_Line;
    end Put_Image;
 
    -- --------------------------------------------------------------------------
