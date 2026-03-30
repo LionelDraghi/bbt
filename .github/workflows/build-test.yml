@@ -75,14 +75,14 @@ jobs:
           fi
 
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y rpl
+            # sudo apt-get update
+            sudo apt-get install -y rpl libxml2-utils
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             ## brew update
             ## brew upgrade
-            brew install rpl
+            brew install rpl libxml2
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install -y wget
+            choco install -y wget libxml2
           fi
 
       - name: Run build and checks
