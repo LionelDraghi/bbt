@@ -1518,30 +1518,12 @@
 
 
 # Document: [B180_Ignored_Files.md](../../features/B180_Ignored_Files.md)  
-  ## Feature: some files are slently oignored by *bbt*  
+  ## Feature: some files are ignored by *bbt*  
    ### Scenario: [Checking that the index file is ignored](../../features/B180_Ignored_Files.md): 
-   - OK : Given the new dir `tmp`  
-   - OK : When running  `./bbt list_files --tmp_dir tmp --index index.md ../docs/examples/gcc_hello_world.md .`  
-   - **NOK** : Then I should get  (../docs/features/B180_Ignored_Files.md:10:)  
-../docs/features/B180_Ignored_Files.md:10: Error: Output:  
-~~~
-Warning: Ignoring file ./index.md  
-../docs/examples/gcc_hello_world.md  
-./index_1.md  
-./index_2.md  
-./index_3.md  
-./index_4.md  
-./tmp.md  
-./verbose_output_NOK.md  
-./verbose_output_OK.md
-~~~
-not equal to expected:  
-~~~
-  Warning: Ignoring file ./index.md    
-  ../docs/examples/gcc_hello_world.md  
-~~~
-  
-   - [ ] scenario   [Checking that the index file is ignored](../../features/B180_Ignored_Files.md) **fails**  
+   - OK : Given the new dir `tmp77`  
+   - OK : When running  `./bbt list_files --tmp_dir tmp77 --index tmp77/index.md ../docs/examples/gcc_hello_world.md tmp77`  
+   - OK : Then I should get   
+   - [X] scenario   [Checking that the index file is ignored](../../features/B180_Ignored_Files.md) pass  
 
 
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
@@ -1714,12 +1696,12 @@ not equal to expected:
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 169 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 168   |
+| Failed     | 0     |
+| Successful | 169   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
