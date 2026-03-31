@@ -8,6 +8,7 @@ bbt: build
 build:
 	echo
 	echo === build #=# and instrument bbt
+	@ alr update
 	alr --non-interactive build --development
 	# Alire profiles : --release --validation --development (default)
 	

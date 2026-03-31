@@ -1,4 +1,13 @@
 
+# Document: [New_non_Gerkhin_header_do_not_ends_the_current_Scenario.md](../../../tests/non_reg_tests/New_non_Gerkhin_header_do_not_ends_the_current_Scenario.md)  
+   ### Scenario: [Step analysis is interrupted when exiting the section ([Issue #37](https://github.com/LionelDraghi/bbt/issues/37))](../../../tests/non_reg_tests/New_non_Gerkhin_header_do_not_ends_the_current_Scenario.md): 
+   - OK : Given there is no `config.ini` file  
+   - OK : Given the file `step_markers2.md`  
+   - OK : When I successfully run `./bbt -c step_markers2.md`  
+   - OK : Then the output contains `- [ ] scenario [1](step_markers2.md) is empty, nothing tested`  
+   - [X] scenario   [Step analysis is interrupted when exiting the section ([Issue #37](https://github.com/LionelDraghi/bbt/issues/37))](../../../tests/non_reg_tests/New_non_Gerkhin_header_do_not_ends_the_current_Scenario.md) pass  
+
+
 # Document: [exception_on_is_equal.md](../../../tests/non_reg_tests/exception_on_is_equal.md)  
    ### Scenario: [test that `is equal to file` no more raise an exception when files are of different sizes, check Issue: #7](../../../tests/non_reg_tests/exception_on_is_equal.md): 
    - OK : Given the file `tmp.1`  
@@ -20,12 +29,12 @@
    - [X] scenario   [](../../../tests/non_reg_tests/extra_line.md) pass  
 
 
-## Summary : **Success**, 2 scenarios OK
+## Summary : **Success**, 3 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 2     |
+| Successful | 3     |
 | Empty      | 0     |
 | Not Run    | 0     |
 

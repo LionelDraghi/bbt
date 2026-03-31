@@ -33,21 +33,18 @@ package body BBT.Cmd_Line is
    procedure Go_Next_Arg is
    begin
       Arg_Counter := @ + 1;
-      -- Put_Line ("Go_Next " & Arg_Counter'Image);
    end Go_Next_Arg;
 
    -- --------------------------------------------------------------------------
    procedure Go_Back_Previous_Arg is
    begin
       Arg_Counter := @ - 1;
-      -- Put_Line ("Go_Previous_Arg " & Arg_Counter'Image);
    end Go_Back_Previous_Arg;
 
    -- --------------------------------------------------------------------------
    function On_Last_Arg return Boolean is
       L : constant Boolean := Arg_Counter = Ada.Command_Line.Argument_Count;
    begin
-      -- Put_Line ("Last " & L'Image);
       return L;
    end On_Last_Arg;
 
@@ -55,7 +52,6 @@ package body BBT.Cmd_Line is
    function Current_Arg return String is
       S : constant String := Ada.Command_Line.Argument (Arg_Counter);
    begin
-      -- Put_Line ("Current " & S'Image);
       return S;
    end Current_Arg;
 
@@ -63,7 +59,6 @@ package body BBT.Cmd_Line is
    function More_Args return Boolean is
       B : constant Boolean := Arg_Counter <= Ada.Command_Line.Argument_Count;
    begin
-      -- Put_Line ("More_Arg " & B'Image);
       return B;
    end More_Args;
 
@@ -103,7 +98,6 @@ package body BBT.Cmd_Line is
    procedure Put_Settings                           is separate;
    procedure Put_Help (Topic : Settings.Help_Topic) is separate;
    procedure Put_Trace_Topics                       is separate;
-   -- procedure Create_Template                        is separate;
 
    -- --------------------------------------------------------------------------
    procedure Analyze is
@@ -181,9 +175,6 @@ package body BBT.Cmd_Line is
 
             elsif Cmd in "list_grammar" | "lg" then
                Set_Cmd (List_Grammar);
-
-            --  elsif Cmd in "create_template" | "ct" then
-               --  Set_Cmd (Create_Template);
 
                -- Options ------------------------------------------------------
             elsif Cmd = "-o" or Cmd = "--output" or Cmd = "--index"
@@ -324,9 +315,6 @@ package body BBT.Cmd_Line is
 
             elsif Cmd = "-ls" then
                Settings.List_Settings := True;
-
-            --  elsif Cmd = "-lt" then
-            --     Put_Trace_Topics;
 
                -- Filtering options --------------------------------------------
             elsif Cmd in "-e" | "--exclude" then

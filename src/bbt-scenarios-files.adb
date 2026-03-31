@@ -39,14 +39,12 @@ package body BBT.Scenarios.Files is
    -- --------------------------------------------------------------------------
    procedure Add_Document (File_Name : String) is
       use Ada.Directories;
-      Name : constant String := Full_Name (File_Name);
    begin
-      if -- Name = Full_Name (Settings.Template_Name) or
-        Name = Index_File_Name
+      if Index_File_Name /= ""
+         and then Full_Name (File_Name) = Full_Name (Index_File_Name)
       then
          --  Filters the output file if any that is not supposed to be executed.
-         Put_Warning ("Ignoring file " & Name'Image);
-         -- Fixme: need a test
+         Put_Warning ("Ignoring file " & File_Name);
 
       else
          The_List.Append (File_Name);
