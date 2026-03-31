@@ -11,4 +11,5 @@
     },
     "editor.guides.bracketPairs": "active",
     "editor.bracketPairColorization.enabled": true,
+    "sarif-viewer.connectToGithubCodeScanning": "off",
 }
