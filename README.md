@@ -243,7 +243,7 @@ Nevertheless, *bbt* is still young, meaning that :
 - it is subject to interface and behavior changes, keep an eyes on the changelog before updating;   
 - your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions). 
 
-btt compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
+*btt* compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
 On MacOS, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
 
 ## Help and comments
