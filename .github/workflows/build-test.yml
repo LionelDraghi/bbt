@@ -82,7 +82,7 @@ jobs:
             ## brew upgrade
             brew install rpl libxml2
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install -y wget libxml2
+            choco install -y wget xsltproc
           fi
 
       - name: Run build and checks
