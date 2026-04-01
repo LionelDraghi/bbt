@@ -16,6 +16,9 @@ endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 BADGE_URL = $(shell cat $(RESULTS_DIR)/badge.url)
+# BADGE_URL_LINUX = $(shell cat ../docs/tests_results/Linux/badge.url)
+# BADGE_URL_DARWIN = $(shell cat ../docs/tests_results/Darwin/badge.url)
+# BADGE_URL_WINDOWS = $(shell cat ../docs/tests_results/Windows/badge.url)
 
 all: check
 
@@ -110,7 +113,7 @@ doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
 	
 	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
-	echo wget badge ...
+	@ echo wget badge ...
 	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 
 clean:
