@@ -1517,6 +1517,15 @@
    - [X] scenario   [explain Invalid Step](../../features/B170_Explain.md) pass  
 
 
+# Document: [B180_Ignored_Files.md](../../features/B180_Ignored_Files.md)  
+  ## Feature: some files are ignored by *bbt*  
+   ### Scenario: [Checking that the index file is ignored](../../features/B180_Ignored_Files.md): 
+   - OK : Given the new dir `tmp77`  
+   - OK : When running  `./bbt list_files --tmp_dir tmp77 --index tmp77/index.md ../docs/examples/gcc_hello_world.md tmp77`  
+   - OK : Then I should get   
+   - [X] scenario   [Checking that the index file is ignored](../../features/B180_Ignored_Files.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -1687,12 +1696,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 168 scenarios OK
+## Summary : **Success**, 169 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 168   |
+| Successful | 169   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
