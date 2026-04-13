@@ -58,7 +58,7 @@ Here are some detected problem.
   bad_steps.md:17: Warning: Skipping step with syntax error  
   - OK : when I run `grep --version`  
   ~~~
-  Then we also check that when using --keep_going option, skipped steps are explicit.  
+  Then we also check that when using `--keep_going` option, skipped steps are explicit.  
   Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20.  
   But the erroneous step that is skipped is the one line 17.  
   The step line 20 is run.
