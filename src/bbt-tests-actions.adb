@@ -167,7 +167,7 @@ package body BBT.Tests.Actions is
                         ", Return_Code = " & Return_Code'Image);
 
       if Spawn_OK and then Expected_Result = Success then
-         Put_Step_Result (Step      => Step,
+         Put_Step_Result (Step       => Step,
                            Success   => Is_Success (Return_Code),
                            Fail_Msg  => "Unsuccessfully run " &
                               Step.Data.Object_String'Image,
@@ -177,13 +177,14 @@ package body BBT.Tests.Actions is
       elsif Spawn_OK and then Expected_Result = Failure then
          Put_Step_Result (Step      => Step,
                           Success   => not Is_Success (Return_Code),
-                          Fail_Msg  => "Successfully run "
-                            & Step.Data.Object_String'Image
-                            & " but expected to fail",
+                          Fail_Msg  => "Successfully run " &
+                            Step.Data.Object_String'Image &
+                            " but expected to fail",
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
 
-      else -- not Spawn_OK or Expected_Result = Don't_Care
+      else -- If Expected_Result = Don't_Care, Success is only
+      --      determined by Spawn_OK, and the return code is not checked.
          Put_Step_Result (Step      => Step,
                           Success   => Spawn_OK,
                           Fail_Msg  => "Couldn't run " & Cmd,
