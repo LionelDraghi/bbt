@@ -26,7 +26,6 @@ begin
    Code_Block_Expected := The_Grammar
      (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
 
-
    case State.Subject is
       when No_Subject | Output_Subj | Subject_Text =>
          null;
@@ -41,8 +40,6 @@ begin
       when Dir_Subject =>
          if No_Subject_String then
             IO.Put_Error ("Dir name expected in subject phrase (should be between backticks)", Loc);
-            --  Code_Block_Expected := False;
-            --  -- No sense to have a random error after a syntax error
          end if;
 
    end case;

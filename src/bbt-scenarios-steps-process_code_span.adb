@@ -96,6 +96,14 @@ begin
                Put_Debug_Line ("  Object = Obj_Text", Loc);
 
             end if;
+
+         when Fail =>
+            -- We are in a
+            --    Then `cmd` fails
+            -- step, so there should be no code span after the verb
+            Put_Warning ("Unexpected code span after verb " &
+                         Current_Verb'Image &
+                         " in step " & State.Cat'Image & ", ignored.", Loc);
       end case;
    end if;
 end Process_Code_Span;

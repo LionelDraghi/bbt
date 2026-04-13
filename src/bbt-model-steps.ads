@@ -34,6 +34,7 @@ package BBT.Model.Steps is
                     -- Run actions
                     Run_Cmd,
                     Run_Without_Error,
+                    Run_With_Error,
                     -- Check actions
                     Check_No_File,
                     Check_No_Dir,

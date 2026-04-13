@@ -23,6 +23,7 @@ begin
       when Subject_Text     => return "`text`";
       when No_Verb          => return "";
       when Run              => return "run";
+      when Fail             => return "fail";
       when Successful_Run   => return "successfully run";
       when Get              => return "get";
       when Get_No           => return "get no";
