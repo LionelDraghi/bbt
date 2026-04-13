@@ -183,8 +183,9 @@ package body BBT.Tests.Actions is
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
 
-      else -- If Expected_Result = Don't_Care, Success is only
-      --      determined by Spawn_OK, and the return code is not checked.
+      else
+         -- If Expected_Result = Don't_Care, Success is only
+         -- determined by Spawn_OK, not by the return code.
          Put_Step_Result (Step      => Step,
                           Success   => Spawn_OK,
                           Fail_Msg  => "Couldn't run " & Cmd,
