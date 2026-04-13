@@ -37,7 +37,7 @@ Here are some detected problem.
 
 - When I run `./bbt -k -c bad_steps.md`
 
-- Then the output contains 
+- Then the output contains  
   Most important part, we check the error messages
   ~~~
   bad_steps.md:2: Error: File name expected in subject phrase (should be between backticks)  
@@ -48,7 +48,7 @@ Here are some detected problem.
   bad_steps.md:20: Error: Missing Code Block expected line 17 
   ~~~
 
-- And the output contains 
+- And the output contains  
   We also check that when using --keep_going option, skipped steps are explicit.
   Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20. 
   But the erroneous step that is skipped is the one line 17.
