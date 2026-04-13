@@ -25,14 +25,6 @@ with GNAT.Traceback.Symbolic;
 package body BBT.Scenarios.Files is
 
    -- --------------------------------------------------------------------------
-   use BBT.IO;
-   procedure Put_Debug_Line (Item      : String;
-                             Location  : Location_Type    := No_Location;
-                             Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := Scen_Files)
-                             renames BBT.IO.Put_Line;
-
-   -- --------------------------------------------------------------------------
    The_List : File_List.Vector;
    package File_List_Sorting is new File_List.Generic_Sorting;
 

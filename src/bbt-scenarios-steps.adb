@@ -135,13 +135,6 @@ package body BBT.Scenarios.Steps is
    end Chunk;
    package body Chunk is separate;
 
-   procedure Put_Debug_Line (Item      : String;
-                             Location  : Location_Type    := No_Location;
-                             Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := IO.Steps)
-                             renames BBT.IO.Put_Line;
-   pragma Warnings (Off, Put_Debug_Line);
-
    -- -----------------------------------------------------------------------
    procedure Put_Rule (P           : Prepositions;
                        SA          : Subject_Attrib;
@@ -237,7 +230,7 @@ package body BBT.Scenarios.Steps is
 
    -- --------------------------------------------------------------------------
    function Parse (Line                :        Unbounded_String;
-                   Loc                 : in out Location_Type;
+                   Loc                 : in out IO.Location_Type;
                    Code_Block_Expected :    out Boolean)
                    return Model.Steps.Step_Data
    is
@@ -248,9 +241,10 @@ package body BBT.Scenarios.Steps is
       TT  : Token_Type;
 
    begin
+      Code_Block_Expected := False;
       Src_Code := Line;
 
-      Put_Debug_Line ("In Parse, Line = " & To_String (Line), Loc);
+      -- Put_Debug_Line ("In Parse, Line = " & To_String (Line), Loc);
 
       Initialize_Lexer;
 
@@ -301,7 +295,7 @@ package body BBT.Scenarios.Steps is
                Tok : constant String := Next_Token (Tmp'Access, First, Last, TT);
 
             begin
-               -- Put_Debug_Line ("   In Parse, Token = " & Tok, Loc);
+               Put_Debug_Line ("   In Parse, " & TT'Image & " " & Tok, Loc);
                case TT is
                when Keyword =>
                   Process_Keyword (Tok, Loc, State);
@@ -315,8 +309,8 @@ package body BBT.Scenarios.Steps is
                   end if;
                   State.Code_Span_Last := Last;
                   -- Put_Debug_Line ("   In Parse, Code Span from " & State.Code_Span_First'Image & " to" & Last'Image, Loc);
-                  Put_Debug_Line ("   In Parse, Line    = >" & Tmp & "<", Loc);
-                  Put_Debug_Line ("   In Parse, Or zone = >" & Tmp (State.Code_Span_First .. Last) & "<", Loc);
+                  -- Put_Debug_Line ("   In Parse, Line    = >" & Tmp & "<", Loc);
+                  -- Put_Debug_Line ("   In Parse, Or zone = >" & Tmp (State.Code_Span_First .. Last) & "<", Loc);
 
                   Process_Code_Span (Tok,
                                      Loc,

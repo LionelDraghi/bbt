@@ -10,13 +10,6 @@ separate (BBT.Tests.Builder)
 -- -----------------------------------------------------------------------------
 package body FSM is
 
-   procedure Put_Debug_Line (Item      : String;
-                             Location  : Location_Type    := No_Location;
-                             Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := IO.FSM)
-                             renames BBT.IO.Put_Line;
-   pragma Warnings (Off, Put_Debug_Line);
-
    -- -----------------------------------------------------------------------
    Internal_State            : States      := In_Document;
    Internal_Previous_State   : States;

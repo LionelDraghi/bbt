@@ -46,6 +46,8 @@ package body Chunk is
             & "', ignoring following '" & Image (V) & "'",
             Loc);
       end if;
+      Put_Debug_Line ("Set_Verb (" & Image (V) & ")",
+                      Location => Loc);
    end Set_Verb;
 
    -- --------------------------------------------------------------------------

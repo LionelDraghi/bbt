@@ -24,13 +24,6 @@ with Ada.Text_IO;
 package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
-   procedure Put_Debug_Line (Item      : String;
-                             Location  : Location_Type    := No_Location;
-                             Verbosity : Verbosity_Levels := Debug;
-                             Topic     : Extended_Topics  := IO.Builder)
-                             renames BBT.IO.Put_Line;
-
-   -- --------------------------------------------------------------------------
    type States is (Not_In_Document,
                    In_Document,
                    In_Feature,

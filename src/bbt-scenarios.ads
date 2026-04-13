@@ -8,6 +8,8 @@
 with Ada.Strings.Unbounded;    use Ada.Strings.Unbounded;
 with Ada.Strings.Text_Buffers;
 
+with BBT.IO;
+
 private package BBT.Scenarios is
 -- Provide (in child packages) services related to the Scenario manipulation
 -- that is Scenario file list management, and and scenario parsing.
@@ -54,5 +56,14 @@ private package BBT.Scenarios is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       A      :        Line_Attributes);
    -- Fixme: To be moved as dispatching in Writers
+
+private
+   use BBT.IO;
+   procedure Put_Debug_Line (Item      : String;
+                             Location  : Location_Type    := No_Location;
+                             Verbosity : Verbosity_Levels := Debug;
+                             Topic     : Extended_Topics  := IO.Scenario)
+                             renames BBT.IO.Put_Line;
+   pragma Warnings (Off, Put_Debug_Line);
 
 end BBT.Scenarios;

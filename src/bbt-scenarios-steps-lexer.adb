@@ -29,9 +29,11 @@ package body BBT.Scenarios.Steps.Lexer is
          "when",
          "then",
          "and",      -- "and" and "but" are equivalent to "Given" if they
-         "but",      -- appear in the "Given" section, to "Then" if tey
-         "run",      -- appear in the "Then" section, etc.
+         "but",
+         "run",
          "running",  -- "When I run" = "When running"
+         "fail",     -- "fail" = "fails"
+         "fails",
          "executable",
          "get",
          "new",

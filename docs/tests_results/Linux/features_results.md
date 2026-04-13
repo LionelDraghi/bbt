@@ -774,6 +774,16 @@
    - [X] scenario   [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md) pass  
 
 
+# Document: [A250_Fails.md](../../features/A250_Fails.md)  
+   ### Scenario: [Checking that a command fails](../../features/A250_Fails.md): 
+   - OK : Given the new file `mismatched_tag.xml`  
+   - OK : Then `xmllint mismatched_tag.xml` fails   
+   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
+   - OK : And  `xmllint mismatched_tag.xml` should fail   
+   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
+   - [X] scenario   [Checking that a command fails](../../features/A250_Fails.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -1696,12 +1706,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 169 scenarios OK
+## Summary : **Success**, 170 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 169   |
+| Successful | 170   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

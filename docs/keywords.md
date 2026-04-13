@@ -5,6 +5,8 @@
 - but
 - run
 - running
+- fail
+- fails
 - executable
 - get
 - new

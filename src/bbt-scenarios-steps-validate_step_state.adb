@@ -58,8 +58,8 @@ begin
       when Obj_Dir_Name =>
          if No_Object_File_Name then
             IO.Put_Error ("Dir name expected in object phrase (should be between backticks)", Loc);
-            --  Code_Block_Expected := False;
-            --  -- No sense to have a random error after a syntax error
+            Code_Block_Expected := False;
+            -- No sense to have a random error after a syntax error
          end if;
 
    end case;

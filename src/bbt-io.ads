@@ -40,17 +40,12 @@ private package BBT.IO is
                             Created_Files,
                             Model,
                             Filters,
-                            FSM,
-                            Lexer,
                             MD_Writer,
                             Text_Writer,
                             Adoc_Writer,
                             Runner,
-                            Scen_Files,
-                            Spawn,
                             Step_Actions,
-                            Step_Lexer,
-                            Steps,
+                            Scenario,
                             Tests_Builder,
                             Writers);
    subtype Topics is Extended_Topics range

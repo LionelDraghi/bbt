@@ -73,6 +73,7 @@ begin
      or Lower_Keyword = "fails"
    then
       Set_Verb (Fail, Loc);
+      State.Subject := Subject_Text;
 
    elsif Lower_Keyword = "successfully" then
       State.Successfully_Met := True;
@@ -142,5 +143,6 @@ begin
       State.Ignore_Order := True;
 
    end if;
+   -- Put_Debug_Line ("  after Process_Keyword, state = " & State'Image, Loc);
 
 end Process_Keyword;

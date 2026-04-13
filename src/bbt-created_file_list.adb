@@ -24,7 +24,7 @@ package body BBT.Created_File_List  is
                              Location  : Location_Type    := No_Location;
                              Verbosity : Verbosity_Levels := Debug;
                              Topic     : Extended_Topics  := IO.Created_Files)
-                             renames BBT.IO.Put_Line;
+                             renames IO.Put_Line;
    pragma Warnings (Off, Put_Debug_Line);
 
    package String_Sets is new Ada.Containers.Indefinite_Ordered_Sets (String);

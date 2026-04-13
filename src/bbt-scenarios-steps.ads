@@ -8,14 +8,11 @@
 with BBT.Model.Steps,
      BBT.IO;
 
-use BBT.IO;
-
 package BBT.Scenarios.Steps is
 
    function Parse (Line                :        Unbounded_String;
-                   Loc                 : in out Location_Type;
+                   Loc                 : in out IO.Location_Type;
                    Code_Block_Expected :    out Boolean)
-                    -- Cmd_List            :    out BBT.Model.Steps.Cmd_List)
                    return BBT.Model.Steps.Step_Data;
 
    procedure Put_Keywords;
