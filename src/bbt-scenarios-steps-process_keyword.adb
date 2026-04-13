@@ -69,6 +69,11 @@ begin
          Set_Verb (Get_No, Loc);
       end if;
 
+   elsif Lower_Keyword = "fail"
+     or Lower_Keyword = "fails"
+   then
+      Set_Verb (Fail, Loc);
+
    elsif Lower_Keyword = "successfully" then
       State.Successfully_Met := True;
 

@@ -21,13 +21,15 @@ private package BBT.Tests.Actions is
    function Is_Failure (I : Integer) return Boolean is
      (not Is_Success (I));
 
-   procedure Run_Cmd (Step         :     Step_Type'Class;
-                      Cmd          :     String;
-                      Output_Name  :     String;
-                      Check_Result :     Boolean;
-                      Verbosity    :     Verbosity_Levels;
-                      Spawn_OK     : out Boolean;
-                      Return_Code  : out Integer);
+   type Run_Result is (Not_Specified, Success, Failure);
+
+   procedure Run_Cmd (Step            :     Step_Type'Class;
+                      Cmd             :     String;
+                      Output_Name     :     String;
+                      Expected_Result :     Run_Result;
+                      Verbosity       :     Verbosity_Levels;
+                      Spawn_OK        : out Boolean;
+                      Return_Code     : out Integer);
 
    procedure Create_If_None (Step      : Step_Type'Class;
                              Verbosity : Verbosity_Levels);

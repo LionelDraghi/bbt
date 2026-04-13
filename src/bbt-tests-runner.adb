@@ -98,24 +98,35 @@ package body BBT.Tests.Runner is
       case Step.Data.Action is
          when Run_Cmd =>
             Created_File_List.Add (Output);
-            Run_Cmd (Step         => Step,
-                     Cmd          => To_String (Step.Data.Object_String),
-                     Output_Name  => Output,
-                     Check_Result => False,
-                     Verbosity    => Verbosity,
-                     Spawn_OK     => Spawn_OK,
-                     Return_Code  => Return_Code);
+            Run_Cmd (Step            => Step,
+                     Cmd             => To_String (Step.Data.Object_String),
+                     Output_Name     => Output,
+                     Expected_Result => Not_Specified,
+                     Verbosity       => Verbosity,
+                     Spawn_OK        => Spawn_OK,
+                     Return_Code     => Return_Code);
             Run_Error := not (Spawn_OK);
 
          when Run_Without_Error =>
             Created_File_List.Add (Output);
-            Run_Cmd (Step         => Step,
-                     Cmd          => To_String (Step.Data.Object_String),
-                     Output_Name  => Output,
-                     Check_Result => True,
-                     Verbosity    => Verbosity,
-                     Spawn_OK     => Spawn_OK,
-                     Return_Code  => Return_Code);
+            Run_Cmd (Step            => Step,
+                     Cmd             => To_String (Step.Data.Object_String),
+                     Output_Name     => Output,
+                     Expected_Result => Success,
+                     Verbosity       => Verbosity,
+                     Spawn_OK        => Spawn_OK,
+                     Return_Code     => Return_Code);
+            Run_Error := not (Spawn_OK);
+
+         when Run_With_Error =>
+            Created_File_List.Add (Output);
+            Run_Cmd (Step            => Step,
+                     Cmd             => To_String (Step.Data.Subject_String),
+                     Output_Name     => Output,
+                     Expected_Result => Failure,
+                     Verbosity       => Verbosity,
+                     Spawn_OK        => Spawn_OK,
+                     Return_Code     => Return_Code);
             Run_Error := not (Spawn_OK);
 
          when Error_Return_Code =>

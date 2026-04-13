@@ -151,6 +151,10 @@ package body BBT.Model.Steps is
         return Prefix_Start & "Run command " & Object_String & Executable
                & " and check that it does not return an error";
 
+      when Run_With_Error =>
+        return Prefix_Start & "Run command " & Object_String & Executable
+               & " and check that it fails (returns an error)";
+
       -- Check actions
       when Check_No_File =>
         return Prefix & "that file " & Object_File_Name & " does not exist";

@@ -44,6 +44,7 @@ begin
    Set (Given, No_SA,  Dir_Subject,  No_Verb,    No_Object, (Create_If_None, False, new String'("- Given the directory `dir1`")));
    Set (Given, No_SA,  No_Subject,   Run,            Obj_Text, (Run_Cmd,           False, new String'("- Given I run `cmd`")));
    Set (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Given I successfully run `cmd`")));
+   Set (Given, No_SA,  Subject_Text, Fail,       No_Object,    (Run_With_Error,    False, new String'("Given `xmllint mismatched_tag.xml` fails")));
 
    Set (When_P, No_SA, No_Subject, Run,            Obj_Text,     (Run_Cmd,           False, new String'("- When I run `cmd`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Obj_Text,     (Run_Without_Error, False, new String'("- When I successfully run `cmd`")));
@@ -86,6 +87,6 @@ begin
    Set (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object,     (File_Does_Not_Contain, True, new String'("- Then the file `list` does not contain <followed by code fenced lines>")));
    Set (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj, (No_Output, False, new String'("- Then there is no output")));
-   Set (Then_P, No_SA, No_Subject, Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Then I successfully run `cmd`")));
-
+   Set (Then_P, No_SA, No_Subject,   Successful_Run, Obj_Text,  (Run_Without_Error, False, new String'("- Then I successfully run `cmd`")));
+   Set (Then_P, No_SA, Subject_Text, Fail,           No_Object, (Run_With_Error,    False, new String'("Then `xmllint mismatched_tag.xml` fails")));
 end Initialize_Grammar;

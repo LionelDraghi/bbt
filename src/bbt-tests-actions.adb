@@ -78,13 +78,13 @@ package body BBT.Tests.Actions is
    end Get_Expected;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Cmd (Step         :     Step_Type'Class;
-                      Cmd          :     String;
-                      Output_Name  :     String;
-                      Check_Result :     Boolean;
-                      Verbosity    :     Verbosity_Levels;
-                      Spawn_OK     : out Boolean;
-                      Return_Code  : out Integer) is
+   procedure Run_Cmd (Step            :     Step_Type'Class;
+                      Cmd             :     String;
+                      Output_Name     :     String;
+                      Expected_Result :     Run_Result;
+                      Verbosity       :     Verbosity_Levels;
+                      Spawn_OK        : out Boolean;
+                      Return_Code     : out Integer) is
       use GNAT.OS_Lib;
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
@@ -166,13 +166,30 @@ package body BBT.Tests.Actions is
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
 
-      if Spawn_OK and then Check_Result then
-         Put_Step_Result (Step     => Step,
-                          Success  => Is_Success (Return_Code),
-                          Fail_Msg => "Unsuccessfully run " &
-                            Step.Data.Object_String'Image,
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
+      if Spawn_OK then
+         case Expected_Result is
+            when Not_Specified =>
+               Put_Step_Result (Step     => Step,
+                                Success  => Spawn_OK,
+                                Fail_Msg => "*** unexpected fail message ***, please report this to the maintainers along with the faulty scenario",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            when Success =>
+               Put_Step_Result (Step     => Step,
+                                Success  => Is_Success (Return_Code),
+                                Fail_Msg => "Unsuccessfully run " &
+                                  Step.Data.Object_String'Image,
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            when Failure =>
+               Put_Step_Result (Step     => Step,
+                                Success  => not Is_Success (Return_Code),
+                                Fail_Msg => "Successfully run "
+                                  & Step.Data.Object_String'Image
+                                  & " but expected to fail",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+         end case;
       else
          Put_Step_Result (Step     => Step,
                           Success  => Spawn_OK,

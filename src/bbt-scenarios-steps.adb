@@ -55,6 +55,7 @@ package body BBT.Scenarios.Steps is
                     Containing,
                     Is_V,
                     Is_No,
+                    Fail,
                     -- Objects ----------------------------------------------
                     No_Object,
                     Output_Obj,

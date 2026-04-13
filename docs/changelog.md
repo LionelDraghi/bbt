@@ -11,7 +11,9 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Changed] `bbt create_template` deprecated and replaced with `bbt help tutorial` and `bbt help example` 
   - [Changed] `bbt lg | list_grammar` now produce a Markdown table **with an example** for each recognized syntax
   - [Added]   `Then I successfully run` syntax added
-  
+  - [Added]   ``` When I run `x` or `y` ``` syntax added
+  - [Added]   ``` Given | Then `cmd` fails ``` syntax added
+
 - **[0.2.1] - 2026-06-13**
   - [Added]   Feature #28: production of a junit.xml file through --junit option
   - [Added]   new `file matches regexp` syntax
