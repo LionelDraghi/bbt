@@ -120,7 +120,7 @@ When you write:
 > - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
 
 *bbt* only sees two keywords and a parameter:  
-> - Then get `version 15.0.0`     
+> - **Then** I should **get** **`version 15.0.0`** (Fix #2398 and #2402)    
   
 This is what allows you to write steps in almost natural language. 
 
