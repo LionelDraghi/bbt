@@ -38,7 +38,6 @@ Here are some detected problem.
 - When I run `./bbt -k -c bad_steps.md`
 
 - Then the output contains 
-  Most important part, we check the error messages
   ~~~
   bad_steps.md:2: Error: File name expected in subject phrase (should be between backticks)  
   bad_steps.md:5: Error: Dir name expected in subject phrase (should be between backticks)  
@@ -47,12 +46,9 @@ Here are some detected problem.
   bad_steps.md:14: Error: Unrecognized step "then I get dir"  
   bad_steps.md:20: Error: Missing Code Block expected line 17 
   ~~~
+  Here we first check the most important part, error messages.  
 
 - And the output contains 
-  We also check that when using --keep_going option, skipped steps are explicit.
-  Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20. 
-  But the erroneous step that is skipped is the one line 17.
-  The step line 20 is run.
   ~~~
   bad_steps.md:2: Warning: Skipping step with syntax error  
   bad_steps.md:5: Warning: Skipping step with syntax error  
@@ -61,7 +57,11 @@ Here are some detected problem.
   bad_steps.md:14: Warning: Skipping step with syntax error 
   bad_steps.md:17: Warning: Skipping step with syntax error  
   - OK : when I run `grep --version`  
-~~~
+  ~~~
+  Then we also check that when using --keep_going option, skipped steps are explicit.  
+  Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20.  
+  But the erroneous step that is skipped is the one line 17.  
+  The step line 20 is run.
 
 - And the output contains
   ~~~  
