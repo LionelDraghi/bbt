@@ -166,37 +166,27 @@ package body BBT.Tests.Actions is
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
 
-      if Spawn_OK then
-         case Expected_Result is
-            when Not_Specified =>
-               begin
-                  pragma Warnings (Off, "condition is always True");
-                  Put_Step_Result (Step     => Step,
-                                 Success  => Spawn_OK,
-                                 Fail_Msg => "*** unexpected fail message ***, please report this to the maintainers along with the faulty scenario",
-                                 Loc       => Step.Location,
-                                 Verbosity => Verbosity);
-               end;
-            when Success =>
-               Put_Step_Result (Step     => Step,
-                                Success  => Is_Success (Return_Code),
-                                Fail_Msg => "Unsuccessfully run " &
-                                  Step.Data.Object_String'Image,
-                                Loc       => Step.Location,
-                                Verbosity => Verbosity);
-            when Failure =>
-               Put_Step_Result (Step     => Step,
-                                Success  => not Is_Success (Return_Code),
-                                Fail_Msg => "Successfully run "
-                                  & Step.Data.Object_String'Image
-                                  & " but expected to fail",
-                                Loc       => Step.Location,
-                                Verbosity => Verbosity);
-         end case;
-      else
-         Put_Step_Result (Step     => Step,
-                          Success  => Spawn_OK,
-                          Fail_Msg => "Couldn't run " & Cmd,
+      if Spawn_OK and then Expected_Result = Success then
+         Put_Step_Result (Step      => Step,
+                           Success   => Is_Success (Return_Code),
+                           Fail_Msg  => "Unsuccessfully run " &
+                              Step.Data.Object_String'Image,
+                           Loc       => Step.Location,
+                           Verbosity => Verbosity);
+
+      elsif Spawn_OK and then Expected_Result = Failure then
+         Put_Step_Result (Step      => Step,
+                          Success   => not Is_Success (Return_Code),
+                          Fail_Msg  => "Successfully run "
+                            & Step.Data.Object_String'Image
+                            & " but expected to fail",
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+
+      else -- not Spawn_OK or Expected_Result = Don't_Care
+         Put_Step_Result (Step      => Step,
+                          Success   => Spawn_OK,
+                          Fail_Msg  => "Couldn't run " & Cmd,
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
       end if;
