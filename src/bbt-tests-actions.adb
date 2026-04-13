@@ -169,11 +169,14 @@ package body BBT.Tests.Actions is
       if Spawn_OK then
          case Expected_Result is
             when Not_Specified =>
-               Put_Step_Result (Step     => Step,
-                                Success  => Spawn_OK,
-                                Fail_Msg => "*** unexpected fail message ***, please report this to the maintainers along with the faulty scenario",
-                                Loc       => Step.Location,
-                                Verbosity => Verbosity);
+               begin
+                  pragma Warnings (Off, "condition is always True");
+                  Put_Step_Result (Step     => Step,
+                                 Success  => Spawn_OK,
+                                 Fail_Msg => "*** unexpected fail message ***, please report this to the maintainers along with the faulty scenario",
+                                 Loc       => Step.Location,
+                                 Verbosity => Verbosity);
+               end;
             when Success =>
                Put_Step_Result (Step     => Step,
                                 Success  => Is_Success (Return_Code),
