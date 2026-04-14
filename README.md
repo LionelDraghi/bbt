@@ -256,7 +256,7 @@ Comments and questions are welcome [here](https://github.com/LionelDraghi/bbt/di
 - [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
 - [References](docs/references.md): syntax, grammar, and more details on non obvious behavior
 - [Project status](docs/project.md): changelog, tests, TDL...
-- [Command line help](docs/bbt_help.md)
+- [Command line help](docs/bbt_help.txt)
 - [bbt on the web](docs/bbt_on_the_net.md)
 
 [^1]: More precisely, *bbt* complies (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 
