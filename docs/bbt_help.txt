@@ -1,4 +1,3 @@
-
 Usage : bbt [Options]* [Command] file*
 
   The default command is 'run'
@@ -20,14 +19,14 @@ Basic commands:
        run               : the default command
   ls | list              : list selected items
   he | help [topic]      : base help, or more on one of the topic listed below
-  he | help on_all       : help on all topics
-  he | help tutorial     : create a tutorial
-  he | help example      : create an example scenario
+  he | help on_all       : full online help
+  he | help tutorial     : print a tutorial 
+  he | help example      : print an example scenario file
 
 Help topics:
   filtering : --select --exclude --include
   matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
-  other     : list_files list_keywords list_grammar explain --strict 
+  other     : list_files list_keywords list_grammar explain --strict
               --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
@@ -75,10 +74,10 @@ Other options:
                            This file will contain the normal bbt output,
                            whatever are the verbosity settings (-q, -v, etc.)
                            for standard output.
-        --junit file.xml : generate a JUnit XML report file
   -ed | --exec_dir 'dir' : run command in dir instead of current dir
   -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
   -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)
+  -j  | --junit file.xml : generate a JUnit XML report file
   -gb | --generate_badge badge.url : create a text file containing
                            a shields.io URL to get a svg badge
                            with tests results summary.
@@ -92,3 +91,4 @@ Debug options:
 
 Friends are here : https://github.com/LionelDraghi/bbt/Issues
 Good luck :-)
+

@@ -1,4 +1,3 @@
-
 Human vs exact matching:
   bbt default behavior is "human match", that is ignoring differences
   in casing, ignoring consecutive spaces, and ignoring blank lines.

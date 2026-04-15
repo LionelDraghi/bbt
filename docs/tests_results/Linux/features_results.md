@@ -1220,101 +1220,42 @@
 
 # Document: [B130_Cmd_Line_Help.md](../../features/B130_Cmd_Line_Help.md)  
   ## Feature: Clear command line help  
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt help`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt he`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
+   - OK : then the output is equal to file `../docs/help/base.txt`  
    - [X] scenario   [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [filtering help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he filtering`   
-   - OK : then the output is file `filtering.txt`  
+   - OK : then the output is equal to file `../docs/help/filtering.txt`  
    - [X] scenario   [filtering help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [matching help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help matching`   
-   - OK : then the output is file `matching.txt`  
+   - OK : then the output is equal to file `../docs/help/matching.txt`  
    - [X] scenario   [matching help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [others help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help other`   
-   - OK : then the output is file `other.txt`  
+   - OK : then the output is equal to file `../docs/help/other.txt`  
    - [X] scenario   [others help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [On_All help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help on_all`   
-   - OK : then the output contains file `base.txt`  
-   - OK : and  the output contains file `filtering.txt`  
-   - OK : and  the output contains file `matching.txt`  
-   - OK : and  the output contains file `other.txt`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output contains file `../docs/help/filtering.txt`  
+   - OK : and  the output contains file `../docs/help/matching.txt`  
+   - OK : and  the output contains file `../docs/help/other.txt`  
    - [X] scenario   [On_All help](../../features/B130_Cmd_Line_Help.md) pass  
 
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [tutorial generation](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help tutorial`   
+   - OK : then the output is equal to file `../docs/help/tutorial.md`  
    - [X] scenario   [tutorial generation](../../features/B130_Cmd_Line_Help.md) pass  
 
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [generated example is OK](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help example`   
+   - OK : then the output is equal to file `../docs/examples/gcc_hello_world.md`  
    - [X] scenario   [generated example is OK](../../features/B130_Cmd_Line_Help.md) pass  
 
 

@@ -357,7 +357,7 @@ package body Text_Utilities is
    -- comparison algorithm is :
    -- I1 and I2 (in the loop below) are the two cursor respectively
    -- in T1 and T2.
-   -- For each line in T1 (until there is enough lines left in T1 to
+   -- For each line in T1 (until there is not enough lines left in T1 to
    -- match all T2), we search for a matching line in T2.
    -- Then, we move I1 and I2 to see if following line in both
    -- text matches also.
@@ -376,7 +376,12 @@ package body Text_Utilities is
          return True;
 
       elsif Is_Empty (T2) then
-         return True; -- If T2 is empty, what does "contains" means?
+         return False;
+         -- If T2 is empty, what does "contains" means?
+         -- But returning True could mask an error
+         -- (file not found resulting in T2 empty for example)
+         -- Even if it's on the caller responsability to ensure T2 is not empty,
+         -- "return False" seems safer here.
 
       else
          declare

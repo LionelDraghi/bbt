@@ -143,8 +143,7 @@ package body BBT.Tests.Runner is
               (Get_Text (Output), Step, Verbosity);
 
          when Output_Contains =>
-            Output_Contains
-              (Get_Text (Output), Step, Verbosity);
+            Output_Contains (Get_Text (Output), Step, Verbosity);
 
          when Output_Does_Not_Contain =>
             Output_Does_Not_Contain

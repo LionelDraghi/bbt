@@ -235,7 +235,7 @@ package body BBT.Scenarios.Steps is
                    return Model.Steps.Step_Data
    is
       State    : Parse_State;
-      Src_Code : Unbounded_String     := Null_Unbounded_String;
+      Src_Code : Unbounded_String := Null_Unbounded_String;
 
       Tmp : aliased constant String := To_String (Line);
       TT  : Token_Type;

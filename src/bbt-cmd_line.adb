@@ -374,9 +374,6 @@ package body BBT.Cmd_Line is
 
             end if;
 
-            --  IO.Put_Error (BBT.Output_Format.One_Line_Image
-            --                (BBT.Output_Format.BBT_Files));
-
             if IO.Some_Error then return; end if;
             -- No need to further analyze command line, or to do
             -- Options_Coherency_Tests.

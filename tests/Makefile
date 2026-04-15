@@ -91,7 +91,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ echo 2. examples check ================
 	@ ./bbt --yes -k -c -q -sb -hm \
 	--index $(RESULTS_DIR)/examples_results.md \
-	../docs/examples ../src/help/example.md || echo KO, check the availability of gcc and rpl on your platform "********"
+	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests

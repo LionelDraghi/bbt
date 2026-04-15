@@ -4,6 +4,8 @@ Fixme in current version
 Location | Text
 ---------|-----
 [docs/features/B030_File_creation_in_Given_steps.md](../docs/features/B030_File_creation_in_Given_steps.md):14|> This last case is not yet tested because bbt doesn't support for now prompt interaction. ()  
+[docs/features/B130_Cmd_Line_Help.md](../docs/features/B130_Cmd_Line_Help.md):17|  or `./bbt help` or `./bbt he`  
+[docs/features/B130_Cmd_Line_Help.md](../docs/features/B130_Cmd_Line_Help.md):47| but I don't know how to test it!
 [docs/proposed_features/B070_Mandatory_new_bug.md](../docs/proposed_features/B070_Mandatory_new_bug.md):1| bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `whatever` file, even if it has not the same content.
 [docs/proposed_features/error_output_contains.md](../docs/proposed_features/error_output_contains.md):3| not yet implemented.
 [docs/UG.md](../docs/UG.md):174|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  

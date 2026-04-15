@@ -2,7 +2,7 @@
 
 ## Scenario 1 : get gcc version
   
-  On Linux or Windows, the output is something like: 
+  On Linux or Windows, `gcc -v` output contains something like: 
   > gcc version 14.2.0 (Debian 14.2.0-16)  
 
   On Darwin:  

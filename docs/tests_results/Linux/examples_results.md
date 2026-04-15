@@ -24,39 +24,38 @@
 
 
 # Document: [sut_version.md](../../examples/sut_version.md)  
-   ### Scenario: [I want to know sut version](../../examples/sut_version.md): 
+   ### Scenario: [I want to know sut version 1/2](../../examples/sut_version.md): 
    - OK : When I run `./sut --version`  
    - OK : Then the output contains `version 1.0`  
-   - [X] scenario   [I want to know sut version](../../examples/sut_version.md) pass  
+   - [X] scenario   [I want to know sut version 1/2](../../examples/sut_version.md) pass  
+
+   ### Scenario: [I want to know sut version 2/2](../../examples/sut_version.md): 
+   - OK : When I run `./sut -v`  
+   - OK : Then the output contains `version 1.0`  
+   - [X] scenario   [I want to know sut version 2/2](../../examples/sut_version.md) pass  
 
 
-# Document: [example.md](../../../src/help/example.md)  
-  ## Feature: grep matching may be case insensitive  
-   ### Background: [](../../../src/help/example.md): 
-   - OK : Given the new file `flowers.lst`  
-   - [X] background [](../../../src/help/example.md) pass  
+# Document: [gcc_hello_world.md](../../examples/gcc_hello_world.md)  
+   ### Scenario: [1 : get gcc version](../../examples/gcc_hello_world.md): 
+   - OK : When I run `gcc -v`  
+   - OK : Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
+   - [X] scenario   [1 : get gcc version](../../examples/gcc_hello_world.md) pass  
 
-   ### Scenario: [default case sensitive matching](../../../src/help/example.md): 
-   - OK : When I run `grep rose flowers.lst`  
-   - OK : Then I get   
-   - [X] scenario   [default case sensitive matching](../../../src/help/example.md) pass  
-
-   ### Background: [](../../../src/help/example.md): 
-   - OK : Given the new file `flowers.lst`  
-   - [X] background [](../../../src/help/example.md) pass  
-
-   ### Scenario: [case insensitive matching](../../../src/help/example.md): 
-   - OK : When I run `grep -i rose flowers.lst`  
-   - OK : Then I get   
-   - [X] scenario   [case insensitive matching](../../../src/help/example.md) pass  
+   ### Scenario: [2 : compiling and executing an hello word](../../examples/gcc_hello_world.md): 
+   - OK : Given the new file `main.c`  
+   - OK : And given there is no `./main` file  
+   - OK : When I successfully run `gcc main.c -o main`  
+   - OK : And  I run `./main`  
+   - OK : Then the output is `Hello, World!`  
+   - [X] scenario   [2 : compiling and executing an hello word](../../examples/gcc_hello_world.md) pass  
 
 
-## Summary : **Success**, 6 scenarios OK
+## Summary : **Success**, 7 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 6     |
+| Successful | 7     |
 | Empty      | 0     |
 | Not Run    | 0     |
 

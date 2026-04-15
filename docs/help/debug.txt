@@ -1,4 +1,3 @@
-
 Debug command:
    tt             : list trace topics
 Debug options:

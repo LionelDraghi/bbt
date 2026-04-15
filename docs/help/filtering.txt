@@ -1,4 +1,3 @@
-
 Filtering:
   Features, Scenarios and Steps may be selected or filtered.
   By default, every item is selected.
@@ -7,4 +6,3 @@ Filtering:
   -i | --include 'string' : include in selection items containing 'string'
   Multiple occurrences are processed in order, meaning that you can exclude
   a whole Feature and then re-include a Scenario belonging to this feature.
-

@@ -125,7 +125,6 @@ begin
       for File of Scenarios.Files.Document_List loop
          Ada.Text_IO.Put_Line (File);
       end loop;
-      -- return;
 
    when Explain =>
       -- Dry run:

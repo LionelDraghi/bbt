@@ -1,4 +1,3 @@
-
 Usage : bbt [Options]* [Command] file*
 
   The default command is 'run'
@@ -30,3 +29,6 @@ Help topics:
   other     : list_files list_keywords list_grammar explain --strict
               --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
+
+bbt version 0.3.0-dev
+https://github.com/LionelDraghi/bbt/

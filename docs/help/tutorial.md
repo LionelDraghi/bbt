@@ -24,7 +24,7 @@ The complete scenarios structure is heavily inspired by Gherkin files, with a fe
 
     [# Feature] (any number of features per file)
 
-    [# Background] (at most    per Feature)
+    [# Background] (at most one per Feature)
 
     # Scenario 1 (any number of scenarios per feature)
     - Given/When/Then step
@@ -48,8 +48,8 @@ Header level is not taken into account : `# Scenario` is equivalent to `#### Sce
 
 ### Non interpreted content
 
-Outside previously mentionned headers and steps, lines are ignored by bbt, that is considered as comments.
-Meanning that you can interleave Scenarios with comments as you want: comments may appear between Header and Steps or even between Steps and code blocks.  
+Outside previously mentioned headers and steps, lines are ignored by bbt, that is considered as comments.
+Meaning that you can interleave Scenarios with comments as you want: comments may appear between Header and Steps or even between Steps and code blocks.  
 In case of doubt, just run `bbt explain` on your scenario to ensure that the file is understud the way you want.  
 
 ### Background  
