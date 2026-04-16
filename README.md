@@ -114,7 +114,7 @@ A distinctive feature of *bbt* is that it appears to directly understand those a
 - When I run `sut --quiet input.txt`
 - Then there is no output
 ```
-This is achieved using a [partial parser](https://devopedia.org/natural-language-parsing). There is no rigid grammar, as *bbt* only looks for specific keywords to recognize the skeleton of the sentence.  
+This is achieved using a [partial parser](https://devopedia.org/natural-language-parsing). Because the parser ignores everything that is not relevant to it and only looks for specific keywords to recognize the skeleton of the sentence, the writer has a lot of flexibility and is not constrained by a rigid grammar as with a scripting language.  
 
 When you write:  
 > - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
