@@ -114,7 +114,7 @@ A distinctive feature of *bbt* is that it appears to directly understand those a
 - When I run `sut --quiet input.txt`
 - Then there is no output
 ```
-This is achieved using a [partial parser](https://devopedia.org/natural-language-parsing). Because the parser ignores everything that is not relevant to it and only looks for specific keywords to recognize the skeleton of the sentence, the writer has a lot of flexibility and is not constrained by a rigid grammar as with a scripting language.  
+This is achieved using a [partial parser](https://devopedia.org/natural-language-parsing). The parser ignores everything that is not relevant to it and only looks for specific keywords to recognize the skeleton of the sentence.  
 
 When you write:  
 > - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
@@ -122,6 +122,7 @@ When you write:
 *bbt* only sees two keywords and a parameter:  
 > - **Then** I should **get** **`version 15.0.0`** (Fix #2398 and #2402)    
   
+This gives the writer a lot of flexibility and avoids being constrained by a rigid grammar as with a scripting language.  
 This is what allows you to write steps in almost natural language. 
 
 ### One more example
