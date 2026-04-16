@@ -121,9 +121,8 @@ When you write:
 
 *bbt* only sees two keywords and a parameter:  
 > - **Then** I should **get** **`version 15.0.0`** (Fix #2398 and #2402)    
-  
-This gives the writer a lot of flexibility and avoids being constrained by a rigid grammar as with a scripting language.  
-This is what allows you to write steps in almost natural language. 
+
+As a result, the writer enjoys a lot of flexibility and is not constrained by a rigid grammar as with a scripting language, enabling steps to be written in almost natural language.
 
 ### One more example
 
