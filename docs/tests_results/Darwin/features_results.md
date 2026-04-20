@@ -627,20 +627,20 @@
    - [X] scenario   [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
 
 
-# Document: [A220_AsciiDoc_gcc_hello_word.adoc](../../features/A220_AsciiDoc_gcc_hello_word.adoc)  
-   ### Scenario: [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc): 
+# Document: [A220_AsciiDoc_gcc_hello_world.adoc](../../features/A220_AsciiDoc_gcc_hello_world.adoc)  
+   ### Scenario: [gcc version?](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : When I run `gcc -v`  
    - OK : Then the output contains `version `  
    - OK : Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
-   - [X] scenario   [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+   - [X] scenario   [gcc version?](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
 
-   ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc): 
+   ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : Given the new file `main.c`  
    - OK : And given there is no `main` file  
    - OK : When I successfully run `gcc main.c -o main`  
    - OK : And  I run `./main`  
    - OK : Then the output is `Hello, World!`  
-   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
 
 
 # Document: [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
