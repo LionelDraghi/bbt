@@ -1,14 +1,20 @@
 PLATFORM = $(shell uname -s)
 
 .SILENT:
-all: build check doc
+all: build tools check doc
 
 bbt: build
 
+tools:
+	echo === building tools
+	cd tools && alr build --release
+	@ $(MAKE) -s setup --directory=tests
+	@ $(MAKE) -s build --directory=tests
+
 build:
 	echo
-	echo === build #=# and instrument bbt
-	alr --non-interactive build --development
+	echo === building bbt for dev #=# and instrument bbt
+	alr --non-interactive build --validation
 	# Alire profiles : --release --validation --development (default)
 	
 	#=# alr gnatcov instrument --level=stmt --dump-trigger=atexit --projects=bbt.gpr --ignore-source-files=bbt-main*.ad? 
@@ -16,14 +22,15 @@ build:
 	#=# rm obj/development/bbt-gnatcov-instr/bbt-main*ad[sb]
 	#=# alr build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full.gpr
 
-	echo === build tools
-	cd tools && alr build --release
-	@ $(MAKE) -s setup --directory=tests
-	@ $(MAKE) -s build --directory=tests
-
-check:
+release:
+	echo
+	echo === building bbt for release
+	alr --non-interactive build --release
+	# Alire profiles : --release --validation --development (default)
+	
+check: 
 	# --------------------------------------------------------------------
-	echo === run tests
+	echo === running tests
 	@ $(MAKE) -s check --directory=tests
 
 	#=# echo
