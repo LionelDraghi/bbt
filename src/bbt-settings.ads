@@ -5,8 +5,6 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
--- pragma Extensions_Allowed (All);
-
 with Bbt_Config;
 
 private package BBT.Settings is

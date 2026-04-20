@@ -391,24 +391,31 @@ package body BBT.Tests.Builder is
 
       -- -----------------------------------------------------------------------
       procedure Duplicate (L : in out Scenarios.List) is
+
          -- --------------------------------------------------------------------
          function Copy_Scenario
-           (Source   : in Scenario_Type'Class;
-            With_Cmd : in String) return Scenario_Type'Class
+           (Source   : in Scenario_Type;
+            With_Cmd : in String) return Scenario_Type
          is
-         -- copy A to B neutralizing the Step_List, replaced with a single Cmd
-            Target : Scenario_Type'Class := Source;
-            Step : Step_Data renames
-              Target.Step_List (Target.Cmd_List_Step_Index).Data;
+         -- copy A to B neutralizing the Cmd_List, replaced with a single Cmd
+            Target : aliased Scenario_Type := Source;
          begin
-            Target.Cmd_List    := Empty_Cmd_List;
-            Step.Commands      := Model.Steps.Empty_Cmd_List;
-            Step.Object_String := +With_Cmd;
-            Replace_Slice (Source => Step.Src_Code,
-                           Low    => Step.Code_Span_First,
-                           High   => Step.Code_Span_Last,
-                           By     => With_Cmd);
-            return Target;
+            Copy_Step_List (Source, Target); -- Fixme: Adjust should be defined
+            --  for type Scenario, and this should be hiden inside
+            Target.Cmd_List  := Empty_Cmd_List;  -- Need a Setter!
+            declare
+               Step : Step_Data renames
+                        Target.Step_List (Target.Cmd_List_Step_Index).Data;
+            begin
+               Step.Commands      := Model.Steps.Empty_Cmd_List;
+               Step.Object_String := +With_Cmd;
+               Replace_Slice (Source => Step.Src_Code,
+                              Low    => Step.Code_Span_First,
+                              High   => Step.Code_Span_Last,
+                              By     => With_Cmd);
+
+               return Target;
+            end;
          end Copy_Scenario;
 
          -- --------------------------------------------------------------------
@@ -428,7 +435,7 @@ package body BBT.Tests.Builder is
       begin
          while Has_Element (Scen_Cursor) loop
             declare
-               Scen : constant Scenario_Type'Class := Element (Scen_Cursor);
+               Scen : constant Scenario_Type := Scenario_Type (Element (Scen_Cursor));
                Cmd_Idx : Positive := 1;
 
             begin
@@ -450,7 +457,7 @@ package body BBT.Tests.Builder is
                   To_Be_Split := Scen_Cursor;
                   for Cmd of Scen.Cmd_List loop
                      declare
-                        Scen_B : Scenario_Type'Class := Copy_Scenario
+                        Scen_B : Scenario_Type := Copy_Scenario
                           (Source   => Scen,
                            With_Cmd => Cmd);
                      begin

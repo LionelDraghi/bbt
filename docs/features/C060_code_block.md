@@ -5,7 +5,7 @@ bbt uses code blocks in its own syntax, while pretending to let the user the fre
 This scenario puts code blocks pretty much everywhere, and check that only code blocks following a step are taken into account.
 The code blocks that should be taken into account contain `Rose`, code blocks that should be ignored contains `Lily` 
 
-- Given the file `lot_of_code_blocks.md`
+- Given the new file `lot_of_code_blocks.md`
 ~~~md
 ```
 Lily
@@ -37,7 +37,7 @@ Lily
 Popy
 ```
 
-- Given the file `flowers.txt`
+- Given the new file `flowers.txt`
 ```
 Rose
 Cactus

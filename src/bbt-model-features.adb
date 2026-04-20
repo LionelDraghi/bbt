@@ -25,7 +25,7 @@ package body BBT.Model.Features is
      (F : in out Feature_Type) return Scenario_Maybe is
      (F.Background);
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Get_Results
      (F : Feature_Type) return Test_Results_Count is
    begin
@@ -44,7 +44,7 @@ package body BBT.Model.Features is
       end if;
    end Get_Results;
 
-      -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Create_Feature
      (Name     : Unbounded_String;
       Parent   : access Documents.Document_Type;
@@ -60,7 +60,7 @@ package body BBT.Model.Features is
       Scenario_List => <>,
       Background    => <>);
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Set_Filter (Scen     : in out Scenario_Type'Class;
                          Filtered :        Boolean) is
    begin
@@ -72,7 +72,7 @@ package body BBT.Model.Features is
       end loop;
    end Set_Filter;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Set_Filter (F        : in out Feature_Type'Class;
                          Filtered :        Boolean) is
    begin
@@ -87,11 +87,11 @@ package body BBT.Model.Features is
       end if;
    end Set_Filter;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    overriding function Has_Background (F : Feature_Type) return Boolean is
      (F.Background /= null and then not F.Background.Step_List.Is_Empty);
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    procedure Filter_Tree (F : in out Feature_Type) is
    begin
       Set_Filter (F, True);
@@ -131,7 +131,7 @@ package body BBT.Model.Features is
       end loop;
    end Apply_Filters_To;
 
-   -- -------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
    function Last_Feature
      (F : in out Feature_Lists.Vector) return Feature_Maybe
    is

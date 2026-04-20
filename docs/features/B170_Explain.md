@@ -302,14 +302,14 @@ line_B
 ```
 Document `scenario_to_explain.md`  
 1: Scenario `1`  
-2: - Check  that output is as in file `expected.txt`  
-3: - Check  that output is   
+2: - Check that output is as in file `expected.txt`  
+3: - Check that output is   
 ~~~  
 line_A  
 ~~~  
-7: - Check  that output is `msg`  
-8: - Check  that output is as in file `flowers2.txt`  
-9: - Check  that output is   
+7: - Check that output is `msg`  
+8: - Check that output is as in file `flowers2.txt`  
+9: - Check that output is   
 ~~~  
 line_B  
 ~~~  

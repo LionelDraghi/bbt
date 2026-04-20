@@ -95,7 +95,7 @@ package body BBT.Model.Steps is
           elsif File_Content_Available then
             "that output is " & Code_Fenced_File_Content
           else
-            " that output is as in file " & Object_File_Name);
+            "that output is as in file " & Object_File_Name);
 
       function Output_Contains return String is
          (if    Obj_String_Available   then
@@ -103,7 +103,7 @@ package body BBT.Model.Steps is
           elsif File_Content_Available then
             "that output contains " & Code_Fenced_File_Content
           else
-            " that output contains as in file " & Object_File_Name);
+            "that output contains as in file " & Object_File_Name);
 
       function Output_Does_Not_Contain return String is
          (if    Obj_String_Available   then
@@ -111,7 +111,7 @@ package body BBT.Model.Steps is
           elsif File_Content_Available then
             "that output does not contain " & Code_Fenced_File_Content
           else
-            " that output does not contain as in file " & Object_File_Name);
+            "that output does not contain as in file " & Object_File_Name);
 
    begin
       case Step.Data.Action is
@@ -222,6 +222,13 @@ package body BBT.Model.Steps is
       end case;
 
    end Explain;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Parent  (Step            : in out Step_Type;
+                          Parent_Scenario :        Scenarios.Scenario_Access) is
+   begin
+      Step.Parent := Node_Access (Parent_Scenario);
+   end Set_Parent;
 
    -- --------------------------------------------------------------------------
    function Create_Step (Info            : Step_Data;

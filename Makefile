@@ -1,22 +1,36 @@
 PLATFORM = $(shell uname -s)
 
+ifeq ($(OS), Windows_NT)
+	# PLATFORM := $(shell uname -s) -> should be Linux, Windows or Darwin
+	# But is MSYS_NT-10.0-26100 on Windows, and I don't want the DIR name
+	# to change with the MSYS or Windows version number.
+	# This is why I override it on Windows:
+	PLATFORM := Windows
+	EXE_SUFFIX := .exe
+else
+	EXE_SUFFIX :=
+endif
+
 .SILENT:
-all: build tools check doc
 
-bbt: build
+all: build sut check doc
 
-tools:
-	echo === building tools
+bbt$(EXE_SUFFIX): build
+sut$(EXE_SUFFIX): tools
+
+sut:
+	echo === building sut
 	cd tools && alr build --release
-	@ $(MAKE) -s setup --directory=tests
-	@ $(MAKE) -s build --directory=tests
+
+	$(MAKE) -s setup --directory=tests
+	$(MAKE) -s build --directory=tests
 
 build:
 	echo
 	echo === building bbt for dev #=# and instrument bbt
 	alr --non-interactive build --validation
 	# Alire profiles : --release --validation --development (default)
-	
+
 	#=# alr gnatcov instrument --level=stmt --dump-trigger=atexit --projects=bbt.gpr --ignore-source-files=bbt-main*.ad? 
 	#=# # can't prevent gnatcov to instrument bbt-main.adb with non legal Ada
 	#=# rm obj/development/bbt-gnatcov-instr/bbt-main*ad[sb]
@@ -27,11 +41,11 @@ release:
 	echo === building bbt for release
 	alr --non-interactive build --release
 	# Alire profiles : --release --validation --development (default)
-	
-check: 
+
+check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	# --------------------------------------------------------------------
 	echo === running tests
-	@ $(MAKE) -s check --directory=tests
+	$(MAKE) -s check --directory=tests
 
 	#=# echo
 	#=# echo === coverage report
@@ -40,7 +54,7 @@ check:
 doc: ./bbt
 	echo === doc prod
 	@ $(MAKE) -s doc --directory=tests
-	
+
 	./bbt list_grammar  > docs/grammar.md
 	./bbt list_keywords > docs/keywords.md
 

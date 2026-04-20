@@ -36,7 +36,12 @@ package body BBT.Scenarios.Files is
          and then Full_Name (File_Name) = Full_Name (Index_File_Name)
       then
          --  Filters the output file if any that is not supposed to be executed.
-         Put_Warning ("Ignoring file " & File_Name);
+         Put_Warning ("Ignoring file " & Index_File_Name);
+         --  We put Index_File_Name and not File_Name
+         --  because the latter will be in the local system convention,
+         --  and the former is what user as specified on the command line.
+         --  On Windows, if the user specified dir/file,
+         --  File_Name will be dir/file, while Index_File_Name is dir\file.
 
       else
          The_List.Append (File_Name);

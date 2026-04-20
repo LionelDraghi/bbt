@@ -53,19 +53,24 @@ package body BBT.Tests.Actions is
    begin
       if Step.Data.File_Content /= Empty_Text then
          -- File content provided in code fenced lines
-         Put_Debug_Line ("++++++++++ Get_Expected returning Text" & Step.Data.File_Content'Image);
+         Put_Debug_Line ("======= Get_Expected returning Text" & Step.Data.File_Content'Image);
          return Step.Data.File_Content;
 
       elsif Step.Data.Object_File_Name /= Null_Unbounded_String
         and then File_Exists (+Step.Data.Object_File_Name)
       then
          -- The string denotes a file
-         Put_Debug_Line ("++++++++++ Get_Expected returning content of file " & Step.Data.Object_File_Name'Image);
-         return Get_Text (+Step.Data.Object_File_Name);
+         declare
+            T : constant Text := Get_Text (+Step.Data.Object_File_Name);
+         begin
+            Put_Debug_Line ("======= Get_Expected returning content of file " & Step.Data.Object_File_Name'Image);
+            -- Put_Text (Item => T);
+            return T;
+         end;
 
       elsif Step.Data.Object_String /= Null_Unbounded_String then
          -- The string is the content
-         Put_Debug_Line ("++++++++++ Get_Expected returning string content" & Step.Data.Object_String'Image);
+         Put_Debug_Line ("======= Get_Expected returning string content" & Step.Data.Object_String'Image);
          return [1 => +Step.Data.Object_String];
 
       else
@@ -76,7 +81,7 @@ package body BBT.Tests.Actions is
          -- unless run with "--keep_going".
          -- In both cases, returning an Empty_Text seems to be the right
          -- things to do.
-         Put_Debug_Line ("++++++++++ Get_Expected returning empty Text");
+         Put_Debug_Line ("======= Get_Expected returning empty Text");
          return Empty_Text;
       end if;
    end Get_Expected;
@@ -102,7 +107,7 @@ package body BBT.Tests.Actions is
       -- built-in)
       --
       -- If it is, replace it by the fully-qualified path name (spawn
-      -- is implemented via execve, which _ on macOS - doesn't
+      -- is implemented via execve, which on macOS doesn't
       -- understand PATH)
       Find_The_Executable_If_Any :
       declare
@@ -438,8 +443,12 @@ package body BBT.Tests.Actions is
       use Texts;
       T2 : constant Text := Get_Expected (Step);
    begin
-      Put_Debug_Line ("++++++++++ Output_Is Step = " & Step'Image);
-      Put_Debug_Line ("++++++++++ dir = " & Settings.Launch_Directory);
+      -- Put_Debug_Line ("++++++++++ Output_Is Step = " & Step'Image);
+      -- Put_Debug_Line ("++++++++++ dir = " & Settings.Launch_Directory);
+      Put_Debug_Line ("++++++++++ Output = ");
+      -- Put_Text (Item => Output);
+      Put_Debug_Line ("++++++++++ T2 = ");
+      -- Put_Text (Item => T2);
       Put_Step_Result (Step     => Step,
                        Success  => Is_Equal
                          (Output, T2,

@@ -48,14 +48,10 @@ private package BBT.Model is
 
    type Node_Access is not null access all Root_Node'Class;
 
-   procedure Filter
-     (N : in out Root_Node);
-   procedure Unfilter
-     (N : in out Root_Node);
-    procedure Set_Start_Time
-     (N : in out Root_Node);
-    procedure Set_End_Time
-     (N : in out Root_Node);
+   procedure Filter   (N : in out Root_Node);
+   procedure Unfilter (N : in out Root_Node);
+   procedure Set_Start_Time (N : in out Root_Node);
+   procedure Set_End_Time   (N : in out Root_Node);
 
    -- --------------------------------------------------------------------------
    -- Calculate the elapsed time (duration) between Start_Time and End_Time
@@ -63,18 +59,18 @@ private package BBT.Model is
    function Elapsed_Time (N : Root_Node'Class) return Duration;
 
   -- Mark the item as filtered
-   procedure Apply_Filters_To
-     (N : in out Root_Node) is abstract;
-   function Has_Background
-     (D : Root_Node) return Boolean is (False);
+   procedure Apply_Filters_To (N : in out Root_Node) is abstract;
+
+   function Has_Background (D : Root_Node) return Boolean is (False);
 
    -- --------------------------------------------------------------------------
    type Non_Root_Node is abstract new Root_Node with record
-      Parent : aliased Node_Access; -- There is always a parent node
+      Parent : aliased Node_Access;
+      -- Fixme : should be a discriminant? because there is always a parent node
    end record;
 
-   procedure Unfilter_Parents
-     (N : in out Non_Root_Node'Class);
+   --  -- --------------------------------------------------------------------------
+   procedure Unfilter_Parents (N : in out Non_Root_Node'Class);
 
    -- --------------------------------------------------------------------------
    type Test_Result is (Not_Run, Failed, Empty, Successful)

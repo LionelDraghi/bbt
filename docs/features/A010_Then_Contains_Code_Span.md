@@ -20,7 +20,7 @@ _Table of Contents:_
 
 ### Scenario: test on a file
 
-  - Given the file `config.ini` 
+  - Given the new file `config.ini` 
   ```
   mode=silent config.ini
   recurse=false config.ini

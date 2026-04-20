@@ -39,7 +39,7 @@ package body BBT.Model.Documents is
          -- This is the root Document
          return Document_Access (P.Parent);
       else
-         -- Let's go one more level up
+         -- Let's recurse one more level up
          return Parent_Doc (Non_Root_Node'Class (P.Parent.all));
       end if;
    end Parent_Doc;

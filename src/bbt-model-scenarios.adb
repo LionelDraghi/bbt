@@ -157,6 +157,18 @@ package body BBT.Model.Scenarios is
       Cmd_List_Step_Index   => <>);
 
    -- --------------------------------------------------------------------------
+   procedure Copy_Step_List (Source :        Scenario_Type;
+                             Target : in out Scenario_Type) is
+   begin
+      Target.Step_List := Source.Step_List;
+      for Step of Target.Step_List loop
+         Step.Set_Parent (Parent_Scenario => Target'Access);
+         -- This is why we can't do
+         -- a simple = between lists.
+      end loop;
+   end Copy_Step_List;
+
+   -- --------------------------------------------------------------------------
    function Last_Scenario
      (Scen : in out Scenario_Lists.Vector) return Scenario_Maybe
    is

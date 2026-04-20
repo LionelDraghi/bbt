@@ -60,7 +60,7 @@ package BBT.Model.Steps is
    --  A step may include multiple commands with the syntax
    --  "-When I run "cmd1" or "cmd2" or "cmd3" ..."
    package Cmd_Lists is new Ada.Containers.Indefinite_Vectors
-   (Positive, String);
+     (Positive, String);
    subtype Cmd_List is Cmd_Lists.Vector;
    Empty_Cmd_List : Cmd_Lists.Vector := Cmd_Lists.Empty_Vector;
 
@@ -83,8 +83,8 @@ package BBT.Model.Steps is
       Commands         : Cmd_List                  := Empty_Cmd_List;
       Code_Span_First  : Natural                   := 0;
       Code_Span_Last   : Natural                   := 0;
-      -- Code_Span_First and Code_Span_Last point in Src_Code to the "or" part that should
-      -- be replaced when duplicating code.
+      -- Code_Span_First and Code_Span_Last point in Src_Code to the "or"
+      -- part that should be replaced when duplicating code.
       -- "- When I run `cmd1` or `cmd2` or `cmd3` whatever comment"
       --                ^ Code_Span_First      ^ Code_Span_Last
       -- That will ultimately be displayed as
@@ -104,10 +104,14 @@ package BBT.Model.Steps is
    end record with Put_Image => Put_Image;
 
    -- --------------------------------------------------------------------------
+   procedure Set_Parent  (Step            : in out Step_Type;
+                          Parent_Scenario :        Scenarios.Scenario_Access);
+
    function Create_Step (Info            : Step_Data;
                          Loc             : Location_Type;
                          Parent_Scenario : access Scenarios.Scenario_Type)
                          return Step_Type;
+
    procedure Put_Image
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       S      :        Step_Type);
@@ -123,10 +127,11 @@ package BBT.Model.Steps is
    overriding procedure Apply_Filters_To
      (S : in out Step_Type);
 
-   function Parent
-     (S : Step_Type) return Scenarios.Scenario_Access;
-   -- A Step cannot be created outside of an existing scenario,
-   -- this access should never be null.
+  function Parent
+    (S : Step_Type) return Scenarios.Scenario_Access
+    with Pre => S.Parent /= null;
+  -- A Step cannot be created outside of an existing scenario,
+  -- this access should never be null.
 
    -- --------------------------------------------------------------------------
    procedure Set_Filter (S        : in out Step_Type'Class;

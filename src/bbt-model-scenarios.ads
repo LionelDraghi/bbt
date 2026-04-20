@@ -39,6 +39,9 @@ package BBT.Model.Scenarios is
       Parent        : Node_Access;
       Location      : Location_Type;
       Is_Background : Boolean := False) return Scenario_Type;
+   -- --------------------------------------------------------------------------
+   procedure Copy_Step_List (Source :        Scenario_Type;
+                             Target : in out Scenario_Type);
 
    -- --------------------------------------------------------------------------
    function Is_In_Feature
@@ -47,8 +50,8 @@ package BBT.Model.Scenarios is
      (Scen : Scenario_Type) return Boolean;
    procedure Add_Result
      (Success : Boolean; To : in out Scenario_Type);
-   function Result (Scenario : Scenario_Type'Class)
-                    return Test_Result;
+   function Result
+     (Scenario : Scenario_Type'Class) return Test_Result;
    function Get_Results
       (Scen : Scenario_Type) return Test_Results_Count;
 
@@ -66,8 +69,7 @@ package BBT.Model.Scenarios is
      (Scen : in out Scenario_Type;
       Step :        Step_Type'Class);
    function Last_Step_Index
-     (Scen : Scenario_Type) return Natural
-     is (Scen.Step_List.Last_Index);
+     (Scen : Scenario_Type) return Natural is (Scen.Step_List.Last_Index);
    function Last_Step
      (Scen : in out Scenario_Type) return Step_Maybe;
 

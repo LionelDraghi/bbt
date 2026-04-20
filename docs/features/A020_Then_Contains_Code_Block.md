@@ -9,7 +9,7 @@ _Table of Contents:_
 
 ### Scenario: test the standard output
 
-- Given `config.ini` file
+- Given the new `config.ini` file
 ```
 mode=silent
 lang=fr  

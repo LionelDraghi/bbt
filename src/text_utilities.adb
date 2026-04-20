@@ -163,10 +163,9 @@ package body Text_Utilities is
    -- --------------------------------------------------------------------------
    function Get_Text (File_Name : String) return Text is
       File : File_Type;
-      T    : Text;
+      T    : Text := Empty_Text;
    begin
       Open (File, Name => File_Name, Mode => In_File);
-      T := Empty_Text;
       begin
          loop
             T.Append (Get_Line (File));
@@ -545,6 +544,7 @@ package body Text_Utilities is
       return T;
    end Remove_Blank_Lines;
 
+   -- --------------------------------------------------------------------------
    function Join_Spaces (From : String) return String is
       Tmp : String (From'Range);
       I   : Natural := Tmp'First;

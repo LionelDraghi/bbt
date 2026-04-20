@@ -43,7 +43,7 @@
    - [X] scenario   [test on a multiline output](..\..\features\A010_Then_Contains_Code_Span.md) pass  
 
    ### Scenario: [test on a file](..\..\features\A010_Then_Contains_Code_Span.md): 
-   - OK : Given the file `config.ini`   
+   - OK : Given the new file `config.ini`   
    - OK : Then `config.ini` contains `mode=silent`  
    - [X] scenario   [test on a file](..\..\features\A010_Then_Contains_Code_Span.md) pass  
 
@@ -51,7 +51,7 @@
 # Document: [A020_Then_Contains_Code_Block.md](..\..\features\A020_Then_Contains_Code_Block.md)  
   ## Feature: "contains" a string feature  
    ### Scenario: [test the standard output](..\..\features\A020_Then_Contains_Code_Block.md): 
-   - OK : Given `config.ini` file  
+   - OK : Given the new `config.ini` file  
    - OK : And the `contains_multiline.md` file  
    - OK : Then `config.ini` contains  
    - OK : And `config.ini` contains   
@@ -468,6 +468,172 @@
    - [X] scenario   [command not found](..\..\features\A190_Run.md) pass  
 
 
+# Document: [A195_Run_Or.md](..\..\features\A195_Run_Or.md)  
+  ## Feature: “when I run X or Y” test  
+   ### Scenario: [normal use case](..\..\features\A195_Run_Or.md): 
+   - OK : Given the new file `simple_or.md`   
+   - OK : When I run `./bbt simple_or.md`  
+   - OK : Then I get no error  
+   - **NOK** : And the output contains (..\docs\features\a195_run_or.md:15:)  
+..\docs\features\a195_run_or.md:15: Error: Output:  
+~~~
+  
+# Document: [simple_or.md](simple_or.md)    
+   ### Scenario: [A 1/2](simple_or.md):   
+ Exception : EXCEPTION_ACCESS_VIOLATIONLoad address: 0x7ff600970000  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b70ec2 __gnat_personality_seh0 at raise-gcc.c:1826  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7182623d  
+0x7ffe716d2395  
+0x7ffe71825b7c  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b3c48e ada__tags__object_specific_dataIP at ???  
+0x7ff600a074c7 Bbt.Model.Documents.Parent_Doc at bbt-model-documents.adb:43  
+0x7ff600b06b50 Bbt.Tests.Runner.Run_Step at bbt-tests-runner.adb:76  
+0x7ff600b0a429 Bbt.Tests.Runner.Run_Scenario at bbt-tests-runner.adb:244  
+0x7ff600b0c7f2 Bbt.Tests.Runner.Run_Scenario_List at bbt-tests-runner.adb:341  
+0x7ff600b0d07f Bbt.Tests.Runner.Run_Doc at bbt-tests-runner.adb:380  
+0x7ff600b0e2fe Bbt.Tests.Runner.Run_All at bbt-tests-runner.adb:438  
+0x7ff6009724cd Bbt.Main at bbt-main.adb:152  
+0x7ff60097386e Main at b__bbt-main.adb:588  
+0x7ff600971339 __tmainCRTStartup at ???  
+0x7ff600971145 mainCRTStartup at ???  
+[C:\WINDOWS\System32\KERNEL32.DLL]  
+0x7ffe70ade8d5  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7174c3fa  
+  
+  
+## Summary : **Success**, 0 scenarios OK, 1 empty scenarios
+~~~
+does not contain expected:  
+~~~
+   ### Scenario: [A 1/2](simple_or.md):   
+   - OK : When I run `./sut -v` whatever comment here    
+   - [X] scenario   [A 1/2](simple_or.md) pass    
+   ### Scenario: [A 2/2](simple_or.md):   
+   - OK : When I run `./sut --version` whatever comment here    
+   - [X] scenario   [A 2/2](simple_or.md) pass  
+~~~
+  
+   - [ ] scenario   [normal use case](..\..\features\A195_Run_Or.md) **fails**  
+
+   ### Scenario: [The last command does not meet expectation (test should fail)](..\..\features\A195_Run_Or.md): 
+   - OK : Given the new file `erroneous_or.md`   
+   - OK : When I run `./bbt -c erroneous_or.md`  
+   - **NOK** : Then I get an error (..\docs\features\a195_run_or.md:34:)  
+..\docs\features\a195_run_or.md:34: Error: Expected error code, got no error  
+   - **NOK** : And the output contains (..\docs\features\a195_run_or.md:35:)  
+..\docs\features\a195_run_or.md:35: Error: Output:  
+~~~
+  
+# Document: [erroneous_or.md](erroneous_or.md)    
+   ### Scenario: [B 1/3](erroneous_or.md):   
+ Exception : EXCEPTION_ACCESS_VIOLATIONLoad address: 0x7ff600970000  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b70ec2 __gnat_personality_seh0 at raise-gcc.c:1826  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7182623d  
+0x7ffe716d2395  
+0x7ffe71825b7c  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b3c48e ada__tags__object_specific_dataIP at ???  
+0x7ff600a074c7 Bbt.Model.Documents.Parent_Doc at bbt-model-documents.adb:43  
+0x7ff600b06b50 Bbt.Tests.Runner.Run_Step at bbt-tests-runner.adb:76  
+0x7ff600b0a429 Bbt.Tests.Runner.Run_Scenario at bbt-tests-runner.adb:244  
+0x7ff600b0c7f2 Bbt.Tests.Runner.Run_Scenario_List at bbt-tests-runner.adb:341  
+0x7ff600b0d07f Bbt.Tests.Runner.Run_Doc at bbt-tests-runner.adb:380  
+0x7ff600b0e2fe Bbt.Tests.Runner.Run_All at bbt-tests-runner.adb:438  
+0x7ff6009724cd Bbt.Main at bbt-main.adb:152  
+0x7ff60097386e Main at b__bbt-main.adb:588  
+0x7ff600971339 __tmainCRTStartup at ???  
+0x7ff600971145 mainCRTStartup at ???  
+[C:\WINDOWS\System32\KERNEL32.DLL]  
+0x7ffe70ade8d5  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7174c3fa  
+  
+  
+## Summary : **Success**, 0 scenarios OK, 1 empty scenarios
+~~~
+does not contain expected:  
+~~~
+   - **NOK** : Then I should get no error (erroneous_or.md:3:)    
+erroneous_or.md:3: Error: No error expected, but got one ( 1)    
+   - [ ] scenario   [B 3/3](erroneous_or.md) **fails**  
+~~~
+  
+   - [ ] scenario   [The last command does not meet expectation (test should fail)](..\..\features\A195_Run_Or.md) **fails**  
+
+  ## Feature: Syntactic and Semantic error related to "or" should be detected  
+   ### Scenario: [Missing command before "or"](..\..\features\A195_Run_Or.md): 
+   - OK : Given the new file `erroneous1.md`   
+   - OK : When I run `./bbt -c erroneous1.md`  
+   - OK : Then I get no error  
+   - **NOK** : And the output contains (..\docs\features\a195_run_or.md:56:)  
+..\docs\features\a195_run_or.md:56: Error: Output:  
+~~~
+  
+# Document: [erroneous1.md](erroneous1.md)    
+   ### Scenario: [C 1/2](erroneous1.md):   
+ Exception : EXCEPTION_ACCESS_VIOLATIONLoad address: 0x7ff600970000  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b70ec2 __gnat_personality_seh0 at raise-gcc.c:1826  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7182623d  
+0x7ffe716d2395  
+0x7ffe71825b7c  
+[C:\Users\Lionel\Prj\bbt\tests\bbt.exe]  
+0x7ff600b3c48e ada__tags__object_specific_dataIP at ???  
+0x7ff600a074c7 Bbt.Model.Documents.Parent_Doc at bbt-model-documents.adb:43  
+0x7ff600b06b50 Bbt.Tests.Runner.Run_Step at bbt-tests-runner.adb:76  
+0x7ff600b0a429 Bbt.Tests.Runner.Run_Scenario at bbt-tests-runner.adb:244  
+0x7ff600b0c7f2 Bbt.Tests.Runner.Run_Scenario_List at bbt-tests-runner.adb:341  
+0x7ff600b0d07f Bbt.Tests.Runner.Run_Doc at bbt-tests-runner.adb:380  
+0x7ff600b0e2fe Bbt.Tests.Runner.Run_All at bbt-tests-runner.adb:438  
+0x7ff6009724cd Bbt.Main at bbt-main.adb:152  
+0x7ff60097386e Main at b__bbt-main.adb:588  
+0x7ff600971339 __tmainCRTStartup at ???  
+0x7ff600971145 mainCRTStartup at ???  
+[C:\WINDOWS\System32\KERNEL32.DLL]  
+0x7ffe70ade8d5  
+[C:\WINDOWS\SYSTEM32\ntdll.dll]  
+0x7ffe7174c3fa  
+  
+  
+## Summary : **Success**, 0 scenarios OK, 1 empty scenarios
+~~~
+does not contain expected:  
+~~~
+   ### Scenario: [C 1/2](erroneous1.md):   
+   - OK : When I run or `./sut --version`     
+   - [X] scenario   [C 1/2](erroneous1.md) pass    
+  
+   ### Scenario: [C 2/2](erroneous1.md):   
+   - OK : When I run or `./sut -v`     
+   - [X] scenario   [C 2/2](erroneous1.md) pass    
+  
+## Summary : **Success**, 2 scenarios OK
+~~~
+  
+   - [ ] scenario   [Missing command before "or"](..\..\features\A195_Run_Or.md) **fails**  
+
+   ### Scenario: [Missing command after "or"](..\..\features\A195_Run_Or.md): 
+   - OK : Given the new file `erroneous2.md`   
+   - OK : When I run `./bbt -c erroneous2.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains  
+   - [X] scenario   [Missing command after "or"](..\..\features\A195_Run_Or.md) pass  
+
+   ### Scenario: [Two consecutive "or"](..\..\features\A195_Run_Or.md): 
+   - OK : Given the new file `erroneous3.md`   
+   - OK : When I run `./bbt -c erroneous3.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains  
+   - [X] scenario   [Two consecutive "or"](..\..\features\A195_Run_Or.md) pass  
+
+
 # Document: [A200_Regexp.md](..\..\features\A200_Regexp.md)  
   ## Feature: identifying expected output with regexp  
    ### Scenario: [version number match](..\..\features\A200_Regexp.md): 
@@ -585,113 +751,142 @@
 # Document: [A230_select_exclude_include.md](..\..\features\A230_select_exclude_include.md)  
   ## Feature: Filter  
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [no filtering](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `filtered_step.md`  
-   - OK : When I run `./bbt filtered_step.md`    
-   - OK : Then file `output.txt` is  
+   - OK : When I run `./bbt suite_1.md`    
+   - OK : Then file `output_1.txt` is  
    - [X] scenario   [no filtering](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [step filtering](..\..\features\A230_select_exclude_include.md): 
-   - OK : When I run `./bbt --exclude Windows filtered_step.md`    
-   - OK : Then file `output.txt` is  
+   - OK : When I run `./bbt --exclude Windows suite_1.md`    
+   - OK : Then file `output_1.txt` is  
    - [X] scenario   [step filtering](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [step selection](..\..\features\A230_select_exclude_include.md): 
-   - OK : When I run `./bbt --select create filtered_step.md`    
-   - OK : Then file `output.txt` contains  
+   - OK : When I run `./bbt --select create suite_1.md`    
+   - OK : Then file `output_1.txt` contains  
    - [X] scenario   [step selection](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [Selecting a scenario](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select Robustness filtered_step.md robustness.md`    
-   - OK : Then there is no file `output.txt`  
-   - OK : And `output2.txt` is  
+   - OK : When I run `./bbt --select Robustness suite_1.md suite_2.md`    
+   - OK : Then there is no file `output_1.txt`  
+   - OK : And `output_2.txt` is  
    - [X] scenario   [Selecting a scenario](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [selection is empty](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select xzscskfjhs filtered_step.md robustness.md`    
-   - OK : Then there is no file `output.txt`  
-   - OK : And  there is no file `output2.txt`  
+   - OK : When I run `./bbt --select xzscskfjhs suite_1.md suite_2.md`    
+   - OK : Then there is no file `output_1.txt`  
+   - OK : And  there is no file `output_2.txt`  
    - [X] scenario   [selection is empty](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [Selecting a Background only](..\..\features\A230_select_exclude_include.md): 
    - OK : Given the file `background.md`  
    - OK : When I run `./bbt --select new_file background.md`    
    - OK : Then there is no file `input.txt`  
-   - OK : And  there is no file `output2.txt`  
+   - OK : And  there is no file `output_2.txt`  
    - [X] scenario   [Selecting a Background only](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [Select followed by an exclude](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --select Robustness --exclude Linux robustness.md`  
-   - OK : Then `output2.txt` is  
+   - OK : When I run `./bbt --select Robustness --exclude Linux suite_2.md`  
+   - OK : Then `output_2.txt` is  
    - [X] scenario   [Select followed by an exclude](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [scenario Excluded followed by an include of a step inside](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --exclude Sanity --include create --include Linux robustness.md`    
-   - OK : Then `output2.txt` is  
+   - OK : When I run `./bbt --exclude Robustness --include create --include Linux suite_2.md`    
+   - OK : Then `output_2.txt` is  
    - [X] scenario   [scenario Excluded followed by an include of a step inside](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Background: [Lets cleanup the place](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given there is no file `output.txt`  
-   - OK : Given there is no file `output2.txt`  
+   - OK : Given there is no file `output_1.txt`  
+   - OK : Given there is no file `output_2.txt`  
    - OK : Given there is no file `input.txt`  
+   - OK : Given the file `suite_1.md`  
+   - OK : Given the file `suite_2.md`  
    - [X] background [Lets cleanup the place](..\..\features\A230_select_exclude_include.md) pass  
 
    ### Scenario: [Exclude by file name](..\..\features\A230_select_exclude_include.md): 
-   - OK : Given the file `robustness.md`  
-   - OK : When I run `./bbt --exclude robustness.md robustness.md`    
-   - OK : Then there is no `output2.txt` file  
+   - OK : When I run `./bbt --exclude suite_2.md suite_2.md`    
+   - OK : Then there is no `output_2.txt` file  
    - [X] scenario   [Exclude by file name](..\..\features\A230_select_exclude_include.md) pass  
+
+
+# Document: [A240_Then_I_Succesfully_Run.md](..\..\features\A240_Then_I_Succesfully_Run.md)  
+   ### Scenario: [Running something in postcondition](..\..\features\A240_Then_I_Succesfully_Run.md): 
+   - OK : Given the new file `simple.xml`  
+   - OK : Then I successfully run `xmllint simple.xml`   
+   - [X] scenario   [Running something in postcondition](..\..\features\A240_Then_I_Succesfully_Run.md) pass  
+
+
+# Document: [A250_Fails.md](..\..\features\A250_Fails.md)  
+   ### Scenario: [Checking that a command fails](..\..\features\A250_Fails.md): 
+   - OK : Given the new file `mismatched_tag.xml`  
+   - OK : Then `xmllint mismatched_tag.xml` fails   
+   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
+   - OK : And  `xmllint mismatched_tag.xml` should fail   
+   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
+   - [X] scenario   [Checking that a command fails](..\..\features\A250_Fails.md) pass  
 
 
 # Document: [B010_Deleting_created_files.md](..\..\features\B010_Deleting_created_files.md)  
@@ -733,11 +928,11 @@
    - OK : Given the new `create_tree.md` file  
    - [X] background [create some dir and file](..\..\features\B020_Exec_dir.md) pass  
 
-   ### Scenario: [Lets run `create_tree` in the current dir](..\..\features\B020_Exec_dir.md): 
+   ### Scenario: [Lets run "create_tree.md" in the current dir](..\..\features\B020_Exec_dir.md): 
    - OK : When I run `./bbt create_tree.md`  
    - OK : Then there is a `dir1` dir  
    - OK : And there is a `dir1/file1` file  
-   - [X] scenario   [Lets run `create_tree` in the current dir](..\..\features\B020_Exec_dir.md) pass  
+   - [X] scenario   [Lets run "create_tree.md" in the current dir](..\..\features\B020_Exec_dir.md) pass  
 
    ### Background: [create some dir and file](..\..\features\B020_Exec_dir.md): 
    - OK : Given there is no `dir1` directory  
@@ -745,13 +940,13 @@
    - OK : Given the new `create_tree.md` file  
    - [X] background [create some dir and file](..\..\features\B020_Exec_dir.md) pass  
 
-   ### Scenario: [Lets run `create_tree` in ./dir2](..\..\features\B020_Exec_dir.md): 
+   ### Scenario: [Lets run "create_tree.md" in ./dir2](..\..\features\B020_Exec_dir.md): 
    - OK : Given the new `dir2` directory  
    - OK : When I run `./bbt create_tree.md --exec_dir dir2`  
    - OK : Then there is a `dir2/dir1` dir  
    - OK : And there is a `dir2/dir1/file1` file  
    - OK : And there is no `dir1` dir  
-   - [X] scenario   [Lets run `create_tree` in ./dir2](..\..\features\B020_Exec_dir.md) pass  
+   - [X] scenario   [Lets run "create_tree.md" in ./dir2](..\..\features\B020_Exec_dir.md) pass  
 
 
 # Document: [B030_File_creation_in_Given_steps.md](..\..\features\B030_File_creation_in_Given_steps.md)  
@@ -900,39 +1095,72 @@
    - [X] scenario   [return code when one fail and the other succeed](..\..\features\B060_Return_code_on_test_failure.md) pass  
 
 
-# Document: [B070_Mandatory_new_bug.md](..\..\features\B070_Mandatory_new_bug.md)  
-   ### Background: [](..\..\features\B070_Mandatory_new_bug.md): 
-   - OK : Given the file `whatever.txt`  
-   - [X] background [](..\..\features\B070_Mandatory_new_bug.md) pass  
-
-   ### Scenario: [](..\..\features\B070_Mandatory_new_bug.md): 
-   - OK : Given the file `whatever.txt`  
-   - OK : Then `whatever.txt` contains  
-   - [X] scenario   [](..\..\features\B070_Mandatory_new_bug.md) pass  
-
-
 # Document: [B080_Keep_Going.md](..\..\features\B080_Keep_Going.md)  
   ## Feature: on error, Keep going or stop  
    ### Background: [setup](..\..\features\B080_Keep_Going.md): 
-   - OK : Given the file `feature1.md`  
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
    - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
 
-   ### Scenario: [with `-k`](..\..\features\B080_Keep_Going.md): 
-   - OK : When I run `./bbt -k feature1.md`  
+   ### Scenario: [scenario_with_syntax_error run without `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [scenario_with_syntax_error run without `-k`](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Background: [setup](..\..\features\B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Scenario: [scenario_with_syntax_error run with `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k scenario_with_syntax_error.md`  
    - OK : then output contains  
    - OK : and output contains  
    - OK : and output contains  
    - OK : and output contains  
-   - [X] scenario   [with `-k`](..\..\features\B080_Keep_Going.md) pass  
+   - OK : and output contains  
+   - OK : and output contains  
+   - [X] scenario   [scenario_with_syntax_error run with `-k`](..\..\features\B080_Keep_Going.md) pass  
 
    ### Background: [setup](..\..\features\B080_Keep_Going.md): 
-   - OK : Given the file `feature1.md`  
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
    - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
 
-   ### Scenario: [without `-k`](..\..\features\B080_Keep_Going.md): 
-   - OK : When I run `./bbt feature1.md`  
+   ### Scenario: [scenario_with_assertion_error run without `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt scenario_with_assertion_error.md`  
    - OK : then output is  
-   - [X] scenario   [without `-k`](..\..\features\B080_Keep_Going.md) pass  
+   - [X] scenario   [scenario_with_assertion_error run without `-k`](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Background: [setup](..\..\features\B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Scenario: [scenario_with_assertion_error run with `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k scenario_with_assertion_error.md`  
+   - OK : then output is  
+   - [X] scenario   [scenario_with_assertion_error run with `-k`](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Background: [setup](..\..\features\B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Scenario: [explain scenario_with_syntax_error without `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt ex scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [explain scenario_with_syntax_error without `-k`](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Background: [setup](..\..\features\B080_Keep_Going.md): 
+   - OK : Given the file `scenario_with_syntax_error.md`  
+   - OK : Given the file `scenario_with_assertion_error.md`  
+   - [X] background [setup](..\..\features\B080_Keep_Going.md) pass  
+
+   ### Scenario: [explain scenario_with_syntax_error with `-k`](..\..\features\B080_Keep_Going.md): 
+   - OK : When I run `./bbt -k ex scenario_with_syntax_error.md`  
+   - OK : then output is  
+   - [X] scenario   [explain scenario_with_syntax_error with `-k`](..\..\features\B080_Keep_Going.md) pass  
 
 
 # Document: [B090_tmp_dir.md](..\..\features\B090_tmp_dir.md)  
@@ -941,7 +1169,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](..\..\features\B090_tmp_dir.md) pass  
 
    ### Scenario: [Current dir, no cleanup](..\..\features\B090_tmp_dir.md): 
@@ -953,7 +1181,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](..\..\features\B090_tmp_dir.md) pass  
 
    ### Scenario: [Current dir, with cleanup](..\..\features\B090_tmp_dir.md): 
@@ -965,7 +1193,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](..\..\features\B090_tmp_dir.md) pass  
 
    ### Scenario: [Within dir1, no cleanup](..\..\features\B090_tmp_dir.md): 
@@ -978,7 +1206,7 @@
    - OK : Given there is no `tmp.txt` file  
    - OK : Given there is no `dir1` dir  
    - OK : Given there is no `dir2` dir  
-   - OK : Given the file `scen1.md`  
+   - OK : Given the new file `scen1.md`  
    - [X] background [](..\..\features\B090_tmp_dir.md) pass  
 
    ### Scenario: [Within dir1, with cleanup](..\..\features\B090_tmp_dir.md): 
@@ -1080,122 +1308,1407 @@
 
 # Document: [B130_Cmd_Line_Help.md](..\..\features\B130_Cmd_Line_Help.md)  
   ## Feature: Clear command line help  
-   ### Background: [](..\..\features\B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](..\..\features\B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [calling bbt without parameter or with -h put the normal help](..\..\features\B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt help`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt he`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help](..\..\features\B130_Cmd_Line_Help.md) pass  
+   - **NOK** : then the output is equal to file `../docs/help/base.txt` (..\docs\features\b130_cmd_line_help.md:18:)  
+..\docs\features\b130_cmd_line_help.md:18: Error: Output:  
+~~~
+Usage : bbt [Options]* [Command] file*
+  
 
-   ### Background: [](..\..\features\B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](..\..\features\B130_Cmd_Line_Help.md) pass  
+  
+  The default command is 'run'
+  
+  If no file is provided, reads *.md files
+  
+
+  
+Basic options:
+  
+       --yes        : do not prompt if deletion is needed in
+  
+                      "Given" steps, silently answer yes
+  
+  -c | --cleanup    : after run, remove every file and dir
+  
+                      created by bbt in "Given" steps
+  
+  -r | --recursive  : search scenarios in subdirs
+  
+  -k | --keep_going : do as much work as possible
+  
+       --Werror     : treat warnings as errors
+  
+  -v | --verbose
+  
+  -q | --quiet      : no message unless error,
+  
+                      Warnings are also ignored
+  
+
+  
+Basic commands:
+  
+       run               : the default command
+  
+  ls | list              : list selected items
+  
+  he | help [topic]      : base help, or more on one of the topic listed below
+  
+  he | help on_all       : full online help
+  
+  he | help tutorial     : print a tutorial 
+  
+  he | help example      : print an example scenario file
+  
+
+  
+Help topics:
+  
+  filtering : --select --exclude --include
+  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
+  
+  other     : list_files list_keywords list_grammar explain --strict
+  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
+  
+  debug     : -d tt -ls -t
+  
+
+  
+bbt version 0.3.0-dev
+  
+https://github.com/LionelDraghi/bbt/
+  
+
+~~~
+not equal to expected:  
+~~~
+Usage : bbt [Options]* [Command] file*  
+  
+  The default command is 'run'  
+  If no file is provided, reads *.md files  
+  
+Basic options:  
+       --yes        : do not prompt if deletion is needed in  
+                      "Given" steps, silently answer yes  
+  -c | --cleanup    : after run, remove every file and dir  
+                      created by bbt in "Given" steps  
+  -r | --recursive  : search scenarios in subdirs  
+  -k | --keep_going : do as much work as possible  
+       --Werror     : treat warnings as errors  
+  -v | --verbose  
+  -q | --quiet      : no message unless error,  
+                      Warnings are also ignored  
+  
+Basic commands:  
+       run               : the default command  
+  ls | list              : list selected items  
+  he | help [topic]      : base help, or more on one of the topic listed below  
+  he | help on_all       : full online help  
+  he | help tutorial     : print a tutorial   
+  he | help example      : print an example scenario file  
+  
+Help topics:  
+  filtering : --select --exclude --include  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  debug     : -d tt -ls -t  
+  
+bbt version 0.3.0-dev  
+https://github.com/LionelDraghi/bbt/
+~~~
+  
+   - [ ] scenario   [calling bbt without parameter or with -h put the normal help](..\..\features\B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [filtering help](..\..\features\B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he filtering`   
-   - OK : then the output is file `filtering.txt`  
-   - [X] scenario   [filtering help](..\..\features\B130_Cmd_Line_Help.md) pass  
+   - **NOK** : then the output is equal to file `../docs/help/filtering.txt` (..\docs\features\b130_cmd_line_help.md:22:)  
+..\docs\features\b130_cmd_line_help.md:22: Error: Output:  
+~~~
+Filtering:
+  
+  Features, Scenarios and Steps may be selected or filtered.
+  
+  By default, every item is selected.
+  
+  -s | --select 'string'  : only items containing 'string' are selected
+  
+  -e | --exclude 'string' : remove from selection items containing 'string'
+  
+  -i | --include 'string' : include in selection items containing 'string'
+  
+  Multiple occurrences are processed in order, meaning that you can exclude
+  
+  a whole Feature and then re-include a Scenario belonging to this feature.
+  
 
-   ### Background: [](..\..\features\B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](..\..\features\B130_Cmd_Line_Help.md) pass  
+~~~
+not equal to expected:  
+~~~
+Filtering:  
+  Features, Scenarios and Steps may be selected or filtered.  
+  By default, every item is selected.  
+  -s | --select 'string'  : only items containing 'string' are selected  
+  -e | --exclude 'string' : remove from selection items containing 'string'  
+  -i | --include 'string' : include in selection items containing 'string'  
+  Multiple occurrences are processed in order, meaning that you can exclude  
+  a whole Feature and then re-include a Scenario belonging to this feature.
+~~~
+  
+   - [ ] scenario   [filtering help](..\..\features\B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [matching help](..\..\features\B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help matching`   
-   - OK : then the output is file `matching.txt`  
-   - [X] scenario   [matching help](..\..\features\B130_Cmd_Line_Help.md) pass  
+   - **NOK** : then the output is equal to file `../docs/help/matching.txt` (..\docs\features\b130_cmd_line_help.md:26:)  
+..\docs\features\b130_cmd_line_help.md:26: Error: Output:  
+~~~
+Human vs exact matching:
+  
+  bbt default behavior is "human match", that is ignoring differences
+  
+  in casing, ignoring consecutive spaces, and ignoring blank lines.
+  
+  The opposite behavior, to make strict compare, is set with:
+  
+  -em  | --exact_match
+  
+  exact_match may be altered if **followed** by one or more of:
+  
+  -iw  | --ignore_whitespaces (default)
+  
+  -ic  | --ignore_casing      (default)
+  
+  -ibl | --ignore_blank_lines (default)
+  
+  For example, "-em -iw" will take into account blank lines and
+  
+  casing but ignore whitespaces
+  
+  Note that -iw, -ic, and -ibl are useless if not preceded by -em, 
+  
+  because they are the default setting.
+  
+  There is also a
+  
+  -hm  | --human_match
+  
+  option, equivalent to defaults "-iw -ic -ibl", if you want to
+  
+  assert on the command line that this is the required behavior.
+  
 
-   ### Background: [](..\..\features\B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](..\..\features\B130_Cmd_Line_Help.md) pass  
+~~~
+not equal to expected:  
+~~~
+Human vs exact matching:  
+  bbt default behavior is "human match", that is ignoring differences  
+  in casing, ignoring consecutive spaces, and ignoring blank lines.  
+  The opposite behavior, to make strict compare, is set with:  
+  -em  | --exact_match  
+  exact_match may be altered if **followed** by one or more of:  
+  -iw  | --ignore_whitespaces (default)  
+  -ic  | --ignore_casing      (default)  
+  -ibl | --ignore_blank_lines (default)  
+  For example, "-em -iw" will take into account blank lines and  
+  casing but ignore whitespaces  
+  Note that -iw, -ic, and -ibl are useless if not preceded by -em,   
+  because they are the default setting.  
+  There is also a  
+  -hm  | --human_match  
+  option, equivalent to defaults "-iw -ic -ibl", if you want to  
+  assert on the command line that this is the required behavior.
+~~~
+  
+   - [ ] scenario   [matching help](..\..\features\B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [others help](..\..\features\B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help other`   
-   - OK : then the output is file `other.txt`  
-   - [X] scenario   [others help](..\..\features\B130_Cmd_Line_Help.md) pass  
+   - **NOK** : then the output is equal to file `../docs/help/other.txt` (..\docs\features\b130_cmd_line_help.md:30:)  
+..\docs\features\b130_cmd_line_help.md:30: Error: Output:  
+~~~
+Other commands:
+  
+  lf | list_files      : list Scenario files found
+  
+  lk | list_keywords   : list Step keywords
+  
+  lg | list_grammar    : list possible Steps syntax and associated action
+  
+  ex | explain         : explain what bbt understands from Scenarios files
+  
+                         (do not run the scenarios)
+  
 
-   ### Background: [](..\..\features\B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](..\..\features\B130_Cmd_Line_Help.md) pass  
+  
+Other options:
+  
+        --strict         : warn when not strictly following Gherkin common guidelines
+  
+        --index file.md  : create an md file with test results
+  
+                           that indexes all scenarios run.
+  
+                           This file will contain the normal bbt output,
+  
+                           whatever are the verbosity settings (-q, -v, etc.)
+  
+                           for standard output.
+  
+  -ed | --exec_dir 'dir' : run command in dir instead of current dir
+  
+  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
+  
+  -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)
+  
+  -j  | --junit file.xml : generate a JUnit XML report file
+  
+  -gb | --generate_badge badge.url : create a text file containing
+  
+                           a shields.io URL to get a svg badge
+  
+                           with tests results summary.
+  
+
+~~~
+not equal to expected:  
+~~~
+Other commands:  
+  lf | list_files      : list Scenario files found  
+  lk | list_keywords   : list Step keywords  
+  lg | list_grammar    : list possible Steps syntax and associated action  
+  ex | explain         : explain what bbt understands from Scenarios files  
+                         (do not run the scenarios)  
+  
+Other options:  
+        --strict         : warn when not strictly following Gherkin common guidelines  
+        --index file.md  : create an md file with test results  
+                           that indexes all scenarios run.  
+                           This file will contain the normal bbt output,  
+                           whatever are the verbosity settings (-q, -v, etc.)  
+                           for standard output.  
+  -ed | --exec_dir 'dir' : run command in dir instead of current dir  
+  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir  
+  -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)  
+  -j  | --junit file.xml : generate a JUnit XML report file  
+  -gb | --generate_badge badge.url : create a text file containing  
+                           a shields.io URL to get a svg badge  
+                           with tests results summary.
+~~~
+  
+   - [ ] scenario   [others help](..\..\features\B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [On_All help](..\..\features\B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help on_all`   
-   - OK : then the output contains file `base.txt`  
-   - OK : and  the output contains file `filtering.txt`  
-   - OK : and  the output contains file `matching.txt`  
-   - OK : and  the output contains file `other.txt`  
-   - [X] scenario   [On_All help](..\..\features\B130_Cmd_Line_Help.md) pass  
+   - **NOK** : then the output contains file `../docs/help/base.txt` (..\docs\features\b130_cmd_line_help.md:34:)  
+..\docs\features\b130_cmd_line_help.md:34: Error: Output:  
+~~~
+Usage : bbt [Options]* [Command] file*
+  
+
+  
+  The default command is 'run'
+  
+  If no file is provided, reads *.md files
+  
+
+  
+Basic options:
+  
+       --yes        : do not prompt if deletion is needed in
+  
+                      "Given" steps, silently answer yes
+  
+  -c | --cleanup    : after run, remove every file and dir
+  
+                      created by bbt in "Given" steps
+  
+  -r | --recursive  : search scenarios in subdirs
+  
+  -k | --keep_going : do as much work as possible
+  
+       --Werror     : treat warnings as errors
+  
+  -v | --verbose
+  
+  -q | --quiet      : no message unless error,
+  
+                      Warnings are also ignored
+  
+
+  
+Basic commands:
+  
+       run               : the default command
+  
+  ls | list              : list selected items
+  
+  he | help [topic]      : base help, or more on one of the topic listed below
+  
+  he | help on_all       : full online help
+  
+  he | help tutorial     : print a tutorial 
+  
+  he | help example      : print an example scenario file
+  
+
+  
+Help topics:
+  
+  filtering : --select --exclude --include
+  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
+  
+  other     : list_files list_keywords list_grammar explain --strict
+  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
+  
+  debug     : -d tt -ls -t
+  
+
+  
+bbt version 0.3.0-dev
+  
+https://github.com/LionelDraghi/bbt/
+  
+  
+Filtering:
+  
+  Features, Scenarios and Steps may be selected or filtered.
+  
+  By default, every item is selected.
+  
+  -s | --select 'string'  : only items containing 'string' are selected
+  
+  -e | --exclude 'string' : remove from selection items containing 'string'
+  
+  -i | --include 'string' : include in selection items containing 'string'
+  
+  Multiple occurrences are processed in order, meaning that you can exclude
+  
+  a whole Feature and then re-include a Scenario belonging to this feature.
+  
+  
+Human vs exact matching:
+  
+  bbt default behavior is "human match", that is ignoring differences
+  
+  in casing, ignoring consecutive spaces, and ignoring blank lines.
+  
+  The opposite behavior, to make strict compare, is set with:
+  
+  -em  | --exact_match
+  
+  exact_match may be altered if **followed** by one or more of:
+  
+  -iw  | --ignore_whitespaces (default)
+  
+  -ic  | --ignore_casing      (default)
+  
+  -ibl | --ignore_blank_lines (default)
+  
+  For example, "-em -iw" will take into account blank lines and
+  
+  casing but ignore whitespaces
+  
+  Note that -iw, -ic, and -ibl are useless if not preceded by -em, 
+  
+  because they are the default setting.
+  
+  There is also a
+  
+  -hm  | --human_match
+  
+  option, equivalent to defaults "-iw -ic -ibl", if you want to
+  
+  assert on the command line that this is the required behavior.
+  
+  
+Other commands:
+  
+  lf | list_files      : list Scenario files found
+  
+  lk | list_keywords   : list Step keywords
+  
+  lg | list_grammar    : list possible Steps syntax and associated action
+  
+  ex | explain         : explain what bbt understands from Scenarios files
+  
+                         (do not run the scenarios)
+  
+
+  
+Other options:
+  
+        --strict         : warn when not strictly following Gherkin common guidelines
+  
+        --index file.md  : create an md file with test results
+  
+                           that indexes all scenarios run.
+  
+                           This file will contain the normal bbt output,
+  
+                           whatever are the verbosity settings (-q, -v, etc.)
+  
+                           for standard output.
+  
+  -ed | --exec_dir 'dir' : run command in dir instead of current dir
+  
+  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
+  
+  -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)
+  
+  -j  | --junit file.xml : generate a JUnit XML report file
+  
+  -gb | --generate_badge badge.url : create a text file containing
+  
+                           a shields.io URL to get a svg badge
+  
+                           with tests results summary.
+  
+  
+Debug command:
+  
+   tt             : list trace topics
+  
+Debug options:
+  
+   -ls            : list settings
+  
+   -d             : very very verbose output
+  
+   -d trace_topic : activate debug traces for the topic
+  
+
+  
+Friends are here : https://github.com/LionelDraghi/bbt/Issues
+  
+Good luck :-)
+  
+
+~~~
+does not contain expected:  
+~~~
+Usage : bbt [Options]* [Command] file*  
+  
+  The default command is 'run'  
+  If no file is provided, reads *.md files  
+  
+Basic options:  
+       --yes        : do not prompt if deletion is needed in  
+                      "Given" steps, silently answer yes  
+  -c | --cleanup    : after run, remove every file and dir  
+                      created by bbt in "Given" steps  
+  -r | --recursive  : search scenarios in subdirs  
+  -k | --keep_going : do as much work as possible  
+       --Werror     : treat warnings as errors  
+  -v | --verbose  
+  -q | --quiet      : no message unless error,  
+                      Warnings are also ignored  
+  
+Basic commands:  
+       run               : the default command  
+  ls | list              : list selected items  
+  he | help [topic]      : base help, or more on one of the topic listed below  
+  he | help on_all       : full online help  
+  he | help tutorial     : print a tutorial   
+  he | help example      : print an example scenario file  
+  
+Help topics:  
+  filtering : --select --exclude --include  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  debug     : -d tt -ls -t  
+  
+bbt version 0.3.0-dev  
+https://github.com/LionelDraghi/bbt/
+~~~
+  
+   - OK : and  the output contains file `../docs/help/filtering.txt`  
+   - OK : and  the output contains file `../docs/help/matching.txt`  
+   - **NOK** : and  the output contains file `../docs/help/other.txt` (..\docs\features\b130_cmd_line_help.md:37:)  
+..\docs\features\b130_cmd_line_help.md:37: Error: Output:  
+~~~
+Usage : bbt [Options]* [Command] file*
+  
+
+  
+  The default command is 'run'
+  
+  If no file is provided, reads *.md files
+  
+
+  
+Basic options:
+  
+       --yes        : do not prompt if deletion is needed in
+  
+                      "Given" steps, silently answer yes
+  
+  -c | --cleanup    : after run, remove every file and dir
+  
+                      created by bbt in "Given" steps
+  
+  -r | --recursive  : search scenarios in subdirs
+  
+  -k | --keep_going : do as much work as possible
+  
+       --Werror     : treat warnings as errors
+  
+  -v | --verbose
+  
+  -q | --quiet      : no message unless error,
+  
+                      Warnings are also ignored
+  
+
+  
+Basic commands:
+  
+       run               : the default command
+  
+  ls | list              : list selected items
+  
+  he | help [topic]      : base help, or more on one of the topic listed below
+  
+  he | help on_all       : full online help
+  
+  he | help tutorial     : print a tutorial 
+  
+  he | help example      : print an example scenario file
+  
+
+  
+Help topics:
+  
+  filtering : --select --exclude --include
+  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines
+  
+  other     : list_files list_keywords list_grammar explain --strict
+  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
+  
+  debug     : -d tt -ls -t
+  
+
+  
+bbt version 0.3.0-dev
+  
+https://github.com/LionelDraghi/bbt/
+  
+  
+Filtering:
+  
+  Features, Scenarios and Steps may be selected or filtered.
+  
+  By default, every item is selected.
+  
+  -s | --select 'string'  : only items containing 'string' are selected
+  
+  -e | --exclude 'string' : remove from selection items containing 'string'
+  
+  -i | --include 'string' : include in selection items containing 'string'
+  
+  Multiple occurrences are processed in order, meaning that you can exclude
+  
+  a whole Feature and then re-include a Scenario belonging to this feature.
+  
+  
+Human vs exact matching:
+  
+  bbt default behavior is "human match", that is ignoring differences
+  
+  in casing, ignoring consecutive spaces, and ignoring blank lines.
+  
+  The opposite behavior, to make strict compare, is set with:
+  
+  -em  | --exact_match
+  
+  exact_match may be altered if **followed** by one or more of:
+  
+  -iw  | --ignore_whitespaces (default)
+  
+  -ic  | --ignore_casing      (default)
+  
+  -ibl | --ignore_blank_lines (default)
+  
+  For example, "-em -iw" will take into account blank lines and
+  
+  casing but ignore whitespaces
+  
+  Note that -iw, -ic, and -ibl are useless if not preceded by -em, 
+  
+  because they are the default setting.
+  
+  There is also a
+  
+  -hm  | --human_match
+  
+  option, equivalent to defaults "-iw -ic -ibl", if you want to
+  
+  assert on the command line that this is the required behavior.
+  
+  
+Other commands:
+  
+  lf | list_files      : list Scenario files found
+  
+  lk | list_keywords   : list Step keywords
+  
+  lg | list_grammar    : list possible Steps syntax and associated action
+  
+  ex | explain         : explain what bbt understands from Scenarios files
+  
+                         (do not run the scenarios)
+  
+
+  
+Other options:
+  
+        --strict         : warn when not strictly following Gherkin common guidelines
+  
+        --index file.md  : create an md file with test results
+  
+                           that indexes all scenarios run.
+  
+                           This file will contain the normal bbt output,
+  
+                           whatever are the verbosity settings (-q, -v, etc.)
+  
+                           for standard output.
+  
+  -ed | --exec_dir 'dir' : run command in dir instead of current dir
+  
+  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
+  
+  -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)
+  
+  -j  | --junit file.xml : generate a JUnit XML report file
+  
+  -gb | --generate_badge badge.url : create a text file containing
+  
+                           a shields.io URL to get a svg badge
+  
+                           with tests results summary.
+  
+  
+Debug command:
+  
+   tt             : list trace topics
+  
+Debug options:
+  
+   -ls            : list settings
+  
+   -d             : very very verbose output
+  
+   -d trace_topic : activate debug traces for the topic
+  
+
+  
+Friends are here : https://github.com/LionelDraghi/bbt/Issues
+  
+Good luck :-)
+  
+
+~~~
+does not contain expected:  
+~~~
+Other commands:  
+  lf | list_files      : list Scenario files found  
+  lk | list_keywords   : list Step keywords  
+  lg | list_grammar    : list possible Steps syntax and associated action  
+  ex | explain         : explain what bbt understands from Scenarios files  
+                         (do not run the scenarios)  
+  
+Other options:  
+        --strict         : warn when not strictly following Gherkin common guidelines  
+        --index file.md  : create an md file with test results  
+                           that indexes all scenarios run.  
+                           This file will contain the normal bbt output,  
+                           whatever are the verbosity settings (-q, -v, etc.)  
+                           for standard output.  
+  -ed | --exec_dir 'dir' : run command in dir instead of current dir  
+  -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir  
+  -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)  
+  -j  | --junit file.xml : generate a JUnit XML report file  
+  -gb | --generate_badge badge.url : create a text file containing  
+                           a shields.io URL to get a svg badge  
+                           with tests results summary.
+~~~
+  
+   - [ ] scenario   [On_All help](..\..\features\B130_Cmd_Line_Help.md) **fails**  
+
+   ### Scenario: [tutorial generation](..\..\features\B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help tutorial`   
+   - **NOK** : then the output is equal to file `../docs/help/tutorial.md` (..\docs\features\b130_cmd_line_help.md:42:)  
+..\docs\features\b130_cmd_line_help.md:42: Error: Output:  
+~~~
+
+  
+## Introduction  
+  
+
+  
+This is a bbt tutorial, generated with BBT 0.3.0-dev  
+  
+
+  
+A bbt file contains:  
+  
+1. text that is ignored
+  
+2. scenarios that are interpreted
+  
+ 
+  
+A Scenario minimal structure is:  
+  
+1. a Scenario header, that is a line starting with "# Scenario : "  
+  
+2. One or more Steps, that is lines starting with "- Given", "- When" or "- Then"  
+  
+
+  
+**Example :**  
+  
+    ## Scenario : get gcc version  
+  
+    - When I run `gcc --version`  
+  
+    - Then I get `14.2.0`  
+  
+
+  
+## Scenarios structure   
+  
+
+  
+The complete scenarios structure is heavily inspired by Gherkin files, with a few nuances. 
+  
+
+  
+    [# Background] (at most one per file))
+  
+
+  
+    [# Feature] (any number of features per file)
+  
+
+  
+    [# Background] (at most one per Feature)
+  
+
+  
+    # Scenario 1 (any number of scenarios per feature)
+  
+    - Given/When/Then step
+  
+    [- Given/When/Then/And/But step] (any number of steps per scenario)
+  
+
+  
+**Example :**  
+  
+
+  
+    # Feature : Case sensitivity control 
+  
+
+  
+    ## Scenario : default behavior, no option  
+  
+    - When I run `grep xyz input.txt`  
+  
+    - Then ...  
+  
+
+  
+    ## Scenario : case insensitive search  
+  
+    - When I run `grep -i xyz input.txt`  
+  
+    - Then ...  
+  
+
+  
+The only headers reserved for bbt uses are "Feature", "Scenario" or "Example", and "Background"  
+  
+(Example is a synonym for Scenario).  
+  
+Header level is not taken into account : `# Scenario` is equivalent to `#### Scenario`.  
+  
+
+  
+### Non interpreted content
+  
+
+  
+Outside previously mentioned headers and steps, lines are ignored by bbt, that is considered as comments.
+  
+Meaning that you can interleave Scenarios with comments as you want: comments may appear between Header and Steps or even between Steps and code blocks.  
+  
+In case of doubt, just run `bbt explain` on your scenario to ensure that the file is understud the way you want.  
+  
+
+  
+### Background  
+  
+
+  
+Preconditions common to several scenarios may be put in a Background section, before scenarios :  
+  
+
+  
+    ### Background:  
+  
+    - Given there is no `input.txt` file  
+  
+    - Given there is a `tmp` dir  
+  
+
+  
+Background scope is logical : if it appears at the beginning of the file, it applies to all  
+  
+scenario in the file, if it appears at the beginning of a feature, it apply only  
+  
+to the scenarios of this feature.  
+  
+If there is both, Backgrounds are run in appearance order.  
+  
+
+  
+**Example :**  
+  
+
+  
+    ## Background 1 
+  
+    - Given there is no `config.ini` file  
+  
+    - Given ...  
+  
+
+  
+    # Feature A  
+  
+
+  
+    ## Scenario A.1  
+  
+    Background 1 will run here  
+  
+    - When I run `grep -i xyz input.txt`  
+  
+    - Then ...  
+  
+
+  
+    # Feature B  
+  
+
+  
+    ## Background 2 
+  
+    - Given ...  
+  
+
+  
+    ## Scenario B.1  
+  
+    Background 1 run here  
+  
+    Background 2 run here  
+  
+    - When ...  
+  
+
+  
+### Steps  
+  
+
+  
+Steps are the most important part of bbt files, they perform the actions and checks.  
+  
+- Given [setup condition]  
+  
+- When  [action to perform]  
+  
+- Then  [expected result]  
+  
+
+  
+**Examples of steps:**  
+  
+
+  
+    - Given there is no `.config` dir
+  
+    - Given the `config.ini` file
+  
+      ```
+  
+      verbose=false
+  
+      lang=am
+  
+      ```
+  
+    - Given the executable file `command.sh`
+  
+      ```
+  
+      #!/bin/bash
+  
+      echo "bbt rules!"
+  
+      ```
+  
+    - When I successfully run `xxx`
+  
+      (Equivalent to both lines "- When I run `xxx`" and "- Then I Get No Error")
+  
+    - Then there is no output
+  
+    - Then I get no error
+  
+    - Then output is `sut v0.1.0` (Equivalent "Then I get...")
+  
+
+  
+You can continue a list of Given / When / Then with "And" or "But":  
+  
+
+  
+    - Then output contains `234 processed data`
+  
+    - And  output contains `result = 29580`
+  
+    - But  output doesn't contain `Warning:`
+  
+    - And  output does not contain `Error:`  
+  
+
+  
+*And* and *But* are synonymous of the *Given* / *When* / *Then* that preceedes.  
+  
+
+  
+### Parameters  
+  
+
+  
+Parameters are given in three possible ways :  
+  
+  1. as a string:
+  
+
+  
+    - Then I get `string`
+  
+
+  
+  2. as a code fenced block:
+  
+
+  
+    - Then I get
+  
+    ```
+  
+    This is my multi-line
+  
+    file content
+  
+    ```
+  
+
+  
+  3. in an external file:
+  
+
+  
+    - Then I get the content of file `expected.txt`  
+  
+
+  
+     Note in that case the mandatory "file" keyword  
+  
+
+  
+### Matching level  
+  
+
+  
+Above forms test that the output is exactly what is given.  
+  
+If what you want is just test that the output contains something, then use the "contains" keyword:  
+  
+
+  
+    - Then output contains `sut version v0.1.0`  
+  
+
+  
+If what you want is search for some pattern, then use the "matches" keyword, followed by a regexp :  
+  
+
+  
+    - Then output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`  
+  
+
+  
+Note that the regexp must match the entire line,
+  
+don't forget to put ".*" at the beginning or at the end if necessary.  
+  
+
+  
+## Help  
+  
+
+  
+To get a complete (although less friendly) view on the grammar:  
+  
+
+  
+    bbt list_grammar  
+  
+
+  
+To check your scenario with a dry run:  
+  
+
+  
+    bbt explain scenario.md  
+  
+
+  
+More features here : https://github.com/LionelDraghi/bbt/tree/main#bbt-readme-
+  
+
+~~~
+not equal to expected:  
+~~~
+  
+## Introduction    
+  
+This is a bbt tutorial, generated with BBT 0.3.0-dev    
+  
+A bbt file contains:    
+1. text that is ignored  
+2. scenarios that are interpreted  
+   
+A Scenario minimal structure is:    
+1. a Scenario header, that is a line starting with "# Scenario : "    
+2. One or more Steps, that is lines starting with "- Given", "- When" or "- Then"    
+  
+**Example :**    
+    ## Scenario : get gcc version    
+    - When I run `gcc --version`    
+    - Then I get `14.2.0`    
+  
+## Scenarios structure     
+  
+The complete scenarios structure is heavily inspired by Gherkin files, with a few nuances.   
+  
+    [# Background] (at most one per file))  
+  
+    [# Feature] (any number of features per file)  
+  
+    [# Background] (at most one per Feature)  
+  
+    # Scenario 1 (any number of scenarios per feature)  
+    - Given/When/Then step  
+    [- Given/When/Then/And/But step] (any number of steps per scenario)  
+  
+**Example :**    
+  
+    # Feature : Case sensitivity control   
+  
+    ## Scenario : default behavior, no option    
+    - When I run `grep xyz input.txt`    
+    - Then ...    
+  
+    ## Scenario : case insensitive search    
+    - When I run `grep -i xyz input.txt`    
+    - Then ...    
+  
+The only headers reserved for bbt uses are "Feature", "Scenario" or "Example", and "Background"    
+(Example is a synonym for Scenario).    
+Header level is not taken into account : `# Scenario` is equivalent to `#### Scenario`.    
+  
+### Non interpreted content  
+  
+Outside previously mentioned headers and steps, lines are ignored by bbt, that is considered as comments.  
+Meaning that you can interleave Scenarios with comments as you want: comments may appear between Header and Steps or even between Steps and code blocks.    
+In case of doubt, just run `bbt explain` on your scenario to ensure that the file is understud the way you want.    
+  
+### Background    
+  
+Preconditions common to several scenarios may be put in a Background section, before scenarios :    
+  
+    ### Background:    
+    - Given there is no `input.txt` file    
+    - Given there is a `tmp` dir    
+  
+Background scope is logical : if it appears at the beginning of the file, it applies to all    
+scenario in the file, if it appears at the beginning of a feature, it apply only    
+to the scenarios of this feature.    
+If there is both, Backgrounds are run in appearance order.    
+  
+**Example :**    
+  
+    ## Background 1   
+    - Given there is no `config.ini` file    
+    - Given ...    
+  
+    # Feature A    
+  
+    ## Scenario A.1    
+    Background 1 will run here    
+    - When I run `grep -i xyz input.txt`    
+    - Then ...    
+  
+    # Feature B    
+  
+    ## Background 2   
+    - Given ...    
+  
+    ## Scenario B.1    
+    Background 1 run here    
+    Background 2 run here    
+    - When ...    
+  
+### Steps    
+  
+Steps are the most important part of bbt files, they perform the actions and checks.    
+- Given [setup condition]    
+- When  [action to perform]    
+- Then  [expected result]    
+  
+**Examples of steps:**    
+  
+    - Given there is no `.config` dir  
+    - Given the `config.ini` file  
+      ```  
+      verbose=false  
+      lang=am  
+      ```  
+    - Given the executable file `command.sh`  
+      ```  
+      #!/bin/bash  
+      echo "bbt rules!"  
+      ```  
+    - When I successfully run `xxx`  
+      (Equivalent to both lines "- When I run `xxx`" and "- Then I Get No Error")  
+    - Then there is no output  
+    - Then I get no error  
+    - Then output is `sut v0.1.0` (Equivalent "Then I get...")  
+  
+You can continue a list of Given / When / Then with "And" or "But":    
+  
+    - Then output contains `234 processed data`  
+    - And  output contains `result = 29580`  
+    - But  output doesn't contain `Warning:`  
+    - And  output does not contain `Error:`    
+  
+*And* and *But* are synonymous of the *Given* / *When* / *Then* that preceedes.    
+  
+### Parameters    
+  
+Parameters are given in three possible ways :    
+  1. as a string:  
+  
+    - Then I get `string`  
+  
+  2. as a code fenced block:  
+  
+    - Then I get  
+    ```  
+    This is my multi-line  
+    file content  
+    ```  
+  
+  3. in an external file:  
+  
+    - Then I get the content of file `expected.txt`    
+  
+     Note in that case the mandatory "file" keyword    
+  
+### Matching level    
+  
+Above forms test that the output is exactly what is given.    
+If what you want is just test that the output contains something, then use the "contains" keyword:    
+  
+    - Then output contains `sut version v0.1.0`    
+  
+If what you want is search for some pattern, then use the "matches" keyword, followed by a regexp :    
+  
+    - Then output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`    
+  
+Note that the regexp must match the entire line,  
+don't forget to put ".*" at the beginning or at the end if necessary.    
+  
+## Help    
+  
+To get a complete (although less friendly) view on the grammar:    
+  
+    bbt list_grammar    
+  
+To check your scenario with a dry run:    
+  
+    bbt explain scenario.md    
+  
+More features here : https://github.com/LionelDraghi/bbt/tree/main#bbt-readme-
+~~~
+  
+   - [ ] scenario   [tutorial generation](..\..\features\B130_Cmd_Line_Help.md) **fails**  
+
+   ### Scenario: [generated example is OK](..\..\features\B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help example`   
+   - **NOK** : then the output is equal to file `../docs/examples/gcc_hello_world.md` (..\docs\features\b130_cmd_line_help.md:50:)  
+..\docs\features\b130_cmd_line_help.md:50: Error: Output:  
+~~~
+# gcc simple sanity tests
+  
+
+  
+## Scenario 1 : get gcc version
+  
+  
+  
+  On Linux or Windows, `gcc -v` output contains something like: 
+  
+  > gcc version 14.2.0 (Debian 14.2.0-16)  
+  
+
+  
+  On Darwin:  
+  
+  > Apple clang version 12.0.0 (clang-1200.0.32.29)  
+  
+
+  
+Let's use a regexp to test both:  
+  
+
+  
+- When I run `gcc -v`
+  
+- Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
+  
+
+  
+## Scenario 2 : compiling and executing an hello word
+  
+
+  
+Sanity check of a complete compile / link / run sequence :
+  
+
+  
+- Given the new file `main.c`
+  
+  ```c
+  
+  #include <stdio.h>
+  
+  int main() {
+  
+  printf("Hello, World!");
+  
+  return 0;
+  
+  }
+  
+  ```
+  
+- And given there is no `./main` file
+  
+
+  
+- When I successfully run `gcc main.c -o main`
+  
+- And  I run `./main`
+  
+
+  
+- Then the output is `Hello, World!`
+  
+
+~~~
+not equal to expected:  
+~~~
+# gcc simple sanity tests  
+  
+## Scenario 1 : get gcc version  
+    
+  On Linux or Windows, `gcc -v` output contains something like:   
+  > gcc version 14.2.0 (Debian 14.2.0-16)    
+  
+  On Darwin:    
+  > Apple clang version 12.0.0 (clang-1200.0.32.29)    
+  
+Let's use a regexp to test both:    
+  
+- When I run `gcc -v`  
+- Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
+  
+## Scenario 2 : compiling and executing an hello word  
+  
+Sanity check of a complete compile / link / run sequence :  
+  
+- Given the new file `main.c`  
+  ```c  
+  #include <stdio.h>  
+  int main() {  
+  printf("Hello, World!");  
+  return 0;  
+  }  
+  ```  
+- And given there is no `./main` file  
+  
+- When I successfully run `gcc main.c -o main`  
+- And  I run `./main`  
+  
+- Then the output is `Hello, World!`
+~~~
+  
+   - [ ] scenario   [generated example is OK](..\..\features\B130_Cmd_Line_Help.md) **fails**  
 
 
 # Document: [B140_Index_File.md](..\..\features\B140_Index_File.md)  
-   ### Background: [](..\..\features\B140_Index_File.md): 
+   ### Scenario: [Successful run index file](..\..\features\B140_Index_File.md): 
    - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](..\..\features\B140_Index_File.md) pass  
-
-   ### Scenario: [Quiet mode run](..\..\features\B140_Index_File.md): 
+   - OK : And there is no `index1.md` file  
+   - OK : And there is no `index2.md` file  
+   - OK : And there is no `verbose_output_OK.md` file  
+   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index verbose_output_OK.md`  
    - OK : When I successfully run `./bbt -c --yes -q OK_scen.md --index index_1.md`  
    - OK : Then `index_1.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_2.md`  
-   - OK : Then I get an error  
-   - OK : And `index_2.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Quiet mode run](..\..\features\B140_Index_File.md) pass  
+   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_2.md`  
+   - OK : Then `index_2.md` is equal to file `verbose_output_OK.md`  
+   - [X] scenario   [Successful run index file](..\..\features\B140_Index_File.md) pass  
 
-   ### Background: [](..\..\features\B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
+   ### Scenario: [Unsuccessful run index file](..\..\features\B140_Index_File.md): 
    - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](..\..\features\B140_Index_File.md) pass  
-
-   ### Scenario: [Default mode run](..\..\features\B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes    OK_scen.md --index index_3.md`  
-   - OK : Then `index_3.md` is equal to file `verbose_output_OK.md`  
+   - OK : And there is no `index3.md` file  
+   - OK : And there is no `index4.md` file  
+   - OK : And there is no `verbose_output_NOK.md` file  
+   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index verbose_output_NOK.md`  
+   - OK : Then I get an error  
+   - OK : When I run `./bbt -c --yes -q NOK_scen.md --index index_3.md`  
+   - OK : Then I get an error  
+   - OK : And `index_3.md` is equal to file `verbose_output_NOK.md`  
    - OK : When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`  
    - OK : Then  I get an error  
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Default mode run](..\..\features\B140_Index_File.md) pass  
-
-   ### Background: [](..\..\features\B140_Index_File.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - OK : Given the file `verbose_output_OK.md`  
-   - OK : Given the file `verbose_output_NOK.md`  
-   - [X] background [](..\..\features\B140_Index_File.md) pass  
-
-   ### Scenario: [Verbose mode run](..\..\features\B140_Index_File.md): 
-   - OK : When I successfully run `./bbt -c --yes -v OK_scen.md --index index_5.md`  
-   - OK : Then `index_5.md` is equal to file `verbose_output_OK.md`  
-   - OK : When I run `./bbt -c --yes -v NOK_scen.md --index index_6.md`  
-   - OK : Then I get an error  
-   - OK : And `index_6.md` is equal to file `verbose_output_NOK.md`  
-   - [X] scenario   [Verbose mode run](..\..\features\B140_Index_File.md) pass  
+   - [X] scenario   [Unsuccessful run index file](..\..\features\B140_Index_File.md) pass  
 
 
 # Document: [B150_Deprecated_Options.md](..\..\features\B150_Deprecated_Options.md)  
@@ -1258,19 +2771,152 @@
 
   ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
 
+# Document: [B170_Explain.md](..\..\features\B170_Explain.md)  
+  ## Feature: Explain  
+   ### Scenario: [explain elements other than steps](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain elements other than steps](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Setup_No_File](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Setup_No_File](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Setup_No_Dir](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Setup_No_Dir](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_File_Existence](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_File_Existence](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_Dir_Existence](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_Dir_Existence](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Erase_And_Create](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Erase_And_Create](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Create_If_None](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Create_If_None](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Run](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Run](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Run_Without_Error](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Run_Without_Error](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_No_File](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_No_File](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Check_No_Dir](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Check_No_Dir](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Error_Return_Code and No_Error_Return_Code](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Error_Return_Code and No_Error_Return_Code](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output_Is](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output_Is](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output_Contains and Output_Does_Not_Contain](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output_Contains and Output_Does_Not_Contain](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action Output|File_Matches and Output|File_Does_Not_Match](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action Output|File_Matches and Output|File_Does_Not_Match](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action File_Is and File_Is_Not](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action File_Is and File_Is_Not](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action File_Contains and File_Does_Not_Contain](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action File_Contains and File_Does_Not_Contain](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain action No_Output](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain action No_Output](..\..\features\B170_Explain.md) pass  
+
+   ### Scenario: [explain Invalid Step](..\..\features\B170_Explain.md): 
+   - OK : Given the new file `scenario_to_explain.md`   
+   - OK : When I run `./bbt explain scenario_to_explain.md`  
+   - OK : Then the output contains  
+   - OK : And the output contains  
+   - OK : When I run `./bbt -q explain scenario_to_explain.md`  
+   - OK : Then I get   
+   - [X] scenario   [explain Invalid Step](..\..\features\B170_Explain.md) pass  
+
+
+# Document: [B180_Ignored_Files.md](..\..\features\B180_Ignored_Files.md)  
+  ## Feature: some files are ignored by *bbt*  
+   ### Scenario: [Checking that the index file is ignored](..\..\features\B180_Ignored_Files.md): 
+   - OK : Given the new dir `tmp77`  
+   - OK : When running  `./bbt list_files --tmp_dir tmp77 --index tmp77/index.md ../docs/examples/gcc_hello_world.md tmp77`  
+   - OK : Then I should get   
+   - [X] scenario   [Checking that the index file is ignored](..\..\features\B180_Ignored_Files.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](..\..\features\C010_Empty_scenarios.md)  
-   ### Scenario: [No step test](..\..\features\C010_Empty_scenarios.md): 
+   ### Scenario: [No step test A](..\..\features\C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
-   - OK : When I run `./bbt no_step_in_scenario.input`   
+   - OK : When I successfully run `./bbt no_step_in_scenario.input`   
    - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario.input) is empty, nothing tested`  
-   - OK : And  I get no error  
-   - [X] scenario   [No step test](..\..\features\C010_Empty_scenarios.md) pass  
+   - [X] scenario   [No step test A](..\..\features\C010_Empty_scenarios.md) pass  
+
+   ### Scenario: [No step test B](..\..\features\C010_Empty_scenarios.md): 
+   - OK : Given the `no_step_in_scenario_b.input` file  
+   - OK : When I successfully run `./bbt no_step_in_scenario_b.input`   
+   - OK : Then the output contains `scenario [My_Scenario](no_step_in_scenario_b.input) is empty, nothing tested`  
+   - [X] scenario   [No step test B](..\..\features\C010_Empty_scenarios.md) pass  
 
    ### Scenario: [No scenario in Feature](..\..\features\C010_Empty_scenarios.md): 
    - OK : Given the `no_step_or_scenario_in_feature.input` file  
-   - OK : When I run `./bbt no_step_or_scenario_in_feature.input`   
+   - OK : When I successfully run `./bbt no_step_or_scenario_in_feature.input`   
    - OK : Then the output contains `Warning : No scenario in feature "My_Feature"`  
-   - OK : And I get no error  
    - [X] scenario   [No scenario in Feature](..\..\features\C010_Empty_scenarios.md) pass  
 
 
@@ -1312,6 +2958,12 @@
    - OK : When I run `./bbt -d no_heading_marker.input`  
    - [X] scenario   [Missing heading marker](..\..\features\C030_Markdown_syntax.md) pass  
 
+   ### Scenario: [Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)](..\..\features\C030_Markdown_syntax.md): 
+   - OK : Given the new file `italic_and_bold_in_steps.md`  
+   - OK : When I successfully run `./bbt explain italic_and_bold_in_steps.md`  
+   - OK : Then the output contains  
+   - [X] scenario   [Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)](..\..\features\C030_Markdown_syntax.md) pass  
+
 
 # Document: [C040_Missing_title.md](..\..\features\C040_Missing_title.md)  
    ### Scenario: [Missing tittle in scenario, background and feature](..\..\features\C040_Missing_title.md): 
@@ -1323,17 +2975,17 @@
 
 # Document: [C050_Step_marker.md](..\..\features\C050_Step_marker.md)  
   ## Feature:   
-   ### Scenario: [](..\..\features\C050_Step_marker.md): 
+   ### Scenario: [Different markers within the scenario](..\..\features\C050_Step_marker.md): 
    - OK : Given the file `step_markers.md`  
    - OK : When I run `./bbt -c -q step_markers.md`  
    - OK : Then I get no error  
    - OK : And the output is  
-   - [X] scenario   [](..\..\features\C050_Step_marker.md) pass  
+   - [X] scenario   [Different markers within the scenario](..\..\features\C050_Step_marker.md) pass  
 
 
 # Document: [C060_code_block.md](..\..\features\C060_code_block.md)  
    ### Scenario: [Code fenced blocks](..\..\features\C060_code_block.md): 
-   - OK : Given the file `lot_of_code_blocks.md`  
+   - OK : Given the new file `lot_of_code_blocks.md`  
    - OK : When I run `./bbt -c lot_of_code_blocks.md`  
    - OK : Then I get no error  
    - [X] scenario   [Code fenced blocks](..\..\features\C060_code_block.md) pass  
@@ -1342,32 +2994,32 @@
 # Document: [C070_missing_code_block.md](..\..\features\C070_missing_code_block.md)  
   ## Feature: missing or erroneous code blocks  
    ### Scenario: [Code block missing at the end of the file](..\..\features\C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_at_EOF.md`  
+   - OK : Given the new file `code_block_missing_at_EOF.md`  
    - OK : When I run `./bbt -c code_block_missing_at_EOF.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing at the end of the file](..\..\features\C070_missing_code_block.md) pass  
 
    ### Scenario: [Code block missing while reaching next step](..\..\features\C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_in_step.md`  
+   - OK : Given the new file `code_block_missing_in_step.md`  
    - OK : When I run `./bbt -c code_block_missing_in_step.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing while reaching next step](..\..\features\C070_missing_code_block.md) pass  
 
    ### Scenario: [Code block missing while reaching next scenario](..\..\features\C070_missing_code_block.md): 
-   - OK : Given the file `code_block_missing_in_scenario.md`  
+   - OK : Given the new file `code_block_missing_in_scenario.md`  
    - OK : When I run `./bbt -c code_block_missing_in_scenario.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
    - [X] scenario   [Code block missing while reaching next scenario](..\..\features\C070_missing_code_block.md) pass  
 
    ### Scenario: [Closing code block mark missing](..\..\features\C070_missing_code_block.md): 
-   - OK : Given the file `code_block_not_closed.md`  
+   - OK : Given the new file `code_block_not_closed.md`  
    - OK : When I run `./bbt -c code_block_not_closed.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
-   - OK : Given the file `code_block_not_closed2.md`  
+   - OK : Given the new file `code_block_not_closed2.md`  
    - OK : When I run `./bbt -c code_block_not_closed2.md`  
    - OK : Then there is an error   
    - OK : And  the output contains   
@@ -1409,20 +3061,21 @@
 # Document: [C120_Ill_Formated_Steps.md](..\..\features\C120_Ill_Formated_Steps.md)  
   ## Feature: bbt is providing helpful messages on ill formatted step lines  
    ### Scenario: [](..\..\features\C120_Ill_Formated_Steps.md): 
-   - OK : Given the file `bad_steps.md`  
+   - OK : Given the new file `bad_steps.md`  
    - OK : When I run `./bbt -k -c bad_steps.md`  
    - OK : Then the output contains   
+   - OK : And the output contains   
    - OK : And the output contains  
    - OK : And I get an error  
    - [X] scenario   [](..\..\features\C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 132 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 132   |
+| Failed     | 10    |
+| Successful | 155   |
 | Empty      | 0     |
 | Not Run    | 6     |
 

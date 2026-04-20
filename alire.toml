@@ -25,3 +25,5 @@ ansiada = "^1.0.0"
 type = "test"
 command = ["make"]
 
+[build-profiles]
+bbt = "validation"
