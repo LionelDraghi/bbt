@@ -398,7 +398,8 @@ package body BBT.Tests.Builder is
             With_Cmd : in String) return Scenario_Type
          is
          -- copy A to B neutralizing the Cmd_List, replaced with a single Cmd
-            Target : aliased Scenario_Type := Source;
+            -- Target : aliased Scenario_Type := Source;
+            Target : new Scenario_Type := Source;
          begin
             Copy_Step_List (Source, Target); -- Fixme: Adjust should be defined
             --  for type Scenario, and this should be hiden inside
