@@ -57,7 +57,7 @@
    - [X] scenario   [test on a multiline output](../../features/A010_Then_Contains_Code_Span.md) pass  
 
    ### Scenario: [test on a file](../../features/A010_Then_Contains_Code_Span.md): 
-   - OK : Given the file `config.ini`   
+   - OK : Given the new file `config.ini`   
    - OK : Then `config.ini` contains `mode=silent`  
    - [X] scenario   [test on a file](../../features/A010_Then_Contains_Code_Span.md) pass  
 
@@ -65,7 +65,7 @@
 # Document: [A020_Then_Contains_Code_Block.md](../../features/A020_Then_Contains_Code_Block.md)  
   ## Feature: "contains" a string feature  
    ### Scenario: [test the standard output](../../features/A020_Then_Contains_Code_Block.md): 
-   - OK : Given `config.ini` file  
+   - OK : Given the new `config.ini` file  
    - OK : And the `contains_multiline.md` file  
    - OK : Then `config.ini` contains  
    - OK : And `config.ini` contains   
@@ -627,20 +627,20 @@
    - [X] scenario   [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
 
 
-# Document: [A220_AsciiDoc_gcc_hello_word.adoc](../../features/A220_AsciiDoc_gcc_hello_word.adoc)  
-   ### Scenario: [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc): 
+# Document: [A220_AsciiDoc_gcc_hello_world.adoc](../../features/A220_AsciiDoc_gcc_hello_world.adoc)  
+   ### Scenario: [gcc version?](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : When I run `gcc -v`  
    - OK : Then the output contains `version `  
    - OK : Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`  
-   - [X] scenario   [gcc version?](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+   - [X] scenario   [gcc version?](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
 
-   ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc): 
+   ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : Given the new file `main.c`  
    - OK : And given there is no `main` file  
    - OK : When I successfully run `gcc main.c -o main`  
    - OK : And  I run `./main`  
    - OK : Then the output is `Hello, World!`  
-   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_word.adoc) pass  
+   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
 
 
 # Document: [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
@@ -1562,7 +1562,7 @@
 
 # Document: [C060_code_block.md](../../features/C060_code_block.md)  
    ### Scenario: [Code fenced blocks](../../features/C060_code_block.md): 
-   - OK : Given the file `lot_of_code_blocks.md`  
+   - OK : Given the new file `lot_of_code_blocks.md`  
    - OK : When I run `./bbt -c lot_of_code_blocks.md`  
    - OK : Then I get no error  
    - [X] scenario   [Code fenced blocks](../../features/C060_code_block.md) pass  

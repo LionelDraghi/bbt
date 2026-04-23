@@ -395,15 +395,13 @@ package body BBT.Tests.Builder is
          -- --------------------------------------------------------------------
          function Copy_Scenario
            (Source   : in Scenario_Type;
-            With_Cmd : in String) return Scenario_Type
+            With_Cmd : in String) return Scenario_Access
          is
-         -- copy A to B neutralizing the Cmd_List, replaced with a single Cmd
-            -- Target : aliased Scenario_Type := Source;
-            Target : new Scenario_Type := Source;
+            -- copy A to B neutralizing the Cmd_List, replaced with a single Cmd
+            Target : Scenario_Access := new Scenario_Type'(Source);
          begin
-            Copy_Step_List (Source, Target); -- Fixme: Adjust should be defined
-            --  for type Scenario, and this should be hiden inside
-            Target.Cmd_List  := Empty_Cmd_List;  -- Need a Setter!
+            Copy_Step_List (Source, Target.all);
+            Target.Cmd_List := Empty_Cmd_List;  -- Need a Setter!
             declare
                Step : Step_Data renames
                         Target.Step_List (Target.Cmd_List_Step_Index).Data;
@@ -414,7 +412,6 @@ package body BBT.Tests.Builder is
                               Low    => Step.Code_Span_First,
                               High   => Step.Code_Span_Last,
                               By     => With_Cmd);
-
                return Target;
             end;
          end Copy_Scenario;
@@ -458,12 +455,12 @@ package body BBT.Tests.Builder is
                   To_Be_Split := Scen_Cursor;
                   for Cmd of Scen.Cmd_List loop
                      declare
-                        Scen_B : Scenario_Type := Copy_Scenario
+                        Scen_B : Scenario_Access := Copy_Scenario
                           (Source   => Scen,
                            With_Cmd => Cmd);
                      begin
-                        Prefix_Name (Scen_B, Cmd_Idx, Scen.Cmd_List.Length);
-                        L.Append (New_Item => Scen_B);
+                        Prefix_Name (Scen_B.all, Cmd_Idx, Scen.Cmd_List.Length);
+                        L.Append (New_Item => Scen_B.all);
 
                         Cmd_Idx := @ + 1;
                         Scen_Cursor := Next (Scen_Cursor);

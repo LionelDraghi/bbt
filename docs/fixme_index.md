@@ -14,10 +14,11 @@ Location | Text
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios.ads](../src/bbt-scenarios.ads):58|   --  To be moved as dispatching in Writers
-[src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):189|            --  to be moved in Text_Utilities or so
+[src/bbt-scenarios-files.adb](../src/bbt-scenarios-files.adb):194|            --  to be moved in Text_Utilities or so
 [src/bbt-scenarios-steps.adb](../src/bbt-scenarios-steps.adb):274|               when Unknown    => null; --  should be an explicit error message?
 [src/bbt-scenarios-steps-initialize_grammar.adb](../src/bbt-scenarios-steps-initialize_grammar.adb):35|                                                                                         --  we currently do not check if the existing file contains
 [src/bbt-scenarios-steps-validate_step_state.adb](../src/bbt-scenarios-steps-validate_step_state.adb):16|   -- To move in Text_Utilities
+[src/bbt-tests-builder.adb](../src/bbt-tests-builder.adb):404|            Copy_Step_List (Source, Target.all); --  Adjust should be defined
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):89|      --  defensive code that should be replaced by
 [src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):160|      --  Path_To_Scen should be in Scenario_Type to avoid
