@@ -242,10 +242,11 @@ It has a serious [test base](docs/tests_results/Linux/features_results.md), and 
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
 
 Nevertheless, *bbt* is still young, meaning that :
-- it is subject to interface and behavior changes, keep an eyes on the changelog before updating;   
-- your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions). 
+- your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
+- new features are added regularly: latest updates can be found in the [Changelog](docs/changelog.md);
+- it is subject to interface and behavior changes, keep an eyes on the changelog before updating.   
 
-*btt* compile on Linux, Windows and Mac OS, and the test suite is run on the three platforms.  
+*btt* is available and tested on Linux, Windows and Mac OS.  
 On MacOS, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
 
 ## Help and comments
