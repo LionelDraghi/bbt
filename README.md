@@ -120,7 +120,7 @@ When you write:
 > - Then I should get `version 15.0.0` (Fix #2398 and #2402)    
 
 *bbt* only sees two keywords and a parameter:  
-> - **Then** I should **get** **`version 15.0.0`** (Fix #2398 and #2402)    
+> - **Then** ~~I should~~ **get** **`version 15.0.0`** ~~(Fix #2398 and #2402)~~    
 
 As a result, the writer enjoys a lot of flexibility and is not constrained by a rigid grammar as with a scripting language, enabling steps to be written in almost natural language.
 
