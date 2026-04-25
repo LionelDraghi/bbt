@@ -149,7 +149,7 @@ Good luck :-)
 | Then  |         | output | contains         | `text`            | OUTPUT_CONTAINS         |            | - Then the output contains `msg` |  
 | Then  |         | output | matches          | `text`            | OUTPUT_MATCHES          |            | - Then the output matches `[:digit:]*.[:digit:]*` |  
 | Then  |         | output | does not match   | `text`            | OUTPUT_DOES_NOT_MATCH   |            | - Then the output does not match `[:digit:]*.[:digit:]*` |  
-| Then  |         | output | is               |                   | OUTPUT_IS               |     X      | - Then the output is equal to<followed by code fenced lines> |  
+| Then  |         | output | is               |                   | OUTPUT_IS               |     X      | - Then the output is equal to <followed by code fenced lines> |  
 | Then  |         | output | is               | `file`            | OUTPUT_IS               |            | - Then the output is equal to file `expected.txt` |  
 | Then  |         | output | is               | `text`            | OUTPUT_IS               |            | - Then the output is `msg` |  
 - given
