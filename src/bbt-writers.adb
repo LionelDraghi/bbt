@@ -134,26 +134,6 @@ package body BBT.Writers is
       end loop;
    end Put_Overall_Results;
 
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Scenario (Writer   : Interface_Access;
-   --                          Scenario : Scenario_Type'Class) is
-   --  begin
-   --     if Scenario.Filtered then
-   --        Put_Debug_Line ("Scenario " & (+Scenario.Name) & " is filtered");
-   --     else
-   --        Put_Scenario_Title (Writer.all,
-   --                            Scenario.Location'Image & " Scenario """ &
-   --                            (+Scenario.Name) & """");
-   --        for Step of Scenario.Step_List loop
-   --           if Step.Filtered then
-   --              Put_Debug_Line ("Filtered Step " & (+Step.Data.Src_Code));
-   --           else
-   --              Put_Step (Writer.all, Step);
-   --           end if;
-   --        end loop;
-   --     end if;
-   --  end Put_Scenario;
-
    -- --------------------------------------------------------------------------
    procedure Explain (Scenario : Scenario_Type'Class) is
    begin
@@ -165,30 +145,6 @@ package body BBT.Writers is
          Put_Line (Model.Steps.Explain (Step));
       end loop;
    end Explain;
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Feature (Writer     : Interface_Access;
-   --                         Feature    : Feature_Type'Class) is
-   --  begin
-   --     if Feature.Filtered then
-   --        Put_Debug_Line ("Feature `" & (+Feature.Name) & "` is filtered");
-   --     else
-   --        New_Line;
-   --        Put_Line (Line (Feature.Location) &
-   --                  ": Feature `" & (+Feature.Name) & "`");
-   --        Put_Feature_Title (Writer.all,
-   --                           Feature.Location'Image & " Feature """ &
-   --                           (+Feature.Name) & """");
-
-   --        if Feature.Background /= null then
-   --           Put_Scenario (Writer, Feature.Background.all);
-   --        end if;
-
-   --        for Scenario of Feature.Scenario_List loop
-   --           Put_Scenario (Writer, Scenario);
-   --        end loop;
-   --     end if;
-   --  end Put_Feature;
 
    -- --------------------------------------------------------------------------
    procedure Explain (Feature : Feature_Type'Class) is
@@ -208,28 +164,6 @@ package body BBT.Writers is
 
    end Explain;
 
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Document (Writer     : Interface_Access;
-   --                          Doc        : Document_Type'Class) is
-   --  begin
-   --     if Doc.Filtered then
-   --        Put_Line ("- " & (+Doc.Name) & " (filtered)");
-   --     else
-   --        Put_Line ("- " & (+Doc.Name));
-   --        --  if Doc.Background /= null then
-   --        --     Put_Scenario (Writer, Doc.Background.all);
-   --        --  end if;
-
-   --        --  for S of Doc.Scenario_List loop
-   --        --     Put_Scenario (Writer, S);
-   --        --  end loop;
-
-   --        --  for Feature of Doc.Feature_List loop
-   --        --     Put_Feature (Writer, Feature);
-   --        --  end loop;
-   --     end if;
-   --  end Put_Document;
-
    -- --------------------------------------------------------------------------
    procedure Explain (Doc : Document_Type'Class) is
    begin
@@ -248,16 +182,6 @@ package body BBT.Writers is
          Explain (Feature);
       end loop;
    end Explain;
-
-   --  -- --------------------------------------------------------------------------
-   --  procedure Put_Document_List (Doc_List : Documents.List) is
-   --  begin
-   --     for F in Writer_List'Range when Enabled (F) loop
-   --        for Doc of Doc_List loop
-   --           Put_Document (Writer_List (F), Doc);
-   --        end loop;
-   --     end loop;
-   --  end Put_Document_List;
 
    -- --------------------------------------------------------------------------
    procedure Explain (Doc_List : Documents.List) is

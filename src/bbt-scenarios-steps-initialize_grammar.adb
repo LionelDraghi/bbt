@@ -61,7 +61,7 @@ begin
    Set (Then_P, No_SA, No_Subject,   Is_No,    Error, (No_Error_Return_Code, False, new String'("- Then there is no error")));
    Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_Text,      (Output_Is, False, new String'("- Then the output is `msg`")));
    Set (Then_P, No_SA, Output_Subj,  Is_V,     Obj_File_Name, (Output_Is, False, new String'("- Then the output is equal to file `expected.txt`")));
-   Set (Then_P, No_SA, Output_Subj,  Is_V,     No_Object,     (Output_Is, True,  new String'("- Then the output is equal to<followed by code fenced lines>")));
+   Set (Then_P, No_SA, Output_Subj,  Is_V,     No_Object,     (Output_Is, True,  new String'("- Then the output is equal to <followed by code fenced lines>")));
    Set (Then_P, No_SA, No_Subject,   Get,      Obj_Text,      (Output_Is, False, new String'("- Then I get `msg`")));
    Set (Then_P, No_SA, No_Subject,   Get,      Obj_File_Name, (Output_Is, False, new String'("- Then I get file `flowers2.txt`")));
    Set (Then_P, No_SA, No_Subject,   Get,      No_Object,     (Output_Is, True,  new String'("- Then I get <followed by code fenced lines>")));

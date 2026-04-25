@@ -72,10 +72,6 @@ private package BBT.Writers is
    procedure Put_Overall_Results;
 
    -- -------------------------------------------------------------------------
-   -- Output of the scenario as stored by bbt
-   -- procedure Put_Document_List (Doc_List : Documents.List);
-
-   -- -------------------------------------------------------------------------
    -- Output of the scenario as understood by bbt
    procedure Explain (Doc_List : Documents.List);
 
