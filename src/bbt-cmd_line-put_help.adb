@@ -22,7 +22,7 @@ procedure Put_Help (Topic : Settings.Help_Topic) is
    Other_Help     : constant String with External_Initialization => "../docs/help/other.txt";
    Debug_Help     : constant String with External_Initialization => "../docs/help/debug.txt";
    Tutorial_Help  : constant String with External_Initialization => "../docs/help/tutorial.md";
-   Example_Help   : constant String with External_Initialization => "../docs/examples/gcc_hello_world.md";
+   Example_Help   : constant String with External_Initialization => "../docs/help/example.md";
 
 begin
    case Topic is
