@@ -1,0 +1,3 @@
+# Seem's that External_Initialization add a CR on each LF, 
+# so we need to force the lines to end with LF only, even on Windows
+docs/help/** text=auto eol=lf
