@@ -6,6 +6,8 @@
 -- -----------------------------------------------------------------------------
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Bbt_Config;
+with BBT.Scenarios.Steps;
 
 separate (BBT.Cmd_Line)
 
@@ -24,7 +26,9 @@ procedure Put_Help (Topic : Settings.Help_Topic) is
 
 begin
    case Topic is
-      when Base      => Put_Line (Base_Help);
+      when Base      => Put_Line ("bbt version " & Bbt_Config.Crate_Version);
+                        New_Line;
+                        Put_Line (Base_Help);
       when Filtering => Put_Line (Filtering_Help);
       when Matching  => Put_Line (Matching_Help);
       when Other     => Put_Line (Other_Help);
@@ -32,6 +36,8 @@ begin
       when Debug     => Put_Line (Debug_Help);
       when Tutorial  => Put_Line (Tutorial_Help);
       when Example   => Put_Line (Example_Help);
+      when Grammar   => Scenarios.Steps.Put_Grammar;
+      when Keywords  => Scenarios.Steps.Put_Keywords;
 
       when On_All =>
          -- First the base, then topics

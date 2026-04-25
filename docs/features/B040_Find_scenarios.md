@@ -121,9 +121,9 @@ dir1\dir2\scen5.md
 - When I run `./bbt dir5 dir6`
 - Then the output contains
 ```
-Error : No scenario file found
+Warning : No scenario file found
 ```
-- And I get an error
+- And I get no error
 
 ### Scenario: empty list file on list_files if there is no scenario in given directories
 

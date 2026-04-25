@@ -139,13 +139,16 @@ package body BBT.Cmd_Line is
             elsif Cmd in "create_template" | "ct" then
                Put_Warning ("ct and create_template commands deprecated, use `help example` or `help tutorial` instead");
 
+            elsif Cmd in "list_grammar" | "lg" then
+               Put_Warning ("lg and list_grammar commands deprecated since v0.3.0, use `help grammar` instead");
+
+            elsif Cmd in "list_keywords" | "lk" then
+               Put_Warning ("lk and list_keywords commands deprecated since v0.3.0, use `help keywords` instead");
+
             end if;
 
             -- Commands --------------------------------------------------------
-            if Cmd in "list" | "ls" then
-               Set_Cmd (List);
-
-            elsif Cmd = "run" then
+            if Cmd = "run" then
                Set_Cmd (Run);
 
             elsif Cmd = "tt" then
@@ -169,12 +172,6 @@ package body BBT.Cmd_Line is
 
             elsif Cmd in "list_files" | "lf" then
                Set_Cmd (List_Files);
-
-            elsif Cmd in "list_keywords" | "lk" then
-               Set_Cmd (List_Keywords);
-
-            elsif Cmd in "list_grammar" | "lg" then
-               Set_Cmd (List_Grammar);
 
                -- Options ------------------------------------------------------
             elsif Cmd = "-o" or Cmd = "--output" or Cmd = "--index"

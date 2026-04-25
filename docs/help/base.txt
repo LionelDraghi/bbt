@@ -17,7 +17,7 @@ Basic options:
 
 Basic commands:
        run               : the default command
-  ls | list              : list selected items
+  lf | list_files        : list files that will be run
   he | help [topic]      : base help, or more on one of the topic listed below
   he | help on_all       : full online help
   he | help tutorial     : print a tutorial 
@@ -30,5 +30,4 @@ Help topics:
               --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge
   debug     : -d tt -ls -t
 
-bbt version 0.3.0-dev
 https://github.com/LionelDraghi/bbt/

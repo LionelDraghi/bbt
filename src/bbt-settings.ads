@@ -15,13 +15,11 @@ private package BBT.Settings is
    BBT_Version : constant String := Bbt_Config.Crate_Version;
 
    type Command is (Run,
-                    List,
                     Explain,
                     List_Trace_Topics,
                     List_Keywords,
                     List_Grammar,
                     List_Files,
-                    -- Create_Template,
                     Help,
                     Version,
                     None);
@@ -33,6 +31,8 @@ private package BBT.Settings is
                        Debug,
                        Tutorial,
                        Example,
+                       Grammar,
+                       Keywords,
                        On_All);
    -- Topics are given in importance order, because this order is used when
    -- printing full help with command 'help on_all'

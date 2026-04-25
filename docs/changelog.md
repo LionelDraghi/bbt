@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.3.0-dev] - 2026--**
+  - [Fixed]   `bbt list_files` no more return on error when no file found
   - [Added]   `bbt explain` command rewritten and tested, now usable
   - [Changed] `bbt create_template` deprecated and replaced with `bbt help tutorial` and `bbt help example` 
   - [Changed] `bbt lg | list_grammar` now produce a Markdown table **with an example** for each recognized syntax

@@ -12,7 +12,7 @@ private package BBT.Status_Bar is
    procedure Disable;
 
    --  -------------------------------------------------------------------------
-   procedure Initialize_Progress_Bar (Max_Event : Positive);
+   procedure Initialize_Progress_Bar (Max_Event : Natural);
 
    --  -------------------------------------------------------------------------
    procedure Progress_Bar_Next_Step (File_Name : String);

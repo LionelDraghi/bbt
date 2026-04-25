@@ -39,7 +39,7 @@ procedure BBT.Main is
    begin
       if Scenarios.Files.No_Document_Found then
          -- No file given on cmd line, and no bbt file found
-         IO.Put_Error ("No scenario file found", IO.No_Location);
+         IO.Put_Warning ("No scenario file found", IO.No_Location);
 
       else
          -- Here we are in the normal execution flow
@@ -134,12 +134,6 @@ begin
       -- File comment lines are filtered out.
       Status_Bar.Put_Activity ("Display loaded scenarios");
       Writers.Explain (Model.Documents.Doc_List.all);
-
-   when List =>
-      Status_Bar.Put_Activity ("Analyzing documents");
-      Analyze_Documents;
-      Status_Bar.Put_Activity ("Display non filtered items");
-      Writers.Put_Document_List (Model.Documents.Doc_List.all);
 
    when Run | Settings.None =>
       -- Run is the default command, so None => Run

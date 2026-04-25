@@ -398,7 +398,7 @@ package body BBT.Tests.Builder is
             With_Cmd : in String) return Scenario_Access
          is
             -- copy A to B neutralizing the Cmd_List, replaced with a single Cmd
-            Target : Scenario_Access := new Scenario_Type'(Source);
+            Target : constant Scenario_Access := new Scenario_Type'(Source);
          begin
             Copy_Step_List (Source, Target.all);
             Target.Cmd_List := Empty_Cmd_List;  -- Need a Setter!
@@ -438,7 +438,7 @@ package body BBT.Tests.Builder is
 
             begin
                if not Scen.Cmd_List.Is_Empty then
-                  -- This scenario has an "cmd1 or cmd2"
+                  -- This scenario has a "cmd1 or cmd2" step.
                   -- It will be copied/modified for each cmd,
                   -- and deleted at the end:
                   --   Scen A with "cmd1 or cmd2"
@@ -455,7 +455,7 @@ package body BBT.Tests.Builder is
                   To_Be_Split := Scen_Cursor;
                   for Cmd of Scen.Cmd_List loop
                      declare
-                        Scen_B : Scenario_Access := Copy_Scenario
+                        Scen_B : constant Scenario_Access := Copy_Scenario
                           (Source   => Scen,
                            With_Cmd => Cmd);
                      begin

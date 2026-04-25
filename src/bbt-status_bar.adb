@@ -51,7 +51,7 @@ package body BBT.Status_Bar is
    end Disable;
 
    --  -------------------------------------------------------------------------
-   procedure Initialize_Progress_Bar (Max_Event : Positive) is
+   procedure Initialize_Progress_Bar (Max_Event : Natural) is
    begin
       null; -- Max_Event_Count := Max_Event;
    end Initialize_Progress_Bar;

@@ -936,7 +936,7 @@
    - OK : Given the `dir6/dir7` dir  
    - OK : When I run `./bbt dir5 dir6`  
    - OK : Then the output contains  
-   - OK : And I get an error  
+   - OK : And I get no error  
    - [X] scenario   [error msg when trying to run scenarios, but none found in given directories](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
@@ -1220,11 +1220,6 @@
 
 # Document: [B130_Cmd_Line_Help.md](../../features/B130_Cmd_Line_Help.md)  
   ## Feature: Clear command line help  
-   ### Scenario: [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md): 
-   - OK : When I run `./bbt`   
-   - OK : then the output is equal to file `../docs/help/base.txt`  
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [filtering help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he filtering`   
    - OK : then the output is equal to file `../docs/help/filtering.txt`  
@@ -1253,10 +1248,40 @@
    - OK : then the output is equal to file `../docs/help/tutorial.md`  
    - [X] scenario   [tutorial generation](../../features/B130_Cmd_Line_Help.md) pass  
 
+   ### Scenario: [grammar generation](../../features/B130_Cmd_Line_Help.md): 
+   - OK : Given the file `expected_grammar`  
+   - OK : When I run `./bbt help grammar`   
+   - OK : then the output is equal to file `expected_grammar`  
+   - [X] scenario   [grammar generation](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [listing keywords](../../features/B130_Cmd_Line_Help.md): 
+   - OK : Given the file `expected_keywords`  
+   - OK : When I run `./bbt help keywords`   
+   - OK : then the output is equal to file `expected_keywords`  
+   - [X] scenario   [listing keywords](../../features/B130_Cmd_Line_Help.md) pass  
+
    ### Scenario: [generated example is OK](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help example`   
    - OK : then the output is equal to file `../docs/examples/gcc_hello_world.md`  
    - [X] scenario   [generated example is OK](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt he`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md) pass  
 
 
 # Document: [B140_Index_File.md](../../features/B140_Index_File.md)  
@@ -1647,12 +1672,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 170 scenarios OK
+## Summary : **Success**, 174 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 170   |
+| Successful | 174   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

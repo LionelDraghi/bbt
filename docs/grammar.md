@@ -10,7 +10,7 @@
 | Given |         | `file` |                  |                   | CREATE_IF_NONE          |     X      | - Given the file `config.ini` <followed by code fenced lines> |  
 | Given |         | `file` | containing       |                   | CREATE_IF_NONE          |     X      | - Given the file `config.ini` containing <followed by code fenced lines> |  
 | Given |         | `file` | containing       | `text`            | CREATE_IF_NONE          |            | - Given the file `config.ini` containing `lang=it` |  
-| Given |         | `text` | fail             |                   | RUN_WITH_ERROR          |            | Given `xmllint mismatched_tag.xml` fails |  
+| Given |         | `text` | fail             |                   | RUN_WITH_ERROR          |            | - Given `xmllint mismatched_tag.xml` fails |  
 | Given | new     | `dir`  |                  |                   | ERASE_AND_CREATE        |            | - Given the new directory `dir1` |  
 | Given | new     | `file` |                  |                   | ERASE_AND_CREATE        |     X      | - Given the new file `config.ini` <followed by code fenced lines> |  
 | Given | new     | `file` | containing       |                   | ERASE_AND_CREATE        |     X      | - Given the new file `config.ini` containing <followed by code fenced lines> |  
@@ -45,7 +45,7 @@
 | Then  |         | `file` | is               | `file`            | FILE_IS                 |            | - Then the file `list` is equal to file `expected/list` |  
 | Then  |         | `file` | is               | `text`            | FILE_IS                 |            | - Then the file `list` is `mode=silent` |  
 | Then  |         | `file` | is no            | `file`            | FILE_IS_NOT             |            | - Then the file `list` is no more equal to file `previous_list` |  
-| Then  |         | `text` | fail             |                   | RUN_WITH_ERROR          |            | Then `xmllint mismatched_tag.xml` fails |  
+| Then  |         | `text` | fail             |                   | RUN_WITH_ERROR          |            | - Then `xmllint mismatched_tag.xml` fails |  
 | Then  |         | output | does not contain |                   | OUTPUT_DOES_NOT_CONTAIN |     X      | - Then the output does not contain <followed by code fenced lines> |  
 | Then  |         | output | does not contain | `file`            | OUTPUT_DOES_NOT_CONTAIN |            | - Then the output does not contain file `snippet.txt` |  
 | Then  |         | output | does not contain | `text`            | OUTPUT_DOES_NOT_CONTAIN |            | - Then the output does not contain `msg` |  
