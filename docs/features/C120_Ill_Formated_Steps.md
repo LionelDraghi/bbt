@@ -9,6 +9,10 @@ Here are some detected problem.
 - Given the new file `bad_steps.md`
   ~~~md
   ## Scenario: knowing grep version
+
+  - and I run `grep --version`
+    A scenario cannot start with "and" or "but", otherwise we cannot determine which kind of step it is.
+
   - Given the file
     Missing file name
 
@@ -39,29 +43,31 @@ Here are some detected problem.
 
 - Then the output contains 
   ~~~
-  bad_steps.md:2: Error: File name expected in subject phrase (should be between backticks)  
-  bad_steps.md:5: Error: Dir name expected in subject phrase (should be between backticks)  
-  bad_steps.md:8: Error: Unrecognized step "when I run "  
-  bad_steps.md:11: Error: File name expected in object phrase (should be between backticks)  
-  bad_steps.md:14: Error: Unrecognized step "then I get dir"  
-  bad_steps.md:20: Error: Missing Code Block expected line 17 
+  bad_steps.md:3: Error: No previous step to determine step kind of "and I run `grep --version`"
+  bad_steps.md:6: Error: File name expected in subject phrase (should be between backticks)  
+  bad_steps.md:9: Error: Dir name expected in subject phrase (should be between backticks)  
+  bad_steps.md:12: Error: Unrecognized step "when I run "  
+  bad_steps.md:15: Error: File name expected in object phrase (should be between backticks)  
+  bad_steps.md:18: Error: Unrecognized step "then I get dir"  
+  bad_steps.md:24: Error: Missing Code Block expected line 21 
   ~~~
   Here we first check the most important part, error messages.  
 
 - And the output contains 
   ~~~
-  bad_steps.md:2: Warning: Skipping step with syntax error  
-  bad_steps.md:5: Warning: Skipping step with syntax error  
-  bad_steps.md:8: Warning: Skipping step with syntax error  
-  bad_steps.md:11: Warning: Skipping step with syntax error  
-  bad_steps.md:14: Warning: Skipping step with syntax error 
-  bad_steps.md:17: Warning: Skipping step with syntax error  
+  bad_steps.md:3: Warning: Skipping step with syntax error  
+  bad_steps.md:6: Warning: Skipping step with syntax error  
+  bad_steps.md:9: Warning: Skipping step with syntax error  
+  bad_steps.md:12: Warning: Skipping step with syntax error  
+  bad_steps.md:15: Warning: Skipping step with syntax error  
+  bad_steps.md:18: Warning: Skipping step with syntax error 
+  bad_steps.md:21: Warning: Skipping step with syntax error  
   - OK : when I run `grep --version`  
   ~~~
   Then we also check that when using `--keep_going` option, skipped steps are explicit.  
-  Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 20.  
-  But the erroneous step that is skipped is the one line 17.  
-  The step line 20 is run.
+  Note the subtlety here respect to analysis here above : the error on the step line 17 was detected on line 24.  
+  But the erroneous step that is skipped is the one line 21.  
+  The step line 24 is run.
 
 - And the output contains
   ~~~  

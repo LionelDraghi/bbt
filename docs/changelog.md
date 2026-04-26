@@ -6,7 +6,9 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[0.3.0-dev] - 2026--**
+- **[0.3.1-dev] - 2026-05-**
+
+- **[0.3.0] - 2026-04-26**
   - [Fixed]   `bbt list_files` no more return on error when no file found
   - [Added]   `bbt explain` command rewritten and tested, now usable
   - [Changed] `bbt create_template` deprecated and replaced with `bbt help tutorial` and `bbt help example` 
@@ -15,7 +17,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   ``` When I run `x` or `y` ``` syntax added
   - [Added]   ``` Given | Then `cmd` fails ``` syntax added
 
-- **[0.2.1] - 2026-06-13**
+- **[0.2.1] - 2026-03-04**
   - [Added]   Feature #28: production of a junit.xml file through --junit option
   - [Added]   new `file matches regexp` syntax
 

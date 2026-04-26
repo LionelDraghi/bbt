@@ -244,8 +244,6 @@ package body BBT.Scenarios.Steps is
       Code_Block_Expected := False;
       Src_Code := Line;
 
-      -- Put_Debug_Line ("In Parse, Line = " & To_String (Line), Loc);
-
       Initialize_Lexer;
 
       -- First token processing
@@ -271,10 +269,13 @@ package body BBT.Scenarios.Steps is
          elsif Lower_Keyword = "and" or else Lower_Keyword = "but" then
             State.Cat := Previous_Step_Kind;
             case Previous_Step_Kind is
-               when Unknown    => null; -- Fixme: should be an explicit error message?
                when Given_Step => State.Prep := Given;
                when When_Step  => State.Prep := When_P;
                when Then_Step  => State.Prep := Then_P;
+               when Unknown    =>
+                  IO.Put_Error ("No previous step to determine step kind of "
+                                & Line'Image, Loc);
+                  -- A scenario cannot start with an "and" or "but" step.
             end case;
 
          else

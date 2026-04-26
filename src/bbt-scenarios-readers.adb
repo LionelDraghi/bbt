@@ -118,13 +118,10 @@ package body BBT.Scenarios.Readers is
         and then Bullet_List_Marker (Line.all, First)
       then
          -- Step line ----------------------------------------------------------
-         -- We don't take into account bullet list before being in a Scenario.
-         -- to let the use most Markdown possibilities before Steps, for
+         -- We don't take into account bullet list before being in a Scenario,
+         -- to keep available most Markdown possibilities before Steps, for
          -- example to Have a TOC, or just better comments.
 
-         --  Put_Line ("List Mark line = "
-         --               & Line.all (First .. Line.all'Last),
-         --               Level => IO.Debug);
          return (Kind      => Step_Line,
                  Step_Ln   => To_Unbounded_String
                    (Line.all (First .. Line.all'Last)));

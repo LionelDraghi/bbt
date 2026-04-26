@@ -16,4 +16,8 @@ The same article, with a nice IA generated image!
 
 7. 2025-06-13 : Lionel's presentation at AEIC 2025 Ada Developpers Workshop [Using Natural Language for Test Specification, is That Really Wise?](https://www.youtube.com/watch?v=9u5eoDlE5ow)
 
-8. 2026 : an attempt to make a very short "elevator speech" intro to bbt with HeyGen (IA assisted video creation) (https://www.youtube.com/watch?v=1Qms-Q623fk )
+8. 2026 : an attempt to make a very short "elevator speech" intro to bbt with HeyGen (IA assisted video creation) (https://www.youtube.com/watch?v=1Qms-Q623fk)
+
+9. 2026-04-25 : https://forum.ada-lang.io/t/ann-bbt-0-3-0/4369
+    
+10. 2026-04-26 : Article on dev.to [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)

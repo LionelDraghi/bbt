@@ -223,10 +223,9 @@ package body BBT.Tests.Builder is
 
       case Step_Info.Cat is
          when Unknown =>
-            if Step_Info.Action = None then
-               IO.Put_Error ("No context to determine step kind of "
-                             & Step_Info.Src_Code'Image, Loc);
-            end if;
+             -- This error case is now handled in the lexer,
+             --  so it should not happen here. 
+             null;
 
          when Given_Step =>
             if Settings.Strict_Gherkin then

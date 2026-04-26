@@ -103,7 +103,7 @@ package body BBT.Scenarios.Steps.Lexer is
    is
       -- Note that Cursor is >= Last
       -- Cursor is the point where next call to Next_Token will start,
-      -- Last is the last character of the Token
+      -- Last is the last character of the Token.
       -- In the case of a code span, Last will designate a character before
       -- the closing backtick, and the cursor the character after.
 
@@ -119,8 +119,6 @@ package body BBT.Scenarios.Steps.Lexer is
                   Test   => Ada.Strings.Outside,
                   First  => First,
                   Last   => Last);
-      -- Put_Line ("processing token = """ & Line.all (First .. Last),
-      --          Verbosity => IO.Debug);
       Cursor := (Natural'Min (Line.all'Length, Last + 1));
       -- Jump to next char unless already on the last
       if Is_A_Keyword (Line, First, Last) then

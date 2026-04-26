@@ -214,9 +214,9 @@ Although simple, you don't need to memorize this subset, you can :
 
 ### No-fuss, no-wait run
 
-To run a scenario : `bbt my_scenario.md`  
-To run all the md files in the *tests* tree `bbt -r tests`  
-To run only a selection `bbt --select "Sanity check" tests`  
+- To run a scenario : `bbt my_scenario.md`  
+- To run all the md files in the *tests* tree : `bbt -r tests`  
+- To run only a selection : `bbt --select "Sanity check" tests`  
 
 *bbt* has no dependencies on external lib or tools (diff, for example), and is tested on Linux, Darwin and Windows.  
 
@@ -233,12 +233,10 @@ Test results are generated when running *bbt*, by just using the `--output | -o`
   
 ## Status of the project
 
-*bbt* is no longer a proof of concept, it has proven to be effective and usefull.
-
-It has a serious [test base](docs/tests_results/Linux/features_results.md), and is used in real life on several projects:
--	The first adopter is Raffle, an Ada compiler with a LLVM backend, by Paul Jarret
--	[CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
--	[ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
+*bbt* has a serious [test base](docs/tests_results/Linux/features_results.md), and has proven to be useful in real life on several projects:
+- The first adopter is Raffle, an Ada compiler with a LLVM backend, not yet public, by Paul Jarret
+- [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
+- [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
 
 Nevertheless, *bbt* is still young, meaning that :
