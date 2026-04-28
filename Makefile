@@ -51,7 +51,7 @@ check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	#=# echo === coverage report
 	#=# alr gnatcov coverage --annotate=html --output-dir gnatcov_out --level=stmt --projects bbt.gpr *.srctrace
 
-doc: ./bbt
+doc: ./bbt$(EXE_SUFFIX)
 	echo === doc prod
 	@ $(MAKE) -s doc --directory=tests
 
@@ -94,9 +94,9 @@ endif
 	# > fish_add_path ~/.cargo/bin/
 	echo
 
-install: ./bbt
+install: ./bbt$(EXE_SUFFIX)
 	echo --- install:
-	cp -p bbt ~/bin
+	cp -p bbt$(EXE_SUFFIX) ~/bin
 	echo OK
 	echo
 
