@@ -13,4 +13,4 @@ To check a final state, you sometime need to run some utilities, for example lin
 - Then I successfully run `xmllint simple.xml` 
   (to check that the xml structure is OK)
 ~~~
-- Then I successfully run `./sut` 
+- Then I successfully run `./sut --help` 
