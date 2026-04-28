@@ -13,20 +13,13 @@
 - [Overview](#overview)
   - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
   - [Partial parsing](#partial-parsing)
-  - [One more example](#one-more-example)
 - [Installation](#installation)
   - [Stable version](#stable-version)
   - [Latest version](#latest-version)
     - [Building from sources](#building-from-sources)
     - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
-- [Why should I use *bbt*?](#why-should-i-use-bbt)
-  - [Write once](#write-once)
-  - [Write real documentation, not just a ".feature" Gherkin file](#write-real-documentation-not-just-a-feature-gherkin-file)
-  - [Be proficient in no time](#be-proficient-in-no-time)
-  - [No-fuss, no-wait run](#no-fuss-no-wait-run)
-  - [Ready-to-publish output](#ready-to-publish-output)
-- [Status of the project](#status-of-the-project)
+  - [Going further](#going-further)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
 
@@ -105,7 +98,12 @@ We have:
 
    As per [MDG](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), strings uses Markdown [code span](https://spec.commonmark.org/0.31.2/#code-spans) (that is a string between backticks), and multiline text uses [fenced code blocks](https://spec.commonmark.org/0.31.2/#fenced-code-blocks) (that is a text between two `` ``` `` lines).  
 
-Everything else in the file is ignored. *bbt* stays out of your way, so you are free to use Markdown almost without constraints to draft nice documentations. 
+Everything else in the file is ignored. *bbt* stays out of your way, so you are free to use Markdown almost without constraints to draft nice documentations.  
+
+And in any case, to check what is really taken into account by *bbt*, just use:
+```
+bbt explain my_scenario.md
+```   
   
 ### Partial parsing 
 
@@ -123,10 +121,6 @@ When you write:
 > - **Then** ~~I should~~ **get** **`version 15.0.0`** ~~(Fix #2398 and #2402)~~    
 
 As a result, the writer enjoys a lot of flexibility and is not constrained by a rigid grammar as with a scripting language, enabling steps to be written in almost natural language.
-
-### One more example
-
-[This example](docs/examples/gcc_hello_world.md) shows how simple it is to run a `gcc` sanity test that compiles and runs the ubiquitous *Hello World*.
 
 ## Installation
 
@@ -180,60 +174,8 @@ A short but comprehensive tutorial can be generated with
 bbt help tutorial 
 ```
 
-A good example of a real use is given by Simon's [ada_caser](https://github.com/simonjwright/ada_caser/tree/main) project, which uses a single scenarios file called `tests.md`.
-
-## Why should I use *bbt*?
-
-### Write once
-
-The specification is the only source of truth. This is *bbt*'s most compelling feature, there is nothing else: no intermediate representation, no glue code, no scripting language, no duplication of the original source at all.  
-
-With two main consequences: 
-1. writing a test is a matter of minutes,
-2. there is no more place for a discrepancy between documentation and tests.
-
-Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md).  
-But as far as I know, ***bbt* is the only one to provide such a direct "run the doc" approach**.
-
-### Write real documentation, not just a ".feature" Gherkin file  
-
-*bbt* effectiveness does not come at the cost of limiting documentation readability or expressiveness: 
-
-- First, the vast majority of the file is just plain markdown : use it, structure it the way you like, give as much context as you want, and use all Markdown cool extensions (for example graphics with [Mermaid](https://mermaid.js.org/intro/));
-- Second, even the part that is interpreted by *bbt*, the steps, is written in readable English thanks to the partial parsing.
-
-Nice consequence, *bbt* scenarios may be written by non coders people.
-
-### Be proficient in no time
-
-*bbt* Steps uses a limited English subset, with a vocabulary dedicated to test with no-surprise keywords like *run*, *output*, *contains*, etc.  
-
-Although simple, you don't need to memorize this subset, you can :
-- ask for a example scenario by running `bbt help example`, 
-- ask for a short but pretty comprehensive tutorial with `bbt help tutorial`.  
-
-### No-fuss, no-wait run
-
-- To run a scenario : `bbt my_scenario.md`  
-- To run all the md files in the *tests* tree : `bbt -r tests`  
-- To run only a selection : `bbt --select "Sanity check" tests`  
-
-*bbt* has no dependencies on external lib or tools (diff, for example), and is tested on Linux, Darwin and Windows.  
-
-### Ready-to-publish output 
-
-*bbt* output is in Markdown format. You can adjust the detail level with the usual "-q" and "-v" options.
-
-The output cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
-You can push it on GitHub without further processing.  
-
-To see what it looks like, consider [*bbt* own tests](docs/tests_results/Linux/features_results.md).  
-
-Test results are generated when running *bbt*, by just using the `--output | -o` option.
-  
-## Status of the project
-
-*bbt* has a serious [test base](docs/tests_results/Linux/features_results.md), and has proven to be useful in real life on several projects:
+### Going further 
+- A very short article on the project "Why": [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9).
 - The first adopter is Raffle, an Ada compiler with a LLVM backend, not yet public, by Paul Jarret
 - [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
@@ -252,10 +194,12 @@ Comments and questions are welcome [here](https://github.com/LionelDraghi/bbt/di
 
 ## Further reading
 - [User Guide](docs/UG.md): concepts, commands, features...
-- [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
 - [References](docs/references.md): syntax, grammar, and more details on non obvious behavior
+  
 - [Project status](docs/project.md): changelog, tests, TDL...
-- [Command line help](docs/bbt_help.txt)
+- [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
+
 - [bbt on the web](docs/bbt_on_the_net.md)
+- [Why should I use bbt](docs/why_should_i_use_bbt.md)
 
 [^1]: More precisely, *bbt* complies (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 
