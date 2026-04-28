@@ -11,17 +11,20 @@
 
 ---
 - [Overview](#overview)
-  - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
-  - [Partial parsing](#partial-parsing)
+- [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
+- [A small example](#a-small-example)
+- [Partial parsing](#partial-parsing)
 - [Installation](#installation)
   - [Stable version](#stable-version)
   - [Latest version](#latest-version)
     - [Building from sources](#building-from-sources)
     - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
-  - [Going further](#going-further)
+- [Some projects using *bbt*](#some-projects-using-bbt)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
+- [References](#references)
+
 
 ## Overview
 
@@ -37,7 +40,7 @@ There is no script or other file to write.
 *bbt* does not care about the type of document: call it Acceptance test, feature or behavior description, test scenario, README file or user guide, that's the same.  
 *bbt* makes no distinction between running a scenario in a test file and checking an example in a README, as long as it recognizes a behavior description.
 
-### What does the behavior description look like?
+## What does the behavior description look like?
 
 Here is a minimal example:  
 
@@ -60,6 +63,8 @@ It's in Markdown [^1], so that the text above render as:
 ---
 
 *bbt* being about documentation and simplicity, Markdown is a perfect fit.  
+
+## A small example
 
 Let's consider a slightly more complete example:
 ![simple example](docs/rpl_example.png)
@@ -100,12 +105,12 @@ We have:
 
 Everything else in the file is ignored. *bbt* stays out of your way, so you are free to use Markdown almost without constraints to draft nice documentations.  
 
-And in any case, to check what is really taken into account by *bbt*, just use:
+And in any case, to see what is taken into account by *bbt* in your file, and what will be checked, just run:
 ```
 bbt explain my_scenario.md
 ```   
   
-### Partial parsing 
+## Partial parsing 
 
 A distinctive feature of *bbt* is that it appears to directly understand those almost natural English sentences like:  
 ```
@@ -122,7 +127,12 @@ When you write:
 
 As a result, the writer enjoys a lot of flexibility and is not constrained by a rigid grammar as with a scripting language, enabling steps to be written in almost natural language.
 
+The complete grammar with examples is available [here](https://github.com/LionelDraghi/bbt/blob/main/docs/grammar.md) (also available with the command `bbt help grammar`).
+
 ## Installation
+
+*btt* is available and tested on Linux, Windows and Mac OS.  
+On MacOS, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
 
 ### Stable version
 
@@ -162,6 +172,8 @@ ln -s bbt-0.3.0-dev-x86_64.AppImage bbt
 
 (Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
 
+Note that the project is still under development, and subject to interface and behavior changes, keep an eyes on the changelog before updating.   
+
 ## First use
 
 To get started, you can either draw inspiration from one of the [examples](https://github.com/LionelDraghi/bbt/tree/main/docs/examples), or have *bbt* generate a sample scenario for you :
@@ -174,25 +186,21 @@ A short but comprehensive tutorial can be generated with
 bbt help tutorial 
 ```
 
-### Going further 
-- A very short article on the project "Why": [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9).
-- The first adopter is Raffle, an Ada compiler with a LLVM backend, not yet public, by Paul Jarret
+## Some projects using *bbt*
+- Kudos to the first adopter, Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret
 - [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
 
-Nevertheless, *bbt* is still young, meaning that :
-- your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
-- new features are added regularly: latest updates can be found in the [Changelog](docs/changelog.md);
-- it is subject to interface and behavior changes, keep an eyes on the changelog before updating.   
-
-*btt* is available and tested on Linux, Windows and Mac OS.  
-On MacOS, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
-
 ## Help and comments
-Comments and questions are welcome [here](https://github.com/LionelDraghi/bbt/discussions)
+- Comments your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
+- new features are added regularly: latest updates can be found in the [Changelog](docs/changelog.md);
 
 ## Further reading
+- A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9).
+- How to get off to a good start with the README and bbt: [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)
+
+## References
 - [User Guide](docs/UG.md): concepts, commands, features...
 - [References](docs/references.md): syntax, grammar, and more details on non obvious behavior
   
