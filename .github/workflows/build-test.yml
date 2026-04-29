@@ -1,15 +1,5 @@
 name: Build and test
 on: [push, pull_request, release]
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'tools/**'
-      - 'docs/features/**'
-      - 'docs/examples/**'
-      - 'Makefile'
-      - 'alire.toml'
   
 jobs:
   main:
