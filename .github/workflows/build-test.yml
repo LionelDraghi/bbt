@@ -102,7 +102,8 @@ jobs:
 
       - name: Run build and checks
         env:
-          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos-') && '1' || '' }}
+          GNAT_FILE_NAME_CASE_SENSITIVE: '1'
+          # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
         run: make -k
         
       - name: Save summary
