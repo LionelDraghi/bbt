@@ -3,6 +3,8 @@ name: Build and upload AppImage
 
 on:                    # Run the workflow for each of the following events:
   push:                # - A branch is pushed or updated.
+    branches:
+      - main
     paths:
       - 'src/**'
       - 'tests/**'
@@ -11,13 +13,14 @@ on:                    # Run the workflow for each of the following events:
       - 'docs/examples/**'
       - 'Makefile'
       - 'alire.toml'
-    branches:
-      - main
-  ### pull_request:        # - A pull-request is opened or updated.
+  
+  pull_request:        # - A pull-request is opened or updated.
+    paths: *trigger_paths
+
   workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
+
   release:
     types: [created]   # - A release is created.
-  ### schedule:            # - A scheduled time is reached.
 
 permissions: write-all
 

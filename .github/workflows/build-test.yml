@@ -1,4 +1,5 @@
 name: Build and test
+
 on:                    # Run the workflow for each of the following events:
   push:                # - The main branch is pushed or updated.
     branches:
@@ -19,6 +20,8 @@ on:                    # Run the workflow for each of the following events:
   
   release:
     types: [created]   # - A release is created.
+
+permissions: write-all
 
 jobs:
   main:
