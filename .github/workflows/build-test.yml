@@ -1,19 +1,16 @@
 name: Build and test
-on:                    # Run the workflow for each of the following events:
-  paths-ignore:        # Ignore changes to these files for all triggers
-    - 'README.md'
-    - 'docs/*.md'
-    - 'docs/help/*'
-    - 'docs/proposed_features/*'
-    - 'docs/tests_results/*'
-  push:                # - The main branch is pushed or updated.
+on: [push, pull_request, release.created]
     branches:
       - main
-  pull_request:        # - A pull-request is opened or updated.
-  workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
-  release:
-    types: [created]   # - A release is created.
-
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'tools/**'
+      - 'docs/features/**'
+      - 'docs/examples/**'
+      - 'Makefile'
+      - 'alire.toml'
+  
 jobs:
   main:
     strategy:
