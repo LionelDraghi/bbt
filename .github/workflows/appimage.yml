@@ -2,6 +2,12 @@
 name: Build and upload AppImage
 
 on:                    # Run the workflow for each of the following events:
+  paths-ignore:        # Ignore changes to these files for all triggers
+    - 'README.md'
+    - 'docs/*.md'
+    - 'docs/help/*'
+    - 'docs/proposed_features/*'
+    - 'docs/tests_results/*'
   push:                # - A branch is pushed or updated.
     branches:
       - main
@@ -10,7 +16,7 @@ on:                    # Run the workflow for each of the following events:
   release:
     types: [created]   # - A release is created.
 
-permissions: write-all
+  permissions: write-all
 
 jobs:
   release:
