@@ -224,7 +224,7 @@ package body BBT.Tests.Builder is
       case Step_Info.Cat is
          when Unknown =>
              -- This error case is now handled in the lexer,
-             --  so it should not happen here. 
+             --  so it should not happen here.
              null;
 
          when Given_Step =>

@@ -769,18 +769,16 @@
 
 # Document: [A240_Then_I_Succesfully_Run.md](../../features/A240_Then_I_Succesfully_Run.md)  
    ### Scenario: [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md): 
-   - OK : Given the new file `simple.xml`  
-   - OK : Then I successfully run `xmllint simple.xml`   
+   - OK : Then I successfully run `./sut --help`   
    - [X] scenario   [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md) pass  
 
 
 # Document: [A250_Fails.md](../../features/A250_Fails.md)  
    ### Scenario: [Checking that a command fails](../../features/A250_Fails.md): 
-   - OK : Given the new file `mismatched_tag.xml`  
-   - OK : Then `xmllint mismatched_tag.xml` fails   
-   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
-   - OK : And  `xmllint mismatched_tag.xml` should fail   
-   - OK : And  the output matches `.*Opening and ending tag mismatch.*`  
+   - OK : Then `./sut -zwq` fails   
+   - OK : And  the output is `unknown option -zwq`  
+   - OK : And  `./sut -zwq` should fail   
+   - OK : And  the output is `unknown option -zwq`  
    - [X] scenario   [Checking that a command fails](../../features/A250_Fails.md) pass  
 
 

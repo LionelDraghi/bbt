@@ -160,9 +160,9 @@ don't forget to put ".*" at the beginning or at the end if necessary.
 
 ## Help  
 
-To get a complete (although less friendly) view on the grammar:  
+To get a complete view on step's grammar, with examples:  
 
-    bbt list_grammar  
+    bbt help grammar  
 
 To check your scenario with a dry run:  
 

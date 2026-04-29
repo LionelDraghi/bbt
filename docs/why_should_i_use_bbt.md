@@ -8,7 +8,7 @@ With two main consequences:
 1. writing a test is a matter of minutes,
 2. there is no more place for a discrepancy between documentation and tests.
 
-Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](docs/comparables.md).  
+Alternative tools exist, some are mentioned in [my quick overview of some comparable tools](comparables.md).  
 But as far as I know, ***bbt* is the only one to provide such a direct "run the doc" approach**.
 
 ## Write real documentation, not just a ".feature" Gherkin file  
@@ -43,7 +43,7 @@ To run only a selection `bbt --select "Sanity check" tests`
 The output cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
 You can push it on GitHub without further processing.  
 
-To see what it looks like, consider [*bbt* own tests](docs/tests_results/Linux/features_results.md).  
+To see what it looks like, consider [*bbt* own tests](tests_results/Linux/features_results.md).  
 
 Test results are generated when running *bbt*, by just using the `--output | -o` option.
   
