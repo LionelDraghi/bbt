@@ -84,7 +84,7 @@ jobs:
             brew install rpl
           
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install -y wget xsltproc
+            choco install -y wget
             # Download rpl for Windows
             # Use a direct SourceForge download link and bypass the interstitial page
             $rplUrl = "https://downloads.sourceforge.net/project/gnuwin32/rpl/1.4.1-1/rpl-1.4.1-1-bin.zip"
