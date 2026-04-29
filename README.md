@@ -131,8 +131,9 @@ The complete grammar with examples is available [here](https://github.com/Lionel
 
 ## Installation
 
-*btt* is available and tested on Linux, Windows and Mac OS.  
-On MacOS, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) to avoid small glitches on file names.  
+*btt* is available and tested on Linux, Windows and Mac OS.
+
+NB : On old version of Darwin, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1 to avoid small glitches on file names, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795)  
 
 ### Stable version
 
