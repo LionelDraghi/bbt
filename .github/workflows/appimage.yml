@@ -5,7 +5,7 @@ on:                    # Run the workflow for each of the following events:
   push:                # - A branch is pushed or updated.
     branches:
       - main
-    paths:
+    paths: &trigger_paths
       - 'src/**'
       - 'tests/**'
       - 'tools/**'
