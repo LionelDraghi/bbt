@@ -78,8 +78,8 @@ jobs:
           fi
 
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y rpl
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq rpl
 
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew update
