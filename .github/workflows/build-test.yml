@@ -49,7 +49,6 @@ jobs:
         with:
           path: |
             ~/.cache/alire
-            ~/.local/share/alire
           key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
           restore-keys: |
             ${{ runner.os }}-alire-
@@ -66,6 +65,8 @@ jobs:
             ${{ runner.os }}-cargo-
 
       - name: Setup tools (rpl, mlc)
+        # Note: On Windows runners, bash is available via Git for Windows (which includes MSYS2).
+        # This allows using the same bash script across all platforms.
         shell: bash
         run: |
           # Install mlc if not present
