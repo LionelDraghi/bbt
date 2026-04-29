@@ -79,7 +79,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ ./bbt --yes --keep_going \
 	--exclude @Flaky     \
 	--cleanup $(EXCLUDE) \
-	-q -sb --human_match \
+	-q --human_match \
 	--generate_badge $(RESULTS_DIR)/badge.url   \
 	--junit $(RESULTS_DIR)/features_results.xml \
 	--index $(RESULTS_DIR)/features_results.md  \
@@ -89,14 +89,14 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 
 	@ # Check examples
 	@ echo 2. examples check ================
-	@ ./bbt --yes -k -c -q -sb -hm \
+	@ ./bbt --yes -k -c -q -hm \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
-	@ ./bbt --yes --keep_going --cleanup -q -sb \
+	@ ./bbt --yes --keep_going --cleanup -q \
 	--human_match \
 	--index $(RESULTS_DIR)/non_reg_tests.md \
 	../tests/non_reg_tests 
