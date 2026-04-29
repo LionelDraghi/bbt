@@ -49,6 +49,7 @@ jobs:
         with:
           path: |
             ~/.cache/alire
+            ~/.local/share/alire
           key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
           restore-keys: |
             ${{ runner.os }}-alire-
