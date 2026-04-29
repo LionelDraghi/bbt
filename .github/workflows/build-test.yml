@@ -1,14 +1,25 @@
 name: Build and test
-on: [push, pull_request, release]
-paths:
-  - 'src/**'
-  - 'tests/**'
-  - 'tools/**'
-  - 'docs/features/**'
-  - 'docs/examples/**'
-  - 'Makefile'
-  - 'alire.toml'
+on:                    # Run the workflow for each of the following events:
+  push:                # - The main branch is pushed or updated.
+    branches:
+      - main
+    paths: &trigger_paths
+      - 'src/**'
+      - 'tests/**'
+      - 'tools/**'
+      - 'docs/features/**'
+      - 'docs/examples/**'
+      - 'Makefile'
+      - 'alire.toml'
+
+  pull_request:        # - A pull-request is opened or updated.
+    paths: *trigger_paths
+    
+  workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
   
+  release:
+    types: [created]   # - A release is created.
+
 jobs:
   main:
     strategy:
