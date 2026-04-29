@@ -65,20 +65,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Setup `rpl` (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          # Use a direct SourceForge download link and bypass the interstitial page
-          $rplUrl = "https://downloads.sourceforge.net/project/gnuwin32/rpl/1.4.1-1/rpl-1.4.1-1-bin.zip"
-          Invoke-WebRequest -Uri $rplUrl -OutFile rpl.zip -UseBasicParsing -UserAgent "curl/7.68.0"
-          Expand-Archive -Path rpl.zip -DestinationPath C:\GnuWin32
-          echo "C:\GnuWin32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-      # Install packages (needed by `make check`) on every platform
-      - name: Install packages
+      - name: Setup tools (rpl, mlc)
         shell: bash
         run: |
+          # Install mlc if not present
           if ! command -v mlc >/dev/null 2>&1; then
             cargo install --locked mlc
           else
@@ -88,17 +78,25 @@ jobs:
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
             sudo apt-get install -y rpl libxml2-utils
+
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew update
-            ## brew upgrade
             brew install rpl libxml2
+          
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
             choco install -y wget xsltproc
+            # Download rpl for Windows
+            # Use a direct SourceForge download link and bypass the interstitial page
+            $rplUrl = "https://downloads.sourceforge.net/project/gnuwin32/rpl/1.4.1-1/rpl-1.4.1-1-bin.zip"
+            Invoke-WebRequest -Uri $rplUrl -OutFile rpl.zip -UseBasicParsing -UserAgent "curl/7.68.0"
+            Expand-Archive -Path rpl.zip -DestinationPath C:\GnuWin32
+            echo "C:\GnuWin32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append          
+          
           fi
 
       - name: Run build and checks
         env:
-          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ matrix.os == 'macos-latest' && '1' || '' }}
+          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos-') && '1' || '' }}
         run: make -k
         
       - name: Save summary
