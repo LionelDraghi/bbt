@@ -50,6 +50,7 @@ _Table of Contents:_
   # Scenario: sut version
   - When I run `./sut -v`
   - Then I get `v3.1`
+  (this is not the expected output, so that this scenario will fail).
   ~~~
 
 ### Scenario: Quiet mode run
