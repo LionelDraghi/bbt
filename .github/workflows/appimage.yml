@@ -19,7 +19,7 @@ on:                    # Run the workflow for each of the following events:
     types: [created]   # - A release is created.
   ### schedule:            # - A scheduled time is reached.
 
-  permissions: write-all
+permissions: write-all
 
 jobs:
   release:
