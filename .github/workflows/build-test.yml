@@ -38,6 +38,10 @@ jobs:
     steps:
         # Check-out the repository
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1  # Shallow clone (faster, less output)
+        env:
+          GIT_PROGRESS: 0  # Disable git progress messages
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
