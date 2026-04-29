@@ -77,11 +77,11 @@ jobs:
 
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get update
-            sudo apt-get install -y rpl libxml2-utils
+            sudo apt-get install -y rpl
 
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew update
-            brew install rpl libxml2
+            brew install rpl
           
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
             choco install -y wget xsltproc
