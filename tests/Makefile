@@ -112,7 +112,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
 	
-	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
+	@ ./rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	@ echo wget badge ...
 	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 
