@@ -97,10 +97,9 @@ jobs:
           fi
 
       - name: Run build and checks
-        # env:
-        # # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
-        # GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos-') && '1' || '' }}
-        # # Seems to be mandatory only on old versions of macOS.
+        env:
+        # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
+        GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos-') && '1' || '' }}
         run: make -k
         
       - name: Save summary
