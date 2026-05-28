@@ -75,12 +75,12 @@ We have:
   
 1. **A *Feature* and a *Scenario* header** (followed by the feature/scenario name)  
 
-   *bbt* processes **only** headers starting with Gherkin keywords:
+   *bbt* processes **only** section starting with Gherkin keywords as header:
    - *# Features* 
    - *# Background* 
    - *# Scenario* or *# Example*  
   
-   In this example, the *Overview* Header is ignored.  
+   In this example, the *Overview* section is ignored.  
    Note also that the header's level doesn't matter (*#### Scenario*, is equal to *# Scenario* for *bbt*), so that you're free to structure the file as you want. 
 
 2. **Steps**  
