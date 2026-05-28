@@ -73,17 +73,17 @@ Let's consider a slightly more complete example:
 
 We have:
   
-1. **A *Feature* and a *Scenario* header** (followed by the feature/scenario name)  
+1. **A *Feature* and a *Scenario* section**  
 
    *bbt* processes **only** section starting with Gherkin keywords as header:
    - *# Features* 
    - *# Background* 
    - *# Scenario* or *# Example*  
-  
    In this example, the *Overview* section is ignored.  
+
    Note also that the header's level doesn't matter (*#### Scenario*, is equal to *# Scenario* for *bbt*), so that you're free to structure the file as you want. 
 
-2. **Steps**  
+1. **Steps**  
 
    Within Scenarios, *bbt* reads Steps—that is lines starting with:
    - *- Given*
@@ -91,11 +91,11 @@ We have:
    - *- Then* 
    - *- And* 
    - *- But*  
-  
    Those lines contains the things to check or do.  
+   
    Note that the only possible list marker for Steps is `-`, so that other list markers like '*' or '+' may be used for comments and will be ignored by *bbt*.
 
-3. **Step arguments**
+2. **Step arguments**
 
    Within or after step lines, a Step's argument may be:
    - strings for file name, command to run, etc. (for example here `config.ini`) 
