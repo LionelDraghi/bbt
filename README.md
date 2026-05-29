@@ -75,22 +75,23 @@ We have:
   
 1. **A *Feature* and a *Scenario* section**  
 
-   *bbt* processes **only** section starting with Gherkin keywords as header:
+   *bbt* processes **only** section after a header starting with:
    - *# Features* 
    - *# Background* 
-   - *# Scenario* or *# Example*  
-   In this example, the *Overview* section is ignored.  
+   - *# Scenario* or *# Example*
+   that is some of Gherkin structural keywords.  
+   As a consequence, the *Overview* section is ignored.  
 
    Note also that the header's level doesn't matter (*#### Scenario*, is equal to *# Scenario* for *bbt*), so that you're free to structure the file as you want. 
 
 1. **Steps**  
 
-   Within Scenarios, *bbt* reads Steps—that is lines starting with:
+   Within Scenarios, *bbt* reads Steps—that is, like in Gherkin, lines starting with:
    - *- Given*
    - *- When* 
    - *- Then* 
    - *- And* 
-   - *- But*  
+   - *- But*
    Those lines contains the things to check or do.  
    
    Note that the only possible list marker for Steps is `-`, so that other list markers like '*' or '+' may be used for comments and will be ignored by *bbt*.
