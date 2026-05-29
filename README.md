@@ -28,13 +28,13 @@
 
 ## Overview
 
-*bbt* is a simple tool for black box check the behavior of an executable through the [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).  
+*bbt* is a simple tool for black-box checking the behavior of an executable through the [Command Line Interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface).  
 Hence the name: *bbt* stands for *Black Box Tester*.  
 
 *bbt* targets both *behavior specification* and *end-to-end test automation* for the very common case of apps taking some input and producing some output.  
 It enables developers **to write and execute comprehensive test scenarios in just a few minutes**. 
 
-The standout feature of *btt* is that **it directly uses your documentation in plain english**.  
+The standout feature of *bbt* is that **it directly uses your documentation in plain english**.  
 There is no script or other file to write.
 
 *bbt* does not care about the type of document: call it Acceptance test, feature or behavior description, test scenario, README file or user guide, that's the same.  
@@ -56,7 +56,7 @@ The behavior is described in almost natural English, using the usual [BDD](https
 It's in Markdown [^1], so that the text above render as:
 
 ---
-### Scenario: I want to know gcc version  <!-- omit from toc -->
+### Scenario: I want to know the gcc version  <!-- omit from toc -->
 
 - When I run `gcc --version`
 - Then the output contains `14.2.0`
@@ -132,13 +132,13 @@ The complete grammar with examples is available [here](https://github.com/Lionel
 
 ## Installation
 
-*btt* is available and tested on Linux, Windows and Mac OS.
+*bbt* is available and tested on Linux, Windows and macOS.
 
-NB : On old version of Darwin, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1 to avoid small glitches on file names, cf. discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795)  
+Note (Darwin): On older versions of Darwin, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1 to avoid small glitches with file names. See the discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795)  
 
 ### Stable version
 
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available on Windows, Linux and Darwin thanks to the Alire package manager:
+The stable version of [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) is available on Windows, Linux and Darwin via the Alire package manager:
 
 1. Install [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/alire-badge.json)](https://alire.ada.dev/)
 
@@ -174,7 +174,7 @@ ln -s bbt-0.3.0-dev-x86_64.AppImage bbt
 
 (Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
 
-Note that the project is still under development, and subject to interface and behavior changes, keep an eyes on the changelog before updating.   
+Note that the project is still under development, and subject to interface and behavior changes, keep an eye on the changelog before updating.   
 
 ## First use
 
@@ -195,7 +195,7 @@ bbt help tutorial
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
 
 ## Help and comments
-- Comments your features suggestions are welcomed [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
+- Your comments and feature suggestions are welcome [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
 - new features are added regularly: latest updates can be found in the [Changelog](docs/changelog.md);
 
 ## Further reading
@@ -205,7 +205,7 @@ bbt help tutorial
 ## References
 - [User Guide](docs/UG.md): concepts, commands, features...
 - [References](docs/references.md): syntax, grammar, and more details on non obvious behavior
-- [faq](docs/faq.md)
+- [FAQ](docs/faq.md)
   
 - [Project status](docs/project.md): changelog, tests, TDL...
 - [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
