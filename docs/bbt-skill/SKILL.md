@@ -1,9 +1,18 @@
 ---
 name: bbt-user
-description: Reference guide for LLM to generate valid bbt scenarios from natural language descriptions with proper syntax and structure, and to run them.
+description: |
+  Reference guide for LLM to generate valid bbt scenarios from natural language with proper syntax and structure, and to run them.
+  Includes installation, CLI usage, debugging, and CI/CD integration.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: lionel-draghi
+allowed-tools:
+  - read
+  - grep
+  - bash
+  - edit
+  - write_file
+  - ask_user_question
 ---
 
 # Purpose
@@ -11,59 +20,206 @@ metadata:
 1. a format for embedding test scenarios in almost natural english within Markdown documentation;
 2. a tool to run those tests.
 
-# Installation
-1. `alr` : to check if Alire is available
-   - If not, follow instructions at https://www.getada.dev/ 
+---
 
-2. `bbt help` : to check if bbt is available.
-   - If not, `alr get bbt`
+# Installation and Setup
 
-# running tests with *bbt* 
-- `bbt help` : shows the help message with all options
-- `bbt help filtering | matching | other` : shows an extended help on the provided topic
+## Prerequisites
 
-- `bbt [run] README.md` : runs all scenarios in the README.md file
-- `bbt --recursive <dir>` : runs scenarios in all .md files in the given directory
-- `bbt --keep_going <files>` : runs scenarios in the given files without stopping on the first error
-- `bbt --cleanup <files>` : runs scenarios and silently remove input and output files created during the test
-- `bbt --yes <files>` : runs scenarios in batch mode, answer "yes" to all prompts
+Nore if the [Alire](https://alire.ada.dev/) (the Ada package manager) is installed.
 
-- `bbt README.md --select 'Sanity Check' <files>` : runs only the scenario named "Sanity Check"
-- `bbt README.md --exclude 'Windows_Only' <files>` : do not run scenarios whose title contains Windows_Only
+> Note for macOS (Darwin): On older versions, set `GNAT_FILE_NAME_CASE_SENSITIVE=1` to avoid case sensitivity issues.
 
-- `bbt --human_match <files>` : (default behavior) ignore casing, white space and empty lines when comparing output to expected output 
-- `bbt --exact_match <files>` : expect exactly the same output
+## Installation Methods
 
-# Fine-tuning scenarios
-- `bbt explain <file>` : explain what bbt undestand from the file, and announce what will be done if the file is "run"
+Recommended method: Install bbt using the Alire package manager:
+```bash
+alr install bbt
+bbt --version
+```
+For other installation methods (AppImage for Linux or compiling from sources), see the [bbt GitHub repository](https://github.com/LionelDraghi/bbt#installation).
 
-# Writing tests with `bbt` format
+
+---
+
+# Running Tests with bbt
+
+## Basic Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `bbt` | Run tests in file/directory | `bbt README.md` |
+| `bbt explain` | Dry run bbt against a scenario | `bbt explain my_test.md` |
+| `bbt help` | Display general help | `bbt help` |
+| `bbt help grammar` | Display complete grammar | `bbt help grammar` |
+| `bbt help example` | Generate an example scenario | `bbt help example > test.md` |
+| `bbt help tutorial` | Generate a comprehensive tutorial | `bbt help tutorial` |
+
+## Common Options
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `--recursive` | Run tests recursively | `bbt -r .` |
+| `--exclude <tag>` | Exclude scenarios with a tag | `bbt tests/ --exclude Windows_Only` |
+| `--include <tag>` | Include only scenarios with a tag | `bbt tests/ --include Smoke` |
+| `--verbose` | Verbose mode | `bbt --verbose my_test.md` |
+| `--stop-on-error` | Stop at first failure | `bbt --stop-on-error tests/` |
+| `--keep_going` | Continue after errors | `bbt --keep_going tests/` |
+| `--cleanup` | Remove temporary files after test | `bbt --cleanup tests/` |
+| `--yes` | Batch mode (auto-answer yes) | `bbt --yes tests/` |
+| `--select <name>` | Run only a specific scenario | `bbt README.md --select 'Sanity Check'` |
+| `--human_match` | Ignore case and whitespace (default) | `bbt --human_match tests/` |
+| `--exact_match` | Require exact output match | `bbt --exact_match tests/` |
+
+## Typical Project Structure
+```
+my_project/
+├── README.md
+├── docs/
+│   └── scenarios.md
+└── tests/
+    └── features.md
+```
+
+## Execution Examples
+```bash
+# Test a specific file
+bbt README.md
+
+# Test all files in a directory
+bbt docs/
+bbt tests/
+
+# Test recursively
+bbt -r .
+
+# Exclude tags (for CI on Windows systems)
+bbt tests/ --exclude Unix_Only
+
+# Include only specific tags
+bbt tests/ --include Smoke --include Regression
+
+# Run a specific scenario
+bbt README.md --select 'Version Check'
+```
+
+## Troubleshooting: Installation & Usage
+
+| Problem | Solution |
+|---------|----------|
+| `bbt: command not found` | Ensure `~/.alire/bin` is in your PATH |
+| Ada version error | Update GNAT via Alire: `alr toolchain --select gnat_native` |
+| Case sensitivity issues on macOS | `export GNAT_FILE_NAME_CASE_SENSITIVE=1` |
+| Build fails | Try: `make clean && make build` or `alr clean && alr build` |
+| Slow test execution | Use `--stop-on-error` to stop at the first failure |
+
+---
+
+# Debugging bbt Tests
+
+- Verify that `bbt` correctly identify the scenarios and steps in your file
+  ```bash
+  bbt explain my_test.md
+  ```
+  If a step doesn't appear, verify:
+  - Dash `-` is used (not `*` or `+`)
+  - Keyword (`Given/When/Then/And/But`) is present
+  - Parameters are in backticks or code blocks
+
+- Run in Verbose Mode
+
+- Check the Temporary Files (run without `--cleanup` to keep them) 
+
+## Frequent Errors
+
+### Error 1: Missing Backticks
+```markdown
+# Wrong
+- When I run gcc --version
+
+# Correct
+- When I run `gcc --version`
+```
+
+### Error 2: Incorrect Code Block Markers
+~~~markdown
+# Wrong (using 1 or 2 backticks)
+- Then the output contains `
+hello
+`
+
+# Correct (using 3 backticks)
+- Then the output contains
+  ```
+  hello
+  ```
+~~~
+
+### Error 3: Wrong List Marker
+```markdown
+# Wrong
+* When I run `ls`
+
+# Correct
+- When I run `ls`
+```
+
+---
+
+# CI/CD Integration
+
+## GitHub Actions
+```yaml
+- name: Install Alire
+  run: |
+    curl -fsSL https://alire.ada.dev/download | bash
+    echo "$HOME/.alire/bin" >> $GITHUB_PATH
+- name: Install bbt
+  run: alr install bbt
+- name: Run bbt tests
+  run: bbt docs/features/
+```
+
+## GitLab CI
+```yaml
+test:
+  script:
+    - alr install bbt
+    - bbt docs/features/ --exclude Windows_Only
+```
+
+---
+
+# Fine-tuning Scenarios
+- `bbt explain <file>`: explain what bbt understands from the file, and announce what will be done if the file is "run"
+
+---
+
+# Writing Tests with bbt Format
 
 `bbt` scenarios are characterized by a Gherkin structure, embedded within structured text file, mainly Markdown, but also restructured text and Asciidoc.
 
-`bbt help tutorial` generate a comprehensive description of the file structure, also available at https://github.com/LionelDraghi/bbt/blob/main/docs/tutorial.md
+`bbt help tutorial` generates a comprehensive description of the file structure, also available at https://github.com/LionelDraghi/bbt/blob/main/docs/tutorial.md
 
-Here is a File example, with comments starting with "-->" at the end of each line to explain how `bbt` will interpret it: 
+Here is a file example, with comments starting with "-->" at the end of each line:
 
 ~~~markdown
 # gcc simple sanity tests  --> ignored by bbt
 
 ## Scenario: gcc version?  --> scenario header
-  
+
 - When I run `gcc -v` --> Step with a parameter between backticks
 
 * on Linux or Windows, the output is something like: --> ignored by bbt
-  > gcc version 14.2.0 (Debian 14.2.0-16)   --> ignored by bbt
-* on Darwin:  --> ignored by bbt
-  > Apple clang version 12.0.0 (clang-1200.0.32.29)  --> ignored by bbt
+  > gcc version 14.2.0 (Debian 14.2.0-16)  --> ignored by bbt
 
-- Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*` --> Step with a regexp parameter  
+- Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*` --> Step with regexp
 
 ## Scenario: compiling and executing an hello word --> start another scenario
 
-Sanity check of a complete compile / link / run sequence : --> ignored by bbt
+Sanity check of a complete compile / link / run sequence: --> ignored by bbt
 
-- Given the new file `main.c` containing  --> Step with a parameter between backticks, followed by a code block
+- Given the new file `main.c` containing --> Step with parameter + code block
   ```c
   #include <stdio.h>
   int main() {
@@ -72,30 +228,24 @@ Sanity check of a complete compile / link / run sequence : --> ignored by bbt
   }
   ```
 - And given there is no `./main` file --> Step
-
 - When I successfully run `gcc main.c -o main` --> step
-- And  I run `./main` --> Step
-
-- Then the output is `Hello, World!`    --> Step
+- And I run `./main` --> Step
+- Then the output is `Hello, World!` --> Step
 ~~~
 
-
-****************************************
-
-
-### Parameter formatting
+## Parameter Formatting
 
 **Inline parameters (backticks):**
-- Commands: `` `gcc --version` ``
-- Filenames: `` `output.txt` ``
-- Short text: `` `success` ``
+- Commands: `gcc --version`
+- Filenames: `output.txt`
+- Short text: `success`
 
 **Multiline parameters (code blocks):**
 - File contents
 - Expected multiline output
 - Command scripts
 
-**Example:**
+Example:
 ~~~markdown
 - Given the file `script.sh`
 ```bash
@@ -104,75 +254,27 @@ echo "Hello"
 ```
 ~~~
 
-### Common step patterns
+Common step patterns:
 - Command execution: `- When I run `command` `
 - File creation: `- Given the file `name` containing `content` `
 - Output verification: `- Then output contains `expected` `
 - Error checking: `- Then I get an error`
 
-### Grammar Reference Table
+---
 
-This table provides a comprehensive reference of all *bbt* syntax patterns:
+# Grammar Reference Table
 
-Step kind  |         |Subject |       Verb       | Object |         Action          | Code block expected after the step |
-|-------|---------|--------|------------------|--------|-------------------------|------------|
-| Given |         |        | run              | `text` | RUN_CMD                 |            |
-| Given |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |
-| Given |         |        | is               | `file` | CHECK_FILE_EXISTENCE    |            |
-| Given |         |        | is               | `dir`  | CHECK_DIR_EXISTENCE     |            |
-| Given |         |        | is no            | `file` | SETUP_NO_FILE           |            |
-| Given |         |        | is no            | `dir`  | SETUP_NO_DIR            |            |
-| Given |         | `dir`  |                  |        | CREATE_IF_NONE          |            |
-| Given |         | `file` |                  |        | ERASE_AND_CREATE        |     X      |
-| Given |         | `file` | containing       |        | CREATE_IF_NONE          |     X      |
-| Given |         | `file` | containing       | `text` | CREATE_IF_NONE          |            |
-| Given | new     | `dir`  |                  |        | ERASE_AND_CREATE        |            |
-| Given | new     | `file` |                  |        | ERASE_AND_CREATE        |     X      |
-| Given | new     | `file` | containing       |        | ERASE_AND_CREATE        |     X      |
-| Given | new     | `file` | containing       | `text` | ERASE_AND_CREATE        |            |
-| When  |         |        | run              | `text` | RUN_CMD                 |            |
-| When  |         |        | run              | `cmd`  | RUN_CMD                 |            |
-| When  |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |
-| When  |         |        | successfully run | `cmd`  | RUN_WITHOUT_ERROR       |            |
-| Then  |         |        | get              |        | OUTPUT_IS               |     X      |
-| Then  |         |        | get              | `file` | OUTPUT_IS               |            |
-| Then  |         |        | get              | `text` | OUTPUT_IS               |            |
-| Then  |         |        | get              | error  | ERROR_RETURN_CODE       |            |
-| Then  |         |        | get no           | output | NO_OUTPUT               |            |
-| Then  |         |        | get no           | error  | NO_ERROR_RETURN_CODE    |            |
-| Then  |         |        | is               | `file` | CHECK_FILE_EXISTENCE    |            |
-| Then  |         |        | is               | `dir`  | CHECK_DIR_EXISTENCE     |            |
-| Then  |         |        | is               | error  | ERROR_RETURN_CODE       |            |
-| Then  |         |        | is no            | output | NO_OUTPUT               |            |
-| Then  |         |        | is no            | `file` | CHECK_NO_FILE           |            |
-| Then  |         |        | is no            | `dir`  | CHECK_NO_DIR            |            |
-| Then  |         |        | is no            | error  | NO_ERROR_RETURN_CODE    |            |
-| Then  |         | `file` | does not contain |        | FILE_DOES_NOT_CONTAIN   |     X      |
-| Then  |         | `file` | does not contain | `file` | FILE_DOES_NOT_CONTAIN   |            |
-| Then  |         | `file` | does not contain | `text` | FILE_DOES_NOT_CONTAIN   |            |
-| Then  |         | `file` | contains         |        | FILE_CONTAINS           |     X      |
-| Then  |         | `file` | contains         | `file` | FILE_CONTAINS           |            |
-| Then  |         | `file` | contains         | `text` | FILE_CONTAINS           |            |
-| Then  |         | `file` | is               |        | FILE_IS                 |     X      |
-| Then  |         | `file` | is               | `file` | FILE_IS                 |            |
-| Then  |         | `file` | is               | `text` | FILE_IS                 |            |
-| Then  |         | `file` | is no            | `file` | FILE_IS_NOT             |            |
-| Then  |         | output | does not contain |        | OUTPUT_DOES_NOT_CONTAIN |     X      |
-| Then  |         | output | does not contain | `file` | OUTPUT_DOES_NOT_CONTAIN |            |
-| Then  |         | output | does not contain | `text` | OUTPUT_DOES_NOT_CONTAIN |            |
-| Then  |         | output | contains         |        | OUTPUT_CONTAINS         |     X      |
-| Then  |         | output | contains         | `file` | OUTPUT_CONTAINS         |            |
-| Then  |         | output | contains         | `text` | OUTPUT_CONTAINS         |            |
-| Then  |         | output | matches          | `text` | OUTPUT_MATCHES          |            |
-| Then  |         | output | does not match   | `text` | OUTPUT_DOES_NOT_MATCH   |            |
-| Then  |         | output | is               |        | OUTPUT_IS               |     X      |
-| Then  |         | output | is               | `file` | OUTPUT_IS               |            |
-| Then  |         | output | is               | `text` | OUTPUT_IS               |            |
+For a complete grammar reference with exemples, run:
 
+```bash
+bbt help grammar
+```
 
-## COMMON SCENARIO PATTERNS
+---
 
-### Command Execution
+# Common Scenario Patterns
+
+## Command Execution
 
 **Basic command:**
 ```markdown
@@ -192,7 +294,7 @@ Step kind  |         |Subject |       Verb       | Object |         Action      
 - Then there is a file `program.exe`
 ```
 
-### File Operations
+## File Operations
 
 **File creation with content:**
 ```markdown
@@ -200,7 +302,7 @@ Step kind  |         |Subject |       Verb       | Object |         Action      
 ```
 
 **File creation with multiline content:**
-~~~md
+~~~markdown
 - Given the file `config.ini`
 ```ini
 [key]=value
@@ -208,7 +310,6 @@ Step kind  |         |Subject |       Verb       | Object |         Action      
 option=setting
 ```
 ~~~
-
 
 **File existence check:**
 ```markdown
@@ -221,7 +322,7 @@ option=setting
 - Then file `output.txt` is equal to file `expected.txt`
 ```
 
-### Output Verification
+## Output Verification
 
 **Exact output match:**
 ```markdown
@@ -247,7 +348,7 @@ Expected output line 2
 - Then output matches `Error: .*`
 ```
 
-### Error Handling
+## Error Handling
 
 **Error detection:**
 ```markdown
@@ -261,9 +362,26 @@ Expected output line 2
 - When I successfully run `valid_command`
 ```
 
-## NATURAL LANGUAGE TRANSFORMATION
+---
 
-### From Requirements to *bbt*
+# Natural Language Transformation
+
+When asked to "make a file runable" or "make a file bbt compatible", check within the file 
+- section with "Scenario" or "Example" in the title
+- command line
+- description of input and output
+And then try to transform the content into a bbt scenario, using the grammar and patterns described above.
+
+When asked to make a bbt test from a requirement, a README instruction, or a user story :
+- try to identify the key actions, inputs, and expected outputs, 
+- structure them into a bbt scenario format. 
+- Organize the scenarios in features if needed, 
+- identify common prerequisite and use Backgrouns as needed
+- use tags to indicate platform specific test
+- ensure that the steps are clear, concise, and follow the bbt syntax
+- reuse the provided wording as much as possible, while ensuring that the resulting scenario is valid and executable by bbt.
+
+## From Requirements to bbt
 
 **Requirement:** "System shall display version when --version flag is used"
 
@@ -276,12 +394,12 @@ Expected output line 2
 - And I get no error
 ```
 
-### From README to *bbt*
+## From README to bbt
 
 **README instruction:** "To compile: 1. Create source file, 2. Run compiler, 3. Verify output"
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Basic compilation workflow
 
 - Given the file `program.adb` containing
@@ -295,14 +413,14 @@ end Program;
 - When I successfully run `gcc -c program.adb`
 - Then there is a file `program.o`
 - And I get no error
-```
+~~~
 
-### From User Stories to *bbt*
+## From User Stories to bbt
 
 **User Story:** "As a developer, I want to validate my JSON files so that I can catch syntax errors early"
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Valid JSON file passes validation
 
 - Given the file `valid.json` containing
@@ -314,18 +432,124 @@ end Program;
 ```
 - When I run `json_validator valid.json`
 - Then I get no error
+~~~
 
 ## Scenario: Invalid JSON file fails validation
 
+~~~
 - Given the file `invalid.json` containing `{"name": "test",}`
 - When I run `json_validator invalid.json`
 - Then I get an error
 - And output contains `Syntax error`
+~~~
+---
+
+# Best Practices
+
+## Writing Maintainable Tests
+
+1. **One scenario = one behavior** - Avoid scenarios with more than 5-6 steps
+2. **Use descriptive names**
+   - Bad: `### Scenario: Test 1`
+   - Good: `### Scenario: Login with valid credentials`
+3. **Group related tests** - Use `# Feature: Authentication` to group scenarios
+4. **Document context** - Add explanations outside sections recognized by bbt
+5. **Use tags wisely** - e.g., `@Smoke`, `@Regression`, `@Windows_Only`, `@Unix_Only`
+
+## File Organization
+```
+my_project/
+├── README.md                    # Basic examples
+├── docs/
+│   ├── user_guide.md            # Documentation + tests
+│   └── examples/                # Advanced examples
+└── tests/
+    ├── features/                # Functional tests
+    │   ├── auth.md
+    │   ├── processing.md
+    │   └── errors.md
+    └── regression.md             # Regression tests
 ```
 
-## ADVANCED TOPICS
+---
 
-### Background Usage
+# Checklist Before Committing a Test
+
+- [ ] Scenario has a **descriptive name**
+- [ ] Steps use **valid keywords** (`Given/When/Then/And/But`)
+- [ ] Arguments are **in backticks** (simple) or **fenced code blocks** (multiline)
+- [ ] File paths are **relative to the `.md` file**
+- [ ] Test passes locally (`bbt my_test.md`)
+- [ ] Test passes with `--verbose`
+- [ ] Tags are added if needed (`[Unix_Only]`, `[Smoke]`)
+- [ ] File is **valid Markdown**
+
+---
+
+# Recommended Workflow
+
+## 1. Write a New Test
+1. Create a `.md` file (e.g., `tests/my_feature.md`)
+2. Write the scenario in natural English
+3. Verify syntax: `bbt explain tests/my_feature.md`
+
+## 2. Debug the Test
+1. Run in verbose mode: `bbt --verbose tests/my_feature.md`
+2. If it fails:
+   - Test commands manually
+   - Fix the scenario
+
+## 3. Integrate into Project
+1. Add the file to the Git repository
+2. Run all tests: `bbt tests/`
+3. (Optional) Add a Git hook to run bbt before commit
+
+## 4. Maintain Tests
+1. Update scenarios when behavior changes
+2. Add tags for specific test types
+3. Regularly verify with: `bbt tests/ --include Regression`
+
+---
+
+# Practical Exercises
+
+## Scenarios to Write
+
+1. **Basic test**: Verify that `echo "Hello"` returns `Hello`
+
+2. **File test**:
+   - Create a file `test.txt` with content `"Ada"`
+   - Verify that `cat test.txt` returns `"Ada"`
+
+3. **Error test**: Verify that `ls nonexistent_file` returns an error code
+
+4. **Multi-step test**:
+   - Create a file `input.csv`
+   - Run a script that processes it
+   - Verify that `output.csv` is created with the correct content
+
+---
+
+# Command Summary
+
+| Action | Command |
+|--------|---------|
+| Install bbt | `alr install bbt` |
+| Build from source | `alr build` or `make build` |
+| Verify installation | `bbt --version` |
+| Run a test | `bbt my_test.md` |
+| Show test structure | `bbt explain my_test.md` |
+| Run in verbose mode | `bbt --verbose my_test.md` |
+| Generate an example | `bbt help example > test.md` |
+| View grammar | `bbt help grammar` |
+| Exclude tags | `bbt tests/ --exclude Windows_Only` |
+| Include tags | `bbt tests/ --include Smoke` |
+
+---
+
+# Advanced Topics
+
+## Background Usage
 
 **Document-level background (applies to all scenarios):**
 ```markdown
@@ -343,7 +567,7 @@ end Program;
 - Given the file `input.dat` containing `test data`
 ```
 
-### Complex File Operations
+## Complex File Operations
 
 **File content verification:**
 ```markdown
@@ -360,7 +584,7 @@ Line 3 of expected content
 - Then file `log.txt` does not contain `error`
 ```
 
-### Advanced Matching
+## Advanced Matching
 
 **Unordered content matching:**
 ```markdown
@@ -378,7 +602,7 @@ item3
 - Then output does not match `^Error: .*`
 ```
 
-### Filtering and Tags
+## Filtering and Tags
 
 **Scenario filtering:**
 ```markdown
@@ -392,48 +616,51 @@ item3
 # Feature: Linux file system tests, Linux_Only
 ```
 
-## COMMON MISTAKES TO AVOID
+---
 
-### Keyword Conflicts
+# Common Mistakes to Avoid
 
-**❌ Keyword in free text:**
+## Keyword Conflicts
+
+**Wrong:**
 ```markdown
-- - given there is no `config` file in the current directory  # ❌ There is both file and directory keywords in the object phrase
+- - given there is no `config` file in the current directory
 ```
 
-**✅ Correct:**
+**Correct:**
 ```markdown
 - - given there is no `config` file
 ```
 
-### Parameter Formatting
+## Parameter Formatting
 
-**❌ Missing backticks:**
+**Wrong:**
 ```markdown
-- When I run gcc --version  # ❌ Command not in backticks
+- When I run gcc --version
 ```
 
-**✅ Correct:**
+**Correct:**
 ```markdown
 - When I run `gcc --version`
 ```
 
-### The sentence is interpreted in an opposite way by `bbt`
+## Incorrect Negation
 
-**❌ Incorrect:** 
+**Wrong:** (bbt ignores "never")
 ```markdown
 - then the output never contains `Error`
 ```
-`bbt` ignore "never" (not a keyword) and will check that the output *contains* `Error`
 
-**✅ Correct:**
+**Correct:**
 ```markdown
 - then the output doesn't contains `Error`
 ```
 
-## COMPLETE EXAMPLES
+---
 
-### Simple Command Test
+# Complete Examples
+
+## Simple Command Test
 
 **Input:** "Test that gcc compiler is installed"
 
@@ -446,7 +673,7 @@ item3
 - And I get no error
 ```
 
-### File Processing Workflow
+## File Processing Workflow
 
 **Input:** "Convert input.txt to output.txt using converter tool and verify result"
 
@@ -461,7 +688,7 @@ item3
 - And I get no error
 ```
 
-### Complex Build System
+## Complex Build System
 
 **Input:** "Test complete build process: create source, compile, link, and verify executable"
 
@@ -486,7 +713,7 @@ int main() {
 - And I get no error
 ```
 
-### Error Handling Test
+## Error Handling Test
 
 **Input:** "Verify that invalid input produces appropriate error message"
 
@@ -501,65 +728,69 @@ int main() {
 - And output contains `Line 1: Syntax error`
 ```
 
-## DECISION TREE FOR SCENARIO GENERATION
+---
 
-### Step 1: Identify Test Objective
-- **Command execution** → Use `run` or `successfully run`
-- **File operation** → Use file-related keywords
-- **Output verification** → Use `get`, `contains`, `matches`
-- **Error handling** → Use `get error`, `I get an error`
+# Decision Tree for Scenario Generation
 
-### Step 2: Determine Parameters
-- **Short text** (single line) → Inline backticks `` `text` ``
-- **Multiline content** → Code block after step
-- **File reference** → `` `filename` ``
+## Step 1: Identify Test Objective
+- Command execution: Use `run` or `successfully run`
+- File operation: Use file-related keywords
+- Output verification: Use `get`, `contains`, `matches`
+- Error handling: Use `get error`, `I get an error`
 
-### Step 3: Choose Step Type
-- **Setup/Precondition** → `Given`
-- **Action/Execution** → `When`
-- **Verification/Result** → `Then`
-- **Continuation** → `And` or `But`
+## Step 2: Determine Parameters
+- Short text (single line): Use inline backticks
+- Multiline content: Use a code block after the step
+- File reference: Use filename in backticks
 
-### Step 4: Add Natural Decoration
+## Step 3: Choose Step Type
+- Setup/Precondition: `Given`
+- Action/Execution: `When`
+- Verification/Result: `Then`
+- Continuation: `And` or `But`
+
+## Step 4: Add Natural Decoration
 - Keep it simple and focused
-- Avoid *bbt* keywords in free text
+- Avoid bbt keywords in free text
 - Use natural language that humans would understand
 
-### Step 5: Validate Structure
+## Step 5: Validate Structure
 - Scenarios must start with Given, When, or Then
 - And/But can only follow another step
 - Code blocks must immediately follow their step
 - All parameters must be properly formatted
 
-## WRITING GUIDELINES
+---
 
-### Generation Priorities
-1. **Correct syntax** first (must be parseable by *bbt*)
-2. **Natural language** second (must be readable by humans)
-3. **Completeness** third (cover the test objective)
+# Writing Guidelines
 
-### Steps must be natural english sentences
-- too short, not natural : "- Then file `output.txt` is file `expected.txt`
-- too long               : "- Then the file `output.txt` has the same content as file `expected.txt`, this check the UTF8 vs LATIN-1 conversion discussed in #234"
-- OK     : "- Then the file `output.txt` has the same content as file `expected.txt`, fixes #234"
-- comments should be moved to following lines, with the following exceptions: 
-  - filtering tags must be on stay on the line of the item to filter (Feature, Scenario, Step)  
-  - Issue number may stay on the same line
+## Generation Priorities
+1. Correct syntax first (must be parseable by bbt)
+2. Natural language second (must be readable by humans)
+3. Completeness third (cover the test objective)
 
-### When in Doubt
+## Steps must be natural English sentences
+- Too short: `- Then file output.txt is file expected.txt`
+- Too long: `- Then the file output.txt has the same content as file expected.txt, this checks the UTF8 vs LATIN-1 conversion discussed in #234`
+- OK: `- Then the file output.txt has the same content as file expected.txt, fixes #234`
+- Comments should be moved to following lines, except:
+  - Filtering tags must stay on the line of the item to filter
+  - Issue numbers may stay on the same line
+
+## When in Doubt
 - Use the most common pattern from the Quick Start Guide
 - Prefer simple, direct language
-- Use meaningful filenames (`customers.txt`, `output.txt`, `sensor_3_data.json`)
+- Use meaningful filenames
 - Focus on the core test objective
 
-### Handling Ambiguity
-- **Missing parameters**: Use placeholders like `` `value` ``, `` `content` ``
-- **Unclear expectations**: Use `contains` rather than exact matches
-- **Complex workflows**: Break into multiple simple scenarios
+## Handling Ambiguity
+- Missing parameters: Use placeholders like `value`, `content`
+- Unclear expectations: Use `contains` rather than exact matches
+- Complex workflows: Break into multiple simple scenarios
 
-### Avoid snapshot testing
-Avoid test results that provide a full reference output if the test is focused on a specific part. Otherwise, all tests are impacted when the output format changes, not only tests regarding specifically the modified part.
-This is achieved by using "matches" or "contains" instead of "is".
+## Avoid Snapshot Testing
+Avoid test results that provide a full reference output if the test is focused on a specific part. Otherwise, all tests are impacted when the output format changes.
+Use `matches` or `contains` instead of `is`.
 
 Example:
 ```md
@@ -569,31 +800,28 @@ Example:
 ~~~
 gcc (Debian 14.2.0-19) 14.2.0
 Copyright (C) 2024 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ~~~
 
-# Scenario 2: testing just that the Copyright is given
+# Scenario 2: testing just the Copyright
 - When I run `gcc --version`
-- Then the output contains  
+- Then the output contains 
 ~~~
 Copyright (C) 2024 Free Software Foundation, Inc.
 ~~~
 
-# Scenario 3: testing just the format of the version number
+# Scenario 3: testing just the version format
 - When I run `--version`
 - Then the output matches `(.*version [0-9]+\.[0-9]+\.[0-9]+ .*`
 ```
 
-### Code Block Nesting Rules
+## Code Block Nesting Rules
 
-**Critical Rule for LLM**: When documenting scenarios that contain code blocks, follow these nesting rules:
+**Critical Rule for LLM**: When documenting scenarios that contain code blocks, follow these rules:
+1. Outer code block: Use `~~~` with language specifier
+2. Inner code blocks: Use ``` with language specifier
+3. Maximum nesting: Never exceed 2 levels
 
-1. **Outer code block**: Use `~~~` with language specifier
-2. **Inner code blocks**: Use ``` with language specifier
-3. **Maximum nesting**: Never exceed 2 levels of nesting
-
-**✅ Correct Example**:
+**Correct Example**:
 ```markdown
 ~~~markdown
 ## Scenario: File creation example
@@ -606,30 +834,32 @@ echo "Hello"
 ~~~
 ```
 
-### Optimization Tips
+## Optimization Tips
 - Group related tests in the same feature
 - Use Background for common setup across scenarios
 - Keep scenarios focused on single test objectives
 - Use descriptive scenario names
 
-## REFERENCE SUMMARY
+---
 
-### Key Rules Checklist
-- ✅ Scenarios start with Given/When/Then (not And/But)
-- ✅ Parameters in backticks or code blocks
-- ✅ Code blocks immediately follow their step
-- ✅ No *bbt* keywords in decorative text
-- ✅ File operations specify filenames
-- ✅ Commands are executable strings
+# Reference Summary
 
-### Common Keywords
-- **Actions**: run, successfully run, is, is no, contains, does not contain, get, matches
-- **Subjects**: file, output, error, dir, directory
-- **Modifiers**: new, no, not, unordered
+## Key Rules Checklist
+- Scenarios start with Given/When/Then (not And/But)
+- Parameters in backticks or code blocks
+- Code blocks immediately follow their step
+- No bbt keywords in decorative text
+- File operations specify filenames
+- Commands are executable strings
 
-### Parameter Style Guide
-- **Inline**: Single line, short text, commands, filenames
-- **Code block**: Multiline content, file contents, expected output
-- **File reference**: Use `file` keyword + filename in backticks
+## Common Keywords
+- Actions: run, successfully run, is, is no, contains, does not contain, get, matches
+- Subjects: file, output, error, dir, directory
+- Modifiers: new, no, not, unordered
 
-This optimized reference guide provides LLM agents with the essential information needed to generate valid, effective *bbt* scenarios while maintaining natural language readability for humans.
+## Parameter Style Guide
+- Inline: Single line, short text, commands, filenames
+- Code block: Multiline content, file contents, expected output
+- File reference: Use `file` keyword + filename in backticks
+
+This reference guide provides LLM agents with the essential information needed to generate valid, effective bbt scenarios that remain readable as natural language for humans.
