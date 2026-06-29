@@ -200,7 +200,7 @@ bbt help tutorial
 
 ## Further reading
 - A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9).
-- How to get off to a good start with the README and bbt: [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)
+- How to get off to a good start with the README and *bbt*: [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)
 
 ## References
 - [User Guide](docs/UG.md): concepts, commands, features...
