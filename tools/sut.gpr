@@ -3,10 +3,13 @@ project sut is
    for Source_Dirs use ("./");
    for Object_Dir use "obj/";
    for Exec_Dir use "../";
-   for Main use ("sut.adb");
+   for Main use ("sut.adb",
+                 "rpl.adb");
 
    package Builder is
       for Executable ("sut.adb") use "sut";
+      for Executable ("rpl.adb") use "rpl";
+
       for Default_Switches ("ada") use ("-j2");
    end Builder;
 

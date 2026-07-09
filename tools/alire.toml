@@ -9,7 +9,7 @@ licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
 website = ""
 tags = []
 
-executables = ["sut"]
+executables = ["sut", "rpl"]
 
 [configuration]
 generate_C   = false
