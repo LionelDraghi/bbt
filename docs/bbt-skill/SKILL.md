@@ -103,18 +103,6 @@ bbt tests/ --include Smoke --include Regression
 bbt README.md --select 'Version Check'
 ```
 
-## Troubleshooting: Installation & Usage
-
-| Problem | Solution |
-|---------|----------|
-| `bbt: command not found` | Ensure `~/.alire/bin` is in your PATH |
-| Ada version error | Update GNAT via Alire: `alr toolchain --select gnat_native` |
-| Case sensitivity issues on macOS | `export GNAT_FILE_NAME_CASE_SENSITIVE=1` |
-| Build fails | Try: `make clean && make build` or `alr clean && alr build` |
-| Slow test execution | Use `--stop-on-error` to stop at the first failure |
-
----
-
 # Debugging bbt Tests
 
 - Verify that `bbt` correctly identify the scenarios and steps in your file
@@ -187,11 +175,6 @@ test:
     - alr install bbt
     - bbt docs/features/ --exclude Windows_Only
 ```
-
----
-
-# Fine-tuning Scenarios
-- `bbt explain <file>`: explain what bbt understands from the file, and announce what will be done if the file is "run"
 
 ---
 
