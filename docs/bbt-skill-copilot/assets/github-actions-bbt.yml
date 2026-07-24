@@ -1,0 +1,19 @@
+name: bbt
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  bbt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bbt
+        run: |
+          echo "Install bbt here"
+          bbt help
+
+      - name: Run bbt scenarios
+        run: bbt --recursive .
