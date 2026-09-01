@@ -775,7 +775,7 @@ int main() {
 Avoid test results that provide a full reference output if the test is focused on a specific part. Otherwise, all tests are impacted when the output format changes.
 Use `matches` or `contains` instead of `is`.
 
-Example:
+Don't do:
 ```md
 # Scenario 1: testing the complete --version message
 - When I run `gcc --version`
@@ -784,16 +784,19 @@ Example:
 gcc (Debian 14.2.0-19) 14.2.0
 Copyright (C) 2024 Free Software Foundation, Inc.
 ~~~
+```
 
-# Scenario 2: testing just the Copyright
+Prefer:
+```md
+# Scenario 1 : testing the Copyright
 - When I run `gcc --version`
 - Then the output contains 
 ~~~
 Copyright (C) 2024 Free Software Foundation, Inc.
 ~~~
 
-# Scenario 3: testing just the version format
-- When I run `--version`
+# Scenario 2: testing the version format
+- When I run `gcc --version`
 - Then the output matches `(.*version [0-9]+\.[0-9]+\.[0-9]+ .*`
 ```
 
