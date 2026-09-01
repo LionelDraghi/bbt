@@ -2,7 +2,7 @@
 name: bbt-user
 description: |
   Reference guide for LLM to generate valid bbt scenarios from natural language and run them.
-  Organized into two areas: **author** (writing scenarios) and **runner** (executing tests).
+
   Start with the overview below, then dive into specific topics via linked files.
 license: CC-BY-NC-SA-4.0
 metadata:
@@ -14,6 +14,7 @@ allowed-tools:
   - edit
   - write_file
   - ask_user_question
+compatibility: Requires bbt to be installed for execution tasks; authoring tasks require no runtime dependency.
 ---
 
 # bbt: Behavior-Driven Testing in Markdown

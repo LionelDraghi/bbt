@@ -99,7 +99,7 @@ Add explanations **outside** the scenario steps (these are ignored by bbt but he
 ---
 
 ### 5. Use Tags Wisely
-Add tags to scenarios for filtering and categorization.
+Add tags to scenarios for filtering and categorization, according to project practices.
 
 **Common Tag Patterns:**
 - Platform-specific: `[Windows_Only]`, `[Unix_Only]`, `[MacOS_Only]`
@@ -109,7 +109,7 @@ Add tags to scenarios for filtering and categorization.
 
 **Example:**
 ```markdown
-## Scenario: Windows-specific feature, Windows_Only, Regression
+## Scenario: Windows-specific Autentification feature, Windows_Only, Regression
 
 - When I run `windows_command`
 - Then output contains `Windows result`
@@ -169,40 +169,7 @@ Use this checklist to ensure your scenarios are high quality:
 
 ---
 
-## Recommended Workflow
 
-### 1. Write a New Test
-1. Create a `.md` file (e.g., `tests/my_feature.md`)
-2. Write the scenario in natural English
-3. Verify syntax: `bbt explain tests/my_feature.md`
-4. Check for any unrecognized steps
-
-### 2. Debug the Test
-1. Run in verbose mode: `bbt --verbose tests/my_feature.md`
-2. If it fails:
-   - Manually test the commands
-   - Check the temporary files (run without `--cleanup`)
-   - Fix the scenario
-3. Verify it passes with `--verbose`
-
-### 3. Integrate into Project
-1. Add the file to the Git repository
-2. Run all tests: `bbt tests/`
-3. (Optional) Add a Git hook to run bbt before commit:
-   ```bash
-   # .git/hooks/pre-commit
-   #!/bin/sh
-   bbt tests/ || exit 1
-   ```
-
-### 4. Maintain Tests
-1. Update scenarios when behavior changes
-2. Add tags for specific test types
-3. Regularly verify with: `bbt tests/ --include Regression`
-4. Remove obsolete tests
-5. Add new tests for new features
-
----
 
 ## Optimization Tips
 
@@ -260,76 +227,6 @@ Use **Background** for common setup across multiple scenarios.
 - Create helper scripts for complex setup
 - Store test data in a `test_data/` directory
 
----
-
-## Code Block Nesting Rules
-
-**Critical for LLM and Documentation:**
-
-1. **Outer code block**: Use `~~~` with language specifier for markdown examples
-2. **Inner code blocks**: Use ``` with language specifier for actual bbt code blocks
-3. **Maximum nesting**: Never exceed 2 levels
-
-**Correct Example:**
-```markdown
-~~~markdown
-## Scenario: File creation example
-
-- Given the file `script.sh`
-```bash
-#!/bin/bash
-echo "Hello"
-```
-~~~
-```
-
-**Incorrect Example:**
-```markdown
-~~~markdown
-~~~bash
-# This is WRONG - too many nesting levels
-~~~
-~~~
-```
-
----
-
-## Avoid Snapshot Testing
-
-Avoid test results that provide a **full reference output** if the test is focused on a specific part. Otherwise, all tests are impacted when the output format changes.
-
-**Bad (brittle):**
-```markdown
-## Scenario: testing the complete --version message
-
-- When I run `gcc --version`
-- Then the output is 
-~~~
-gcc (Debian 14.2.0-19) 14.2.0
-Copyright (C) 2024 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-~~~
-```
-
-**Good (focused):**
-```markdown
-## Scenario: testing just the version number
-
-- When I run `gcc --version`
-- Then output contains `14.2.0`
-
-## Scenario: testing just the Copyright
-
-- When I run `gcc --version`
-- Then output contains `Copyright (C) 2024 Free Software Foundation, Inc.`
-
-## Scenario: testing just the version format
-
-- When I run `gcc --version`
-- Then output matches `(gcc|clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
-```
-
-**Use `matches` or `contains` instead of exact matches** for better maintainability.
 
 ---
 

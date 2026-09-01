@@ -25,7 +25,7 @@ So that [benefit]
 > As a developer, I want to validate my JSON files so that I can catch syntax errors early.
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Valid JSON file passes validation
 
 - Given the file `valid.json` containing
@@ -44,7 +44,7 @@ So that [benefit]
 - When I run `json_validator invalid.json`
 - Then I get an error
 - And output contains `Syntax error`
-```
+~~~
 
 **Mapping:**
 - Role: developer → Context for scenario
@@ -59,7 +59,7 @@ So that [benefit]
 > As a data analyst, I want to convert CSV files to JSON format so that I can work with the data in my preferred format.
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: CSV to JSON conversion
 
 - Given the file `input.csv` containing
@@ -75,7 +75,7 @@ Bob,25,LA
 [{"name": "Alice", "age": 30, "city": "NYC"}, {"name": "Bob", "age": 25, "city": "LA"}]
 ```
 - And I get no error
-```
+~~~
 
 ---
 
@@ -85,7 +85,7 @@ Bob,25,LA
 > As a system administrator, I want to receive clear error messages when configuration is invalid so that I can quickly fix issues.
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Invalid configuration produces clear error
 
 - Given the file `invalid_config.yaml` containing
@@ -98,7 +98,7 @@ key: value
 - And output contains `Configuration error`
 - And output contains `Line 2`
 - And output contains `Invalid indentation`
-```
+~~~
 
 ---
 
@@ -108,7 +108,7 @@ key: value
 > As a DevOps engineer, I want to deploy my application with a single command so that the process is simple and repeatable.
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Single-command deployment
 
 - Given the file `deploy.sh` containing
@@ -123,7 +123,7 @@ pm2 start server.js
 - Then output contains `Build successful`
 - And output contains `App started`
 - And I get no error
-```
+~~~
 
 ---
 
@@ -268,7 +268,7 @@ These map **directly** to bbt syntax!
 > - Given I have provided invalid markdown, When I run the publish command, Then I receive a formatting error
 
 **Transformed bbt Scenarios:**
-```markdown
+~~~markdown
 # Feature: Article Publishing, [ContentManager]
 
 ## Scenario: Valid article publishes successfully
@@ -305,7 +305,7 @@ This has **invalid** markdown: [unclosed link
 - When I run `publish article_bad_markdown.md`
 - Then I get error
 - And output contains `Markdown formatting error`
-```
+~~~
 
 ---
 

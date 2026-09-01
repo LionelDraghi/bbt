@@ -308,13 +308,13 @@ option=setting
 ## Output Verification
 
 **Exact output match:**
-```markdown
+~~~markdown
 - Then I get
 ```
 Expected output line 1
 Expected output line 2
 ```
-```
+~~~
 
 **Partial output match:**
 ```markdown
@@ -353,18 +353,18 @@ When asked to "make a file runable" or "make a file bbt compatible", check withi
 - section with "Scenario" or "Example" in the title
 - command line
 - description of input and output
-And then try to transform the content into a bbt scenario, using the grammar and patterns described above.
+And then try to transform the content into a `bbt` scenario, using the grammar and patterns described above.
 
-When asked to make a bbt test from a requirement, a README instruction, or a user story :
+When asked to make a `bbt` test from a requirement, a README instruction, or a user story :
 - try to identify the key actions, inputs, and expected outputs, 
-- structure them into a bbt scenario format. 
-- Organize the scenarios in features if needed, 
-- identify common prerequisite and use Backgrouns as needed
+- structure them into a `bbt` scenario format. 
+- organize the scenarios in features if needed, 
+- identify common prerequisite and use Backgrounds as needed
 - use tags to indicate platform specific test
-- ensure that the steps are clear, concise, and follow the bbt syntax
+- ensure that the steps are clear, concise, and follow the `bbt` syntax
 - reuse the provided wording as much as possible, while ensuring that the resulting scenario is valid and executable by bbt.
 
-## From Requirements to bbt
+## From Requirements to `bbt`
 
 **Requirement:** "System shall display version when --version flag is used"
 
@@ -377,7 +377,7 @@ When asked to make a bbt test from a requirement, a README instruction, or a use
 - And I get no error
 ```
 
-## From README to bbt
+## From README to `bbt`
 
 **README instruction:** "To compile: 1. Create source file, 2. Run compiler, 3. Verify output"
 
@@ -398,7 +398,7 @@ end Program;
 - And I get no error
 ~~~
 
-## From User Stories to bbt
+## From User Stories to `bbt`
 
 **User Story:** "As a developer, I want to validate my JSON files so that I can catch syntax errors early"
 
@@ -436,7 +436,7 @@ end Program;
    - Bad: `### Scenario: Test 1`
    - Good: `### Scenario: Login with valid credentials`
 3. **Group related tests** - Use `# Feature: Authentication` to group scenarios
-4. **Document context** - Add explanations outside sections recognized by bbt
+4. **Document context** - Add explanations outside sections recognized by `bbt`
 5. **Use tags wisely** - e.g., `@Smoke`, `@Regression`, `@Windows_Only`, `@Unix_Only`
 
 ## File Organization
@@ -463,7 +463,6 @@ my_project/
 - [ ] Arguments are **in backticks** (simple) or **fenced code blocks** (multiline)
 - [ ] File paths are **relative to the `.md` file**
 - [ ] Test passes locally (`bbt my_test.md`)
-- [ ] Test passes with `--verbose`
 - [ ] Tags are added if needed (`[Unix_Only]`, `[Smoke]`)
 - [ ] File is **valid Markdown**
 
@@ -491,25 +490,6 @@ my_project/
 1. Update scenarios when behavior changes
 2. Add tags for specific test types
 3. Regularly verify with: `bbt tests/ --include Regression`
-
----
-
-# Practical Exercises
-
-## Scenarios to Write
-
-1. **Basic test**: Verify that `echo "Hello"` returns `Hello`
-
-2. **File test**:
-   - Create a file `test.txt` with content `"Ada"`
-   - Verify that `cat test.txt` returns `"Ada"`
-
-3. **Error test**: Verify that `ls nonexistent_file` returns an error code
-
-4. **Multi-step test**:
-   - Create a file `input.csv`
-   - Run a script that processes it
-   - Verify that `output.csv` is created with the correct content
 
 ---
 

@@ -43,7 +43,7 @@ Each of these can be transformed into testable bbt scenarios.
 ### Example 2: Usage Example
 
 **README:**
-```markdown
+~~~markdown
 ## Usage
 
 To process a file:
@@ -52,7 +52,7 @@ processor input.txt output.txt
 ```
 
 This will read `input.txt`, process its contents, and write the result to `output.txt`.
-```
+~~~
 
 **Transformation:**
 ```markdown
@@ -70,7 +70,7 @@ This will read `input.txt`, process its contents, and write the result to `outpu
 ### Example 3: Configuration Instructions
 
 **README:**
-```markdown
+~~~markdown
 ## Configuration
 
 Create a `config.json` file:
@@ -81,10 +81,10 @@ Create a `config.json` file:
 ```
 
 Then run `app --config config.json` to start the application.
-```
+~~~
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Application starts with valid configuration
 
 - Given the file `config.json` containing
@@ -96,7 +96,7 @@ Then run `app --config config.json` to start the application.
 - When I successfully run `app --config config.json`
 - Then output contains `Application started`
 - And I get no error
-```
+~~~
 
 ---
 
@@ -133,7 +133,7 @@ Then run `app --config config.json` to start the application.
 ### Example 5: Expected Output
 
 **README:**
-```markdown
+~~~markdown
 ## Output
 
 The program will output:
@@ -141,20 +141,23 @@ The program will output:
 Processing...
 Done!
 ```
-```
+~~~
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Program produces expected output
 
 - When I run `program`
-- Then output contains `Processing...`
-- And output contains `Done!`
-- And I get no error
+- Then output contains 
 ```
+Processing...
+Done!
+```
+- And I get no error
+~~~
 
 For **exact** output matching:
-```markdown
+~~~markdown
 ## Scenario: Exact output verification
 
 - When I run `program`
@@ -163,8 +166,8 @@ For **exact** output matching:
 Processing...
 Done!
 ```
-```
-```
+- And I get no error
+~~~
 
 ---
 
@@ -189,7 +192,6 @@ Done!
 - And I successfully run `cmake ..`
 - And I successfully run `cmake --build .`
 - Then there is a file `build/program`
-- And I get no error
 ```
 
 ---
@@ -234,7 +236,7 @@ Similar to Markdown. Focus on code blocks and commands.
 ## Complete Example: Full README Transformation
 
 **Original README.md:**
-```markdown
+~~~markdown
 # My Application
 
 ## Installation
@@ -261,16 +263,15 @@ npm test
 ```
 
 All tests should pass.
-```
+~~~
 
 **Transformed bbt Scenarios:**
-```markdown
-# Feature: My Application
+~~~markdown
+# Scenario: My Application
 
-## Scenario: Installation succeeds
+## Background: Installation succeeds
 
-- When I successfully run `npm install`
-- Then I get no error
+- Given I successfully run `npm install`
 
 ## Scenario: File processing works
 
@@ -278,14 +279,12 @@ All tests should pass.
 - When I successfully run `node app.js input.txt output.txt`
 - Then there is a file `output.txt`
 - And file `output.txt` contains `processed: test data`
-- And I get no error
 
 ## Scenario: All tests pass
 
 - When I successfully run `npm test`
 - Then output contains `Test Suites: 1 passed`
-- And I get no error
-```
+~~~
 
 ---
 

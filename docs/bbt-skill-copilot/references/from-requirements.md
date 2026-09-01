@@ -81,7 +81,7 @@ Map to bbt:
 > "The compiler shall compile source files, generate object files, and produce an executable when given valid source code"
 
 **Transformation:**
-```markdown
+~~~markdown
 ## Scenario: Complete compilation workflow
 
 - Given the file `main.c` containing
@@ -107,7 +107,7 @@ int main() { return 0; }
 - Given there is a file `main.o`
 - When I successfully run `gcc -o program main.o`
 - Then there is a file `program`
-```
+~~~
 
 ---
 
@@ -201,7 +201,7 @@ REQ-003: The system shall display compilation errors when source contains syntax
 ```
 
 **Transformed bbt Scenarios:**
-```markdown
+~~~markdown
 # Feature: Ada Compilation
 
 ## Scenario: Successful compilation produces executable, REQ-001, REQ-002
@@ -231,4 +231,4 @@ end Broken;
 - When I run `gnatmake broken.adb`
 - Then I get error
 - And output contains `syntax error`
-```
+~~~
