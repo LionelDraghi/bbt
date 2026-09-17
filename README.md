@@ -78,7 +78,8 @@ We have:
    *bbt* processes **only** section after a header starting with:
    - *# Features* 
    - *# Background* 
-   - *# Scenario* or *# Example*  
+   - *# Scenario* or *# Example*
+     
    that is some of Gherkin structural keywords.  
    As a consequence, the *Overview* section is ignored.  
 
@@ -91,7 +92,8 @@ We have:
    - *- When* 
    - *- Then* 
    - *- And* 
-   - *- But*  
+   - *- But*
+     
    Those lines contains the things to check or do.  
    
    Note that the only possible list marker for Steps is `-`, so that other list markers like '*' or '+' may be used for comments and will be ignored by *bbt*.
