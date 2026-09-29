@@ -82,10 +82,32 @@ begin
       State.Object := Error;
 
    elsif Lower_Keyword = "output" then
-      if In_Subject_Part then
+      if State.Object = Error then
+         -- "error output": the standard error of the last command
+         --    Then the error output contains `unknown option`
+         --    Then there is no error output
+         if In_Subject_Part then
+            State.Subject := Stderr_Subj;
+            State.Object  := No_Object;
+         else
+            State.Object := Stderr_Obj;
+         end if;
+      elsif In_Subject_Part then
          State.Subject := Output_Subj;
       else
          State.Object := Output_Obj;
+      end if;
+
+   elsif Lower_Keyword = "exit" then
+      -- Then the exit code is `2`
+      if In_Subject_Part then
+         State.Subject := Exit_Subj;
+      end if;
+
+   elsif Lower_Keyword = "environment" then
+      -- Given the environment variable `NAME` is `value`
+      if In_Subject_Part then
+         State.Subject := Env_Var_Subj;
       end if;
 
    elsif Lower_Keyword = "contains" or

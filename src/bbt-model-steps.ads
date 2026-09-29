@@ -31,6 +31,8 @@ package BBT.Model.Steps is
                     Check_Dir_Existence,
                     Erase_And_Create,
                     Create_If_None,
+                    Set_Env_Var,
+                    Unset_Env_Var,
                     -- Run actions
                     Run_Cmd,
                     Run_Without_Error,
@@ -51,7 +53,12 @@ package BBT.Model.Steps is
                     File_Is_Not,
                     File_Contains,
                     File_Does_Not_Contain,
-                    No_Output);
+                    No_Output,
+                    Stderr_Is,
+                    Stderr_Contains,
+                    Stderr_Does_Not_Contain,
+                    No_Stderr,
+                    Exit_Code_Is);
 
    type Step_Type;
    type Step_Maybe is access all Step_Type;

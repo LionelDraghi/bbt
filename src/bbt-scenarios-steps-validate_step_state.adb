@@ -27,8 +27,26 @@ begin
      (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
 
    case State.Subject is
-      when No_Subject | Output_Subj | Subject_Text =>
+      when No_Subject | Output_Subj | Subject_Text | Stderr_Subj =>
          null;
+
+      when Exit_Subj =>
+         if State.Object = Obj_Text then
+            begin
+               if Integer'Value (To_String (State.Object_String)) = 0 then
+                  null; -- only checks that the code is an integer
+               end if;
+            exception
+               when Constraint_Error =>
+                  IO.Put_Error ("Exit code expected in object phrase, got "
+                                & To_String (State.Object_String)'Image, Loc);
+            end;
+         end if;
+
+      when Env_Var_Subj =>
+         if No_Subject_String then
+            IO.Put_Error ("Variable name expected in subject phrase (should be between backticks)", Loc);
+         end if;
 
       when Subject_File =>
          if No_Subject_String then
@@ -45,7 +63,7 @@ begin
    end case;
 
    case State.Object is
-      when No_Object | Output_Obj | Obj_Text | Command_List | Error =>
+      when No_Object | Output_Obj | Stderr_Obj | Obj_Text | Command_List | Error =>
          null;
 
       when Obj_File_Name =>
