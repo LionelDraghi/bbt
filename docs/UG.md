@@ -205,6 +205,25 @@ But if you specify the files, even using wildcards, like in `bbt tests/robustnes
 
 As a special rule, a file will be ignored even if in the search path: the index file if the `--index` option is used, as it is probably a consequence of a previous run. 
 
+### Error output, exit code and environment
+
+By default, `output` steps check the standard output and the standard error
+of the command, merged. When a scenario checks the error output
+(`Then the error output contains ...`, `Then there is no error output`), the
+commands of that scenario write their standard error apart, and `output`
+steps check the standard output alone.
+(cf. [feature `error output`](features/A270_Then_Error_Output.md)).
+
+`Then I get an error` only tells success from failure;
+`Then the exit code is `2`` checks the exact code of the last command.
+(cf. [feature `exit code`](features/A260_Then_Exit_Code_Is.md)).
+
+`Given the environment variable `LANG` is `C`` and
+`Given the environment variable `NO_COLOR` is not set` change the
+environment of the commands run afterwards in the scenario; the variables
+get their previous state back at the end of the scenario.
+(cf. [feature `environment variable`](features/A280_Given_Environment_Variable.md)).
+
 ## Tips
 
 ### Filtering, tags and Conditional execution 

@@ -113,6 +113,10 @@ package body BBT.Model.Steps is
           else
             "that output does not contain as in file " & Object_File_Name);
 
+      -- "that output ..." -> "that error output ..."
+      function On_Error_Output (Explanation : String) return String is
+         ("that error " & Explanation (Explanation'First + 5 .. Explanation'Last));
+
    begin
       case Step.Data.Action is
       when None =>
@@ -218,6 +222,29 @@ package body BBT.Model.Steps is
 
       when No_Output =>
          return Prefix & "that last command produces no output";
+
+      when Set_Env_Var =>
+         return Prefix_Start & "Set environment variable " & Subject_String
+                & " to " & Object_String & " for the scenario";
+
+      when Unset_Env_Var =>
+         return Prefix_Start & "Unset environment variable " & Subject_String
+                & " for the scenario";
+
+      when Stderr_Is =>
+         return Prefix & On_Error_Output (Output_Is);
+
+      when Stderr_Contains =>
+         return Prefix & On_Error_Output (Output_Contains);
+
+      when Stderr_Does_Not_Contain =>
+         return Prefix & On_Error_Output (Output_Does_Not_Contain);
+
+      when No_Stderr =>
+         return Prefix & "that last command produces no error output";
+
+      when Exit_Code_Is =>
+         return Prefix & "that last command exit code is " & Object_String;
 
       end case;
 

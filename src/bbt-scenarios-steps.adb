@@ -42,6 +42,9 @@ package body BBT.Scenarios.Steps is
                     Subject_Text, -- content of code span or following
                     --               code fenced lines, before verb
                     Output_Subj,
+                    Stderr_Subj, -- "the error output"
+                    Exit_Subj,    -- "the exit code"
+                    Env_Var_Subj,      -- "the environment variable `NAME`"
                     -- Verbs ------------------------------------------------
                     No_Verb,
                     Run,
@@ -59,6 +62,7 @@ package body BBT.Scenarios.Steps is
                     -- Objects ----------------------------------------------
                     No_Object,
                     Output_Obj,
+                    Stderr_Obj, -- "there is no error output"
                     Obj_File_Name,
                     Obj_Dir_Name, -- file or dir name
                     Obj_Text, -- content of code span on the same line or
