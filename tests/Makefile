@@ -50,7 +50,6 @@ EXCLUDE := --exclude Windows_Only
 else ifeq ($(PLATFORM), Linux)
 	# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
-	@ln -fs /usr/bin/rpl rpl
 EXCLUDE = --exclude Windows_Only
 
 else
@@ -63,8 +62,6 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	mkdir -p $(RESULTS_DIR)
     
 	@ # Some examples rely on external exe : 
-	@ # - rpl : on windows, you'll find one in the GnuWin32 package
-	@ #         It's not the same rpl than on my Debian, but fortunately command lines are similar  
 	@ # - gcc
 
 	@ # =====================================================================
