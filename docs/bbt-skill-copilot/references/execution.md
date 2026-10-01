@@ -1,6 +1,42 @@
-# Running and integrating bbt
+Use this reference when the user wants to install bbt, run existing scenarios, explain command-line usage, or integrate bbt into CI/CD.
 
-Use this reference when the user wants to run existing scenarios, explain command-line usage, or integrate bbt into CI/CD.
+# Installation and Setup
+
+Check if bbt is already installed
+
+```bash
+bbt help
+```
+
+If not, install it.
+
+## Installing bbt using the Alire package manager (Recommended method)
+
+check if Alire is installed:
+
+```bash
+alr version
+```
+If not, refer to https://alire.ada.dev/docs/#installation for installing
+
+Then:
+
+```bash
+alr install bbt
+```
+
+## Installing bbt using other installation methods
+
+For other installation methods (AppImage for Linux or compiling from sources), see the [bbt GitHub repository](https://github.com/LionelDraghi/bbt#installation).
+
+
+If bbt is still not available, ensure that it is in the PATH.
+When installed with Alire, it should be in:
+- Linux/macOS : ~/.alire/bin/
+- Windows : %APPDATA%\alire\bin\ (soit C:\Users\<utilisateur>\AppData\Roaming\alire\bin\)
+
+> Note for macOS (Darwin): On older versions, setting `GNAT_FILE_NAME_CASE_SENSITIVE=1` to avoid case sensitivity issues may be required.
+
 
 ## Execution principles
 
@@ -10,10 +46,6 @@ When running or proposing bbt commands:
 2. Use selection, exclusion, recursive mode, matching mode, or cleanup options only when the task requires them.
 3. For CI/CD, keep the workflow minimal and make installation steps explicit.
 4. Do not assume the target operating system unless the user or repository context indicates it.
-
-## Output expectations
-
-For execution or CI/CD tasks, provide directly usable shell commands or configuration snippets.
 
 ## Basic commands
 

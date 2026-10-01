@@ -238,8 +238,8 @@ echo "Hello"
 ~~~
 
 Common step patterns:
-- Command execution: `- When I run `command` `
 - File creation: `- Given the file `name` containing `content` `
+- Command execution: `- When I run `command` `
 - Output verification: `- Then output contains `expected` `
 - Error checking: `- Then I get an error`
 

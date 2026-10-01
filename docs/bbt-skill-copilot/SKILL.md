@@ -46,8 +46,8 @@ Typical requests:
 
 ### Read [execution](references/execution.md) when the user wants to
 
-- run existing bbt scenarios
-- check whether a Markdown file executes correctly with bbt
+- install bbt
+- run or check an existing bbt scenarios
 - understand or troubleshoot bbt command-line usage
 - integrate bbt into CI/CD
 
@@ -63,4 +63,4 @@ Typical requests:
 
 Use this link only when the user needs realistic, copyable, complete scenario files or when examples are useful to guide authoring.
 
-If the request involves both conversion and execution, read `authoring.md` first, then `execution.md`.
+If the request involves both conversion and execution, read `execution.md` first, then `authoring.md`.
