@@ -17,6 +17,7 @@ all: build sut check doc
 
 bbt$(EXE_SUFFIX): build
 sut$(EXE_SUFFIX): tools
+rpl$(EXE_SUFFIX): tools
 
 sut:
 	echo === building sut

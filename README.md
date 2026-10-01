@@ -21,6 +21,8 @@
     - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
 - [Some projects using *bbt*](#some-projects-using-bbt)
+  - [By contributors](#by-contributors)
+  - [By users](#by-users)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
 - [References](#references)
@@ -191,9 +193,14 @@ bbt help tutorial
 ```
 
 ## Some projects using *bbt*
+
+### By contributors
 - Kudos to the first adopter, Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret
 - [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
+- [aclida](https://github.com/adarium-labs/aclida), by [Heziode](https://github.com/Heziode)
+
+### By users
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
 
 ## Help and comments
