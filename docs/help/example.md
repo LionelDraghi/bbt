@@ -1,8 +1,15 @@
 # gcc simple sanity tests
 
+### Scenario 1: Checking installed gcc version
+
+> Let's start with the simpliest possible scenario, running a command and checking the output
+
+- When I run `gcc --version`
+- Then the output contains `14.2.0`
+
 ## Scenario 2 : compiling and executing an hello word
 
-> This scenario illustrate basic bbt's features, creating a file, running a command, checking the output.
+> This scenario illustrate basic bbt's features, creating an input file, checking that some file doesn't exist before running a command, checking that the command exit with an OK status, checking the output.
 
 Sanity check of a complete compile / link / run sequence :
 
@@ -51,11 +58,11 @@ Let's use a regexp to test both.
 > This scenario illustrates how to set environment variables and verify localized error messages.
 
 - Given there is no `missing.c` file
+  
+- Given the environment variable `LC_ALL` is set to `en_UK.UTF-8`
+- When I run `gcc missing.c -o missing`
+- Then the error output contains `No such file or directory`
 
-- When I set environment variable `LC_ALL` to `fr_FR.UTF-8` and run `gcc missing.c -o missing`
-- Then the exit code is 1
-- And the error output contains `Aucun fichier ou dossier de ce type`
-
-- When I set environment variable `LC_ALL` to `en_UK.UTF-8` and run `gcc missing.c -o missing`
-- Then the exit code is 1
-- And the error output contains `No such file or directory`
+- Given the environment variable `LC_ALL` is set to `fr_FR.UTF-8`
+- When I run `gcc missing.c -o missing`
+- Then the error output contains `Aucun fichier ou dossier de ce type`
