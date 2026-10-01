@@ -23,13 +23,35 @@ private package BBT.Tests.Actions is
 
    type Run_Result is (Not_Specified, Success, Failure);
 
-   procedure Run_Cmd (Step            :     Step_Type'Class;
-                      Cmd             :     String;
-                      Output_Name     :     String;
-                      Expected_Result :     Run_Result;
-                      Verbosity       :     Verbosity_Levels;
-                      Spawn_OK        : out Boolean;
-                      Return_Code     : out Integer);
+   procedure Run_Cmd (Step              :     Step_Type'Class;
+                      Cmd               :     String;
+                      Output_Name       :     String;
+                      Expected_Result   :     Run_Result;
+                      Verbosity         :     Verbosity_Levels;
+                      Spawn_OK          : out Boolean;
+                      Return_Code       : out Integer;
+                      Error_Output_Name :     String := "");
+   -- The command output (standard output and standard error) is written to
+   -- Output_Name, unless Error_Output_Name is not empty: then the standard
+   -- error is written to Error_Output_Name, and Output_Name receives the
+   -- standard output only.
+
+   function Last_Exit_Code return Integer;
+   -- Exit code of the last command run (0 before the first one).
+
+   procedure Exit_Code_Is (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels);
+
+   procedure Set_Env_Var (Step      : Step_Type'Class;
+                          Verbosity : Verbosity_Levels);
+   procedure Unset_Env_Var (Step      : Step_Type'Class;
+                            Verbosity : Verbosity_Levels);
+   -- The variable keeps its value for the commands run afterwards, until
+   -- Restore_Environment is called.
+
+   procedure Restore_Environment;
+   -- Give back to every variable set or unset since the last call the value
+   -- (or the absence) it had before. Called after each scenario.
 
    procedure Create_If_None (Step      : Step_Type'Class;
                              Verbosity : Verbosity_Levels);

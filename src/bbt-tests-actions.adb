@@ -11,7 +11,9 @@ with BBT.Writers;                       use BBT.Writers;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Command_Line;
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Directories;
+with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with GNAT.OS_Lib;
@@ -87,13 +89,30 @@ package body BBT.Tests.Actions is
    end Get_Expected;
 
    -- --------------------------------------------------------------------------
-   procedure Run_Cmd (Step            :     Step_Type'Class;
-                      Cmd             :     String;
-                      Output_Name     :     String;
-                      Expected_Result :     Run_Result;
-                      Verbosity       :     Verbosity_Levels;
-                      Spawn_OK        : out Boolean;
-                      Return_Code     : out Integer) is
+   -- Portable dup / dup2 of the GNAT runtime (adaint.c), used to give a
+   -- spawned command its own standard error file.
+   function Dup (Fd : GNAT.OS_Lib.File_Descriptor)
+                 return GNAT.OS_Lib.File_Descriptor;
+   pragma Import (C, Dup, "__gnat_dup");
+   procedure Dup2 (Old_Fd, New_Fd : GNAT.OS_Lib.File_Descriptor);
+   pragma Import (C, Dup2, "__gnat_dup2");
+
+   -- --------------------------------------------------------------------------
+   Last_Return_Code : Integer := 0;
+   -- Set by each Run_Cmd, read by the exit code checks of the following
+   -- steps (each step is run by a separate Runner.Run_Step call).
+
+   function Last_Exit_Code return Integer is (Last_Return_Code);
+
+   -- --------------------------------------------------------------------------
+   procedure Run_Cmd (Step              :     Step_Type'Class;
+                      Cmd               :     String;
+                      Output_Name       :     String;
+                      Expected_Result   :     Run_Result;
+                      Verbosity         :     Verbosity_Levels;
+                      Spawn_OK          : out Boolean;
+                      Return_Code       : out Integer;
+                      Error_Output_Name :     String := "") is
       use GNAT.OS_Lib;
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
@@ -165,12 +184,38 @@ package body BBT.Tests.Actions is
          -- Put_Debug_Line ("===========" & Spawn_Arg.all (I).all & "<");
       end loop;
 
-      Spawn (Program_Name => Spawn_Arg.all (1).all,
-             Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
-             Success      => Spawn_OK,
-             Output_File  => Output_Name,
-             Return_Code  => Return_Code,
-             Err_To_Out   => True);
+      if Error_Output_Name = "" then
+         Spawn (Program_Name => Spawn_Arg.all (1).all,
+                Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
+                Success      => Spawn_OK,
+                Output_File  => Output_Name,
+                Return_Code  => Return_Code,
+                Err_To_Out   => True);
+
+      else
+         -- The scenario checks the error output: the child's standard
+         -- error goes to its own file. Spawn leaves the child's standard
+         -- error on ours when Err_To_Out is False, so ours is redirected
+         -- to that file for the duration of the call.
+         declare
+            Err_FD   : constant File_Descriptor :=
+                         Create_File (Error_Output_Name, Binary);
+            Saved_FD : constant File_Descriptor := Dup (Standerr);
+         begin
+            Dup2 (Err_FD, Standerr);
+            Spawn (Program_Name => Spawn_Arg.all (1).all,
+                   Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
+                   Success      => Spawn_OK,
+                   Output_File  => Output_Name,
+                   Return_Code  => Return_Code,
+                   Err_To_Out   => False);
+            Dup2 (Saved_FD, Standerr);
+            Close (Saved_FD);
+            Close (Err_FD);
+         end;
+      end if;
+
+      Last_Return_Code := Return_Code;
 
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
@@ -684,5 +729,122 @@ package body BBT.Tests.Actions is
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end File_Does_Not_Contain;
+
+   -- --------------------------------------------------------------------------
+   procedure Exit_Code_Is (Step      : Step_Type'Class;
+                           Verbosity : Verbosity_Levels) is
+      Expected : constant Integer := Integer'Value (+Step.Data.Object_String);
+      -- Checked in Validate_Step_State
+   begin
+      Put_Debug_Line ("Exit_Code_Is " & Expected'Image & ", last ="
+                      & Last_Return_Code'Image);
+      Put_Step_Result (Step      => Step,
+                       Success   => Last_Return_Code = Expected,
+                       Fail_Msg  => "Expected exit code" & Expected'Image
+                                    & ", got" & Last_Return_Code'Image,
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
+   end Exit_Code_Is;
+
+   -- --------------------------------------------------------------------------
+   -- Environment variables set or unset by the steps of the current
+   -- scenario, with the value (or the absence) they had before, so that
+   -- Restore_Environment can give them back.
+   type Saved_Variable (Name_Length, Value_Length : Natural) is record
+      Name    : String (1 .. Name_Length);
+      Present : Boolean;
+      Value   : String (1 .. Value_Length);
+   end record;
+
+   package Saved_Variable_Lists is new Ada.Containers.Indefinite_Vectors
+     (Positive, Saved_Variable);
+   Saved_Variables : Saved_Variable_Lists.Vector;
+
+   procedure Remember (Name : String) is
+   begin
+      for V of Saved_Variables loop
+         if V.Name = Name then
+            return; -- keep the value from before the first change
+         end if;
+      end loop;
+      if Environment_Variables.Exists (Name) then
+         declare
+            Old : constant String := Environment_Variables.Value (Name);
+         begin
+            Saved_Variables.Append
+              (Saved_Variable'(Name_Length  => Name'Length,
+                Value_Length => Old'Length,
+                Name         => Name,
+                Present      => True,
+                Value        => Old));
+         end;
+      else
+         Saved_Variables.Append
+           (Saved_Variable'(Name_Length  => Name'Length,
+             Value_Length => 0,
+             Name         => Name,
+             Present      => False,
+             Value        => ""));
+      end if;
+   end Remember;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Env_Var (Step      : Step_Type'Class;
+                          Verbosity : Verbosity_Levels) is
+      Name  : constant String := +Step.Data.Subject_String;
+      Value : constant String := +Step.Data.Object_String;
+      OK    : Boolean := True;
+   begin
+      Put_Debug_Line ("Set_Env_Var " & Name & " = " & Value);
+      Remember (Name);
+      begin
+         Environment_Variables.Set (Name, Value);
+      exception
+         when Constraint_Error | Program_Error =>
+            -- Illegal name (empty or with '=') or rejected by the OS
+            OK := False;
+      end;
+      Put_Step_Result (Step      => Step,
+                       Success   => OK,
+                       Fail_Msg  => "Unable to set environment variable "
+                                    & Name'Image,
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
+   end Set_Env_Var;
+
+   -- --------------------------------------------------------------------------
+   procedure Unset_Env_Var (Step      : Step_Type'Class;
+                            Verbosity : Verbosity_Levels) is
+      Name : constant String := +Step.Data.Subject_String;
+      OK   : Boolean := True;
+   begin
+      Put_Debug_Line ("Unset_Env_Var " & Name);
+      Remember (Name);
+      begin
+         Environment_Variables.Clear (Name);
+      exception
+         when Constraint_Error | Program_Error =>
+            OK := False;
+      end;
+      Put_Step_Result (Step      => Step,
+                       Success   => OK,
+                       Fail_Msg  => "Unable to unset environment variable "
+                                    & Name'Image,
+                       Loc       => Step.Location,
+                       Verbosity => Verbosity);
+   end Unset_Env_Var;
+
+   -- --------------------------------------------------------------------------
+   procedure Restore_Environment is
+   begin
+      for V of Saved_Variables loop
+         if V.Present then
+            Environment_Variables.Set (V.Name, V.Value);
+         else
+            Environment_Variables.Clear (V.Name);
+         end if;
+      end loop;
+      Saved_Variables.Clear;
+   end Restore_Environment;
 
 end BBT.Tests.Actions;

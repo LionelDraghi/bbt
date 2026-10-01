@@ -45,6 +45,8 @@ begin
    Set (Given, No_SA,  No_Subject,   Run,            Obj_Text, (Run_Cmd,           False, new String'("- Given I run `cmd`")));
    Set (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Given I successfully run `cmd`")));
    Set (Given, No_SA,  Subject_Text, Fail,       No_Object,    (Run_With_Error,    False, new String'("- Given `xmllint mismatched_tag.xml` fails")));
+   Set (Given, No_SA,  Env_Var_Subj, Is_V,       Obj_Text,     (Set_Env_Var,       False, new String'("- Given the environment variable `LANG` is `C`")));
+   Set (Given, No_SA,  Env_Var_Subj, Is_No,      No_Object,    (Unset_Env_Var,     False, new String'("- Given the environment variable `NO_COLOR` is not set")));
 
    Set (When_P, No_SA, No_Subject, Run,            Obj_Text,     (Run_Cmd,           False, new String'("- When I run `cmd`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Obj_Text,     (Run_Without_Error, False, new String'("- When I successfully run `cmd`")));
@@ -85,6 +87,18 @@ begin
    Set (Then_P, No_SA, Subject_File, Does_Not_Contain, Obj_Text,      (File_Does_Not_Contain, False, new String'("- Then the file `list` does not contain `--version`")));
    Set (Then_P, No_SA, Subject_File, Does_Not_Contain, Obj_File_Name, (File_Does_Not_Contain, False, new String'("- Then the file `list` does not contain `snippet.txt` file")));
    Set (Then_P, No_SA, Subject_File, Does_Not_Contain, No_Object,     (File_Does_Not_Contain, True, new String'("- Then the file `list` does not contain <followed by code fenced lines>")));
+   Set (Then_P, No_SA, Stderr_Subj, Is_V,             Obj_Text,      (Stderr_Is, False, new String'("- Then the error output is `msg`")));
+   Set (Then_P, No_SA, Stderr_Subj, Is_V,             Obj_File_Name, (Stderr_Is, False, new String'("- Then the error output is equal to file `expected.txt`")));
+   Set (Then_P, No_SA, Stderr_Subj, Is_V,             No_Object,     (Stderr_Is, True,  new String'("- Then the error output is <followed by code fenced lines>")));
+   Set (Then_P, No_SA, Stderr_Subj, Contains,         Obj_Text,      (Stderr_Contains, False, new String'("- Then the error output contains `msg`")));
+   Set (Then_P, No_SA, Stderr_Subj, Contains,         Obj_File_Name, (Stderr_Contains, False, new String'("- Then the error output contains file `snippet.txt`")));
+   Set (Then_P, No_SA, Stderr_Subj, Contains,         No_Object,     (Stderr_Contains, True,  new String'("- Then the error output contains <followed by code fenced lines>")));
+   Set (Then_P, No_SA, Stderr_Subj, Does_Not_Contain, Obj_Text,      (Stderr_Does_Not_Contain, False, new String'("- Then the error output does not contain `msg`")));
+   Set (Then_P, No_SA, Stderr_Subj, Does_Not_Contain, Obj_File_Name, (Stderr_Does_Not_Contain, False, new String'("- Then the error output does not contain file `snippet.txt`")));
+   Set (Then_P, No_SA, Stderr_Subj, Does_Not_Contain, No_Object,     (Stderr_Does_Not_Contain, True,  new String'("- Then the error output does not contain <followed by code fenced lines>")));
+   Set (Then_P, No_SA, No_Subject,   Is_No,    Stderr_Obj, (No_Stderr, False, new String'("- Then there is no error output")));
+   Set (Then_P, No_SA, No_Subject,   Get_No,   Stderr_Obj, (No_Stderr, False, new String'("- Then I get no error output")));
+   Set (Then_P, No_SA, Exit_Subj, Is_V,   Obj_Text,         (Exit_Code_Is,    False, new String'("- Then the exit code is `2`")));
    Set (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Successful_Run, Obj_Text,  (Run_Without_Error, False, new String'("- Then I successfully run `cmd`")));

@@ -43,6 +43,8 @@ package body BBT.Scenarios.Steps.Lexer is
          "doesnt",
          "doesn't",
          "error",
+         "exit",       -- "the exit code is `2`"
+         "environment", -- "the environment variable `NAME` is `value`"
          "is",
          "or",
          "output",

@@ -16,6 +16,8 @@
 - doesnt
 - doesn't
 - error
+- exit
+- environment
 - is
 - or
 - output

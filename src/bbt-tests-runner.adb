@@ -74,6 +74,23 @@ package body BBT.Tests.Runner is
       Return_Code : Integer;
       Output      : constant String :=
                       Output_File_Name (Parent_Doc (Step).all);
+      Error_Output : constant String :=
+                       Output (Output'First .. Output'Last - 4) & ".err";
+      -- Output ends with ".out"
+
+      function Checks_Error_Output return Boolean is
+         (for some S of Parent (Step).Step_List =>
+             S.Data.Action in Stderr_Is
+                            | Stderr_Contains
+                            | Stderr_Does_Not_Contain
+                            | No_Stderr);
+      -- When the scenario checks the error output, the commands it runs
+      -- write their standard error to Error_Output, and their standard
+      -- output alone to Output.
+
+      function Error_Output_Name return String is
+        (if Checks_Error_Output then Error_Output else "");
+
    begin
       Run_Error := False;
 
@@ -98,42 +115,54 @@ package body BBT.Tests.Runner is
       case Step.Data.Action is
          when Run_Cmd =>
             Created_File_List.Add (Output);
+            if Error_Output_Name /= "" then
+               Created_File_List.Add (Error_Output);
+            end if;
             Run_Cmd (Step            => Step,
                      Cmd             => To_String (Step.Data.Object_String),
                      Output_Name     => Output,
                      Expected_Result => Not_Specified,
                      Verbosity       => Verbosity,
                      Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code);
+                     Return_Code     => Return_Code,
+                     Error_Output_Name => Error_Output_Name);
             Run_Error := not (Spawn_OK);
 
          when Run_Without_Error =>
             Created_File_List.Add (Output);
+            if Error_Output_Name /= "" then
+               Created_File_List.Add (Error_Output);
+            end if;
             Run_Cmd (Step            => Step,
                      Cmd             => To_String (Step.Data.Object_String),
                      Output_Name     => Output,
                      Expected_Result => Success,
                      Verbosity       => Verbosity,
                      Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code);
+                     Return_Code     => Return_Code,
+                     Error_Output_Name => Error_Output_Name);
             Run_Error := not (Spawn_OK);
 
          when Run_With_Error =>
             Created_File_List.Add (Output);
+            if Error_Output_Name /= "" then
+               Created_File_List.Add (Error_Output);
+            end if;
             Run_Cmd (Step            => Step,
                      Cmd             => To_String (Step.Data.Subject_String),
                      Output_Name     => Output,
                      Expected_Result => Failure,
                      Verbosity       => Verbosity,
                      Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code);
+                     Return_Code     => Return_Code,
+                     Error_Output_Name => Error_Output_Name);
             Run_Error := not (Spawn_OK);
 
          when Error_Return_Code =>
-            Return_Error (Return_Code, Step, Verbosity);
+            Return_Error (Last_Exit_Code, Step, Verbosity);
 
          when No_Error_Return_Code =>
-            Return_No_Error (Return_Code, Step, Verbosity);
+            Return_No_Error (Last_Exit_Code, Step, Verbosity);
 
          when Output_Is =>
             Output_Is (Get_Text (Output), Step, Verbosity);
@@ -198,6 +227,27 @@ package body BBT.Tests.Runner is
 
          when Setup_No_Dir =>
             Setup_No_Dir (Step, Verbosity);
+
+         when Set_Env_Var =>
+            Set_Env_Var (Step, Verbosity);
+
+         when Unset_Env_Var =>
+            Unset_Env_Var (Step, Verbosity);
+
+         when Stderr_Is =>
+            Output_Is (Get_Text (Error_Output), Step, Verbosity);
+
+         when Stderr_Contains =>
+            Output_Contains (Get_Text (Error_Output), Step, Verbosity);
+
+         when Stderr_Does_Not_Contain =>
+            Output_Does_Not_Contain (Get_Text (Error_Output), Step, Verbosity);
+
+         when No_Stderr =>
+            Check_No_Output (Get_Text (Error_Output), Step, Verbosity);
+
+         when Exit_Code_Is =>
+            Exit_Code_Is (Step, Verbosity);
 
          when None =>
             IO.Put_Error ("Unrecognized step " & Step.Data.Src_Code'Image,
@@ -339,6 +389,9 @@ package body BBT.Tests.Runner is
       for Scen of L loop
          Run_Background (Scen);
          Run_Scenario (Scen);
+         Restore_Environment;
+         -- Variables set in the scenario or its backgrounds apply to that
+         -- scenario only.
          exit when IO.Some_Error and not Settings.Keep_Going;
       end loop;
    end Run_Scenario_List;

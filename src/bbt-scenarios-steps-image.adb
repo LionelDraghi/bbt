@@ -18,6 +18,9 @@ begin
       when New_SA           => return "new";
       when No_Subject       => return "";
       when Output_Subj      => return "output";
+      when Stderr_Subj      => return "stderr";
+      when Exit_Subj        => return "exit";
+      when Env_Var_Subj     => return "`var`";
       when Subject_File     => return "`file`";
       when Dir_Subject      => return "`dir`";
       when Subject_Text     => return "`text`";
@@ -36,6 +39,7 @@ begin
       when Is_No            => return "is no";
       when No_Object        => return "";
       when Output_Obj       => return "output";
+      when Stderr_Obj       => return "error output";
       when Obj_File_Name    => return "`file`";
       when Obj_Dir_Name     => return "`dir`";
       when Obj_Text         => return "`text`";
