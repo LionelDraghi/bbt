@@ -7,10 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.3.1-dev] - 2026-05-**
+  - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)
   - [Added]   `Then the error output is | contains | does not contain ...` and `Then there is no error output`: when a scenario checks the error output, its commands' standard error is captured apart from the standard output
-  - [Added]   `Then the exit code is `n`` checks the exact exit code of the last command
-  - [Added]   `Given the environment variable `NAME` is `value` | is not set`, restored at the end of the scenario
-  - [Fixed]   `Then I get [no] error` read the exit code from an uninitialized variable (it worked only because the stack slot of the previous step was reused); the last exit code is now stored
+  - [Added]   `Then the exit code is n` checks the exact exit code of the last command
+  - [Added]   `Given the environment variable NAME is value | is not set`
+  - [Fixed]   `Then I get [no] error` read the exit code from an uninitialized variable
 
 - **[0.3.0] - 2026-04-26**
   - [Fixed]   `bbt list_files` no more return on error when no file found

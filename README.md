@@ -20,6 +20,7 @@
     - [Building from sources](#building-from-sources)
     - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
+- [For AI coding agents](#for-ai-coding-agents)
 - [Some projects using *bbt*](#some-projects-using-bbt)
   - [By contributors](#by-contributors)
   - [By users](#by-users)
@@ -138,7 +139,7 @@ The complete grammar with examples is available [here](https://github.com/Lionel
 
 *bbt* is available and tested on Linux, Windows and macOS.
 
-Note (Darwin): On older versions of Darwin, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1 to avoid small glitches with file names. See the discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795)  
+Note (Darwin): On older versions of Darwin, you may need to set the environment variable GNAT_FILE_NAME_CASE_SENSITIVE to 1 to avoid small glitches with file names casing. See the discussion [here](https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795)  
 
 ### Stable version
 
@@ -191,6 +192,17 @@ A short but comprehensive tutorial can be generated with
 ```
 bbt help tutorial 
 ```
+
+## For AI coding agents
+
+This repository provides an [agent skill](https://agentskills.io) that teaches AI coding agents (Claude Code, Cursor, Copilot, ...) to write, convert, run, and debug *bbt* scenarios.
+
+Install it with the open [skills CLI](https://github.com/vercel-labs/skills):
+```sh
+npx skills add LionelDraghi/bbt --skill bbt-skill
+```
+
+Alternatively, simply copy the [docs/bbt-skill](docs/bbt-skill) directory into the location recommended by the agent you use, for instance `.agents/skills/` in the project root, or in your home directory.
 
 ## Some projects using *bbt*
 
