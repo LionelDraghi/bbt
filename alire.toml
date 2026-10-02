@@ -21,6 +21,11 @@ generate_C = false
 [[depends-on]]
 ansiada = "^1.0.0"
 
+[[depends-on]]
+# External_Initialization aspect (src/bbt-cmd_line-put_help.adb) requires
+# the experimental extensions set : FSF GCC 15 / GNAT Pro 25 or later
+gnat = ">=15"
+
 [[actions]]
 type = "test"
 command = ["make"]

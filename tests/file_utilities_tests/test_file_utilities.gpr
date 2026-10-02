@@ -14,7 +14,10 @@ project Test_File_Utilities is
    end Builder;
 
    package Compiler is
-      Common_Switches := ("-gnat2022");
+      Common_Switches := ("-gnat2022", "-gnatX0");
+      -- -gnatX0 : experimental extensions, required because this project
+      --            compiles ../../src, which uses the External_Initialization
+      --            aspect (FSF GCC 15 / GNAT Pro 25 or later)
       Common_Debug_Switches := Common_Switches &
       ("-g", "-O0",  "-gnatQ", "-gnatf",
        "-gnato", "-fstack-check", "-gnata",
