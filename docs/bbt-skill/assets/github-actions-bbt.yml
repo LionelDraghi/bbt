@@ -1,0 +1,25 @@
+name: bbt
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  bbt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Alire
+        run: |
+          curl -fsSL https://alire.ada.dev/download | bash
+          echo "$HOME/.alire/bin" >> $GITHUB_PATH
+
+      - name: Install bbt
+        run: alr install bbt
+
+      - name: Run bbt scenarios
+        run: bbt --recursive doc/scenario
+
+      - name: check examples
+        run: bbt README.md
