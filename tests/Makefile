@@ -15,10 +15,6 @@ else
 endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
-BADGE_URL = $(shell cat $(RESULTS_DIR)/badge.url)
-# BADGE_URL_LINUX = $(shell cat ../docs/tests_results/Linux/badge.url)
-# BADGE_URL_DARWIN = $(shell cat ../docs/tests_results/Darwin/badge.url)
-# BADGE_URL_WINDOWS = $(shell cat ../docs/tests_results/Windows/badge.url)
 
 all: check
 
@@ -117,7 +113,7 @@ doc: $(RESULTS_DIR)
 	
 	@ ../rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	@ echo fetching badge ...
-	@ curl -s "$(BADGE_URL)" -o $(RESULTS_DIR)/badge.svg
+	@ curl -s "$$(cat $(RESULTS_DIR)/badge.url)" -o $(RESULTS_DIR)/badge.svg
 
 
 # clean removes the test run artifacts only, keeping the links
