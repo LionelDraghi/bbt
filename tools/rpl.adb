@@ -2,7 +2,6 @@ with Ada.Command_Line;
 with Ada.Characters.Handling;
 with Ada.Containers.Vectors;
 with Ada.Directories;
-with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
@@ -167,7 +166,6 @@ procedure Rpl is
       New_Text : String)
    is
       use Ada.Directories;
-      use type Ada.Directories.File_Kind;
       Search    : Search_Type;
       Dir_Entry : Directory_Entry_Type;
       Pattern   : constant String := "*";
@@ -183,7 +181,7 @@ procedure Rpl is
            (Search    => Search,
             Directory => Path,
             Pattern   => Pattern,
-            Filter    => (Ordinary_File => True, Directory => True, others => False));
+            Filter    => [Ordinary_File => True, Directory => True, others => False]);
 
          while More_Entries (Search) loop
             Get_Next_Entry (Search, Dir_Entry);
