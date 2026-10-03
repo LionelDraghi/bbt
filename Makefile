@@ -13,17 +13,17 @@ endif
 
 .SILENT:
 
-all: build sut check doc
+all: build tools check doc
 
-.PHONY : help
+.PHONY : help tools
 help:
 	echo "Usage: make [target]"
 	echo ""
 	echo "Targets:"
-	echo "  all        : build, sut, check and doc (default when no target given)"
+	echo "  all        : build, tools, check and doc (default when no target given)"
 	echo "  build      : build bbt in validation mode"
 	echo "  release    : build bbt in release mode"
-	echo "  sut        : build the sut and rpl tools, and create the"
+	echo "  tools      : build the sut and rpl tools, and create the"
 	echo "                sut, bbt and gcc links in tests/"
 	echo "  check      : run the tests (features, examples, non regression"
 	echo "                and unit tests)"
@@ -41,8 +41,8 @@ bbt$(EXE_SUFFIX): build
 sut$(EXE_SUFFIX): tools
 rpl$(EXE_SUFFIX): tools
 
-sut:
-	echo === building sut
+tools:
+	echo === building tools
 	cd tools && alr build --release
 
 	$(MAKE) -s setup --directory=tests

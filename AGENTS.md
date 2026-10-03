@@ -1,7 +1,7 @@
 
 - `make build` to build bbt and tools 
 
-- `make sut` to build sut and rpl, and to create the sut, bbt, gcc and rpl
+- `make tools` to build sut and rpl, and to create the sut, bbt and gcc
   links in tests/; run it after a fresh clone, or when those links are missing
 
 - to understand bbt : docs/bbt-skill

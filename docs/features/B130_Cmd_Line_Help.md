@@ -17,8 +17,10 @@ _Table of Contents:_
 ## Scenario: calling bbt without parameter or with -h put the normal help
 - When I run `./bbt` or `./bbt help` or `./bbt he`
 - then the output contains file `../docs/help/base.txt`
-- and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`
- 
+- and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`
+
+(The trailing .* keeps the test happy with a version such as 3.2.2-dev)
+
 ## Scenario: filtering help
 - When I run `./bbt he filtering` 
 - then the output is equal to file `../docs/help/filtering.txt`
