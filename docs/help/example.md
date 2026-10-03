@@ -2,10 +2,10 @@
 
 ## Scenario 1: Checking installed gcc version
 
-> Let's start with the simpliest possible scenario, running a command and checking the output
+> Let's start with the simplest possible scenario: run a command and check its output
 
 - When I run `gcc --version`
-- Then the output contains `Free Software Foundation, Inc.`
+- Then the output matches `(gcc|.* clang).*`
 
 ## Scenario 2 : compiling and executing an hello word
 

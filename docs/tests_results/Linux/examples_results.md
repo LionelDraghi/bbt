@@ -2,7 +2,7 @@
 # Document: [gcc_hello_world.md](../../examples/gcc_hello_world.md)  
    ### Scenario: [1: Checking installed gcc version](../../examples/gcc_hello_world.md): 
    - OK : When I run `gcc --version`  
-   - OK : Then the output contains `Free Software Foundation, Inc.`  
+   - OK : Then the output matches `(gcc|.* clang).*`  
    - [X] scenario   [1: Checking installed gcc version](../../examples/gcc_hello_world.md) pass  
 
    ### Scenario: [2 : compiling and executing an hello word](../../examples/gcc_hello_world.md): 
@@ -60,7 +60,7 @@
 # Document: [gcc_hello_world.md](../../examples/gcc_hello_world.md)  
    ### Scenario: [1: Checking installed gcc version](../../examples/gcc_hello_world.md): 
    - OK : When I run `gcc --version`  
-   - OK : Then the output contains `Free Software Foundation, Inc.`  
+   - OK : Then the output matches `(gcc|.* clang).*`  
    - [X] scenario   [1: Checking installed gcc version](../../examples/gcc_hello_world.md) pass  
 
    ### Scenario: [2 : compiling and executing an hello word](../../examples/gcc_hello_world.md): 

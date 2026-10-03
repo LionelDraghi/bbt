@@ -36,7 +36,7 @@ all: check
 build:
 	@ $(MAKE) -s build --directory=file_utilities_tests
 
-setup: ../sut ../bbt
+setup: ../sut$(EXE_SUFFIX) ../bbt$(EXE_SUFFIX)
 	mkdir -p $(RESULTS_DIR)
     
 	@ln -fs ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
