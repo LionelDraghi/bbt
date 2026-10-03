@@ -1,4 +1,4 @@
-bbt version 0.3.0
+bbt version 0.3.1-dev
 
 Usage : bbt [Options]* [Command] file*
 
