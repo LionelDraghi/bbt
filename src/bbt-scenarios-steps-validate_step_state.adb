@@ -33,9 +33,14 @@ begin
       when Exit_Subj =>
          if State.Object = Obj_Text then
             begin
-               if Integer'Value (To_String (State.Object_String)) = 0 then
-                  null; -- only checks that the code is an integer
-               end if;
+               --  Only checks that the exit code is an integer
+               declare
+                  Exit_Code : constant Integer :=
+                    Integer'Value (To_String (State.Object_String));
+                  pragma Unreferenced (Exit_Code);
+               begin
+                  null;
+               end;
             exception
                when Constraint_Error =>
                   IO.Put_Error ("Exit code expected in object phrase, got "
