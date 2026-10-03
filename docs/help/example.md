@@ -1,11 +1,11 @@
 # gcc simple sanity tests
 
-### Scenario 1: Checking installed gcc version
+## Scenario 1: Checking installed gcc version
 
 > Let's start with the simpliest possible scenario, running a command and checking the output
 
 - When I run `gcc --version`
-- Then the output contains `14.2.0`
+- Then the output contains `Free Software Foundation, Inc.`
 
 ## Scenario 2 : compiling and executing an hello word
 
@@ -28,7 +28,7 @@ Sanity check of a complete compile / link / run sequence :
 
 - Then the output is `Hello, World!`
 
-## Scenario 2 : get gcc version
+## Scenario 3 : get gcc version
   
 > This scenario illustrate the use of pattern matching
 
@@ -44,25 +44,32 @@ Let's use a regexp to test both.
 - When I run `gcc -v`
 - Then the output matches `(gcc|.* clang) version [0-9]+\.[0-9]+\.[0-9]+ .*`
 
-## Scenario 3 : checking error output and return code
+## Scenario 4 : checking error output and return code
 
 > This scenario illustrates how to verify both the exit code and stderr output of a command.
 
 - Given there is no `missing.c` file
+- Given the environment variable `LC_ALL` is set to `C`
 - When I run `gcc missing.c -o missing`
-- Then the exit code is 1
+- Then the exit code is `1`
 - And the error output contains `No such file or directory`
 
-## Scenario 4 : checking environment variables handling
+## Scenario 5 : checking environment variables handling
 
-> This scenario illustrates how to set environment variables and verify localized error messages.
+> The CPATH environment variable tells gcc where to look for headers,
+> as if an -I option had been given on the command line.
 
-- Given there is no `missing.c` file
-  
-- Given the environment variable `LC_ALL` is set to `en_UK.UTF-8`
-- When I run `gcc missing.c -o missing`
-- Then the error output contains `No such file or directory`
-
-- Given the environment variable `LC_ALL` is set to `fr_FR.UTF-8`
-- When I run `gcc missing.c -o missing`
-- Then the error output contains `Aucun fichier ou dossier de ce type`
+- Given the new file `inc/myheader.h` containing
+  ```c
+  #define GREETING "Hello from CPATH"
+  ```
+- Given the new file `cp.c` containing
+  ```c
+  #include <stdio.h>
+  #include "myheader.h"
+  int main() { printf("%s\n", GREETING); return 0; }
+  ```
+- Given the environment variable `CPATH` is set to `inc`
+- When I successfully run `gcc cp.c -o cp`
+- When I run `./cp`
+- Then the output is `Hello from CPATH`

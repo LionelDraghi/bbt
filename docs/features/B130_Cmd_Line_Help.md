@@ -165,8 +165,8 @@ _Table of Contents:_
 
 ## Scenario: generated example is OK
 
-Testing that the generated example works is the bare minimum
+Testing that the generated example works is the bare minimum  
 Fixme: but I don't know how to test it!
 
 - When I run `./bbt help example` 
-- then the output is equal to file `../docs/examples/gcc_hello_world.md`
+- then the output is equal to file `../docs/help/example.md`

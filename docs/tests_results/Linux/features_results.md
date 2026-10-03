@@ -224,10 +224,10 @@
 
 # Document: [A100_Then_Get_Stderr.md](../../features/A100_Then_Get_Stderr.md)  
   ## Feature: stderr test  
-   ### Scenario: [unknown option](../../features/A100_Then_Get_Stderr.md): 
-   - OK : When I run `./sut -qsd`  
-   - OK : Then I get `unknown option -qsd` on stderr  
-   - [X] scenario   [unknown option](../../features/A100_Then_Get_Stderr.md) pass  
+   ### Scenario: [missing file name](../../features/A100_Then_Get_Stderr.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the error output is `Missing file name`  
+   - [X] scenario   [missing file name](../../features/A100_Then_Get_Stderr.md) pass  
 
 
 # Document: [A110_Then_No_Output.md](../../features/A110_Then_No_Output.md)  
@@ -793,6 +793,120 @@
    - [X] scenario   [Checking that a command fails](../../features/A250_Fails.md) pass  
 
 
+# Document: [A260_Then_Exit_Code_Is.md](../../features/A260_Then_Exit_Code_Is.md)  
+  ## Feature: exact exit code  
+   ### Scenario: [exit code of a successful command](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut -v`  
+   - OK : Then the exit code is `0`  
+   - OK : And I get no error  
+   - [X] scenario   [exit code of a successful command](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [exit code of a failing command](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut delay 0 3`  
+   - OK : Then the exit code is `3`  
+   - OK : And I get an error  
+   - [X] scenario   [exit code of a failing command](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [the exit code of the last command is checked](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut delay 0 4`  
+   - OK : And I run `./sut -v`  
+   - OK : Then the exit code is `0`  
+   - [X] scenario   [the exit code of the last command is checked](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [wrong exit code](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : Given the new `wrong_exit_code.md` file  
+   - OK : When I run `./bbt wrong_exit_code.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Expected exit code 2, got 3`  
+   - [X] scenario   [wrong exit code](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [the code must be an integer](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : Given the new `not_a_code.md` file  
+   - OK : When I run `./bbt not_a_code.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Exit code expected in object phrase, got "zero"`  
+   - [X] scenario   [the code must be an integer](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+
+# Document: [A270_Then_Error_Output.md](../../features/A270_Then_Error_Output.md)  
+  ## Feature: error output  
+   ### Scenario: [error message on the error output](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the error output is `Missing file name`  
+   - OK : And there is no output  
+   - [X] scenario   [error message on the error output](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [nothing on the error output](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut -v`  
+   - OK : Then there is no error output  
+   - OK : And the output is `sut version 1.0`  
+   - [X] scenario   [nothing on the error output](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [error output contains and does not contain](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut read_env BBT_SURELY_UNSET_VARIABLE`  
+   - OK : Then the error output contains `BBT_SURELY_UNSET_VARIABLE`  
+   - OK : And the error output does not contain `version`  
+   - OK : When I run `./sut -v`  
+   - OK : Then I get no error output  
+   - [X] scenario   [error output contains and does not contain](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [error output in a code block](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut read_env BBT_SURELY_UNSET_VARIABLE`  
+   - OK : Then the error output is  
+   - [X] scenario   [error output in a code block](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [without error output step, the outputs stay merged](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the output is `Missing file name`  
+   - [X] scenario   [without error output step, the outputs stay merged](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [wrong error output](../../features/A270_Then_Error_Output.md): 
+   - OK : Given the new `wrong_error_output.md` file  
+   - OK : When I run `./bbt wrong_error_output.md`  
+   - OK : Then I get an error  
+   - [X] scenario   [wrong error output](../../features/A270_Then_Error_Output.md) pass  
+
+
+# Document: [A280_Given_Environment_Variable.md](../../features/A280_Given_Environment_Variable.md)  
+  ## Feature: environment variables  
+   ### Scenario: [set a variable](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `BBT_TEST_VARIABLE` is `hello`  
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then the output is `hello`  
+   - [X] scenario   [set a variable](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [the variable is back to its previous state](../../features/A280_Given_Environment_Variable.md): 
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then I get an error  
+   - OK : And the output contains `No BBT_TEST_VARIABLE environment variable`  
+   - [X] scenario   [the variable is back to its previous state](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [unset a variable](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `HOME` is not set  
+   - OK : When I run `./sut read_env HOME`  
+   - OK : Then I get an error  
+   - OK : And the output contains `No HOME environment variable`  
+   - [X] scenario   [unset a variable](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [the unset variable is back](../../features/A280_Given_Environment_Variable.md): 
+   - OK : When I run `./sut read_env HOME`  
+   - OK : Then I get no error  
+   - [X] scenario   [the unset variable is back](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [set twice in the same scenario](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `BBT_TEST_VARIABLE` is `first`  
+   - OK : And the environment variable `BBT_TEST_VARIABLE` is `second`  
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then the output is `second`  
+   - [X] scenario   [set twice in the same scenario](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [variable set in a background](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the new `env_background.md` file  
+   - OK : When I run `./bbt env_background.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [variable set in a background](../../features/A280_Given_Environment_Variable.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -1295,7 +1409,7 @@
 
    ### Scenario: [generated example is OK](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help example`   
-   - OK : then the output is equal to file `../docs/examples/gcc_hello_world.md`  
+   - OK : then the output is equal to file `../docs/help/example.md`  
    - [X] scenario   [generated example is OK](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
@@ -1705,12 +1819,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 177 scenarios OK
+## Summary : **Success**, 194 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 177   |
+| Successful | 194   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

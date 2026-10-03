@@ -18,6 +18,8 @@ tools/alire/
 /bbt.exe
 /sut
 /sut.exe
+/rpl
+/rpl.exe
 tests/bbt
 tests/bbt.exe
 tests/sut
