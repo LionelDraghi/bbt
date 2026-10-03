@@ -44,10 +44,8 @@ Tulip
 ```
 - And output contains 
 ```
-contains unexpected:    
-~~~
-Rose        
-~~~
+failed_doesnt_1.md:3: Error: Output contains unexpected at line 1:  
+Rose  
 ```
 
 ### Scenario : Failed "file doesn't contain"
@@ -62,8 +60,6 @@ Rose
 - Then I get an error
 - And output contains 
 ```
-failed_doesnt_2.md:3: Error : flowers.txt shouldn't contain :    
-~~~  
+failed_doesnt_2.md:3: Error: flowers.txt contains unexpected at line 2:  
 Tulip  
-~~~  
 ```

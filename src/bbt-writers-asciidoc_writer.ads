@@ -31,13 +31,13 @@ private
                                             Doc    : Document_Type'Class);
    overriding procedure Put_Feature_Start (Writer  : Asciidoc_Writer;
                                            Feat    : Feature_Type'Class);
-   overriding procedure Put_Scenario_Start (Writer : Asciidoc_Writer;
+   overriding procedure Put_Scenario_Start (Writer    : Asciidoc_Writer;
                                             Scen      : Scenario_Type'Class;
                                             Verbosity : Verbosity_Levels);
-   overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                                         Step     : Step_Type'Class;
-                                         Success  : Boolean;
-                                         Fail_Msg : String;
+   overriding procedure Put_Step_Result (Writer    : Asciidoc_Writer;
+                                         Step      : Step_Type'Class;
+                                         Success   : Boolean;
+                                         Fail_Msg  : Text; -- String;
                                          Loc       : IO.Location_Type;
                                          Verbosity : Verbosity_Levels);
    overriding procedure Put_Scenario_Result (Writer    : Asciidoc_Writer;

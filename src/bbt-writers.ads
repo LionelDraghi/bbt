@@ -11,12 +11,16 @@ with BBT.Model.Documents,
      BBT.Model.Steps,
      BBT.IO;
 
+with Text_Utilities;
+
 use BBT.Model,
     BBT.Model.Documents,
     BBT.Model.Features,
     BBT.Model.Scenarios,
     BBT.Model.Steps,
     BBT.IO;
+
+use Text_Utilities;
 
 private package BBT.Writers is
 -- This package defines common services for all types of output, and
@@ -66,6 +70,12 @@ private package BBT.Writers is
       Fail_Msg  : String;
       Loc       : IO.Location_Type;
       Verbosity : Verbosity_Levels);
+   procedure Put_Step_Result
+     (Step      : Step_Type'Class;
+      Success   : Boolean;
+      Fail_Msg  : Text;
+      Loc       : IO.Location_Type;
+      Verbosity : Verbosity_Levels);
    procedure Put_Scenario_Result
      (Scen      : Scenario_Type'Class;
       Verbosity : Verbosity_Levels);
@@ -106,7 +116,7 @@ private
    procedure Put_Step_Result (Writer    : Abstract_Writer;
                               Step      : Step_Type'Class;
                               Success   : Boolean;
-                              Fail_Msg  : String;
+                              Fail_Msg  : Text; -- String;
                               Loc       : IO.Location_Type;
                               Verbosity : Verbosity_Levels) is abstract;
    procedure Put_Scenario_Result (Writer    : Abstract_Writer;

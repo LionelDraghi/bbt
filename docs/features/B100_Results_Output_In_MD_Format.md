@@ -15,18 +15,17 @@ _Table of Contents:_
 - [Background:](#background)
   - [Scenario: default mode run](#scenario-default-mode-run)
   - [Scenario: verbose mode run](#scenario-verbose-mode-run)
-  - [Scenario: run with an error](#scenario-run-with-an-error)
 
 ## Background:
 
-- Given the file `OK_scen.md`
+- Given the new file `OK_scen.md`
   ~~~
   # Scenario
   - When I run `./sut -v`
   - Then I get `sut version 1.0`
   ~~~
 
-- Given the file `NOK_scen.md`
+- Given the new file `NOK_scen.md`
   ~~~
   # Scenario
   - When I run `./sut -v`
@@ -71,25 +70,4 @@ _Table of Contents:_
   | Empty      | 0     |  
   | Not Run    | 0     |  
   ~~~
-
-### Scenario: run with an error
-
-- When I run `./bbt -c --yes NOK_scen.md`
-
-- Then the output contains
-  ```
-  NOK_scen.md:3: Error: Output:    
-  ~~~  
-  sut version 1.0  
-  ~~~  
-  not equal to expected:    
-  ~~~  
-  v3.1  
-  ~~~    
-  ```
-
-- And the output contains
-  ```
-    - [ ] scenario [](NOK_scen.md) **fails**
-  ```
 

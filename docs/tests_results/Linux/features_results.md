@@ -430,12 +430,23 @@
    - OK : Given the file `contains.md`  
    - [X] background [](../../features/A160_Ignoring_Blank_Lines.md) pass  
 
-   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md): 
+   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2](../../features/A160_Ignoring_Blank_Lines.md): 
    - OK : when I run `./bbt -em -ibl is.md`  
    - OK : then there is no error   
+   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2](../../features/A160_Ignoring_Blank_Lines.md) pass  
+
+   ### Background: [](../../features/A160_Ignoring_Blank_Lines.md): 
+   - OK : Given the file `le_Cid_1.txt`  
+   - OK : Given the file `le_Cid_2.txt`   
+   - OK : Given the file `le_Cid_3.txt`   
+   - OK : Given the file `is.md`  
+   - OK : Given the file `contains.md`  
+   - [X] background [](../../features/A160_Ignoring_Blank_Lines.md) pass  
+
+   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2](../../features/A160_Ignoring_Blank_Lines.md): 
    - OK : when I run `./bbt --exact_match --ignore_blank_lines contains.md`  
    - OK : then there is no error   
-   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md) pass  
+   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2](../../features/A160_Ignoring_Blank_Lines.md) pass  
 
 
 # Document: [A170_File_vs_File_Name.md](../../features/A170_File_vs_File_Name.md)  
@@ -1111,8 +1122,8 @@
 
 # Document: [B100_Results_Output_In_MD_Format.md](../../features/B100_Results_Output_In_MD_Format.md)  
    ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
+   - OK : Given the new file `OK_scen.md`  
+   - OK : Given the new file `NOK_scen.md`  
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [default mode run](../../features/B100_Results_Output_In_MD_Format.md): 
@@ -1121,8 +1132,8 @@
    - [X] scenario   [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
+   - OK : Given the new file `OK_scen.md`  
+   - OK : Given the new file `NOK_scen.md`  
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md): 
@@ -1130,16 +1141,40 @@
    - OK : Then the output contains  
    - [X] scenario   [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
-   ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
-   ### Scenario: [run with an error](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : When I run `./bbt -c --yes NOK_scen.md`  
+# Document: [B105_Expected_vs_Actual_Output.md](../../features/B105_Expected_vs_Actual_Output.md)  
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with no error](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Then file `reference.txt` is  
+   - [X] scenario   [full comparison with no error](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with error in the middle of the file](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `scen1.md`  
+   - OK : When I run `./bbt --yes scen1.md`  
    - OK : Then the output contains  
    - OK : And the output contains  
-   - [X] scenario   [run with an error](../../features/B100_Results_Output_In_MD_Format.md) pass  
+   - [X] scenario   [full comparison with error in the middle of the file](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with blank lines on the left and on the right](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `scen2.md`  
+   - OK : Then I successfully run `./bbt --cleanup --yes scen2.md`  
+   - OK : When I run `./bbt --exact_match --cleanup --yes scen2.md`  
+   - OK : Then there is an error   
+   - OK : And the output contains   
+   - OK : And the output contains  
+   - OK : And the output contains  
+   - [X] scenario   [full comparison with blank lines on the left and on the right](../../features/B105_Expected_vs_Actual_Output.md) pass  
 
 
 # Document: [B110_Spawn.md](../../features/B110_Spawn.md)  
@@ -1670,12 +1705,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 174 scenarios OK
+## Summary : **Success**, 177 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 174   |
+| Successful | 177   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

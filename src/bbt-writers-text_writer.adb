@@ -127,7 +127,7 @@ package body BBT.Writers.Text_Writer is
    overriding procedure Put_Step_Result (Writer    : Text_Writer;
                                          Step      : Step_Type'Class;
                                          Success   : Boolean;
-                                         Fail_Msg  : String;
+                                         Fail_Msg  : Text; -- String;
                                          Loc       : BBT.IO.Location_Type;
                                          Verbosity : Verbosity_Levels) is
       Pre  : constant String := Pref (Success);
@@ -139,7 +139,19 @@ package body BBT.Writers.Text_Writer is
       else
          IO.Put_Line (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
                       Verbosity => Verbosity);
-         IO.Put_Error (Fail_Msg & "  ", Loc);
+         -- First line is a standard error line with location,
+         -- then the rest of the message is printed normally
+         if not Fail_Msg.Is_Empty then
+            IO.Put_Error (Fail_Msg.First_Element, Loc);
+            declare
+               Rest : Text := Fail_Msg;
+            begin
+               Rest.Delete_First;
+               if not Rest.Is_Empty then
+                  Text_Utilities.Put_Text (Item => Rest);
+               end if;
+            end;
+         end if;
       end if;
    end Put_Step_Result;
 

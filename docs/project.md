@@ -40,6 +40,11 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 - "no new files" and "no env change" check
 
+- LCS based diff alignment  
+  Error messages compare expected and actual positionally; an LCS based
+  alignment, as in diff or git, would give more relevant results.  
+  cf. [LCS_diff_alignment](proposed_features/LCS_diff_alignment.md)
+
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...
 

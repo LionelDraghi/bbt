@@ -171,13 +171,12 @@ package body BBT.Writers.Markdown_Writers is
 
    -- --------------------------------------------------------------------------
    overriding
-   procedure Put_Step_Result
-     (Writer   : Markdown_Writer;
-      Step     : Step_Type'Class;
-      Success  : Boolean;
-      Fail_Msg : String;
-      Loc       : BBT.IO.Location_Type;
-      Verbosity : Verbosity_Levels)
+   procedure Put_Step_Result (Writer    : Markdown_Writer;
+                              Step      : Step_Type'Class;
+                              Success   : Boolean;
+                              Fail_Msg  : Text; -- String;
+                              Loc       : BBT.IO.Location_Type;
+                              Verbosity : Verbosity_Levels)
    is
       Pre : constant String := Prefix (Success);
    begin
@@ -192,7 +191,17 @@ package body BBT.Writers.Markdown_Writers is
          IO.Put_Line
            (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
             Verbosity => Verbosity);
-         IO.Put_Error (Fail_Msg & "  ", Loc);
+         if not Fail_Msg.Is_Empty then
+            IO.Put_Error (Fail_Msg.First_Element, Loc);
+            declare
+               Rest : Text := Fail_Msg;
+            begin
+               Rest.Delete_First;
+               if not Rest.Is_Empty then
+                  Text_Utilities.Put_Text (Item => Rest);
+               end if;
+            end;
+         end if;
       end if;
    end Put_Step_Result;
 

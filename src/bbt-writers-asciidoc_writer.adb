@@ -122,23 +122,30 @@ package body BBT.Writers.Asciidoc_Writer is
    end Put_Scenario_Start;
 
    -- --------------------------------------------------------------------------
-   overriding procedure Put_Step_Result (Writer   : Asciidoc_Writer;
-                                         Step     : Step_Type'Class;
-                                         Success  : Boolean;
-                                         Fail_Msg : String;
+   overriding procedure Put_Step_Result (Writer    : Asciidoc_Writer;
+                                         Step      : Step_Type'Class;
+                                         Success   : Boolean;
+                                         Fail_Msg  : Text; -- String;
                                          Loc       : BBT.IO.Location_Type;
                                          Verbosity : Verbosity_Levels)
    is
       Pre  : constant String := Pref (Success);
    begin
       if Success then
-         IO.Pause_Tee;
          IO.Put_Line (Item      => Pre & (+Step.Data.Src_Code) & "  ",
                       Verbosity => Verbosity);
-         IO.Restore_Tee;
       else
          IO.Put_Line (Pre & (+Step.Data.Src_Code) & " (" & IO.Image (Loc) & ")  ",
                       Verbosity => Verbosity);
+         if not Fail_Msg.Is_Empty then
+            IO.Put_Error (Fail_Msg.First_Element, Loc);
+            declare
+               Rest : Text := Fail_Msg;
+            begin
+               Rest.Delete_First;
+               Text_Utilities.Put_Text (Item => Rest);
+            end;
+         end if;
       end if;
    end Put_Step_Result;
 

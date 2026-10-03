@@ -12,6 +12,7 @@ User Guide  <!-- omit from toc -->
     - [using the positive form](#using-the-positive-form)
 - [Behavior](#behavior)
   - [Blank lines and Case sensitivity and line order](#blank-lines-and-case-sensitivity-and-line-order)
+  - [Understanding errors](#understanding-errors)
   - [Execution](#execution)
 - [Tips](#tips)
   - [Filtering, tags and Conditional execution](#filtering-tags-and-conditional-execution)
@@ -192,6 +193,47 @@ On the other hand, the order of lines in files is generally meaningful.
 But not always. If you want to check the presence of some files in a directory, you don't care in which order they are listed, and you don't want your test to fail on another platform because the `ls` command behavior may be different.
 The "I don't care the line order" behavior is implemented through the `unordered` keyword.  
 (cf. [feature `unordered`](features/A140_Unordered_Keyword.md) for an example).
+
+### Understanding errors
+
+When a comparison fails, bbt does not simply dump the expected and actual
+contents: it displays them side by side, in a format inspired by `sdiff`,
+so that the difference is immediately visible.
+
+Common lines are suppressed, and each group of consecutive differing lines
+is preceded by a hunk header in the `git diff` style.
+Unlike in `git diff`, the line number in the hunk header is the number of
+the first **differing** line, not the number of the first context line,
+and the counts do not include the context: bbt aims at locating the error,
+not at producing a patch.
+Each hunk is surrounded by up to 3 lines of context, displayed in the left
+column only, as `sdiff` does with its `-l` option: the differing lines are
+the only ones with two columns, and thus stand out:
+
+```
+scen1.md:16: Error: input.1 not equal to expected:
+@@ -5 +5 @@
+  for diff operations
+  It contains exactly      |     It should contains more or less
+  ten lines of text
+```
+
+The left column is the expected content, the right column the actual one,
+and the separators between the two columns are:
+- `|` : the line differs
+- `<` : only the expected content has the line
+- `>` : only the actual content has the line
+
+The same spirit applies when a `does not contain` step fails: the intruder
+is reported with the line where it was found:
+
+```
+failed_doesnt_2.md:3: Error: flowers.txt contains unexpected at line 2:
+Tulip
+```
+
+(cf. [feature expected vs actual output](features/B105_Expected_vs_Actual_Output.md)
+for more examples).
 
 ### Execution
 

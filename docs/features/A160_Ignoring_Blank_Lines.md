@@ -82,10 +82,7 @@ _Table of Contents:_
 - and output contains `Error : le_Cid_1.txt does not contain expected:`
   
 ## Scenario : with --exact_match and --ignore_blank_lines, non sensible to blank lines
-- when I run `./bbt -em -ibl is.md`
-- then there is no error 
-
-- when I run `./bbt --exact_match --ignore_blank_lines contains.md`
+- when I run `./bbt -em -ibl is.md` or `./bbt --exact_match --ignore_blank_lines contains.md`
 - then there is no error 
 
 

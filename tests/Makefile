@@ -36,7 +36,9 @@ all: check
 build:
 	@ $(MAKE) -s build --directory=file_utilities_tests
 
-setup:
+setup: ../sut ../bbt
+	mkdir -p $(RESULTS_DIR)
+    
 	@ln -fs ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ln -fs ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
 # Manage differences between Windows and Unix
@@ -48,7 +50,7 @@ else ifeq ($(PLATFORM), Darwin)
 EXCLUDE := --exclude Windows_Only
 
 else ifeq ($(PLATFORM), Linux)
-	# Seems that the PATH is not passed to spawned process on Linux :
+# Seems that the PATH is not passed to spawned process on Linux :
 	@ln -fs /usr/bin/gcc gcc
 EXCLUDE = --exclude Windows_Only
 
@@ -58,22 +60,10 @@ else
 
 endif
 
-check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
-	mkdir -p $(RESULTS_DIR)
-    
-	@ # Some examples rely on external exe : 
-	@ # - gcc
-
-	@ # =====================================================================
-	@ # WARNING : remember that bbt output file must be output directly in
-	@ # the right directory, and NOT in the current directory and then moved to 
-	@ # docs/test_results, otherwise relative path in the results file to the 
-	@ # scenario files will be wrong!
-	@ # =====================================================================
-	
+features:
 	@ # Then test all the features
 	@ echo 1. features tests ================
-	@ ./bbt --yes --keep_going \
+	./bbt --yes --keep_going \
 	--exclude @Flaky     \
 	--cleanup $(EXCLUDE) \
 	-q --human_match \
@@ -84,26 +74,40 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ echo
 	@ - rm -f verbose_output_NOK.md verbose_output_OK.md
 
+examples:
 	@ # Check examples
 	@ echo 2. examples check ================
-	@ ./bbt --yes -k -c -q -hm \
+	./bbt --yes -k -c -q -hm \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc and rpl on your platform "********"
 	@ echo
 
+non_reg:
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
-	@ ./bbt --yes --keep_going --cleanup -q \
+	./bbt --yes --keep_going --cleanup -q \
 	--human_match \
 	--index $(RESULTS_DIR)/non_reg_tests.md \
 	../tests/non_reg_tests 
 	@ echo
 
+unit_testing:
 	@ # Unit testing
 	@ echo 4. unit testing ==================
-	@ $(MAKE) -s check EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests && echo OK || echo ***** KO
+	$(MAKE) -s check EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests && echo OK || echo ***** KO
 	@ echo
 
+check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) features examples non_reg unit_testing
+	@ # Some examples rely on external exe : 
+	@ # - gcc
+
+	@ # =====================================================================
+	@ # WARNING : remember that bbt output file must be output directly in
+	@ # the right directory, and NOT in the current directory and then moved to 
+	@ # docs/test_results, otherwise relative path in the results file to the 
+	@ # scenario files will be wrong!
+	@ # =====================================================================
+	
 	@ - rm -f *.out *.err main tmp.txt output2.txt tmp.md index_*.md
 
 doc: $(RESULTS_DIR)

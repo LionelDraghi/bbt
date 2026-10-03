@@ -129,14 +129,9 @@ _Table of Contents:_
   ### Scenario: [sut version](NOK_scen.md):   
   - OK : When I run `./sut -v`  
   - **NOK** : Then I get `v3.1` (NOK_scen.md:3:) 
-  NOK_scen.md:3: Error: Output:  
-  ~~~
-  sut version 1.0
-  ~~~
-  not equal to expected:  
-  ~~~
-  v3.1
-  ~~~
+  NOK_scen.md:3: Error: Output not equal to expected:  
+  @@ -1 +1 @@
+  v3.1  | sut version 1.0
   
   - [ ] scenario   [sut version](NOK_scen.md) **fails**    
 
@@ -160,14 +155,9 @@ When there is an error, even if quiet mode is specified, we output all info.
 - And  the output is
   ```
   - **NOK** : Then I get `v3.1` (NOK_scen.md:3:)  
-  NOK_scen.md:3: Error: Output:  
-  ~~~
-  sut version 1.0
-  ~~~
-  not equal to expected:  
-  ~~~
-  v3.1
-  ~~~
+  NOK_scen.md:3: Error: Output not equal to expected:  
+  @@ -1 +1 @@
+  v3.1  | sut version 1.0
   
   ## Summary : **Fail**
 

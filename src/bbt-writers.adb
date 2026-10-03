@@ -96,7 +96,7 @@ package body BBT.Writers is
    procedure Put_Step_Result
      (Step      : Step_Type'Class;
       Success   : Boolean;
-      Fail_Msg  : String;
+      Fail_Msg  : Text;
       Loc       : BBT.IO.Location_Type;
       Verbosity : Verbosity_Levels) is
    begin
@@ -113,6 +113,17 @@ package body BBT.Writers is
          -- When no error, it depends on the selected verbose mode.
          Model.Scenarios.Add_Result (Success, To => Parent (Step).all);
       end loop;
+   end Put_Step_Result;
+
+   -- --------------------------------------------------------------------------
+   procedure Put_Step_Result
+     (Step      : Step_Type'Class;
+      Success   : Boolean;
+      Fail_Msg  : String;
+      Loc       : BBT.IO.Location_Type;
+      Verbosity : Verbosity_Levels) is
+   begin
+      Put_Step_Result (Step, Success, Text'[1 => Fail_Msg], Loc, Verbosity);
    end Put_Step_Result;
 
    -- --------------------------------------------------------------------------

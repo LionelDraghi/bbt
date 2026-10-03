@@ -12,6 +12,9 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   `Then the exit code is n` checks the exact exit code of the last command
   - [Added]   `Given the environment variable NAME is value | is not set`
   - [Fixed]   `Then I get [no] error` read the exit code from an uninitialized variable
+  - [Changed] error messages now display expected and actual side by side, in a
+               more readable sdiff inspired format, with diff hunk headers (`@@`)
+               to locate the problem, and a few lines of context around each difference
 
 - **[0.3.0] - 2026-04-26**
   - [Fixed]   `bbt list_files` no more return on error when no file found

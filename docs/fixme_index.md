@@ -7,7 +7,7 @@ Location | Text
 [docs/features/B130_Cmd_Line_Help.md](../docs/features/B130_Cmd_Line_Help.md):153| but I don't know how to test it!
 [docs/proposed_features/B070_Mandatory_new_bug.md](../docs/proposed_features/B070_Mandatory_new_bug.md):1| bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `whatever` file, even if it has not the same content.
 [docs/proposed_features/error_output_contains.md](../docs/proposed_features/error_output_contains.md):3| not yet implemented.
-[docs/UG.md](../docs/UG.md):174|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
+[docs/UG.md](../docs/UG.md):175|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
 [src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):207|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-model-documents.adb](../src/bbt-model-documents.adb):211|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
@@ -19,5 +19,6 @@ Location | Text
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-tests-runner.adb](../src/bbt-tests-runner.adb):89|      --  defensive code that should be replaced by
 [src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):160|      --  Path_To_Scen should be in Scenario_Type to avoid
-[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):210|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
+[src/bbt-writers-markdown_writers.adb](../src/bbt-writers-markdown_writers.adb):219|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all
+[src/text_utilities.ads](../src/text_utilities.ads):110|   --  the comparison is positional: an insertion or deletion shifts
