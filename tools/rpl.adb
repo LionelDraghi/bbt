@@ -31,12 +31,12 @@ procedure Rpl is
       Ada.Text_IO.Put_Line ("Options:");
       Ada.Text_IO.Put_Line ("  -h, --help       Show this help message and exit");
       Ada.Text_IO.Put_Line ("  --version        Show version and exit");
-      Ada.Text_IO.Put_Line ("  -i              Ignore case when searching");
-      Ada.Text_IO.Put_Line ("  -q              Quiet mode (no output)");
-      Ada.Text_IO.Put_Line ("  -w              Match whole words only");
-      Ada.Text_IO.Put_Line ("  -v              Verbose mode (show detailed output)");
-      Ada.Text_IO.Put_Line ("  -s              Dry run (show changes without modifying files)");
-      Ada.Text_IO.Put_Line ("  -R              Process directories recursively");
+      Ada.Text_IO.Put_Line ("  -i, --ignore-case    Ignore case when searching");
+      Ada.Text_IO.Put_Line ("  -q, --quiet          Quiet mode (no output)");
+      Ada.Text_IO.Put_Line ("  -w, --whole-words    Match whole words only");
+      Ada.Text_IO.Put_Line ("  -v, --verbose        Verbose mode (show detailed output)");
+      Ada.Text_IO.Put_Line ("  -s, --dry-run        Show changes without modifying files");
+      Ada.Text_IO.Put_Line ("  -R, --recursive      Process directories recursively");
    end Usage;
 
    function Lower (S : String) return String is
@@ -225,6 +225,26 @@ begin
          elsif A = "--version" then
             Ada.Text_IO.Put_Line ("rpl for bbt 0.1");
             return;
+
+         --  Long options, as the rpl packaged in Debian does
+         elsif A = "--ignore-case" then
+            Ignore_Case := True;
+            I := I + 1;
+         elsif A = "--quiet" then
+            Quiet := True;
+            I := I + 1;
+         elsif A = "--whole-words" then
+            Whole_Words := True;
+            I := I + 1;
+         elsif A = "--verbose" then
+            Verbose := True;
+            I := I + 1;
+         elsif A = "--dry-run" then
+            Dry_Run := True;
+            I := I + 1;
+         elsif A = "--recursive" then
+            Recursive := True;
+            I := I + 1;
 
          elsif A'Length > 0 and then A (A'First) = '-' then
             for J in A'First + 1 .. A'Last loop

@@ -41,6 +41,7 @@ setup: ../sut$(EXE_SUFFIX) ../bbt$(EXE_SUFFIX)
     
 	@ln -fs ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	@ln -fs ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
+	@ln -fs ../rpl$(EXE_SUFFIX) rpl$(EXE_SUFFIX)
 # Manage differences between Windows and Unix
 ifeq ($(PLATFORM), Windows)
 EXCLUDE := --exclude Unix_Only
@@ -79,7 +80,7 @@ examples:
 	@ echo 2. examples check ================
 	./bbt --yes -k -c -q -hm \
 	--index $(RESULTS_DIR)/examples_results.md \
-	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc and rpl on your platform "********"
+	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
 	@ echo
 
 non_reg:

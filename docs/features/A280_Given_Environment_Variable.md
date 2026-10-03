@@ -29,14 +29,18 @@ _Table of Contents:_
 
 ### Scenario: unset a variable
 
-- Given the environment variable `HOME` is not set
-- When I run `./sut read_env HOME`
+Once the scenario is completed, bbt restores the variable
+to its previous value, and `read_env` finds it back.
+Portability note: `PATH` is set on every platform, unlike `HOME` which does not exist on Windows
+
+- Given the environment variable `PATH` is not set
+- When I run `./sut read_env PATH`
 - Then I get an error
-- And the output contains `No HOME environment variable`
+- And the output contains `No PATH environment variable`
 
 ### Scenario: the unset variable is back
 
-- When I run `./sut read_env HOME`
+- When I run `./sut read_env PATH`
 - Then I get no error
 
 ### Scenario: set twice in the same scenario

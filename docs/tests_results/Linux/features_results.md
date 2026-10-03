@@ -882,14 +882,14 @@
    - [X] scenario   [the variable is back to its previous state](../../features/A280_Given_Environment_Variable.md) pass  
 
    ### Scenario: [unset a variable](../../features/A280_Given_Environment_Variable.md): 
-   - OK : Given the environment variable `HOME` is not set  
-   - OK : When I run `./sut read_env HOME`  
+   - OK : Given the environment variable `PATH` is not set  
+   - OK : When I run `./sut read_env PATH`  
    - OK : Then I get an error  
-   - OK : And the output contains `No HOME environment variable`  
+   - OK : And the output contains `No PATH environment variable`  
    - [X] scenario   [unset a variable](../../features/A280_Given_Environment_Variable.md) pass  
 
    ### Scenario: [the unset variable is back](../../features/A280_Given_Environment_Variable.md): 
-   - OK : When I run `./sut read_env HOME`  
+   - OK : When I run `./sut read_env PATH`  
    - OK : Then I get no error  
    - [X] scenario   [the unset variable is back](../../features/A280_Given_Environment_Variable.md) pass  
 

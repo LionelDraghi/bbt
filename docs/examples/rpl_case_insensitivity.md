@@ -15,8 +15,9 @@
   ```
 
 - When I run `rpl -i FR UK config.ini`  
-  -i = --ignore-case  
-  Note that on Windows, we are using rpl 1.4.1 by Joe Laffey, that do not accept long options unlike the rpl packaged on Debian 
+  -i = ignore case  
+  The tests use the local rpl, built by the `tools` target, so the
+  behavior is the same on every platform.
 
 - Then the `config.ini` file contains 
   ```

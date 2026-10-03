@@ -65,9 +65,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Setup tools (rpl, mlc)
+      - name: Setup tools (mlc)
         # Note: On Windows runners, bash is available via Git for Windows (which includes MSYS2).
         # This allows using the same bash script across all platforms.
+        # rpl is no more installed from external sources: the local rpl,
+        # built by the tools target, is used.
         shell: bash
         run: |
           # Install mlc if not present
@@ -75,25 +77,6 @@ jobs:
             cargo install --locked mlc
           else
             echo "mlc already installed"
-          fi
-
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq rpl
-
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            brew update
-            brew install rpl
-          
-          elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install -y --no-progress wget
-            # Download rpl for Windows
-            # Use a direct SourceForge download link and bypass the interstitial page
-            rplUrl="https://downloads.sourceforge.net/project/gnuwin32/rpl/1.4.1/rpl-1.4.1-bin.zip"
-            curl -sL -o rpl.zip "$rplUrl"
-            unzip -q rpl.zip -d C:/GnuWin32
-            echo "C:/GnuWin32/bin" >> $GITHUB_PATH
-          
           fi
 
       - name: Run build and checks
