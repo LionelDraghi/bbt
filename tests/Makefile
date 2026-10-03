@@ -43,7 +43,12 @@ ifeq ($(PLATFORM), Windows)
 EXCLUDE := --exclude Unix_Only
 
 else ifeq ($(PLATFORM), Darwin)
-	export GNAT_FILE_NAME_CASE_SENSITIVE=1
+# Unindented on purpose: this is a make directive, exported to every recipe
+# and its children (bbt and the spawned commands), not a recipe line.
+# GNAT on a case-insensitive filesystem (default on macOS) otherwise
+# lowercases file names at run time, breaking the self-tests.
+# cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
+export GNAT_FILE_NAME_CASE_SENSITIVE=1
 EXCLUDE := --exclude Windows_Only
 
 else ifeq ($(PLATFORM), Linux)
