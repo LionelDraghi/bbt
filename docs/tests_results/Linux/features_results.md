@@ -1331,6 +1331,7 @@
    - [X] scenario   [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
 
    ### Scenario: [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `quoted_glob_test.md`  
    - OK : When I run `./bbt explain quoted_glob_test.md`  
    - OK : Then output is  
    - [X] scenario   [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  

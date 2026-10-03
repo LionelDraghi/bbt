@@ -65,6 +65,12 @@ _Table of Contents:_
 
 ## Scenario: no warning on a quoted metacharacter in bbt explain
 
+- Given the new file `quoted_glob_test.md`
+  ~~~
+  # Scenario
+  - When I run `find . -name "*.ad[sb]"` Successfully
+  ~~~
+
 - When I run `./bbt explain quoted_glob_test.md`
 - Then output is
   ```
