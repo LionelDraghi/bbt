@@ -205,19 +205,30 @@ package body BBT.Tests.Builder is
    --  Commands are not run through a shell, so a metacharacter will be
    --  passed verbatim as an argument to the command, and the step can
    --  never behave as its author expects.
+   --  On the other hand, quoting is the way to pass a literal
+   --  metacharacter as an argument, so metacharacters inside a quoted
+   --  part of the command are intentional and do not raise a warning.
+      In_Single_Quotes : Boolean := False;
+      In_Double_Quotes : Boolean := False;
    begin
       for I in Cmd'Range loop
-         for Metachar of Shell_Metachars loop
-            if Cmd (I) = Metachar then
-               IO.Put_Warning ("the command contains a shell metacharacter ('"
-                               & Cmd (I) & "'), but commands are not run "
-                               & "through a shell: a command shall not "
-                               & "contain pipes, redirections, or command "
-                               & "substitutions; '" & Cmd (I) & "' will be "
-                               & "passed as an argument to the command", Loc);
-               return;
-            end if;
-         end loop;
+         if Cmd (I) = ''' then
+            In_Single_Quotes := not In_Single_Quotes;
+         elsif Cmd (I) = '"' then
+            In_Double_Quotes := not In_Double_Quotes;
+         elsif not In_Single_Quotes and not In_Double_Quotes then
+            for Metachar of Shell_Metachars loop
+               if Cmd (I) = Metachar then
+                  IO.Put_Warning ("the command contains a shell metacharacter ('"
+                                  & Cmd (I) & "'), but commands are not run "
+                                  & "through a shell: a command shall not "
+                                  & "contain pipes, redirections, or command "
+                                  & "substitutions; '" & Cmd (I) & "' will be "
+                                  & "passed as an argument to the command", Loc);
+                  return;
+               end if;
+            end loop;
+         end if;
       end loop;
    end Check_Shell_Metachars;
 

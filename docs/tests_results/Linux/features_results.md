@@ -1324,6 +1324,17 @@
    - OK : Then output is  
    - [X] scenario   [warning also displayed by bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
 
+   ### Scenario: [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `quoted_glob_test.md`  
+   - OK : When I run `./bbt -c quoted_glob_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : When I run `./bbt explain quoted_glob_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
 
 # Document: [B120_Output_Verbosity.md](../../features/B120_Output_Verbosity.md)  
    ### Background: [](../../features/B120_Output_Verbosity.md): 
@@ -1663,6 +1674,17 @@
    - [X] scenario   [Checking that the index file is ignored](../../features/B180_Ignored_Files.md) pass  
 
 
+# Document: [B190_Clean_Error_When_No_Output.md](../../features/B190_Clean_Error_When_No_Output.md)  
+  ## Feature: clean error when checking the output of a command that did not run  
+   ### Scenario: [check the output of a command that does not exist](../../features/B190_Clean_Error_When_No_Output.md): 
+   - OK : Given the new file `no_cmd_test.md`  
+   - OK : When I run `./bbt -k no_cmd_test.md`  
+   - OK : Then output contains  
+   - OK : and output contains  
+   - OK : Then I get an error  
+   - [X] scenario   [check the output of a command that does not exist](../../features/B190_Clean_Error_When_No_Output.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -1833,12 +1855,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 196 scenarios OK
+## Summary : **Success**, 199 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 196   |
+| Successful | 199   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

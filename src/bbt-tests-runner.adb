@@ -112,6 +112,44 @@ package body BBT.Tests.Runner is
 
       Put_Debug_Line ("  ====== Running Step " & Step.Data.Src_Code'Image);
 
+      if Step.Data.Action in Output_Is
+                           | Output_Contains
+                           | Output_Does_Not_Contain
+                           | Output_Matches
+                           | Output_Does_Not_Match
+                           | No_Output
+                           | Stderr_Is
+                           | Stderr_Contains
+                           | Stderr_Does_Not_Contain
+                           | No_Stderr
+      then
+         -- The output file may not exist, for instance when the command
+         -- of a previous run step could not be spawned, and the run
+         -- continued (--keep_going): report a clean error on the step
+         -- instead of raising NAME_ERROR in Get_Text.
+         declare
+            File_Name : constant String :=
+                          (if Step.Data.Action in Stderr_Is
+                                                      | Stderr_Contains
+                                                      | Stderr_Does_Not_Contain
+                                                      | No_Stderr
+                           then Error_Output else Output);
+         begin
+            if not Ada.Directories.Exists (File_Name) then
+               Put_Step_Result (Step     => Step,
+                                Success  => False,
+                                Fail_Msg => "cannot open "
+                                  & Ada.Directories.Simple_Name (File_Name)
+                                  & ": the command did not run",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+               Run_Error := True;
+               Set_End_Time (Step);
+               return;
+            end if;
+         end;
+      end if;
+
       case Step.Data.Action is
          when Run_Cmd =>
             Created_File_List.Add (Output);

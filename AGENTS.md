@@ -23,8 +23,11 @@
     not tracked by --cleanup, which only tracks files created in `Given` steps
 
 - commit discipline:
-  after changing code or tests, run a full `make` (build, sut, check, doc),
-  then commit the whole generated state together (results, badges,
+  never commit or push without the owner's explicit consent: prepare the
+  change, run a full `make` (build, sut, check, doc), and report the
+  result; wait for the go-ahead before committing
+  when the owner approves a commit, commit the whole generated state
+  together (results, badges,
   bbt_help.txt, indexes...): committing in the middle of the chain
   (e.g. after features only) freezes inconsistent artifacts, such as
   a badge.url still holding the bbt placeholder, or a stale badge.svg
