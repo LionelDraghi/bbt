@@ -1415,20 +1415,140 @@
    ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md) pass  
+   - **NOK** : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+` (../docs/features/B130_Cmd_Line_Help.md:20:)  
+../docs/features/B130_Cmd_Line_Help.md:20: Error: Output:  
+~~~
+bbt version 0.3.1-dev  
+  
+Usage : bbt [Options]* [Command] file*  
+  
+  The default command is 'run'  
+  If no file is provided, reads *.md files  
+  
+Basic options:  
+       --yes        : do not prompt if deletion is needed in  
+                      "Given" steps, silently answer yes  
+  -c | --cleanup    : after run, remove every file and dir  
+                      created by bbt in "Given" steps  
+  -r | --recursive  : search scenarios in subdirs  
+  -k | --keep_going : do as much work as possible  
+       --Werror     : treat warnings as errors  
+  -v | --verbose  
+  -q | --quiet      : no message unless error,  
+                      Warnings are also ignored  
+  
+Basic commands:  
+       run               : the default command  
+  lf | list_files        : list files that will be run  
+  he | help [topic]      : base help, or more on one of the topic listed below  
+  he | help on_all       : full online help  
+  he | help tutorial     : print a tutorial   
+  he | help example      : print an example scenario file  
+  
+Help topics:  
+  filtering : --select --exclude --include  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  debug     : -d tt -ls -t  
+  
+https://github.com/LionelDraghi/bbt/  
+
+~~~
+does not match expected:  bbt version [0-9]+\.[0-9]+\.[0-9]+
+   - [ ] scenario   [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md) pass  
+   - **NOK** : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+` (../docs/features/B130_Cmd_Line_Help.md:20:)  
+../docs/features/B130_Cmd_Line_Help.md:20: Error: Output:  
+~~~
+bbt version 0.3.1-dev  
+  
+Usage : bbt [Options]* [Command] file*  
+  
+  The default command is 'run'  
+  If no file is provided, reads *.md files  
+  
+Basic options:  
+       --yes        : do not prompt if deletion is needed in  
+                      "Given" steps, silently answer yes  
+  -c | --cleanup    : after run, remove every file and dir  
+                      created by bbt in "Given" steps  
+  -r | --recursive  : search scenarios in subdirs  
+  -k | --keep_going : do as much work as possible  
+       --Werror     : treat warnings as errors  
+  -v | --verbose  
+  -q | --quiet      : no message unless error,  
+                      Warnings are also ignored  
+  
+Basic commands:  
+       run               : the default command  
+  lf | list_files        : list files that will be run  
+  he | help [topic]      : base help, or more on one of the topic listed below  
+  he | help on_all       : full online help  
+  he | help tutorial     : print a tutorial   
+  he | help example      : print an example scenario file  
+  
+Help topics:  
+  filtering : --select --exclude --include  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  debug     : -d tt -ls -t  
+  
+https://github.com/LionelDraghi/bbt/  
+
+~~~
+does not match expected:  bbt version [0-9]+\.[0-9]+\.[0-9]+
+   - [ ] scenario   [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md) **fails**  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+`  
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md) pass  
+   - **NOK** : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+` (../docs/features/B130_Cmd_Line_Help.md:20:)  
+../docs/features/B130_Cmd_Line_Help.md:20: Error: Output:  
+~~~
+bbt version 0.3.1-dev  
+  
+Usage : bbt [Options]* [Command] file*  
+  
+  The default command is 'run'  
+  If no file is provided, reads *.md files  
+  
+Basic options:  
+       --yes        : do not prompt if deletion is needed in  
+                      "Given" steps, silently answer yes  
+  -c | --cleanup    : after run, remove every file and dir  
+                      created by bbt in "Given" steps  
+  -r | --recursive  : search scenarios in subdirs  
+  -k | --keep_going : do as much work as possible  
+       --Werror     : treat warnings as errors  
+  -v | --verbose  
+  -q | --quiet      : no message unless error,  
+                      Warnings are also ignored  
+  
+Basic commands:  
+       run               : the default command  
+  lf | list_files        : list files that will be run  
+  he | help [topic]      : base help, or more on one of the topic listed below  
+  he | help on_all       : full online help  
+  he | help tutorial     : print a tutorial   
+  he | help example      : print an example scenario file  
+  
+Help topics:  
+  filtering : --select --exclude --include  
+  matching  : --exact_match --ignore_whitespaces --ignore_casing --ignore_blank_lines  
+  other     : list_files list_keywords list_grammar explain --strict  
+              --index file.md --junit file.xml --exec_dir --tmp_dir --generate_badge  
+  debug     : -d tt -ls -t  
+  
+https://github.com/LionelDraghi/bbt/  
+
+~~~
+does not match expected:  bbt version [0-9]+\.[0-9]+\.[0-9]+
+   - [ ] scenario   [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md) **fails**  
 
 
 # Document: [B140_Index_File.md](../../features/B140_Index_File.md)  
@@ -1819,12 +1939,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 194 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 194   |
+| Failed     | 3     |
+| Successful | 191   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
