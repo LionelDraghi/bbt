@@ -6,7 +6,7 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[0.3.1-dev] - 2026-05-**
+- **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)
   - [Added]   `Then the error output is | contains | does not contain ...` and `Then there is no error output`: when a scenario checks the error output, its commands' standard error is captured apart from the standard output
   - [Added]   `Then the exit code is n` checks the exact exit code of the last command
@@ -15,6 +15,11 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Changed] error messages now display expected and actual side by side, in a
                more readable sdiff inspired format, with diff hunk headers (`@@`)
                to locate the problem, and a few lines of context around each difference
+  - [Changed] help reorganization: `bbt explain` is now documented in the base
+               help, the deprecated `lg | list_grammar` and `lk | list_keywords`
+               commands are no more advertised (use `bbt help grammar` and
+               `bbt help keywords`), and `bbt help on_all` no more dumps the
+               grammar and keywords tables
 
 - **[0.3.0] - 2026-04-26**
   - [Fixed]   `bbt list_files` no more return on error when no file found
