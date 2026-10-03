@@ -116,8 +116,8 @@ doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
 	
 	@ ../rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
-	@ echo wget badge ...
-	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
+	@ echo fetching badge ...
+	@ curl -s "$(BADGE_URL)" -o $(RESULTS_DIR)/badge.svg
 
 
 # clean removes the test run artifacts only, keeping the links
@@ -126,6 +126,7 @@ clean:
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
+	@ - rm -f file_utilities_tests/test_file_utilities.md
 
 # distclean also removes the binaries and the links
 distclean:
