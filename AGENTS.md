@@ -19,6 +19,13 @@
   - files created by `When I run` steps (e.g. binaries compiled by gcc) are
     not tracked by --cleanup, which only tracks files created in `Given` steps
 
+- commit discipline:
+  after changing code or tests, run a full `make` (build, sut, check, doc),
+  then commit the whole generated state together (results, badges,
+  bbt_help.txt, indexes...): committing in the middle of the chain
+  (e.g. after features only) freezes inconsistent artifacts, such as
+  a badge.url still holding the bbt placeholder, or a stale badge.svg
+
 - to do list : 
   - docs/proposed_features
   - docs/fixme_index.md
@@ -57,7 +64,4 @@
   - `Line_Index` is based on Positive: `Line_Index (0)` raises a constraint error,
     use 'Base arithmetic for index offsets
   - to pad a string, use Ada.Strings.Fixed.Head (pads or truncates, no overflow)
-  - comparison failure messages are built by Text_Utilities.Side_By_Side
-    (sdiff -l -s style, with git diff like @@ hunks pointing at the first
-    differing line); a LCS based alignment is proposed in
-    docs/proposed_features/LCS_diff_alignment.md
+
