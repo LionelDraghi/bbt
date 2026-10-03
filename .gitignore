@@ -36,16 +36,5 @@ tests/cp.exe
 tests/file_utilities_tests/test_file_utilities
 tests/file_utilities_tests/test_file_utilities.exe
 
-# Test run artifacts
-tests/*.out
-tests/index_*.md
-tests/tmp.*
-tests/*.tmp
-tests/input.*
-tests/*.xml
-tests/expected_grammar
-tests/expected_keywords
-tests/file_utilities_tests/test_file_utilities.md
-
 # Misc scratch
 /tmp/

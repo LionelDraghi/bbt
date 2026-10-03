@@ -40,7 +40,7 @@
   ## Feature: 1 : Case insensitivity  
    ### Scenario: [1.1 : simple use (single file, no globbing)](../../examples/rpl_case_insensitivity.md): 
    - OK : Given the new file `config.ini` :  
-   - OK : When I run `rpl -i FR UK config.ini`    
+   - OK : When I run `./rpl -i FR UK config.ini`    
    - OK : Then the `config.ini` file contains   
    - [X] scenario   [1.1 : simple use (single file, no globbing)](../../examples/rpl_case_insensitivity.md) pass  
 

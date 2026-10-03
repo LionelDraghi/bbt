@@ -109,12 +109,13 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) features examples non_reg unit_te
 	@ # scenario files will be wrong!
 	@ # =====================================================================
 	
-	@ - rm -f *.out *.err main cp tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ - rm -f *.out *.err *.xml file1.tmp main cp tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ $(MAKE) -s clean --directory=file_utilities_tests
 
 doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
 	
-	@ rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
+	@ ../rpl --quiet bbt $(PLATFORM) $(RESULTS_DIR)/badge.url
 	@ echo wget badge ...
 	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 

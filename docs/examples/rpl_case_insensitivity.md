@@ -14,7 +14,7 @@
   keyboard=FR
   ```
 
-- When I run `rpl -i FR UK config.ini`  
+- When I run `./rpl -i FR UK config.ini`  
   -i = ignore case  
   The tests use the local rpl, built by the `tools` target, so the
   behavior is the same on every platform.
