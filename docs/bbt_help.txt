@@ -106,6 +106,8 @@ Good luck :-)
 | Given |         | `file` | containing       |                   | CREATE_IF_NONE          |     X      | - Given the file `config.ini` containing <followed by code fenced lines> |  
 | Given |         | `file` | containing       | `text`            | CREATE_IF_NONE          |            | - Given the file `config.ini` containing `lang=it` |  
 | Given |         | `text` | fail             |                   | RUN_WITH_ERROR          |            | - Given `xmllint mismatched_tag.xml` fails |  
+| Given |         | `var`  | is               | `text`            | SET_ENV_VAR             |            | - Given the environment variable `LANG` is `C` |  
+| Given |         | `var`  | is no            |                   | UNSET_ENV_VAR           |            | - Given the environment variable `NO_COLOR` is not set |  
 | Given | new     | `dir`  |                  |                   | ERASE_AND_CREATE        |            | - Given the new directory `dir1` |  
 | Given | new     | `file` |                  |                   | ERASE_AND_CREATE        |     X      | - Given the new file `config.ini` <followed by code fenced lines> |  
 | Given | new     | `file` | containing       |                   | ERASE_AND_CREATE        |     X      | - Given the new file `config.ini` containing <followed by code fenced lines> |  
@@ -120,11 +122,13 @@ Good luck :-)
 | Then  |         |        | get              | `text`            | OUTPUT_IS               |            | - Then I get `msg` |  
 | Then  |         |        | get              | error             | ERROR_RETURN_CODE       |            | - Then I get error |  
 | Then  |         |        | get no           | output            | NO_OUTPUT               |            | - Then there is no output |  
+| Then  |         |        | get no           | error output      | NO_STDERR               |            | - Then I get no error output |  
 | Then  |         |        | get no           | error             | NO_ERROR_RETURN_CODE    |            | - Then I get no error |  
 | Then  |         |        | is               | `file`            | CHECK_FILE_EXISTENCE    |            | - Then there is a  `config.ini` file |  
 | Then  |         |        | is               | `dir`             | CHECK_DIR_EXISTENCE     |            | - Then there is a  `dir1` directory |  
 | Then  |         |        | is               | error             | ERROR_RETURN_CODE       |            | - Then there is an error |  
 | Then  |         |        | is no            | output            | NO_OUTPUT               |            | - Then there is no output |  
+| Then  |         |        | is no            | error output      | NO_STDERR               |            | - Then there is no error output |  
 | Then  |         |        | is no            | `file`            | CHECK_NO_FILE           |            | - Then there is no `config.ini` file |  
 | Then  |         |        | is no            | `dir`             | CHECK_NO_DIR            |            | - Then there is no `dir1` directory |  
 | Then  |         |        | is no            | error             | NO_ERROR_RETURN_CODE    |            | - Then there is no error |  
@@ -152,6 +156,16 @@ Good luck :-)
 | Then  |         | output | is               |                   | OUTPUT_IS               |     X      | - Then the output is equal to <followed by code fenced lines> |  
 | Then  |         | output | is               | `file`            | OUTPUT_IS               |            | - Then the output is equal to file `expected.txt` |  
 | Then  |         | output | is               | `text`            | OUTPUT_IS               |            | - Then the output is `msg` |  
+| Then  |         | stderr | does not contain |                   | STDERR_DOES_NOT_CONTAIN |     X      | - Then the error output does not contain <followed by code fenced lines> |  
+| Then  |         | stderr | does not contain | `file`            | STDERR_DOES_NOT_CONTAIN |            | - Then the error output does not contain file `snippet.txt` |  
+| Then  |         | stderr | does not contain | `text`            | STDERR_DOES_NOT_CONTAIN |            | - Then the error output does not contain `msg` |  
+| Then  |         | stderr | contains         |                   | STDERR_CONTAINS         |     X      | - Then the error output contains <followed by code fenced lines> |  
+| Then  |         | stderr | contains         | `file`            | STDERR_CONTAINS         |            | - Then the error output contains file `snippet.txt` |  
+| Then  |         | stderr | contains         | `text`            | STDERR_CONTAINS         |            | - Then the error output contains `msg` |  
+| Then  |         | stderr | is               |                   | STDERR_IS               |     X      | - Then the error output is <followed by code fenced lines> |  
+| Then  |         | stderr | is               | `file`            | STDERR_IS               |            | - Then the error output is equal to file `expected.txt` |  
+| Then  |         | stderr | is               | `text`            | STDERR_IS               |            | - Then the error output is `msg` |  
+| Then  |         | exit   | is               | `text`            | EXIT_CODE_IS            |            | - Then the exit code is `2` |  
 - given
 - when
 - then
@@ -170,6 +184,8 @@ Good luck :-)
 - doesnt
 - doesn't
 - error
+- exit
+- environment
 - is
 - or
 - output
