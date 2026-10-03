@@ -6,6 +6,8 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+- **[0.4.2-dev] - 2026-??-??**
+
 - **[0.4.1] - 2026-10-03**
   - [Fixed]   self-tests now pass on macOS without any prepared environment:
                `make` itself exports `GNAT_FILE_NAME_CASE_SENSITIVE`, which is
