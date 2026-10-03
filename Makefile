@@ -15,6 +15,28 @@ endif
 
 all: build sut check doc
 
+.PHONY : help
+help:
+	echo "Usage: make [target]"
+	echo ""
+	echo "Targets:"
+	echo "  all        : build, sut, check and doc (default when no target given)"
+	echo "  build      : build bbt in validation mode"
+	echo "  release    : build bbt in release mode"
+	echo "  sut        : build the sut and rpl tools, and create the"
+	echo "                sut, bbt and gcc links in tests/"
+	echo "  check      : run the tests (features, examples, non regression"
+	echo "                and unit tests)"
+	echo "  doc        : regenerate the generated docs (help reference files,"
+	echo "                indexes, badges) and check the links with mlc"
+	echo "  install    : copy bbt to ~/bin"
+	echo "  clean      : remove the test run artifacts only,"
+	echo "                keeping binaries and links usable"
+	echo "  distclean  : remove everything that can be rebuilt,"
+	echo "                including binaries and links"
+	echo ""
+	echo "Refer to AGENTS.md and docs/developer_guide.md for more details."
+
 bbt$(EXE_SUFFIX): build
 sut$(EXE_SUFFIX): tools
 rpl$(EXE_SUFFIX): tools
