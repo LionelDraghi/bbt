@@ -304,8 +304,13 @@ package body Text_Utilities is
       T1_Max_Len : constant Line_Length := Max_Line_Length (T1);
       Sep_Col    : constant Line_Length := T1_Max_Len + 1;
 
-      Last_Common_Index : constant Line_Index := Line_Index'Min (T1.Last_Index, T2.Last_Index);
-      Last_Index        : constant Line_Index := Line_Index'Max (T1.Last_Index, T2.Last_Index);
+      --  Line_Index is Positive based, and Last_Index is 0 on an empty Text,
+      --  so these two constants shall be computed on Line_Index'Base,
+      --  otherwise comparing an empty Text raises a CONSTRAINT_ERROR.
+      Last_Common_Index : constant Line_Index'Base :=
+        Line_Index'Min (T1.Last_Index, T2.Last_Index);
+      Last_Index        : constant Line_Index'Base :=
+        Line_Index'Max (T1.Last_Index, T2.Last_Index);
 
       Result : Text := Empty_Text;
 

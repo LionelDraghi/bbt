@@ -1311,6 +1311,20 @@
    - [X] scenario   [Command with quoted arguments (Unix_Only)](../../features/B110_Spawn.md) pass  
 
 
+# Document: [B115_Warning_On_Shell_Metacharacters.md](../../features/B115_Warning_On_Shell_Metacharacters.md)  
+  ## Feature: warning on shell metacharacters in commands  
+   ### Scenario: [warning when a command contains a pipe](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `pipe_test.md`  
+   - OK : When I run `./bbt -c pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning when a command contains a pipe](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [warning also displayed by bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : When I run `./bbt explain pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning also displayed by bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+
 # Document: [B120_Output_Verbosity.md](../../features/B120_Output_Verbosity.md)  
    ### Background: [](../../features/B120_Output_Verbosity.md): 
    - OK : Given the file `OK_scen.md`  
@@ -1819,12 +1833,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 194 scenarios OK
+## Summary : **Success**, 196 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 194   |
+| Successful | 196   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

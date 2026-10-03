@@ -138,7 +138,13 @@ package body BBT.Tests.Builder is
 
    -- --------------------------------------------------------------------------
    procedure Add_Scenario (Name : String; Loc : Location_Type) is
+   --  Set_State shall be called before the new empty scenario is appended:
+   --  if the previous step misses its expected code block, Set_State raises
+   --  the "Missing Code Block" error and flags that previous step, that
+   --  is the last step of the *current* scenario; after the append, the
+   --  last scenario would be the new empty one, and Last_Step would crash.
    begin
+      Set_State (In_Scenario, Loc => Loc);
       case Current_Doc_State is
          when In_Document =>
             Put_Debug_Line ("Add_Scenario " & Name'Image & " in doc "
@@ -155,7 +161,6 @@ package body BBT.Tests.Builder is
                                 Parent   => Node_Access (Last_Feature),
                                 Location => Loc));
       end case;
-      Set_State (In_Scenario, Loc => Loc);
    end Add_Scenario;
 
    -- --------------------------------------------------------------------------
@@ -190,6 +195,31 @@ package body BBT.Tests.Builder is
       Set_State (In_Background, Loc => Loc);
 
    end Add_Background;
+
+   -- --------------------------------------------------------------------------
+   --  Shell metacharacters that a command author may expect to be
+   --  interpreted by a shell, although commands are spawned directly.
+   Shell_Metachars : constant String := "|$`<>&;*?";
+
+   procedure Check_Shell_Metachars (Cmd : String; Loc : Location_Type) is
+   --  Commands are not run through a shell, so a metacharacter will be
+   --  passed verbatim as an argument to the command, and the step can
+   --  never behave as its author expects.
+   begin
+      for I in Cmd'Range loop
+         for Metachar of Shell_Metachars loop
+            if Cmd (I) = Metachar then
+               IO.Put_Warning ("the command contains a shell metacharacter ('"
+                               & Cmd (I) & "'), but commands are not run "
+                               & "through a shell: a command shall not "
+                               & "contain pipes, redirections, or command "
+                               & "substitutions; '" & Cmd (I) & "' will be "
+                               & "passed as an argument to the command", Loc);
+               return;
+            end if;
+         end loop;
+      end loop;
+   end Check_Shell_Metachars;
 
    -- --------------------------------------------------------------------------
    procedure Add_Step (Step_Info           : in out Model.Steps.Step_Data;
@@ -258,6 +288,14 @@ package body BBT.Tests.Builder is
             Set_Step_State (In_Then_Step, Code_Block_Expected, Loc);
 
       end case;
+
+      if Step_Info.Action in Run_Cmd | Run_Without_Error | Run_With_Error then
+         Check_Shell_Metachars (To_String (Step_Info.Object_String), Loc);
+         Check_Shell_Metachars (To_String (Step_Info.Subject_String), Loc);
+         for Cmd of Step_Info.Commands loop
+            Check_Shell_Metachars (Cmd, Loc);
+         end loop;
+      end if;
 
       case Current_Background is
          when Doc     =>

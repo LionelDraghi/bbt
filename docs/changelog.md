@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.4.2-dev] - 2026-??-??**
+  - [Added]   a warning when a run command contains shell metacharacters (`|`, `$`, backtick, `<`, `>`, ...), as commands are not run through a shell
+  - [Fixed]   an empty actual output compared to a non empty expected content raised a CONSTRAINT_ERROR and silently passed
+  - [Fixed]   `bbt explain` crashed when a step with a missing code block was followed by another scenario header
 
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)

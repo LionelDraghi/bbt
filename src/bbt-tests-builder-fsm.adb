@@ -111,7 +111,9 @@ package body FSM is
          -- on the previous step.
          Put_Line ("Error: Missing Code Block expected line"
                     & Code_BLock_Expected_Line'Image, Loc);
-         Last_Step.Set_Has_Syntax_Error (True);
+         if Last_Step /= null then
+            Last_Step.Set_Has_Syntax_Error (True);
+         end if;
       end if;
 
       -- When living the In_Step state, check that the expected code block

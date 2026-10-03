@@ -262,6 +262,9 @@ package body BBT.Tests.Runner is
 
    exception
       when E : others =>
+         --  An exception while processing a step is a failure of
+         --  the step, and thus of the scenario.
+         Run_Error := True;
          Put_Exception ("while processing step "
                         & Step'Image
                         & " : " & Ada.Exceptions.Exception_Name (E) & " "
