@@ -107,6 +107,6 @@ clean:
 	@ alr -q clean
 	cd tools && alr clean
 	@ $(MAKE) -s clean --directory=tests
-	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out obj/* tmp.txt output2.txt main main.c
+	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out obj/* tmp.txt output2.txt main main.c tmp
 	echo OK
 	echo

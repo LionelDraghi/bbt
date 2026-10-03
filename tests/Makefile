@@ -108,7 +108,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) features examples non_reg unit_te
 	@ # scenario files will be wrong!
 	@ # =====================================================================
 	
-	@ - rm -f *.out *.err main cp tmp.txt output2.txt tmp.md index_*.md
+	@ - rm -f *.out *.err main cp tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords
 
 doc: $(RESULTS_DIR)
 	@ $(MAKE) -s doc DOC_DIR=../$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests
@@ -118,7 +118,7 @@ doc: $(RESULTS_DIR)
 	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 
 clean:
-	@ - rm -f *.out *.err main cp bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md
+	@ - rm -f *.out *.err main cp bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md

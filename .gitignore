@@ -43,4 +43,9 @@ tests/tmp.*
 tests/*.tmp
 tests/input.*
 tests/*.xml
+tests/expected_grammar
+tests/expected_keywords
 tests/file_utilities_tests/test_file_utilities.md
+
+# Misc scratch
+/tmp/
