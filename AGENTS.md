@@ -13,8 +13,11 @@
   - to run one suite            : `cd tests & make features | examples | non_reg | unit_testing`
   - add the `--exclude Windows_Only` option when on Linux/MacOS
   - add the `--exclude Unix_Only`    option when on Windows
-  - after `make clean`, verify cleanliness on the file system,
-    not only with git status: git ignored files
+  - `make clean` removes the test run artifacts only, keeping the built
+    binaries and links usable; `make distclean` removes everything
+    that can be rebuilt, including binaries and links
+  - after `make clean` or `make distclean`, verify cleanliness on the file
+    system, not only with git status: git ignored files
     (input.*, expected_*, cp...) remain invisible
   - files created by `When I run` steps (e.g. binaries compiled by gcc) are
     not tracked by --cleanup, which only tracks files created in `Given` steps

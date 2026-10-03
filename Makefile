@@ -101,12 +101,24 @@ install: ./bbt$(EXE_SUFFIX)
 	echo OK
 	echo
 
-.PHONY : clean
+.PHONY : clean distclean
+
+# clean removes the test run artifacts only,
+# keeping the built binaries and links usable
 clean:
 	echo --- clean:
+	@ $(MAKE) -s clean --directory=tests
+	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out tmp.txt output2.txt main main.c tmp
+	echo OK
+	echo
+
+# distclean removes everything that can be rebuilt,
+# including the binaries and the links
+distclean:
+	echo --- distclean:
 	@ alr -q clean
 	cd tools && alr clean
-	@ $(MAKE) -s clean --directory=tests
+	@ $(MAKE) -s distclean --directory=tests
 	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out obj/* tmp.txt output2.txt main main.c tmp
 	echo OK
 	echo

@@ -22,7 +22,7 @@ BADGE_URL = $(shell cat $(RESULTS_DIR)/badge.url)
 
 all: check
 
-.PHONY : clean setup check
+.PHONY : clean distclean setup check features examples non_reg unit_testing doc
 
 # To keep the trace of the run on each platform, the test results
 # are stored in a directory per platform (Linux, Windows, Darwin).
@@ -117,10 +117,19 @@ doc: $(RESULTS_DIR)
 	@ echo wget badge ...
 	@ wget -q "$(BADGE_URL)" -O $(RESULTS_DIR)/badge.svg
 
+
+# clean removes the test run artifacts only, keeping the links
 clean:
+	@ - rm -f *.out *.err main cp hello optimize *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
+	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
+	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
+
+# distclean also removes the binaries and the links
+distclean:
 	@ - rm -f *.out *.err main cp bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
 	@ $(MAKE) clean --directory=file_utilities_tests
-	
+
