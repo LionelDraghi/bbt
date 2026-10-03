@@ -6,7 +6,11 @@ All notable changes from a user perspective to this project will be documented i
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[0.4.1-dev] - 2026-??-??**
+- **[0.4.1] - 2026-10-03**
+  - [Fixed]   self-tests now pass on macOS without any prepared environment:
+               `make` itself exports `GNAT_FILE_NAME_CASE_SENSITIVE`, which is
+               required on case-insensitive filesystems, otherwise GNAT
+               lowercases file names at run time
 
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)

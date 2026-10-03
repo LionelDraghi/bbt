@@ -1,7 +1,7 @@
 
 ## Introduction  
 
-This is a bbt tutorial, generated with BBT 0.4.0  
+This is a bbt tutorial, generated with BBT 0.4.1  
 
 A bbt file contains:  
 1. text that is ignored
