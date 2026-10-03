@@ -15,8 +15,7 @@ with BBT.IO,
 with Ada.Command_Line,
      Ada.Directories;
 
-use BBT.Cmd_Line,
-    BBT.Scenarios,
+use BBT.Scenarios,
     BBT.Scenarios.Files,
     BBT.Settings,
     BBT.Writers;

@@ -7,7 +7,7 @@ Location | Text
 [docs/features/B130_Cmd_Line_Help.md](../docs/features/B130_Cmd_Line_Help.md):171| but I don't know how to test it!
 [docs/proposed_features/B070_Mandatory_new_bug.md](../docs/proposed_features/B070_Mandatory_new_bug.md):1| bug 26 oct 2024 : the `Given the file whatever` is not overwriting an existing `whatever` file, even if it has not the same content.
 [docs/UG.md](../docs/UG.md):175|>  as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
-[src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):207|               --     --  opt -ot / --output_tag not yet coded
+[src/bbt-cmd_line.adb](../src/bbt-cmd_line.adb):206|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-model-documents.adb](../src/bbt-model-documents.adb):211|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
