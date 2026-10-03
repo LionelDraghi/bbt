@@ -1,9 +1,7 @@
 Other commands:
   lf | list_files      : list Scenario files found
-  lk | list_keywords   : list Step keywords
-  lg | list_grammar    : list possible Steps syntax and associated action
-  ex | explain         : explain what bbt understands from Scenarios files
-                         (do not run the scenarios)
+  he | help grammar      : list possible Steps syntax and associated action
+  he | help keywords     : list Step keywords
 
 Other options:
         --strict         : warn when not strictly following Gherkin common guidelines

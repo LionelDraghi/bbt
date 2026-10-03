@@ -5,7 +5,7 @@
 
 This feature output what is understood by `bbt` in natural language.  
 Line that are not used by bbt are ignored.  
-There is one scenario per Action, cf `bbt list_grammar` for the list (that is defined in package bbt-model.steps.ads).  
+There is one scenario per Action, cf `bbt help grammar` for the list (that is defined in package bbt-model.steps.ads).  
 
 --- 
 

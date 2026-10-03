@@ -41,8 +41,12 @@ begin
 
       when On_All =>
          -- First the base, then topics
+         -- Grammar and Keywords are excluded: they are long generated
+         -- tables, available on demand through their own help topic.
          Put_Help (Base);
-         for Topic in Help_Topic when Topic not in On_All | Base | Tutorial | Example loop
+         for Topic in Help_Topic when Topic not in On_All | Base | Tutorial
+                                           | Example | Grammar | Keywords
+         loop
             Put_Help (Topic);
          end loop;
 
