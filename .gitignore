@@ -31,6 +31,8 @@ tests/rpl.exe
 tests/main
 tests/main.c
 tests/main.exe
+tests/cp
+tests/cp.exe
 tests/file_utilities_tests/test_file_utilities
 tests/file_utilities_tests/test_file_utilities.exe
 
