@@ -59,17 +59,6 @@
   `alr build` alone does not
 - the full release procedure is in docs/release_procedure.md
 
-## Ada gotchas, learned the hard way
-
-- `Ada.Containers.Indefinite_Vectors` exports `"&" (Element_Type, Element_Type)
-  return Vector`: as soon as a String parameter overload exists next to a Text one
-  (e.g. Put_Step_Result), a `"literal" & String` expression becomes ambiguous in
-  scopes where the instance is use visible. Disambiguate with a `String'(...)`
-  qualification, or use Append
-- `Line_Index` is based on Positive: `Line_Index (0)` raises a constraint error,
-  use 'Base arithmetic for index offsets
-- to pad a string, use Ada.Strings.Fixed.Head (pads or truncates, no overflow)
-
 ## Pointers
 
 - to understand bbt: docs/bbt-skill
