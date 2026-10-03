@@ -12,3 +12,31 @@ tests/file_utilities_tests/config/
 tools/alire/
 .DS_Store
 .vibe
+
+# Binaries and links
+/bbt
+/bbt.exe
+/sut
+/sut.exe
+tests/bbt
+tests/bbt.exe
+tests/sut
+tests/sut.exe
+tests/gcc
+tests/gcc.exe
+tests/rpl
+tests/rpl.exe
+tests/main
+tests/main.c
+tests/main.exe
+tests/file_utilities_tests/test_file_utilities
+tests/file_utilities_tests/test_file_utilities.exe
+
+# Test run artifacts
+tests/*.out
+tests/index_*.md
+tests/tmp.*
+tests/*.tmp
+tests/input.*
+tests/*.xml
+tests/file_utilities_tests/test_file_utilities.md
