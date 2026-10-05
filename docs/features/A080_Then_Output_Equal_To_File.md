@@ -22,6 +22,7 @@ Usage:
    sut rename             file_name   : prompt user for the new file name
    sut read_env    var_name           : display environment variable
    sut delay       n [return_code]    : wait for n seconds before returning code, success if none
+   sut cr_lf       file_name          : write a file with CR CR LF line endings
    sut -h | --help or no command line : display this message
    sut -v | --version                 : display a version string
 

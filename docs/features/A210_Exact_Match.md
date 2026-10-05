@@ -15,6 +15,7 @@ This test scenario is organized around :
 - a file that differ from the reference only in casing;
 - a file that differ from the reference only in white spaces;
 - a file that differ from the reference only in blank lines.
+- a file that differ from the reference only in CRs at line ends;
 
 and a scenario that compare the ref file with the three other.
 
@@ -26,6 +27,8 @@ _Table of Contents_:
 - [Scenario: exact match](#scenario-exact-match)
 - [Scenario: exact match except for casing](#scenario-exact-match-except-for-casing)
 - [Scenario: exact match except for casing and blank lines](#scenario-exact-match-except-for-casing-and-blank-lines)
+- [Scenario: human match ignores CR at line ends](#scenario-human-match-ignores-cr-at-line-ends)
+- [Scenario: exact match is sensitive to CR at line ends](#scenario-exact-match-is-sensitive-to-cr-at-line-ends)
 
 ### Background:
 
@@ -65,6 +68,14 @@ _Table of Contents_:
   # Scenario 3:
   - Then `text.ref` is equal to file `text.3`
   ~~~
+
+- Given the `compare_crlf.md` file
+  ~~~
+  # Scenario 1:
+  - Then `text.ref` is equal to file `text.4`
+  ~~~
+
+- Given I successfully run `./sut cr_lf text.4`
 
 ### Scenario: Human match
 
@@ -128,4 +139,18 @@ _Table of Contents_:
 - And output contains
   ~~~
   - [X] scenario [3:](compare.md) pass    
+  ~~~
+
+### Scenario: human match ignores CR at line ends
+
+- When I run `./bbt compare_crlf.md`
+- Then I get no error
+
+### Scenario: exact match is sensitive to CR at line ends
+
+- When I run `./bbt -k --exact_match compare_crlf.md`
+- Then I get an error
+- And output contains
+  ~~~
+  - **NOK** : Then `text.ref` is equal to file `text.4` (compare_crlf.md:2:)
   ~~~

@@ -836,7 +836,8 @@ package body Text_Utilities is
       T : Text := Empty_Text;
    begin
       for L of From_Text loop
-         if Ada.Strings.Fixed.Index_Non_Blank (L) /= 0 then
+         --  a line holding only spaces and CRs is blank
+         if Ada.Strings.Fixed.Index_Non_Blank (Join_Spaces (L)) /= 0 then
             T.Append (L);
          end if;
       end loop;
@@ -849,7 +850,9 @@ package body Text_Utilities is
       I   : Natural := Tmp'First;
    begin
       for J in From'Range loop
-         if From (J) /= ' ' then
+         --  CRs are ignored like spaces: they are an insignificant
+         --  presentation detail at line ends
+         if From (J) /= ' ' and then From (J) /= Ada.Characters.Latin_1.CR then
             Tmp (I) := From (J);
             I := @ + 1;
          end if;
