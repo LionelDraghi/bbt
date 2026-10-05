@@ -728,11 +728,10 @@ package body BBT.Tests.Actions is
                          OK             : out Boolean)
    is
       use Ada.Streams;
-      use type Stream_Element_Offset;
       Input : constant String :=
                 To_String (Step.Data.Object_String)
                 & (if With_Newline
-                   then (1 => Ada.Characters.Latin_1.LF)
+                   then [1 => Ada.Characters.Latin_1.LF]
                    else "");
       Data      : Stream_Element_Array (1 .. Input'Length);
       Last      : Stream_Element_Offset;
