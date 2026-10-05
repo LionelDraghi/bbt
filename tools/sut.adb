@@ -24,6 +24,7 @@ procedure sut is
       Put_Line ("   sut create|read        file_name");
       Put_Line ("   sut append      ""Text"" file_name");
       Put_Line ("   sut delete             file_name   : prompt user to confirm deletion");
+      Put_Line ("   sut rename             file_name   : prompt user for the new file name");
       Put_Line ("   sut read_env    var_name           : display environment variable");
       Put_Line ("   sut delay       n [return_code]    : wait for n seconds before returning code, success if none");
       Put_Line ("   sut -h | --help or no command line : display this message");
@@ -127,6 +128,37 @@ begin
                            end case;
                         end loop Get_Answer;
 
+                     else
+                        Put_Line (Standard_Error, "No " &
+                                    To_String (File_Name) & " file");
+                     end if;
+                  end if;
+               end;
+
+            elsif Opt = "rename" then --------------------------------------------
+               declare
+                  use Ada.Directories;
+                  New_Name : Unbounded_String;
+               begin
+                  if No_More_Arg then
+                     Put_Line (Standard_Error, "Missing file name");
+                  else
+                     Arg_Index := @ + 1;
+                     File_Name := To_Unbounded_String (Argument (Arg_Index));
+                     if Exists (To_String (File_Name)) and then
+                       Kind (To_String (File_Name)) = Ordinary_File
+                     then
+                        Put_Line ("Rename " & To_String (File_Name) &
+                                    " to:");
+                        New_Name := To_Unbounded_String (Get_Line);
+                        if To_String (New_Name) = "" then
+                           Put_Line (Standard_Error, "Missing new file name");
+                        else
+                           Rename (To_String (File_Name),
+                                   To_String (New_Name));
+                           Put_Line ("Renamed to " & To_String (New_Name));
+                           Set_Exit_Status (Success);
+                        end if;
                      else
                         Put_Line (Standard_Error, "No " &
                                     To_String (File_Name) & " file");
