@@ -20,6 +20,7 @@ with Ada.Exceptions;
 with Ada.Streams;
 with Ada.Streams.Stream_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Unchecked_Deallocation;
 
 with Spawn.Environments,
      Spawn.Processes,
@@ -194,9 +195,31 @@ package body BBT.Tests.Actions is
    end Write_Error;
 
    -- ------------------------------------------------------------------------
-   The_Process : Spawn.Processes.Process;
-   --  The process run by the last Run_Cmd. It is reset at each Run_Cmd;
-   --  it survives between steps only when interactive input is expected.
+   type Process_Access is access all Spawn.Processes.Process;
+   procedure Free is new Ada.Unchecked_Deallocation
+     (Object => Spawn.Processes.Process, Name => Process_Access);
+
+   The_Process : Process_Access;
+   --  The process run by the last Run_Cmd. A new process object is
+   --  created at each Run_Cmd: reusing the same object for several
+   --  starts works on POSIX but is broken on Windows (the Spawn
+   --  monitor fails with ERROR_INVALID_HANDLE on the second start).
+   --  It survives between steps only when interactive input is expected.
+
+   Dead    : Boolean := False;
+   --  the process object can be freed: either the process properly
+   --  terminated, or it could not be created at all
+
+   Started_OK : Boolean := False;
+   --  the process could be created (the Started callback was called);
+   --  an error on a non created process leaves nothing to kill
+
+   Monitor_Initialized : Boolean := False;
+   --  at least one process was successfully started during this run;
+   --  until then, the Spawn monitor has an empty process table, and
+   --  Monitor_Loop crashes on Windows (null table dereference)
+
+
 
    package Listeners is
       type Listener is limited new
@@ -229,6 +252,8 @@ package body BBT.Tests.Actions is
          pragma Unreferenced (Self);
       begin
          Put_Debug_Line ("  command started");
+         Started_OK         := True;
+         Monitor_Initialized := True;
       end Started;
 
       overriding procedure Standard_Output_Available
@@ -275,6 +300,7 @@ package body BBT.Tests.Actions is
          Put_Debug_Line ("  command finished, exit code" & Exit_Code'Image
                          & ", status " & Exit_Status'Image);
          Running := False;
+         Dead    := True;
          Last_Return_Code := Integer (Exit_Code);
       end Finished;
 
@@ -287,6 +313,11 @@ package body BBT.Tests.Actions is
          Put_Debug_Line ("  command error" & Process_Error'Image);
          Running := False;
          BBT.Tests.Actions.Process_Error := Process_Error;
+         if not Started_OK then
+            --  the process could not be created: nothing remains
+            --  to kill or reap, the object can be freed
+            Dead := True;
+         end if;
       end Error_Occurred;
 
       overriding procedure Exception_Occurred
@@ -300,6 +331,9 @@ package body BBT.Tests.Actions is
                              (Occurrence));
          Running := False;
          BBT.Tests.Actions.Process_Error := 1;
+         if not Started_OK then
+            Dead := True;
+         end if;
       end Exception_Occurred;
 
    end Listeners;
@@ -311,6 +345,26 @@ package body BBT.Tests.Actions is
    Quiet_Window  : constant Duration := 0.10;
    Quiet_Timeout : constant Duration := 5.0;
    End_Timeout   : constant Duration := 10.0;
+
+   procedure Safe_Monitor_Loop (Timeout : Duration) is
+   begin
+      if Monitor_Initialized then
+         Spawn.Processes.Monitor_Loop (Timeout);
+      else
+         --  Until a process is successfully started, the Spawn monitor
+         --  process table is not allocated, and Monitor_Loop crashes
+         --  on Windows with a null table dereference. The command
+         --  error, if any, has already been reported through the
+         --  Error_Occurred callback before the crash point.
+         begin
+            Spawn.Processes.Monitor_Loop (Timeout);
+         exception
+            when Constraint_Error =>
+               Put_Debug_Line ("  ignored monitor crash before the " &
+                                 "first started command");
+         end;
+      end if;
+   end Safe_Monitor_Loop;
 
    procedure Pump (Timeout : Duration);
    --  Process the pending events until the command is no more running,
@@ -325,7 +379,7 @@ package body BBT.Tests.Actions is
          if Timeout > 0.0 and then Ada.Calendar.Clock >= Deadline then
             return;
          end if;
-         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         Safe_Monitor_Loop (Quiet_Step);
       end loop;
    end Pump;
 
@@ -338,7 +392,7 @@ package body BBT.Tests.Actions is
       Last_Size : Natural;
    begin
       if not Running then
-         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         Safe_Monitor_Loop (Quiet_Step);
          return;
       end if;
       --  The command output is considered complete when it stays quiet
@@ -347,7 +401,7 @@ package body BBT.Tests.Actions is
       --  or it is still starting does not matter, as long as it is quiet.
       loop
          Last_Size := Output_Bytes + Err_Bytes;
-         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         Safe_Monitor_Loop (Quiet_Step);
          if Output_Bytes + Err_Bytes = Last_Size then
             Quiet := @ + Quiet_Step;
          else
@@ -367,7 +421,7 @@ package body BBT.Tests.Actions is
       Last_Size  : Natural;
    begin
       if not Running then
-         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         Safe_Monitor_Loop (Quiet_Step);
          return;
       end if;
       --  The output of a running command is checked once the response to
@@ -381,7 +435,7 @@ package body BBT.Tests.Actions is
       --  more than the quiet window may be considered quiet too early.
       loop
          Last_Size := Output_Bytes + Err_Bytes;
-         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         Safe_Monitor_Loop (Quiet_Step);
          if Output_Bytes + Err_Bytes = Last_Size then
             if Output_Bytes + Err_Bytes > Input_Bytes then
                Quiet := @ + Quiet_Step;
@@ -394,6 +448,29 @@ package body BBT.Tests.Actions is
            or else Ada.Calendar.Clock >= Deadline;
       end loop;
    end Wait_Response;
+
+   -- --------------------------------------------------------------------------
+   procedure Dispose_Process is
+      use type Ada.Calendar.Time;
+      Deadline : constant Ada.Calendar.Time :=
+                   Ada.Calendar.Clock + End_Timeout;
+   begin
+      if The_Process = null then
+         return;
+      end if;
+      if not Dead then
+         --  An error does not mean that the process died: kill it, and
+         --  pump the monitor until it is reaped. Freeing the object
+         --  before would leave dangling references in the monitor.
+         Put_Debug_Line ("  disposing a still running command");
+         The_Process.Kill_Process;
+         while not Dead loop
+            Safe_Monitor_Loop (Quiet_Step);
+            exit when Ada.Calendar.Clock >= Deadline;
+         end loop;
+      end if;
+      Free (The_Process);
+   end Dispose_Process;
 
    -- --------------------------------------------------------------------------
    procedure Run_Cmd (Step                       :     Step_Type'Class;
@@ -430,6 +507,10 @@ package body BBT.Tests.Actions is
             Running := False;
          end if;
       end if;
+
+      --  A new Spawn process object is used for each command: reusing
+      --  the same object for several starts is broken on Windows.
+      Dispose_Process;
 
       -- The first argument should be an executable (e.g. not a bash
       -- built-in)
@@ -526,6 +607,9 @@ package body BBT.Tests.Actions is
       for I in 2 .. Spawn_Arg'Last loop
          Args.Append (Spawn_Arg.all (I).all);
       end loop;
+      The_Process := new Spawn.Processes.Process;
+      Dead        := False;
+      Started_OK  := False;
       The_Process.Set_Program (Spawn_Arg.all (1).all);
       The_Process.Set_Arguments (Args);
       --  The command inherits the bbt environment, including the
@@ -732,6 +816,7 @@ package body BBT.Tests.Actions is
       end if;
       Output_Line_Offset := 0;
       Err_Line_Offset    := 0;
+      Dispose_Process;
    end Reset_Interactive_State;
 
    -- --------------------------------------------------------------------------

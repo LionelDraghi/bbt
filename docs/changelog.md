@@ -14,6 +14,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   `bbt explain` crashed when a step with a missing code block was followed by another scenario header
   - [Fixed]   with `--keep_going`, an output checking step following a command that could not be spawned crashed with an unhandled NAME_ERROR instead of reporting a clean error on the missing output file
   - [Fixed]   CRs at line ends, as found in files or output produced on Windows, were significant in human match mode, although human match is supposed to ignore text presentation: they are now ignored like other whitespaces, and remain significant with `--exact_match`
+  - [Fixed]   on Windows, command execution was broken since the move to the Spawn library: every command after the first failed with "Couldn't run", and bbt crashed at end of run or at scenario end, because the same Spawn process object was reused for all commands, which the Spawn Windows monitor does not support; a fresh process object is now created for each command, and disposed of once reaped
   
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)
