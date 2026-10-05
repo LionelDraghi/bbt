@@ -29,6 +29,11 @@ jobs:
   release:
     name: Continuous
     runs-on: ubuntu-22.04 # Use the oldest supported ubuntu version for greater compatibility.
+    if: github.event_name != 'pull_request'
+    # The AppImage release upload is only meaningful on main pushes and
+    # releases: on a pull request, the release creation fails with an
+    # invalid tag_name / target_commitish (the merge ref is not a valid
+    # release target), and the check was reported as a PR failure.
     steps:
        - name: Checkout
          uses: actions/checkout@v2
