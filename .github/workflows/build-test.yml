@@ -102,13 +102,29 @@ jobs:
               echo "- When I run \`./sut -v\`"
               echo "- Then I get no error"
             done; } > tests/stack_diag.md
+          { echo "# Diagnostic: stack growth per step, without any command"
+            for i in $(seq 1 500); do
+              echo
+              echo "## Scenario: check $i"
+              echo "- Given there is no \`to_check_$i\` file"
+              echo "- Then there is no \`to_check_$i\` file"
+            done; } > tests/step_diag.md
           cd tests
           DIAG=$(./bbt --yes stack_diag.md 2>&1 || true)
           LAST=$(echo "$DIAG" | grep -E 'Summary' | tail -1 || true)
           if echo "$DIAG" | grep -q "stack overflow"; then
-            echo "::error title=macos-diag::stack overflow in the long run test: $LAST"
+            EXC=$(echo "$DIAG" | grep -E 'Exception' | tail -1 || true)
+            echo "::error title=macos-diag-run::stack overflow in the long run test: $LAST -- at $EXC"
           else
-            echo "::warning title=macos-diag::no stack overflow in the long run test: $LAST"
+            echo "::warning title=macos-diag-run::no stack overflow in the long run test: $LAST"
+          fi
+          DIAG2=$(./bbt --yes step_diag.md 2>&1 || true)
+          LAST2=$(echo "$DIAG2" | grep -E 'Summary' | tail -1 || true)
+          if echo "$DIAG2" | grep -q "stack overflow"; then
+            EXC2=$(echo "$DIAG2" | grep -E 'Exception' | tail -1 || true)
+            echo "::error title=macos-diag-step::stack overflow without any command: $LAST2 -- at $EXC2"
+          else
+            echo "::warning title=macos-diag-step::no stack overflow without any command: $LAST2"
           fi
           cd ..
           A280=$(cd tests && ./bbt --yes ../docs/features/A280_Given_Environment_Variable.md 2>&1 | grep -E 'Summary' | tail -1)
