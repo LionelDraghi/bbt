@@ -132,6 +132,11 @@ package body BBT.Tests.Actions is
    Err_Line_Offset    : Natural := 0;
    --  lines produced before the last input step
 
+   Input_Bytes : Natural := 0;
+   --  bytes produced when the last input was sent, or at the start of
+   --  the command if no input was sent yet: the response to check is
+   --  the output produced after that point
+
    Last_Return_Code : Integer := 0;
    --  Set by the listener when the command terminates, read by the exit
    --  code checks of the following steps (each step is run by a separate
@@ -358,7 +363,6 @@ package body BBT.Tests.Actions is
       use type Ada.Calendar.Time;
       Deadline   : constant Ada.Calendar.Time :=
                      Ada.Calendar.Clock + Quiet_Timeout;
-      Entry_Size : constant Natural := Output_Bytes + Err_Bytes;
       Quiet      : Duration := 0.0;
       Last_Size  : Natural;
    begin
@@ -366,9 +370,11 @@ package body BBT.Tests.Actions is
          Spawn.Processes.Monitor_Loop (Quiet_Step);
          return;
       end if;
-      --  The output of a running command is checked when it stays quiet
-      --  AFTER having produced some output since this call, or when it
-      --  terminates. Waiting for the first output avoids considering the
+      --  The output of a running command is checked once the response to
+      --  the last input, or the output produced since the command start
+      --  when no input was sent yet, is complete: the command stays
+      --  quiet AFTER having produced some output after that point, or
+      --  terminates. Waiting for this output avoids considering the
       --  command quiet while it is still computing the consequence of
       --  the last input.
       --  Fixme: a command producing its output in bursts separated by
@@ -377,7 +383,7 @@ package body BBT.Tests.Actions is
          Last_Size := Output_Bytes + Err_Bytes;
          Spawn.Processes.Monitor_Loop (Quiet_Step);
          if Output_Bytes + Err_Bytes = Last_Size then
-            if Output_Bytes + Err_Bytes > Entry_Size then
+            if Output_Bytes + Err_Bytes > Input_Bytes then
                Quiet := @ + Quiet_Step;
             end if;
          else
@@ -513,8 +519,9 @@ package body BBT.Tests.Actions is
       Err_Lines          := 0;
       Output_Line_Offset := 0;
       Err_Line_Offset    := 0;
-      Process_Error       := 0;
-      Running             := False;
+      Input_Bytes        := 0;
+      Process_Error      := 0;
+      Running            := False;
 
       for I in 2 .. Spawn_Arg'Last loop
          Args.Append (Spawn_Arg.all (I).all);
@@ -665,6 +672,7 @@ package body BBT.Tests.Actions is
       Wait_Quiet;
       Output_Line_Offset := Output_Lines;
       Err_Line_Offset    := Err_Lines;
+      Input_Bytes        := Output_Bytes + Err_Bytes;
 
       for J in Input'Range loop
          Data (Stream_Element_Offset (J)) := Character'Pos (Input (J));

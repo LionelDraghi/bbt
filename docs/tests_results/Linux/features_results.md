@@ -1027,6 +1027,25 @@
    - OK : Then there is no more `config.ini` file  
    - [X] scenario   ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md) pass  
 
+   ### Scenario: [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is no `config.ini` file  
+   - [X] scenario   [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `file "config.ini" not deleted`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
 
 # Document: [B040_Find_scenarios.md](../../features/B040_Find_scenarios.md)  
   ## Feature: multiples scenarios given in command line  
@@ -1898,12 +1917,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 204 scenarios OK
+## Summary : **Success**, 206 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 204   |
+| Successful | 206   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
