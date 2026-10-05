@@ -84,6 +84,35 @@ jobs:
           GNAT_FILE_NAME_CASE_SENSITIVE: ${{ matrix.os == 'macos-latest' && '1' || '' }}
           # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
         run: make -k
+
+      - name: macOS stack diagnostics
+        #  Diagnose the macOS stack overflow seen on A280: run a long series
+        #  of trivial commands in a single bbt run to measure a possible
+        #  per command stack growth, and check whether A280 passes alone.
+        #  Results are published as annotations, so that they are readable
+        #  from the checks API without the job log.
+        if: always() && matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          echo "stack limit: $(ulimit -s)"
+          { echo "# Diagnostic: stack growth per command"
+            for i in $(seq 1 500); do
+              echo
+              echo "## Scenario: run $i"
+              echo "- When I run \`./sut -v\`"
+              echo "- Then I get no error"
+            done; } > tests/stack_diag.md
+          cd tests
+          DIAG=$(./bbt --yes stack_diag.md 2>&1 || true)
+          LAST=$(echo "$DIAG" | grep -E 'Summary' | tail -1 || true)
+          if echo "$DIAG" | grep -q "stack overflow"; then
+            echo "::error title=macos-diag::stack overflow in the long run test: $LAST"
+          else
+            echo "::warning title=macos-diag::no stack overflow in the long run test: $LAST"
+          fi
+          cd ..
+          A280=$(cd tests && ./bbt --yes ../docs/features/A280_Given_Environment_Variable.md 2>&1 | grep -E 'Summary' | tail -1)
+          echo "::warning title=macos-diag::A280 standalone: $A280"
         
       - name: Save summary
         if: always()
