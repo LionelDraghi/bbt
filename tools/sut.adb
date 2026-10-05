@@ -1,9 +1,12 @@
 -- SPDX-License-Identifier: Apache-2.0
 
 with Ada.Calendar,
+     Ada.Characters.Latin_1,
      Ada.Command_Line,
      Ada.Directories,
      Ada.Environment_Variables,
+     Ada.Streams,
+     Ada.Streams.Stream_IO,
      Ada.Strings.Unbounded,
      Ada.Text_IO;
 
@@ -27,6 +30,7 @@ procedure sut is
       Put_Line ("   sut rename             file_name   : prompt user for the new file name");
       Put_Line ("   sut read_env    var_name           : display environment variable");
       Put_Line ("   sut delay       n [return_code]    : wait for n seconds before returning code, success if none");
+      Put_Line ("   sut cr_lf       file_name          : write a file with CR CR LF line endings");
       Put_Line ("   sut -h | --help or no command line : display this message");
       Put_Line ("   sut -v | --version                 : display a version string");
       New_Line;
@@ -201,6 +205,30 @@ begin
                   Put_Line (File, Argument (Arg_Index + 1));
                   Close (File);
                   Arg_Index := @ + 2;
+                  Set_Exit_Status (Success);
+               end if;
+
+            elsif Opt = "cr_lf" then ------------------------------------------
+               --  Write a file whose lines end with CR CR LF, that is, with
+               --  a stray CR remaining in each line whatever the platform,
+               --  to test how bbt handles CRs in line contents
+               if No_More_Arg then
+                  Put_Line (Standard_Error, "Missing file name");
+               else
+                  Arg_Index := @ + 1;
+                  File_Name := To_Unbounded_String (Argument (Arg_Index));
+                  declare
+                     use Ada.Characters.Latin_1;
+                     F : Ada.Streams.Stream_IO.File_Type;
+                  begin
+                     Ada.Streams.Stream_IO.Create
+                       (F, Ada.Streams.Stream_IO.Out_File,
+                        To_String (File_Name));
+                     String'Write (Ada.Streams.Stream_IO.Stream (F),
+                                   "Rose" & CR & CR & LF &
+                                   "Tulip" & CR & CR & LF);
+                     Ada.Streams.Stream_IO.Close (F);
+                  end;
                   Set_Exit_Status (Success);
                end if;
 

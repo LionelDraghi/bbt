@@ -121,19 +121,35 @@ doc: $(RESULTS_DIR)
 	@ curl -s "$$(cat $(RESULTS_DIR)/badge.url)" -o $(RESULTS_DIR)/badge.svg
 
 
-# clean removes the test run artifacts only, keeping the links
+# clean removes the test run artifacts only, keeping the links.
+# --cleanup tracks only the files created in Given steps, so the
+# files created by When steps remain: they are listed below.
+# The list may become incomplete when new tests create new files:
+# any file not listed here, for instance a file of your own, is preserved.
 clean:
 	@ - rm -f *.out *.err main cp hello optimize *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
 	@ - rm -f file_utilities_tests/test_file_utilities.md
+	@ - rm -f blaise_cendrars.txt flowers1.txt flowers2.txt flowers3.txt help_message.txt le_Cid_1.txt le_Cid_2.txt le_Cid_3.txt list_1.txt list_2.txt
+	@ - rm -f text.1 text.2 text.3 text.4 text.ref tmp.1 tmp.2 tmp.3 tmp.4
+	@ - rm -f cmd_not_found.md compare.md compare_crlf.md contains.md contains_multiline.md create_exec.md failed_doesnt_1.md failed_doesnt_2.md
+	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md
+	@ - rm -f file_is_code_fence.input no_step_in_scenario.input no_step_in_scenario_b.input no_step_or_scenario_in_feature.input vza.input
+	@ - rm -f ask ask.c new_name.txt
 
 # distclean also removes the binaries and the links
 distclean:
-	@ - rm -f *.out *.err main cp bbt bbt.exe hello optimize sut sut.exe gcc rpl *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ - rm -f *.out *.err main cp bbt bbt.exe hello optimize sut sut.exe gcc rpl rpl.exe *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
+	@ - rm -f blaise_cendrars.txt flowers1.txt flowers2.txt flowers3.txt help_message.txt le_Cid_1.txt le_Cid_2.txt le_Cid_3.txt list_1.txt list_2.txt
+	@ - rm -f text.1 text.2 text.3 text.4 text.ref tmp.1 tmp.2 tmp.3 tmp.4
+	@ - rm -f cmd_not_found.md compare.md compare_crlf.md contains.md contains_multiline.md create_exec.md failed_doesnt_1.md failed_doesnt_2.md
+	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md
+	@ - rm -f file_is_code_fence.input no_step_in_scenario.input no_step_in_scenario_b.input no_step_or_scenario_in_feature.input vza.input
+	@ - rm -f ask ask.c new_name.txt
 	@ $(MAKE) clean --directory=file_utilities_tests
 

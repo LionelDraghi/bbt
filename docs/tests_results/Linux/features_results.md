@@ -580,6 +580,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [Human match](../../features/A210_Exact_Match.md): 
@@ -595,6 +597,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match](../../features/A210_Exact_Match.md): 
@@ -611,6 +615,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing](../../features/A210_Exact_Match.md): 
@@ -627,6 +633,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing and blank lines](../../features/A210_Exact_Match.md): 
@@ -636,6 +644,37 @@
    - OK : And output contains  
    - OK : And output contains  
    - [X] scenario   [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [human match ignores CR at line ends](../../features/A210_Exact_Match.md): 
+   - OK : When I run `./bbt compare_crlf.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [human match ignores CR at line ends](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [exact match is sensitive to CR at line ends](../../features/A210_Exact_Match.md): 
+   - OK : When I run `./bbt -k --exact_match compare_crlf.md`  
+   - OK : Then I get an error  
+   - OK : And output contains  
+   - [X] scenario   [exact match is sensitive to CR at line ends](../../features/A210_Exact_Match.md) pass  
 
 
 # Document: [A220_AsciiDoc_gcc_hello_world.adoc](../../features/A220_AsciiDoc_gcc_hello_world.adoc)  
@@ -1917,12 +1956,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 206 scenarios OK
+## Summary : **Success**, 208 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 206   |
+| Successful | 208   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
