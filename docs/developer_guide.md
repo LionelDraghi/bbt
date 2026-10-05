@@ -52,6 +52,57 @@ One of the component of the scenario file will be further analyzed, it’s the s
 
 === to be completed ===
 
+## Command execution and interaction
+
+The commands of the `When I run` steps are executed through the
+[Spawn](https://github.com/AdaCore/spawn) library (Alire dependency
+`spawn`), asynchronously: the listener appends the standard output and
+the standard error to the same files as the previous blocking
+implementation did, and reports the exit code on termination.
+
+This library was chosen over `GNAT.Expect` after experimenting with both
+(October 2026, with scratch programs):
+
+- `GNAT.Expect` (its `GNAT.Expect.TTY` child package is implemented on
+  all native GNAT ports) exposes a consuming, sliding buffer: `Expect`
+  returns the output up to the match, the tail arrives on the next call,
+  and older data is discarded once `Buffer_Size` is reached. Mapping
+  this pull-by-regexp model on the exact output checks of bbt would have
+  required constant draining, and `Close` on an already terminated child
+  reported a kill status (9) instead of its exit code. Moreover, on
+  Unix `GNAT.Expect.TTY` sets up the pseudo terminal as a full terminal
+  (echo, canonical mode and `CR` `LF` translation active, as gdb
+  expects), while on Windows it provides pipes or a console, not a
+  pseudo terminal: in both cases, the exact output checks of bbt would
+  be polluted;
+- `Spawn` (pipes) was validated byte exact on the two input forms: a key
+  without newline received by `Ada.Text_IO.Get_Immediate`, a line with
+  newline received by `Get_Line`, the prompt being flushed by
+  `Ada.Text_IO` before the read. It is also the cross-platform path:
+  Windows is implemented explicitly, and the library is used by Alire
+  itself.
+
+Note that `Spawn.Environments.System_Environment` is a snapshot taken at
+elaboration time: the child environment is rebuilt at each command with
+`Ada.Environment_Variables.Iterate`, so that the environment variable
+steps apply to the commands.
+
+When a scenario contains a `When I type` or a `When I enter` step
+(cf. [A290](features/A290_When_I_Type_Or_Enter.md)), the command is
+started and not awaited: it is fed across steps, and the synchronization
+relies on two event pumping primitives:
+
+- `Wait_Quiet`: the command has produced no more output during a short
+  window: its prompt is complete, the input can be sent;
+- `Wait_Response`: the command has produced some output after the last
+  input (or since the command start, when no input was sent yet), and
+  then stayed quiet: its response is complete, and can be checked.
+
+The pseudo terminal option, that would remove the flush constraint
+documented in A290, is described in
+[proposed_features/pty.md](proposed_features/pty.md), with the experiment
+results.
+
 ## Tests
 
 `make` or `make check` run different kind of tests :
@@ -101,3 +152,4 @@ Sources of `sut` are in the `tools` sub-directory.
 
 1. For the sake of clarity, the examples (within docs/examples) use a real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.
+3. Alire dependencies, declared in alire.toml: `ansiada` (colors in the results output), and `spawn` (asynchronous command execution, cf. [Command execution and interaction](#command-execution-and-interaction)).

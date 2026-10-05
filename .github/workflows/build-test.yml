@@ -86,7 +86,8 @@ jobs:
         run: make -k
         
       - name: Save summary
-        run: cat docs/tests_results/${OS_PLATFORM}/features_results.md > ${GITHUB_STEP_SUMMARY}
+        if: always()
+        run: cat docs/tests_results/${OS_PLATFORM}/features_results.md >> ${GITHUB_STEP_SUMMARY} || echo "no results available"
         shell: bash
 
       - name: tests results publishing

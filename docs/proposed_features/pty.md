@@ -53,16 +53,50 @@ allocates one):
   `Ada.Text_IO` program, `Get_Immediate` temporarily switching the
   terminal mode.
 
-Two possible paths, to be arbitrated:
+## The ada-util path (2026-10-05)
 
-1. bbt filters the `CR` and the echo itself, and accepts the
-   single-key limitation for non Ada programs: no new dependency, but
-   a filtering heuristic in the output path, and a behavior that
-   diverges between POSIX and Windows;
-2. an upstream evolution of the Spawn library, exposing a pseudo
-   terminal configuration (no echo, no canonical mode, no `CR` `LF`
-   translation): the clean path, making the checked output identical
-   with or without pseudo terminal.
+[ada-util](https://github.com/stcarrez/ada-util) (Alire crate `utilada`,
+by Stephane Carrez) turns out to provide exactly what is missing: its
+`Util.Processes` package has a `Set_Allocate_TTY` procedure, and the
+Unix implementation (`util-processes-os.adb`) configures the pseudo
+terminal slave with `tcgetattr` / **`cfmakeraw`** / `tcsetattr`:
+
+- raw mode means **no echo**: the input does not pollute the output;
+- **no canonical mode**: a single key without `Enter` is delivered;
+- **no `CR` `LF` translation**: the output bytes are exact.
+
+So the three problems listed above are solved by construction, without
+any upstream contribution. The rest of the API also fits bbt well:
+
+- `Set_Environment (Proc, Name, Value)`: the environment steps map
+  directly, with no snapshot trap (the environment is set on the child,
+  not read from the parent);
+- `Pipe_Mode` has a `READ_WRITE_ALL_SEPARATE` mode: three pipes, the
+  standard error is received apart, and under TTY a second pseudo
+  terminal is allocated for it, so the error output checks would keep
+  working;
+- `Set_Output_Stream (File)`, `Wait`, `Get_Exit_Status`, `Is_Running`,
+  `Stop`.
+
+On Windows, `Set_Allocate_TTY` is not implemented: the commands would
+keep the pipes behavior, as with Spawn.
+
+The weak point is the event model: reads on the pipe streams are
+blocking, with no listener or polling equivalent to the Spawn
+`Monitor_Loop`. The quiescence detection (`Wait_Quiet`, `Wait_Response`)
+would then rely on a helper task, or on exposing the underlying file
+descriptor.
+
+Candidate designs, to be arbitrated:
+
+1. use ada-util only for the pseudo terminal scenarios, keeping Spawn
+   as the execution engine for the others: two process libraries in
+   bbt, but each used where it is the best fit;
+2. replace Spawn by ada-util entirely: one dependency, a direct
+   environment API, but the event pumping of the interactive steps has
+   to be redesigned around blocking reads;
+3. keep filtering heuristics on top of the Spawn pipes (see above):
+   no new dependency, but heuristics in the output path.
 
 
 _Table of Contents:_
