@@ -907,6 +907,48 @@
    - [X] scenario   [variable set in a background](../../features/A280_Given_Environment_Variable.md) pass  
 
 
+# Document: [A290_When_I_Type_Or_Enter.md](../../features/A290_When_I_Type_Or_Enter.md)  
+  ## Feature: interaction with the command under test  
+   ### Scenario: [answering a key prompt with type](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I run `./sut delete to_delete.txt`  
+   - OK : Then the output is  
+   - OK : Then the output is `Deleting to_delete.txt`  
+   - OK : And there is no file `to_delete.txt`  
+   - [X] scenario   [answering a key prompt with type](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [refusing with type](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_keep.txt` containing `some data`  
+   - OK : When I run `./sut delete to_keep.txt`  
+   - OK : Then there is no output  
+   - OK : And there is a file `to_keep.txt`  
+   - [X] scenario   [refusing with type](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [several inputs in a row](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I run `./sut delete to_delete.txt`  
+   - OK : Then the output is `Deleting to_delete.txt`  
+   - OK : And there is no file `to_delete.txt`  
+   - [X] scenario   [several inputs in a row](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [answering a line prompt with enter](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given there is no `new_name.txt` file  
+   - OK : Given the new file `old_name.txt` containing `some data`  
+   - OK : When I run `./sut rename old_name.txt`  
+   - OK : Then the output is  
+   - OK : Then the output is `Renamed to new_name.txt`  
+   - OK : And there is no file `old_name.txt`  
+   - OK : And there is a file `new_name.txt`  
+   - [X] scenario   [answering a line prompt with enter](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [enter without a running command](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the `no_input.md` file  
+   - OK : When I run `./bbt -c no_input.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `no_input.md:2: Error : no command is running when reaching this step`  
+   - [X] scenario   [enter without a running command](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -1856,12 +1898,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 199 scenarios OK
+## Summary : **Success**, 204 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 199   |
+| Successful | 204   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

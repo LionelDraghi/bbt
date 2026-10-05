@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.4.2-dev] - 2026-??-??**
+  - [Added]   `When I type Y` and `When I enter Y` steps, to interact with a command waiting for user input: `type` sends the text without a trailing newline, for programs reading a single key, and `enter` sends it followed by a newline, for programs reading a whole line. The command is started without waiting for its termination, and the output checks following an input step apply to the output produced after it: the prompt displayed before the input is ignored. Command execution is now based on the Spawn library (see docs/features/A290_When_I_Type_Or_Enter.md)
   - [Added]   a warning when a run command contains shell metacharacters (`|`, `$`, backtick, `<`, `>`, ...), as commands are not run through a shell
   - [Fixed]   this warning was raised on quoted metacharacters (e.g. `find . -name "*.ad[sb]"`), although quoting is exactly the way to pass a literal metacharacter as an argument
   - [Fixed]   an empty actual output compared to a non empty expected content raised a CONSTRAINT_ERROR and silently passed

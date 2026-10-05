@@ -50,6 +50,13 @@
   rebuild before testing `bbt help`, and regenerate the reference files
   (docs/bbt_help.txt, docs/example.md, docs/examples/gcc_hello_world.md)
   after a change, otherwise B130 fails
+- to show a whole step between backticks in the docs, with the inner
+  backticks visible (e.g. When I type `Y`), use a double backtick code span,
+  with a space before the closing delimiter: ``When I type `Y` ``;
+- on any functional evolution, do not forget the possible update of the
+  tutorial and of the example in help (docs/help/tutorial.md,
+  docs/help/example.md and their generated copies docs/tutorial.md,
+  docs/example.md, docs/examples/gcc_hello_world.md)
 
 ## Alire and version numbering
 

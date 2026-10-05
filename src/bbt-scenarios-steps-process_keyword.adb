@@ -28,6 +28,14 @@ begin
          Set_Verb (Run, Loc);
       end if;
 
+   elsif Lower_Keyword = "type" then
+      -- When I type `Y`
+      Set_Verb (Type_Text, Loc);
+
+   elsif Lower_Keyword = "enter" then
+      -- When I enter `Y`
+      Set_Verb (Enter_Text, Loc);
+
    elsif Lower_Keyword = "or" then
       if State.Cmd_Expected then
       -- If there is two consecutive, let's warn the user.

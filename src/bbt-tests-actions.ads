@@ -23,18 +23,63 @@ private package BBT.Tests.Actions is
 
    type Run_Result is (Not_Specified, Success, Failure);
 
-   procedure Run_Cmd (Step              :     Step_Type'Class;
-                      Cmd               :     String;
-                      Output_Name       :     String;
-                      Expected_Result   :     Run_Result;
-                      Verbosity         :     Verbosity_Levels;
-                      Spawn_OK          : out Boolean;
-                      Return_Code       : out Integer;
-                      Error_Output_Name :     String := "");
+   procedure Run_Cmd (Step                       :     Step_Type'Class;
+                      Cmd                        :     String;
+                      Output_Name                :     String;
+                      Expected_Result            :     Run_Result;
+                      Verbosity                  :     Verbosity_Levels;
+                      Spawn_OK                   : out Boolean;
+                      Return_Code                : out Integer;
+                      Error_Output_Name          :     String := "";
+                      Interactive_Input_Expected :     Boolean := False);
    -- The command output (standard output and standard error) is written to
    -- Output_Name, unless Error_Output_Name is not empty: then the standard
    -- error is written to Error_Output_Name, and Output_Name receives the
    -- standard output only.
+   -- The command runs asynchronously: unless Interactive_Input_Expected is
+   -- set, Run_Cmd waits for its termination, and the command is finished
+   -- when Run_Cmd returns. With Interactive_Input_Expected, Run_Cmd only
+   -- waits for the command to become quiet, and the following steps send
+   -- text to the still running command with Send_Input.
+
+   procedure Send_Input (Step           :     Step_Type'Class;
+                         With_Newline   :     Boolean;
+                         Verbosity      :     Verbosity_Levels;
+                         OK             : out Boolean);
+   -- Send the step text to the standard input of the command started by
+   -- the last Run_Cmd. Without trailing newline unless With_Newline.
+   -- The step fails if no command is running.
+   -- The output produced by the command after this input is the only one
+   -- checked by the following output checks steps: Output_Since_Input
+   -- gives that part of a Text read from an output file.
+
+   function Interactive_Command_Running return Boolean;
+   -- Is a command started by Run_Cmd, waiting for input, still running?
+
+   procedure Wait_Quiet;
+   -- Pump events until the running command, if any, has produced no more
+   -- output during a short quiet window: its prompt is complete.
+
+   procedure Wait_Response;
+   -- Pump events until the running command, if any, has produced some
+   -- output since this call, and then stayed quiet during a short window,
+   -- or terminated: the consequence of the last input is complete.
+
+   procedure Wait_Command_End (Step      :     Step_Type'Class;
+                               Verbosity :     Verbosity_Levels;
+                               OK        : out Boolean);
+   -- Pump events until the running command terminates; the step fails
+   -- if it is still running after a timeout.
+
+   function Output_Since_Input (Output : Text) return Text;
+   -- The part of Output produced after the last Send_Input
+
+   function Stderr_Since_Input (Stderr : Text) return Text;
+   -- The part of Stderr produced after the last Send_Input
+
+   procedure Reset_Interactive_State;
+   -- Terminate a command still running at the end of a scenario, and
+   -- reset the output baselines. Called between scenarios.
 
    function Last_Exit_Code return Integer;
    -- Exit code of the last command run (0 before the first one).

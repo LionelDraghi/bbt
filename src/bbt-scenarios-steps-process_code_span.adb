@@ -64,6 +64,8 @@ begin
 
          when Run              |
               Successful_Run   |
+              Type_Text        |
+              Enter_Text       |
               Get              |
               Get_No           |
               Contains         |

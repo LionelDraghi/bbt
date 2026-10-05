@@ -10,11 +10,22 @@ with BBT.Created_File_List;             use BBT.Created_File_List;
 with BBT.Writers;                       use BBT.Writers;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
+with Ada.Calendar;
+with Ada.Characters.Latin_1;
 with Ada.Command_Line;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Directories;
 with Ada.Environment_Variables;
+with Ada.Exceptions;
+with Ada.Streams;
+with Ada.Streams.Stream_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
+with Spawn.Environments,
+     Spawn.Processes,
+     Spawn.Process_Listeners,
+     Spawn.Processes.Monitor_Loop,
+     Spawn.String_Vectors;
 
 with GNAT.OS_Lib;
 
@@ -89,38 +100,330 @@ package body BBT.Tests.Actions is
    end Get_Expected;
 
    -- --------------------------------------------------------------------------
-   -- Portable dup / dup2 of the GNAT runtime (adaint.c), used to give a
-   -- spawned command its own standard error file.
-   function Dup (Fd : GNAT.OS_Lib.File_Descriptor)
-                 return GNAT.OS_Lib.File_Descriptor;
-   pragma Import (C, Dup, "__gnat_dup");
-   procedure Dup2 (Old_Fd, New_Fd : GNAT.OS_Lib.File_Descriptor);
-   pragma Import (C, Dup2, "__gnat_dup2");
+   --  Asynchronous execution of the commands, based on the Spawn library.
+   --  The standard output and standard error of the command are appended
+   --  to files by the listener, so that the output checks steps read the
+   --  same files as before.
+   --  When a scenario sends text to the command (Type_Text / Enter_Text
+   --  steps), the command runs across steps, and each input step resets
+   --  the output baseline: the output checks following an input step apply
+   --  only to the output produced after it.
 
-   -- --------------------------------------------------------------------------
+   Running       : Boolean := False;
+   --  the last command is still running
+   Process_Error : Integer := 0;
+   --  set by the listener if the command could not be run
+
+   Cmd_Output_Name : Unbounded_String;
+   Cmd_Err_Name    : Unbounded_String;
+   Merged          : Boolean := True;
+   --  the standard error goes to the output file unless an error output
+   --  file was requested
+
+   Output_Bytes : Natural := 0;
+   Err_Bytes    : Natural := 0;
+   --  bytes written so far, used to detect when the command is quiet
+
+   Output_Lines : Natural := 0;
+   Err_Lines    : Natural := 0;
+   --  complete lines written so far
+
+   Output_Line_Offset : Natural := 0;
+   Err_Line_Offset    : Natural := 0;
+   --  lines produced before the last input step
+
    Last_Return_Code : Integer := 0;
-   -- Set by each Run_Cmd, read by the exit code checks of the following
-   -- steps (each step is run by a separate Runner.Run_Step call).
+   --  Set by the listener when the command terminates, read by the exit
+   --  code checks of the following steps (each step is run by a separate
+   --  Runner.Run_Step call).
 
    function Last_Exit_Code return Integer is (Last_Return_Code);
 
+   -- ------------------------------------------------------------------------
+   procedure Append_Data (File_Name : String;
+                          Data      : Ada.Streams.Stream_Element_Array)
+   is
+      F : Ada.Streams.Stream_IO.File_Type;
+   begin
+      --  The file is opened and closed at each call, so that output checks
+      --  can read it between two callbacks.
+      if Ada.Directories.Exists (File_Name) then
+         Ada.Streams.Stream_IO.Open
+           (F, Ada.Streams.Stream_IO.Append_File, File_Name);
+      else
+         Ada.Streams.Stream_IO.Create
+           (F, Ada.Streams.Stream_IO.Out_File, File_Name);
+      end if;
+      Ada.Streams.Stream_IO.Write (F, Data);
+      Ada.Streams.Stream_IO.Close (F);
+   end Append_Data;
+
+   -- ------------------------------------------------------------------------
+   procedure Write_Output (Data : Ada.Streams.Stream_Element_Array) is
+      use Ada.Streams;
+   begin
+      Append_Data (To_String (Cmd_Output_Name), Data);
+      Output_Bytes := @ + Natural (Data'Length);
+      for C of Data loop
+         if C = Character'Pos (Ada.Characters.Latin_1.LF) then
+            Output_Lines := @ + 1;
+         end if;
+      end loop;
+   end Write_Output;
+
+   procedure Write_Error (Data : Ada.Streams.Stream_Element_Array) is
+      use Ada.Streams;
+   begin
+      --  When the standard error is merged, it goes to the output file
+      if Merged then
+         Append_Data (To_String (Cmd_Output_Name), Data);
+      else
+         Append_Data (To_String (Cmd_Err_Name), Data);
+      end if;
+      Err_Bytes := @ + Natural (Data'Length);
+      for C of Data loop
+         if C = Character'Pos (Ada.Characters.Latin_1.LF) then
+            Err_Lines := @ + 1;
+         end if;
+      end loop;
+   end Write_Error;
+
+   -- ------------------------------------------------------------------------
+   The_Process : Spawn.Processes.Process;
+   --  The process run by the last Run_Cmd. It is reset at each Run_Cmd;
+   --  it survives between steps only when interactive input is expected.
+
+   package Listeners is
+      type Listener is limited new
+        Spawn.Process_Listeners.Process_Listener with null record;
+
+      overriding procedure Started (Self : in out Listener);
+
+      overriding procedure Standard_Output_Available
+        (Self : in out Listener);
+
+      overriding procedure Standard_Error_Available
+        (Self : in out Listener);
+
+      overriding procedure Finished
+        (Self        : in out Listener;
+         Exit_Status : Spawn.Processes.Process_Exit_Status;
+         Exit_Code   : Spawn.Processes.Process_Exit_Code);
+
+      overriding procedure Error_Occurred
+        (Self          : in out Listener;
+         Process_Error : Integer);
+
+      overriding procedure Exception_Occurred
+        (Self       : in out Listener;
+         Occurrence : Ada.Exceptions.Exception_Occurrence);
+   end Listeners;
+
+   package body Listeners is
+      overriding procedure Started (Self : in out Listener) is
+         pragma Unreferenced (Self);
+      begin
+         Put_Debug_Line ("  command started");
+      end Started;
+
+      overriding procedure Standard_Output_Available
+        (Self : in out Listener)
+      is
+         pragma Unreferenced (Self);
+         use type Ada.Streams.Stream_Element_Offset;
+         Data : Ada.Streams.Stream_Element_Array (1 .. 2 ** 12);
+         Last : Ada.Streams.Stream_Element_Offset;
+         Ok   : Boolean := True;
+      begin
+         loop
+            The_Process.Read_Standard_Output (Data, Last, Ok);
+            exit when Last < Data'First;
+            Write_Output (Data (1 .. Last));
+         end loop;
+      end Standard_Output_Available;
+
+      overriding procedure Standard_Error_Available
+        (Self : in out Listener)
+      is
+         pragma Unreferenced (Self);
+         use type Ada.Streams.Stream_Element_Offset;
+         Data : Ada.Streams.Stream_Element_Array (1 .. 2 ** 12);
+         Last : Ada.Streams.Stream_Element_Offset;
+         Ok   : Boolean := True;
+      begin
+         loop
+            The_Process.Read_Standard_Error (Data, Last, Ok);
+            exit when Last < Data'First;
+            Write_Error (Data (1 .. Last));
+         end loop;
+      end Standard_Error_Available;
+
+      overriding procedure Finished
+        (Self        : in out Listener;
+         Exit_Status : Spawn.Processes.Process_Exit_Status;
+         Exit_Code   : Spawn.Processes.Process_Exit_Code)
+      is
+         pragma Unreferenced (Self);
+         --  Fixme: a command terminated by a signal is not distinguished
+         --  from a normal termination.
+      begin
+         Put_Debug_Line ("  command finished, exit code" & Exit_Code'Image
+                         & ", status " & Exit_Status'Image);
+         Running := False;
+         Last_Return_Code := Integer (Exit_Code);
+      end Finished;
+
+      overriding procedure Error_Occurred
+        (Self          : in out Listener;
+         Process_Error : Integer)
+      is
+         pragma Unreferenced (Self);
+      begin
+         Put_Debug_Line ("  command error" & Process_Error'Image);
+         Running := False;
+         BBT.Tests.Actions.Process_Error := Process_Error;
+      end Error_Occurred;
+
+      overriding procedure Exception_Occurred
+        (Self       : in out Listener;
+         Occurrence : Ada.Exceptions.Exception_Occurrence)
+      is
+         pragma Unreferenced (Self);
+      begin
+         Put_Debug_Line ("  exception in the listener: " &
+                           Ada.Exceptions.Exception_Information
+                             (Occurrence));
+         Running := False;
+         BBT.Tests.Actions.Process_Error := 1;
+      end Exception_Occurred;
+
+   end Listeners;
+
+   The_Listener : aliased Listeners.Listener;
+
+   -- ------------------------------------------------------------------------
+   Quiet_Step    : constant Duration := 0.02;
+   Quiet_Window  : constant Duration := 0.10;
+   Quiet_Timeout : constant Duration := 5.0;
+   End_Timeout   : constant Duration := 10.0;
+
+   procedure Pump (Timeout : Duration);
+   --  Process the pending events until the command is no more running,
+   --  or until Timeout is elapsed. No timeout when Timeout = 0.0.
+
+   procedure Pump (Timeout : Duration) is
+      use type Ada.Calendar.Time;
+      Deadline : constant Ada.Calendar.Time :=
+                   Ada.Calendar.Clock + Timeout;
+   begin
+      while Running loop
+         if Timeout > 0.0 and then Ada.Calendar.Clock >= Deadline then
+            return;
+         end if;
+         Spawn.Processes.Monitor_Loop (Quiet_Step);
+      end loop;
+   end Pump;
+
+   -- ------------------------------------------------------------------------
+   procedure Wait_Quiet is
+      use type Ada.Calendar.Time;
+      Deadline  : constant Ada.Calendar.Time :=
+                    Ada.Calendar.Clock + Quiet_Timeout;
+      Quiet     : Duration := 0.0;
+      Last_Size : Natural;
+   begin
+      if not Running then
+         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         return;
+      end if;
+      --  The command output is considered complete when it stays quiet
+      --  during a short window, or when it terminates. This is used before
+      --  sending input to a command: whether its prompt is already there
+      --  or it is still starting does not matter, as long as it is quiet.
+      loop
+         Last_Size := Output_Bytes + Err_Bytes;
+         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         if Output_Bytes + Err_Bytes = Last_Size then
+            Quiet := @ + Quiet_Step;
+         else
+            Quiet := 0.0;
+         end if;
+         exit when Quiet >= Quiet_Window or else not Running
+           or else Ada.Calendar.Clock >= Deadline;
+      end loop;
+   end Wait_Quiet;
+
+   -- ------------------------------------------------------------------------
+   procedure Wait_Response is
+      use type Ada.Calendar.Time;
+      Deadline   : constant Ada.Calendar.Time :=
+                     Ada.Calendar.Clock + Quiet_Timeout;
+      Entry_Size : constant Natural := Output_Bytes + Err_Bytes;
+      Quiet      : Duration := 0.0;
+      Last_Size  : Natural;
+   begin
+      if not Running then
+         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         return;
+      end if;
+      --  The output of a running command is checked when it stays quiet
+      --  AFTER having produced some output since this call, or when it
+      --  terminates. Waiting for the first output avoids considering the
+      --  command quiet while it is still computing the consequence of
+      --  the last input.
+      --  Fixme: a command producing its output in bursts separated by
+      --  more than the quiet window may be considered quiet too early.
+      loop
+         Last_Size := Output_Bytes + Err_Bytes;
+         Spawn.Processes.Monitor_Loop (Quiet_Step);
+         if Output_Bytes + Err_Bytes = Last_Size then
+            if Output_Bytes + Err_Bytes > Entry_Size then
+               Quiet := @ + Quiet_Step;
+            end if;
+         else
+            Quiet := 0.0;
+         end if;
+         exit when not Running
+           or else Quiet >= Quiet_Window
+           or else Ada.Calendar.Clock >= Deadline;
+      end loop;
+   end Wait_Response;
+
    -- --------------------------------------------------------------------------
-   procedure Run_Cmd (Step              :     Step_Type'Class;
-                      Cmd               :     String;
-                      Output_Name       :     String;
-                      Expected_Result   :     Run_Result;
-                      Verbosity         :     Verbosity_Levels;
-                      Spawn_OK          : out Boolean;
-                      Return_Code       : out Integer;
-                      Error_Output_Name :     String := "") is
+   procedure Run_Cmd (Step                       :     Step_Type'Class;
+                      Cmd                        :     String;
+                      Output_Name                :     String;
+                      Expected_Result            :     Run_Result;
+                      Verbosity                  :     Verbosity_Levels;
+                      Spawn_OK                   : out Boolean;
+                      Return_Code                : out Integer;
+                      Error_Output_Name          :     String := "";
+                      Interactive_Input_Expected :     Boolean := False)
+   is
       use GNAT.OS_Lib;
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
         := Argument_String_To_List (Cmd);
+      Args           : Spawn.String_Vectors.UTF_8_String_Vector;
 
    begin
       Put_Debug_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
-                        ", output file = " & Output_Name);
+                        ", output file = " & Output_Name &
+                        (if Interactive_Input_Expected
+                         then ", interactive input expected"
+                         else ""));
+
+      --  A previous command should have terminated before this one starts:
+      --  all steps but the input ones wait for its end. If it is still
+      --  running here, let's give it a chance, then kill it.
+      if Running then
+         Pump (End_Timeout);
+         if Running then
+            Put_Debug_Line ("  killing a still running command");
+            The_Process.Kill_Process;
+            Running := False;
+         end if;
+      end if;
 
       -- The first argument should be an executable (e.g. not a bash
       -- built-in)
@@ -184,43 +487,98 @@ package body BBT.Tests.Actions is
          -- Put_Debug_Line ("===========" & Spawn_Arg.all (I).all & "<");
       end loop;
 
-      if Error_Output_Name = "" then
-         Spawn (Program_Name => Spawn_Arg.all (1).all,
-                Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
-                Success      => Spawn_OK,
-                Output_File  => Output_Name,
-                Return_Code  => Return_Code,
-                Err_To_Out   => True);
-
-      else
-         -- The scenario checks the error output: the child's standard
-         -- error goes to its own file. Spawn leaves the child's standard
-         -- error on ours when Err_To_Out is False, so ours is redirected
-         -- to that file for the duration of the call.
+      --  Truncate the output files, and reset the state
+      declare
+         F : Ada.Streams.Stream_IO.File_Type;
+      begin
+         Ada.Streams.Stream_IO.Create
+           (F, Ada.Streams.Stream_IO.Out_File, Output_Name);
+         Ada.Streams.Stream_IO.Close (F);
+      end;
+      Cmd_Output_Name := To_Unbounded_String (Output_Name);
+      Merged          := Error_Output_Name = "";
+      if not Merged then
          declare
-            Err_FD   : constant File_Descriptor :=
-                         Create_File (Error_Output_Name, Binary);
-            Saved_FD : constant File_Descriptor := Dup (Standerr);
+            F : Ada.Streams.Stream_IO.File_Type;
          begin
-            Dup2 (Err_FD, Standerr);
-            Spawn (Program_Name => Spawn_Arg.all (1).all,
-                   Args         => Spawn_Arg.all (2 .. Spawn_Arg'Last),
-                   Success      => Spawn_OK,
-                   Output_File  => Output_Name,
-                   Return_Code  => Return_Code,
-                   Err_To_Out   => False);
-            Dup2 (Saved_FD, Standerr);
-            Close (Saved_FD);
-            Close (Err_FD);
+            Ada.Streams.Stream_IO.Create
+              (F, Ada.Streams.Stream_IO.Out_File, Error_Output_Name);
+            Ada.Streams.Stream_IO.Close (F);
          end;
+         Cmd_Err_Name := To_Unbounded_String (Error_Output_Name);
+      end if;
+      Output_Bytes       := 0;
+      Err_Bytes          := 0;
+      Output_Lines       := 0;
+      Err_Lines          := 0;
+      Output_Line_Offset := 0;
+      Err_Line_Offset    := 0;
+      Process_Error       := 0;
+      Running             := False;
+
+      for I in 2 .. Spawn_Arg'Last loop
+         Args.Append (Spawn_Arg.all (I).all);
+      end loop;
+      The_Process.Set_Program (Spawn_Arg.all (1).all);
+      The_Process.Set_Arguments (Args);
+      --  The command inherits the bbt environment, including the
+      --  variables set or unset by the environment variable steps.
+      --  The environment is rebuilt at each command: the Spawn library
+      --  snapshot of the system environment is taken at elaboration
+      --  time, and thus does not reflect those steps.
+      declare
+         Env : Spawn.Environments.Process_Environment;
+         procedure Copy (Name, Value : String) is
+         begin
+            Env.Insert (Name, Value);
+         end Copy;
+      begin
+         Ada.Environment_Variables.Iterate (Copy'Access);
+         The_Process.Set_Environment (Env);
+      end;
+      The_Process.Set_Listener (The_Listener'Unchecked_Access);
+
+      begin
+         The_Process.Start;
+         Running := True;
+      exception
+         when E : others =>
+            Running := False;
+            Spawn_OK := False;
+            Put_Debug_Line ("  cannot start the command: " &
+                              Ada.Exceptions.Exception_Information (E));
+            Put_Step_Result
+              (Step      => Step,
+               Success   => False,
+               Fail_Msg  => "Couldn't run " & Cmd,
+               Loc       => Step.Location,
+               Verbosity => Verbosity);
+            return;
+      end;
+
+      --  Unless the command is to be fed interactively, the step waits
+      --  for its termination, as a blocking Spawn would.
+      if Interactive_Input_Expected then
+         Wait_Quiet;
+      else
+         Pump (0.0);
       end if;
 
-      Last_Return_Code := Return_Code;
+      Spawn_OK := Process_Error = 0;
+      Return_Code := Last_Return_Code;
 
       Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
 
-      if Spawn_OK and then Expected_Result = Success then
+      --  Note: when interactive input is expected, the command may still
+      --  be running here, so its return code is not checked at this step:
+      --  it will be available to the following exit code checks steps,
+      --  once the command has terminated.
+      --  Fixme: thus, "successfully run" is not checked for interactive
+      --  commands.
+      if Spawn_OK and then not Interactive_Input_Expected
+        and then Expected_Result = Success
+      then
          Put_Step_Result (Step       => Step,
                            Success   => Is_Success (Return_Code),
                            Fail_Msg  => "Unsuccessfully run " &
@@ -228,7 +586,9 @@ package body BBT.Tests.Actions is
                            Loc       => Step.Location,
                            Verbosity => Verbosity);
 
-      elsif Spawn_OK and then Expected_Result = Failure then
+      elsif Spawn_OK and then not Interactive_Input_Expected
+        and then Expected_Result = Failure
+      then
          Put_Step_Result (Step      => Step,
                           Success   => not Is_Success (Return_Code),
                           Fail_Msg  => "Successfully run " &
@@ -248,6 +608,123 @@ package body BBT.Tests.Actions is
       end if;
 
    end Run_Cmd;
+
+   -- --------------------------------------------------------------------------
+   function Interactive_Command_Running return Boolean is (Running);
+
+   -- --------------------------------------------------------------------------
+   procedure Wait_Command_End (Step      :     Step_Type'Class;
+                               Verbosity :     Verbosity_Levels;
+                               OK        : out Boolean) is
+   begin
+      if Running then
+         Pump (End_Timeout);
+      end if;
+      OK := not Running;
+      if not OK then
+         Put_Step_Result (Step      => Step,
+                          Success   => False,
+                          Fail_Msg  => "the command is still running",
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+      end if;
+   end Wait_Command_End;
+
+   -- --------------------------------------------------------------------------
+   procedure Send_Input (Step           :     Step_Type'Class;
+                         With_Newline   :     Boolean;
+                         Verbosity      :     Verbosity_Levels;
+                         OK             : out Boolean)
+   is
+      use Ada.Streams;
+      use type Stream_Element_Offset;
+      Input : constant String :=
+                To_String (Step.Data.Object_String)
+                & (if With_Newline
+                   then (1 => Ada.Characters.Latin_1.LF)
+                   else "");
+      Data      : Stream_Element_Array (1 .. Input'Length);
+      Last      : Stream_Element_Offset;
+      Write_OK  : Boolean := True;
+   begin
+      Put_Debug_Line ("Send_Input" & Input'Image);
+      if not Running then
+         Put_Step_Result (Step      => Step,
+                          Success   => False,
+                          Fail_Msg  => "no command is running when " &
+                            "reaching this step",
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+         OK := False;
+         return;
+      end if;
+
+      --  The command prompt should be complete before the input is sent,
+      --  and the output baseline is set just before the input: the output
+      --  checks following this step apply to the consequence of the input.
+      Wait_Quiet;
+      Output_Line_Offset := Output_Lines;
+      Err_Line_Offset    := Err_Lines;
+
+      for J in Input'Range loop
+         Data (Stream_Element_Offset (J)) := Character'Pos (Input (J));
+      end loop;
+      The_Process.Write_Standard_Input (Data, Last, Write_OK);
+      OK := Write_OK and then Last = Data'Last;
+      if not OK then
+         Put_Step_Result (Step      => Step,
+                          Success   => False,
+                          Fail_Msg  => "cannot send input to the command",
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+      end if;
+   end Send_Input;
+
+   -- --------------------------------------------------------------------------
+   function Output_Since_Input (Output : Text) return Text is
+      Result : Text := Empty_Text;
+      Skip   : Natural := Output_Line_Offset;
+   begin
+      for Line of Output loop
+         if Skip > 0 then
+            Skip := @ - 1;
+         else
+            Result.Append (Line);
+         end if;
+      end loop;
+      return Result;
+   end Output_Since_Input;
+
+   -- --------------------------------------------------------------------------
+   function Stderr_Since_Input (Stderr : Text) return Text is
+      Result : Text := Empty_Text;
+      Skip   : Natural := Err_Line_Offset;
+   begin
+      for Line of Stderr loop
+         if Skip > 0 then
+            Skip := @ - 1;
+         else
+            Result.Append (Line);
+         end if;
+      end loop;
+      return Result;
+   end Stderr_Since_Input;
+
+   -- --------------------------------------------------------------------------
+   procedure Reset_Interactive_State is
+   begin
+      if Running then
+         Pump (1.0);
+         if Running then
+            Put_Debug_Line ("  killing a command still running at the " &
+                              "end of the scenario");
+            The_Process.Kill_Process;
+            Running := False;
+         end if;
+      end if;
+      Output_Line_Offset := 0;
+      Err_Line_Offset    := 0;
+   end Reset_Interactive_State;
 
    -- --------------------------------------------------------------------------
    procedure Erase_And_Create (Step         : Step_Type'Class;

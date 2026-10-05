@@ -37,6 +37,8 @@ begin
       when Containing       => return "containing";
       when Is_V             => return "is";
       when Is_No            => return "is no";
+      when Type_Text        => return "type";
+      when Enter_Text       => return "enter";
       when No_Object        => return "";
       when Output_Obj       => return "output";
       when Stderr_Obj       => return "error output";

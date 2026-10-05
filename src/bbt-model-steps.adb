@@ -159,6 +159,15 @@ package body BBT.Model.Steps is
         return Prefix_Start & "Run command " & Object_String & Executable
                & " and check that it fails (returns an error)";
 
+      -- Interactive input actions
+      when Type_Text =>
+        return Prefix_Start & "Type " & Object_String
+               & " to the running command, without trailing newline";
+
+      when Enter_Text =>
+        return Prefix_Start & "Enter " & Object_String
+               & " followed by a newline to the running command";
+
       -- Check actions
       when Check_No_File =>
         return Prefix & "that file " & Object_File_Name & " does not exist";

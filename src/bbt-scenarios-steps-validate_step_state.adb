@@ -102,8 +102,12 @@ begin
                    & ", Cmd_List.Is_Empty = " & State.Cmd_List.Is_Empty'Image
                    & ", No_Object_String = " & No_Object_String'Image, Loc);
 
-   if (Verb in Run | Successful_Run) and State.Action = None then
+   if Verb in Run | Successful_Run and State.Action = None then
       IO.Put_Error ("Command to run not provided (should be between backticks)", Loc);
+
+   elsif Verb in Type_Text | Enter_Text and State.Action = None then
+      IO.Put_Error ("Input text not provided (should be between backticks)", Loc);
+
    end if;
 
 end Validate_Step_State;

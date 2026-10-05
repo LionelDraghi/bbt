@@ -71,6 +71,8 @@ _Table of Contents:_
 | When  |         |        | run              | `cmd` [or `cmd`]* | RUN_CMD                 |            | - When I run `cmd` or `cmd2` or `cmd3` |  
 | When  |         |        | successfully run | `text`            | RUN_WITHOUT_ERROR       |            | - When I successfully run `cmd` |  
 | When  |         |        | successfully run | `cmd` [or `cmd`]* | RUN_WITHOUT_ERROR       |            | - When I successfully run `cmd` or `cmd2` or `cmd3` |  
+| When  |         |        | type             | `text`            | TYPE_TEXT               |            | - When I type `Y` |  
+| When  |         |        | enter            | `text`            | ENTER_TEXT              |            | - When I enter `Y` |  
 | Then  |         |        | successfully run | `text`            | RUN_WITHOUT_ERROR       |            | - Then I successfully run `cmd` |  
 | Then  |         |        | get              |                   | OUTPUT_IS               |     X      | - Then I get <followed by code fenced lines> |  
 | Then  |         |        | get              | `file`            | OUTPUT_IS               |            | - Then I get file `flowers2.txt` |  
@@ -135,6 +137,8 @@ _Table of Contents:_
 - but
 - run
 - running
+- type
+- enter
 - fail
 - fails
 - executable

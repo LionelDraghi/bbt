@@ -74,3 +74,43 @@ Let's use a regexp to test both.
 - When I run `./cp`
 - Then the output is `Hello from CPATH`
 
+## Scenario 6 : interacting with a program prompt
+
+> This scenario illustrates the `type` and `enter` steps, to interact
+> with a program waiting for user input. `enter` sends a whole line,
+> `type` a single key press. Note the `fflush` calls in the program:
+> as bbt feeds the program through a pipe, the standard output is not
+> a terminal, and thus block buffered: the prompts need an explicit
+> flush to be visible before the program waits for input.
+
+- Given the new file `ask.c` containing
+  ```c
+  #include <stdio.h>
+  #include <string.h>
+  int main() {
+    char name[32];
+    printf("What is your name?\n");
+    fflush(stdout);
+    fgets(name, sizeof(name), stdin);
+    name[strcspn(name, "\n")] = '\0';
+    printf("Hello %s!\nContinue? [y/n]\n", name);
+    fflush(stdout);
+    if (getchar() == 'y') {
+      printf("Continuing!\n");
+    }
+    return 0;
+  }
+  ```
+- And given there is no `./ask` file
+- When I successfully run `gcc ask.c -o ask`
+- When I run `./ask`
+- Then the output is `What is your name?`
+- When I enter `bbt`
+- Then the output is
+  ```
+  Hello bbt!
+  Continue? [y/n]
+  ```
+- When I type `y`
+- Then the output is `Continuing!`
+- And the exit code is `0`

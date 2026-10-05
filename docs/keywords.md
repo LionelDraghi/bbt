@@ -5,6 +5,8 @@
 - but
 - run
 - running
+- type
+- enter
 - fail
 - fails
 - executable

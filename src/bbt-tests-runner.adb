@@ -91,6 +91,12 @@ package body BBT.Tests.Runner is
       function Error_Output_Name return String is
         (if Checks_Error_Output then Error_Output else "");
 
+      function Interactive_Scenario return Boolean is
+        (for some S of Parent (Step).Step_List =>
+            S.Data.Action in Type_Text | Enter_Text);
+      --  A scenario that sends text to a running command starts it without
+      --  waiting for its termination.
+
    begin
       Run_Error := False;
 
@@ -111,6 +117,42 @@ package body BBT.Tests.Runner is
       end if;
 
       Put_Debug_Line ("  ====== Running Step " & Step.Data.Src_Code'Image);
+
+      --  When the scenario feeds a running command, the steps have to
+      --  synchronize with it before running:
+      if Interactive_Command_Running then
+         if Step.Data.Action in Type_Text | Enter_Text then
+            null;
+            --  Send_Input does its own synchronization
+
+         elsif Step.Data.Action in Output_Is
+                                 | Output_Contains
+                                 | Output_Does_Not_Contain
+                                 | Output_Matches
+                                 | Output_Does_Not_Match
+                                 | No_Output
+                                 | Stderr_Is
+                                 | Stderr_Contains
+                                 | Stderr_Does_Not_Contain
+                                 | No_Stderr
+         then
+            --  The output of a still running command is checked once its
+            --  response to the last input is complete.
+            Wait_Response;
+
+         else
+            --  Any other step requires the command to have terminated
+            --  before running.
+            Wait_Command_End (Step      => Step,
+                              Verbosity => Verbosity,
+                              OK        => Spawn_OK);
+            if not Spawn_OK then
+               Run_Error := True;
+               Set_End_Time (Step);
+               return;
+            end if;
+         end if;
+      end if;
 
       if Step.Data.Action in Output_Is
                            | Output_Contains
@@ -156,14 +198,15 @@ package body BBT.Tests.Runner is
             if Error_Output_Name /= "" then
                Created_File_List.Add (Error_Output);
             end if;
-            Run_Cmd (Step            => Step,
-                     Cmd             => To_String (Step.Data.Object_String),
-                     Output_Name     => Output,
-                     Expected_Result => Not_Specified,
-                     Verbosity       => Verbosity,
-                     Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code,
-                     Error_Output_Name => Error_Output_Name);
+            Run_Cmd (Step                       => Step,
+                     Cmd                        => To_String (Step.Data.Object_String),
+                     Output_Name                => Output,
+                     Expected_Result            => Not_Specified,
+                     Verbosity                  => Verbosity,
+                     Spawn_OK                   => Spawn_OK,
+                     Return_Code                => Return_Code,
+                     Error_Output_Name          => Error_Output_Name,
+                     Interactive_Input_Expected => Interactive_Scenario);
             Run_Error := not (Spawn_OK);
 
          when Run_Without_Error =>
@@ -171,14 +214,15 @@ package body BBT.Tests.Runner is
             if Error_Output_Name /= "" then
                Created_File_List.Add (Error_Output);
             end if;
-            Run_Cmd (Step            => Step,
-                     Cmd             => To_String (Step.Data.Object_String),
-                     Output_Name     => Output,
-                     Expected_Result => Success,
-                     Verbosity       => Verbosity,
-                     Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code,
-                     Error_Output_Name => Error_Output_Name);
+            Run_Cmd (Step                       => Step,
+                     Cmd                        => To_String (Step.Data.Object_String),
+                     Output_Name                => Output,
+                     Expected_Result            => Success,
+                     Verbosity                  => Verbosity,
+                     Spawn_OK                   => Spawn_OK,
+                     Return_Code                => Return_Code,
+                     Error_Output_Name          => Error_Output_Name,
+                     Interactive_Input_Expected => Interactive_Scenario);
             Run_Error := not (Spawn_OK);
 
          when Run_With_Error =>
@@ -186,15 +230,31 @@ package body BBT.Tests.Runner is
             if Error_Output_Name /= "" then
                Created_File_List.Add (Error_Output);
             end if;
-            Run_Cmd (Step            => Step,
-                     Cmd             => To_String (Step.Data.Subject_String),
-                     Output_Name     => Output,
-                     Expected_Result => Failure,
-                     Verbosity       => Verbosity,
-                     Spawn_OK        => Spawn_OK,
-                     Return_Code     => Return_Code,
-                     Error_Output_Name => Error_Output_Name);
+            Run_Cmd (Step                       => Step,
+                     Cmd                        => To_String (Step.Data.Subject_String),
+                     Output_Name                => Output,
+                     Expected_Result            => Failure,
+                     Verbosity                  => Verbosity,
+                     Spawn_OK                   => Spawn_OK,
+                     Return_Code                => Return_Code,
+                     Error_Output_Name          => Error_Output_Name,
+                     Interactive_Input_Expected => Interactive_Scenario);
             Run_Error := not (Spawn_OK);
+
+         when Type_Text =>
+            Send_Input (Step           => Step,
+                        With_Newline   => False,
+                        Verbosity      => Verbosity,
+                        OK             => Spawn_OK);
+            Run_Error := not (Spawn_OK);
+
+         when Enter_Text =>
+            Send_Input (Step           => Step,
+                        With_Newline   => True,
+                        Verbosity      => Verbosity,
+                        OK             => Spawn_OK);
+            Run_Error := not (Spawn_OK);
+
 
          when Error_Return_Code =>
             Return_Error (Last_Exit_Code, Step, Verbosity);
@@ -203,26 +263,28 @@ package body BBT.Tests.Runner is
             Return_No_Error (Last_Exit_Code, Step, Verbosity);
 
          when Output_Is =>
-            Output_Is (Get_Text (Output), Step, Verbosity);
+            Output_Is (Output_Since_Input (Get_Text (Output)),
+                       Step, Verbosity);
 
          when No_Output =>
             Check_No_Output
-              (Get_Text (Output), Step, Verbosity);
+              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when Output_Contains =>
-            Output_Contains (Get_Text (Output), Step, Verbosity);
+            Output_Contains (Output_Since_Input (Get_Text (Output)),
+                             Step, Verbosity);
 
          when Output_Does_Not_Contain =>
             Output_Does_Not_Contain
-              (Get_Text (Output), Step, Verbosity);
+              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when Output_Matches =>
             Output_Matches
-              (Get_Text (Output), Step, Verbosity);
+              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when Output_Does_Not_Match =>
             Output_Does_Not_Match
-              (Get_Text (Output), Step, Verbosity);
+              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when File_Matches =>
             File_Matches (Step, Verbosity);
@@ -273,16 +335,20 @@ package body BBT.Tests.Runner is
             Unset_Env_Var (Step, Verbosity);
 
          when Stderr_Is =>
-            Output_Is (Get_Text (Error_Output), Step, Verbosity);
+            Output_Is (Stderr_Since_Input (Get_Text (Error_Output)),
+                       Step, Verbosity);
 
          when Stderr_Contains =>
-            Output_Contains (Get_Text (Error_Output), Step, Verbosity);
+            Output_Contains (Stderr_Since_Input (Get_Text (Error_Output)),
+                             Step, Verbosity);
 
          when Stderr_Does_Not_Contain =>
-            Output_Does_Not_Contain (Get_Text (Error_Output), Step, Verbosity);
+            Output_Does_Not_Contain
+              (Stderr_Since_Input (Get_Text (Error_Output)), Step, Verbosity);
 
          when No_Stderr =>
-            Check_No_Output (Get_Text (Error_Output), Step, Verbosity);
+            Check_No_Output (Stderr_Since_Input (Get_Text (Error_Output)),
+                             Step, Verbosity);
 
          when Exit_Code_Is =>
             Exit_Code_Is (Step, Verbosity);
@@ -431,6 +497,7 @@ package body BBT.Tests.Runner is
          Run_Background (Scen);
          Run_Scenario (Scen);
          Restore_Environment;
+         Reset_Interactive_State;
          -- Variables set in the scenario or its backgrounds apply to that
          -- scenario only.
          exit when IO.Some_Error and not Settings.Keep_Going;

@@ -266,6 +266,31 @@ environment of the commands run afterwards in the scenario; the variables
 get their previous state back at the end of the scenario.
 (cf. [feature `environment variable`](features/A280_Given_Environment_Variable.md)).
 
+### Interaction
+
+Some programs wait for user input. In a scenario that contains a `When I type`
+or a `When I enter` step, the command started by `When I run` is not awaited
+for termination: it runs across steps, and the input steps send text to its
+standard input.
+
+- ``When I type `Y` `` sends `Y` without a trailing newline, as if the user
+had just pressed the key: this is for programs reading a single key press
+- ``When I enter `Y` `` sends `Y` followed by a newline, as if the user had
+typed it then pressed `Enter`: this is for programs reading a whole line
+
+The output of the program is a consequence of its input: the output checks
+following an input step apply only to the output produced after it, the
+prompt displayed before the input is ignored. Any other step, such as a file
+check or a new `When I run`, first waits for the command to terminate.
+(cf. [feature `type or enter`](features/A290_When_I_Type_Or_Enter.md)).
+
+Note that the command input and output are pipes, not a terminal: a program
+that does not flush its prompt before waiting for input will not show it.
+Ada.Text_IO programs are not concerned (the output is flushed before any
+read); a C program needs a `fflush (stdout)` after each prompt, or a call
+to `setvbuf`. A future evolution may give interactive commands a pseudo
+terminal, removing this constraint on POSIX systems.
+
 ## Tips
 
 ### Filtering, tags and Conditional execution 

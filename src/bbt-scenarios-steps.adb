@@ -59,6 +59,8 @@ package body BBT.Scenarios.Steps is
                     Is_V,
                     Is_No,
                     Fail,
+                    Type_Text,
+                    Enter_Text,
                     -- Objects ----------------------------------------------
                     No_Object,
                     Output_Obj,

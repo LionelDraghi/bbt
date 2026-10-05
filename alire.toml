@@ -22,6 +22,11 @@ generate_C = false
 ansiada = "^1.0.0"
 
 [[depends-on]]
+# asynchronous, cross-platform process spawning, used to run the
+# commands and interact with them (When I type / When I enter)
+spawn = "^25.0.0"
+
+[[depends-on]]
 # External_Initialization aspect (src/bbt-cmd_line-put_help.adb) requires
 # the experimental extensions set : FSF GCC 15 / GNAT Pro 25 or later
 gnat = ">=15"

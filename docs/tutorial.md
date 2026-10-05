@@ -95,35 +95,26 @@ Steps are the most important part of bbt files, they perform the actions and che
 - When  [action to perform]  
 - Then  [expected result]  
 
-**Examples of steps:**  
+A few examples, to get the feeling:  
 
-    - Given there is no `.config` dir
-    - Given the `config.ini` file
-      ```
-      verbose=false
-      lang=am
-      ```
-    - Given the executable file `command.sh`
-      ```
-      #!/bin/bash
-      echo "bbt rules!"
-      ```
-    - When I successfully run `xxx`
-      (Equivalent to both lines "- When I run `xxx`" and "- Then I Get No Error")
-    - Then there is no output
-    - Then I get no error
-    - Then output is `sut v0.1.0` (Equivalent "Then I get...")
+    - Given there is no `config.ini` file
+    - When I successfully run `sut`
+      (equivalent to "- When I run `sut`" followed by "- Then I get no error")
+    - Then the output is `sut version 1.0`
 
-You can continue a list of Given / When / Then with "And" or "But":  
+Steps can be continued with "And" or "But", synonymous of the *Given* /
+*When* / *Then* that precedes:  
 
     - Then output contains `234 processed data`
     - And  output contains `result = 29580`
-    - But  output doesn't contain `Warning:`
-    - And  output does not contain `Error:`  
+    - But  output does not contain `Warning:`  
 
-*And* and *But* are synonymous of the *Given* / *When* / *Then* that preceedes.  
+Step parameters (the command to run, the expected output, the file names...)
+are given between backticks, in a code fenced block, or in an external
+file, as detailed in the following sections. A complete reference of all
+the steps, classified by category, ends this chapter.
 
-### Parameters  
+#### Parameters  
 
 Parameters are given in three possible ways :  
   1. as a string:
@@ -142,9 +133,9 @@ Parameters are given in three possible ways :
 
     - Then I get the content of file `expected.txt`  
 
-     Note in that case the mandatory "file" keyword  
+  Note in that case the mandatory "file" keyword  
 
-### Matching level  
+#### Matching level  
 
 Above forms test that the output is exactly what is given.  
 If what you want is just test that the output contains something, then use the "contains" keyword:  
@@ -157,6 +148,88 @@ If what you want is search for some pattern, then use the "matches" keyword, fol
 
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  
+
+#### Steps examples, by category  
+
+All the available steps, classified by what they set up, run or check:  
+
+**Setup: files and directories**  
+
+    - Given there is no `config.ini` file
+    - Given there is a `config.ini` file
+    - Given there is no `dir1` directory
+    - Given the directory `dir1`
+    - Given the new directory `dir1`
+    - Given the new file `config.ini`
+      ```
+      verbose=false
+      lang=am
+      ```
+    - Given the `config.ini` file containing `lang=am`
+    - Given the executable file `command.sh`
+      ```
+      #!/bin/bash
+      echo "bbt rules!"
+      ```
+
+**Setup: environment**  
+
+    - Given the environment variable `LC_ALL` is `C`
+    - Given the environment variable `NO_COLOR` is not set
+
+**Running commands**  
+
+    - When I run `gcc --version`
+    - When I successfully run `make`
+    - When `grep pattern missing_file.txt` fails
+    - When I run `grep pattern file1.txt` or `grep pattern file2.txt`
+      (the scenario is run once per command of the or list)
+
+**Interacting with a running command**  
+
+    - When I run `./program`
+    - Then the output is `Continue? [y/n]`
+    - When I type `y`
+      (single key press, no Enter, for a program reading a key)
+    - Then the output is `Continuing`
+    - When I enter `some text`
+      (a whole line, followed by Enter, for a program reading a line)
+
+**Checking the output**  
+
+    - Then the output is `sut version 1.0`
+    - Then I get `sut version 1.0` (equivalent form)
+    - Then the output is
+      ```
+      a multi-line
+      expected output
+      ```
+    - Then the output is equal to file `expected.txt`
+    - Then the output contains `3 matches replaced`
+    - Then the output does not contain `Warning:`
+    - Then the output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`
+    - Then I get file (unordered) `flowers2.txt`
+    - Then there is no output
+
+**Checking the error output and the exit code**  
+
+    - Then the error output contains `No such file or directory`
+    - Then there is no error output
+    - Then I get an error
+    - Then I get no error
+    - Then the exit code is `2`
+
+**Checking files and directories**  
+
+    - Then there is a `config.ini` file
+    - Then there is no `config.ini` file
+    - Then there is a `dir1` directory
+    - Then the file `config.ini` is `lang=am`
+    - Then the file `config.ini` is equal to file `expected.ini`
+    - Then the file `config.ini` is no more equal to file `expected.ini`
+    - Then the file `config.ini` contains `lang=am`
+    - Then the file `config.ini` does not contain `secret`
+    - Then the file `list` matches `.*string.*`
 
 ## Help  
 

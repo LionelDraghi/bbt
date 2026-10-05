@@ -101,6 +101,8 @@ Step kind  |         |Subject |       Verb       | Object |         Action      
 | When  |         |        | run              | `cmd`  | RUN_CMD                 |            |
 | When  |         |        | successfully run | `text` | RUN_WITHOUT_ERROR       |            |
 | When  |         |        | successfully run | `cmd`  | RUN_WITHOUT_ERROR       |            |
+| When  |         |        | type             | `text` | TYPE_TEXT               |            |
+| When  |         |        | enter            | `text` | ENTER_TEXT              |            |
 | Then  |         |        | get              |        | OUTPUT_IS               |     X      |
 | Then  |         |        | get              | `file` | OUTPUT_IS               |            |
 | Then  |         |        | get              | `text` | OUTPUT_IS               |            |
@@ -283,6 +285,21 @@ Expected output line 2
 - When I successfully run `valid_command`
 - Then I get no error
 ```
+
+### Interactive Input
+
+For programs that wait for user input, the command is run, then the input is sent:
+```markdown
+- When I run `program --prompt`
+- Then the output is `Continue? [Y]es/[N]o`
+- When I type `Y`
+- Then the output is `Continuing`
+```
+
+Use `type` for a single key press (no newline), and `enter` for a whole line
+(followed by a newline). The output checks following an input step apply only
+to the output produced after it: the prompt displayed before the input is
+ignored.
 
 ## NATURAL LANGUAGE TRANSFORMATION
 

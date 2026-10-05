@@ -26,6 +26,10 @@ checks following a `type` or `enter` step apply only to the output
 produced after this step. The prompt displayed before the input is
 ignored: each `type` or `enter` step resets the checked output.
 
+The command input and output are pipes: the program under test is
+expected to flush its prompt before waiting for input (this is the
+default with `Ada.Text_IO`; a C program needs `fflush`).
+
 _Table of Contents:_
 - [Scenario: answering a key prompt with type](#scenario-answering-a-key-prompt-with-type)
 - [Scenario: refusing with type](#scenario-refusing-with-type)
@@ -78,6 +82,11 @@ last input step is checked.
 line. The question is displayed before the input: it is ignored by
 the output check following the `enter` step.
 
+The new file name is created by the command, not by a `Given` step:
+it is not tracked by the cleanup, so let's make sure it does not
+exist, even after a previous run.
+
+- Given there is no `new_name.txt` file
 - Given the new file `old_name.txt` containing `some data`
 - When I run `./sut rename old_name.txt`
 - Then the output is

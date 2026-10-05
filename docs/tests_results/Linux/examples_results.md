@@ -35,6 +35,17 @@
    - OK : Then the output is `Hello from CPATH`  
    - [X] scenario   [5 : checking environment variables handling](../../examples/gcc_hello_world.md) pass  
 
+   ### Scenario: [6 : interacting with a program prompt](../../examples/gcc_hello_world.md): 
+   - OK : Given the new file `ask.c` containing  
+   - OK : And given there is no `./ask` file  
+   - OK : When I successfully run `gcc ask.c -o ask`  
+   - OK : When I run `./ask`  
+   - OK : Then the output is `What is your name?`  
+   - OK : Then the output is  
+   - OK : Then the output is `Continuing!`  
+   - OK : And the exit code is `0`  
+   - [X] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) pass  
+
 
 # Document: [rpl_case_insensitivity.md](../../examples/rpl_case_insensitivity.md)  
   ## Feature: 1 : Case insensitivity  
@@ -93,13 +104,24 @@
    - OK : Then the output is `Hello from CPATH`  
    - [X] scenario   [5 : checking environment variables handling](../../examples/gcc_hello_world.md) pass  
 
+   ### Scenario: [6 : interacting with a program prompt](../../examples/gcc_hello_world.md): 
+   - OK : Given the new file `ask.c` containing  
+   - OK : And given there is no `./ask` file  
+   - OK : When I successfully run `gcc ask.c -o ask`  
+   - OK : When I run `./ask`  
+   - OK : Then the output is `What is your name?`  
+   - OK : Then the output is  
+   - OK : Then the output is `Continuing!`  
+   - OK : And the exit code is `0`  
+   - [X] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) pass  
 
-## Summary : **Success**, 13 scenarios OK
+
+## Summary : **Success**, 15 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 13    |
+| Successful | 15    |
 | Empty      | 0     |
 | Not Run    | 0     |
 

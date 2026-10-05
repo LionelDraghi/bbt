@@ -32,6 +32,8 @@ package body BBT.Scenarios.Steps.Lexer is
          "but",
          "run",
          "running",  -- "When I run" = "When running"
+         "type",     -- "When I type `Y`"
+         "enter",    -- "When I enter `Y`"
          "fail",     -- "fail" = "fails"
          "fails",
          "executable",

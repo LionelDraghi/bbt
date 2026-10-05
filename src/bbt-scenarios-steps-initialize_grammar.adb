@@ -52,6 +52,8 @@ begin
    Set (When_P, No_SA, No_Subject, Successful_Run, Obj_Text,     (Run_Without_Error, False, new String'("- When I successfully run `cmd`")));
    Set (When_P, No_SA, No_Subject, Run,            Command_List, (Run_Cmd,           False, new String'("- When I run `cmd` or `cmd2` or `cmd3`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Command_List, (Run_Without_Error, False, new String'("- When I successfully run `cmd` or `cmd2` or `cmd3`")));
+   Set (When_P, No_SA, No_Subject, Type_Text,      Obj_Text,     (Type_Text,         False, new String'("- When I type `Y`")));
+   Set (When_P, No_SA, No_Subject, Enter_Text,     Obj_Text,     (Enter_Text,        False, new String'("- When I enter `Y`")));
 
    Set (Then_P, No_SA, No_Subject,   Is_V,     Obj_File_Name, (Check_File_Existence, False, new String'("- Then there is a  `config.ini` file")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Obj_File_Name, (Check_No_File,        False, new String'("- Then there is no `config.ini` file")));
