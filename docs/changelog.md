@@ -12,8 +12,8 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   an empty actual output compared to a non empty expected content raised a CONSTRAINT_ERROR and silently passed
   - [Fixed]   `bbt explain` crashed when a step with a missing code block was followed by another scenario header
   - [Fixed]   with `--keep_going`, an output checking step following a command that could not be spawned crashed with an unhandled NAME_ERROR instead of reporting a clean error on the missing output file
-  - [Fixed]   the `bbt explain` scenario on quoted metacharacters depended on a file created by an `Unix_Only` scenario, breaking the Windows continuous integration
-
+  - [Fixed]   CRs at line ends, as found in files or output produced on Windows, were significant in human match mode, although human match is supposed to ignore text presentation: they are now ignored like other whitespaces, and remain significant with `--exact_match`
+  
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)
   - [Added]   `Then the error output is | contains | does not contain ...` and `Then there is no error output`: when a scenario checks the error output, its commands' standard error is captured apart from the standard output

@@ -11,6 +11,7 @@ on:                    # Run the workflow for each of the following events:
       - 'tools/**'
       - 'docs/features/**'
       - 'docs/examples/**'
+      - 'docs/help/**'
       - 'Makefile'
       - 'alire.toml'
   

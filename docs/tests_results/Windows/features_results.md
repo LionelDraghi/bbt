@@ -558,6 +558,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](..\..\features\A210_Exact_Match.md) pass  
 
    ### Scenario: [Human match](..\..\features\A210_Exact_Match.md): 
@@ -573,6 +575,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](..\..\features\A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match](..\..\features\A210_Exact_Match.md): 
@@ -589,6 +593,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](..\..\features\A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing](..\..\features\A210_Exact_Match.md): 
@@ -605,6 +611,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](..\..\features\A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing and blank lines](..\..\features\A210_Exact_Match.md): 
@@ -614,6 +622,37 @@
    - OK : And output contains  
    - OK : And output contains  
    - [X] scenario   [exact match except for casing and blank lines](..\..\features\A210_Exact_Match.md) pass  
+
+   ### Background: [](..\..\features\A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](..\..\features\A210_Exact_Match.md) pass  
+
+   ### Scenario: [human match ignores CR at line ends](..\..\features\A210_Exact_Match.md): 
+   - OK : When I run `./bbt compare_crlf.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [human match ignores CR at line ends](..\..\features\A210_Exact_Match.md) pass  
+
+   ### Background: [](..\..\features\A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](..\..\features\A210_Exact_Match.md) pass  
+
+   ### Scenario: [exact match is sensitive to CR at line ends](..\..\features\A210_Exact_Match.md): 
+   - OK : When I run `./bbt -k --exact_match compare_crlf.md`  
+   - OK : Then I get an error  
+   - OK : And output contains  
+   - [X] scenario   [exact match is sensitive to CR at line ends](..\..\features\A210_Exact_Match.md) pass  
 
 
 # Document: [A220_AsciiDoc_gcc_hello_world.adoc](..\..\features\A220_AsciiDoc_gcc_hello_world.adoc)  
@@ -1272,6 +1311,26 @@
 # Document: [B110_Spawn.md](..\..\features\B110_Spawn.md)  
   ## Feature: Command line to spawn processing  
 
+# Document: [B115_Warning_On_Shell_Metacharacters.md](..\..\features\B115_Warning_On_Shell_Metacharacters.md)  
+  ## Feature: warning on shell metacharacters in commands  
+   ### Scenario: [warning when a command contains a pipe](..\..\features\B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `pipe_test.md`  
+   - OK : When I run `./bbt -c pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning when a command contains a pipe](..\..\features\B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [warning also displayed by bbt explain](..\..\features\B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : When I run `./bbt explain pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning also displayed by bbt explain](..\..\features\B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [no warning on a quoted metacharacter in bbt explain](..\..\features\B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `quoted_glob_test.md`  
+   - OK : When I run `./bbt explain quoted_glob_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning on a quoted metacharacter in bbt explain](..\..\features\B115_Warning_On_Shell_Metacharacters.md) pass  
+
+
 # Document: [B120_Output_Verbosity.md](..\..\features\B120_Output_Verbosity.md)  
    ### Background: [](..\..\features\B120_Output_Verbosity.md): 
    - OK : Given the file `OK_scen.md`  
@@ -1610,6 +1669,17 @@
    - [X] scenario   [Checking that the index file is ignored](..\..\features\B180_Ignored_Files.md) pass  
 
 
+# Document: [B190_Clean_Error_When_No_Output.md](..\..\features\B190_Clean_Error_When_No_Output.md)  
+  ## Feature: clean error when checking the output of a command that did not run  
+   ### Scenario: [check the output of a command that does not exist](..\..\features\B190_Clean_Error_When_No_Output.md): 
+   - OK : Given the new file `no_cmd_test.md`  
+   - OK : When I run `./bbt -k no_cmd_test.md`  
+   - OK : Then output contains  
+   - OK : and output contains  
+   - OK : Then I get an error  
+   - [X] scenario   [check the output of a command that does not exist](..\..\features\B190_Clean_Error_When_No_Output.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](..\..\features\C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](..\..\features\C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -1780,12 +1850,12 @@
    - [X] scenario   [](..\..\features\C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 189 scenarios OK
+## Summary : **Success**, 195 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 189   |
+| Successful | 195   |
 | Empty      | 0     |
-| Not Run    | 6     |
+| Not Run    | 7     |
 
