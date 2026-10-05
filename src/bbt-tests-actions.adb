@@ -14,13 +14,13 @@ with Ada.Calendar;
 with Ada.Characters.Latin_1;
 with Ada.Command_Line;
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Containers.Vectors;
 with Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Exceptions;
 with Ada.Streams;
 with Ada.Streams.Stream_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Unchecked_Deallocation;
 
 with Spawn.Environments,
      Spawn.Processes,
@@ -196,8 +196,6 @@ package body BBT.Tests.Actions is
 
    -- ------------------------------------------------------------------------
    type Process_Access is access all Spawn.Processes.Process;
-   procedure Free is new Ada.Unchecked_Deallocation
-     (Object => Spawn.Processes.Process, Name => Process_Access);
 
    The_Process : Process_Access;
    --  The process run by the last Run_Cmd. A new process object is
@@ -206,9 +204,21 @@ package body BBT.Tests.Actions is
    --  monitor fails with ERROR_INVALID_HANDLE on the second start).
    --  It survives between steps only when interactive input is expected.
 
+   package Retired_Processes is new Ada.Containers.Vectors
+     (Positive, Process_Access);
+   Retired : Retired_Processes.Vector;
+   --  The process objects are never freed: the Spawn monitor keeps a
+   --  pid to process map, with no removal on termination, so a freed
+   --  object leaves a dangling pointer in the monitor. On macOS, where
+   --  pids are quickly reused, waitpid then finds the stale map entry
+   --  and writes the exit status into freed memory, corrupting the heap
+   --  (erroneous memory access, bogus stack overflow, at random
+   --  positions). The objects are small, and a run spawns at most a few
+   --  hundreds of them: leaking them is the safe option, until the
+   --  library cleans its map.
+
    Dead    : Boolean := False;
-   --  the process object can be freed: either the process properly
-   --  terminated, or it could not be created at all
+   --  the process has terminated, or could not be created at all
 
    Started_OK : Boolean := False;
    --  the process could be created (the Started callback was called);
@@ -460,8 +470,7 @@ package body BBT.Tests.Actions is
       end if;
       if not Dead then
          --  An error does not mean that the process died: kill it, and
-         --  pump the monitor until it is reaped. Freeing the object
-         --  before would leave dangling references in the monitor.
+         --  pump the monitor until it is reaped.
          Put_Debug_Line ("  disposing a still running command");
          The_Process.Kill_Process;
          while not Dead loop
@@ -469,7 +478,11 @@ package body BBT.Tests.Actions is
             exit when Ada.Calendar.Clock >= Deadline;
          end loop;
       end if;
-      Free (The_Process);
+      --  The object is kept in Retired for the whole run: the Spawn
+      --  monitor never forgets a process (its pid map has no removal),
+      --  so freeing the object would leave a dangling pointer there.
+      Retired.Append (The_Process);
+      The_Process := null;
    end Dispose_Process;
 
    -- --------------------------------------------------------------------------
