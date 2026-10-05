@@ -87,6 +87,18 @@ elaboration time: the child environment is rebuilt at each command with
 `Ada.Environment_Variables.Iterate`, so that the environment variable
 steps apply to the commands.
 
+Two constraints of the library, found while making bbt work on the
+three platforms, are worth knowing:
+
+- a process object cannot be restarted: a fresh object is created for
+  each command (the Windows monitor fails otherwise);
+- a process object must never be freed: the POSIX monitor keeps a
+  pid to process map with no removal on termination, so a freed object
+  leaves a dangling pointer there, and on macOS, where pids are quickly
+  reused, the exit status is written into freed memory
+  (cf. [spawn#36](https://github.com/AdaCore/spawn/issues/36));
+  the objects are kept alive for the whole run.
+
 When a scenario contains a `When I type` or a `When I enter` step
 (cf. [A290](features/A290_When_I_Type_Or_Enter.md)), the command is
 started and not awaited: it is fed across steps, and the synchronization

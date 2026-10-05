@@ -85,51 +85,6 @@ jobs:
           # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
         run: make -k
 
-      - name: macOS stack diagnostics
-        #  Diagnose the macOS stack overflow seen on A280: run a long series
-        #  of trivial commands in a single bbt run to measure a possible
-        #  per command stack growth, and check whether A280 passes alone.
-        #  Results are published as annotations, so that they are readable
-        #  from the checks API without the job log.
-        if: always() && matrix.os == 'macos-latest'
-        shell: bash
-        run: |
-          echo "stack limit: $(ulimit -s)"
-          { echo "# Diagnostic: stack growth per command"
-            for i in $(seq 1 500); do
-              echo
-              echo "## Scenario: run $i"
-              echo "- When I run \`./sut -v\`"
-              echo "- Then I get no error"
-            done; } > tests/stack_diag.md
-          { echo "# Diagnostic: stack growth per step, without any command"
-            for i in $(seq 1 500); do
-              echo
-              echo "## Scenario: check $i"
-              echo "- Given there is no \`to_check_$i\` file"
-              echo "- Then there is no \`to_check_$i\` file"
-            done; } > tests/step_diag.md
-          cd tests
-          DIAG=$(./bbt --yes stack_diag.md 2>&1 || true)
-          LAST=$(echo "$DIAG" | grep -E 'Summary' | tail -1 || true)
-          if echo "$DIAG" | grep -q "stack overflow"; then
-            EXC=$(echo "$DIAG" | grep -E 'Exception' | tail -1 || true)
-            echo "::error title=macos-diag-run::stack overflow in the long run test: $LAST -- at $EXC"
-          else
-            echo "::warning title=macos-diag-run::no stack overflow in the long run test: $LAST"
-          fi
-          DIAG2=$(./bbt --yes step_diag.md 2>&1 || true)
-          LAST2=$(echo "$DIAG2" | grep -E 'Summary' | tail -1 || true)
-          if echo "$DIAG2" | grep -q "stack overflow"; then
-            EXC2=$(echo "$DIAG2" | grep -E 'Exception' | tail -1 || true)
-            echo "::error title=macos-diag-step::stack overflow without any command: $LAST2 -- at $EXC2"
-          else
-            echo "::warning title=macos-diag-step::no stack overflow without any command: $LAST2"
-          fi
-          cd ..
-          A280=$(cd tests && ./bbt --yes ../docs/features/A280_Given_Environment_Variable.md 2>&1 | grep -E 'Summary' | tail -1)
-          echo "::warning title=macos-diag::A280 standalone: $A280"
-        
       - name: Save summary
         if: always()
         run: cat docs/tests_results/${OS_PLATFORM}/features_results.md >> ${GITHUB_STEP_SUMMARY} || echo "no results available"

@@ -215,7 +215,8 @@ package body BBT.Tests.Actions is
    --  (erroneous memory access, bogus stack overflow, at random
    --  positions). The objects are small, and a run spawns at most a few
    --  hundreds of them: leaking them is the safe option, until the
-   --  library cleans its map.
+   --  library cleans its map
+   --  (cf. https://github.com/AdaCore/spawn/issues/36).
 
    Dead    : Boolean := False;
    --  the process has terminated, or could not be created at all
