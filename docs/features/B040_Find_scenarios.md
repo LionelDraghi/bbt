@@ -62,17 +62,12 @@ Usage : bbt [Options]* [Command] file*
 
 ### Scenario: running all scenarios in dir1
 
+The `[/\]` regexp accepts both path separators, so the check does not
+depend on the platform.
+
 - When I run `./bbt lf dir1`
-- Then the output is on Unix_Only (unordered)
-```
-dir1/scen2.md
-dir1/scen1.md
-```
-- And the output is on Windows_Only (unordered)
-```
-dir1\scen2.md
-dir1\scen1.md
-```
+- Then the output matches `dir1[/\\]scen1.md`
+- And the output matches `dir1[/\\]scen2.md`
 
 ### Scenario: running multiple scenarios given on command line
 
@@ -97,20 +92,10 @@ dir1/scen4.scen
 - Given the `dir1/res1` file containing `res1`
 ``` 
 - When I run `./bbt lf -r dir1`
-- Then the output is on Unix_Only (unordered)
-```
-dir1/scen2.md
-dir1/scen1.md
-dir1/dir3/dir4/scen6.md
-dir1/dir2/scen5.md
-```
-- And the output is on Windows_Only (unordered)
-```
-dir1\scen2.md
-dir1\scen1.md
-dir1\dir3\dir4\scen6.md
-dir1\dir2\scen5.md
-```
+- Then the output matches `dir1[/\\]scen1.md`
+- And the output matches `dir1[/\\]scen2.md`
+- And the output matches `dir1[/\\]dir2[/\\]scen5.md`
+- And the output matches `dir1[/\\]dir3[/\\]dir4[/\\]scen6.md`
 
 ### Scenario: error msg when trying to run scenarios, but none found in given directories
 

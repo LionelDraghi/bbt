@@ -1112,7 +1112,8 @@
 
    ### Scenario: [running all scenarios in dir1](../../features/B040_Find_scenarios.md): 
    - OK : When I run `./bbt lf dir1`  
-   - OK : Then the output is on Unix_Only (unordered)  
+   - OK : Then the output matches `dir1[/\\]scen1.md`  
+   - OK : And the output matches `dir1[/\\]scen2.md`  
    - [X] scenario   [running all scenarios in dir1](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
@@ -1142,7 +1143,10 @@
    - OK : Given the `dir1/dir2/scen5.md` file containing `foo`  
    - OK : Given the `dir1/dir3/dir4/scen6.md` file containing `bar`  
    - OK : When I run `./bbt lf -r dir1`  
-   - OK : Then the output is on Unix_Only (unordered)  
+   - OK : Then the output matches `dir1[/\\]scen1.md`  
+   - OK : And the output matches `dir1[/\\]scen2.md`  
+   - OK : And the output matches `dir1[/\\]dir2[/\\]scen5.md`  
+   - OK : And the output matches `dir1[/\\]dir3[/\\]dir4[/\\]scen6.md`  
    - [X] scenario   [running scenarios in a tree thanks to `-r`](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
