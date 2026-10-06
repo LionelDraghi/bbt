@@ -64,13 +64,13 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [changed] Close #10 (final counts formatted as MD table)
   - [changed] Close #11 (quote surrounding parameters now removed when spawning a command)
   - [changed] Close #9  (error code block fenced instead of line prefixed with "|")
-  - [Changed] An empty code block (that is two consecutive ``` lines) is no more considered as an error, but just as a file intentionally empty.
+  - [Changed] An empty code block (that is two consecutive `` ``` `` lines) is no more considered as an error, but just as a file intentionally empty.
   - [Added]   `Output matches regexp` syntax added.
   - [Fixed]   Fixed run summary printed even when nothing was run because of an early error occurs during scenario analysis.
   - [Added]   `-Given the file containing` now accept code fenced block content.
   - [Changed] The template file (produce with -ct) is now more complete, so that a user could start with it without reading the doc.
   - [Added]   Added robustness tests on missing code block marks in scenario files.
-  - [Changed] It's now possible to use both ``` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
+  - [Changed] It's now possible to use both `` ``` `` and ~~~ for code block marks. As per Markdown rules, the closing mark has to be the same as the opening one.
   - [Added]   First implementation of a progress bar, `-sb` option
   - [Changed] On the command line, commands no more start with '-' or '--' (previous form still taken into account for now)
   - [Fixed]   Fixes #7 

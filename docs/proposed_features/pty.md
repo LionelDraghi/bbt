@@ -22,7 +22,7 @@ without pseudo terminal:
 
 - the line feeds written by the program are translated into `CR` `LF`
   on their way out of the terminal: bbt filters the `CR`, so that
-  `Then the output is `msg`` matches the same text as over pipes;
+  ``Then the output is `msg` `` matches the same text as over pipes;
 - the terminal echoes the sent input to the output: the echo must not
   be part of the checked output, either by disabling the echo on the
   terminal, or by filtering it.
@@ -87,16 +87,28 @@ blocking, with no listener or polling equivalent to the Spawn
 would then rely on a helper task, or on exposing the underlying file
 descriptor.
 
-Candidate designs, to be arbitrated:
+Candidate designs, to be arbitrated. The guiding design principle is to
+keep a single process library in bbt: a double dependency, with two
+execution engines and two sets of platform quirks to validate, is
+worse than either option.
 
-1. use ada-util only for the pseudo terminal scenarios, keeping Spawn
-   as the execution engine for the others: two process libraries in
-   bbt, but each used where it is the best fit;
-2. replace Spawn by ada-util entirely: one dependency, a direct
-   environment API, but the event pumping of the interactive steps has
-   to be redesigned around blocking reads;
+1. contribute the missing pseudo terminal configuration to Spawn
+   (expose the slave descriptor, or provide a raw mode setting), and
+   use it once released: one dependency, the feature delivered by
+   construction, but gated on the upstream acceptance and release;
+
+2. replace Spawn by ada-util entirely: one dependency, and the pseudo
+   terminal comes already configured (raw mode), but the event pumping
+   of the interactive steps has to be redesigned around blocking
+   reads (no polling today: the underlying descriptor would have to
+   be exposed upstream), and the Windows paths have to be validated;
 3. keep filtering heuristics on top of the Spawn pipes (see above):
-   no new dependency, but heuristics in the output path.
+   no new dependency and no upstream work, but heuristics in the
+   output path.
+
+Using ada-util for the pseudo terminal scenarios only, keeping Spawn
+for the others, is rejected: each library used where it is the best
+fit would not compensate the cost of two process libraries in bbt.
 
 
 _Table of Contents:_

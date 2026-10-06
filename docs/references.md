@@ -72,7 +72,7 @@ won't be recognized as a Feature.
 
 ####  Fenced Code blocks
 
-Both ``` and ~~~ code fence mark are recognized by bbt, but only in steps, and only the first block.
+Both `` ``` `` and ~~~ code fence mark are recognized by bbt, but only in steps, and only the first block.
 Meaning that code blocks can be used within the documentation without interfering with bbt.
 
 And, as per Markdown rules, the closing mark should the same as the opening one.

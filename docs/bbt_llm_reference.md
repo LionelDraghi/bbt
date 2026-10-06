@@ -630,7 +630,7 @@ Copyright (C) 2024 Free Software Foundation, Inc.
 **Critical Rule for LLM**: When documenting scenarios that contain code blocks, follow these nesting rules:
 
 1. **Outer code block**: Use `~~~` with language specifier
-2. **Inner code blocks**: Use ``` with language specifier
+2. **Inner code blocks**: Use `` ``` `` with language specifier
 3. **Maximum nesting**: Never exceed 2 levels of nesting
 
 **✅ Correct Example**:

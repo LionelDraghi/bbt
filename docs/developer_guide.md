@@ -82,6 +82,12 @@ This library was chosen over `GNAT.Expect` after experimenting with both
   Windows is implemented explicitly, and the library is used by Alire
   itself.
 
+Other candidates were reviewed later (October 2026):
+
+- `GLib.Spawn_Alt.Asynchronous` ([gtkada_contributions](https://www.dmitry-kazakov.de/ada/gtkada_contributions.htm)), proposed in the [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467), and co-authored by the Spawn author: the pipes are serviced by dedicated tasks, the completion is notified once the process died and all pipes are closed, and the environment is passed at each run. Rejected: it drags the whole GTK+ dependency (`Gtk.Main.Router`, that requires a window) into a console tool, it is not distributed on Alire, and its callbacks run on separate tasks, which would force a protected object refactor of the current single task design. Spawn can be seen as the Alire packaged continuation of the same design, with a `spawn_glib` flavor when GLib main loop integration is wanted;
+- the Alire index was swept for other process libraries: `spoon` (posix_spawn, no Windows), `ashell` (built on Florist, POSIX oriented, Windows availability dubious), `spawn_glib` (Spawn itself on the GLib event loop). None brings a feature bbt misses;
+- `utilada` (`Util.Processes`, `Util.Streams.Pipes`) is the only credible alternative: on Alire, Apache-2.0, Windows supported, direct stdout and stderr redirection to files, and the `Set_Allocate_TTY` pseudo terminal option. It is the documented fallback for the pseudo terminal feature, cf. [proposed_features/pty.md](proposed_features/pty.md), not a replacement for the current execution engine.
+
 Note that `Spawn.Environments.System_Environment` is a snapshot taken at
 elaboration time: the child environment is rebuilt at each command with
 `Ada.Environment_Variables.Iterate`, so that the environment variable

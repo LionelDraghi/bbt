@@ -257,10 +257,10 @@ steps check the standard output alone.
 (cf. [feature `error output`](features/A270_Then_Error_Output.md)).
 
 `Then I get an error` only tells success from failure;
-`Then the exit code is `2`` checks the exact code of the last command.
+``Then the exit code is `2` `` checks the exact code of the last command.
 (cf. [feature `exit code`](features/A260_Then_Exit_Code_Is.md)).
 
-`Given the environment variable `LANG` is `C`` and
+``Given the environment variable `LANG` is `C` `` and
 `Given the environment variable `NO_COLOR` is not set` change the
 environment of the commands run afterwards in the scenario; the variables
 get their previous state back at the end of the scenario.

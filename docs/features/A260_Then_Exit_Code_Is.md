@@ -3,7 +3,7 @@
 
 `Then I get an error` / `Then I get no error` only tell success from failure.
 When the exit code itself is part of the specification (a usage error is 2,
-a missing file is 66…), the step `Then the exit code is `n`` checks it.
+a missing file is 66…), the step ``Then the exit code is `n` `` checks it.
 
 _Table of Contents:_
 - [Scenario: exit code of a successful command](#scenario-exit-code-of-a-successful-command)
