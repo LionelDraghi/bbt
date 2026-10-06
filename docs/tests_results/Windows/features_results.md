@@ -1034,12 +1034,8 @@
    - OK : Then I get error  
    - [X] scenario   [a required file does not exist](..\..\features\B030_File_creation_in_Given_steps.md) pass  
 
-   ### Scenario: [the required file is created](..\..\features\B030_File_creation_in_Given_steps.md): 
-   - OK : Given my favorite and so useful `config.ini` file  
-   - OK : Then `config.ini` contains `Tmp_dir=/tmp`  
-   - [X] scenario   [the required file is created](..\..\features\B030_File_creation_in_Given_steps.md) pass  
-
    ### Scenario: ["Given there is no", when there actually is, should erase the file](..\..\features\B030_File_creation_in_Given_steps.md): 
+   - OK : Given my favorite and so useful `config.ini` file  
    - OK : Given there is no `config.ini` file    
    - OK : Then there is no more `config.ini` file  
    - [X] scenario   ["Given there is no", when there actually is, should erase the file](..\..\features\B030_File_creation_in_Given_steps.md) pass  
@@ -1959,12 +1955,12 @@
    - [X] scenario   [](..\..\features\C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 206 scenarios OK
+## Summary : **Success**, 205 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 206   |
+| Successful | 205   |
 | Empty      | 0     |
 | Not Run    | 7     |
 

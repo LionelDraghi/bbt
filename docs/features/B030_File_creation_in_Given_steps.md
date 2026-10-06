@@ -15,14 +15,9 @@ If run in interactive mode, the expected behavior depends on the user answer :
 - If it answer "yes", the test will be OK.
 - And logically, if it answer "no", the test will fail.
 
-> [!NOTE]
-> Some scenarios below run a nested bbt without the `--yes` option:
-> it prompts for the erasing confirmation, and the answer is given by
-> a ``When I type `` step (cf. [A290](A290_When_I_Type_Or_Enter.md)).
 
 _Table of Contents:_
 - [Scenario : a required file does not exist](#scenario--a-required-file-does-not-exist)
-- [Scenario : the required file is created](#scenario--the-required-file-is-created)
 - [Scenario : "Given there is no", when there actually is, should erase the file](#scenario--given-there-is-no-when-there-actually-is-should-erase-the-file)
 - [Scenario : erasing confirmed by a typed key](#scenario--erasing-confirmed-by-a-typed-key)
 - [Scenario : erasing refused by a typed key](#scenario--erasing-refused-by-a-typed-key)
@@ -37,18 +32,13 @@ _Table of Contents:_
 - When I run `./sut read config.ini`
 - Then I get error
 
-### Scenario : the required file is created
+### Scenario : "Given there is no", when there actually is, should erase the file 
 
-  - Given my favorite and so useful `config.ini` file
+- Given my favorite and so useful `config.ini` file
 ```
 Tmp_dir=/tmp
 Alias l="ls -tla"
 ```
-- Then `config.ini` contains `Tmp_dir=/tmp`
-
- ### Scenario : "Given there is no", when there actually is, should erase the file 
-
-
 - Given there is no `config.ini` file  
 - Then there is no more `config.ini` file
  
