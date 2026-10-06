@@ -18,9 +18,18 @@ Use this reference to create, improve, validate, or convert bbt scenarios.
 
 ## Expected results and golden files
 
-- Expected results must be explicit and readable: keep them in clear text in the scenario file, as an inline string or a fenced code block.
-- Only when the expected result is too long to stay readable, move it to an external expected-result file - a "golden file" - and check it with the bbt file-to-file comparison steps (exact syntax: `bbt help grammar`).
-- Never modify a golden file without the user's explicit agreement. A mismatch means either a regression in the program under test, or a deliberate behavior change: only the user can decide.
+A precise, focused expectation says what the test tests: prefer it to a
+comparison with a full reference output, where the whole output is
+asserted at once - including details nobody deliberately specified - and
+where a change in an unrelated part of the output breaks the test.
+Comparing the whole output against a reference file - a "golden file" -
+is the technique called snapshot testing: a last resort, then. Keep
+expected results explicit and readable:
+
+- keep them in clear text in the scenario file, as an inline string or a fenced code block;
+- check the specific part you care about with `is`, `contains` or `matches`, not the whole output;
+- only when the expected result is too long to stay readable, move it to an external expected-result file - a "golden file" - and check it with the bbt file-to-file comparison steps (exact syntax: `bbt help grammar`);
+- never modify a golden file without the user's explicit agreement. A mismatch means either a regression in the program under test, or a deliberate behavior change: only the user can decide.
 
 ## Frequent pitfalls
 

@@ -598,7 +598,7 @@ int main() {
 - **Complex workflows**: Break into multiple simple scenarios
 
 ### Avoid snapshot testing
-Avoid test results that provide a full reference output if the test is focused on a specific part. Otherwise, all tests are impacted when the output format changes, not only tests regarding specifically the modified part.
+Avoid comparing the whole output with a full reference file (a "golden file" - the technique is called snapshot testing) if the test is focused on a specific part: everything is asserted at once, including details nobody deliberately specified, and all tests are impacted when the output format changes, not only tests regarding specifically the modified part.
 This is achieved by using "matches" or "contains" instead of "is".
 
 Example:
