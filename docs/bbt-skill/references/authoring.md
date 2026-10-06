@@ -27,5 +27,7 @@ Use this reference to create, improve, validate, or convert bbt scenarios.
 Most structural mistakes are visible in `bbt explain` output. Check that:
 - steps use the `-` list marker, not `*` or `+`, and start with `Given`, `When` or `Then`, never `And` or `But`;
 - commands and short parameters are between backticks, multiline parameters in a fenced code block;
+- a parameter between backticks cannot itself contain a backtick: the first one closes the parameter, and the rest of the line is misparsed, with possibly no visible error; when a parameter must contain a backtick character, use a fenced code block instead of inline backticks;
+- the same trap corrupts the rendering of the prose around scenarios: quoting a bbt step in single backticks while the step itself contains backticks (most do) leaves an unclosed code span that swallows the document until the next backtick, often far away; wrap such quotes in double backticks, as in ``When I run `cmd` ``, and use `` ``` `` for a literal fence mark in prose;
 - a code block immediately follows its step, with no blank line in between;
 - no bbt step keyword appears in free text outside scenarios.
