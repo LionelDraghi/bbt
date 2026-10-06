@@ -171,11 +171,6 @@ If you want to start with a brand new one whatever is the situation, use:
 ```
 **and** confirm deletion when prompted, or use the `--yes` option.
 
-> [!WARNING] 
-> Fixme: as of 0.0.6, bbt is not able to simulate interactive behavior, and so this behavior is only partially tested.  
-> And if there is no test, don't trust the doc :-)
-
-
 ## Behavior
 
 ### Blank lines and Case sensitivity and line order

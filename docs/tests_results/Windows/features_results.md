@@ -1063,6 +1063,50 @@
    - OK : And there is a `config.ini` file  
    - [X] scenario   [erasing refused by a typed key](..\..\features\B030_File_creation_in_Given_steps.md) pass  
 
+   ### Scenario: [directory tree erasing confirmed by a typed key](..\..\features\B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is no `d1` directory  
+   - [X] scenario   [directory tree erasing confirmed by a typed key](..\..\features\B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [directory tree erasing refused by a typed key](..\..\features\B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_refuse.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d1" not deleted`  
+   - OK : And there is a `d1` directory  
+   - [X] scenario   [directory tree erasing refused by a typed key](..\..\features\B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing confirmed by a typed key](..\..\features\B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d2` directory  
+   - OK : Given the new `d2/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_confirm.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `d2` directory  
+   - OK : And there is no `d2/f1` file  
+   - [X] scenario   [new directory erasing confirmed by a typed key](..\..\features\B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing refused by a typed key](..\..\features\B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d3` directory  
+   - OK : Given the new `d3/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_refuse.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d3" not deleted`  
+   - OK : And there is a `d3` directory  
+   - OK : And there is a `d3/f1` file  
+   - [X] scenario   [new directory erasing refused by a typed key](..\..\features\B030_File_creation_in_Given_steps.md) pass  
+
 
 # Document: [B040_Find_scenarios.md](..\..\features\B040_Find_scenarios.md)  
   ## Feature: multiples scenarios given in command line  
@@ -1915,12 +1959,12 @@
    - [X] scenario   [](..\..\features\C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 202 scenarios OK
+## Summary : **Success**, 206 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 202   |
+| Successful | 206   |
 | Empty      | 0     |
 | Not Run    | 7     |
 

@@ -863,15 +863,31 @@ package body BBT.Tests.Actions is
                              Loc       => Step.Location,
                              Verbosity => Verbosity);
          when Directory =>
-            if not Exists (File_Name) then
+            --  The new keyword means created from scratch: an existing
+            --  tree is erased, after user confirmation, and the directory
+            --  is recreated empty. When the user refuses the erasing, the
+            --  step fails, as the existing tree is not a fresh start.
+            declare
+               Existed : constant Boolean := Exists (File_Name);
+               Erased  : Boolean         := not Existed;
+            begin
+               if Existed then
+                  Put_Debug_Line (Item => "Deleting existing " & File_Name);
+                  Delete_Tree (File_Name);
+                  Erased := not Exists (File_Name);
+               end if;
                Directories.Create_Path (File_Name);
-            end if;
-            Put_Step_Result (Step      => Step,
-                             Success   => Dir_Exists (File_Name),
-                             Fail_Msg  => "Couldn't create directory " &
-                               File_Name'Image,
-                             Loc       => Step.Location,
-                             Verbosity => Verbosity);
+               Put_Step_Result (Step      => Step,
+                                Success   => Erased
+                                             and then Dir_Exists (File_Name),
+                                Fail_Msg  => (if Erased
+                                              then "Couldn't create directory "
+                                                & File_Name'Image
+                                              else "dir " & File_Name'Image
+                                                & " not deleted"),
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            end;
          when others =>
             -- don't mess around with special files!
             null;
