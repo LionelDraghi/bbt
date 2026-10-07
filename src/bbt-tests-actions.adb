@@ -145,14 +145,21 @@ package body BBT.Tests.Actions is
 
    function Last_Exit_Code return Integer is (Last_Return_Code);
 
+   Output_Stream : Ada.Streams.Stream_IO.File_Type;
+   Err_Stream    : Ada.Streams.Stream_IO.File_Type;
+   --  Open for the whole command duration, and flushed at each chunk,
+   --  so that output checks can read the files between two callbacks,
+   --  without paying the file open cost at each chunk.
+
    -- ------------------------------------------------------------------------
    procedure Append_Data (File_Name : String;
                           Data      : Ada.Streams.Stream_Element_Array)
    is
       F : Ada.Streams.Stream_IO.File_Type;
    begin
-      --  The file is opened and closed at each call, so that output checks
-      --  can read it between two callbacks.
+      --  Fallback used when no stream is open: the file is opened and
+      --  closed at each call, so that output checks can read it between
+      --  two callbacks.
       if Ada.Directories.Exists (File_Name) then
          Ada.Streams.Stream_IO.Open
            (F, Ada.Streams.Stream_IO.Append_File, File_Name);
@@ -165,10 +172,38 @@ package body BBT.Tests.Actions is
    end Append_Data;
 
    -- ------------------------------------------------------------------------
+   procedure Write_Chunk (Stream    : Ada.Streams.Stream_IO.File_Type;
+                          File_Name : String;
+                          Data      : Ada.Streams.Stream_Element_Array) is
+   begin
+      --  When a stream is open, the chunk is written through it, and
+      --  flushed, so that output checks can read the file between two
+      --  callbacks without paying the file open cost at each chunk;
+      --  otherwise the fallback opens and closes the file at each call.
+      if Ada.Streams.Stream_IO.Is_Open (Stream) then
+         Ada.Streams.Stream_IO.Write (Stream, Data);
+         Ada.Streams.Stream_IO.Flush (Stream);
+      else
+         Append_Data (File_Name, Data);
+      end if;
+   end Write_Chunk;
+
+   -- ------------------------------------------------------------------------
+   procedure Close_Stream (Stream : in out Ada.Streams.Stream_IO.File_Type) is
+   begin
+      --  The streams are flushed at each chunk: this final flush is a
+      --  safety net, e.g. for a command that could not start.
+      if Ada.Streams.Stream_IO.Is_Open (Stream) then
+         Ada.Streams.Stream_IO.Flush (Stream);
+         Ada.Streams.Stream_IO.Close (Stream);
+      end if;
+   end Close_Stream;
+
+   -- ------------------------------------------------------------------------
    procedure Write_Output (Data : Ada.Streams.Stream_Element_Array) is
       use Ada.Streams;
    begin
-      Append_Data (To_String (Cmd_Output_Name), Data);
+      Write_Chunk (Output_Stream, To_String (Cmd_Output_Name), Data);
       Output_Bytes := @ + Natural (Data'Length);
       for C of Data loop
          if C = Character'Pos (Ada.Characters.Latin_1.LF) then
@@ -182,9 +217,9 @@ package body BBT.Tests.Actions is
    begin
       --  When the standard error is merged, it goes to the output file
       if Merged then
-         Append_Data (To_String (Cmd_Output_Name), Data);
+         Write_Chunk (Output_Stream, To_String (Cmd_Output_Name), Data);
       else
-         Append_Data (To_String (Cmd_Err_Name), Data);
+         Write_Chunk (Err_Stream, To_String (Cmd_Err_Name), Data);
       end if;
       Err_Bytes := @ + Natural (Data'Length);
       for C of Data loop
@@ -466,6 +501,11 @@ package body BBT.Tests.Actions is
       Deadline : constant Ada.Calendar.Time :=
                    Ada.Calendar.Clock + End_Timeout;
    begin
+      --  Close the output streams in any case: they were flushed at
+      --  each chunk, so the files are already complete and readable.
+      Close_Stream (Output_Stream);
+      Close_Stream (Err_Stream);
+
       if The_Process = null then
          return;
       end if;
@@ -588,24 +628,45 @@ package body BBT.Tests.Actions is
          -- Put_Debug_Line ("===========" & Spawn_Arg.all (I).all & "<");
       end loop;
 
-      --  Truncate the output files, and reset the state
-      declare
-         F : Ada.Streams.Stream_IO.File_Type;
-      begin
-         Ada.Streams.Stream_IO.Create
-           (F, Ada.Streams.Stream_IO.Out_File, Output_Name);
-         Ada.Streams.Stream_IO.Close (F);
-      end;
-      Cmd_Output_Name := To_Unbounded_String (Output_Name);
-      Merged          := Error_Output_Name = "";
-      if not Merged then
+      --  Truncate the output files, and reset the state.
+      --
+      --  Unless the command is to be fed interactively, the streams stay
+      --  open for the whole command, and are flushed at each chunk:
+      --  reopening a file at each chunk costs around 0.7 s on some
+      --  Windows configurations, which made commands producing their
+      --  output in many chunks, such as a nested bbt help grammar, take
+      --  minutes instead of milliseconds. The streams are closed as
+      --  soon as the command is terminated, or at the next command, so
+      --  that the following checks can read the files.
+      --
+      --  For an interactive command, the output is instead appended by
+      --  open-and-close at each chunk: the checks read the files
+      --  between two chunks while the command is still running, which
+      --  requires the file to be closed between the chunks.
+      if Interactive_Input_Expected then
          declare
             F : Ada.Streams.Stream_IO.File_Type;
          begin
             Ada.Streams.Stream_IO.Create
-              (F, Ada.Streams.Stream_IO.Out_File, Error_Output_Name);
+              (F, Ada.Streams.Stream_IO.Out_File, Output_Name);
             Ada.Streams.Stream_IO.Close (F);
+            if Error_Output_Name /= "" then
+               Ada.Streams.Stream_IO.Create
+                 (F, Ada.Streams.Stream_IO.Out_File, Error_Output_Name);
+               Ada.Streams.Stream_IO.Close (F);
+            end if;
          end;
+      else
+         Ada.Streams.Stream_IO.Create
+           (Output_Stream, Ada.Streams.Stream_IO.Out_File, Output_Name);
+         if Error_Output_Name /= "" then
+            Ada.Streams.Stream_IO.Create
+              (Err_Stream, Ada.Streams.Stream_IO.Out_File, Error_Output_Name);
+         end if;
+      end if;
+      Cmd_Output_Name := To_Unbounded_String (Output_Name);
+      Merged          := Error_Output_Name = "";
+      if not Merged then
          Cmd_Err_Name := To_Unbounded_String (Error_Output_Name);
       end if;
       Output_Bytes       := 0;
@@ -650,6 +711,10 @@ package body BBT.Tests.Actions is
          when E : others =>
             Running := False;
             Spawn_OK := False;
+            --  The command could not start: close the streams, so that
+            --  the following checks can read the empty output files.
+            Close_Stream (Output_Stream);
+            Close_Stream (Err_Stream);
             Put_Debug_Line ("  cannot start the command: " &
                               Ada.Exceptions.Exception_Information (E));
             Put_Step_Result
@@ -667,6 +732,10 @@ package body BBT.Tests.Actions is
          Wait_Quiet;
       else
          Pump (0.0);
+         --  The command is terminated: close the streams now, so that
+         --  the following checks can read the files.
+         Close_Stream (Output_Stream);
+         Close_Stream (Err_Stream);
       end if;
 
       Spawn_OK := Process_Error = 0;

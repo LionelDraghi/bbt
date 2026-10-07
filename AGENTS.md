@@ -3,15 +3,24 @@
 ## Commit discipline
 
 - never stage, commit or push without the owner's explicit consent:
-  `git add` is as forbidden as `git commit` and `git push`; prepare the
-  change, run a full `make all` (build, sut, check, doc), a `make clean` to check
-  that there is no remaining unwanted file, and report the result;
-  wait for the go-ahead before touching the index or the history
-- once the owner gives the go-ahead, run the whole sequence in one go:
-  `git add` the whole generated state (results, badges,
-  indexes...), commit, and push. Committing in the middle of the chain
-  (e.g. after features only) freezes inconsistent artifacts, such as
-  a badge.url still holding the bbt placeholder, or a stale badge.svg
+  `git add` is as forbidden as `git commit` and `git push`
+- the dev loop is `cd tests && make features`, or, for a single test,
+  `cd tests && ./bbt <test_file>`; run another suite (examples,
+  non_reg, unit_testing) only when the change concerns it
+- when the dev loop is green: `make clean`, then the owner reviews the
+  sources
+- when the review is OK, run the full sequence: a `make all` (build,
+  sut, check, doc), a `make clean` to check that there is no remaining
+  unwanted file (on the file system, not only with git status: git
+  ignored files remain invisible), and report the result; wait for the
+  go-ahead before touching the index or the history
+- once the owner gives the go-ahead, run the full sequence again, and
+  if everything is green, push the whole chain in one go: `git add`
+  the whole generated state (results, badges, indexes...), commit, and
+  push. Committing in the middle of the chain (e.g. after features
+  only) freezes inconsistent artifacts, such as a badge.url still
+  holding the bbt placeholder, or a stale badge.svg; if anything fails
+  during this last run, stop and ask the owner to arbitrate
 
 ## Build
 

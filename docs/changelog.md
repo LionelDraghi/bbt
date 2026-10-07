@@ -18,6 +18,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   on macOS, freeing the process objects corrupted the heap (cf. [spawn#36](https://github.com/AdaCore/spawn/issues/36)): the process objects are now kept alive for the whole run
   - [Added]   interactive scenarios testing the erasing confirmation of files and directory trees, including through the `new` keyword, the answer being sent to a nested bbt by a `When I type` step (cf. B030_File_creation_in_Given_steps.md)
   - [Fixed]   ``Given the new directory `dir1` `` now really starts from a white page: an existing `dir1` tree is erased, after user confirmation, or silently with `--yes` (it used to leave an existing tree in place)
+  - [Fixed]   on Windows, commands producing many output chunks, such as a nested `bbt help grammar`, were dramatically slowed down by the output files being reopened at each chunk: the output streams are now kept open during the command (cf. B130_Cmd_Line_Help.md)
   - [Changed] the LLM reference guide is removed and merged into the bbt-skill
   - [Fixed]   the index file links were broken on Windows: the relative paths
                used `\` separators, that Markdown parsers read as escape

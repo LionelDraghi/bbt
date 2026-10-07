@@ -150,7 +150,7 @@ clean:
 	@ - rm -f cmd_not_found.md compare.md compare_crlf.md contains.md contains_multiline.md create_exec.md failed_doesnt_1.md failed_doesnt_2.md
 	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md
 	@ - rm -f file_is_code_fence.input no_step_in_scenario.input no_step_in_scenario_b.input no_step_or_scenario_in_feature.input vza.input
-	@ - rm -f ask ask.c new_name.txt
+	@ - rm -f ask ask.c new_name.txt config.ini erase_confirm.md
 
 # distclean also removes the binaries and the links
 distclean: clean
