@@ -48,9 +48,14 @@ jobs:
       - name: Cache Alire dependencies
         uses: actions/cache@v3
         with:
+          # On Linux, alire data is in ~/.cache/alire and ~/.local/share/alire;
+          # on Windows runners (runneradmin user), it is in %LOCALAPPDATA%\alire:
+          # the Linux-only paths left the Windows toolchain out of the cache,
+          # and it was fully re-downloaded on each run.
           path: |
             ~/.cache/alire
             ~/.local/share/alire
+            ~/AppData/Local/alire
           key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
           restore-keys: |
             ${{ runner.os }}-alire-
