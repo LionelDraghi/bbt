@@ -161,8 +161,9 @@ package body BBT.Writers.Text_Writer is
                                              Verbosity : Verbosity_Levels)
    is
       Path_To_Scen  : constant String
-        := File_Utilities.Short_Path (From_Dir => Settings.Index_Dir,
-                                      To_File  => (+Parent_Doc (Scen).Name));
+        := File_Utilities.Web_Path (File_Utilities.Short_Path
+             (From_Dir => Settings.Index_Dir,
+              To_File  => (+Parent_Doc (Scen).Name)));
       Link_Image    : constant String
         := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
    begin

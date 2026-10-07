@@ -78,5 +78,15 @@ Short_Path (From_Dir => "\\Volume\Server\Users\Lionel\",
 Short_Path (From_Dir => "c:/Users/Lionel/tmp",
             To_File  => "c:\Users\Lionel\Proj\truc") = ..\Proj\truc
 
+20. Relative paths with .. : OK
+Short_Path (From_Dir => "../docs/tests_results/Windows",
+            To_File  => "../docs/features/A190_Run.md") = ..\..\features\A190_Run.md
+
+21. Relative paths, deeper From_Dir : OK
+Short_Path (From_Dir => "../docs/tests_results/Windows/sub",
+            To_File  => "../docs/features/A190_Run.md") = ..\..\..\features\A190_Run.md
+
+Web_Path on Windows separators : OK
+Web_Path on Unix separators : OK
 
 File_Utilities.Short_Path tests OK

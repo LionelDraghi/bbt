@@ -108,6 +108,14 @@ package File_Utilities is
    --   of both '/' and '\' on Windows.
 
    -- --------------------------------------------------------------------------
+   -- --------------------------------------------------------------------------
+   function Web_Path (Path : String) return String;
+   -- Returns Path with the Windows separators ('\') translated to '/',
+   -- as expected in Markdown links and URLs: a backslash in a Markdown
+   -- link destination is an escape character, and thus breaks the link
+   -- (`..\..\foo.md` is read `....\foo.md` by any CommonMark parser).
+   -- On Unix, Path is returned unchanged.
+
    function Escape (Text : in String) return String;
    -- bash specific function that escape characters
    -- ' '

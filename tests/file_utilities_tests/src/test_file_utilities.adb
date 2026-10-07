@@ -284,7 +284,44 @@ begin
              From_Dir => "c:/Users/Lionel/tmp",
              To_File  => "c:\Users\Lionel\Proj\truc",
              Expected => "..\Proj\truc");
+      Check (Title    => "Relative paths with ..",
+             From_Dir => "../docs/tests_results/Windows",
+             To_File  => "../docs/features/A190_Run.md",
+             Expected => "..\..\features\A190_Run.md");
+      Check (Title    => "Relative paths, deeper From_Dir",
+             From_Dir => "../docs/tests_results/Windows/sub",
+             To_File  => "../docs/features/A190_Run.md",
+             Expected => "..\..\..\features\A190_Run.md");
    end if;
+
+   -- -----------------------------------------------------------------------
+   -- Web_Path tests
+   declare
+      W : constant String :=
+        File_Utilities.Web_Path ("..\..\features\A190_Run.md");
+   begin
+      Put ("Web_Path on Windows separators");
+      if W = "../../features/A190_Run.md" then
+         Put_Line (" : OK");
+      else
+         Put_Line (" : NOK ****");
+         Put_Line ("Got " & W);
+         Failure_Count := Failure_Count + 1;
+      end if;
+   end;
+   declare
+      W : constant String :=
+        File_Utilities.Web_Path ("../features/A190_Run.md");
+   begin
+      Put ("Web_Path on Unix separators");
+      if W = "../features/A190_Run.md" then
+         Put_Line (" : OK");
+      else
+         Put_Line (" : NOK ****");
+         Put_Line ("Got " & W);
+         Failure_Count := Failure_Count + 1;
+      end if;
+   end;
 
    -- --------------------------------------------------------------------------
    Quiet := False;

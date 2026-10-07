@@ -19,6 +19,10 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   interactive scenarios testing the erasing confirmation of files and directory trees, including through the `new` keyword, the answer being sent to a nested bbt by a `When I type` step (cf. B030_File_creation_in_Given_steps.md)
   - [Fixed]   ``Given the new directory `dir1` `` now really starts from a white page: an existing `dir1` tree is erased, after user confirmation, or silently with `--yes` (it used to leave an existing tree in place)
   - [Changed] the LLM reference guide is removed and merged into the bbt-skill
+  - [Fixed]   the index file links were broken on Windows: the relative paths
+               used `\` separators, that Markdown parsers read as escape
+               characters; the separators are now always `/`
+               (cf. B140_Index_File.md)
   
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)

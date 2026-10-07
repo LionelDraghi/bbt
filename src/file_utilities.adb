@@ -7,6 +7,7 @@
 
 with Ada.Directories.Hierarchical_File_Names,
      Ada.Strings,
+     Ada.Strings.Fixed,
      Ada.Strings.Fixed.Equal_Case_Insensitive,
      Ada.Strings.Maps;
 
@@ -150,6 +151,15 @@ package body File_Utilities is
       end;
 
    end Short_Path;
+
+   -- --------------------------------------------------------------------------
+   function Web_Path (Path : String) return String is
+      Web_Mapping : constant Character_Mapping :=
+        To_Mapping (From => "\", To => "/");
+   begin
+      return Ada.Strings.Fixed.Translate (Path, Web_Mapping);
+   end Web_Path;
+
 
    -- --------------------------------------------------------------------------
    function Escape (Text : String) return String is

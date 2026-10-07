@@ -124,8 +124,8 @@ package body BBT.Writers.Markdown_Writers is
      (Writer : Markdown_Writer; Doc : Document_Type'Class)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Short_Path
-          (From_Dir => Settings.Index_Dir, To_File => (+Doc.Name));
+        File_Utilities.Web_Path (File_Utilities.Short_Path
+          (From_Dir => Settings.Index_Dir, To_File => (+Doc.Name)));
       Verbosity    : constant Verbosity_Levels := Normal;
    begin
       New_Line (Verbosity);
@@ -154,9 +154,9 @@ package body BBT.Writers.Markdown_Writers is
       Verbosity : Verbosity_Levels)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Short_Path
+        File_Utilities.Web_Path (File_Utilities.Short_Path
           (From_Dir => Settings.Index_Dir,
-           To_File  => (+Parent_Doc (Scen).Name));
+           To_File  => (+Parent_Doc (Scen).Name)));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid
       -- recomputing when looping on the writers
       Link_Image   : constant String :=
@@ -213,9 +213,9 @@ package body BBT.Writers.Markdown_Writers is
       Verbosity : Verbosity_Levels)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Short_Path
+        File_Utilities.Web_Path (File_Utilities.Short_Path
           (From_Dir => Settings.Index_Dir,
-           To_File  => (+Parent_Doc (Scen).Name));
+           To_File  => (+Parent_Doc (Scen).Name)));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid recomputing
       -- when looping on the writers
       Link_Image   : constant String :=

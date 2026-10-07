@@ -12,6 +12,8 @@ In this test, a scenario is run in quiet / normal / verbose mode while writing a
 
 - [Scenario: Successful run index file](#scenario-successful-run-index-file)
 - [Scenario: Unsuccessful run index file](#scenario-unsuccessful-run-index-file)
+- [Scenario: Unsuccessful run index file](#scenario-unsuccessful-run-index-file)
+- [Scenario: index links use web separators](#scenario-index-links-use-web-separators)
 
 
 ### Scenario: Successful run index file
@@ -69,4 +71,24 @@ Compare with default mode output
 - When I  run `./bbt -c --yes    NOK_scen.md --index index_4.md`
 - Then  I get an error
 - And `index_4.md` is equal to file `verbose_output_NOK.md`
+
+### Scenario: index links use web separators
+
+The index file is a Markdown file: a backslash in a link, as produced
+on Windows, is an escape character for the Markdown parser, and breaks
+the link. The separators in the index links are thus always `/`,
+whatever the platform.
+
+- Given the new directory `dir1`
+- Given the file `dir1/OK_scen.md` containing
+  ~~~md
+  # Scenario: sut version
+  - When I run `./sut --version`
+  - Then I get `sut version 1.0`
+  ~~~
+- Given the directory `dir1/sub`
+- When I successfully run `./bbt -c --yes dir1/OK_scen.md --index dir1/sub/index_web.md`
+- Then the file `dir1/sub/index_web.md` contains `](../OK_scen.md)`
+- And the file `dir1/sub/index_web.md` does not contain `\`
+
 
