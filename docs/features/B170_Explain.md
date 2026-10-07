@@ -172,9 +172,9 @@ line_A
 ```
 Document `scenario_to_explain.md`  
 1: Scenario `1`  
-2: - Create a directory (fail if already existing) named `dir1`  
-3: - Create a file (fail if already existing) named `file1` containing `string_A`  
-4: - Create a file (fail if already existing) named `file2` containing   
+2: - Create a directory (if not already existing) named `dir1`  
+3: - Create a file (overwritten if content differs) named `file1` containing `string_A`  
+4: - Create a file (overwritten if content differs) named `file2` containing   
 ~~~  
 line_A  
 ~~~  

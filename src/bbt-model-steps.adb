@@ -144,7 +144,10 @@ package body BBT.Model.Steps is
 
       when Create_If_None       =>
         return Prefix_Start & "Create a " & File_Kind
-               & " (fail if already existing) named " & Subject_String
+               & (if Step.Data.File_Type = Directory
+                  then " (if not already existing) named "
+                  else " (overwritten if content differs) named ")
+               & Subject_String
                & Optional_Content (Prefix_If_Found => " containing ");
 
       -- Run actions

@@ -22,6 +22,9 @@ package BBT.Tests.Actions.File_Operations is
    function Kind (Name : String) return File_Kind;
    procedure Delete_File (Name : String);
    procedure Delete_Tree (Dir_Name : String);
+   function Confirm_Overwrite (File_Name : String) return Boolean;
+   --  Prompts the user for the confirmation of the replacing of an
+   --  existing file, unless Settings.Yes is set.
 
    -- --------------------------------------------------------------------------
    subtype File_Type is Ada.Text_IO.File_Type;

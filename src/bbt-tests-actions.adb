@@ -978,14 +978,49 @@ package body BBT.Tests.Actions is
                Create_File (File_Name    => File_Name,
                             With_Content => Get_Expected (Step),
                             Executable   => Step.Data.Executable_File);
+               Put_Step_Result (Step     => Step,
+                                Success  => File_Exists (File_Name),
+                                Fail_Msg => "File " & File_Name'Image &
+                                  " creation failed",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
 
+            elsif Is_Equal (Get_Text (File_Name), Get_Expected (Step),
+                            Case_Insensitive   => Settings.Ignore_Casing,
+                            Ignore_Blanks      => Settings.Ignore_Whitespaces,
+                            Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                            Sort_Texts         => Step.Data.Ignore_Order)
+            then
+               --  The existing file already has the expected content,
+               --  in the current match mode: nothing to do.
+               Put_Step_Result (Step     => Step,
+                                Success  => True,
+                                Fail_Msg => "File " & File_Name'Image &
+                                  " creation failed",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+
+            elsif Confirm_Overwrite (File_Name) then
+               Created_File_List.Add (File_Name);
+               --  The previous content is lost anyway: the file is
+               --  deleted at the end, even if pre-existing.
+               Create_File (File_Name    => File_Name,
+                            With_Content => Get_Expected (Step),
+                            Executable   => Step.Data.Executable_File);
+               Put_Step_Result (Step     => Step,
+                                Success  => File_Exists (File_Name),
+                                Fail_Msg => "File " & File_Name'Image &
+                                  " creation failed",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result (Step     => Step,
+                                Success  => False,
+                                Fail_Msg => "file " & File_Name'Image &
+                                  " not overwritten",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
             end if;
-            Put_Step_Result (Step     => Step,
-                             Success  => File_Exists (File_Name),
-                             Fail_Msg => "File " & File_Name'Image &
-                               " creation failed",
-                             Loc       => Step.Location,
-                             Verbosity => Verbosity);
          when Directory =>
             if not Exists (File_Name) then
                Created_File_List.Add (File_Name);

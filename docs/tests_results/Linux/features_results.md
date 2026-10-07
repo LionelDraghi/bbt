@@ -13,6 +13,14 @@
    - OK : Then there is a dir `dir2`  
    - [X] scenario   [Checking that there is some dir](../../features/A005_Given.md) pass  
 
+   ### Scenario: [An existing directory is kept as is](../../features/A005_Given.md): 
+   - OK : Given the new directory `dir6`  
+   - OK : Given the new file `dir6/f1` containing `some data`  
+   - OK : Given the directory `dir6`  
+   - OK : Then there is a `dir6` directory  
+   - OK : And there is a `dir6/f1` file  
+   - [X] scenario   [An existing directory is kept as is](../../features/A005_Given.md) pass  
+
    ### Scenario: [Checking that there is a file with some content](../../features/A005_Given.md): 
    - OK : Given there is no file `file3`  
    - OK : Given the file `file3`  
@@ -25,6 +33,53 @@
    - OK : Then file `file4` is `alpha`  
    - OK : Then file `file5` is  
    - [X] scenario   [Creating a file with some content](../../features/A005_Given.md) pass  
+
+   ### Scenario: [An existing file with the expected content is kept as is](../../features/A005_Given.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `keep_content.md` file  
+   - OK : When I run `./bbt -q -c keep_content.md`  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [An existing file with the expected content is kept as is](../../features/A005_Given.md) pass  
+
+   ### Scenario: [An existing file with a different content is replaced with --yes](../../features/A005_Given.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
+   - OK : Given the new `replace_yes.md` file  
+   - OK : When I run `./bbt -q --yes replace_yes.md`  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [An existing file with a different content is replaced with --yes](../../features/A005_Given.md) pass  
+
+   ### Scenario: [Replacing confirmed by a typed key](../../features/A005_Given.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
+   - OK : Given the new `replace_confirm.md` file  
+   - OK : When I run `./bbt -q replace_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `config.ini` file  
+   - OK : Then I get no error  
+   - [X] scenario   [Replacing confirmed by a typed key](../../features/A005_Given.md) pass  
+
+   ### Scenario: [Replacing refused by a typed key](../../features/A005_Given.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
+   - OK : Given the new `replace_refuse.md` file  
+   - OK : When I run `./bbt -q replace_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `file "config.ini" not overwritten`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [Replacing refused by a typed key](../../features/A005_Given.md) pass  
+
+   ### Scenario: [The current match mode drives the comparison](../../features/A005_Given.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `match_mode.md` file  
+   - OK : When I run `./bbt -q match_mode.md`  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : When I run `./bbt -q --exact_match match_mode.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `file "config.ini" not overwritten`  
+   - [X] scenario   [The current match mode drives the comparison](../../features/A005_Given.md) pass  
 
 
 # Document: [A006_Given_Executable_File.md](../../features/A006_Given_Executable_File.md)  
@@ -2009,12 +2064,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 212 scenarios OK
+## Summary : **Success**, 218 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 212   |
+| Successful | 218   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

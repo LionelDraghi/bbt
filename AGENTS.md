@@ -55,7 +55,8 @@
 
 - feature files in docs/features are the specification (TDD first)
 - avoid snapshot testing (cf. bbt-skill), especially for generated files
-- add a line in docs/changelog.md under the current -dev version
+- add a line in docs/changelog.md under the current -dev version,
+  stacking the last arrived entry on top of the list
 - keep the changelog entries short: one line announcing the change, with a
   reference to the feature file or the issue for the details
 - `Fixme:` comments in docs/ and src/ are indexed in docs/dev/fixme_index.md by `make doc`

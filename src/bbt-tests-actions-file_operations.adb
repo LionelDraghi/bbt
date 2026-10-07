@@ -11,7 +11,7 @@ with BBT.IO,
 package body BBT.Tests.Actions.File_Operations is
 
    -- --------------------------------------------------------------------------
-   function Confirm_Delete (Prompt : String) return Boolean is
+   function Confirm (Prompt : String) return Boolean is
       C : Character;
    begin
       if Settings.Yes then return True;
@@ -30,7 +30,13 @@ package body BBT.Tests.Actions.File_Operations is
             when others => null;
          end case;
       end loop;
-   end Confirm_Delete;
+   end Confirm;
+
+   -- --------------------------------------------------------------------------
+   function Confirm_Overwrite (File_Name : String) return Boolean is
+   begin
+      return Confirm ("Overwrite file " & File_Name & "?");
+   end Confirm_Overwrite;
 
    -- --------------------------------------------------------------------------
    function Exists (Name : String) return Boolean is
@@ -50,7 +56,7 @@ package body BBT.Tests.Actions.File_Operations is
    procedure Delete_File (Name : String) is
    begin
       if Exists (Name)
-        and then Confirm_Delete ("Delete file " & Name & "?")
+        and then Confirm ("Delete file " & Name & "?")
       then
          Ada.Directories.Delete_File (Name);
       end if;
@@ -60,7 +66,7 @@ package body BBT.Tests.Actions.File_Operations is
    procedure Delete_Tree (Dir_Name : String)  is
    begin
       if Exists (Dir_Name)
-        and then Confirm_Delete ("Delete tree " & Dir_Name & "?")
+        and then Confirm ("Delete tree " & Dir_Name & "?")
       then
          Ada.Directories.Delete_Tree (Dir_Name);
       end if;
