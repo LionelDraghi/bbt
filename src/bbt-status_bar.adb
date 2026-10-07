@@ -87,6 +87,10 @@ package body BBT.Status_Bar is
          --                   Style      => Invert));
 
          Put (Restore);
+         --  The pause lets the human eye read the status line before
+         --  the run output continues: it is paid only when the bar
+         --  is displayed.
+         delay (0.1);
       end if;
 
    end Progress_Bar_Next_Step;

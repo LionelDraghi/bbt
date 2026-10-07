@@ -47,6 +47,13 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   with an explicit message instead.  
   cf. [timeouts](../proposed_features/timeouts.md)
 
+- progress bar to rework  
+  The status bar (`-sb` option) only displays the current file name:
+  the progress percentage and the event counting are stubs (commented
+  out code in bbt-status_bar.adb, Initialize_Progress_Bar is null).
+  The reading pause (`delay (0.1)`) has been moved inside the display,
+  so that it is paid only when the bar is shown.
+
 - readers and writers organization  
   Factorize the format knowledge (Markdown_Utilities is a first
   step), and design for a future non Markdown format: Text_Writer

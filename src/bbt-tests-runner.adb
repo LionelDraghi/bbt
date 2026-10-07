@@ -528,7 +528,7 @@ package body BBT.Tests.Runner is
       begin
          Put_Document_Start (Doc);
 
-         Status_Bar.Progress_Bar_Next_Step (Path_To_Scen); delay (0.1);
+         Status_Bar.Progress_Bar_Next_Step (Path_To_Scen);
 
          if Doc.Scenario_List.Is_Empty and then Doc.Feature_List.Is_Empty
          then

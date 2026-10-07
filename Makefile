@@ -130,17 +130,16 @@ install: ./bbt$(EXE_SUFFIX)
 clean:
 	echo --- clean:
 	@ $(MAKE) -s clean --directory=tests
-	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out tmp.txt output2.txt main main.c tmp
+	@ - rm -rf config.ini *.out dir* tmp.txt output2.txt main main.c tmp
 	echo OK
 	echo
 
 # distclean removes everything that can be rebuilt,
 # including the binaries and the links
-distclean:
+distclean: clean
 	echo --- distclean:
 	@ alr -q clean
 	cd tools && alr clean
 	@ $(MAKE) -s distclean --directory=tests
-	@ - rm -rf config.ini *.out dir? docs/tests/*/*.out obj/* tmp.txt output2.txt main main.c tmp
 	echo OK
 	echo
