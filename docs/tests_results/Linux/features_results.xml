@@ -1,339 +1,339 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="features_results" tests="213" failures="0" errors="0" skipped="1" time="0.000904000">
-  <testsuite name="../docs/features/A005_Given.md" tests="4" failures="0" errors="0" skipped="0" time="0.000904000">
-    <testcase name="Checking that there is no file or dir" classname="../docs/features/A005_Given.md" time="0.000162000"/>
-    <testcase name="Checking that there is some dir" classname="../docs/features/A005_Given.md" time="0.000151000"/>
+<testsuites name="features_results" tests="213" failures="0" errors="0" skipped="1" time="0.001041000">
+  <testsuite name="../docs/features/A005_Given.md" tests="4" failures="0" errors="0" skipped="0" time="0.001041000">
+    <testcase name="Checking that there is no file or dir" classname="../docs/features/A005_Given.md" time="0.000187000"/>
+    <testcase name="Checking that there is some dir" classname="../docs/features/A005_Given.md" time="0.000188000"/>
     <testcase name="Checking that there is a file with some content" classname="../docs/features/A005_Given.md" time="0.000260000"/>
-    <testcase name="Creating a file with some content" classname="../docs/features/A005_Given.md" time="0.000260000"/>
+    <testcase name="Creating a file with some content" classname="../docs/features/A005_Given.md" time="0.000318000"/>
   </testsuite>
-  <testsuite name="../docs/features/A006_Given_Executable_File.md" tests="2" failures="0" errors="0" skipped="0" time="0.105725000">
-    <testcase name="trying to run a script without the executable keyword should fail" classname="../docs/features/A006_Given_Executable_File.md" time="0.063788000"/>
-    <testcase name="trying to run the same script created with the executable attribute should succeed" classname="../docs/features/A006_Given_Executable_File.md" time="0.041867000"/>
+  <testsuite name="../docs/features/A006_Given_Executable_File.md" tests="2" failures="0" errors="0" skipped="0" time="0.106454000">
+    <testcase name="trying to run a script without the executable keyword should fail" classname="../docs/features/A006_Given_Executable_File.md" time="0.064281000"/>
+    <testcase name="trying to run the same script created with the executable attribute should succeed" classname="../docs/features/A006_Given_Executable_File.md" time="0.042097000"/>
   </testsuite>
-  <testsuite name="../docs/features/A010_Then_Contains_Code_Span.md" tests="3" failures="0" errors="0" skipped="0" time="0.083875000">
-    <testcase name="test on a string output" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.041738000"/>
-    <testcase name="test on a multiline output" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.041833000"/>
-    <testcase name="test on a file" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.000186000"/>
+  <testsuite name="../docs/features/A010_Then_Contains_Code_Span.md" tests="3" failures="0" errors="0" skipped="0" time="0.084390000">
+    <testcase name="test on a string output" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.041873000"/>
+    <testcase name="test on a multiline output" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.042171000"/>
+    <testcase name="test on a file" classname="../docs/features/A010_Then_Contains_Code_Span.md" time="0.000231000"/>
   </testsuite>
-  <testsuite name="../docs/features/A020_Then_Contains_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.063987000">
-    <testcase name="test the standard output" classname="../docs/features/A020_Then_Contains_Code_Block.md" time="0.000383000"/>
-    <testcase name="compare with an existing file" classname="../docs/features/A020_Then_Contains_Code_Block.md" time="0.063532000"/>
+  <testsuite name="../docs/features/A020_Then_Contains_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.064502000">
+    <testcase name="test the standard output" classname="../docs/features/A020_Then_Contains_Code_Block.md" time="0.000492000"/>
+    <testcase name="compare with an existing file" classname="../docs/features/A020_Then_Contains_Code_Block.md" time="0.063935000"/>
   </testsuite>
-  <testsuite name="../docs/features/A030_Then_Does_Not_Contain.md" tests="3" failures="0" errors="0" skipped="0" time="0.253030000">
-    <testcase name="Successful checks" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.042009000"/>
-    <testcase name="Failed &quot;output doesn&apos;t contain&quot;" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.105269000"/>
-    <testcase name="Failed &quot;file doesn&apos;t contain&quot;" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.105380000"/>
+  <testsuite name="../docs/features/A030_Then_Does_Not_Contain.md" tests="3" failures="0" errors="0" skipped="0" time="0.255098000">
+    <testcase name="Successful checks" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.042365000"/>
+    <testcase name="Failed &quot;output doesn&apos;t contain&quot;" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.106248000"/>
+    <testcase name="Failed &quot;file doesn&apos;t contain&quot;" classname="../docs/features/A030_Then_Does_Not_Contain.md" time="0.106058000"/>
   </testsuite>
-  <testsuite name="../docs/features/A040_Example_Keyword.md" tests="2" failures="0" errors="0" skipped="0" time="0.083447000">
-    <testcase name="NOK return code" classname="../docs/features/A040_Example_Keyword.md" time="0.041601000"/>
-    <testcase name="NOK return code" classname="../docs/features/A040_Example_Keyword.md" time="0.041727000"/>
+  <testsuite name="../docs/features/A040_Example_Keyword.md" tests="2" failures="0" errors="0" skipped="0" time="0.084090000">
+    <testcase name="NOK return code" classname="../docs/features/A040_Example_Keyword.md" time="0.041921000"/>
+    <testcase name="NOK return code" classname="../docs/features/A040_Example_Keyword.md" time="0.042068000"/>
   </testsuite>
-  <testsuite name="../docs/features/A050_Then_File_Is_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.063626000">
-    <testcase name="file is as expected" classname="../docs/features/A050_Then_File_Is_Code_Block.md" time="0.000226000"/>
-    <testcase name="file is not as expected" classname="../docs/features/A050_Then_File_Is_Code_Block.md" time="0.063332000"/>
+  <testsuite name="../docs/features/A050_Then_File_Is_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.064464000">
+    <testcase name="file is as expected" classname="../docs/features/A050_Then_File_Is_Code_Block.md" time="0.000255000"/>
+    <testcase name="file is not as expected" classname="../docs/features/A050_Then_File_Is_Code_Block.md" time="0.064128000"/>
   </testsuite>
-  <testsuite name="../docs/features/A060_Then_File_Equal_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.275149000">
-    <testcase name="test on a single line file" classname="../docs/features/A060_Then_File_Equal_Code_Span.md" time="0.083285000"/>
-    <testcase name="adding a second line to the file, so the same test should fail" classname="../docs/features/A060_Then_File_Equal_Code_Span.md" time="0.191757000"/>
+  <testsuite name="../docs/features/A060_Then_File_Equal_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.274750000">
+    <testcase name="test on a single line file" classname="../docs/features/A060_Then_File_Equal_Code_Span.md" time="0.084288000"/>
+    <testcase name="adding a second line to the file, so the same test should fail" classname="../docs/features/A060_Then_File_Equal_Code_Span.md" time="0.190322000"/>
   </testsuite>
-  <testsuite name="../docs/features/A065_Then_File_Equal_File.md" tests="3" failures="0" errors="0" skipped="0" time="0.064388000">
-    <testcase name="test `is equal to file` form" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.000353000"/>
-    <testcase name="test `is equal to file` when files are *not* equal" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.063590000"/>
-    <testcase name="test the negative form `is not equal to file`" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.000315000"/>
+  <testsuite name="../docs/features/A065_Then_File_Equal_File.md" tests="3" failures="0" errors="0" skipped="0" time="0.065274000">
+    <testcase name="test `is equal to file` form" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.000428000"/>
+    <testcase name="test `is equal to file` when files are *not* equal" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.064303000"/>
+    <testcase name="test the negative form `is not equal to file`" classname="../docs/features/A065_Then_File_Equal_File.md" time="0.000403000"/>
   </testsuite>
-  <testsuite name="../docs/features/A070_Then_Get_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.083675000">
-    <testcase name="asking for sut help" classname="../docs/features/A070_Then_Get_Code_Span.md" time="0.041800000"/>
-    <testcase name="causing an sut error with a long explanation" classname="../docs/features/A070_Then_Get_Code_Span.md" time="0.041794000"/>
+  <testsuite name="../docs/features/A070_Then_Get_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.084169000">
+    <testcase name="asking for sut help" classname="../docs/features/A070_Then_Get_Code_Span.md" time="0.042136000"/>
+    <testcase name="causing an sut error with a long explanation" classname="../docs/features/A070_Then_Get_Code_Span.md" time="0.041948000"/>
   </testsuite>
-  <testsuite name="../docs/features/A080_Then_Output_Equal_To_File.md" tests="1" failures="0" errors="0" skipped="0" time="0.042059000">
-    <testcase name="test `output is equal` keyword" classname="../docs/features/A080_Then_Output_Equal_To_File.md" time="0.041994000"/>
+  <testsuite name="../docs/features/A080_Then_Output_Equal_To_File.md" tests="1" failures="0" errors="0" skipped="0" time="0.042240000">
+    <testcase name="test `output is equal` keyword" classname="../docs/features/A080_Then_Output_Equal_To_File.md" time="0.042184000"/>
   </testsuite>
-  <testsuite name="../docs/features/A090_Then_Get_Error.md" tests="2" failures="0" errors="0" skipped="0" time="0.083405000">
-    <testcase name="NOK return code" classname="../docs/features/A090_Then_Get_Error.md" time="0.041601000"/>
-    <testcase name="OK return code" classname="../docs/features/A090_Then_Get_Error.md" time="0.041711000"/>
+  <testsuite name="../docs/features/A090_Then_Get_Error.md" tests="2" failures="0" errors="0" skipped="0" time="0.083927000">
+    <testcase name="NOK return code" classname="../docs/features/A090_Then_Get_Error.md" time="0.041908000"/>
+    <testcase name="OK return code" classname="../docs/features/A090_Then_Get_Error.md" time="0.041878000"/>
   </testsuite>
-  <testsuite name="../docs/features/A100_Then_Get_Stderr.md" tests="1" failures="0" errors="0" skipped="0" time="0.041820000">
-    <testcase name="missing file name" classname="../docs/features/A100_Then_Get_Stderr.md" time="0.041769000"/>
+  <testsuite name="../docs/features/A100_Then_Get_Stderr.md" tests="1" failures="0" errors="0" skipped="0" time="0.042121000">
+    <testcase name="missing file name" classname="../docs/features/A100_Then_Get_Stderr.md" time="0.042069000"/>
   </testsuite>
-  <testsuite name="../docs/features/A110_Then_No_Output.md" tests="2" failures="0" errors="0" skipped="0" time="0.147338000">
-    <testcase name="silent operation" classname="../docs/features/A110_Then_No_Output.md" time="0.041907000"/>
-    <testcase name="silent operation expected, but there is an output" classname="../docs/features/A110_Then_No_Output.md" time="0.105320000"/>
+  <testsuite name="../docs/features/A110_Then_No_Output.md" tests="2" failures="0" errors="0" skipped="0" time="0.148373000">
+    <testcase name="silent operation" classname="../docs/features/A110_Then_No_Output.md" time="0.042064000"/>
+    <testcase name="silent operation expected, but there is an output" classname="../docs/features/A110_Then_No_Output.md" time="0.106202000"/>
   </testsuite>
-  <testsuite name="../docs/features/A120_Then_Get_String.md" tests="1" failures="0" errors="0" skipped="0" time="0.041805000">
-    <testcase name="asking for sut version" classname="../docs/features/A120_Then_Get_String.md" time="0.041758000"/>
+  <testsuite name="../docs/features/A120_Then_Get_String.md" tests="1" failures="0" errors="0" skipped="0" time="0.042004000">
+    <testcase name="asking for sut version" classname="../docs/features/A120_Then_Get_String.md" time="0.041926000"/>
   </testsuite>
-  <testsuite name="../docs/features/A130_Successfully_Keyword.md" tests="3" failures="0" errors="0" skipped="0" time="0.188572000">
-    <testcase name="*when I successfully run* a command with successful run" classname="../docs/features/A130_Successfully_Keyword.md" time="0.041728000"/>
-    <testcase name="*when I successfully run* a command with a wrong command line, returns an error status" classname="../docs/features/A130_Successfully_Keyword.md" time="0.104750000"/>
-    <testcase name="*when I run* a command with a wrong command line" classname="../docs/features/A130_Successfully_Keyword.md" time="0.041927000"/>
+  <testsuite name="../docs/features/A130_Successfully_Keyword.md" tests="3" failures="0" errors="0" skipped="0" time="0.190067000">
+    <testcase name="*when I successfully run* a command with successful run" classname="../docs/features/A130_Successfully_Keyword.md" time="0.041966000"/>
+    <testcase name="*when I successfully run* a command with a wrong command line, returns an error status" classname="../docs/features/A130_Successfully_Keyword.md" time="0.105657000"/>
+    <testcase name="*when I run* a command with a wrong command line" classname="../docs/features/A130_Successfully_Keyword.md" time="0.042251000"/>
   </testsuite>
-  <testsuite name="../docs/features/A140_Unordered_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.295040000">
-    <testcase name="&quot;I get&quot; without the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.104847000"/>
-    <testcase name="same &quot;I get&quot; with the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.041958000"/>
-    <testcase name="&quot;contains&quot; without the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.105272000"/>
-    <testcase name="same &quot;contains&quot; but with the &quot;unordered&quot; modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.042056000"/>
+  <testsuite name="../docs/features/A140_Unordered_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.296430000">
+    <testcase name="&quot;I get&quot; without the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.105446000"/>
+    <testcase name="same &quot;I get&quot; with the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.042179000"/>
+    <testcase name="&quot;contains&quot; without the modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.105611000"/>
+    <testcase name="same &quot;contains&quot; but with the &quot;unordered&quot; modifier" classname="../docs/features/A140_Unordered_Keyword.md" time="0.042176000"/>
   </testsuite>
-  <testsuite name="../docs/features/A150_Background_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.001367000">
-    <testcase name="lets erase what was created by previous background runs" classname="../docs/features/A150_Background_Keyword.md" time="0.000142000"/>
-    <testcase name="Two Background executed" classname="../docs/features/A150_Background_Keyword.md" time="0.000078000"/>
-    <testcase name="lets erase once more what was created by previous background runs" classname="../docs/features/A150_Background_Keyword.md" time="0.000103000"/>
-    <testcase name="only first background should apply" classname="../docs/features/A150_Background_Keyword.md" time="0.000072000"/>
+  <testsuite name="../docs/features/A150_Background_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.001663000">
+    <testcase name="lets erase what was created by previous background runs" classname="../docs/features/A150_Background_Keyword.md" time="0.000172000"/>
+    <testcase name="Two Background executed" classname="../docs/features/A150_Background_Keyword.md" time="0.000085000"/>
+    <testcase name="lets erase once more what was created by previous background runs" classname="../docs/features/A150_Background_Keyword.md" time="0.000131000"/>
+    <testcase name="only first background should apply" classname="../docs/features/A150_Background_Keyword.md" time="0.000083000"/>
   </testsuite>
-  <testsuite name="../docs/features/A160_Ignoring_Blank_Lines.md" tests="5" failures="0" errors="0" skipped="0" time="0.363700000">
-    <testcase name="some obvious tests" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.000176000"/>
-    <testcase name="default behavior, non sensible to blank lines" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.126912000"/>
-    <testcase name="with --exact_match, sensible to blank lines" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.107696000"/>
-    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.063712000"/>
-    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.063742000"/>
+  <testsuite name="../docs/features/A160_Ignoring_Blank_Lines.md" tests="5" failures="0" errors="0" skipped="0" time="0.386606000">
+    <testcase name="some obvious tests" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.000221000"/>
+    <testcase name="default behavior, non sensible to blank lines" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.127794000"/>
+    <testcase name="with --exact_match, sensible to blank lines" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.128979000"/>
+    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.063903000"/>
+    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2" classname="../docs/features/A160_Ignoring_Blank_Lines.md" time="0.063920000"/>
   </testsuite>
-  <testsuite name="../docs/features/A170_File_vs_File_Name.md" tests="3" failures="0" errors="0" skipped="0" time="0.084247000">
-    <testcase name="&quot;Then I get file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.041946000"/>
-    <testcase name="&quot;Then output is | contains | does not contain file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.041987000"/>
-    <testcase name="&quot;Then file is | contains | does not contain file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.000170000"/>
+  <testsuite name="../docs/features/A170_File_vs_File_Name.md" tests="3" failures="0" errors="0" skipped="0" time="0.085062000">
+    <testcase name="&quot;Then I get file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.042275000"/>
+    <testcase name="&quot;Then output is | contains | does not contain file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.042463000"/>
+    <testcase name="&quot;Then file is | contains | does not contain file&quot; form" classname="../docs/features/A170_File_vs_File_Name.md" time="0.000177000"/>
   </testsuite>
-  <testsuite name="../docs/features/A190_Run.md" tests="4" failures="0" errors="0" skipped="0" time="0.233793000">
-    <testcase name="the command relative path is given" classname="../docs/features/A190_Run.md" time="0.063145000"/>
-    <testcase name="the command is in the PATH" classname="../docs/features/A190_Run.md" time="0.042299000"/>
-    <testcase name="command not found" classname="../docs/features/A190_Run.md" time="0.063938000"/>
-    <testcase name="the command is not executable (Unix_Only)" classname="../docs/features/A190_Run.md" time="0.064210000"/>
+  <testsuite name="../docs/features/A190_Run.md" tests="4" failures="0" errors="0" skipped="0" time="0.235280000">
+    <testcase name="the command relative path is given" classname="../docs/features/A190_Run.md" time="0.063510000"/>
+    <testcase name="the command is in the PATH" classname="../docs/features/A190_Run.md" time="0.042698000"/>
+    <testcase name="command not found" classname="../docs/features/A190_Run.md" time="0.064339000"/>
+    <testcase name="the command is not executable (Unix_Only)" classname="../docs/features/A190_Run.md" time="0.064524000"/>
   </testsuite>
-  <testsuite name="../docs/features/A195_Run_Or.md" tests="5" failures="0" errors="0" skipped="0" time="0.694563000">
-    <testcase name="normal use case" classname="../docs/features/A195_Run_Or.md" time="0.146748000"/>
-    <testcase name="The last command does not meet expectation (test should fail)" classname="../docs/features/A195_Run_Or.md" time="0.188785000"/>
-    <testcase name="Missing command before &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.147166000"/>
-    <testcase name="Missing command after &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.063706000"/>
-    <testcase name="Two consecutive &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.147847000"/>
+  <testsuite name="../docs/features/A195_Run_Or.md" tests="5" failures="0" errors="0" skipped="0" time="0.699503000">
+    <testcase name="normal use case" classname="../docs/features/A195_Run_Or.md" time="0.147455000"/>
+    <testcase name="The last command does not meet expectation (test should fail)" classname="../docs/features/A195_Run_Or.md" time="0.192243000"/>
+    <testcase name="Missing command before &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.147638000"/>
+    <testcase name="Missing command after &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.063873000"/>
+    <testcase name="Two consecutive &quot;or&quot;" classname="../docs/features/A195_Run_Or.md" time="0.147985000"/>
   </testsuite>
-  <testsuite name="../docs/features/A200_Regexp.md" tests="5" failures="0" errors="0" skipped="0" time="0.295571000">
-    <testcase name="version number match" classname="../docs/features/A200_Regexp.md" time="0.041916000"/>
-    <testcase name="version number mismatch" classname="../docs/features/A200_Regexp.md" time="0.105374000"/>
-    <testcase name="Test of &quot;output does not match&quot;" classname="../docs/features/A200_Regexp.md" time="0.042173000"/>
-    <testcase name="Test of &quot;output does not match&quot; that indeed matches" classname="../docs/features/A200_Regexp.md" time="0.105553000"/>
-    <testcase name="test of &quot;file match&quot;" classname="../docs/features/A200_Regexp.md" time="0.000273000"/>
+  <testsuite name="../docs/features/A200_Regexp.md" tests="5" failures="0" errors="0" skipped="0" time="0.297053000">
+    <testcase name="version number match" classname="../docs/features/A200_Regexp.md" time="0.042035000"/>
+    <testcase name="version number mismatch" classname="../docs/features/A200_Regexp.md" time="0.105895000"/>
+    <testcase name="Test of &quot;output does not match&quot;" classname="../docs/features/A200_Regexp.md" time="0.042297000"/>
+    <testcase name="Test of &quot;output does not match&quot; that indeed matches" classname="../docs/features/A200_Regexp.md" time="0.106170000"/>
+    <testcase name="test of &quot;file match&quot;" classname="../docs/features/A200_Regexp.md" time="0.000374000"/>
   </testsuite>
-  <testsuite name="" tests="6" failures="0" errors="0" skipped="0" time="0.706278000">
-    <testcase name="Human match" classname="" time="0.127909000"/>
-    <testcase name="exact match" classname="" time="0.067712000"/>
-    <testcase name="exact match except for casing" classname="" time="0.064245000"/>
-    <testcase name="exact match except for casing and blank lines" classname="" time="0.064250000"/>
-    <testcase name="human match ignores CR at line ends" classname="" time="0.063925000"/>
-    <testcase name="exact match is sensitive to CR at line ends" classname="" time="0.063820000"/>
+  <testsuite name="" tests="6" failures="0" errors="0" skipped="0" time="0.704686000">
+    <testcase name="Human match" classname="" time="0.128456000"/>
+    <testcase name="exact match" classname="" time="0.064791000"/>
+    <testcase name="exact match except for casing" classname="" time="0.064603000"/>
+    <testcase name="exact match except for casing and blank lines" classname="" time="0.064763000"/>
+    <testcase name="human match ignores CR at line ends" classname="" time="0.063748000"/>
+    <testcase name="exact match is sensitive to CR at line ends" classname="" time="0.063967000"/>
   </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.239039000">
-    <testcase name="gcc version?" classname="" time="0.045786000"/>
-    <testcase name="compiling and executing an hello word" classname="" time="0.193155000"/>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.230501000">
+    <testcase name="gcc version?" classname="" time="0.047497000"/>
+    <testcase name="compiling and executing an hello word" classname="" time="0.182901000"/>
   </testsuite>
-  <testsuite name="../docs/features/A230_select_exclude_include.md" tests="9" failures="0" errors="0" skipped="0" time="1.116129000">
-    <testcase name="no filtering" classname="../docs/features/A230_select_exclude_include.md" time="0.188217000"/>
-    <testcase name="step filtering" classname="../docs/features/A230_select_exclude_include.md" time="0.146879000"/>
-    <testcase name="step selection" classname="../docs/features/A230_select_exclude_include.md" time="0.105222000"/>
-    <testcase name="Selecting a scenario" classname="../docs/features/A230_select_exclude_include.md" time="0.188534000"/>
-    <testcase name="selection is empty" classname="../docs/features/A230_select_exclude_include.md" time="0.063536000"/>
-    <testcase name="Selecting a Background only" classname="../docs/features/A230_select_exclude_include.md" time="0.063681000"/>
-    <testcase name="Select followed by an exclude" classname="../docs/features/A230_select_exclude_include.md" time="0.146565000"/>
-    <testcase name="scenario Excluded followed by an include of a step inside" classname="../docs/features/A230_select_exclude_include.md" time="0.146886000"/>
-    <testcase name="Exclude by file name" classname="../docs/features/A230_select_exclude_include.md" time="0.063572000"/>
+  <testsuite name="../docs/features/A230_select_exclude_include.md" tests="9" failures="0" errors="0" skipped="0" time="1.122687000">
+    <testcase name="no filtering" classname="../docs/features/A230_select_exclude_include.md" time="0.188933000"/>
+    <testcase name="step filtering" classname="../docs/features/A230_select_exclude_include.md" time="0.147341000"/>
+    <testcase name="step selection" classname="../docs/features/A230_select_exclude_include.md" time="0.105773000"/>
+    <testcase name="Selecting a scenario" classname="../docs/features/A230_select_exclude_include.md" time="0.189859000"/>
+    <testcase name="selection is empty" classname="../docs/features/A230_select_exclude_include.md" time="0.064228000"/>
+    <testcase name="Selecting a Background only" classname="../docs/features/A230_select_exclude_include.md" time="0.064120000"/>
+    <testcase name="Select followed by an exclude" classname="../docs/features/A230_select_exclude_include.md" time="0.147553000"/>
+    <testcase name="scenario Excluded followed by an include of a step inside" classname="../docs/features/A230_select_exclude_include.md" time="0.147433000"/>
+    <testcase name="Exclude by file name" classname="../docs/features/A230_select_exclude_include.md" time="0.063885000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.041836000">
-    <testcase name="Running something in postcondition" classname="" time="0.041776000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.041954000">
+    <testcase name="Running something in postcondition" classname="" time="0.041910000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.083886000">
-    <testcase name="Checking that a command fails" classname="" time="0.083841000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.084074000">
+    <testcase name="Checking that a command fails" classname="" time="0.084028000"/>
   </testsuite>
-  <testsuite name="../docs/features/A260_Then_Exit_Code_Is.md" tests="5" failures="0" errors="0" skipped="0" time="0.337184000">
-    <testcase name="exit code of a successful command" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.041792000"/>
-    <testcase name="exit code of a failing command" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.041830000"/>
-    <testcase name="the exit code of the last command is checked" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.083924000"/>
-    <testcase name="wrong exit code" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.105431000"/>
-    <testcase name="the code must be an integer" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.063864000"/>
+  <testsuite name="../docs/features/A260_Then_Exit_Code_Is.md" tests="5" failures="0" errors="0" skipped="0" time="0.338688000">
+    <testcase name="exit code of a successful command" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.041946000"/>
+    <testcase name="exit code of a failing command" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.042080000"/>
+    <testcase name="the exit code of the last command is checked" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.084320000"/>
+    <testcase name="wrong exit code" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.105767000"/>
+    <testcase name="the code must be an integer" classname="../docs/features/A260_Then_Exit_Code_Is.md" time="0.064241000"/>
   </testsuite>
-  <testsuite name="../docs/features/A270_Then_Error_Output.md" tests="6" failures="0" errors="0" skipped="0" time="0.358125000">
-    <testcase name="error message on the error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.041993000"/>
-    <testcase name="nothing on the error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.042058000"/>
-    <testcase name="error output contains and does not contain" classname="../docs/features/A270_Then_Error_Output.md" time="0.084352000"/>
-    <testcase name="error output in a code block" classname="../docs/features/A270_Then_Error_Output.md" time="0.042091000"/>
-    <testcase name="without error output step, the outputs stay merged" classname="../docs/features/A270_Then_Error_Output.md" time="0.041958000"/>
-    <testcase name="wrong error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.105293000"/>
+  <testsuite name="../docs/features/A270_Then_Error_Output.md" tests="6" failures="0" errors="0" skipped="0" time="0.358487000">
+    <testcase name="error message on the error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.041996000"/>
+    <testcase name="nothing on the error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.042059000"/>
+    <testcase name="error output contains and does not contain" classname="../docs/features/A270_Then_Error_Output.md" time="0.084423000"/>
+    <testcase name="error output in a code block" classname="../docs/features/A270_Then_Error_Output.md" time="0.042134000"/>
+    <testcase name="without error output step, the outputs stay merged" classname="../docs/features/A270_Then_Error_Output.md" time="0.041879000"/>
+    <testcase name="wrong error output" classname="../docs/features/A270_Then_Error_Output.md" time="0.105667000"/>
   </testsuite>
-  <testsuite name="../docs/features/A280_Given_Environment_Variable.md" tests="6" failures="0" errors="0" skipped="0" time="0.358203000">
-    <testcase name="set a variable" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.041936000"/>
-    <testcase name="the variable is back to its previous state" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042117000"/>
-    <testcase name="unset a variable" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042114000"/>
-    <testcase name="the unset variable is back" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.041997000"/>
-    <testcase name="set twice in the same scenario" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042192000"/>
-    <testcase name="variable set in a background" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.147426000"/>
+  <testsuite name="../docs/features/A280_Given_Environment_Variable.md" tests="6" failures="0" errors="0" skipped="0" time="0.360582000">
+    <testcase name="set a variable" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042210000"/>
+    <testcase name="the variable is back to its previous state" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042331000"/>
+    <testcase name="unset a variable" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042263000"/>
+    <testcase name="the unset variable is back" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.042040000"/>
+    <testcase name="set twice in the same scenario" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.043194000"/>
+    <testcase name="variable set in a background" classname="../docs/features/A280_Given_Environment_Variable.md" time="0.148115000"/>
   </testsuite>
-  <testsuite name="../docs/features/A290_When_I_Type_Or_Enter.md" tests="5" failures="0" errors="0" skipped="0" time="1.239185000">
-    <testcase name="answering a key prompt with type" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.323945000"/>
-    <testcase name="refusing with type" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.223355000"/>
-    <testcase name="several inputs in a row" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.303660000"/>
-    <testcase name="answering a line prompt with enter" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.323951000"/>
-    <testcase name="enter without a running command" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.063884000"/>
+  <testsuite name="../docs/features/A290_When_I_Type_Or_Enter.md" tests="5" failures="0" errors="0" skipped="0" time="1.222197000">
+    <testcase name="answering a key prompt with type" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.304294000"/>
+    <testcase name="refusing with type" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.223756000"/>
+    <testcase name="several inputs in a row" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.304711000"/>
+    <testcase name="answering a line prompt with enter" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.324586000"/>
+    <testcase name="enter without a running command" classname="../docs/features/A290_When_I_Type_Or_Enter.md" time="0.064484000"/>
   </testsuite>
-  <testsuite name="../docs/features/B010_Deleting_created_files.md" tests="2" failures="0" errors="0" skipped="0" time="0.130204000">
-    <testcase name="run without --cleanup" classname="../docs/features/B010_Deleting_created_files.md" time="0.064304000"/>
-    <testcase name="run with --cleanup" classname="../docs/features/B010_Deleting_created_files.md" time="0.064864000"/>
+  <testsuite name="../docs/features/B010_Deleting_created_files.md" tests="2" failures="0" errors="0" skipped="0" time="0.131004000">
+    <testcase name="run without --cleanup" classname="../docs/features/B010_Deleting_created_files.md" time="0.064752000"/>
+    <testcase name="run with --cleanup" classname="../docs/features/B010_Deleting_created_files.md" time="0.065108000"/>
   </testsuite>
-  <testsuite name="../docs/features/B020_Exec_dir.md" tests="2" failures="0" errors="0" skipped="0" time="0.128220000">
-    <testcase name="Lets run &quot;create_tree.md&quot; in the current dir" classname="../docs/features/B020_Exec_dir.md" time="0.063695000"/>
-    <testcase name="Lets run &quot;create_tree.md&quot; in ./dir2" classname="../docs/features/B020_Exec_dir.md" time="0.063837000"/>
+  <testsuite name="../docs/features/B020_Exec_dir.md" tests="2" failures="0" errors="0" skipped="0" time="0.128487000">
+    <testcase name="Lets run &quot;create_tree.md&quot; in the current dir" classname="../docs/features/B020_Exec_dir.md" time="0.063696000"/>
+    <testcase name="Lets run &quot;create_tree.md&quot; in ./dir2" classname="../docs/features/B020_Exec_dir.md" time="0.064058000"/>
   </testsuite>
-  <testsuite name="../docs/features/B030_File_creation_in_Given_steps.md" tests="8" failures="0" errors="0" skipped="0" time="2.119665000">
-    <testcase name="a required file does not exist" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.042924000"/>
-    <testcase name="&quot;Given there is no&quot;, when there actually is, should erase the file" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.000257000"/>
-    <testcase name="erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.345908000"/>
-    <testcase name="erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.345851000"/>
-    <testcase name="directory tree erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.345862000"/>
-    <testcase name="directory tree erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.345859000"/>
-    <testcase name="new directory erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.346329000"/>
-    <testcase name="new directory erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.345991000"/>
+  <testsuite name="../docs/features/B030_File_creation_in_Given_steps.md" tests="8" failures="0" errors="0" skipped="0" time="2.105171000">
+    <testcase name="a required file does not exist" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.043051000"/>
+    <testcase name="&quot;Given there is no&quot;, when there actually is, should erase the file" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.000282000"/>
+    <testcase name="erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.346427000"/>
+    <testcase name="erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.346481000"/>
+    <testcase name="directory tree erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.347160000"/>
+    <testcase name="directory tree erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.326871000"/>
+    <testcase name="new directory erasing confirmed by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.347407000"/>
+    <testcase name="new directory erasing refused by a typed key" classname="../docs/features/B030_File_creation_in_Given_steps.md" time="0.346829000"/>
   </testsuite>
-  <testsuite name="../docs/features/B040_Find_scenarios.md" tests="6" failures="0" errors="0" skipped="0" time="0.386560000">
-    <testcase name="no file or dir on the command line" classname="../docs/features/B040_Find_scenarios.md" time="0.063435000"/>
-    <testcase name="running all scenarios in dir1" classname="../docs/features/B040_Find_scenarios.md" time="0.063710000"/>
-    <testcase name="running multiple scenarios given on command line" classname="../docs/features/B040_Find_scenarios.md" time="0.063474000"/>
-    <testcase name="running scenarios in a tree thanks to `-r`" classname="../docs/features/B040_Find_scenarios.md" time="0.064582000"/>
-    <testcase name="error msg when trying to run scenarios, but none found in given directories" classname="../docs/features/B040_Find_scenarios.md" time="0.063822000"/>
-    <testcase name="empty list file on list_files if there is no scenario in given directories" classname="../docs/features/B040_Find_scenarios.md" time="0.063553000"/>
+  <testsuite name="../docs/features/B040_Find_scenarios.md" tests="6" failures="0" errors="0" skipped="0" time="0.390907000">
+    <testcase name="no file or dir on the command line" classname="../docs/features/B040_Find_scenarios.md" time="0.063826000"/>
+    <testcase name="running all scenarios in dir1" classname="../docs/features/B040_Find_scenarios.md" time="0.064248000"/>
+    <testcase name="running multiple scenarios given on command line" classname="../docs/features/B040_Find_scenarios.md" time="0.064122000"/>
+    <testcase name="running scenarios in a tree thanks to `-r`" classname="../docs/features/B040_Find_scenarios.md" time="0.065262000"/>
+    <testcase name="error msg when trying to run scenarios, but none found in given directories" classname="../docs/features/B040_Find_scenarios.md" time="0.064441000"/>
+    <testcase name="empty list file on list_files if there is no scenario in given directories" classname="../docs/features/B040_Find_scenarios.md" time="0.064104000"/>
   </testsuite>
-  <testsuite name="../docs/features/B050_Strict_gherkin.md" tests="1" failures="0" errors="0" skipped="0" time="0.377424000">
-    <testcase name="Multiple When in a scenario" classname="../docs/features/B050_Strict_gherkin.md" time="0.377363000"/>
+  <testsuite name="../docs/features/B050_Strict_gherkin.md" tests="1" failures="0" errors="0" skipped="0" time="0.379157000">
+    <testcase name="Multiple When in a scenario" classname="../docs/features/B050_Strict_gherkin.md" time="0.379089000"/>
   </testsuite>
-  <testsuite name="../docs/features/B060_Return_code_on_test_failure.md" tests="3" failures="0" errors="0" skipped="0" time="0.316481000">
-    <testcase name="return code on test success" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105368000"/>
-    <testcase name="return code when the test fail" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105273000"/>
-    <testcase name="return code when one fail and the other succeed" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105640000"/>
+  <testsuite name="../docs/features/B060_Return_code_on_test_failure.md" tests="3" failures="0" errors="0" skipped="0" time="0.317687000">
+    <testcase name="return code on test success" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105519000"/>
+    <testcase name="return code when the test fail" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105993000"/>
+    <testcase name="return code when one fail and the other succeed" classname="../docs/features/B060_Return_code_on_test_failure.md" time="0.105992000"/>
   </testsuite>
-  <testsuite name="../docs/features/B080_Keep_Going.md" tests="6" failures="0" errors="0" skipped="0" time="0.676560000">
-    <testcase name="scenario_with_syntax_error run without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.063509000"/>
-    <testcase name="scenario_with_syntax_error run with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.147549000"/>
-    <testcase name="scenario_with_assertion_error run without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.147073000"/>
-    <testcase name="scenario_with_assertion_error run with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.189485000"/>
-    <testcase name="explain scenario_with_syntax_error without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.063751000"/>
-    <testcase name="explain scenario_with_syntax_error with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.063890000"/>
+  <testsuite name="../docs/features/B080_Keep_Going.md" tests="6" failures="0" errors="0" skipped="0" time="0.680608000">
+    <testcase name="scenario_with_syntax_error run without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.063875000"/>
+    <testcase name="scenario_with_syntax_error run with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.148627000"/>
+    <testcase name="scenario_with_assertion_error run without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.147946000"/>
+    <testcase name="scenario_with_assertion_error run with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.190294000"/>
+    <testcase name="explain scenario_with_syntax_error without `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.064193000"/>
+    <testcase name="explain scenario_with_syntax_error with `-k`" classname="../docs/features/B080_Keep_Going.md" time="0.064201000"/>
   </testsuite>
-  <testsuite name="../docs/features/B090_tmp_dir.md" tests="4" failures="0" errors="0" skipped="0" time="0.422173000">
-    <testcase name="Current dir, no cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.104903000"/>
-    <testcase name="Current dir, with cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105013000"/>
-    <testcase name="Within dir1, no cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105179000"/>
-    <testcase name="Within dir1, with cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105474000"/>
+  <testsuite name="../docs/features/B090_tmp_dir.md" tests="4" failures="0" errors="0" skipped="0" time="0.424310000">
+    <testcase name="Current dir, no cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105441000"/>
+    <testcase name="Current dir, with cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105673000"/>
+    <testcase name="Within dir1, no cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105656000"/>
+    <testcase name="Within dir1, with cleanup" classname="../docs/features/B090_tmp_dir.md" time="0.105732000"/>
   </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.211183000">
-    <testcase name="default mode run" classname="" time="0.105183000"/>
-    <testcase name="verbose mode run" classname="" time="0.105416000"/>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.212528000">
+    <testcase name="default mode run" classname="" time="0.105940000"/>
+    <testcase name="verbose mode run" classname="" time="0.105937000"/>
   </testsuite>
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.193030000">
-    <testcase name="full comparison with no error" classname="" time="0.000097000"/>
-    <testcase name="full comparison with error in the middle of the file" classname="" time="0.064021000"/>
-    <testcase name="full comparison with blank lines on the left and on the right" classname="" time="0.128351000"/>
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.194395000">
+    <testcase name="full comparison with no error" classname="" time="0.000123000"/>
+    <testcase name="full comparison with error in the middle of the file" classname="" time="0.064478000"/>
+    <testcase name="full comparison with blank lines on the left and on the right" classname="" time="0.129208000"/>
   </testsuite>
-  <testsuite name="../docs/features/B110_Spawn.md" tests="2" failures="0" errors="0" skipped="0" time="0.126345000">
-    <testcase name="Directory with space in the name (Unix_Only)" classname="../docs/features/B110_Spawn.md" time="0.042035000"/>
-    <testcase name="Command with quoted arguments (Unix_Only)" classname="../docs/features/B110_Spawn.md" time="0.084197000"/>
+  <testsuite name="../docs/features/B110_Spawn.md" tests="2" failures="0" errors="0" skipped="0" time="0.126408000">
+    <testcase name="Directory with space in the name (Unix_Only)" classname="../docs/features/B110_Spawn.md" time="0.042047000"/>
+    <testcase name="Command with quoted arguments (Unix_Only)" classname="../docs/features/B110_Spawn.md" time="0.084268000"/>
   </testsuite>
-  <testsuite name="../docs/features/B115_Warning_On_Shell_Metacharacters.md" tests="4" failures="0" errors="0" skipped="0" time="0.345914000">
-    <testcase name="warning when a command contains a pipe" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.105219000"/>
-    <testcase name="warning also displayed by bbt explain" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.063528000"/>
-    <testcase name="no warning when the metacharacter is quoted (Unix_Only)" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.105885000"/>
-    <testcase name="no warning on a quoted metacharacter in bbt explain" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.071054000"/>
+  <testsuite name="../docs/features/B115_Warning_On_Shell_Metacharacters.md" tests="4" failures="0" errors="0" skipped="0" time="0.340624000">
+    <testcase name="warning when a command contains a pipe" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.105812000"/>
+    <testcase name="warning also displayed by bbt explain" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.063845000"/>
+    <testcase name="no warning when the metacharacter is quoted (Unix_Only)" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.106543000"/>
+    <testcase name="no warning on a quoted metacharacter in bbt explain" classname="../docs/features/B115_Warning_On_Shell_Metacharacters.md" time="0.064188000"/>
   </testsuite>
-  <testsuite name="" tests="5" failures="0" errors="0" skipped="0" time="0.906689000">
-    <testcase name="Quiet mode run" classname="" time="0.231404000"/>
-    <testcase name="Default mode run" classname="" time="0.231832000"/>
-    <testcase name="Verbose mode run" classname="" time="0.231551000"/>
-    <testcase name="Normal mode with an error" classname="" time="0.105425000"/>
-    <testcase name="Quiet mode with an error" classname="" time="0.105529000"/>
+  <testsuite name="" tests="5" failures="0" errors="0" skipped="0" time="0.909692000">
+    <testcase name="Quiet mode run" classname="" time="0.231292000"/>
+    <testcase name="Default mode run" classname="" time="0.231922000"/>
+    <testcase name="Verbose mode run" classname="" time="0.233443000"/>
+    <testcase name="Normal mode with an error" classname="" time="0.105796000"/>
+    <testcase name="Quiet mode with an error" classname="" time="0.106112000"/>
   </testsuite>
-  <testsuite name="../docs/features/B130_Cmd_Line_Help.md" tests="11" failures="0" errors="0" skipped="0" time="0.705775000">
-    <testcase name="filtering help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063439000"/>
-    <testcase name="matching help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063605000"/>
-    <testcase name="others help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063585000"/>
-    <testcase name="On_All help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064304000"/>
-    <testcase name="tutorial generation" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063899000"/>
-    <testcase name="grammar generation" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.067151000"/>
-    <testcase name="listing keywords" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063903000"/>
-    <testcase name="generated example is OK" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063839000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 1/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063682000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 2/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063792000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 3/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063673000"/>
+  <testsuite name="../docs/features/B130_Cmd_Line_Help.md" tests="11" failures="0" errors="0" skipped="0" time="0.715421000">
+    <testcase name="filtering help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063622000"/>
+    <testcase name="matching help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063883000"/>
+    <testcase name="others help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064010000"/>
+    <testcase name="On_All help" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064754000"/>
+    <testcase name="tutorial generation" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.070766000"/>
+    <testcase name="grammar generation" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.067307000"/>
+    <testcase name="listing keywords" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063889000"/>
+    <testcase name="generated example is OK" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.063983000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 1/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064130000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 2/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064056000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 3/3" classname="../docs/features/B130_Cmd_Line_Help.md" time="0.064050000"/>
   </testsuite>
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="1.134992000">
-    <testcase name="Successful run index file" classname="" time="0.711401000"/>
-    <testcase name="Unsuccessful run index file" classname="" time="0.317610000"/>
-    <testcase name="index links use web separators" classname="" time="0.105784000"/>
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="1.122366000">
+    <testcase name="Successful run index file" classname="" time="0.697192000"/>
+    <testcase name="Unsuccessful run index file" classname="" time="0.318688000"/>
+    <testcase name="index links use web separators" classname="" time="0.106322000"/>
   </testsuite>
-  <testsuite name="../docs/features/B150_Deprecated_Options.md" tests="1" failures="0" errors="0" skipped="0" time="0.105115000">
-    <testcase name="--output option" classname="../docs/features/B150_Deprecated_Options.md" time="0.105062000"/>
+  <testsuite name="../docs/features/B150_Deprecated_Options.md" tests="1" failures="0" errors="0" skipped="0" time="0.105673000">
+    <testcase name="--output option" classname="../docs/features/B150_Deprecated_Options.md" time="0.105623000"/>
   </testsuite>
-  <testsuite name="../docs/features/B160_JUnit_XML_Export.md" tests="5" failures="0" errors="0" skipped="1" time="0.450588000">
-    <testcase name="1 : Basic file with only a single scenario" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.107005000"/>
-    <testcase name="1: both scenario are run" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.148529000"/>
-    <testcase name="2 : one scenario is skipped" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.106267000"/>
-    <testcase name="Test XML escaping with special characters" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.088117000"/>
+  <testsuite name="../docs/features/B160_JUnit_XML_Export.md" tests="5" failures="0" errors="0" skipped="1" time="0.454440000">
+    <testcase name="1 : Basic file with only a single scenario" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.108553000"/>
+    <testcase name="1: both scenario are run" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.148591000"/>
+    <testcase name="2 : one scenario is skipped" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.087091000"/>
+    <testcase name="Test XML escaping with special characters" classname="../docs/features/B160_JUnit_XML_Export.md" time="0.109450000"/>
   </testsuite>
-  <testsuite name="../docs/features/B170_Explain.md" tests="19" failures="0" errors="0" skipped="0" time="1.291062000">
-    <testcase name="explain elements other than steps" classname="../docs/features/B170_Explain.md" time="0.063397000"/>
-    <testcase name="explain action Setup_No_File" classname="../docs/features/B170_Explain.md" time="0.063575000"/>
-    <testcase name="explain action Setup_No_Dir" classname="../docs/features/B170_Explain.md" time="0.063738000"/>
-    <testcase name="explain action Check_File_Existence" classname="../docs/features/B170_Explain.md" time="0.063864000"/>
-    <testcase name="explain action Check_Dir_Existence" classname="../docs/features/B170_Explain.md" time="0.063749000"/>
-    <testcase name="explain action Erase_And_Create" classname="../docs/features/B170_Explain.md" time="0.063878000"/>
-    <testcase name="explain action Create_If_None" classname="../docs/features/B170_Explain.md" time="0.063867000"/>
-    <testcase name="explain action Run" classname="../docs/features/B170_Explain.md" time="0.063735000"/>
-    <testcase name="explain action Run_Without_Error" classname="../docs/features/B170_Explain.md" time="0.063871000"/>
-    <testcase name="explain action Check_No_File" classname="../docs/features/B170_Explain.md" time="0.064055000"/>
-    <testcase name="explain action Check_No_Dir" classname="../docs/features/B170_Explain.md" time="0.076130000"/>
-    <testcase name="explain action Error_Return_Code and No_Error_Return_Code" classname="../docs/features/B170_Explain.md" time="0.063875000"/>
-    <testcase name="explain action Output_Is" classname="../docs/features/B170_Explain.md" time="0.064009000"/>
-    <testcase name="explain action Output_Contains and Output_Does_Not_Contain" classname="../docs/features/B170_Explain.md" time="0.063894000"/>
-    <testcase name="explain action Output|File_Matches and Output|File_Does_Not_Match" classname="../docs/features/B170_Explain.md" time="0.063969000"/>
-    <testcase name="explain action File_Is and File_Is_Not" classname="../docs/features/B170_Explain.md" time="0.063907000"/>
-    <testcase name="explain action File_Contains and File_Does_Not_Contain" classname="../docs/features/B170_Explain.md" time="0.063905000"/>
-    <testcase name="explain action No_Output" classname="../docs/features/B170_Explain.md" time="0.063891000"/>
-    <testcase name="explain Invalid Step" classname="../docs/features/B170_Explain.md" time="0.127419000"/>
+  <testsuite name="../docs/features/B170_Explain.md" tests="19" failures="0" errors="0" skipped="0" time="1.286013000">
+    <testcase name="explain elements other than steps" classname="../docs/features/B170_Explain.md" time="0.063957000"/>
+    <testcase name="explain action Setup_No_File" classname="../docs/features/B170_Explain.md" time="0.064110000"/>
+    <testcase name="explain action Setup_No_Dir" classname="../docs/features/B170_Explain.md" time="0.064114000"/>
+    <testcase name="explain action Check_File_Existence" classname="../docs/features/B170_Explain.md" time="0.064007000"/>
+    <testcase name="explain action Check_Dir_Existence" classname="../docs/features/B170_Explain.md" time="0.064166000"/>
+    <testcase name="explain action Erase_And_Create" classname="../docs/features/B170_Explain.md" time="0.064059000"/>
+    <testcase name="explain action Create_If_None" classname="../docs/features/B170_Explain.md" time="0.064078000"/>
+    <testcase name="explain action Run" classname="../docs/features/B170_Explain.md" time="0.064316000"/>
+    <testcase name="explain action Run_Without_Error" classname="../docs/features/B170_Explain.md" time="0.064254000"/>
+    <testcase name="explain action Check_No_File" classname="../docs/features/B170_Explain.md" time="0.064092000"/>
+    <testcase name="explain action Check_No_Dir" classname="../docs/features/B170_Explain.md" time="0.064222000"/>
+    <testcase name="explain action Error_Return_Code and No_Error_Return_Code" classname="../docs/features/B170_Explain.md" time="0.064272000"/>
+    <testcase name="explain action Output_Is" classname="../docs/features/B170_Explain.md" time="0.064236000"/>
+    <testcase name="explain action Output_Contains and Output_Does_Not_Contain" classname="../docs/features/B170_Explain.md" time="0.064197000"/>
+    <testcase name="explain action Output|File_Matches and Output|File_Does_Not_Match" classname="../docs/features/B170_Explain.md" time="0.064339000"/>
+    <testcase name="explain action File_Is and File_Is_Not" classname="../docs/features/B170_Explain.md" time="0.064211000"/>
+    <testcase name="explain action File_Contains and File_Does_Not_Contain" classname="../docs/features/B170_Explain.md" time="0.064588000"/>
+    <testcase name="explain action No_Output" classname="../docs/features/B170_Explain.md" time="0.064232000"/>
+    <testcase name="explain Invalid Step" classname="../docs/features/B170_Explain.md" time="0.128158000"/>
   </testsuite>
-  <testsuite name="../docs/features/B180_Ignored_Files.md" tests="1" failures="0" errors="0" skipped="0" time="0.063588000">
-    <testcase name="Checking that the index file is ignored" classname="../docs/features/B180_Ignored_Files.md" time="0.063537000"/>
+  <testsuite name="../docs/features/B180_Ignored_Files.md" tests="1" failures="0" errors="0" skipped="0" time="0.064032000">
+    <testcase name="Checking that the index file is ignored" classname="../docs/features/B180_Ignored_Files.md" time="0.063982000"/>
   </testsuite>
-  <testsuite name="../docs/features/B190_Clean_Error_When_No_Output.md" tests="1" failures="0" errors="0" skipped="0" time="0.063931000">
-    <testcase name="check the output of a command that does not exist" classname="../docs/features/B190_Clean_Error_When_No_Output.md" time="0.063868000"/>
+  <testsuite name="../docs/features/B190_Clean_Error_When_No_Output.md" tests="1" failures="0" errors="0" skipped="0" time="0.064387000">
+    <testcase name="check the output of a command that does not exist" classname="../docs/features/B190_Clean_Error_When_No_Output.md" time="0.064323000"/>
   </testsuite>
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.191080000">
-    <testcase name="No step test A" classname="" time="0.063572000"/>
-    <testcase name="No step test B" classname="" time="0.063636000"/>
-    <testcase name="No scenario in Feature" classname="" time="0.063740000"/>
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.191955000">
+    <testcase name="No step test A" classname="" time="0.063720000"/>
+    <testcase name="No step test B" classname="" time="0.063885000"/>
+    <testcase name="No scenario in Feature" classname="" time="0.064226000"/>
   </testsuite>
-  <testsuite name="../docs/features/C030_Markdown_syntax.md" tests="3" failures="0" errors="0" skipped="0" time="0.717276000">
-    <testcase name="Heading variations" classname="../docs/features/C030_Markdown_syntax.md" time="0.588957000"/>
-    <testcase name="Missing heading marker" classname="../docs/features/C030_Markdown_syntax.md" time="0.063835000"/>
-    <testcase name="Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)" classname="../docs/features/C030_Markdown_syntax.md" time="0.064225000"/>
+  <testsuite name="../docs/features/C030_Markdown_syntax.md" tests="3" failures="0" errors="0" skipped="0" time="0.706037000">
+    <testcase name="Heading variations" classname="../docs/features/C030_Markdown_syntax.md" time="0.577930000"/>
+    <testcase name="Missing heading marker" classname="../docs/features/C030_Markdown_syntax.md" time="0.063812000"/>
+    <testcase name="Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)" classname="../docs/features/C030_Markdown_syntax.md" time="0.064093000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.147145000">
-    <testcase name="Missing tittle in scenario, background and feature" classname="" time="0.147102000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.147826000">
+    <testcase name="Missing tittle in scenario, background and feature" classname="" time="0.147779000"/>
   </testsuite>
-  <testsuite name="../docs/features/C050_Step_marker.md" tests="1" failures="0" errors="0" skipped="0" time="0.064085000">
-    <testcase name="Different markers within the scenario" classname="../docs/features/C050_Step_marker.md" time="0.064033000"/>
+  <testsuite name="../docs/features/C050_Step_marker.md" tests="1" failures="0" errors="0" skipped="0" time="0.064662000">
+    <testcase name="Different markers within the scenario" classname="../docs/features/C050_Step_marker.md" time="0.064610000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.105680000">
-    <testcase name="Code fenced blocks" classname="" time="0.105629000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.106346000">
+    <testcase name="Code fenced blocks" classname="" time="0.106297000"/>
   </testsuite>
-  <testsuite name="../docs/features/C070_missing_code_block.md" tests="4" failures="0" errors="0" skipped="0" time="0.445393000">
-    <testcase name="Code block missing at the end of the file" classname="../docs/features/C070_missing_code_block.md" time="0.105411000"/>
-    <testcase name="Code block missing while reaching next step" classname="../docs/features/C070_missing_code_block.md" time="0.105586000"/>
-    <testcase name="Code block missing while reaching next scenario" classname="../docs/features/C070_missing_code_block.md" time="0.106039000"/>
-    <testcase name="Closing code block mark missing" classname="../docs/features/C070_missing_code_block.md" time="0.128126000"/>
+  <testsuite name="../docs/features/C070_missing_code_block.md" tests="4" failures="0" errors="0" skipped="0" time="0.446481000">
+    <testcase name="Code block missing at the end of the file" classname="../docs/features/C070_missing_code_block.md" time="0.105998000"/>
+    <testcase name="Code block missing while reaching next step" classname="../docs/features/C070_missing_code_block.md" time="0.105908000"/>
+    <testcase name="Code block missing while reaching next scenario" classname="../docs/features/C070_missing_code_block.md" time="0.105889000"/>
+    <testcase name="Closing code block mark missing" classname="../docs/features/C070_missing_code_block.md" time="0.128470000"/>
   </testsuite>
-  <testsuite name="../docs/features/C080_missing_scenario.md" tests="2" failures="0" errors="0" skipped="0" time="0.128003000">
-    <testcase name="Steps without scenario header" classname="../docs/features/C080_missing_scenario.md" time="0.063933000"/>
-    <testcase name="Empty file" classname="../docs/features/C080_missing_scenario.md" time="0.063945000"/>
+  <testsuite name="../docs/features/C080_missing_scenario.md" tests="2" failures="0" errors="0" skipped="0" time="0.128605000">
+    <testcase name="Steps without scenario header" classname="../docs/features/C080_missing_scenario.md" time="0.064156000"/>
+    <testcase name="Empty file" classname="../docs/features/C080_missing_scenario.md" time="0.064345000"/>
   </testsuite>
-  <testsuite name="../docs/features/C090_GNU_Error_Msg_Format.md" tests="1" failures="0" errors="0" skipped="0" time="0.195603000">
-    <testcase name="" classname="../docs/features/C090_GNU_Error_Msg_Format.md" time="0.195535000"/>
+  <testsuite name="../docs/features/C090_GNU_Error_Msg_Format.md" tests="1" failures="0" errors="0" skipped="0" time="0.189878000">
+    <testcase name="" classname="../docs/features/C090_GNU_Error_Msg_Format.md" time="0.189822000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.105651000">
-    <testcase name="Detection of ambiguous use of multiple recognized verbs in the same Step" classname="" time="0.105607000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.106247000">
+    <testcase name="Detection of ambiguous use of multiple recognized verbs in the same Step" classname="" time="0.106207000"/>
   </testsuite>
-  <testsuite name="../docs/features/C120_Ill_Formated_Steps.md" tests="1" failures="0" errors="0" skipped="0" time="0.236539000">
-    <testcase name="" classname="../docs/features/C120_Ill_Formated_Steps.md" time="0.236478000"/>
+  <testsuite name="../docs/features/C120_Ill_Formated_Steps.md" tests="1" failures="0" errors="0" skipped="0" time="0.149193000">
+    <testcase name="" classname="../docs/features/C120_Ill_Formated_Steps.md" time="0.149137000"/>
   </testsuite>
 </testsuites>
