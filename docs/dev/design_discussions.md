@@ -14,8 +14,9 @@ updated with a reference to its replacement.
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
+| [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
-| [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated, implementation pending | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
+| [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
 
 The table is sorted by status: the entries under discussion first.
@@ -86,7 +87,7 @@ References:
 
 ## D2. successfully and the interactive steps
 
-Status: arbitrated (October 2026), implementation pending
+Status: arbitrated (October 2026), implemented (October 2026)
 
 `when I successfully run 'X'` is defined in
 [A130](../features/A130_Successfully_Keyword.md) as the shortcut for
@@ -213,3 +214,51 @@ References:
 - [changelog.md](../changelog.md), 0.4.2-dev: CRs at line ends were
   significant in human match mode - the class of bugs the docs/help
   LF rule fixes.
+## D5. Tests.Actions organization
+
+Status: arbitrated (October 2026), implemented (October 2026)
+
+`BBT.Tests.Actions` mixes in one package body (1728 lines) the
+command machinery (Spawn listener, process and stream state, pumping,
+`Run_Cmd`, `Send_Input`, the deferred exit status check), the file
+and directory setup, the output and file content checks, the exit
+code checks, and the environment management. The runner dispatches
+them all from one case statement, itself already grouped by domain.
+
+The precedent is set: `File_Operations` is already a child of the
+private package, holding the low level file primitives. The proposal
+is to continue on this pattern, one child per domain, mirroring the
+branches of the runner case:
+
+- `Actions.Commands`: the process machinery and its state (listener,
+  process and stream state, `Running`, `Last_Exit_Code`, `Pump`,
+  `Wait_*`, `Run_Cmd`, `Send_Input`, deferred exit status check,
+  `Output_Since_Input`, `Reset_Interactive_State`);
+- `Actions.Setup`: `Erase_And_Create`, `Create_If_None`,
+  `Setup_No_File`, `Setup_No_Dir`, `Check_File_Existence`,
+  `Check_Dir_Existence`, `Check_No_File`, `Check_No_Dir`;
+- `Actions.Output_Checks`: `Output_*`, `Check_No_Output`, the
+  `File_*` and `Files_Is*` checks - stateless, the checked text is
+  a parameter;
+- `Actions.Environment`: `Set_Env_Var`, `Unset_Env_Var`,
+  `Restore_Environment`, and the environment memory;
+- `File_Operations` stays as is.
+
+The runner would with and use the children, its case statement
+already matching the split. Two moves accompany the split:
+
+- `Get_Expected`, a body helper invisible to the children, moves to
+  `BBT.Model.Steps`: the expected content of a step is model
+  knowledge, needed by `Setup` and `Output_Checks`;
+- `Exit_Code_Is` takes the code as a parameter, as `Return_Error`
+  already does, making the exit code checks stateless; the deferred
+  check, that needs the command state, stays in `Actions.Commands`.
+
+Rejected alternative: splitting `BBT.Tests.Actions` into sibling
+packages visible from the whole application. It loses the
+encapsulation of the private package, and breaks the precedent set
+by `File_Operations`. The children of a private package keep the
+test machinery invisible to the rest of bbt.
+
+The move is mechanical: cut and paste plus with and use clauses, no
+behavior change, to be verified by the unchanged test suites.

@@ -270,6 +270,48 @@ package body BBT.Model.Steps is
    end Set_Parent;
 
    -- --------------------------------------------------------------------------
+   function Get_Expected (Step : Step_Type'Class) return Text is
+      use type Text;
+      function File_Exists (Name : String) return Boolean is
+        (Name /= ""
+         and then Exists (Name)
+         and then Kind (Name) = Ordinary_File);
+   begin
+      if Step.Data.File_Content /= Empty_Text then
+         -- File content provided in code fenced lines
+         Put_Debug_Line ("======= Get_Expected returning Text" & Step.Data.File_Content'Image);
+         return Step.Data.File_Content;
+
+      elsif Step.Data.Object_File_Name /= Null_Unbounded_String
+        and then File_Exists (+Step.Data.Object_File_Name)
+      then
+         -- The string denotes a file
+         declare
+            T : constant Text := Get_Text (+Step.Data.Object_File_Name);
+         begin
+            Put_Debug_Line ("======= Get_Expected returning content of file " & Step.Data.Object_File_Name'Image);
+            return T;
+         end;
+
+      elsif Step.Data.Object_String /= Null_Unbounded_String then
+         -- The string is the content
+         Put_Debug_Line ("======= Get_Expected returning string content" & Step.Data.Object_String'Image);
+         return [1 => +Step.Data.Object_String];
+
+      else
+         -- Either the provided file content was null (two consecutive code
+         -- fence marks), or there is an error somewhere in the scenario.
+         -- But scenario errors are supposed to be caught during scenario
+         -- analysis, and the run stopped before reaching this point,
+         -- unless run with "--keep_going".
+         -- In both cases, returning an Empty_Text seems to be the right
+         -- things to do.
+         Put_Debug_Line ("======= Get_Expected returning empty Text");
+         return Empty_Text;
+      end if;
+   end Get_Expected;
+
+   -- --------------------------------------------------------------------------
    function Create_Step (Info            : Step_Data;
                          Loc             : Location_Type;
                          Parent_Scenario : access Scenarios.Scenario_Type)

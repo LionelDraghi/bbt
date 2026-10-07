@@ -32,12 +32,8 @@ begin
    Set (Given, No_SA,  No_Subject,   Is_V,       Obj_Dir_Name,  (Check_Dir_Existence,  False, new String'("- Given there is a `dir1` directory")));
    Set (Given, New_SA, Subject_File, Containing, Obj_Text,     (Erase_And_Create, False, new String'("- Given the new file `config.ini` containing `lang=it`")));
    Set (Given, No_SA,  Subject_File, Containing, Obj_Text,     (Create_If_None, False, new String'("- Given the file `config.ini` containing `lang=it`")));
-                                                                                         -- Fixme: we currently do not check if the existing file contains
-                                                                                         -- what is expected
    Set (Given, New_SA, Subject_File, Containing, No_Object, (Erase_And_Create, True, new String'("- Given the new file `config.ini` containing <followed by code fenced lines>")));
    Set (Given, No_SA,  Subject_File, Containing, No_Object, (Create_If_None,   True, new String'("- Given the file `config.ini` containing <followed by code fenced lines>")));
-                                                                                       -- Fixme : we currently do not check if the existing file contains
-                                                                                       -- what is expected
    Set (Given, New_SA, Subject_File, No_Verb,    No_Object, (Erase_And_Create, True, new String'("- Given the new file `config.ini` <followed by code fenced lines>")));
    Set (Given, No_SA,  Subject_File, No_Verb,    No_Object, (Create_If_None, True, new String'("- Given the file `config.ini` <followed by code fenced lines>")));
    Set (Given, New_SA, Dir_Subject,  No_Verb,    No_Object, (Erase_And_Create, False, new String'("- Given the new directory `dir1`")));

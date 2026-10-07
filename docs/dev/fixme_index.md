@@ -10,13 +10,11 @@ Location | Text
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios.ads](../../src/bbt-scenarios.ads):58|   --  To be moved as dispatching in Writers
 [src/bbt-scenarios-files.adb](../../src/bbt-scenarios-files.adb):194|            --  to be moved in Text_Utilities or so
-[src/bbt-scenarios-steps-initialize_grammar.adb](../../src/bbt-scenarios-steps-initialize_grammar.adb):35|                                                                                         --  we currently do not check if the existing file contains
 [src/bbt-scenarios-steps-validate_step_state.adb](../../src/bbt-scenarios-steps-validate_step_state.adb):16|   -- To move in Text_Utilities
-[src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):343|         --   a command terminated by a signal is not distinguished
-[src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):480|      --   a command producing its output in bursts separated by
-[src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):751|      --   thus, "successfully run" is not checked for interactive
-[src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):112|      --  defensive code that should be replaced by
-[src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
+[src/bbt-tests-actions-commands.adb](../../src/bbt-tests-actions-commands.adb):357|         --   a command terminated by a signal is not distinguished
+[src/bbt-tests-actions-commands.adb](../../src/bbt-tests-actions-commands.adb):508|      --   a command producing its output in bursts separated by
+[src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):118|      --  defensive code that should be replaced by
+[src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):59|   --  Clearly not confortable with that function, it's magic.
 [src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):161|      --  Path_To_Scen should be in Scenario_Type to avoid
 [src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):220|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all

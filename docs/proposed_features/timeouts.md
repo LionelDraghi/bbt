@@ -1,8 +1,11 @@
 ## Feature: bounding the tests execution time
 
 Status: parked. The need is recorded here so that it is not lost;
-the design will be arbitrated later, once the interactive steps
-(`type`, `enter`) and the deferred exit status checks are in place.
+the design will be arbitrated later. The prerequisite is in place:
+the interactive steps (`type`, `enter`) and the deferred exit status
+checks (cf. the design discussion D2) are implemented. The
+granularity is already arbitrated (October 2026): per scenario,
+see below.
 
 ### Motivations
 
@@ -22,14 +25,19 @@ Two recent evolutions make the risk more acute:
   the scenario: a command taking a long time to exit stretches the
   whole test run.
 
+### Arbitrated (October 2026)
+
+- the timeout is per scenario, for instance
+  `--scenario-timeout <duration>`. Rejected alternatives: a timer
+  per step, which does not fit a command spanning several steps, and
+  where a hang may only show on the deferred checks; a timer for the
+  whole run, which stops bbt after the damage is done, instead of
+  failing at the place where the hang blocks, where bbt can name the
+  culprit.
+
 ### Proposals to arbitrate
 
-- an option bounding the time spent on each scenario, for instance
-  `--scenario-timeout <duration>`: on expiry, the scenario fails with
-  a message naming the hanging step;
-- an option bounding the whole run, for instance
-  `--global-timeout <duration>`: on expiry, bbt stops and reports the
-  scenarios not run;
+- on expiry, the scenario fails with a message naming the hanging step;
 - on expiry, the running child process is killed before bbt reports
   the failure, so that no process is left behind;
 - the default is no timeout at all, so that bbt's behavior is

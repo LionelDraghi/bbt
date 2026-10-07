@@ -14,7 +14,10 @@ with BBT.Created_File_List,
      BBT.IO,
      BBT.Settings,
      BBT.Status_Bar,
-     BBT.Tests.Actions,
+     BBT.Tests.Actions.Commands,
+     BBT.Tests.Actions.Environment,
+     BBT.Tests.Actions.Output_Checks,
+     BBT.Tests.Actions.Setup,
      BBT.Writers,
      File_Utilities,
      Text_Utilities;
@@ -26,7 +29,10 @@ use BBT.Created_File_List,
     BBT.Model.Scenarios,
     BBT.Model.Steps,
     BBT.IO,
-    BBT.Tests.Actions,
+    BBT.Tests.Actions.Commands,
+    BBT.Tests.Actions.Environment,
+    BBT.Tests.Actions.Output_Checks,
+    BBT.Tests.Actions.Setup,
     BBT.Writers,
     Text_Utilities;
 
@@ -151,6 +157,22 @@ package body BBT.Tests.Runner is
                Set_End_Time (Step);
                return;
             end if;
+         end if;
+      end if;
+
+      --  A deferred exit status check (cf. the design discussion D2) is
+      --  resolved as soon as the command has terminated: on failure, the
+      --  result is reported on the successfully run step, and the
+      --  current step is not executed. The type and enter steps resolve
+      --  it inside Send_Input, once the command termination is observed.
+      if Deferred_Exit_Check_Pending
+        and then not Interactive_Command_Running
+      then
+         Resolve_Deferred_Exit_Check (Verbosity, Spawn_OK);
+         if not Spawn_OK then
+            Run_Error := True;
+            Set_End_Time (Step);
+            return;
          end if;
       end if;
 
@@ -351,7 +373,7 @@ package body BBT.Tests.Runner is
                              Step, Verbosity);
 
          when Exit_Code_Is =>
-            Exit_Code_Is (Step, Verbosity);
+            Exit_Code_Is (Last_Exit_Code, Step, Verbosity);
 
          when None =>
             IO.Put_Error ("Unrecognized step " & Step.Data.Src_Code'Image,
@@ -406,6 +428,11 @@ package body BBT.Tests.Runner is
             exit Step_Processing when IO.Some_Error and Settings.Stop_On_Error;
 
          end loop Step_Processing;
+
+         --  A deferred exit status check is part of the scenario result
+         --  (cf. the design discussion D2): it is resolved at the end of
+         --  the scenario, waiting if needed for the command termination.
+         Wait_Deferred_Exit_Check (Verbosity);
 
          Put_Scenario_Result (Scen, Verbosity);
          Set_End_Time (Scen);

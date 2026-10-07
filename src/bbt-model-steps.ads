@@ -134,6 +134,11 @@ package BBT.Model.Steps is
      (Step : Step_Type) return String;
    -- returns an explanation of the step in natural language
 
+   function Get_Expected (Step : Step_Type'Class) return Text;
+   -- returns the expected content of the step: the content provided in
+   -- code fenced lines, or the content of the file named by the object,
+   -- or the object string itself, or an empty text
+
    overriding procedure Apply_Filters_To
      (S : in out Step_Type);
 
