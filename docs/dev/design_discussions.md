@@ -16,6 +16,7 @@ updated with a reference to its replacement.
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated, implementation pending | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
+| [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
 
 The table is sorted by status: the entries under discussion first.
 
@@ -183,3 +184,32 @@ References:
   writer output is the Markdown index;
 - [markdown_utilities.ads](../../src/markdown_utilities.ads): the first
   factorization step.
+
+## D4. Line endings: LF everywhere
+
+Status: arbitrated (October 2026)
+
+The repository uses LF line endings on every platform, Windows
+included. This is enforced by [.gitattributes](../../.gitattributes)
+(`* text=auto eol=lf`), and it generalizes the rule that already
+existed for docs/help: a CR in the help files ends up in the text
+embedded in bbt at build time, and in bbt's output checks.
+
+The storage was already LF: the Windows working tree was the problem,
+checked out in CRLF by core.autocrlf=true, a recurring source of tool
+quirks and edits fighting over the file format.
+
+The generated files, written by bbt itself, remain CRLF on disk on
+Windows, as emitted by GNAT.Text_IO: git normalizes them at add, so
+the storage stays LF and git status stays clean, and making bbt write
+LF explicitly is not worth it.
+
+This position stands as long as CRLF is not a requirement of a use
+case, or the fix of a specific bbt bug.
+
+References:
+
+- the .gitattributes historical note on the docs/help precedent;
+- [changelog.md](../changelog.md), 0.4.2-dev: CRs at line ends were
+  significant in human match mode - the class of bugs the docs/help
+  LF rule fixes.
