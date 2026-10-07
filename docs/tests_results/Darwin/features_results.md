@@ -57,7 +57,7 @@
    - [X] scenario   [test on a multiline output](../../features/A010_Then_Contains_Code_Span.md) pass  
 
    ### Scenario: [test on a file](../../features/A010_Then_Contains_Code_Span.md): 
-   - OK : Given the file `config.ini`   
+   - OK : Given the new file `config.ini`   
    - OK : Then `config.ini` contains `mode=silent`  
    - [X] scenario   [test on a file](../../features/A010_Then_Contains_Code_Span.md) pass  
 
@@ -65,7 +65,7 @@
 # Document: [A020_Then_Contains_Code_Block.md](../../features/A020_Then_Contains_Code_Block.md)  
   ## Feature: "contains" a string feature  
    ### Scenario: [test the standard output](../../features/A020_Then_Contains_Code_Block.md): 
-   - OK : Given `config.ini` file  
+   - OK : Given the new `config.ini` file  
    - OK : And the `contains_multiline.md` file  
    - OK : Then `config.ini` contains  
    - OK : And `config.ini` contains   
@@ -224,10 +224,10 @@
 
 # Document: [A100_Then_Get_Stderr.md](../../features/A100_Then_Get_Stderr.md)  
   ## Feature: stderr test  
-   ### Scenario: [unknown option](../../features/A100_Then_Get_Stderr.md): 
-   - OK : When I run `./sut -qsd`  
-   - OK : Then I get `unknown option -qsd` on stderr  
-   - [X] scenario   [unknown option](../../features/A100_Then_Get_Stderr.md) pass  
+   ### Scenario: [missing file name](../../features/A100_Then_Get_Stderr.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the error output is `Missing file name`  
+   - [X] scenario   [missing file name](../../features/A100_Then_Get_Stderr.md) pass  
 
 
 # Document: [A110_Then_No_Output.md](../../features/A110_Then_No_Output.md)  
@@ -430,12 +430,23 @@
    - OK : Given the file `contains.md`  
    - [X] background [](../../features/A160_Ignoring_Blank_Lines.md) pass  
 
-   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md): 
+   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2](../../features/A160_Ignoring_Blank_Lines.md): 
    - OK : when I run `./bbt -em -ibl is.md`  
    - OK : then there is no error   
+   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2](../../features/A160_Ignoring_Blank_Lines.md) pass  
+
+   ### Background: [](../../features/A160_Ignoring_Blank_Lines.md): 
+   - OK : Given the file `le_Cid_1.txt`  
+   - OK : Given the file `le_Cid_2.txt`   
+   - OK : Given the file `le_Cid_3.txt`   
+   - OK : Given the file `is.md`  
+   - OK : Given the file `contains.md`  
+   - [X] background [](../../features/A160_Ignoring_Blank_Lines.md) pass  
+
+   ### Scenario: [with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2](../../features/A160_Ignoring_Blank_Lines.md): 
    - OK : when I run `./bbt --exact_match --ignore_blank_lines contains.md`  
    - OK : then there is no error   
-   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines](../../features/A160_Ignoring_Blank_Lines.md) pass  
+   - [X] scenario   [with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2](../../features/A160_Ignoring_Blank_Lines.md) pass  
 
 
 # Document: [A170_File_vs_File_Name.md](../../features/A170_File_vs_File_Name.md)  
@@ -569,6 +580,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [Human match](../../features/A210_Exact_Match.md): 
@@ -584,6 +597,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match](../../features/A210_Exact_Match.md): 
@@ -600,6 +615,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing](../../features/A210_Exact_Match.md): 
@@ -616,6 +633,8 @@
    - OK : Given the file `text.2`  
    - OK : Given the file `text.3`  
    - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
    - [X] background [](../../features/A210_Exact_Match.md) pass  
 
    ### Scenario: [exact match except for casing and blank lines](../../features/A210_Exact_Match.md): 
@@ -625,6 +644,37 @@
    - OK : And output contains  
    - OK : And output contains  
    - [X] scenario   [exact match except for casing and blank lines](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [human match ignores CR at line ends](../../features/A210_Exact_Match.md): 
+   - OK : When I run `./bbt compare_crlf.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [human match ignores CR at line ends](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [exact match is sensitive to CR at line ends](../../features/A210_Exact_Match.md): 
+   - OK : When I run `./bbt -k --exact_match compare_crlf.md`  
+   - OK : Then I get an error  
+   - OK : And output contains  
+   - [X] scenario   [exact match is sensitive to CR at line ends](../../features/A210_Exact_Match.md) pass  
 
 
 # Document: [A220_AsciiDoc_gcc_hello_world.adoc](../../features/A220_AsciiDoc_gcc_hello_world.adoc)  
@@ -769,9 +819,173 @@
 
 # Document: [A240_Then_I_Succesfully_Run.md](../../features/A240_Then_I_Succesfully_Run.md)  
    ### Scenario: [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md): 
-   - OK : Given the new file `simple.xml`  
-   - OK : Then I successfully run `xmllint simple.xml`   
+   - OK : Then I successfully run `./sut --help`   
    - [X] scenario   [Running something in postcondition](../../features/A240_Then_I_Succesfully_Run.md) pass  
+
+
+# Document: [A250_Fails.md](../../features/A250_Fails.md)  
+   ### Scenario: [Checking that a command fails](../../features/A250_Fails.md): 
+   - OK : Then `./sut -zwq` fails   
+   - OK : And  the output is `unknown option -zwq`  
+   - OK : And  `./sut -zwq` should fail   
+   - OK : And  the output is `unknown option -zwq`  
+   - [X] scenario   [Checking that a command fails](../../features/A250_Fails.md) pass  
+
+
+# Document: [A260_Then_Exit_Code_Is.md](../../features/A260_Then_Exit_Code_Is.md)  
+  ## Feature: exact exit code  
+   ### Scenario: [exit code of a successful command](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut -v`  
+   - OK : Then the exit code is `0`  
+   - OK : And I get no error  
+   - [X] scenario   [exit code of a successful command](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [exit code of a failing command](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut delay 0 3`  
+   - OK : Then the exit code is `3`  
+   - OK : And I get an error  
+   - [X] scenario   [exit code of a failing command](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [the exit code of the last command is checked](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : When I run `./sut delay 0 4`  
+   - OK : And I run `./sut -v`  
+   - OK : Then the exit code is `0`  
+   - [X] scenario   [the exit code of the last command is checked](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [wrong exit code](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : Given the new `wrong_exit_code.md` file  
+   - OK : When I run `./bbt wrong_exit_code.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Expected exit code 2, got 3`  
+   - [X] scenario   [wrong exit code](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+   ### Scenario: [the code must be an integer](../../features/A260_Then_Exit_Code_Is.md): 
+   - OK : Given the new `not_a_code.md` file  
+   - OK : When I run `./bbt not_a_code.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Exit code expected in object phrase, got "zero"`  
+   - [X] scenario   [the code must be an integer](../../features/A260_Then_Exit_Code_Is.md) pass  
+
+
+# Document: [A270_Then_Error_Output.md](../../features/A270_Then_Error_Output.md)  
+  ## Feature: error output  
+   ### Scenario: [error message on the error output](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the error output is `Missing file name`  
+   - OK : And there is no output  
+   - [X] scenario   [error message on the error output](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [nothing on the error output](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut -v`  
+   - OK : Then there is no error output  
+   - OK : And the output is `sut version 1.0`  
+   - [X] scenario   [nothing on the error output](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [error output contains and does not contain](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut read_env BBT_SURELY_UNSET_VARIABLE`  
+   - OK : Then the error output contains `BBT_SURELY_UNSET_VARIABLE`  
+   - OK : And the error output does not contain `version`  
+   - OK : When I run `./sut -v`  
+   - OK : Then I get no error output  
+   - [X] scenario   [error output contains and does not contain](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [error output in a code block](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut read_env BBT_SURELY_UNSET_VARIABLE`  
+   - OK : Then the error output is  
+   - [X] scenario   [error output in a code block](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [without error output step, the outputs stay merged](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the output is `Missing file name`  
+   - [X] scenario   [without error output step, the outputs stay merged](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [wrong error output](../../features/A270_Then_Error_Output.md): 
+   - OK : Given the new `wrong_error_output.md` file  
+   - OK : When I run `./bbt wrong_error_output.md`  
+   - OK : Then I get an error  
+   - [X] scenario   [wrong error output](../../features/A270_Then_Error_Output.md) pass  
+
+
+# Document: [A280_Given_Environment_Variable.md](../../features/A280_Given_Environment_Variable.md)  
+  ## Feature: environment variables  
+   ### Scenario: [set a variable](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `BBT_TEST_VARIABLE` is `hello`  
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then the output is `hello`  
+   - [X] scenario   [set a variable](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [the variable is back to its previous state](../../features/A280_Given_Environment_Variable.md): 
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then I get an error  
+   - OK : And the output contains `No BBT_TEST_VARIABLE environment variable`  
+   - [X] scenario   [the variable is back to its previous state](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [unset a variable](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `PATH` is not set  
+   - OK : When I run `./sut read_env PATH`  
+   - OK : Then I get an error  
+   - OK : And the output contains `No PATH environment variable`  
+   - [X] scenario   [unset a variable](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [the unset variable is back](../../features/A280_Given_Environment_Variable.md): 
+   - OK : When I run `./sut read_env PATH`  
+   - OK : Then I get no error  
+   - [X] scenario   [the unset variable is back](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [set twice in the same scenario](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the environment variable `BBT_TEST_VARIABLE` is `first`  
+   - OK : And the environment variable `BBT_TEST_VARIABLE` is `second`  
+   - OK : When I run `./sut read_env BBT_TEST_VARIABLE`  
+   - OK : Then the output is `second`  
+   - [X] scenario   [set twice in the same scenario](../../features/A280_Given_Environment_Variable.md) pass  
+
+   ### Scenario: [variable set in a background](../../features/A280_Given_Environment_Variable.md): 
+   - OK : Given the new `env_background.md` file  
+   - OK : When I run `./bbt env_background.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [variable set in a background](../../features/A280_Given_Environment_Variable.md) pass  
+
+
+# Document: [A290_When_I_Type_Or_Enter.md](../../features/A290_When_I_Type_Or_Enter.md)  
+  ## Feature: interaction with the command under test  
+   ### Scenario: [answering a key prompt with type](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I run `./sut delete to_delete.txt`  
+   - OK : Then the output is  
+   - OK : Then the output is `Deleting to_delete.txt`  
+   - OK : And there is no file `to_delete.txt`  
+   - [X] scenario   [answering a key prompt with type](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [refusing with type](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_keep.txt` containing `some data`  
+   - OK : When I run `./sut delete to_keep.txt`  
+   - OK : Then there is no output  
+   - OK : And there is a file `to_keep.txt`  
+   - [X] scenario   [refusing with type](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [several inputs in a row](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I run `./sut delete to_delete.txt`  
+   - OK : Then the output is `Deleting to_delete.txt`  
+   - OK : And there is no file `to_delete.txt`  
+   - [X] scenario   [several inputs in a row](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [answering a line prompt with enter](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given there is no `new_name.txt` file  
+   - OK : Given the new file `old_name.txt` containing `some data`  
+   - OK : When I run `./sut rename old_name.txt`  
+   - OK : Then the output is  
+   - OK : Then the output is `Renamed to new_name.txt`  
+   - OK : And there is no file `old_name.txt`  
+   - OK : And there is a file `new_name.txt`  
+   - [X] scenario   [answering a line prompt with enter](../../features/A290_When_I_Type_Or_Enter.md) pass  
+
+   ### Scenario: [enter without a running command](../../features/A290_When_I_Type_Or_Enter.md): 
+   - OK : Given the `no_input.md` file  
+   - OK : When I run `./bbt -c no_input.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `no_input.md:2: Error : no command is running when reaching this step`  
+   - [X] scenario   [enter without a running command](../../features/A290_When_I_Type_Or_Enter.md) pass  
 
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -842,15 +1056,74 @@
    - OK : Then I get error  
    - [X] scenario   [a required file does not exist](../../features/B030_File_creation_in_Given_steps.md) pass  
 
-   ### Scenario: [the required file is created](../../features/B030_File_creation_in_Given_steps.md): 
-   - OK : Given my favorite and so useful `config.ini` file  
-   - OK : Then `config.ini` contains `Tmp_dir=/tmp`  
-   - [X] scenario   [the required file is created](../../features/B030_File_creation_in_Given_steps.md) pass  
-
    ### Scenario: ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given my favorite and so useful `config.ini` file  
    - OK : Given there is no `config.ini` file    
    - OK : Then there is no more `config.ini` file  
    - [X] scenario   ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is no `config.ini` file  
+   - [X] scenario   [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `file "config.ini" not deleted`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is no `d1` directory  
+   - [X] scenario   [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_refuse.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d1" not deleted`  
+   - OK : And there is a `d1` directory  
+   - [X] scenario   [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d2` directory  
+   - OK : Given the new `d2/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_confirm.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `d2` directory  
+   - OK : And there is no `d2/f1` file  
+   - [X] scenario   [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d3` directory  
+   - OK : Given the new `d3/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_refuse.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d3" not deleted`  
+   - OK : And there is a `d3` directory  
+   - OK : And there is a `d3/f1` file  
+   - [X] scenario   [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
 
 
 # Document: [B040_Find_scenarios.md](../../features/B040_Find_scenarios.md)  
@@ -879,7 +1152,8 @@
 
    ### Scenario: [running all scenarios in dir1](../../features/B040_Find_scenarios.md): 
    - OK : When I run `./bbt lf dir1`  
-   - OK : Then the output is on Unix_Only (unordered)  
+   - OK : Then the output matches `dir1[/\\]scen1.md`  
+   - OK : And the output matches `dir1[/\\]scen2.md`  
    - [X] scenario   [running all scenarios in dir1](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
@@ -909,7 +1183,10 @@
    - OK : Given the `dir1/dir2/scen5.md` file containing `foo`  
    - OK : Given the `dir1/dir3/dir4/scen6.md` file containing `bar`  
    - OK : When I run `./bbt lf -r dir1`  
-   - OK : Then the output is on Unix_Only (unordered)  
+   - OK : Then the output matches `dir1[/\\]scen1.md`  
+   - OK : And the output matches `dir1[/\\]scen2.md`  
+   - OK : And the output matches `dir1[/\\]dir2[/\\]scen5.md`  
+   - OK : And the output matches `dir1[/\\]dir3[/\\]dir4[/\\]scen6.md`  
    - [X] scenario   [running scenarios in a tree thanks to `-r`](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
@@ -926,7 +1203,7 @@
    - OK : Given the `dir6/dir7` dir  
    - OK : When I run `./bbt dir5 dir6`  
    - OK : Then the output contains  
-   - OK : And I get an error  
+   - OK : And I get no error  
    - [X] scenario   [error msg when trying to run scenarios, but none found in given directories](../../features/B040_Find_scenarios.md) pass  
 
    ### Background: [](../../features/B040_Find_scenarios.md): 
@@ -1103,8 +1380,8 @@
 
 # Document: [B100_Results_Output_In_MD_Format.md](../../features/B100_Results_Output_In_MD_Format.md)  
    ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
+   - OK : Given the new file `OK_scen.md`  
+   - OK : Given the new file `NOK_scen.md`  
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [default mode run](../../features/B100_Results_Output_In_MD_Format.md): 
@@ -1113,8 +1390,8 @@
    - [X] scenario   [default mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
+   - OK : Given the new file `OK_scen.md`  
+   - OK : Given the new file `NOK_scen.md`  
    - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
    ### Scenario: [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md): 
@@ -1122,16 +1399,40 @@
    - OK : Then the output contains  
    - [X] scenario   [verbose mode run](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
-   ### Background: [](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : Given the file `OK_scen.md`  
-   - OK : Given the file `NOK_scen.md`  
-   - [X] background [](../../features/B100_Results_Output_In_MD_Format.md) pass  
 
-   ### Scenario: [run with an error](../../features/B100_Results_Output_In_MD_Format.md): 
-   - OK : When I run `./bbt -c --yes NOK_scen.md`  
+# Document: [B105_Expected_vs_Actual_Output.md](../../features/B105_Expected_vs_Actual_Output.md)  
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with no error](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Then file `reference.txt` is  
+   - [X] scenario   [full comparison with no error](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with error in the middle of the file](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `scen1.md`  
+   - OK : When I run `./bbt --yes scen1.md`  
    - OK : Then the output contains  
    - OK : And the output contains  
-   - [X] scenario   [run with an error](../../features/B100_Results_Output_In_MD_Format.md) pass  
+   - [X] scenario   [full comparison with error in the middle of the file](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with blank lines on the left and on the right](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `scen2.md`  
+   - OK : Then I successfully run `./bbt --cleanup --yes scen2.md`  
+   - OK : When I run `./bbt --exact_match --cleanup --yes scen2.md`  
+   - OK : Then there is an error   
+   - OK : And the output contains   
+   - OK : And the output contains  
+   - OK : And the output contains  
+   - [X] scenario   [full comparison with blank lines on the left and on the right](../../features/B105_Expected_vs_Actual_Output.md) pass  
 
 
 # Document: [B110_Spawn.md](../../features/B110_Spawn.md)  
@@ -1152,6 +1453,32 @@
    - OK : Then I get no error  
    - OK : And file `tmp.txt` is   
    - [X] scenario   [Command with quoted arguments (Unix_Only)](../../features/B110_Spawn.md) pass  
+
+
+# Document: [B115_Warning_On_Shell_Metacharacters.md](../../features/B115_Warning_On_Shell_Metacharacters.md)  
+  ## Feature: warning on shell metacharacters in commands  
+   ### Scenario: [warning when a command contains a pipe](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `pipe_test.md`  
+   - OK : When I run `./bbt -c pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning when a command contains a pipe](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [warning also displayed by bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : When I run `./bbt explain pipe_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [warning also displayed by bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `quoted_glob_test.md`  
+   - OK : When I run `./bbt -c quoted_glob_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
+   ### Scenario: [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `quoted_glob_test.md`  
+   - OK : When I run `./bbt explain quoted_glob_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
 
 
 # Document: [B120_Output_Verbosity.md](../../features/B120_Output_Verbosity.md)  
@@ -1210,102 +1537,68 @@
 
 # Document: [B130_Cmd_Line_Help.md](../../features/B130_Cmd_Line_Help.md)  
   ## Feature: Clear command line help  
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Scenario: [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md): 
-   - OK : When I run `./bbt`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt help`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - OK : When I run `./bbt he`   
-   - OK : then the output contains file `base_help.txt`  
-   - OK : And the output contains   
-   - [X] scenario   [calling bbt without parameter or with -h put the normal help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [filtering help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he filtering`   
-   - OK : then the output is file `filtering.txt`  
+   - OK : then the output is equal to file `../docs/help/filtering.txt`  
    - [X] scenario   [filtering help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [matching help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help matching`   
-   - OK : then the output is file `matching.txt`  
+   - OK : then the output is equal to file `../docs/help/matching.txt`  
    - [X] scenario   [matching help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [others help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help other`   
-   - OK : then the output is file `other.txt`  
+   - OK : then the output is equal to file `../docs/help/other.txt`  
    - [X] scenario   [others help](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [On_All help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help on_all`   
-   - OK : then the output contains file `base.txt`  
-   - OK : and  the output contains file `filtering.txt`  
-   - OK : and  the output contains file `matching.txt`  
-   - OK : and  the output contains file `other.txt`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output contains file `../docs/help/filtering.txt`  
+   - OK : and  the output contains file `../docs/help/matching.txt`  
+   - OK : and  the output contains file `../docs/help/other.txt`  
    - [X] scenario   [On_All help](../../features/B130_Cmd_Line_Help.md) pass  
 
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
-
    ### Scenario: [tutorial generation](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help tutorial`   
+   - OK : then the output is equal to file `../docs/help/tutorial.md`  
    - [X] scenario   [tutorial generation](../../features/B130_Cmd_Line_Help.md) pass  
 
-   ### Background: [](../../features/B130_Cmd_Line_Help.md): 
-   - OK : Given the file `base_help.txt`   
-   - OK : Given the file `filtering.txt`  
-   - OK : Given the file `matching.txt`  
-   - OK : Given the file `tutorial.txt`  
-   - OK : Given the file `other.txt`  
-   - [X] background [](../../features/B130_Cmd_Line_Help.md) pass  
+   ### Scenario: [grammar generation](../../features/B130_Cmd_Line_Help.md): 
+   - OK : Given the file `expected_grammar`  
+   - OK : When I run `./bbt help grammar`   
+   - OK : then the output is equal to file `expected_grammar`  
+   - [X] scenario   [grammar generation](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [listing keywords](../../features/B130_Cmd_Line_Help.md): 
+   - OK : Given the file `expected_keywords`  
+   - OK : When I run `./bbt help keywords`   
+   - OK : then the output is equal to file `expected_keywords`  
+   - [X] scenario   [listing keywords](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [generated example is OK](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help example`   
+   - OK : then the output is equal to file `../docs/help/example.md`  
    - [X] scenario   [generated example is OK](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md) pass  
+
+   ### Scenario: [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt he`  
+   - OK : then the output contains file `../docs/help/base.txt`  
+   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - [X] scenario   [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md) pass  
 
 
 # Document: [B140_Index_File.md](../../features/B140_Index_File.md)  
@@ -1335,6 +1628,15 @@
    - OK : Then  I get an error  
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
    - [X] scenario   [Unsuccessful run index file](../../features/B140_Index_File.md) pass  
+
+   ### Scenario: [index links use web separators](../../features/B140_Index_File.md): 
+   - OK : Given the new directory `dir1`  
+   - OK : Given the file `dir1/OK_scen.md` containing  
+   - OK : Given the directory `dir1/sub`  
+   - OK : When I successfully run `./bbt -c --yes dir1/OK_scen.md --index dir1/sub/index_web.md`  
+   - OK : Then the file `dir1/sub/index_web.md` contains `](../OK_scen.md)`  
+   - OK : And the file `dir1/sub/index_web.md` does not contain `\`  
+   - [X] scenario   [index links use web separators](../../features/B140_Index_File.md) pass  
 
 
 # Document: [B150_Deprecated_Options.md](../../features/B150_Deprecated_Options.md)  
@@ -1526,6 +1828,17 @@
    - [X] scenario   [Checking that the index file is ignored](../../features/B180_Ignored_Files.md) pass  
 
 
+# Document: [B190_Clean_Error_When_No_Output.md](../../features/B190_Clean_Error_When_No_Output.md)  
+  ## Feature: clean error when checking the output of a command that did not run  
+   ### Scenario: [check the output of a command that does not exist](../../features/B190_Clean_Error_When_No_Output.md): 
+   - OK : Given the new file `no_cmd_test.md`  
+   - OK : When I run `./bbt -k no_cmd_test.md`  
+   - OK : Then output contains  
+   - OK : and output contains  
+   - OK : Then I get an error  
+   - [X] scenario   [check the output of a command that does not exist](../../features/B190_Clean_Error_When_No_Output.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -1611,7 +1924,7 @@
 
 # Document: [C060_code_block.md](../../features/C060_code_block.md)  
    ### Scenario: [Code fenced blocks](../../features/C060_code_block.md): 
-   - OK : Given the file `lot_of_code_blocks.md`  
+   - OK : Given the new file `lot_of_code_blocks.md`  
    - OK : When I run `./bbt -c lot_of_code_blocks.md`  
    - OK : Then I get no error  
    - [X] scenario   [Code fenced blocks](../../features/C060_code_block.md) pass  
@@ -1696,12 +2009,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 169 scenarios OK
+## Summary : **Success**, 212 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 169   |
+| Successful | 212   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
