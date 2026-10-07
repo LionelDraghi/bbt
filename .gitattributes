@@ -1,3 +1,17 @@
-# Seem's that External_Initialization add a CR on each LF, 
-# so we need to force the lines to end with LF only, even on Windows
-docs/help/** text=auto eol=lf
+# All text files use LF line endings on every platform, Windows
+# included: no CRLF in the working tree, so that the tools behave the
+# same everywhere.
+* text=auto eol=lf
+
+# Binary files, explicitly marked so that no heuristic applies
+*.png binary
+*.jpg binary
+*.mp4 binary
+*.pdf binary
+*.xlsx binary
+*.exe binary
+
+# Historical note: the files in docs/help are embedded in bbt at build
+# time, and a CR in them ends up in the embedded help text, and in
+# bbt's output checks: this was the initial reason to force LF, before
+# it was generalized to the whole repository.

@@ -15,6 +15,8 @@
 
 ## Build
 
+- the repository uses LF line endings on every platform, Windows
+  included: enforced by .gitattributes, do not override it locally
 - `make build` to build bbt and tools
 
 - `make tools` to build sut and rpl, and to create the sut, bbt and gcc
