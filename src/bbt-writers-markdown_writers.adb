@@ -8,6 +8,7 @@
 with BBT.IO,
      BBT.Settings;
 with File_Utilities;
+with Markdown_Utilities;
 with Ada.Directories;
 with GNAT.Regexp;
 
@@ -124,17 +125,17 @@ package body BBT.Writers.Markdown_Writers is
      (Writer : Markdown_Writer; Doc : Document_Type'Class)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Web_Path (File_Utilities.Short_Path
+        Markdown_Utilities.Web_Path (File_Utilities.Short_Path
           (From_Dir => Settings.Index_Dir, To_File => (+Doc.Name)));
       Verbosity    : constant Verbosity_Levels := Normal;
    begin
       New_Line (Verbosity);
       Put_Line
-        ("# Document: ["
-         & Ada.Directories.Simple_Name (Path_To_Scen)
-         & "]("
-         & (Path_To_Scen)
-         & ")  ",
+        ("# Document: "
+         & Markdown_Utilities.Link
+             (Name => Ada.Directories.Simple_Name (Path_To_Scen),
+              Path => Path_To_Scen)
+         & "  ",
          Verbosity => Verbosity);
    end Put_Document_Start;
 
@@ -154,13 +155,13 @@ package body BBT.Writers.Markdown_Writers is
       Verbosity : Verbosity_Levels)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Web_Path (File_Utilities.Short_Path
+        Markdown_Utilities.Web_Path (File_Utilities.Short_Path
           (From_Dir => Settings.Index_Dir,
            To_File  => (+Parent_Doc (Scen).Name)));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid
       -- recomputing when looping on the writers
       Link_Image   : constant String :=
-        ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+        Markdown_Utilities.Link ((+Scen.Name), Path_To_Scen);
       Scen_Kind : constant String := Indent (Scenario) &
         (if Scen.Is_Background
          then "### Background: "
@@ -213,13 +214,13 @@ package body BBT.Writers.Markdown_Writers is
       Verbosity : Verbosity_Levels)
    is
       Path_To_Scen : constant String :=
-        File_Utilities.Web_Path (File_Utilities.Short_Path
+        Markdown_Utilities.Web_Path (File_Utilities.Short_Path
           (From_Dir => Settings.Index_Dir,
            To_File  => (+Parent_Doc (Scen).Name)));
       -- Fixme: Path_To_Scen should be in Scenario_Type to avoid recomputing
       -- when looping on the writers
       Link_Image   : constant String :=
-        ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+        Markdown_Utilities.Link ((+Scen.Name), Path_To_Scen);
       Scen_Kind    : constant String :=
         (if Scen.Is_Background then " background " else " scenario   ");
       Spaces : constant String := Indent (Scenario);
@@ -231,7 +232,7 @@ package body BBT.Writers.Markdown_Writers is
             -- new line in Markdown format when this line is followed
             -- by an error message.
             Put_Line
-              (Spaces & "- [ ]"
+              (Spaces & "- " & Markdown_Utilities.Checkbox (False)
                & Scen_Kind
                & Link_Image
                & " is empty, nothing tested  ",
@@ -239,17 +240,20 @@ package body BBT.Writers.Markdown_Writers is
 
          when Successful =>
             Put_Line
-              (Spaces & "- [X]" & Scen_Kind & Link_Image & " pass  ",
+              (Spaces & "- " & Markdown_Utilities.Checkbox (True)
+               & Scen_Kind & Link_Image & " pass  ",
                Verbosity => Verbosity);
 
          when Failed =>
             Put_Line
-              (Spaces & "- [ ]" & Scen_Kind & Link_Image & " **fails**  ",
+              (Spaces & "- " & Markdown_Utilities.Checkbox (False)
+               & Scen_Kind & Link_Image & " **fails**  ",
                Verbosity => Verbosity);
 
          when Not_Run =>
             Put_Line
-              (Spaces & "- [ ]" & Scen_Kind & Link_Image & " not run  ",
+              (Spaces & "- " & Markdown_Utilities.Checkbox (False)
+               & Scen_Kind & Link_Image & " not run  ",
                Verbosity => Verbosity);
       end case;
 

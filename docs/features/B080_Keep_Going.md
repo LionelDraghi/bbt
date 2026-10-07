@@ -98,7 +98,7 @@ _Table of Contents:_
   ~~~  
 - and output contains
   ```
-scenario_with_syntax_error.md:6: Warning: Skipping step with syntax error
+  scenario_with_syntax_error.md:6: Warning: Skipping step with syntax error
   ```
 - and output contains
   ```
@@ -115,7 +115,7 @@ scenario_with_syntax_error.md:6: Warning: Skipping step with syntax error
 # Scenario: scenario_with_assertion_error run without `-k`
 - When I run `./bbt scenario_with_assertion_error.md`
 - then output is
-  ```
+```
 # Document: [scenario_with_assertion_error.md](scenario_with_assertion_error.md)  
    ### Scenario: [1](scenario_with_assertion_error.md): 
    - OK : When I run `./sut -h`  
@@ -135,12 +135,12 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
 | Successful | 1     |
 | Empty      | 0     |
 | Not Run    | 1     |
-  ```
+```
 
 # Scenario: scenario_with_assertion_error run with `-k`
 - When I run `./bbt -k scenario_with_assertion_error.md`
 - then output is
-  ```
+```
 # Document: [scenario_with_assertion_error.md](scenario_with_assertion_error.md)  
    ### Scenario: [1](scenario_with_assertion_error.md): 
    - OK : When I run `./sut -h`  
@@ -164,7 +164,7 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
 | Successful | 2     |
 | Empty      | 0     |
 | Not Run    | 0     |
-  ```
+```
 
 # Scenario: explain scenario_with_syntax_error without `-k`
 - When I run `./bbt ex scenario_with_syntax_error.md`

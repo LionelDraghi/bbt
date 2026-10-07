@@ -86,7 +86,5 @@ Short_Path (From_Dir => "../docs/tests_results/Windows",
 Short_Path (From_Dir => "../docs/tests_results/Windows/sub",
             To_File  => "../docs/features/A190_Run.md") = ..\..\..\features\A190_Run.md
 
-Web_Path on Windows separators : OK
-Web_Path on Unix separators : OK
 
 File_Utilities.Short_Path tests OK

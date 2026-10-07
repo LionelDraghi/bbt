@@ -12,6 +12,7 @@ use BBT.IO,
     BBT.Settings;
 
 with File_Utilities;
+with Markdown_Utilities;
 
 with GNAT.Regexp;
 
@@ -161,26 +162,30 @@ package body BBT.Writers.Text_Writer is
                                              Verbosity : Verbosity_Levels)
    is
       Path_To_Scen  : constant String
-        := File_Utilities.Web_Path (File_Utilities.Short_Path
+        := Markdown_Utilities.Web_Path (File_Utilities.Short_Path
              (From_Dir => Settings.Index_Dir,
               To_File  => (+Parent_Doc (Scen).Name)));
       Link_Image    : constant String
-        := ("[" & (+Scen.Name) & "](" & Path_To_Scen & ")");
+        := Markdown_Utilities.Link ((+Scen.Name), Path_To_Scen);
    begin
       if not Scen.Is_Background then
          case Model.Scenarios.Result (Scen) is
          when Empty =>
-            Put_Line ("  - [ ] scenario " & Link_Image &
+            Put_Line ("  - " & Markdown_Utilities.Checkbox (False)
+                        & " scenario " & Link_Image &
                         " is empty, nothing tested  ",
                       Verbosity => Normal);
          when Successful =>
-            Put_Line ("  - [X] scenario " & Link_Image & " pass  ",
+            Put_Line ("  - " & Markdown_Utilities.Checkbox (True)
+                        & " scenario " & Link_Image & " pass  ",
                       Verbosity => Normal);
          when Failed =>
-            Put_Line ("  - [ ] scenario " & Link_Image & " fails  ",
+            Put_Line ("  - " & Markdown_Utilities.Checkbox (False)
+                        & " scenario " & Link_Image & " fails  ",
                       Verbosity => Quiet);
          when Not_Run =>
-            Put_Line ("  - [ ] scenario " & Link_Image & " not run  ",
+            Put_Line ("  - " & Markdown_Utilities.Checkbox (False)
+                        & " scenario " & Link_Image & " not run  ",
                       Verbosity => Quiet);
          end case;
       end if;

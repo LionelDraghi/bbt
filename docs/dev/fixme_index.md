@@ -18,7 +18,7 @@ Location | Text
 [src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):682|      --   thus, "successfully run" is not checked for interactive
 [src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):112|      --  defensive code that should be replaced by
 [src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):53|   --  Clearly not confortable with that function, it's magic.
-[src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):160|      --  Path_To_Scen should be in Scenario_Type to avoid
-[src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):219|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
+[src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):161|      --  Path_To_Scen should be in Scenario_Type to avoid
+[src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):220|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all
 [src/text_utilities.ads](../../src/text_utilities.ads):117|   --  the comparison is positional: an insertion or deletion shifts

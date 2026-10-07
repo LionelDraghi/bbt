@@ -153,15 +153,6 @@ package body File_Utilities is
    end Short_Path;
 
    -- --------------------------------------------------------------------------
-   function Web_Path (Path : String) return String is
-      Web_Mapping : constant Character_Mapping :=
-        To_Mapping (From => "\", To => "/");
-   begin
-      return Ada.Strings.Fixed.Translate (Path, Web_Mapping);
-   end Web_Path;
-
-
-   -- --------------------------------------------------------------------------
    function Escape (Text : String) return String is
       Src_Idx       : Natural := Text'First;
       To_Be_Escaped : constant Ada.Strings.Maps.Character_Set := To_Set (' '

@@ -47,6 +47,13 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   with an explicit message instead.  
   cf. [timeouts](../proposed_features/timeouts.md)
 
+- readers and writers organization  
+  Factorize the format knowledge (Markdown_Utilities is a first
+  step), and design for a future non Markdown format: Text_Writer
+  is de facto a second Markdown writer, and the balance between
+  factorization and flexibility has to be worked.  
+  cf. [writers_org](../proposed_features/writers_org.md)
+
 - LCS based diff alignment  
   Error messages compare expected and actual positionally; an LCS based
   alignment, as in diff or git, would give more relevant results.  
