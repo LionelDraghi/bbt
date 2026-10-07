@@ -9,7 +9,7 @@ Project Status <!-- omit from toc -->
 
 ## Development Status
 
-- [Changelog](changelog.md)
+- [Changelog](../changelog.md)
 
 ## Help, comments, suggestions, feedback...
 
@@ -45,12 +45,12 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   that no step provides, blocks the whole run: an option bounding the
   time per scenario, or the total run time, would make bbt fail fast
   with an explicit message instead.  
-  cf. [timeouts](proposed_features/timeouts.md)
+  cf. [timeouts](../proposed_features/timeouts.md)
 
 - LCS based diff alignment  
   Error messages compare expected and actual positionally; an LCS based
   alignment, as in diff or git, would give more relevant results.  
-  cf. [LCS_diff_alignment](proposed_features/LCS_diff_alignment.md)
+  cf. [LCS_diff_alignment](../proposed_features/LCS_diff_alignment.md)
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...

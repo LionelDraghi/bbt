@@ -44,13 +44,13 @@
 - add a line in docs/changelog.md under the current -dev version
 - keep the changelog entries short: one line announcing the change, with a
   reference to the feature file or the issue for the details
-- `Fixme:` comments in docs/ and src/ are indexed in docs/fixme_index.md by `make doc`
+- `Fixme:` comments in docs/ and src/ are indexed in docs/dev/fixme_index.md by `make doc`
 - examples and generated docs must not depend on the machine or on the locale:
   no hard version number (use a regexp or a fixed behavior), and set
   `Given the environment variable LC_ALL is set to C` when a tool message is checked
 - files in docs/help/ are embedded in bbt at build time (External_Initialization):
   rebuild before testing `bbt help`, and regenerate the reference files
-  (docs/example.md, docs/examples/gcc_hello_world.md)
+  (docs/examples/gcc_hello_world.md)
   after a change, otherwise B130 fails
 - to show a whole step between backticks in the docs, with the inner
   backticks visible (e.g. When I type `Y`), use a double backtick code span,
@@ -60,19 +60,18 @@
   are exempt, their format is up to the generator
 - on any functional evolution, do not forget the possible update of the
   tutorial and of the example in help (docs/help/tutorial.md,
-  docs/help/example.md and their generated copies docs/tutorial.md,
-  docs/example.md, docs/examples/gcc_hello_world.md)
+  docs/help/example.md and docs/examples/gcc_hello_world.md)
 
 ## Design decisions
 
-- significant design decisions are recorded in docs/design_decisions.md
+- significant design decisions are recorded in docs/dev/design_decisions.md
   (the decision log): one entry per subject, stating the decision, the
   rejected alternatives and why, and referencing the PR or discussion
   where the subject was elaborated
 - the developer guide keeps only the operational descriptions: when a
   discussion of alternatives ends up there, move it to the decision log
 - an idea not yet decided goes to docs/proposed_features, with an entry
-  in the TDL chapter of docs/project.md; it can be short, just enough
+  in the TDL chapter of docs/dev/project.md; it can be short, just enough
   to capture the need, or already polished as a docs/features file,
   scenarios included, ready to be moved there when the decision is
   made (cf. docs/proposed_features/timeouts.md)
@@ -83,13 +82,13 @@
   otherwise alr cannot load the workspace
 - after a version change in alire.toml, `alr update` regenerates Crate_Version;
   `alr build` alone does not
-- the full release procedure is in docs/release_procedure.md
+- the full release procedure is in docs/dev/release_procedure.md
 
 ## Pointers
 
 - to understand bbt: docs/bbt-skill
-- design and tests: docs/developer_guide.md
-- design decisions log: docs/design_decisions.md
-- to do list: docs/proposed_features, docs/fixme_index.md,
-  chapter TDL in docs/project.md
+- design and tests: docs/dev/developer_guide.md
+- design decisions log: docs/dev/design_decisions.md
+- to do list: docs/proposed_features, docs/dev/fixme_index.md,
+  chapter TDL in docs/dev/project.md
 - bbt is tested mostly with bbt

@@ -73,7 +73,7 @@ It's in Markdown [^1], so that the text above render as:
 ## A small example
 
 Let's consider a slightly more complete example:
-![simple example](docs/rpl_example.png)
+![simple example](docs/assets/rpl_example.png)
 
 (Markdown source [here](docs/examples/rpl_case_insensitivity.md))
 
@@ -233,9 +233,9 @@ The reading is organized by role:
 - How to get off to a good start with the README and *bbt*: [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)
 
 ### As a developer
-- [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
-- [Design decisions](docs/design_decisions.md): the decision log, significant design decisions and their rationale
-- [Release procedure](docs/release_procedure.md)
+- [Developer Guide](docs/dev/developer_guide.md): design overview, issues, fixme...
+- [Design decisions](docs/dev/design_decisions.md): the decision log, significant design decisions and their rationale
+- [Release procedure](docs/dev/release_procedure.md)
 
 ### As a curious reader
 - A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9)
@@ -250,6 +250,6 @@ Some documents are worth reading for several roles:
 |-------------------------------------------------------------------------|:---------:|:--------------:|:-------------------:|
 | [References](docs/references.md): syntax, grammar, non obvious behavior |     x     |       x        |                     |
 | [Changelog](docs/changelog.md)                                          |     x     |       x        |          x          |
-| [Project status](docs/project.md): tests, TDL                           |           |       x        |          x          |
+| [Project status](docs/dev/project.md): tests, TDL                           |           |       x        |          x          |
 
 [^1]: More precisely, *bbt* complies (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 

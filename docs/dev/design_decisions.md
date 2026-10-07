@@ -68,7 +68,7 @@ Other candidates were reviewed later (October 2026):
   stdout and stderr redirection to files, and the `Set_Allocate_TTY`
   pseudo terminal option. It is the documented fallback for the pseudo
   terminal feature, cf.
-  [proposed_features/pty.md](proposed_features/pty.md), not a
+  [proposed_features/pty.md](../proposed_features/pty.md), not a
   replacement for the current execution engine.
 
 References:
@@ -83,10 +83,10 @@ References:
 Status: accepted (October 2026), implementation pending
 
 `when I successfully run 'X'` is defined in
-[A130](features/A130_Successfully_Keyword.md) as the shortcut for
+[A130](../features/A130_Successfully_Keyword.md) as the shortcut for
 `When I run 'X'` followed by `Then I get no error`. Since the
 interactive steps
-([A290](features/A290_When_I_Type_Or_Enter.md),
+([A290](../features/A290_When_I_Type_Or_Enter.md),
 [PR #39](https://github.com/LionelDraghi/bbt/pull/39)) start a command
 and feed it across steps, the command may still be running long after
 its `run` step: what does "successfully" check then?

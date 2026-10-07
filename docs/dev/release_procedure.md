@@ -13,7 +13,7 @@ in the repository parent directory.
    in src/Alire_config/bbt_config.ads is regenerated, and check the version
    displayed by `bbt help`
 3. update version strings in the sources, e.g. the "generated with BBT x.y.z"
-   line in docs/help/tutorial.md (docs/tutorial.md is regenerated from it)
+   line in docs/help/tutorial.md
 4. close the -dev changelog section: retitle it with the release number
    and the release date, then run a full `make`, and commit the whole
    generated state

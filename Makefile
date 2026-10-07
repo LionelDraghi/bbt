@@ -35,7 +35,7 @@ help:
 	echo "  distclean  : remove everything that can be rebuilt,"
 	echo "                including binaries and links"
 	echo ""
-	echo "Refer to AGENTS.md and docs/developer_guide.md for more details."
+	echo "Refer to AGENTS.md and docs/dev/developer_guide.md for more details."
 
 bbt$(EXE_SUFFIX): build
 sut$(EXE_SUFFIX): tools
@@ -80,24 +80,22 @@ doc: ./bbt$(EXE_SUFFIX)
 
 	./bbt help grammar  > docs/grammar.md
 	./bbt help keywords > docs/keywords.md
-	./bbt help tutorial > docs/tutorial.md
-	./bbt help example  > docs/example.md 
 
 	echo 'Fixme in current version'	>  fixme_index.md
 	echo '------------------------'	>> fixme_index.md
 	echo                            >> fixme_index.md
 	echo 'Location | Text'          >> fixme_index.md
 	echo '---------|-----'          >> fixme_index.md
-	grep -rn 'Fixme:' docs/* src/* | sort | sed -E "s/:/|/2;s/Fixme://;s/(^[^:]*)/[\1](\.\.\/\1)/" >> fixme_index.md
-	mv fixme_index.md docs/fixme_index.md
+	grep -rn 'Fixme:' docs/* src/* | sort | sed -E "s/:/|/2;s/Fixme://;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> fixme_index.md
+	mv fixme_index.md docs/dev/fixme_index.md
 
 	echo 'Reference to issues in current version'	>  issues_index.md
 	echo '--------------------------------------'	>> issues_index.md
 	echo                                			>> issues_index.md
 	echo 'Location | Text'             			    >> issues_index.md
 	echo '---------|-----'             			    >> issues_index.md
-	grep -rn 'Issue #' docs/* src/* | sort |  sed -E "s/:/|/2;s/Issue #/#/;s/(^[^:]*)/[\1](\.\.\/\1)/" >> issues_index.md
-	mv issues_index.md docs/issues_index.md
+	grep -rn 'Issue #' docs/* src/* | sort |  sed -E "s/:/|/2;s/Issue #/#/;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> issues_index.md
+	mv issues_index.md docs/dev/issues_index.md
 
 	echo Checking links in md files
 ifeq ($(OS), Windows_NT)

@@ -81,7 +81,7 @@ three platforms, are worth knowing:
   the objects are kept alive for the whole run.
 
 When a scenario contains a `When I type` or a `When I enter` step
-(cf. [A290](features/A290_When_I_Type_Or_Enter.md)), the command is
+(cf. [A290](../features/A290_When_I_Type_Or_Enter.md)), the command is
 started and not awaited: it is fed across steps, and the synchronization
 relies on two event pumping primitives:
 
@@ -93,7 +93,7 @@ relies on two event pumping primitives:
 
 The pseudo terminal option, that would remove the flush constraint
 documented in A290, is described in
-[proposed_features/pty.md](proposed_features/pty.md), with the experiment
+[proposed_features/pty.md](../proposed_features/pty.md), with the experiment
 results.
 
 ## Tests
@@ -127,7 +127,7 @@ All test results per platform are then available in docs/tests_results/Windows|L
 
 ## Development Status
 
-- [Changelog](changelog.md)
+- [Changelog](../changelog.md)
 - [Fixme](fixme_index.md)
 - [References to issue in code and tests](issues_index.md)
 

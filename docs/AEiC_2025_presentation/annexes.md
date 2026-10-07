@@ -29,7 +29,7 @@ style: |
 # <!-- fit --> tres tres tres tres tres tres tres long long long titre 
 # <!-- fit --> Gros titre
 # Gros titre (sans "fit")
-![bg right:50% w:600](../rpl_example.png)
+![bg right:50% w:600](../assets/rpl_example.png)
 <!-- _backgroundColor: palegreen -->
 <!-- _color: navy -->
 
