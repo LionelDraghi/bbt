@@ -8,7 +8,7 @@
   that there is no remaining unwanted file, and report the result;
   wait for the go-ahead before touching the index or the history
 - once the owner gives the go-ahead, run the whole sequence in one go:
-  `git add` the whole generated state (results, badges, bbt_help.txt,
+  `git add` the whole generated state (results, badges,
   indexes...), commit, and push. Committing in the middle of the chain
   (e.g. after features only) freezes inconsistent artifacts, such as
   a badge.url still holding the bbt placeholder, or a stale badge.svg
@@ -50,14 +50,14 @@
   `Given the environment variable LC_ALL is set to C` when a tool message is checked
 - files in docs/help/ are embedded in bbt at build time (External_Initialization):
   rebuild before testing `bbt help`, and regenerate the reference files
-  (docs/bbt_help.txt, docs/example.md, docs/examples/gcc_hello_world.md)
+  (docs/example.md, docs/examples/gcc_hello_world.md)
   after a change, otherwise B130 fails
 - to show a whole step between backticks in the docs, with the inner
   backticks visible (e.g. When I type `Y`), use a double backtick code span,
   with a space before the closing delimiter: ``When I type `Y` ``;
 - align the tables in Markdown files with spaces, so that they stay readable
-  in plain text form; generated files (docs/grammar.md, docs/keywords.md,
-  docs/bbt_help.txt...) are exempt, their format is up to the generator
+  in plain text form; generated files (docs/grammar.md, docs/keywords.md...)
+  are exempt, their format is up to the generator
 - on any functional evolution, do not forget the possible update of the
   tutorial and of the example in help (docs/help/tutorial.md,
   docs/help/example.md and their generated copies docs/tutorial.md,

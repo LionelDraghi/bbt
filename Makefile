@@ -82,7 +82,6 @@ doc: ./bbt$(EXE_SUFFIX)
 	./bbt help keywords > docs/keywords.md
 	./bbt help tutorial > docs/tutorial.md
 	./bbt help example  > docs/example.md 
-	./bbt help on_all   > docs/bbt_help.txt 
 
 	echo 'Fixme in current version'	>  fixme_index.md
 	echo '------------------------'	>> fixme_index.md
