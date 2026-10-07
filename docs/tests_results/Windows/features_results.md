@@ -316,6 +316,34 @@
    - OK : Then I get `unknown option -vza`  
    - [X] scenario   [*when I run* a command with a wrong command line](../../features/A130_Successfully_Keyword.md) pass  
 
+   ### Scenario: [*when I successfully run* an interactive command that finally exits cleanly](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I successfully run `./sut delete to_delete.txt`  
+   - OK : Then the output is `Deleting to_delete.txt`  
+   - OK : And there is no file `to_delete.txt`  
+   - [X] scenario   [*when I successfully run* an interactive command that finally exits cleanly](../../features/A130_Successfully_Keyword.md) pass  
+
+   ### Scenario: [*when I successfully run* an interactive command that finally fails](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new `interactive_fail.md` file  
+   - OK : When I run `./bbt -q -c --yes interactive_fail.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Unsuccessfully run "./sut delete to_keep.txt"`  
+   - [X] scenario   [*when I successfully run* an interactive command that finally fails](../../features/A130_Successfully_Keyword.md) pass  
+
+   ### Scenario: [the deferred failure is reported before the next step](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new `deferred_fail.md` file  
+   - OK : When I run `./bbt -q -c --yes deferred_fail.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `Unsuccessfully run "./sut delete to_keep.txt"`  
+   - OK : And the output does not contain `no command is running`  
+   - [X] scenario   [the deferred failure is reported before the next step](../../features/A130_Successfully_Keyword.md) pass  
+
+   ### Scenario: [successfully run, then an explicit no error check](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new file `to_delete.txt` containing `some data`  
+   - OK : When I successfully run `./sut delete to_delete.txt`  
+   - OK : Then I get no error  
+   - [X] scenario   [successfully run, then an explicit no error check](../../features/A130_Successfully_Keyword.md) pass  
+
 
 # Document: [A140_Unordered_Keyword.md](../../features/A140_Unordered_Keyword.md)  
   ## Feature: when the modifier `unordered` is given after `get`, order of line is ignored  
@@ -2019,12 +2047,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 212 scenarios OK
+## Summary : **Success**, 216 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 212   |
+| Successful | 216   |
 | Empty      | 0     |
 | Not Run    | 7     |
 
