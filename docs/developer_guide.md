@@ -60,33 +60,8 @@ The commands of the `When I run` steps are executed through the
 the standard error to the same files as the previous blocking
 implementation did, and reports the exit code on termination.
 
-This library was chosen over `GNAT.Expect` after experimenting with both
-(October 2026, with scratch programs):
-
-- `GNAT.Expect` (its `GNAT.Expect.TTY` child package is implemented on
-  all native GNAT ports) exposes a consuming, sliding buffer: `Expect`
-  returns the output up to the match, the tail arrives on the next call,
-  and older data is discarded once `Buffer_Size` is reached. Mapping
-  this pull-by-regexp model on the exact output checks of bbt would have
-  required constant draining, and `Close` on an already terminated child
-  reported a kill status (9) instead of its exit code. Moreover, on
-  Unix `GNAT.Expect.TTY` sets up the pseudo terminal as a full terminal
-  (echo, canonical mode and `CR` `LF` translation active, as gdb
-  expects), while on Windows it provides pipes or a console, not a
-  pseudo terminal: in both cases, the exact output checks of bbt would
-  be polluted;
-- `Spawn` (pipes) was validated byte exact on the two input forms: a key
-  without newline received by `Ada.Text_IO.Get_Immediate`, a line with
-  newline received by `Get_Line`, the prompt being flushed by
-  `Ada.Text_IO` before the read. It is also the cross-platform path:
-  Windows is implemented explicitly, and the library is used by Alire
-  itself.
-
-Other candidates were reviewed later (October 2026):
-
-- `GLib.Spawn_Alt.Asynchronous` ([gtkada_contributions](https://www.dmitry-kazakov.de/ada/gtkada_contributions.htm)), proposed in the [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467), and co-authored by the Spawn author: the pipes are serviced by dedicated tasks, the completion is notified once the process died and all pipes are closed, and the environment is passed at each run. Rejected: it drags the whole GTK+ dependency (`Gtk.Main.Router`, that requires a window) into a console tool, it is not distributed on Alire, and its callbacks run on separate tasks, which would force a protected object refactor of the current single task design. Spawn can be seen as the Alire packaged continuation of the same design, with a `spawn_glib` flavor when GLib main loop integration is wanted;
-- the Alire index was swept for other process libraries: `spoon` (posix_spawn, no Windows), `ashell` (built on Florist, POSIX oriented, Windows availability dubious), `spawn_glib` (Spawn itself on the GLib event loop). None brings a feature bbt misses;
-- `utilada` (`Util.Processes`, `Util.Streams.Pipes`) is the only credible alternative: on Alire, Apache-2.0, Windows supported, direct stdout and stderr redirection to files, and the `Set_Allocate_TTY` pseudo terminal option. It is the documented fallback for the pseudo terminal feature, cf. [proposed_features/pty.md](proposed_features/pty.md), not a replacement for the current execution engine.
+The choice of this library, and the alternatives that were rejected,
+are recorded in [design_decisions.md](design_decisions.md).
 
 Note that `Spawn.Environments.System_Environment` is a snapshot taken at
 elaboration time: the child environment is rebuilt at each command with
