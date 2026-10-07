@@ -20,6 +20,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   ``Given the new directory `dir1` `` now really starts from a white page: an existing `dir1` tree is erased, after user confirmation, or silently with `--yes` (it used to leave an existing tree in place)
   - [Fixed]   on Windows, commands producing many output chunks, such as a nested `bbt help grammar`, were dramatically slowed down by the output files being reopened at each chunk: the output streams are now kept open during the command (cf. B130_Cmd_Line_Help.md)
   - [Changed] the LLM reference guide is removed and merged into the bbt-skill
+  - [Changed] the Linux, Darwin and Windows test badges are updated by the CI on each push on main, instead of a manual run on each platform, and moved in a new Status section of the README
   - [Fixed]   the index file links were broken on Windows: the relative paths
                used `\` separators, that Markdown parsers read as escape
                characters; the separators are now always `/`

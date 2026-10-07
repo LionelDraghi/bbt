@@ -9,10 +9,10 @@ Location | Text
 [src/bbt-model-documents.adb](../../src/bbt-model-documents.adb):211|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):49|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):66|     (D : in out Documents_Lists.Vector) --  should be type List
+[src/bbt-scenarios.ads](../../src/bbt-scenarios.ads):58|   --  To be moved as dispatching in Writers
 [src/bbt-scenarios-files.adb](../../src/bbt-scenarios-files.adb):194|            --  to be moved in Text_Utilities or so
 [src/bbt-scenarios-steps-initialize_grammar.adb](../../src/bbt-scenarios-steps-initialize_grammar.adb):35|                                                                                         --  we currently do not check if the existing file contains
 [src/bbt-scenarios-steps-validate_step_state.adb](../../src/bbt-scenarios-steps-validate_step_state.adb):16|   -- To move in Text_Utilities
-[src/bbt-scenarios.ads](../../src/bbt-scenarios.ads):58|   --  To be moved as dispatching in Writers
 [src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):343|         --   a command terminated by a signal is not distinguished
 [src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):480|      --   a command producing its output in bursts separated by
 [src/bbt-tests-actions.adb](../../src/bbt-tests-actions.adb):751|      --   thus, "successfully run" is not checked for interactive

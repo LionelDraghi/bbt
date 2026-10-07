@@ -22,19 +22,19 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### High priority
 
-- interactive exec
-  Test of command waiting for user input
+- PTY for interactive commands  
+  Interactive input is now supported (`When I type`, `When I enter`), but
+  commands are fed through pipes, and a program that does not flush its
+  prompt before reading cannot be tested. Giving it a pseudo terminal
+  would remove this constraint on the software under test.  
+  cf. [pty](../proposed_features/pty.md)
 
 ### Low priority
-
-- environment  
-  Check and/or set environment variable
 
 - append / remove  
   To append / remove text to an existing text file
 
-- implement "case insensitive" and "ignore blank lines" modifiers
-  
+- implement a "case insensitive" modifier
 - explore the possibility to run multiple exe in //, while staying simple.  
   Maybe by using the AdaCore spawn lib.
 
@@ -69,11 +69,6 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...
-
-- Synonyms : 
-
-  Stderr = error output  
-  Stdout = output
 
 - Adding a command line completion generation  
   cf. to https://rust-lang.github.io/rustup/installation/index.html#enable-tab-completion-for-bash-fish-zsh-or-powershell  

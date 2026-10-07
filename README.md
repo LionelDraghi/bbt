@@ -2,12 +2,7 @@
 
 [![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) [![Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FLionelDraghi%2Fbbt%2Fmain%2Falire.toml&query=%24.version&label=latest&style=flat-square)](https://github.com/LionelDraghi/bbt/blob/main/docs/changelog.md) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
-[![image](https://img.shields.io/badge/-inside-blue?logo=ada&logoColor=white&labelColor=grey&logoSize=auto&style=flat-square)](https://ada-lang.io/)
 [![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-blue?style=flat-square)](https://blog.adacore.com/ada-spark-crate-of-the-year-2024-winners-announced) 
-
-[![](docs/tests_results/Linux/badge.svg)](docs/tests_results/Linux/features_results.md) 
-[![](docs/tests_results/Darwin/badge.svg)](docs/tests_results/Darwin/features_results.md)
-[![](docs/tests_results/Windows/badge.svg)](docs/tests_results/Windows/features_results.md) 
 
 ---
 - [Overview](#overview)
@@ -17,6 +12,7 @@
 - [Installation](#installation)
   - [Stable version](#stable-version)
   - [Latest version](#latest-version)
+    - [Status](#status)
     - [Building from sources](#building-from-sources)
     - [AppImage (Linux only)](#appimage-linux-only)
 - [First use](#first-use)
@@ -164,7 +160,16 @@ The stable version of [![Alire](https://img.shields.io/endpoint?url=https://alir
 
    Ensure that the installation directory is in your PATH.
 
-### Latest version
+### Latest version  
+
+#### Status  
+
+The three supported platforms are continuously tested: the badges below are
+updated by the CI on each push, and give the test results of the latest version.
+
+[![](docs/tests_results/Linux/badge.svg)](docs/tests_results/Linux/features_results.md) 
+[![](docs/tests_results/Darwin/badge.svg)](docs/tests_results/Darwin/features_results.md)
+[![](docs/tests_results/Windows/badge.svg)](docs/tests_results/Windows/features_results.md) 
 
 #### Building from sources
 ```sh
@@ -210,10 +215,10 @@ Alternatively, simply copy the [docs/bbt-skill](docs/bbt-skill) directory into t
 ## Some projects using *bbt*
 
 ### By contributors
-- Kudos to the first adopter, Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret
+- Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret. Kudos to the first bbt adopter!
 - [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
-- [aclida](https://github.com/adarium-labs/aclida), by [Heziode](https://github.com/Heziode)
+- aclida (not yet public) by [Heziode](https://github.com/Heziode)
 
 ### By users
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert

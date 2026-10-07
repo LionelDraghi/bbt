@@ -1056,12 +1056,8 @@
    - OK : Then I get error  
    - [X] scenario   [a required file does not exist](../../features/B030_File_creation_in_Given_steps.md) pass  
 
-   ### Scenario: [the required file is created](../../features/B030_File_creation_in_Given_steps.md): 
-   - OK : Given my favorite and so useful `config.ini` file  
-   - OK : Then `config.ini` contains `Tmp_dir=/tmp`  
-   - [X] scenario   [the required file is created](../../features/B030_File_creation_in_Given_steps.md) pass  
-
    ### Scenario: ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given my favorite and so useful `config.ini` file  
    - OK : Given there is no `config.ini` file    
    - OK : Then there is no more `config.ini` file  
    - [X] scenario   ["Given there is no", when there actually is, should erase the file](../../features/B030_File_creation_in_Given_steps.md) pass  
@@ -1084,6 +1080,50 @@
    - OK : And the output contains `file "config.ini" not deleted`  
    - OK : And there is a `config.ini` file  
    - [X] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_confirm.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is no `d1` directory  
+   - [X] scenario   [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d1` directory  
+   - OK : Given the new `d1/f1` file containing `some data`  
+   - OK : Given the new `erase_dir_refuse.md` file  
+   - OK : When I run `./bbt -q -c erase_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d1" not deleted`  
+   - OK : And there is a `d1` directory  
+   - [X] scenario   [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d2` directory  
+   - OK : Given the new `d2/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_confirm.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_confirm.md`  
+   - OK : Then the output is  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And there is a `d2` directory  
+   - OK : And there is no `d2/f1` file  
+   - [X] scenario   [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+
+   ### Scenario: [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new `d3` directory  
+   - OK : Given the new `d3/f1` file containing `some data`  
+   - OK : Given the new `erase_new_dir_refuse.md` file  
+   - OK : When I run `./bbt -q erase_new_dir_refuse.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `dir "d3" not deleted`  
+   - OK : And there is a `d3` directory  
+   - OK : And there is a `d3/f1` file  
+   - [X] scenario   [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
 
 
 # Document: [B040_Find_scenarios.md](../../features/B040_Find_scenarios.md)  
@@ -1589,6 +1629,15 @@
    - OK : And `index_4.md` is equal to file `verbose_output_NOK.md`  
    - [X] scenario   [Unsuccessful run index file](../../features/B140_Index_File.md) pass  
 
+   ### Scenario: [index links use web separators](../../features/B140_Index_File.md): 
+   - OK : Given the new directory `dir1`  
+   - OK : Given the file `dir1/OK_scen.md` containing  
+   - OK : Given the directory `dir1/sub`  
+   - OK : When I successfully run `./bbt -c --yes dir1/OK_scen.md --index dir1/sub/index_web.md`  
+   - OK : Then the file `dir1/sub/index_web.md` contains `](../OK_scen.md)`  
+   - OK : And the file `dir1/sub/index_web.md` does not contain `\`  
+   - [X] scenario   [index links use web separators](../../features/B140_Index_File.md) pass  
+
 
 # Document: [B150_Deprecated_Options.md](../../features/B150_Deprecated_Options.md)  
   ## Feature: Deprecated and no more supported options  
@@ -1960,12 +2009,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 208 scenarios OK
+## Summary : **Success**, 212 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 208   |
+| Successful | 212   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

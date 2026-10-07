@@ -115,7 +115,8 @@ The index number is not significant, but lowest number are supposed to be more b
 
 Tests are run in the tests directory, so that docs will not be polluted with possibly remaining files.
 
-All test results per platform are then available in docs/tests_results/Windows|Linux|Darwin
+All test results per platform are then available in docs/tests_results/Windows|Linux|Darwin  
+On each push on main, the CI republishes the results and badges of the three platforms, so a manual run on each platform is no more needed to update them.
 
  > [!NOTE] On Mac, GNAT_FILE_NAME_CASE_SENSITIVE must be set to 1 (refer to https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795) othwise some tests will fail. 
 

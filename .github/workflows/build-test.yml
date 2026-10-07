@@ -10,6 +10,7 @@ on:                    # Run the workflow for each of the following events:
       - 'tools/**'
       - 'docs/features/**'
       - 'docs/examples/**'
+      - '.github/workflows/**'
       - 'Makefile'
       - 'alire.toml'
 
@@ -95,3 +96,34 @@ jobs:
         if: always()
         with:
           report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/features_results.xml
+
+      - name: Publish test results and badges
+        # make -k above regenerated docs/tests_results/${OS_PLATFORM} in the
+        # runner workspace, but did not commit it: publish it, so that the
+        # badges shown in the README are updated by the CI, and not only by
+        # a manual run on each platform. Only on success and on main, so that
+        # failing tests or pull-requests do not update the published status.
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/tests_results/${OS_PLATFORM}
+          if git diff --cached --quiet; then
+            echo "No change in docs/tests_results/${OS_PLATFORM}, nothing to publish"
+            exit 0
+          fi
+          git commit -m "CI: update ${OS_PLATFORM} test results and badges [skip ci]"
+          # The three platforms run in parallel and push to the same branch:
+          # retry with rebase if another platform pushed in between.
+          for i in 1 2 3 4 5; do
+            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+              echo "Results and badges published"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "Push failed (attempt $i), retrying after a delay"
+            sleep $((i * 10))
+          done
+          echo "Could not publish ${OS_PLATFORM} test results"
+          exit 1
