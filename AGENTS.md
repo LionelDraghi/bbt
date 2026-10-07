@@ -19,8 +19,9 @@
 
 - `make tools` to build sut and rpl, and to create the sut, bbt and gcc
   links in tests/; run it after a fresh clone, or when those links are missing
-- on Windows, those links are in fact copies: rerun `make tools` after
-  rebuilding bbt, otherwise the tests run the stale copy
+- on Windows, those links are in fact copies, refreshed by the tests
+  `setup` target (a prerequisite of every suite) and by `make build`,
+  that refreshes tests/bbt via the `refresh_bbt` target after linking
 
 ## Test procedure
 

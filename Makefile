@@ -59,10 +59,13 @@ build:
 	#=# rm obj/development/bbt-gnatcov-instr/bbt-main*ad[sb]
 	#=# alr build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full.gpr
 
+	@ $(MAKE) -s refresh_bbt --directory=tests
+
 release:
 	echo
 	echo === building bbt for release
 	alr --non-interactive build --release
+	@ $(MAKE) -s refresh_bbt --directory=tests
 	# Alire profiles : --release --validation --development (default)
 
 check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)

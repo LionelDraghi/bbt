@@ -10,8 +10,13 @@ ifeq ($(OS), Windows_NT)
 	# This is why I override it on Windows:
 	PLATFORM := Windows
 	EXE_SUFFIX := .exe
+	# On Windows, ln -fs silently falls back on a timestamp-preserving
+	# copy: an explicit cp is more honest, and sets a fresh mtime at
+	# each refresh, so that the staleness is observable
+	REFRESH := cp -f
 else
 	EXE_SUFFIX :=
+	REFRESH := ln -fs
 endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
@@ -35,9 +40,14 @@ build:
 setup: ../sut$(EXE_SUFFIX) ../bbt$(EXE_SUFFIX)
 	mkdir -p $(RESULTS_DIR)
     
-	@ln -fs ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
-	@ln -fs ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
-	@ln -fs ../rpl$(EXE_SUFFIX) rpl$(EXE_SUFFIX)
+	@$(REFRESH) ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
+	@$(REFRESH) ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
+	@$(REFRESH) ../rpl$(EXE_SUFFIX) rpl$(EXE_SUFFIX)
+
+refresh_bbt: ../bbt$(EXE_SUFFIX)
+	@$(REFRESH) ../bbt$(EXE_SUFFIX) bbt$(EXE_SUFFIX)
+	# Called by the root build, so that a direct ./bbt run in tests/
+	# after a rebuild never uses a stale binary
 # Manage differences between Windows and Unix
 ifeq ($(PLATFORM), Windows)
 EXCLUDE := --exclude Unix_Only
@@ -62,9 +72,10 @@ else
 
 endif
 
-features:
+features: setup
 	@ # Then test all the features
 	@ echo 1. features tests ================
+	@ ./bbt --version
 	./bbt --yes --keep_going \
 	--exclude @Flaky     \
 	--cleanup $(EXCLUDE) \
@@ -76,17 +87,19 @@ features:
 	@ echo
 	@ - rm -f verbose_output_NOK.md verbose_output_OK.md
 
-examples:
+examples: setup
 	@ # Check examples
 	@ echo 2. examples check ================
+	@ ./bbt --version
 	./bbt --yes -k -c -q -hm \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
 	@ echo
 
-non_reg:
+non_reg: setup
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
+	@ ./bbt --version
 	./bbt --yes --keep_going --cleanup -q \
 	--human_match \
 	--index $(RESULTS_DIR)/non_reg_tests.md \
