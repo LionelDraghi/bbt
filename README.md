@@ -234,7 +234,7 @@ The reading is organized by role:
 
 ### As a developer
 - [Developer Guide](docs/dev/developer_guide.md): design overview, issues, fixme...
-- [Design decisions](docs/dev/design_decisions.md): the decision log, significant design decisions and their rationale
+- [Design discussions](docs/dev/design_discussions.md): design subjects under discussion or arbitrated, and their rationale
 - [Release procedure](docs/dev/release_procedure.md)
 
 ### As a curious reader

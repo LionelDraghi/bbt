@@ -61,7 +61,7 @@ the standard error to the same files as the previous blocking
 implementation did, and reports the exit code on termination.
 
 The choice of this library, and the alternatives that were rejected,
-are recorded in [design_decisions.md](design_decisions.md).
+are recorded in [design_discussions.md](design_discussions.md).
 
 Note that `Spawn.Environments.System_Environment` is a snapshot taken at
 elaboration time: the child environment is rebuilt at each command with

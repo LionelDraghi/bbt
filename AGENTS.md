@@ -65,14 +65,20 @@
   tutorial and of the example in help (docs/help/tutorial.md,
   docs/help/example.md and docs/examples/gcc_hello_world.md)
 
-## Design decisions
+## Design discussions
 
-- significant design decisions are recorded in docs/dev/design_decisions.md
-  (the decision log): one entry per subject, stating the decision, the
-  rejected alternatives and why, and referencing the PR or discussion
-  where the subject was elaborated
+- design subjects are discussed in docs/dev/design_discussions.md, one
+  entry per subject, with its status: under discussion, or arbitrated; an
+  arbitrated entry states the decision, the rejected alternatives and
+  why, and references the PR or discussion where the subject was
+  elaborated
+- the document header holds a table of the entries, sorted by status,
+  the entries under discussion first
+- a reference to an entry from the code is welcome when it helps the
+  understanding
 - the developer guide keeps only the operational descriptions: when a
-  discussion of alternatives ends up there, move it to the decision log
+  discussion of alternatives ends up there, move it to the design
+  discussions
 - an idea not yet decided goes to docs/proposed_features, with an entry
   in the TDL chapter of docs/dev/project.md; it can be short, just enough
   to capture the need, or already polished as a docs/features file,
@@ -91,7 +97,7 @@
 
 - to understand bbt: docs/bbt-skill
 - design and tests: docs/dev/developer_guide.md
-- design decisions log: docs/dev/design_decisions.md
+- design discussions: docs/dev/design_discussions.md
 - to do list: docs/proposed_features, docs/dev/fixme_index.md,
   chapter TDL in docs/dev/project.md
 - bbt is tested mostly with bbt

@@ -1,22 +1,27 @@
-# Design decisions
+# Design discussions
 
-This document is bbt's decision log: it records the significant design
-decisions, their context, and the alternatives that were rejected. When
-the discussion that led to a decision happened elsewhere (a pull
+This document holds the design discussions: each entry records a
+significant design subject, with its status - under discussion, or
+arbitrated - and, once arbitrated, the decision, the alternatives that
+were rejected and why. When the discussion happened elsewhere (a pull
 request, a GitHub discussion, a forum thread), the entry references it
-and adds only the complements needed to understand the decision as it
+and adds only the complements needed to understand the subject as it
 stands.
 
-An entry may be superseded by a later entry; it is then updated with a
-reference to its replacement.
+An arbitrated entry may be superseded by a later entry; it is then
+updated with a reference to its replacement.
 
-_Table of Contents:_
-- [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)
-- [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps)
+| Subject                                                                                  | Status                             | References                                                                         |
+|------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
+| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
+| [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated, implementation pending | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
+
+The table is sorted by status: the entries under discussion first.
 
 ## D1. Command execution library: Spawn
 
-Status: accepted (October 2026)
+Status: arbitrated (October 2026)
 
 The commands of the `When I run` steps are executed through the
 [Spawn](https://github.com/AdaCore/spawn) library (Alire dependency
@@ -80,7 +85,7 @@ References:
 
 ## D2. successfully and the interactive steps
 
-Status: accepted (October 2026), implementation pending
+Status: arbitrated (October 2026), implementation pending
 
 `when I successfully run 'X'` is defined in
 [A130](../features/A130_Successfully_Keyword.md) as the shortcut for
@@ -134,3 +139,47 @@ References:
 - [PR #40](https://github.com/LionelDraghi/bbt/pull/40): the design
   discussion, listing the three solutions and the elimination
   rationale.
+
+## D3. Readers and writers organization
+
+Status: under discussion
+
+bbt reads Markdown (the MDG reader) and a close AsciiDoc subset, and
+writes Markdown, AsciiDoc and text - the text writer being in fact a
+second Markdown writer, as B140 shows: the verbose output is equal to
+the Markdown index file.
+
+The Markdown specific knowledge is scattered: the readers (mdg, adoc)
+and the lexer know how to read, the writers know how to write, and
+[Markdown_Utilities](../../src/markdown_utilities.ads) (2026-10)
+centralizes the shared helpers (`Web_Path`, `Link`, `Checkbox`,
+`Hard_Break`), but:
+
+- `Text_Writer` duplicates the Markdown knowledge of
+  `Markdown_Writer`: checkboxes, links, hard breaks, and the results
+  summary table are written twice;
+- `AsciiDoc_Writer` embeds Markdown conventions (the "  " hard break,
+  whereas AsciiDoc uses " +");
+- a future format that is not a Markdown flavor (reST, org mode...)
+  would need its own reader and its own writer, and would reuse
+  almost nothing of the existing writers.
+
+Points to arbitrate:
+
+- where does the abstraction line go between the writer hierarchy and
+  the format utilities?
+- should `Text_Writer` be a `Markdown_Writer`?
+- should the markdown and asciidoc writers share a common intermediate
+  representation?
+
+The balance is between the factorization gain - one results model,
+one writer hierarchy, the format syntax grouped per format utility
+package - and the cost of an abstraction layer for a set of formats
+that is, today, all Markdown derived.
+
+References:
+
+- [B140_Index_File.md](../features/B140_Index_File.md): the text
+  writer output is the Markdown index;
+- [markdown_utilities.ads](../../src/markdown_utilities.ads): the first
+  factorization step.

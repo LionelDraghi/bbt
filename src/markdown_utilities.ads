@@ -5,6 +5,10 @@
 -- SPDX-FileCopyrightText: 2025, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+--  This package centralizes the Markdown syntax knowledge shared by the
+--  writers. It is a first step of the readers and writers organization
+--  discussion, cf. docs/dev/design_discussions.md.
+
 package Markdown_Utilities is
 
    -- --------------------------------------------------------------------------
