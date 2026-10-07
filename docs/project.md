@@ -40,6 +40,13 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 - "no new files" and "no env change" check
 
+- bounding the tests execution time  
+  A hanging command under test, typically one waiting for an input
+  that no step provides, blocks the whole run: an option bounding the
+  time per scenario, or the total run time, would make bbt fail fast
+  with an explicit message instead.  
+  cf. [timeouts](proposed_features/timeouts.md)
+
 - LCS based diff alignment  
   Error messages compare expected and actual positionally; an LCS based
   alignment, as in diff or git, would give more relevant results.  

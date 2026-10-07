@@ -42,6 +42,8 @@
 - feature files in docs/features are the specification (TDD first)
 - avoid snapshot testing (cf. bbt-skill), especially for generated files
 - add a line in docs/changelog.md under the current -dev version
+- keep the changelog entries short: one line announcing the change, with a
+  reference to the feature file or the issue for the details
 - `Fixme:` comments in docs/ and src/ are indexed in docs/fixme_index.md by `make doc`
 - examples and generated docs must not depend on the machine or on the locale:
   no hard version number (use a regexp or a fixed behavior), and set
@@ -53,10 +55,27 @@
 - to show a whole step between backticks in the docs, with the inner
   backticks visible (e.g. When I type `Y`), use a double backtick code span,
   with a space before the closing delimiter: ``When I type `Y` ``;
+- align the tables in Markdown files with spaces, so that they stay readable
+  in plain text form; generated files (docs/grammar.md, docs/keywords.md,
+  docs/bbt_help.txt...) are exempt, their format is up to the generator
 - on any functional evolution, do not forget the possible update of the
   tutorial and of the example in help (docs/help/tutorial.md,
   docs/help/example.md and their generated copies docs/tutorial.md,
   docs/example.md, docs/examples/gcc_hello_world.md)
+
+## Design decisions
+
+- significant design decisions are recorded in docs/design_decisions.md
+  (the decision log): one entry per subject, stating the decision, the
+  rejected alternatives and why, and referencing the PR or discussion
+  where the subject was elaborated
+- the developer guide keeps only the operational descriptions: when a
+  discussion of alternatives ends up there, move it to the decision log
+- an idea not yet decided goes to docs/proposed_features, with an entry
+  in the TDL chapter of docs/project.md; it can be short, just enough
+  to capture the need, or already polished as a docs/features file,
+  scenarios included, ready to be moved there when the decision is
+  made (cf. docs/proposed_features/timeouts.md)
 
 ## Alire and version numbering
 
@@ -70,6 +89,7 @@
 
 - to understand bbt: docs/bbt-skill
 - design and tests: docs/developer_guide.md
+- design decisions log: docs/design_decisions.md
 - to do list: docs/proposed_features, docs/fixme_index.md,
   chapter TDL in docs/project.md
 - bbt is tested mostly with bbt

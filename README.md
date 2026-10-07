@@ -26,7 +26,10 @@
   - [By users](#by-users)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
-- [References](#references)
+  - [As a user](#as-a-user)
+  - [As a developer](#as-a-developer)
+  - [As a curious reader](#as-a-curious-reader)
+  - [Reading map](#reading-map)
 
 
 ## Overview
@@ -220,18 +223,33 @@ Alternatively, simply copy the [docs/bbt-skill](docs/bbt-skill) directory into t
 - new features are added regularly: latest updates can be found in the [Changelog](docs/changelog.md);
 
 ## Further reading
-- A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9).
+
+The reading is organized by role:
+
+### As a user
+- [User Guide](docs/UG.md): concepts, commands, features...
+- [Why should I use bbt](docs/why_should_i_use_bbt.md)?
+- [FAQ](docs/faq.md)
 - How to get off to a good start with the README and *bbt*: [Giving README-Driven Development Superpowers with bbt](https://dev.to/lioneldraghi/giving-readme-driven-development-superpowers-with-bbt-2a1h)
 
-## References
-- [User Guide](docs/UG.md): concepts, commands, features...
-- [References](docs/references.md): syntax, grammar, and more details on non obvious behavior
-- [FAQ](docs/faq.md)
-  
-- [Project status](docs/project.md): changelog, tests, TDL...
+### As a developer
 - [Developer Guide](docs/developer_guide.md): design overview, issues, fixme...
+- [Design decisions](docs/design_decisions.md): the decision log, significant design decisions and their rationale
+- [Release procedure](docs/release_procedure.md)
 
+### As a curious reader
+- A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9)
+- [Comparables](docs/comparables.md): existing comparables and inspiring references
 - [bbt on the web](docs/bbt_on_the_net.md)
-- [Why should I use bbt](docs/why_should_i_use_bbt.md)
+
+### Reading map
+
+Some documents are worth reading for several roles:
+
+| Document                                                                | As a user | As a developer | As a curious reader |
+|-------------------------------------------------------------------------|:---------:|:--------------:|:-------------------:|
+| [References](docs/references.md): syntax, grammar, non obvious behavior |     x     |       x        |                     |
+| [Changelog](docs/changelog.md)                                          |     x     |       x        |          x          |
+| [Project status](docs/project.md): tests, TDL                           |           |       x        |          x          |
 
 [^1]: More precisely, *bbt* complies (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 

@@ -409,15 +409,15 @@ Malformed lines: 0
 
 ### 5. Grading
 
-| Component                                                | Points |
-|----------------------------------------------------------|:------:|
-| **`weblogstat` public test suite** – Scenarios passed    | 45     |
-| **`weblogstat` public test suite** – Feature bonuses (no error in all scenarios of a feature) | 10 |
-| Hidden `bbt` robustness tests                            | 15     |
-| Code quality (structure, readability, comments, modularity) | 20  |
-| Report contents and formatting                           | 5      |
-| Collaboration evidence (Git history, contributions)      | 5      |
-| **Total**                                                | **100**|
+| Component                                                                                       | Points  |
+|-------------------------------------------------------------------------------------------------|:-------:|
+| **`weblogstat` public test suite** – Scenarios passed                                         |   45    |
+| **`weblogstat` public test suite** – Feature bonuses (no error in all scenarios of a feature) |   10    |
+| Hidden `bbt` robustness tests                                                                   |   15    |
+| Code quality (structure, readability, comments, modularity)                                     |   20    |
+| Report contents and formatting                                                                  |    5    |
+| Collaboration evidence (Git history, contributions)                                             |    5    |
+| **Total**                                                                                       | **100** |
 
 #### 5.1 `weblogstat` public test suite – Scenarios (45 pts)
 

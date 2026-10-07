@@ -7,17 +7,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.4.2-dev] - 2026-??-??**
-  - [Added]   `When I type Y` and `When I enter Y` steps, to interact with a command waiting for user input: `type` sends the text without a trailing newline, for programs reading a single key, and `enter` sends it followed by a newline, for programs reading a whole line. The command is started without waiting for its termination, and the output checks following an input step apply to the output produced after it: the prompt displayed before the input is ignored. Command execution is now based on the Spawn library (see docs/features/A290_When_I_Type_Or_Enter.md)
+  - [Added]   `When I type Y` and `When I enter Y` steps, to interact with a command waiting for user input: `type` sends a single key, `enter` sends a whole line (see docs/features/A290_When_I_Type_Or_Enter.md)
   - [Added]   a warning when a run command contains shell metacharacters (`|`, `$`, backtick, `<`, `>`, ...), as commands are not run through a shell
   - [Fixed]   this warning was raised on quoted metacharacters (e.g. `find . -name "*.ad[sb]"`), although quoting is exactly the way to pass a literal metacharacter as an argument
   - [Fixed]   an empty actual output compared to a non empty expected content raised a CONSTRAINT_ERROR and silently passed
   - [Fixed]   `bbt explain` crashed when a step with a missing code block was followed by another scenario header
   - [Fixed]   with `--keep_going`, an output checking step following a command that could not be spawned crashed with an unhandled NAME_ERROR instead of reporting a clean error on the missing output file
   - [Fixed]   CRs at line ends, as found in files or output produced on Windows, were significant in human match mode, although human match is supposed to ignore text presentation: they are now ignored like other whitespaces, and remain significant with `--exact_match`
-  - [Fixed]   on Windows, command execution was broken since the move to the Spawn library: every command after the first failed with "Couldn't run", and bbt crashed at end of run or at scenario end, because the same Spawn process object was reused for all commands, which the Spawn Windows monitor does not support; a fresh process object is now created for each command, and disposed of once reaped
-  - [Fixed]   on macOS, freeing the process objects corrupted the heap: the Spawn monitor never removes terminated processes from its pid map (cf. [spawn#36](https://github.com/AdaCore/spawn/issues/36)), and when the OS reuses a pid, the exit status was written into freed memory, crashing bbt at positions moving from run to run; the process objects are now kept alive for the whole run
+  - [Fixed]   on Windows, command execution was broken since the move to the Spawn library: a fresh process object is now created for each command
+  - [Fixed]   on macOS, freeing the process objects corrupted the heap (cf. [spawn#36](https://github.com/AdaCore/spawn/issues/36)): the process objects are now kept alive for the whole run
   - [Added]   interactive scenarios testing the erasing confirmation of files and directory trees, including through the `new` keyword, the answer being sent to a nested bbt by a `When I type` step (cf. B030_File_creation_in_Given_steps.md)
-  - [Fixed]   ``Given the new directory `dir1` `` now really starts from a white page: an existing `dir1` tree is erased, after user confirmation, or silently with `--yes`, and the directory is recreated empty; it used to leave an existing tree in place, and the step failed to detect it (cf. B030_File_creation_in_Given_steps.md)
+  - [Fixed]   ``Given the new directory `dir1` `` now really starts from a white page: an existing `dir1` tree is erased, after user confirmation, or silently with `--yes` (it used to leave an existing tree in place)
+  - [Changed] the LLM reference guide is removed and merged into the bbt-skill
   
 - **[0.4.0] - 2026-10-03**
   - [Added]   An agent skill for AI coding agents to write, convert, run, and debug *bbt* scenarios, installable with `npx skills add LionelDraghi/bbt --skill bbt-skill` (see the new "For AI coding agents" section in the README)

@@ -16,6 +16,29 @@ Use this reference to create, improve, validate, or convert bbt scenarios.
 - Prefer stable checks over volatile values (timestamps, absolute paths, environment-specific versions).
 - Add filtering tags for platform-specific scenarios (e.g. `Windows_Only`, `Unix_Only`); see `bbt help filtering`.
 
+## Conversion examples
+
+**Requirement:** "System shall display version when --version flag is used"
+
+```markdown
+## Scenario: Version flag displays correct version
+
+- When I run `program --version`
+- Then the output contains `1.0.0`
+- And I get no error
+```
+
+**README instruction:** "Convert input.txt to output.txt using converter tool and verify result"
+
+```markdown
+## Scenario: File conversion workflow
+
+- Given the file `input.txt` containing `raw data`
+- When I run `converter input.txt output.txt`
+- Then there is a file `output.txt`
+- And the file `output.txt` contains `processed data`
+```
+
 ## Expected results and golden files
 
 A precise, focused expectation says what the test tests: prefer it to a
@@ -39,4 +62,9 @@ Most structural mistakes are visible in `bbt explain` output. Check that:
 - a parameter between backticks cannot itself contain a backtick: the first one closes the parameter, and the rest of the line is misparsed, with possibly no visible error; when a parameter must contain a backtick character, use a fenced code block instead of inline backticks;
 - the same trap corrupts the rendering of the prose around scenarios: quoting a bbt step in single backticks while the step itself contains backticks (most do) leaves an unclosed code span that swallows the document until the next backtick, often far away; wrap such quotes in double backticks, as in ``When I run `cmd` ``, and use `` ``` `` for a literal fence mark in prose;
 - a code block immediately follows its step, with no blank line in between;
-- no bbt step keyword appears in free text outside scenarios.
+- no bbt step keyword appears in free text outside scenarios;
+- bbt keeps only the keywords and parameters of a step, and ignores the rest
+  of the sentence: a negation in the free text is ignored, and the check is
+  then the opposite of the intended one. For instance, ``- then the output
+  never contains `Error` `` checks that the output *contains* `Error`: write
+  what bbt should check, using the step keywords.

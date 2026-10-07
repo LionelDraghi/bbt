@@ -5,7 +5,7 @@ license: CC-BY-NC-SA-4.0
 compatibility: bbt must be installed for running, debugging, and CI/CD tasks; authoring requires no runtime dependency.
 metadata:
   author: Lionel Draghi
-  version: "1.0.0"
+  version: "1.1.0"
 allowed-tools:
   - read
   - grep
@@ -48,12 +48,12 @@ If the request involves both conversion and execution, read `running.md` first, 
 
 Options, grammar, and examples evolve with each bbt release: never rely on copied documentation. Query bbt itself, or the online reference:
 
-| Need | Command or link |
-|------|-----------------|
-| Syntax and file structure | `bbt help tutorial` |
-| A complete starter scenario | `bbt help example` |
-| Full step grammar, with examples | `bbt help grammar` |
-| Step keywords | `bbt help keywords` |
-| Commands and options | `bbt help`, then `bbt help <topic>` with topic in `filtering`, `matching`, `other`, `debug`, or `bbt help on_all` |
-| What bbt understands from a file (dry run) | `bbt explain file.md` |
-| Installation, issues, documentation | https://github.com/LionelDraghi/bbt |
+| Need                                       | Command or link                                                                                                   |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Syntax and file structure                  | `bbt help tutorial`                                                                                               |
+| A complete starter scenario                | `bbt help example`                                                                                                |
+| Full step grammar, with examples           | `bbt help grammar`                                                                                                |
+| Step keywords                              | `bbt help keywords`                                                                                               |
+| Commands and options                       | `bbt help`, then `bbt help <topic>` with topic in `filtering`, `matching`, `other`, `debug`, or `bbt help on_all` |
+| What bbt understands from a file (dry run) | `bbt explain file.md`                                                                                             |
+| Installation, issues, documentation        | https://github.com/LionelDraghi/bbt                                                                               |
