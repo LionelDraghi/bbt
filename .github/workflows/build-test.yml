@@ -101,9 +101,11 @@ jobs:
         # make -k above regenerated docs/tests_results/${OS_PLATFORM} in the
         # runner workspace, but did not commit it: publish it, so that the
         # badges shown in the README are updated by the CI, and not only by
-        # a manual run on each platform. Only on success and on main, so that
-        # failing tests or pull-requests do not update the published status.
-        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        # a manual run on each platform. The publication happens even when
+        # some tests fail, so that the badges reflect the actual status
+        # (red when tests failed); only main is published, so that
+        # pull-requests do not change the published status.
+        if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -116,8 +118,11 @@ jobs:
           git commit -m "CI: update ${OS_PLATFORM} test results and badges [skip ci]"
           # The three platforms run in parallel and push to the same branch:
           # retry with rebase if another platform pushed in between.
+          # --autostash is required: the other regenerated files, outside
+          # docs/tests_results (grammar.md, fixme_index.md, ...), are not
+          # committed, and would make the rebase fail on unstaged changes.
           for i in 1 2 3 4 5; do
-            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+            if git fetch origin main && git rebase --autostash origin/main && git push origin HEAD:main; then
               echo "Results and badges published"
               exit 0
             fi
