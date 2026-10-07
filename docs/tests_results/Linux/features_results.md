@@ -338,6 +338,7 @@
    - [X] scenario   [*when I successfully run* an interactive command that finally exits cleanly](../../features/A130_Successfully_Keyword.md) pass  
 
    ### Scenario: [*when I successfully run* an interactive command that finally fails](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new file `to_keep.txt` containing `some data`  
    - OK : Given the new `interactive_fail.md` file  
    - OK : When I run `./bbt -q -c --yes interactive_fail.md`  
    - OK : Then I get an error  
@@ -345,6 +346,7 @@
    - [X] scenario   [*when I successfully run* an interactive command that finally fails](../../features/A130_Successfully_Keyword.md) pass  
 
    ### Scenario: [the deferred failure is reported before the next step](../../features/A130_Successfully_Keyword.md): 
+   - OK : Given the new file `to_keep.txt` containing `some data`  
    - OK : Given the new `deferred_fail.md` file  
    - OK : When I run `./bbt -q -c --yes deferred_fail.md`  
    - OK : Then I get an error  
@@ -1922,6 +1924,33 @@
    - [X] scenario   [check the output of a command that does not exist](../../features/B190_Clean_Error_When_No_Output.md) pass  
 
 
+# Document: [B200_Scenario_Timeout.md](../../features/B200_Scenario_Timeout.md)  
+  ## Feature: bounding the tests execution time  
+   ### Scenario: [a hanging command fails the scenario on timeout](../../features/B200_Scenario_Timeout.md): 
+   - OK : Given the new `hang.md` file  
+   - OK : When I run `./bbt -q -c --scenario_timeout 1 hang.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `the scenario timeout of 1s expired`  
+   - [X] scenario   [a hanging command fails the scenario on timeout](../../features/B200_Scenario_Timeout.md) pass  
+
+   ### Scenario: [the deferred exit status check waits no more than the timeout](../../features/B200_Scenario_Timeout.md): 
+   - OK : Given the new file `to_keep.txt` containing `some data`  
+   - OK : Given the new `deferred_hang.md` file  
+   - OK : When I run `./bbt -q -c --yes --scenario_timeout 1 deferred_hang.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `the scenario timeout of 1s expired before the command termination`  
+   - [X] scenario   [the deferred exit status check waits no more than the timeout](../../features/B200_Scenario_Timeout.md) pass  
+
+   ### Scenario: [the duration is a number of seconds, with an optional unit](../../features/B200_Scenario_Timeout.md): 
+   - OK : Given the new `quick.md` file  
+   - OK : When I run `./bbt -q -c --scenario_timeout 1m30s quick.md`  
+   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : When I run `./bbt -q --scenario_timeout xyz quick.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `invalid duration`  
+   - [X] scenario   [the duration is a number of seconds, with an optional unit](../../features/B200_Scenario_Timeout.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -2092,12 +2121,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 222 scenarios OK
+## Summary : **Success**, 225 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 222   |
+| Successful | 225   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

@@ -19,7 +19,9 @@ jobs:
         run: alr install bbt
 
       - name: Run bbt scenarios
-        run: bbt --recursive doc/scenario
+        # --scenario_timeout makes a hanging scenario fail fast
+        # instead of blocking the job
+        run: bbt --recursive --scenario_timeout 5m doc/scenario
 
       - name: check examples
         run: bbt README.md

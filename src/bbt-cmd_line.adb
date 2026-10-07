@@ -214,6 +214,22 @@ package body BBT.Cmd_Line is
                   Settings.Set_JUnit_File (Current_Arg);
                end if;
 
+            elsif Cmd = "--scenario_timeout" then
+               if On_Last_Arg then
+                  IO.Put_Error (Cmd & " must be followed by a duration");
+               else
+                  Go_Next_Arg;
+                  declare
+                     OK : Boolean;
+                  begin
+                     Settings.Set_Scenario_Timeout (Current_Arg, OK);
+                     if not OK then
+                        IO.Put_Error ("invalid duration """
+                                      & Current_Arg & """");
+                     end if;
+                  end;
+               end if;
+
             elsif Cmd = "-ed" or Cmd = "--exec_dir" then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a file name");

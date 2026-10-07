@@ -97,8 +97,22 @@ package BBT.Tests.Actions.Commands is
    procedure Wait_Deferred_Exit_Check (Verbosity : Verbosity_Levels);
    -- Called at the end of a scenario: if an exit status check is
    -- deferred and its command is still running, wait for the command
-   -- termination, then resolve the check. Bounding that wait is a
-   -- parked proposal (cf. docs/proposed_features/timeouts.md).
+   -- termination, then resolve the check. The wait is bounded by the
+   -- scenario timeout (cf. the design discussion D6).
+
+   procedure Set_Scenario_Deadline;
+   -- Arm the scenario timeout, when set in the settings: called at
+   -- the start of each scenario. The deadline covers the scenario
+   -- steps, backgrounds included, not the cleanup (cf. the design
+   -- discussion D6).
+
+   procedure Check_Deadline (Step      :     Step_Type'Class;
+                            Verbosity :     Verbosity_Levels;
+                            OK        : out Boolean);
+   -- If the scenario timeout is armed and expired: kill the still
+   -- running command, if any, and report the failure on the Step
+   -- line (cf. the design discussion D6). OK is False when the
+   -- deadline expired.
 
    function Last_Exit_Code return Integer;
    -- Exit code of the last command run (0 before the first one).

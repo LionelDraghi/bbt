@@ -29,3 +29,5 @@ First determine what is being debugged: the program under test, or the scenario.
 ## CI/CD
 
 Keep it minimal: install bbt, run the scenario files. A starter GitHub Actions workflow is provided in [assets/github-actions-bbt.yml](../assets/github-actions-bbt.yml); adapt it to the target OS and to the filtering needs.
+
+A regression can make a command hang or loop forever: in a pipeline, that blocks the job until the runner kills it, with no diagnosis. Run with a scenario timeout, for instance `bbt --scenario_timeout 5m tests/`: a scenario that exceeds the bound fails fast with a message naming the hanging step, and its still running command is killed, so that no process is left behind. There is no timeout by default; pick a generous bound, so that only real hangs trigger it, not slow machines.

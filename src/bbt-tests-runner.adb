@@ -145,6 +145,14 @@ package body BBT.Tests.Runner is
             --  The output of a still running command is checked once its
             --  response to the last input is complete.
             Wait_Response;
+            Check_Deadline (Step      => Step,
+                            Verbosity => Verbosity,
+                            OK        => Spawn_OK);
+            if not Spawn_OK then
+               Run_Error := True;
+               Set_End_Time (Step);
+               return;
+            end if;
 
          else
             --  Any other step requires the command to have terminated
@@ -521,6 +529,9 @@ package body BBT.Tests.Runner is
    procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
    begin
       for Scen of L loop
+         Set_Scenario_Deadline;
+         --  The timeout budget covers the scenario and its backgrounds
+         --  (cf. the design discussion D6), not the cleanup.
          Run_Background (Scen);
          Run_Scenario (Scen);
          Restore_Environment;

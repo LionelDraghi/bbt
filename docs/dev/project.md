@@ -40,14 +40,6 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 - "no new files" and "no env change" check
 
-- bounding the tests execution time  
-  A hanging command under test, typically one waiting for an input
-  that no step provides, blocks the whole run: an option bounding the
-  time per scenario would make bbt fail fast with an explicit message
-  instead. The per scenario granularity is arbitrated, and the
-  prerequisite (the deferred exit status checks, cf. D2) is in place:
-  the rest of the design is parked, waiting for arbitration.  
-  cf. [timeouts](../proposed_features/timeouts.md)
 
 - progress bar to rework  
   The status bar (`-sb` option) only displays the current file name:

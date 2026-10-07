@@ -26,6 +26,11 @@
   only) freezes inconsistent artifacts, such as a badge.url still
   holding the bbt placeholder, or a stale badge.svg; if anything fails
   during this last run, stop and ask the owner to arbitrate
+- before pushing, `git pull --rebase origin main`: the CI has most
+  likely pushed three commits updating the test results and badges
+  since the last push, and a plain `git push` is rejected; if the
+  rebase conflicts on a generated file (test results, badges...),
+  keep the local version, that reflects the latest full run
 
 ## Build
 
@@ -64,6 +69,8 @@
   stacking the last arrived entry on top of the list
 - keep the changelog entries short: one line announcing the change, with a
   reference to the feature file or the issue for the details
+- the changelog is for human users: do not record the bbt skill
+  evolutions there
 - `Fixme:` comments in docs/ and src/ are indexed in docs/dev/fixme_index.md by `make doc`
 - examples and generated docs must not depend on the machine or on the locale:
   no hard version number (use a regexp or a fixed behavior), and set
@@ -100,7 +107,7 @@
   in the TDL chapter of docs/dev/project.md; it can be short, just enough
   to capture the need, or already polished as a docs/features file,
   scenarios included, ready to be moved there when the decision is
-  made (cf. docs/proposed_features/timeouts.md)
+  made (cf. docs/proposed_features/pty.md)
 
 ## Alire and version numbering
 

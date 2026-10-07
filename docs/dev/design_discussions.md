@@ -15,6 +15,7 @@ updated with a reference to its replacement.
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
+| [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
@@ -262,3 +263,53 @@ test machinery invisible to the rest of bbt.
 
 The move is mechanical: cut and paste plus with and use clauses, no
 behavior change, to be verified by the unchanged test suites.
+
+## D6. Scenario timeout
+
+Status: arbitrated (October 2026), implemented (October 2026)
+
+A test suite must stay CI friendly: a command hanging, looping
+forever, or waiting for an input that no step provides must fail
+fast with an explicit message, not block the whole pipeline. The
+risk became acute with the interactive steps and the deferred exit
+status checks (cf. D2), that may wait for a command termination at
+the end of a scenario, possibly forever.
+
+Decisions:
+
+- the timeout is per scenario, for instance
+  `--scenario_timeout <duration>`. Rejected alternatives: a timer
+  per step, which does not fit a command spanning several steps, and
+  where a hang may only show on the deferred checks; a timer for the
+  whole run, which stops bbt after the damage is done, instead of
+  failing at the place where the hang blocks, where bbt can name the
+  culprit.
+- the timer covers the scenario steps, backgrounds included, not
+  the cleanup;
+- on expiry, the still running command is killed, so that no
+  process is left behind, and the scenario fails with a message on
+  the hanging step line, so that the user understands which step
+  causes the error; the deferred exit status check says that the
+  timeout expired before the command termination, on the
+  successfully run step line;
+- the duration is a number of seconds with an optional unit:
+  groups of digits followed by `s`, `m` or `h` are summed
+  (`10`, `10s`, `2m`, `1m30s`); an invalid duration is a command
+  line error;
+- the default is no timeout at all, so that bbt's behavior is
+  unchanged unless the option is explicitly given.
+
+The enforcement is deadline based: the pumping loops
+(`Pump`, `Wait_Quiet`, `Wait_Response`) exit when the deadline is
+passed, and each step that can block on a command checks the
+deadline and reports the failure. This bounds every wait on a
+command, without a watchdog task and its abort hazards. The only
+unbounded wait left is bbt's own confirmation prompt, that waits for
+the user, not for a command.
+
+References:
+
+- the specification and the scenarios:
+  [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md);
+- the former proposal docs/proposed_features/timeouts.md, removed
+  once implemented.

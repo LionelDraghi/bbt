@@ -17,6 +17,7 @@ with Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Exceptions;
 with Ada.Streams;
+with Ada.Strings.Fixed;
 with Ada.Streams.Stream_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -57,6 +58,30 @@ package body BBT.Tests.Actions.Commands is
    --  the last command is still running
    Spawn_Error : Integer := 0;
    --  set by the listener if the command could not be run
+
+   Scenario_Deadline : Ada.Calendar.Time := Ada.Calendar.Clock;
+   --  expiry time of the current scenario when the scenario timeout is
+   --  armed; the bound applies only when Settings.Scenario_Timeout > 0
+   --  (cf. the design discussion D6)
+
+   use type Ada.Calendar.Time;
+
+   function Timeout_Expired return Boolean is
+     (Settings.Scenario_Timeout > 0.0
+      and then Ada.Calendar.Clock >= Scenario_Deadline);
+
+   procedure Set_Scenario_Deadline is
+   begin
+      if Settings.Scenario_Timeout > 0.0 then
+         Scenario_Deadline := Ada.Calendar.Clock + Settings.Scenario_Timeout;
+      end if;
+   end Set_Scenario_Deadline;
+
+   function Timeout_Image return String is
+     (Ada.Strings.Fixed.Trim
+        (Integer (Settings.Scenario_Timeout)'Image, Ada.Strings.Left));
+   --  the timeout is always a whole number of seconds: the duration
+   --  parser only sums integer amounts of seconds, minutes or hours
 
    Cmd_Output_Name : Unbounded_String;
    Cmd_Err_Name    : Unbounded_String;
@@ -431,7 +456,6 @@ package body BBT.Tests.Actions.Commands is
    --  or until Timeout is elapsed. No timeout when Timeout = 0.0.
 
    procedure Pump (Timeout : Duration) is
-      use type Ada.Calendar.Time;
       Deadline : constant Ada.Calendar.Time :=
                    Ada.Calendar.Clock + Timeout;
    begin
@@ -439,9 +463,43 @@ package body BBT.Tests.Actions.Commands is
          if Timeout > 0.0 and then Ada.Calendar.Clock >= Deadline then
             return;
          end if;
+         exit when Timeout_Expired;
          Safe_Monitor_Loop (Quiet_Step);
       end loop;
    end Pump;
+
+   -- ------------------------------------------------------------------------
+   procedure Kill_Running_Command is
+   begin
+      if Running and then The_Process /= null then
+         Put_Debug_Line ("  killing the command on scenario timeout");
+         The_Process.Kill_Process;
+         --  Pump a moment, so that the listener reaps the process and
+         --  updates the state.
+         Pump (0.5);
+      end if;
+   end Kill_Running_Command;
+
+   -- ------------------------------------------------------------------------
+   procedure Check_Deadline (Step      :     Step_Type'Class;
+                             Verbosity :     Verbosity_Levels;
+                             OK        : out Boolean) is
+   begin
+      OK := not Timeout_Expired;
+      if not OK then
+         --  The scenario timeout expired: kill the still running
+         --  command, so that no process is left behind, and report
+         --  the failure on the hanging step line (cf. the design
+         --  discussion D6).
+         Kill_Running_Command;
+         Put_Step_Result (Step      => Step,
+                          Success   => False,
+                          Fail_Msg  => "the scenario timeout of "
+                            & Timeout_Image & "s expired",
+                          Loc       => Step.Location,
+                          Verbosity => Verbosity);
+      end if;
+   end Check_Deadline;
 
    -- ------------------------------------------------------------------------
    procedure Wait_Deferred_Exit_Check (Verbosity : Verbosity_Levels) is
@@ -453,13 +511,25 @@ package body BBT.Tests.Actions.Commands is
                               "the deferred exit status check");
             Pump (0.0);
          end if;
-         Resolve_Deferred_Exit_Check (Verbosity, OK);
+         if Timeout_Expired then
+            Put_Step_Result (Step      => Deferred_Step.all,
+                             Success   => False,
+                             Fail_Msg  => "the scenario timeout of "
+                               & Timeout_Image
+                               & "s expired before the command termination",
+                             Loc       => Deferred_Step.all.Location,
+                             Verbosity => Verbosity);
+            Kill_Running_Command;
+            Deferred_Pending := False;
+            Deferred_Step    := null;
+         else
+            Resolve_Deferred_Exit_Check (Verbosity, OK);
+         end if;
       end if;
    end Wait_Deferred_Exit_Check;
 
    -- ------------------------------------------------------------------------
    procedure Wait_Quiet is
-      use type Ada.Calendar.Time;
       Deadline  : constant Ada.Calendar.Time :=
                     Ada.Calendar.Clock + Quiet_Timeout;
       Quiet     : Duration := 0.0;
@@ -482,13 +552,13 @@ package body BBT.Tests.Actions.Commands is
             Quiet := 0.0;
          end if;
          exit when Quiet >= Quiet_Window or else not Running
-           or else Ada.Calendar.Clock >= Deadline;
+           or else Ada.Calendar.Clock >= Deadline
+           or else Timeout_Expired;
       end loop;
    end Wait_Quiet;
 
    -- ------------------------------------------------------------------------
    procedure Wait_Response is
-      use type Ada.Calendar.Time;
       Deadline   : constant Ada.Calendar.Time :=
                      Ada.Calendar.Clock + Quiet_Timeout;
       Quiet      : Duration := 0.0;
@@ -519,13 +589,13 @@ package body BBT.Tests.Actions.Commands is
          end if;
          exit when not Running
            or else Quiet >= Quiet_Window
-           or else Ada.Calendar.Clock >= Deadline;
+           or else Ada.Calendar.Clock >= Deadline
+           or else Timeout_Expired;
       end loop;
    end Wait_Response;
 
    -- --------------------------------------------------------------------------
    procedure Dispose_Process is
-      use type Ada.Calendar.Time;
       Deadline : constant Ada.Calendar.Time :=
                    Ada.Calendar.Clock + End_Timeout;
    begin
@@ -766,6 +836,16 @@ package body BBT.Tests.Actions.Commands is
          Close_Stream (Err_Stream);
       end if;
 
+      Check_Deadline (Step      => Step,
+                      Verbosity => Verbosity,
+                      OK        => Spawn_OK);
+      if not Spawn_OK then
+         --  The scenario timeout expired while running the command:
+         --  the failure has already been reported on the step line.
+         Return_Code := Last_Return_Code;
+         return;
+      end if;
+
       Spawn_OK := Spawn_Error = 0;
       Return_Code := Last_Return_Code;
 
@@ -817,13 +897,18 @@ package body BBT.Tests.Actions.Commands is
       if Running then
          Pump (End_Timeout);
       end if;
-      OK := not Running;
-      if not OK then
-         Put_Step_Result (Step      => Step,
-                          Success   => False,
-                          Fail_Msg  => "the command is still running",
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
+      Check_Deadline (Step      => Step,
+                      Verbosity => Verbosity,
+                      OK        => OK);
+      if OK then
+         OK := not Running;
+         if not OK then
+            Put_Step_Result (Step      => Step,
+                             Success   => False,
+                             Fail_Msg  => "the command is still running",
+                             Loc       => Step.Location,
+                             Verbosity => Verbosity);
+         end if;
       end if;
    end Wait_Command_End;
 
@@ -877,6 +962,14 @@ package body BBT.Tests.Actions.Commands is
       --  and the output baseline is set just before the input: the output
       --  checks following this step apply to the consequence of the input.
       Wait_Quiet;
+      Check_Deadline (Step      => Step,
+                      Verbosity => Verbosity,
+                      OK        => OK);
+      if not OK then
+         --  The scenario timeout expired: the failure has already
+         --  been reported on the step line.
+         return;
+      end if;
       Output_Line_Offset := Output_Lines;
       Err_Line_Offset    := Err_Lines;
       Input_Bytes        := Output_Bytes + Err_Bytes;
@@ -987,8 +1080,5 @@ package body BBT.Tests.Actions.Commands is
                        Loc       => Step.Location,
                        Verbosity => Verbosity);
    end Exit_Code_Is;
-
-   -- --------------------------------------------------------------------------
-   -- Environment variables set or unset by the steps of the current
 
 end BBT.Tests.Actions.Commands;

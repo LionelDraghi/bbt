@@ -93,4 +93,42 @@ package body BBT.Settings is
    function Badge_File_Name return String is
      (if Badge_Name = null then "" else Badge_Name.all);
 
+   -- --------------------------------------------------------------------------
+   procedure Set_Scenario_Timeout (Value : String; OK : out Boolean) is
+      Total  : Duration := 0.0;
+      Index  : Integer  := Value'First;
+      Amount : Natural;
+      Digit_Count : Natural;
+   begin
+      OK := Value /= "";
+      while OK and then Index <= Value'Last loop
+         Amount := 0;
+         Digit_Count := 0;
+         while Index <= Value'Last and then Value (Index) in '0' .. '9' loop
+            Amount := Amount * 10
+                        + (Character'Pos (Value (Index))
+                             - Character'Pos ('0'));
+            Digit_Count := Digit_Count + 1;
+            Index  := Index + 1;
+         end loop;
+         OK := Digit_Count > 0;
+         exit when not OK;
+         if Index <= Value'Last then
+            case Value (Index) is
+               when 's' | 'S' => Total := Total + Duration (Amount);
+               when 'm' | 'M' => Total := Total + 60.0 * Duration (Amount);
+               when 'h' | 'H' => Total := Total + 3600.0 * Duration (Amount);
+               when others    => OK := False;
+            end case;
+            Index := Index + 1;
+         else
+            --  no unit: a plain number of seconds
+            Total := Total + Duration (Amount);
+         end if;
+      end loop;
+      if OK then
+         Scenario_Timeout := Total;
+      end if;
+   end Set_Scenario_Timeout;
+
 end BBT.Settings;

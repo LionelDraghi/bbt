@@ -14,6 +14,13 @@ Other options:
   -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
   -sb | --status_bar     : enable a progress bar in the terminal (WIP!!)
   -j  | --junit file.xml : generate a JUnit XML report file
+       --scenario_timeout duration : abort a scenario whose steps take
+                           longer than the given duration: the running
+                           command is killed, and the scenario fails with
+                           a timeout message on the hanging step. The
+                           duration is a number of seconds, with an
+                           optional unit: s, m or h (10, 10s, 2m, 1m30s).
+                           No timeout by default.
   -gb | --generate_badge badge.url : create a text file containing
                            a shields.io URL to get a svg badge
                            with tests results summary.

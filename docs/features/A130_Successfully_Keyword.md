@@ -72,6 +72,7 @@ The command fails once the answer is sent: the deferred exit status
 check fails, and the failure references the `successfully run` step
 line, not the last step of the scenario.
 
+- Given the new file `to_keep.txt` containing `some data`
 - Given the new `interactive_fail.md` file
 ~~~md
 # Scenario: interactive command finally fails
@@ -91,6 +92,7 @@ reported on the `successfully run` step, the current step is not
 executed, and no misleading `no command is running` message is
 displayed.
 
+- Given the new file `to_keep.txt` containing `some data`
 - Given the new `deferred_fail.md` file
 ~~~md
 # Scenario: the command fails before the next step

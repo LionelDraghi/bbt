@@ -55,6 +55,9 @@ private package BBT.Settings is
    Ignore_Whitespaces    : Boolean    := True;
    Ignore_Casing         : Boolean    := True;
    Ignore_Blank_Lines    : Boolean    := True;
+   Scenario_Timeout      : Duration   := 0.0;
+   -- Time bound applied to each scenario when set to a non zero value;
+   -- no timeout by default
    Current_Command       : Command    := None;
    Current_Topic         : Help_Topic := Base;
    Selection_Mode        : Boolean    := False;
@@ -86,6 +89,14 @@ private package BBT.Settings is
    -- --------------------------------------------------------------------------
    function Output_File_Dir return String;
    -- Each spawned command outputs will be output here
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Scenario_Timeout (Value : String; OK : out Boolean);
+   -- Parse a duration expressed as a number of seconds with an
+   -- optional unit, and set Scenario_Timeout accordingly: groups of
+   -- digits followed by s, m or h are summed (for instance 1m30s);
+   -- a plain number is a number of seconds. OK is False when Value
+   -- is not a valid duration, and Scenario_Timeout is unchanged.
 
    -- --------------------------------------------------------------------------
    -- Operation related to the index file of all run scenarios
