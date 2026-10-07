@@ -38,7 +38,7 @@ jobs:
     
     steps:
         # Check-out the repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
@@ -46,7 +46,7 @@ jobs:
         #   version: 2.1.0 # Remove this option to use the default (latest stable release)
 
       - name: Cache Alire dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           # On Linux, alire data is in ~/.cache/alire and ~/.local/share/alire;
           # on Windows runners (runneradmin user), it is in %LOCALAPPDATA%\alire:
@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-alire-
 
       - name: Cache Cargo dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
