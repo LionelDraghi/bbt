@@ -24,6 +24,14 @@ on:                    # Run the workflow for each of the following events:
 
 permissions: write-all
 
+concurrency:
+  # A new push cancels the run still in flight: without this, overlapping
+  # runs regenerate and publish the same results files, and fight over
+  # them (the JUnit xml also changes at each run, as it contains the
+  # execution times), making the publish step fail on rebase conflicts.
+  group: build-and-test-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   main:
     strategy:
@@ -127,7 +135,7 @@ jobs:
           # docs/tests_results (grammar.md, fixme_index.md, ...), are not
           # committed, and would make the rebase fail on unstaged changes.
           for i in 1 2 3 4 5; do
-            if git fetch origin main && git rebase --autostash origin/main && git push origin HEAD:main; then
+            if git fetch origin main && git rebase --autostash -X theirs origin/main && git push origin HEAD:main; then
               echo "Results and badges published"
               exit 0
             fi
