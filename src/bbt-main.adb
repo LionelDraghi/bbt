@@ -85,11 +85,14 @@ begin
    end if;
 
    if Settings.Status_Bar then
-      Status_Bar.Enable;
+      Status_Bar.Enable (Force => Settings.Force_Status_Bar);
    end if;
 
+   --  The one shot commands (listing, help, version) do not use the
+   --  status bar: they are instantaneous, and most of their output
+   --  does not go through BBT.IO.
+
    if Settings.List_Settings then
-      Status_Bar.Put_Activity ("Listing settings");
       Cmd_Line.Put_Settings;
    end if;
 
@@ -108,20 +111,16 @@ begin
    case Settings.Current_Command is
 
    when List_Trace_Topics =>
-      Status_Bar.Put_Activity ("Listing trace topics");
       Cmd_Line.Put_Trace_Topics;
 
    when List_Keywords =>
-      Status_Bar.Put_Activity ("Listing keywords");
       Scenarios.Steps.Put_Keywords;
       return;
 
    when List_Grammar =>
-      Status_Bar.Put_Activity ("Listing grammar");
       BBT.Scenarios.Steps.Put_Grammar;
 
    when List_Files =>
-      Status_Bar.Put_Activity ("Listing files");
       for File of Scenarios.Files.Document_List loop
          Ada.Text_IO.Put_Line (File);
       end loop;
@@ -175,6 +174,10 @@ begin
    -- "run" is the default action, so they shouldn't be any other action
    --  processed after that point.
    -- --------------------------------------------------------------------
+
+   Status_Bar.Clear;
+   --  Erase the status bar, so that the terminal is left on a clean
+   --  last line.
 
    if (IO.Some_Error and then not Settings.Ignore_Errors)
      or else not Model.Documents.No_Fail

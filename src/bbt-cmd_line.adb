@@ -276,6 +276,13 @@ package body BBT.Cmd_Line is
             elsif Cmd = "-sb" or Cmd = "--status_bar" then
                Settings.Status_Bar := True;
 
+            elsif Cmd = "--force_status_bar" then
+               --  Debugging option, not a user option, and on purpose
+               --  not documented in the help: used by the feature tests
+               --  themselves, that run the nested bbt through pipes, to
+               --  force the bar despite the terminal detection
+               Settings.Force_Status_Bar := True;
+
             elsif Cmd = "-gb" or Cmd = "--generate_badge" then
                if On_Last_Arg then
                   IO.Put_Error (Cmd & " must be followed by a file name");

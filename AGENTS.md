@@ -78,7 +78,10 @@
 - files in docs/help/ are embedded in bbt at build time (External_Initialization):
   rebuild before testing `bbt help`, and regenerate the reference files
   (docs/examples/gcc_hello_world.md)
-  after a change, otherwise B130 fails
+  after a change, otherwise B130 fails; note that the embedding is done
+  by the binder: if a plain `make build` answers "up to date", remove
+  obj/<profile>/b__bbt-main.* to force the rebind, otherwise B130 fails
+  on the stale help text
 - to show a whole step between backticks in the docs, with the inner
   backticks visible (e.g. When I type `Y`), use a double backtick code span,
   with a space before the closing delimiter: ``When I type `Y` ``;

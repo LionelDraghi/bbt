@@ -51,6 +51,7 @@ private package BBT.Settings is
    Strict_Gherkin        : Boolean    := False;
    Generate_JUnit_Report : Boolean    := False;
    Status_Bar            : Boolean    := False;
+   Force_Status_Bar      : Boolean    := False;
    Generate_Badge        : Boolean    := False;
    Ignore_Whitespaces    : Boolean    := True;
    Ignore_Casing         : Boolean    := True;

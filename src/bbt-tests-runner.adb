@@ -428,6 +428,7 @@ package body BBT.Tests.Runner is
          Put_Scenario_Start (Scen, Verbosity);
 
          Step_Processing : for Step of Scen.Step_List loop
+            Status_Bar.Tick;
             Run_Step (Step      => Step,
                       Run_Error => Run_Error,
                       Verbosity => Verbosity);
@@ -534,6 +535,15 @@ package body BBT.Tests.Runner is
          --  (cf. the design discussion D6), not the cleanup.
          Run_Background (Scen);
          Run_Scenario (Scen);
+         Status_Bar.Next_Scenario
+           ((case Model.Scenarios.Result (Scen) is
+              when Model.Failed     => Status_Bar.Failed,
+              when Model.Successful => Status_Bar.OK,
+              when Model.Not_Run |
+                   Model.Empty      => Status_Bar.Skipped));
+         --  Filtered scenarios are skipped by Run_Background and
+         --  Run_Scenario, but are still counted by the progress bar,
+         --  as they are by the final counters (Not Run).
          Restore_Environment;
          Reset_Interactive_State;
          -- Variables set in the scenario or its backgrounds apply to that
@@ -566,7 +576,7 @@ package body BBT.Tests.Runner is
       begin
          Put_Document_Start (Doc);
 
-         Status_Bar.Progress_Bar_Next_Step (Path_To_Scen);
+         Status_Bar.Set_Current_File (Path_To_Scen);
 
          if Doc.Scenario_List.Is_Empty and then Doc.Feature_List.Is_Empty
          then
@@ -612,8 +622,7 @@ package body BBT.Tests.Runner is
 
    -- --------------------------------------------------------------------------
    procedure Run_All is
-      File_Count : constant Natural := Natural (Doc_List.Length);
-      -- package CVer is new GNAT.Compiler_Version;
+      Scenario_Count : Natural := 0;
 
    begin
       -- First, let's move to a different exec dir, if any
@@ -624,7 +633,19 @@ package body BBT.Tests.Runner is
          Ada.Directories.Create_Path (Settings.Tmp_Dir);
       end if;
 
-      Status_Bar.Initialize_Progress_Bar (File_Count);
+      --  The progress counter counts scenarios as the final counters do:
+      --  backgrounds are excluded, as their results are folded into each
+      --  scenario, and filtered scenarios are included, as they are
+      --  visited, and end up Not Run.
+      for D of Doc_List.all loop
+         if not D.Filtered then
+            Scenario_Count := @ + Natural (D.Scenario_List.Length);
+            for F of D.Feature_List loop
+               Scenario_Count := @ + Natural (F.Scenario_List.Length);
+            end loop;
+         end if;
+      end loop;
+      Status_Bar.Initialize_Progress_Bar (Scenario_Count);
 
       --  Put_Line ("Time: " & Ada.Calendar.Formatting.Image
       -- -- or BBT.IO.Image??

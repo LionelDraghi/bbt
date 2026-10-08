@@ -2,7 +2,15 @@ with "src/Alire_config/bbt_config.gpr";
 
 project BBT is
 
-   for Source_Dirs use ("src", "src/Alire_config");
+   --  The Status_Bar.Platform body is platform dependent: the bodies
+   --  are selected per host OS, only one of the two dirs below is used
+   case Bbt_Config.Alire_Host_OS is
+      when "windows" =>
+         for Source_Dirs use ("src", "src/Alire_config", "src/windows");
+      when others =>
+         for Source_Dirs use ("src", "src/Alire_config", "src/posix");
+   end case;
+
    for Object_Dir use "obj/" & Bbt_Config.Build_Profile;
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "./";

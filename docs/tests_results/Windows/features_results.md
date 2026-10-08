@@ -1906,6 +1906,50 @@
    - [X] scenario   [the duration is a number of seconds, with an optional unit](../../features/B200_Scenario_Timeout.md) pass  
 
 
+# Document: [B210_Status_Bar.md](../../features/B210_Status_Bar.md)  
+  ## Feature: transient status bar and progress counter  
+   ### Scenario: [backgrounds are not counted](../../features/B210_Status_Bar.md): 
+   - OK : Given the new `sb.md` file  
+   - OK : When I run `./bbt -q -c -sb --force_status_bar sb.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `1/1`  
+   - OK : And the output does not contain `2/2`  
+   - [X] scenario   [backgrounds are not counted](../../features/B210_Status_Bar.md) pass  
+
+   ### Scenario: [filtered scenarios are counted](../../features/B210_Status_Bar.md): 
+   - OK : Given the new `sb_filtered.md` file  
+   - OK : When I run `./bbt -q -c -sb --force_status_bar -s one sb_filtered.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `2/2`  
+   - OK : And the output contains `1 scenarios OK`  
+   - [X] scenario   [filtered scenarios are counted](../../features/B210_Status_Bar.md) pass  
+
+   ### Scenario: [the normal output is preserved](../../features/B210_Status_Bar.md): 
+   - OK : Given the new `sb.md` file  
+   - OK : When I run `./bbt -q -c -sb --force_status_bar sb.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `Analyzing documents`  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the normal output is preserved](../../features/B210_Status_Bar.md) pass  
+
+   ### Scenario: [the bar is disabled when the standard output is not a terminal](../../features/B210_Status_Bar.md): 
+   - OK : Given the new `sb.md` file  
+   - OK : When I run `./bbt -q -c -sb sb.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - OK : And the output does not contain `1/1`  
+   - OK : And the output does not contain `Analyzing documents`  
+   - [X] scenario   [the bar is disabled when the standard output is not a terminal](../../features/B210_Status_Bar.md) pass  
+
+   ### Scenario: [the failure stays visible](../../features/B210_Status_Bar.md): 
+   - OK : Given the new `sb_failed.md` file  
+   - OK : When I run `./bbt -q -k -c -sb --force_status_bar sb_failed.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `## Summary : **Fail**`  
+   - OK : And the output contains `1 failed`  
+   - [X] scenario   [the failure stays visible](../../features/B210_Status_Bar.md) pass  
+
+
 # Document: [C010_Empty_scenarios.md](../../features/C010_Empty_scenarios.md)  
    ### Scenario: [No step test A](../../features/C010_Empty_scenarios.md): 
    - OK : Given the `no_step_in_scenario.input` file  
@@ -2076,12 +2120,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 219 scenarios OK
+## Summary : **Success**, 224 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 219   |
+| Successful | 224   |
 | Empty      | 0     |
 | Not Run    | 7     |
 

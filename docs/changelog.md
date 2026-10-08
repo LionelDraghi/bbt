@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.4.2-dev] - 2026-??-??**
+  - [Changed]  the status bar redesigned, adapted to terminal capabilities (color support, UTF-8 support...)
   - [Added]   `--scenario_timeout <duration>` bounds the time spent on each scenario: on expiry, the running command is killed and the scenario fails with a message on the hanging step (cf. B200_Scenario_Timeout.md)
   - [Fixed]   the exit status of a command fed interactively is now checked: the check is deferred to the next step, or to the end of the scenario, and a failure is reported on the successfully run step line
   - [Fixed]   `bbt explain` wrongly announced an overwrite for ``Given the dir `dir1` ``: a directory is only created if not already existing, and an existing one is kept as is

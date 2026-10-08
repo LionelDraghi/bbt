@@ -41,12 +41,15 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 - "no new files" and "no env change" check
 
 
-- progress bar to rework  
-  The status bar (`-sb` option) only displays the current file name:
-  the progress percentage and the event counting are stubs (commented
-  out code in bbt-status_bar.adb, Initialize_Progress_Bar is null).
-  The reading pause (`delay (0.1)`) has been moved inside the display,
-  so that it is paid only when the bar is shown.
+- status bar animation during long commands  
+  The status bar (`-sb` option) displays a transient bar on the
+  current line, with a spinner and a `<done>/<total>` scenario counter
+  (cf. [B210_Status_Bar.md](../features/B210_Status_Bar.md)).
+  The spinner advances at each step only: it stays frozen while a
+  single command runs for a long time. A background task refreshing
+  the bar on a timer would remove this, at the cost of serializing
+  the writes on the standard output.  
+  cf. the [status bar rendering](design_discussions.md) design discussion
 
 - readers and writers organization  
   Factorize the format knowledge (Markdown_Utilities is a first

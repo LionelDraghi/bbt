@@ -5,6 +5,12 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with BBT.Status_Bar;
+--  Fixme: this with inverts the dependency direction: the base output
+--  layer should not depend on a UI component; the proper design is an
+--  output hook, that the status bar would register at Enable,
+--  cf. the design discussion D7
+
 with File_Utilities;       use File_Utilities;
 
 with Ada.Calendar.Formatting;
@@ -253,7 +259,9 @@ package body BBT.IO is
         := Is_Authorized (Verbosity) or else Is_Enabled (Topic);
    begin
       if Print_On_Standard_Output then
+         Status_Bar.Clear;
          Text_IO.New_Line;
+         Status_Bar.Draw;
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then
          Text_IO.New_Line (Tee_File);
@@ -271,7 +279,9 @@ package body BBT.IO is
         := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
+         Status_Bar.Clear;
          Text_IO.Put_Line (Prefix & Item);
+         Status_Bar.Draw;
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then
          Text_IO.Put_Line (Tee_File, Prefix & Item);
@@ -289,6 +299,9 @@ package body BBT.IO is
         := (if Location'Image = "" then "" else Location'Image & " ");
    begin
       if Print_On_Standard_Output then
+         Status_Bar.Clear;
+         --  No Draw here: the line is not complete, and the bar is
+         --  redrawn at the next completed line
          Text_IO.Put (Prefix & Item);
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then

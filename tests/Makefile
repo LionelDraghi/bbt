@@ -21,9 +21,38 @@ endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 
+# Options common to the three bbt suite invocations below
+COMMON_OPTIONS := --yes --keep_going --cleanup --quiet \
+--human_match --status_bar --scenario_timeout 30
+
 all: check
 
-.PHONY : clean distclean setup check features examples non_reg unit_testing doc
+.PHONY : help clean distclean setup check features examples non_reg unit_testing doc
+
+help:
+	@ echo "Usage: make [target]"
+	@ echo ""
+	@ echo "Targets:"
+	@ echo "  all           : check (default when no target given)"
+	@ echo "  build         : build the file_utilities unit test program"
+	@ echo "  setup         : create $(RESULTS_DIR) and refresh the sut, bbt"
+	@ echo "                   and rpl links in tests/"
+	@ echo "  refresh_bbt   : refresh the bbt link only, so that a direct"
+	@ echo "                   ./bbt run in tests/ never uses a stale binary"
+	@ echo "  features      : run the functional tests (docs/features)"
+	@ echo "  examples      : run the sanity checks (docs/examples),"
+	@ echo "                   which require gcc on the PATH"
+	@ echo "  non_reg       : run the non regression tests (non_reg_tests)"
+	@ echo "  unit_testing  : run the file_utilities unit tests"
+	@ echo "  check         : run all the suites, then remove the run artifacts"
+	@ echo "  doc           : copy the unit test results to $(RESULTS_DIR)"
+	@ echo "                   and fetch the badge"
+	@ echo "  clean         : remove the test run artifacts only,"
+	@ echo "                   keeping the built binaries and links usable"
+	@ echo "  distclean     : remove everything that can be rebuilt,"
+	@ echo "                   including binaries and links"
+	@ echo ""
+	@ echo "To run a single test: ./bbt <test_file>, cf. AGENTS.md"
 
 # To keep the trace of the run on each platform, the test results
 # are stored in a directory per platform (Linux, Windows, Darwin).
@@ -76,10 +105,9 @@ features: setup
 	@ # Then test all the features
 	@ echo 1. features tests ================
 	@ ./bbt --version
-	./bbt --yes --keep_going \
-	--exclude @Flaky     \
-	--cleanup $(EXCLUDE) \
-	-q --human_match \
+	./bbt $(COMMON_OPTIONS) \
+	--exclude @Flaky \
+	$(EXCLUDE) \
 	--generate_badge $(RESULTS_DIR)/badge.url   \
 	--junit $(RESULTS_DIR)/features_results.xml \
 	--index $(RESULTS_DIR)/features_results.md  \
@@ -91,7 +119,7 @@ examples: setup
 	@ # Check examples
 	@ echo 2. examples check ================
 	@ ./bbt --version
-	./bbt --yes -k -c -q -hm \
+	./bbt $(COMMON_OPTIONS) \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
 	@ echo
@@ -100,8 +128,7 @@ non_reg: setup
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
 	@ ./bbt --version
-	./bbt --yes --keep_going --cleanup -q \
-	--human_match \
+	./bbt $(COMMON_OPTIONS) \
 	--index $(RESULTS_DIR)/non_reg_tests.md \
 	../tests/non_reg_tests 
 	@ echo

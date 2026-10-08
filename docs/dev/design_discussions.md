@@ -14,6 +14,7 @@ updated with a reference to its replacement.
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
+| [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
@@ -313,3 +314,86 @@ References:
   [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md);
 - the former proposal docs/proposed_features/timeouts.md, removed
   once implemented.
+
+## D7. Status bar rendering
+
+Status: arbitrated (October 2026), implemented
+
+The `-sb | --status_bar` option displays a transient bar. Decisions:
+
+- the bar lives on the current terminal line: BBT.IO erases it
+  (`CR` + `EL 2K`) before any output on the standard output, and
+  redraws it after a completed line, so that no residue is left
+  over the normal output, and the bar never scrolls away;
+- rejected alternative: writing at a fixed screen position
+  (`CUP 1;1`), the former implementation, that overwrites the
+  scrolled results and leaves fragments in the scrollback;
+  also rejected: a dedicated line at the bottom of the screen,\  
+  that requires the terminal height, unavailable in plain ANSI;
+- during a run, the bar shows a spinner and a `<done>/<total>`
+  counter counting scenarios as the final counters do: backgrounds
+  are not counted, as their results are folded into each scenario,
+  and filtered scenarios are counted, as they are visited and end
+  up Not Run; the spinner is time based (twelve frames per second,
+  indexed on the clock): advancing it at each step gave a jerky
+  animation, the steps having very uneven durations, and frames
+  skipped by the eye; the glyph is still sampled by the redraws, so
+  a background timer remains the only way to animate during a long
+  silent command (cf. the TDL in project.md);
+- the bar is written directly through Ada.Text_IO, never through
+  BBT.IO, so that it never ends up in the tee file, and the
+  erase/redraw protocol cannot recurse;
+- the one shot commands (listings, help, version) do not use the
+  bar: they are instantaneous, and most of their output bypasses
+  BBT.IO;
+- the spinner is deliberately ASCII (`|/-\`), to stay readable on
+  any terminal; when the terminal renders UTF-8, a braille spinner
+  and pass/fail glyphs (green check mark, red cross) replace it:
+  the Unicode level comes from termicap, and, on Windows, the
+  console output code page is checked to be 65001 before emitting
+  any non ASCII glyph (Status_Bar.Platform, whose body is selected
+  per host OS in bbt.gpr): a terminal hosting a code page such as
+  850 would otherwise display mojibake;
+- the bar is displayed only when the standard output is a terminal,
+  detected through termicap (`Termicap.Capabilities.Get`): on a
+  redirected output, it would only fill the logs with escape
+  sequences; the `--force_status_bar` option overrides this: it is
+  a debugging option, undocumented in the help on purpose, used by
+  the feature tests themselves, that run the nested bbt through
+  pipes;
+- the bar colours are sober: no background, gray text, a cyan
+  spinner, and a green check mark / red cross on the last scenario
+  outcome, the palette being selected according to the colour level
+  detected by termicap (nothing at all under `NO_COLOR`, which the
+  termicap detection honours, the 16 standard colours on a basic
+  terminal, fine RGB otherwise), so that the bar stays readable on
+  light and dark themes alike;
+- as soon as a scenario fails, the whole bar turns red, and
+  displays the failure count until the end of the run: the ticks of
+  the following scenarios, and their green check marks, cannot erase
+  the failure from the user's view.
+
+Known limitation: the spinner is frozen while a single command
+runs for a long time; a background task refreshing the bar on a
+timer would remove this, at the cost of serializing the writes
+on the standard output (cf. the TDL in project.md).
+
+Known refactoring candidate: the `with BBT.Status_Bar` in
+bbt-io.adb inverts the dependency direction: the base output
+layer depends on a UI component, that conceptually should depend
+on it. The clean fix is an output hook: BBT.IO would expose a
+registration (a pair of access-to-procedure, or a dispatching
+observer), and the status bar would register its Clear / Draw at
+Enable, restoring the natural direction, BBT.IO knowing nothing
+about bars. Kept as is for now: the coupling is minimal (two
+procedure calls in the stdout paths), and it cannot recurse, the
+bar writing through Ada.Text_IO directly, never through BBT.IO;
+revisited if the IO package gets other output companions, or
+when the writers organization (D3) is arbitrated.
+
+References:
+
+- the specification and the scenarios:
+  [B210_Status_Bar.md](../features/B210_Status_Bar.md);
+- the implementation: bbt-status_bar.adb, and the erase/redraw
+  hooks in bbt-io.adb.

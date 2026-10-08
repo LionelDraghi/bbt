@@ -1,0 +1,17 @@
+name = "repro_unicode"
+description = "termicap Unicode detection reproducer"
+version = "0.1.0"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+
+tags = ["termicap","reproducer"]
+
+[[depends-on]]
+termicap = "^1.0.0"
+
+[[depends-on]]
+gnat = ">=15"
+

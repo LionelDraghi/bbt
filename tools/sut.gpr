@@ -1,6 +1,10 @@
 project sut is
 
    for Source_Dirs use ("./");
+   --  The diagnostic crates below are standalone Alire crates,
+   --  excluded from this project's sources: they are built on
+   --  demand, and are not needed by the test suites
+   for Excluded_Source_Dirs use ("sbdemo", "repro_unicode");
    for Object_Dir use "obj/";
    for Exec_Dir use "../";
    for Main use ("sut.adb",

@@ -37,3 +37,7 @@ command = ["make"]
 
 [build-profiles]
 bbt = "validation"
+
+[[depends-on]]
+termicap = "^1.0.0"
+

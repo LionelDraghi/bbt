@@ -6,7 +6,8 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.IO,
-     BBT.Settings;
+     BBT.Settings,
+     BBT.Status_Bar;
 
 package body BBT.Tests.Actions.File_Operations is
 
@@ -25,6 +26,9 @@ package body BBT.Tests.Actions.File_Operations is
       end if;
 
       loop
+         Status_Bar.Clear;
+         --  Erase the status bar, so that the prompt is not glued
+         --  at the end of the bar line
          Ada.Text_IO.Put (Prompt);
          Ada.Text_IO.Put_Line ("   [Y]es/[N]o/[A]ll");
          Ada.Text_IO.Get_Immediate (C);
