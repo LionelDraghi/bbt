@@ -50,8 +50,8 @@ begin
    Put_Line ("   " & Checkbox (Yes) & " Yes");
    Put_Line ("   " & Checkbox (Settings.Cleanup) & " Cleanup");
    Put_Line ("   " & Checkbox (Settings.Strict_Gherkin) & " Strict_Gherkin");
-   Put_Line ("   " & Checkbox (Settings.Status_Bar) & " Status_Bar");
-   Put_Line ("   " & Checkbox (Settings.Force_Status_Bar) & " Force_Status_Bar");
+   Put_Line ("   " & Checkbox (No_TTY) & " No_TTY");
+   Put_Line ("   " & Checkbox (Force_Status_Bar) & " Force_Status_Bar");
    Put_Line ("   " & Checkbox (Settings.Generate_Badge) & " Generate_Badge");
    Put_Line ("   " & Checkbox (Settings.Selection_Mode) & " Selection Mode");
    --  Put_Line ("   Trace enabled for topics:");

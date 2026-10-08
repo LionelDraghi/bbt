@@ -1,4 +1,14 @@
+<!-- omit from toc -->
 # Design discussions
+
+- [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)
+- [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps)
+- [D3. Readers and writers organization](#d3-readers-and-writers-organization)
+- [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)
+- [D5. Tests.Actions organization](#d5-testsactions-organization)
+- [D6. Scenario timeout](#d6-scenario-timeout)
+- [D7. Status bar rendering](#d7-status-bar-rendering)
+- [D8. Status bar default and --no\_tty](#d8-status-bar-default-and---no_tty)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -15,6 +25,7 @@ updated with a reference to its replacement.
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
+| [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
@@ -319,7 +330,8 @@ References:
 
 Status: arbitrated (October 2026), implemented
 
-The `-sb | --status_bar` option displays a transient bar. Decisions:
+The status bar, now displayed by default (cf. D8), draws a
+transient bar. Decisions:
 
 - the bar lives on the current terminal line: BBT.IO erases it
   (`CR` + `EL 2K`) before any output on the standard output, and
@@ -397,3 +409,42 @@ References:
   [B210_Status_Bar.md](../features/B210_Status_Bar.md);
 - the implementation: bbt-status_bar.adb, and the erase/redraw
   hooks in bbt-io.adb.
+
+## D8. Status bar default and --no_tty
+
+Status: arbitrated (October 2026), implemented
+
+The status bar, formerly enabled by `-sb | --status_bar`, is now
+displayed by default. Decisions:
+
+- the bar is the default when the standard output is a terminal:
+  an explicit option to get it would only be spelled by Makefiles
+  and CI scripts, never by a human sitting at a terminal;
+- `-sb | --status_bar` is kept only to warn that it is deprecated
+  and no longer necessary, and is removed from the help (cf.
+  B150_Deprecated_Options.md); the warning suggests `--no_tty`;
+- the option that disables the bar and, more generally, any
+  terminal control sequence, is named `--no_tty` (short `-nt`),
+  after the Alire precedent (`--no-tty`, "disables control
+  characters in output"): bbt then behaves as if the standard
+  output was not a terminal, which is also the default behavior
+  on a redirected output;
+- rejected alternatives: `--no_ansi` (the docker compose wording,
+  technical, and not the vocabulary of the Ada ecosystem bbt users
+  live in), `--plain` (semantic, but less explicit on what it
+  cuts), `--no_color` (misleading: the bar uses cursor moves and
+  line erases, not only colors) and `--no_status_bar` (too
+  narrow: it would not cover a future use of control sequences
+  outside of the bar);
+- `NO_COLOR` remains honored, through the termicap detection,
+  as before;
+- `--no_tty` wins over the undocumented `--force_status_bar`
+  debugging option: an explicit request for no control sequence
+  cannot be contradicted (tested in B210).
+
+References:
+
+- the specification and the scenarios:
+  [B210_Status_Bar.md](../features/B210_Status_Bar.md) and
+  [B150_Deprecated_Options.md](../features/B150_Deprecated_Options.md);
+- the implementation: bbt-cmd_line.adb, bbt-main.adb, bbt-settings.ads.

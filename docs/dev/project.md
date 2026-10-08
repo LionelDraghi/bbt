@@ -42,8 +42,9 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 
 - status bar animation during long commands  
-  The status bar (`-sb` option) displays a transient bar on the
-  current line, with a spinner and a `<done>/<total>` scenario counter
+  The status bar, displayed by default on a terminal, draws a
+  transient bar on the current line, with a spinner and a
+  `<done>/<total>` scenario counter
   (cf. [B210_Status_Bar.md](../features/B210_Status_Bar.md)).
   The spinner advances at each step only: it stays frozen while a
   single command runs for a long time. A background task refreshing

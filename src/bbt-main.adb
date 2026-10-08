@@ -84,7 +84,10 @@ begin
       -- Default, for when there is no explicit --output
    end if;
 
-   if Settings.Status_Bar then
+   if not Settings.No_TTY then
+      --  The status bar is the default, when the standard output is
+      --  a terminal; --no_tty disables it, and wins over
+      --  --force_status_bar.
       Status_Bar.Enable (Force => Settings.Force_Status_Bar);
    end if;
 

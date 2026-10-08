@@ -23,7 +23,7 @@ RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 
 # Options common to the three bbt suite invocations below
 COMMON_OPTIONS := --yes --keep_going --cleanup --quiet \
---human_match --status_bar --scenario_timeout 30
+--human_match --scenario_timeout 30
 
 all: check
 

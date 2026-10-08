@@ -12,8 +12,9 @@ Other options:
                            for standard output.
   -ed | --exec_dir 'dir' : run command in dir instead of current dir
   -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
-  -sb | --status_bar     : enable a transient status bar in the terminal,
-                           displayed only when the standard output is one
+  -nt | --no_tty         : behave as if the standard output was not
+                           a terminal: no status bar, no control
+                           sequence in the output
   -j  | --junit file.xml : generate a JUnit XML report file
        --scenario_timeout duration : abort a scenario whose steps take
                            longer than the given duration: the running

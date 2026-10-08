@@ -50,7 +50,9 @@ private package BBT.Settings is
    Cleanup               : Boolean    := False;
    Strict_Gherkin        : Boolean    := False;
    Generate_JUnit_Report : Boolean    := False;
-   Status_Bar            : Boolean    := False;
+   No_TTY                : Boolean    := False;
+   -- if set, behave as if the standard output was not a terminal:
+   -- no status bar, no control sequence; wins over Force_Status_Bar
    Force_Status_Bar      : Boolean    := False;
    Generate_Badge        : Boolean    := False;
    Ignore_Whitespaces    : Boolean    := True;

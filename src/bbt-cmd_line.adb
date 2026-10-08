@@ -274,7 +274,15 @@ package body BBT.Cmd_Line is
                Settings.Strict_Gherkin := True;
 
             elsif Cmd = "-sb" or Cmd = "--status_bar" then
-               Settings.Status_Bar := True;
+               --  Obsolete option: the status bar is now the default.
+               --  It is kept only to warn the user, and is no more
+               --  documented in the help.
+               Put_Warning ("-sb and --status_bar options deprecated, "
+                            & "the status bar is now enabled by default, "
+                            & "use --no_tty to disable it");
+
+            elsif Cmd = "-nt" or Cmd = "--no_tty" then
+               Settings.No_TTY := True;
 
             elsif Cmd = "--force_status_bar" then
                --  Debugging option, not a user option, and on purpose
