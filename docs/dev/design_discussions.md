@@ -28,7 +28,7 @@ updated with a reference to its replacement.
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
-| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10)               | [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467) |
+| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Under discussion again (2026-10)    | [pty.md](../proposed_features/pty.md)                                             |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
 
@@ -36,11 +36,24 @@ The table is sorted by status: the entries under discussion first.
 
 ## D1. Command execution library: Spawn
 
-Status: arbitrated (October 2026)
+Status: arbitrated (October 2026), reopened (October 2026)
 
 The commands of the `When I run` steps are executed through the
 [Spawn](https://github.com/AdaCore/spawn) library (Alire dependency
 `spawn`), asynchronously.
+
+The Spawn pseudo terminal (October 2026) left the child terminal
+unconfigured: no `tcsetattr`, no descriptor exposed, so the echo and
+the `CR` `LF` translation would pollute the checked outputs, and a
+single key press would not be delivered out of canonical mode
+(cf. [pty.md](../proposed_features/pty.md) for the experiments).
+[ada-util](https://github.com/stcarrez/ada-util) solves the three
+problems by construction, and candidate design 2 (replace Spawn by
+ada-util entirely) is implemented on the `pty` branch, all suites
+green on Linux: the arbitration is reopened, pending the comparison
+of the two engines, and the validation of the ada-util Windows
+paths (`Set_Allocate_TTY` is not implemented there, and the command
+output pumping relies on `poll`).
 
 `GNAT.Expect` was rejected after experimenting with both (October 2026,
 with scratch programs):
@@ -91,12 +104,178 @@ Other candidates were reviewed later (October 2026):
   [proposed_features/pty.md](../proposed_features/pty.md), not a
   replacement for the current execution engine.
 
+### Comparison Spawn vs ada-util (October 2026)
+
+Candidate design 2 is implemented on the `pty` branch, all suites
+green on Linux: the two engines are compared below on facts, the
+Spawn binary being rebuilt from the same commit for the measures,
+and rebuildable through the git history of the branch. The
+arbitration is pending.
+
+**Complexity and readability.** The library specific code is of
+similar volume (about 245 lines for Spawn, 225 lines plus 92 lines
+of terminal size support for ada-util), but the structure differs:
+
+- the Spawn engine was inversion of control: six listener callbacks
+  mutated four state flags (`Running`, `Dead`, `Started_OK`,
+  `Monitor_Initialized`) whose combinations encoded the process
+  state, and the transitions fired at library chosen times; knowing
+  the state between two pump calls required simulating the
+  callback interleavings. Three defensive workarounds came with it:
+  a `Constraint_Error` guard around `Monitor_Loop` (the Windows
+  monitor crashes on an empty process table), a deliberate leak of
+  the process objects (spawn#36: the monitor pid map never removes,
+  and freeing corrupts the heap on macOS), and no object reuse
+  (Windows `ERROR_INVALID_HANDLE` on the second start). The
+  environment needed a manual rebuild at each command, the Spawn
+  snapshot being taken at elaboration time;
+
+- the ada-util engine is a sequential pull model: all the state
+  transitions (data, end of file, reap, exit status) happen in
+  `Poll_Step` / `Reap_Command`, at points that the code can name,
+  over three flags of direct semantics (`Running`, `Out_Closed`,
+  `Err_Closed`). No library workaround remains: the process object
+  is allocated per command and freed after the reap, and
+  `Set_Default_Environment` is a snapshot at spawn time, exactly the
+  semantics bbt needs. The price is owning what the library lacks:
+  the C `poll` binding (about 30 lines, the library event model
+  being the known weak point), the distinction between end of file
+  and a mere production pause (the only real bug of the port), and
+  the `TIOCSWINSZ` wrapper for the 80x24 terminal size (92 lines
+  over four files, including the first C source of bbt).
+
+One point first believed to be a regression, and corrected by the
+robustness measures below: the termination detection. Spawn defers
+the `Finished` event while the channels are active, so both engines
+wait for all the writers before reporting the command end — the
+mechanisms differ (library deferred event against end of file then
+reap), the semantics are the same. On the other hand, the flush
+constraint on the tested programs is gone by construction, and the
+pseudo terminal comes configured (raw mode), where Spawn left it
+unconfigurable (cf. [pty.md](../proposed_features/pty.md)).
+
+Verdict on this axis: the ada-util engine reads better, control
+flow and state transitions being explicit, at the cost of about 70
+owned lines including two C wrappers.
+
+**Execution time (October 2026, measured).** The features suite
+(all its 232 scenarios, most of them running a nested bbt) runs in
+about 27 s with the Spawn engine, and in about 8.8 s with the
+ada-util engine, on the same machine, three runs each, stable
+(the committed Linux CI results agree on the 26 s order for Spawn).
+The difference is a fixed per-command latency: a trivial nested
+command costs about 43 ms under Spawn, against 4 ms under ada-util
+(measured on scenarios reduced to a single `When I run` step). The
+Spawn engine pumps its monitor in fixed `Quiet_Step` (20 ms)
+rounds, whatever the events, and a command lifecycle needs a few
+rounds; the ada-util engine `poll()` returns as soon as data or the
+end of file is ready, and its drain loop reads everything
+available. With several hundred commands per suite, the about
+40 ms saved on each make the 3x ratio. The interactive scenarios
+are not concerned: their quiet windows (100 ms) are identical in
+both engines.
+
+Verdict on this axis: ada-util, by a large margin, and not through
+micro-optimization: the pull model reacts to the events, where the
+Spawn pumping burns fixed time slices.
+
+**Robustness (October 2026, tested).** Tested on both binaries: a
+command forking a child that writes one second after its parent
+exits is waited for by both engines, that capture the complete
+output — the Spawn monitor defers the `Finished` event while the
+channels are active, so both engines wait for all the writers, and
+the termination semantics are equivalent. A command killed by a
+signal differs: the exit code is the signal number with Spawn (9
+for SIGKILL), and the signal number times 1000 with ada-util
+(9000); the exact exit code checks on signaled commands would
+differ. A 10 MB output is delivered complete by both engines, and
+the bbt output check then crashes with a STORAGE_ERROR in both
+cases: an orthogonal bbt bug, independent of the engine, to be
+filed as an issue. On the library side, the Spawn engine carried
+the workarounds for three known library defects (cf. the
+complexity axis), where the ada-util engine has none so far; the
+only bug of the port was in bbt owned code (the end of file
+against production pause distinction), caught by the suite.
+
+Verdict on this axis: equivalent termination semantics, ada-util
+without library workarounds, one documented semantic difference on
+the signaled commands exit codes.
+
+**Dependencies (October 2026, measured).** Both are one Alire
+crate under Apache-2.0, with no dependency beyond the toolchain.
+Spawn (AdaCore) is the smaller one: 47 Ada units, 340 KB of
+source, and it is used by Alire itself. ada-util (Stephane Carrez,
+single maintainer) is a much larger toolbox: 319 units, 2.5 MB of
+source in the base crate, from which bbt links only the needed
+units. The bbt binary grows from 8.7 to 9.4 MB, and the cold build
+from 4.3 to 5.4 s.
+
+Verdict on this axis: Spawn, for the dependency weight and the
+maintainer breadth; not decisive though, the dependency closure
+being the same.
+
+**Windows paths (October 2026, static analysis).** The Spawn
+engine is the proven one: green on the bbt CI on the three
+platforms for months, its two known Windows bugs being worked
+around in bbt. The ada-util engine has identified gaps: on
+Windows the command descriptors are Win32 handles (the utilada
+`File_Type` is a `HANDLE` there), so the `poll()` based pump does
+not carry over — its `Poll_Fd.Fd : int` even truncating them, and
+`poll` being a Winsock only function on Windows: the pump has to
+be rewritten per platform (e.g. `WaitForMultipleObjects`, on the
+`BBT.Terminal` pattern). Moreover `Set_Allocate_TTY` is not
+implemented there: the interactive commands would lose the pseudo
+terminal, and the flush constraint documented in A290 would come
+back on that platform. The rest of the path (process creation,
+environment, termination, exit status) has a Windows
+implementation in the library, untested by bbt.
+
+Verdict on this axis: Spawn today; the ada-util switch is gated on
+a real porting effort on the pump, and on accepting the pseudo
+terminal loss on Windows.
+
+On the performance transfer to Windows (anticipation, not
+measured, the ada-util pump not being written there): the cause of
+the Linux gap is in the bbt pumping code, identical on all the
+platforms (fixed `Quiet_Step` monitor rounds), and the Spawn
+Windows monitor waits on the same fixed slice model
+(`WaitForMultipleObjectsEx` with a millisecond timeout), so the
+fixed per-command latency is expected there too. A reactive
+Windows pump (`WaitForMultipleObjects` on the pipe handles) keeps
+the ada-util side fast. The ratio will probably be lower than 3x
+though, the Windows process creation cost (tens of milliseconds)
+adding the same floor to both engines. The Windows monitor bugs
+that bbt worked around (the null table crash, and the object reuse
+failing with ERROR_INVALID_HANDLE) were never filed upstream:
+both are now filed as
+[spawn#37](https://github.com/AdaCore/spawn/issues/37) (the object
+reuse) and
+[spawn#38](https://github.com/AdaCore/spawn/issues/38) (the null
+table crash), next to
+[spawn#36](https://github.com/AdaCore/spawn/issues/36) (whose fix,
+a robustness matter, would not change the pumping latency, that no
+filed issue addresses today).
+
+**Balance.** ada-util wins the complexity (no defensive code),
+the execution time (3x), and the robustness (no library defect
+workaround); the dependencies are close to a wash (one crate
+either way, ada-util being the heavier); Windows is the one axis
+where Spawn clearly wins today. Candidate design 2 is thus the
+better engine on the POSIX platforms, gated on a Windows port of
+the pump to be written and validated.
+
 References:
 
 - the [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467);
 - [AdaCore/spawn#36](https://github.com/AdaCore/spawn/issues/36): the
-  POSIX monitor dangling pointer on freed process objects, that bbt
-  works around by never freeing them (cf. the developer guide).
+  POSIX monitor dangling pointer on freed process objects, that the
+  Spawn engine worked around by never freeing them (visible in the
+  git history of `bbt-tests-actions-commands.adb`, branch `pty`);
+- [AdaCore/spawn#37](https://github.com/AdaCore/spawn/issues/37) and
+  [AdaCore/spawn#38](https://github.com/AdaCore/spawn/issues/38): the
+  two Windows monitor bugs that the Spawn engine worked around (the
+  object reuse failing with ERROR_INVALID_HANDLE, and the null table
+  crash), filed during this comparison.
 
 ## D2. successfully and the interactive steps
 

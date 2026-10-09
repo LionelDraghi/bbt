@@ -117,6 +117,10 @@ The nested bbt is run without the `--yes` option and without
 checks: it prompts for the replacing confirmation, the scenario
 answers `Y`, and the file is replaced.
 
+The command runs on a pseudo terminal (cf. the interaction feature),
+and the nested bbt would then detect a terminal and print its status
+bar in the middle of the prompt: `--no_tty` keeps its output clean.
+
 - Given the new file `config.ini` containing `Tmp_dir=/other`
 - Given the new `replace_confirm.md` file
 ~~~md
@@ -125,7 +129,7 @@ answers `Y`, and the file is replaced.
 - Given the file `config.ini` containing `Tmp_dir=/tmp`
 - Then the file `config.ini` is `Tmp_dir=/tmp`
 ~~~
-- When I run `./bbt -q replace_confirm.md`
+- When I run `./bbt -q --no_tty replace_confirm.md`
 - Then the output is
 ```
 Overwrite file config.ini?   [Y]es/[N]o/[A]ll
@@ -138,7 +142,8 @@ Overwrite file config.ini?   [Y]es/[N]o/[A]ll
 ### Scenario: Replacing refused by a typed key
 
 Same run, but the scenario answers `n`: the file is kept as is, the
-nested scenario fails.
+nested scenario fails. The nested bbt runs with `--no_tty`, as in the
+previous scenario: the command is on a pseudo terminal.
 
 - Given the new file `config.ini` containing `Tmp_dir=/other`
 - Given the new `replace_refuse.md` file
@@ -148,7 +153,7 @@ nested scenario fails.
 - Given the file `config.ini` containing `Tmp_dir=/tmp`
 - Then the file `config.ini` is `Tmp_dir=/tmp`
 ~~~
-- When I run `./bbt -q replace_refuse.md`
+- When I run `./bbt -q --no_tty replace_refuse.md`
 - Then the output is
 ```
 Overwrite file config.ini?   [Y]es/[N]o/[A]ll
@@ -177,7 +182,7 @@ scenario answers `n`.
 ~~~
 - When I run `./bbt -q match_mode.md`
 - Then the output contains `## Summary : **Success**, 1 scenarios OK`
-- When I run `./bbt -q --exact_match match_mode.md`
+- When I run `./bbt -q --no_tty --exact_match match_mode.md`
 - Then the output is
 ```
 Overwrite file config.ini?   [Y]es/[N]o/[A]ll

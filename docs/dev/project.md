@@ -23,13 +23,40 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 ### High priority
 
 - PTY for interactive commands  
-  Interactive input is now supported (`When I type`, `When I enter`), but
-  commands are fed through pipes, and a program that does not flush its
-  prompt before reading cannot be tested. Giving it a pseudo terminal
-  would remove this constraint on the software under test.  
+  Implemented on the `pty` branch (Spawn replaced by ada-util, the
+  commands of the interactive scenarios run on a pseudo terminal in
+  raw mode), all suites green on Linux; pending the Spawn / utilada
+  comparison and the Windows paths validation before arbitration.  
+  cf. [pty](../proposed_features/pty.md)
+
+- Explicit terminal context  
+  The interactive scenarios (`type` / `enter`) now always run on a
+  pseudo terminal: the "answers fed through a pipe" context
+  (`printf 'y\n' | ask`) is not testable anymore, although it is a
+  real deployment context, that a program detecting a non-terminal
+  standard input behaves differently there. An explicit context
+  keyword, e.g. `When I run in a terminal`, pipes staying the
+  default, would let a scenario state the deployment context it
+  tests, instead of the harness inferring it from the steps.  
+  cf. [pty](../proposed_features/pty.md)
+
+- ada-util upstream proposals  
+  Three functions that would simplify the bbt engine and add value
+  to the library: `Wait_Event` (the missing event model, that would
+  also make the Windows pump port trivial), `Set_Terminal_Size`,
+  and a non blocking termination check. Filed on stcarrez/ada-util
+  as #72, #73 and #74; #74 is implemented by PR #75 and #73 by
+  PR #76, both pending review.  
   cf. [pty](../proposed_features/pty.md)
 
 ### Low priority
+
+- non interactive commands output redirect  
+  Let the child write the output files directly through the
+  library redirections, instead of pumping, for the commands that
+  run to completion; the pump would remain for the interactive
+  commands only.  
+  cf. [non_interactive_redirect](../proposed_features/non_interactive_redirect.md)
 
 - append / remove  
   To append / remove text to an existing text file

@@ -6,30 +6,32 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.Settings;
+with BBT.Terminal;
 with BBT.Writers;                       use BBT.Writers;
 with BBT.Tests.Actions.File_Operations; use BBT.Tests.Actions.File_Operations;
 
 with Ada.Calendar;
 with Ada.Characters.Latin_1;
 with Ada.Command_Line;
-with Ada.Containers.Vectors;
 with Ada.Directories;
-with Ada.Environment_Variables;
 with Ada.Exceptions;
 with Ada.Streams;
 with Ada.Strings.Fixed;
 with Ada.Streams.Stream_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Unchecked_Deallocation;
 
-with Spawn.Environments,
-     Spawn.Processes,
-     Spawn.Process_Listeners,
-     Spawn.Processes.Monitor_Loop,
-     Spawn.String_Vectors;
+with Interfaces.C;
+
+with Util.Processes,
+     Util.Strings.Vectors,
+     Util.Streams,
+     Util.Streams.Raw;
 
 with GNAT.OS_Lib;
 
-use Ada, BBT;
+use Ada, BBT, Interfaces.C;
+use Util.Processes;
 
 package body BBT.Tests.Actions.Commands is
 
@@ -45,19 +47,19 @@ package body BBT.Tests.Actions.Commands is
    function Is_Success (I : Integer) return Boolean is
      (I = Integer (Command_Line.Success));
    -- --------------------------------------------------------------------------
-   --  Asynchronous execution of the commands, based on the Spawn library.
-   --  The standard output and standard error of the command are appended
-   --  to files by the listener, so that the output checks steps read the
-   --  same files as before.
+   --  Execution of the commands, based on the ada-util library
+   --  (Util.Processes). The standard output and standard error of the
+   --  command are pumped into files by polling the descriptors, so that
+   --  the output checks steps read the same files as before.
    --  When a scenario sends text to the command (Type_Text / Enter_Text
-   --  steps), the command runs across steps, and each input step resets
-   --  the output baseline: the output checks following an input step apply
-   --  only to the output produced after it.
+   --  steps), the command runs across steps on a pseudo terminal
+   --  allocated by the library (raw mode: no echo, no canonical mode,
+   --  no CR LF translation), and each input step resets the output
+   --  baseline: the output checks following an input step apply only
+   --  to the output produced after it.
 
-   Running       : Boolean := False;
-   --  the last command is still running
-   Spawn_Error : Integer := 0;
-   --  set by the listener if the command could not be run
+   Running : Boolean := False;
+   --  the last command is still running (not yet reaped)
 
    Scenario_Deadline : Ada.Calendar.Time := Ada.Calendar.Clock;
    --  expiry time of the current scenario when the scenario timeout is
@@ -269,161 +271,159 @@ package body BBT.Tests.Actions.Commands is
    end Write_Error;
 
    -- ------------------------------------------------------------------------
-   type Process_Access is access all Spawn.Processes.Process;
+   use type Util.Streams.Raw.Raw_Stream_Access;
+
+   type Process_Access is access Util.Processes.Process;
+   procedure Free_Process is new Ada.Unchecked_Deallocation
+     (Object => Util.Processes.Process, Name => Process_Access);
 
    The_Process : Process_Access;
    --  The process run by the last Run_Cmd. A new process object is
-   --  created at each Run_Cmd: reusing the same object for several
-   --  starts works on POSIX but is broken on Windows (the Spawn
-   --  monitor fails with ERROR_INVALID_HANDLE on the second start).
-   --  It survives between steps only when interactive input is expected.
+   --  created at each Run_Cmd, and freed at the next one, once
+   --  terminated and reaped: the ada-util library keeps no process
+   --  map surviving the command, contrary to the Spawn monitor.
 
-   package Retired_Processes is new Ada.Containers.Vectors
-     (Positive, Process_Access);
-   Retired : Retired_Processes.Vector;
-   --  The process objects are never freed: the Spawn monitor keeps a
-   --  pid to process map, with no removal on termination, so a freed
-   --  object leaves a dangling pointer in the monitor. On macOS, where
-   --  pids are quickly reused, waitpid then finds the stale map entry
-   --  and writes the exit status into freed memory, corrupting the heap
-   --  (erroneous memory access, bogus stack overflow, at random
-   --  positions). The objects are small, and a run spawns at most a few
-   --  hundreds of them: leaking them is the safe option, until the
-   --  library cleans its map
-   --  (cf. https://github.com/AdaCore/spawn/issues/36).
+   Out_Raw : Util.Streams.Raw.Raw_Stream_Access;
+   Err_Raw : Util.Streams.Raw.Raw_Stream_Access;
+   --  The raw streams on the command output and error descriptors,
+   --  watched by the pump; Err_Raw is null when the standard error is
+   --  merged into the standard output
 
-   Dead    : Boolean := False;
-   --  the process has terminated, or could not be created at all
+   Out_Closed : Boolean := True;
+   Err_Closed : Boolean := True;
+   --  end of file reached on the output / error stream
 
-   Started_OK : Boolean := False;
-   --  the process could be created (the Started callback was called);
-   --  an error on a non created process leaves nothing to kill
+   -- -----------------------------------------------------------------------
+   --  Thin binding on the C poll() function, to watch the command output
+   --  and error descriptors that the ada-util event model does not
+   --  expose: the reads on the library streams are blocking
 
-   Monitor_Initialized : Boolean := False;
-   --  at least one process was successfully started during this run;
-   --  until then, the Spawn monitor has an empty process table, and
-   --  Monitor_Loop crashes on Windows (null table dereference)
+   --  poll() event bits: a modular type, as Ada has no bitwise
+   --  operators on signed integers
+   type Event_Bits is mod 2 ** 16;
+   Pollin  : constant Event_Bits := 16#001#;
+   Pollerr : constant Event_Bits := 16#008#;
+   Pollhup : constant Event_Bits := 16#010#;
+   Watched : constant Event_Bits := Pollin or Pollerr or Pollhup;
 
+   type Poll_Fd is record
+      Fd      : int;
+      Events  : short;
+      Revents : short;
+   end record;
+   pragma Convention (C, Poll_Fd);
 
+   function Poll (Fds     : not null access Poll_Fd;
+                  Nfds    : unsigned;
+                  Timeout : int) return int;
+   pragma Import (C, Poll, "poll");
 
-   package Listeners is
-      type Listener is limited new
-        Spawn.Process_Listeners.Process_Listener with null record;
+   -- -----------------------------------------------------------------------
+   procedure Reap_Command is
+   --  Wait for the terminated command, collect its exit status, and
+   --  mark it no more running. Called once both output streams have
+   --  reached end of file: the command has then terminated, or has
+   --  closed its outputs while remaining unable to produce any more
+   --  output, in which case the blocking Wait returns at its
+   --  termination, as the pump loop did before.
+   begin
+      Wait (The_Process.all);
+      Running := False;
+      Last_Return_Code := Get_Exit_Status (The_Process.all);
+      Put_Debug_Line ("  command finished, exit code"
+                      & Last_Return_Code'Image);
+   end Reap_Command;
 
-      overriding procedure Started (Self : in out Listener);
-
-      overriding procedure Standard_Output_Available
-        (Self : in out Listener);
-
-      overriding procedure Standard_Error_Available
-        (Self : in out Listener);
-
-      overriding procedure Finished
-        (Self        : in out Listener;
-         Exit_Status : Spawn.Processes.Process_Exit_Status;
-         Exit_Code   : Spawn.Processes.Process_Exit_Code);
-
-      overriding procedure Error_Occurred
-        (Self          : in out Listener;
-         Process_Error : Integer);
-
-      overriding procedure Exception_Occurred
-        (Self       : in out Listener;
-         Occurrence : Ada.Exceptions.Exception_Occurrence);
-   end Listeners;
-
-   package body Listeners is
-      overriding procedure Started (Self : in out Listener) is
-         pragma Unreferenced (Self);
-      begin
-         Put_Debug_Line ("  command started");
-         Started_OK         := True;
-         Monitor_Initialized := True;
-      end Started;
-
-      overriding procedure Standard_Output_Available
-        (Self : in out Listener)
-      is
-         pragma Unreferenced (Self);
-         use type Ada.Streams.Stream_Element_Offset;
-         Data : Ada.Streams.Stream_Element_Array (1 .. 2 ** 12);
-         Last : Ada.Streams.Stream_Element_Offset;
-         Ok   : Boolean := True;
-      begin
-         loop
-            The_Process.Read_Standard_Output (Data, Last, Ok);
-            exit when Last < Data'First;
-            Write_Output (Data (1 .. Last));
-         end loop;
-      end Standard_Output_Available;
-
-      overriding procedure Standard_Error_Available
-        (Self : in out Listener)
-      is
-         pragma Unreferenced (Self);
-         use type Ada.Streams.Stream_Element_Offset;
-         Data : Ada.Streams.Stream_Element_Array (1 .. 2 ** 12);
-         Last : Ada.Streams.Stream_Element_Offset;
-         Ok   : Boolean := True;
-      begin
-         loop
-            The_Process.Read_Standard_Error (Data, Last, Ok);
-            exit when Last < Data'First;
-            Write_Error (Data (1 .. Last));
-         end loop;
-      end Standard_Error_Available;
-
-      overriding procedure Finished
-        (Self        : in out Listener;
-         Exit_Status : Spawn.Processes.Process_Exit_Status;
-         Exit_Code   : Spawn.Processes.Process_Exit_Code)
-      is
-         pragma Unreferenced (Self);
-         --  Fixme: a command terminated by a signal is not distinguished
-         --  from a normal termination.
-      begin
-         Put_Debug_Line ("  command finished, exit code" & Exit_Code'Image
-                         & ", status " & Exit_Status'Image);
-         Running := False;
-         Dead    := True;
-         Last_Return_Code := Integer (Exit_Code);
-      end Finished;
-
-      overriding procedure Error_Occurred
-        (Self          : in out Listener;
-         Process_Error : Integer)
-      is
-         pragma Unreferenced (Self);
-      begin
-         Put_Debug_Line ("  command error" & Process_Error'Image);
-         Running := False;
-         Spawn_Error := Process_Error;
-         if not Started_OK then
-            --  the process could not be created: nothing remains
-            --  to kill or reap, the object can be freed
-            Dead := True;
+   -- -----------------------------------------------------------------------
+   procedure Drain (Raw      : Util.Streams.Raw.Raw_Stream_Access;
+                   Is_Error : Boolean;
+                   Closed   : in out Boolean) is
+      use Ada.Streams;
+      Buffer : Stream_Element_Array (1 .. 2 ** 14);
+      Last   : Stream_Element_Offset;
+      Fd     : aliased Poll_Fd :=
+                 (Fd      => int (Raw.Get_File),
+                  Events  => short (Pollin),
+                  Revents => 0);
+      Eof : Boolean := False;
+   begin
+      --  Read the stream until it is drained: the first read is called
+      --  on a descriptor that the caller knows readable, and the
+      --  following ones only when more data is already available, so
+      --  that the blocking reads never wait. The stream is marked
+      --  closed on end of file only: a read pause just means that the
+      --  command is still producing its output.
+      while not Eof loop
+         Raw.Read (Into => Buffer, Last => Last);
+         Eof := Last < Buffer'First;
+         exit when Eof;
+         --  End of file: the command closed the stream
+         if Is_Error then
+            Write_Error (Buffer (Buffer'First .. Last));
+         else
+            Write_Output (Buffer (Buffer'First .. Last));
          end if;
-      end Error_Occurred;
+         Fd.Revents := 0;
+         exit when Poll (Fd'Access, 1, 0) <= 0
+           or else (Event_Bits (Fd.Revents) and Watched) = 0;
+         --  No more data already available
+      end loop;
+      Closed := Eof;
+   end Drain;
 
-      overriding procedure Exception_Occurred
-        (Self       : in out Listener;
-         Occurrence : Ada.Exceptions.Exception_Occurrence)
-      is
-         pragma Unreferenced (Self);
-      begin
-         Put_Debug_Line ("  exception in the listener: " &
-                           Ada.Exceptions.Exception_Information
-                             (Occurrence));
-         Running := False;
-         Spawn_Error := 1;
-         if not Started_OK then
-            Dead := True;
+   -- -----------------------------------------------------------------------
+   procedure Poll_Step (Timeout : Duration);
+   --  Wait for command output during Timeout at most, read the
+   --  available data and write it to the output files, then reap the
+   --  command when both streams have reached end of file.
+
+   procedure Poll_Step (Timeout : Duration) is
+      Fds   : array (1 .. 2) of aliased Poll_Fd;
+      Count : Natural := 0;
+   begin
+      if The_Process = null or else not Running then
+         return;
+      end if;
+      if not Out_Closed then
+         Count := @ + 1;
+         Fds (Count) := (Fd      => int (Out_Raw.Get_File),
+                         Events  => short (Pollin),
+                         Revents => 0);
+      end if;
+      if Err_Raw /= null and then not Err_Closed then
+         Count := @ + 1;
+         Fds (Count) := (Fd      => int (Err_Raw.Get_File),
+                         Events  => short (Pollin),
+                         Revents => 0);
+      end if;
+      if Count = 0 then
+         --  Both streams are at end of file: the command is
+         --  terminated, but was not reaped yet
+         Reap_Command;
+         return;
+      end if;
+      if Poll (Fds (1)'Access, unsigned (Count), int (Timeout * 1000.0)) <= 0
+      then
+         --  No output during the timeout, or poll error
+         return;
+      end if;
+      for I in 1 .. Count loop
+         if (Event_Bits (Fds (I).Revents) and Watched) /= 0 then
+            if Fds (I).Fd = int (Out_Raw.Get_File) then
+               Drain (Raw      => Out_Raw,
+                      Is_Error => False,
+                      Closed   => Out_Closed);
+            else
+               Drain (Raw      => Err_Raw,
+                      Is_Error => True,
+                      Closed   => Err_Closed);
+            end if;
          end if;
-      end Exception_Occurred;
-
-   end Listeners;
-
-   The_Listener : aliased Listeners.Listener;
+      end loop;
+      if Out_Closed and then (Err_Raw = null or else Err_Closed) then
+         Reap_Command;
+      end if;
+   end Poll_Step;
 
    -- ------------------------------------------------------------------------
    Quiet_Step    : constant Duration := 0.02;
@@ -431,28 +431,8 @@ package body BBT.Tests.Actions.Commands is
    Quiet_Timeout : constant Duration := 5.0;
    End_Timeout   : constant Duration := 10.0;
 
-   procedure Safe_Monitor_Loop (Timeout : Duration) is
-   begin
-      if Monitor_Initialized then
-         Spawn.Processes.Monitor_Loop (Timeout);
-      else
-         --  Until a process is successfully started, the Spawn monitor
-         --  process table is not allocated, and Monitor_Loop crashes
-         --  on Windows with a null table dereference. The command
-         --  error, if any, has already been reported through the
-         --  Error_Occurred callback before the crash point.
-         begin
-            Spawn.Processes.Monitor_Loop (Timeout);
-         exception
-            when Constraint_Error =>
-               Put_Debug_Line ("  ignored monitor crash before the " &
-                                 "first started command");
-         end;
-      end if;
-   end Safe_Monitor_Loop;
-
    procedure Pump (Timeout : Duration);
-   --  Process the pending events until the command is no more running,
+   --  Poll the command output until the command is no more running,
    --  or until Timeout is elapsed. No timeout when Timeout = 0.0.
 
    procedure Pump (Timeout : Duration) is
@@ -464,7 +444,7 @@ package body BBT.Tests.Actions.Commands is
             return;
          end if;
          exit when Timeout_Expired;
-         Safe_Monitor_Loop (Quiet_Step);
+         Poll_Step (Quiet_Step);
       end loop;
    end Pump;
 
@@ -473,9 +453,9 @@ package body BBT.Tests.Actions.Commands is
    begin
       if Running and then The_Process /= null then
          Put_Debug_Line ("  killing the command on scenario timeout");
-         The_Process.Kill_Process;
-         --  Pump a moment, so that the listener reaps the process and
-         --  updates the state.
+         Stop (The_Process.all, 9);
+         --  Pump a moment, so that the command output is drained and
+         --  the command reaped.
          Pump (0.5);
       end if;
    end Kill_Running_Command;
@@ -536,7 +516,6 @@ package body BBT.Tests.Actions.Commands is
       Last_Size : Natural;
    begin
       if not Running then
-         Safe_Monitor_Loop (Quiet_Step);
          return;
       end if;
       --  The command output is considered complete when it stays quiet
@@ -545,7 +524,7 @@ package body BBT.Tests.Actions.Commands is
       --  or it is still starting does not matter, as long as it is quiet.
       loop
          Last_Size := Output_Bytes + Err_Bytes;
-         Safe_Monitor_Loop (Quiet_Step);
+         Poll_Step (Quiet_Step);
          if Output_Bytes + Err_Bytes = Last_Size then
             Quiet := @ + Quiet_Step;
          else
@@ -565,7 +544,6 @@ package body BBT.Tests.Actions.Commands is
       Last_Size  : Natural;
    begin
       if not Running then
-         Safe_Monitor_Loop (Quiet_Step);
          return;
       end if;
       --  The output of a running command is checked once the response to
@@ -579,7 +557,7 @@ package body BBT.Tests.Actions.Commands is
       --  more than the quiet window may be considered quiet too early.
       loop
          Last_Size := Output_Bytes + Err_Bytes;
-         Safe_Monitor_Loop (Quiet_Step);
+         Poll_Step (Quiet_Step);
          if Output_Bytes + Err_Bytes = Last_Size then
             if Output_Bytes + Err_Bytes > Input_Bytes then
                Quiet := @ + Quiet_Step;
@@ -596,8 +574,6 @@ package body BBT.Tests.Actions.Commands is
 
    -- --------------------------------------------------------------------------
    procedure Dispose_Process is
-      Deadline : constant Ada.Calendar.Time :=
-                   Ada.Calendar.Clock + End_Timeout;
    begin
       --  Close the output streams in any case: they were flushed at
       --  each chunk, so the files are already complete and readable.
@@ -607,21 +583,15 @@ package body BBT.Tests.Actions.Commands is
       if The_Process = null then
          return;
       end if;
-      if not Dead then
-         --  An error does not mean that the process died: kill it, and
-         --  pump the monitor until it is reaped.
+      if Running then
+         --  The command did not terminate by itself: kill it, and
+         --  reap it; SIGKILL guarantees the termination
          Put_Debug_Line ("  disposing a still running command");
-         The_Process.Kill_Process;
-         while not Dead loop
-            Safe_Monitor_Loop (Quiet_Step);
-            exit when Ada.Calendar.Clock >= Deadline;
-         end loop;
+         Stop (The_Process.all, 9);
+         Wait (The_Process.all);
+         Running := False;
       end if;
-      --  The object is kept in Retired for the whole run: the Spawn
-      --  monitor never forgets a process (its pid map has no removal),
-      --  so freeing the object would leave a dangling pointer there.
-      Retired.Append (The_Process);
-      The_Process := null;
+      Free_Process (The_Process);
    end Dispose_Process;
 
    -- --------------------------------------------------------------------------
@@ -639,7 +609,7 @@ package body BBT.Tests.Actions.Commands is
       -- Initial_Dir : constant String  := Current_Directory;
       Spawn_Arg      : constant Argument_List_Access
         := Argument_String_To_List (Cmd);
-      Args           : Spawn.String_Vectors.UTF_8_String_Vector;
+      Args           : Util.Strings.Vectors.Vector;
 
    begin
       Put_Debug_Line ("Run_Cmd " & Cmd & " in " & Settings.Exec_Dir &
@@ -655,13 +625,12 @@ package body BBT.Tests.Actions.Commands is
          Pump (End_Timeout);
          if Running then
             Put_Debug_Line ("  killing a still running command");
-            The_Process.Kill_Process;
+            Stop (The_Process.all, 9);
             Running := False;
          end if;
       end if;
 
-      --  A new Spawn process object is used for each command: reusing
-      --  the same object for several starts is broken on Windows.
+      --  A new process object is used for each command.
       Dispose_Process;
 
       -- The first argument should be an executable (e.g. not a bash
@@ -774,36 +743,39 @@ package body BBT.Tests.Actions.Commands is
       Output_Line_Offset := 0;
       Err_Line_Offset    := 0;
       Input_Bytes        := 0;
-      Spawn_Error         := 0;
       Running            := False;
 
+      --  The first argument is the command, and the following ones are
+      --  the already split and unquoted arguments: the process is
+      --  created without shell
+      Args.Append (Spawn_Arg.all (1).all);
       for I in 2 .. Spawn_Arg'Last loop
          Args.Append (Spawn_Arg.all (I).all);
       end loop;
-      The_Process := new Spawn.Processes.Process;
-      Dead        := False;
-      Started_OK  := False;
-      The_Process.Set_Program (Spawn_Arg.all (1).all);
-      The_Process.Set_Arguments (Args);
+
+      The_Process := new Util.Processes.Process;
+      Set_Shell (The_Process.all, "");
+      --  No /bin/sh, as before: the arguments are split by bbt
+      if Interactive_Input_Expected then
+         --  The pseudo terminal makes the command prompts visible
+         --  before it waits for input, without fflush; the library
+         --  configures the terminal slave in raw mode: no echo, no
+         --  canonical mode, no CR LF translation
+         --  (cf. docs/proposed_features/pty.md)
+         Set_Allocate_TTY (The_Process.all);
+      end if;
       --  The command inherits the bbt environment, including the
-      --  variables set or unset by the environment variable steps.
-      --  The environment is rebuilt at each command: the Spawn library
-      --  snapshot of the system environment is taken at elaboration
-      --  time, and thus does not reflect those steps.
-      declare
-         Env : Spawn.Environments.Process_Environment;
-         procedure Copy (Name, Value : String) is
-         begin
-            Env.Insert (Name, Value);
-         end Copy;
-      begin
-         Ada.Environment_Variables.Iterate (Copy'Access);
-         The_Process.Set_Environment (Env);
-      end;
-      The_Process.Set_Listener (The_Listener'Unchecked_Access);
+      --  variables set or unset by the environment variable steps:
+      --  Set_Default_Environment imports the bbt current environment
+      --  at spawn time, and thus reflects those steps.
+      Set_Default_Environment (The_Process.all);
 
       begin
-         The_Process.Start;
+         Spawn (The_Process.all,
+                Arguments => Args,
+                Mode      => (if Merged
+                              then Util.Processes.READ_WRITE_ALL
+                              else Util.Processes.READ_WRITE_ALL_SEPARATE));
          Running := True;
       exception
          when E : others =>
@@ -823,6 +795,24 @@ package body BBT.Tests.Actions.Commands is
                Verbosity => Verbosity);
             return;
       end;
+
+      --  Watch the command output and error descriptors
+      Out_Raw := Util.Streams.Raw.Raw_Stream_Access
+                   (Get_Output_Stream (The_Process.all));
+      Err_Raw := Util.Streams.Raw.Raw_Stream_Access
+                   (Get_Error_Stream (The_Process.all));
+      Out_Closed := False;
+      Err_Closed := Err_Raw = null;
+      --  Merged standard error: no error stream to watch
+
+      if Interactive_Input_Expected then
+         --  Give the pseudo terminal its window size: an unset size
+         --  (0x0) would make any program querying its terminal size
+         --  misbehave, and the simulated terminal must be
+         --  indistinguishable from a real one
+         --  (cf. docs/proposed_features/pty.md)
+         BBT.Terminal.Set_Size (int (Out_Raw.Get_File));
+      end if;
 
       --  Unless the command is to be fed interactively, the step waits
       --  for its termination, as a blocking Spawn would.
@@ -846,10 +836,10 @@ package body BBT.Tests.Actions.Commands is
          return;
       end if;
 
-      Spawn_OK := Spawn_Error = 0;
+      Spawn_OK := True;
       Return_Code := Last_Return_Code;
 
-      Put_Debug_Line ("Spawn returns : Success = " & Spawn_OK'Image &
+      Put_Debug_Line ("Run_Cmd returns : Success = " & Spawn_OK'Image &
                         ", Return_Code = " & Return_Code'Image);
 
       --  Note: when interactive input is expected, the command may still
@@ -857,14 +847,8 @@ package body BBT.Tests.Actions.Commands is
       --  next synchronization point, or to the end of the scenario
       --  (cf. the design discussion D2): the step result is emitted
       --  when the check is resolved, on the successfully run step line.
-      if not Spawn_OK then
-         Put_Step_Result (Step      => Step,
-                          Success   => False,
-                          Fail_Msg  => "Couldn't run " & Cmd,
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
-
-      elsif Running and then Expected_Result /= Not_Specified then
+      --  Any run error has already been reported, and returned.
+      if Running and then Expected_Result /= Not_Specified then
          Defer_Exit_Check (Step     => Step,
                            Expected => Expected_Result);
 
@@ -876,7 +860,7 @@ package body BBT.Tests.Actions.Commands is
 
       else
          -- If Expected_Result = Not_Specified, Success is only
-         -- determined by Spawn_OK, not by the return code.
+         -- determined by the run, not by the return code.
          Put_Step_Result (Step      => Step,
                           Success   => True,
                           Fail_Msg  => "Couldn't run " & Cmd,
@@ -924,9 +908,7 @@ package body BBT.Tests.Actions.Commands is
                 & (if With_Newline
                    then [1 => Ada.Characters.Latin_1.LF]
                    else "");
-      Data      : Stream_Element_Array (1 .. Input'Length);
-      Last      : Stream_Element_Offset;
-      Write_OK  : Boolean := True;
+      Data : Stream_Element_Array (1 .. Input'Length);
    begin
       Put_Debug_Line ("Send_Input" & Input'Image);
 
@@ -977,8 +959,15 @@ package body BBT.Tests.Actions.Commands is
       for J in Input'Range loop
          Data (Stream_Element_Offset (J)) := Character'Pos (Input (J));
       end loop;
-      The_Process.Write_Standard_Input (Data, Last, Write_OK);
-      OK := Write_OK and then Last = Data'Last;
+      begin
+         Get_Input_Stream (The_Process.all).Write (Data);
+         OK := True;
+      exception
+         when E : others =>
+            Put_Debug_Line ("  cannot send input to the command: " &
+                              Ada.Exceptions.Exception_Information (E));
+            OK := False;
+      end;
       if not OK then
          Put_Step_Result (Step      => Step,
                           Success   => False,
@@ -1026,7 +1015,7 @@ package body BBT.Tests.Actions.Commands is
          if Running then
             Put_Debug_Line ("  killing a command still running at the " &
                               "end of the scenario");
-            The_Process.Kill_Process;
+            Stop (The_Process.all, 9);
             Running := False;
          end if;
       end if;

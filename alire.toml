@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Black box test runner"
-version = "0.5.0"
+version = "0.5.1-dev"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
@@ -22,9 +22,10 @@ generate_C = false
 ansiada = "^1.0.0"
 
 [[depends-on]]
-# asynchronous, cross-platform process spawning, used to run the
-# commands and interact with them (When I type / When I enter)
-spawn = "^25.0.0"
+# cross-platform process launching and interaction with the commands
+# (When I type / When I enter), with a pseudo terminal in raw mode
+# allocated to the interactive commands
+utilada = "^2.8.0"
 
 [[depends-on]]
 # External_Initialization aspect (src/bbt-cmd_line-put_help.adb) requires
@@ -40,4 +41,3 @@ bbt = "validation"
 
 [[depends-on]]
 termicap = "^1.0.0"
-
