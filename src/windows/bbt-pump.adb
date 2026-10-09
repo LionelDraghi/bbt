@@ -13,6 +13,9 @@ with Util.Streams.Raw;
 
 package body BBT.Pump is
 
+   use type Interfaces.C.int;
+   use type Interfaces.C.unsigned;
+
    -- -----------------------------------------------------------------------
    --  The command output and error descriptors are the read ends of
    --  anonymous pipes, that the wait functions do not support: the
