@@ -237,11 +237,15 @@ confirmed it precisely: the ada-util engine is green on the Linux
 and macOS runners, and the Windows build failed at link time on
 `undefined reference to 'poll'`. The pump is since ported per
 platform (`BBT.Pump`: `poll()` on Unix, `PeekNamedPipe` on
-Windows), the remaining gate being the Windows CI validation of
-that port.
+Windows), and the PR #41 CI validates it: the three platforms are
+green, all suites included. What remains specific to Windows is
+the pseudo terminal absence, not the engine: the interactive
+commands keep the pipes behavior there, and the flush constraint
+documented in A290 applies on that platform only.
 
-On the performance transfer to Windows (anticipation, not
-measured, the ada-util pump not being written there): the cause of
+On the performance transfer to Windows (an anticipation written
+before the Windows port, the ratio itself still to be measured on
+that platform): the cause of
 the Linux gap is in the bbt pumping code, identical on all the
 platforms (fixed `Quiet_Step` monitor rounds), and the Spawn
 Windows monitor waits on the same fixed slice model
