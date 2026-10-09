@@ -233,10 +233,12 @@ implementation in the library, untested by bbt.
 Verdict on this axis: Spawn today; the ada-util switch is gated on
 a real porting effort on the pump, and on accepting the pseudo
 terminal loss on Windows. The bbt PR #41 CI (October 2026)
-confirms it precisely: the ada-util engine is green on the Linux
-and macOS runners, and the Windows build fails at link time on
-`undefined reference to 'poll'` — the pump port is the one
-remaining gate.
+confirmed it precisely: the ada-util engine is green on the Linux
+and macOS runners, and the Windows build failed at link time on
+`undefined reference to 'poll'`. The pump is since ported per
+platform (`BBT.Pump`: `poll()` on Unix, `PeekNamedPipe` on
+Windows), the remaining gate being the Windows CI validation of
+that port.
 
 On the performance transfer to Windows (anticipation, not
 measured, the ada-util pump not being written there): the cause of

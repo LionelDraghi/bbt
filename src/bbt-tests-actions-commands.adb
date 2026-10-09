@@ -5,6 +5,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with BBT.Pump;
 with BBT.Settings;
 with BBT.Terminal;
 with BBT.Writers;                       use BBT.Writers;
@@ -271,6 +272,7 @@ package body BBT.Tests.Actions.Commands is
    end Write_Error;
 
    -- ------------------------------------------------------------------------
+   use type BBT.Pump.Stream_State;
    use type Util.Streams.Raw.Raw_Stream_Access;
 
    type Process_Access is access Util.Processes.Process;
@@ -293,30 +295,6 @@ package body BBT.Tests.Actions.Commands is
    Err_Closed : Boolean := True;
    --  end of file reached on the output / error stream
 
-   -- -----------------------------------------------------------------------
-   --  Thin binding on the C poll() function, to watch the command output
-   --  and error descriptors that the ada-util event model does not
-   --  expose: the reads on the library streams are blocking
-
-   --  poll() event bits: a modular type, as Ada has no bitwise
-   --  operators on signed integers
-   type Event_Bits is mod 2 ** 16;
-   Pollin  : constant Event_Bits := 16#001#;
-   Pollerr : constant Event_Bits := 16#008#;
-   Pollhup : constant Event_Bits := 16#010#;
-   Watched : constant Event_Bits := Pollin or Pollerr or Pollhup;
-
-   type Poll_Fd is record
-      Fd      : int;
-      Events  : short;
-      Revents : short;
-   end record;
-   pragma Convention (C, Poll_Fd);
-
-   function Poll (Fds     : not null access Poll_Fd;
-                  Nfds    : unsigned;
-                  Timeout : int) return int;
-   pragma Import (C, Poll, "poll");
 
    -- -----------------------------------------------------------------------
    procedure Reap_Command is
@@ -341,11 +319,9 @@ package body BBT.Tests.Actions.Commands is
       use Ada.Streams;
       Buffer : Stream_Element_Array (1 .. 2 ** 14);
       Last   : Stream_Element_Offset;
-      Fd     : aliased Poll_Fd :=
-                 (Fd      => int (Raw.Get_File),
-                  Events  => short (Pollin),
-                  Revents => 0);
-      Eof : Boolean := False;
+      Watch  : constant BBT.Pump.Watched_Stream
+                 := (Raw => Raw, State => BBT.Pump.No_Data);
+      Eof    : Boolean := False;
    begin
       --  Read the stream until it is drained: the first read is called
       --  on a descriptor that the caller knows readable, and the
@@ -363,9 +339,7 @@ package body BBT.Tests.Actions.Commands is
          else
             Write_Output (Buffer (Buffer'First .. Last));
          end if;
-         Fd.Revents := 0;
-         exit when Poll (Fd'Access, 1, 0) <= 0
-           or else (Event_Bits (Fd.Revents) and Watched) = 0;
+         exit when not BBT.Pump.Has_Data (Watch);
          --  No more data already available
       end loop;
       Closed := Eof;
@@ -378,7 +352,7 @@ package body BBT.Tests.Actions.Commands is
    --  command when both streams have reached end of file.
 
    procedure Poll_Step (Timeout : Duration) is
-      Fds   : array (1 .. 2) of aliased Poll_Fd;
+      Watch : BBT.Pump.Watched_Array (1 .. 2);
       Count : Natural := 0;
    begin
       if The_Process = null or else not Running then
@@ -386,15 +360,11 @@ package body BBT.Tests.Actions.Commands is
       end if;
       if not Out_Closed then
          Count := @ + 1;
-         Fds (Count) := (Fd      => int (Out_Raw.Get_File),
-                         Events  => short (Pollin),
-                         Revents => 0);
+         Watch (Count) := (Raw => Out_Raw, State => BBT.Pump.No_Data);
       end if;
       if Err_Raw /= null and then not Err_Closed then
          Count := @ + 1;
-         Fds (Count) := (Fd      => int (Err_Raw.Get_File),
-                         Events  => short (Pollin),
-                         Revents => 0);
+         Watch (Count) := (Raw => Err_Raw, State => BBT.Pump.No_Data);
       end if;
       if Count = 0 then
          --  Both streams are at end of file: the command is
@@ -402,21 +372,23 @@ package body BBT.Tests.Actions.Commands is
          Reap_Command;
          return;
       end if;
-      if Poll (Fds (1)'Access, unsigned (Count), int (Timeout * 1000.0)) <= 0
-      then
-         --  No output during the timeout, or poll error
-         return;
-      end if;
+      BBT.Pump.Wait (Watch (1 .. Count), Timeout);
       for I in 1 .. Count loop
-         if (Event_Bits (Fds (I).Revents) and Watched) /= 0 then
-            if Fds (I).Fd = int (Out_Raw.Get_File) then
+         if Watch (I).Raw = Out_Raw then
+            if Watch (I).State = BBT.Pump.Data_Available then
                Drain (Raw      => Out_Raw,
                       Is_Error => False,
                       Closed   => Out_Closed);
-            else
+            elsif Watch (I).State = BBT.Pump.End_Of_Stream then
+               Out_Closed := True;
+            end if;
+         else
+            if Watch (I).State = BBT.Pump.Data_Available then
                Drain (Raw      => Err_Raw,
                       Is_Error => True,
                       Closed   => Err_Closed);
+            elsif Watch (I).State = BBT.Pump.End_Of_Stream then
+               Err_Closed := True;
             end if;
          end if;
       end loop;

@@ -165,12 +165,14 @@ commands keep the pipes behavior), and the move of the scenarios
 below to docs/features once the design is arbitrated.
 
 The PR #41 CI confirms the diagnostic (October 2026): the engine is
-green on Linux and on macOS, and the Windows build fails at link
+green on Linux and on macOS, and the Windows build failed at link
 time on `undefined reference to 'poll'` — `poll` is a Winsock only
-function there, and the command descriptors are Win32 handles:
-the pump (`Poll_Step` / `Drain`) has to be ported per platform,
-e.g. `WaitForMultipleObjects` on the `BBT.Terminal` body selection
-pattern.
+function there, and the command descriptors are Win32 handles. The
+pump is now ported per platform: the `BBT.Pump` package waits on
+`poll()` on Unix, and on `PeekNamedPipe` on Windows — the canonical
+way of watching an anonymous pipe, the wait functions not
+supporting the synchronous handles of `CreatePipe`. The Windows
+build is then validated by the PR #41 CI.
 
 ## Open questions (2026-10-09)
 
