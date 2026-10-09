@@ -50,8 +50,13 @@ jobs:
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
-        # with:
-        #   version: 2.1.0 # Remove this option to use the default (latest stable release)
+        with:
+          # The setup-alire@v5 default (2.1.0) is built with the GNAT 14
+          # runtime, which fails to copy dependency files whose path exceeds
+          # Windows MAX_PATH (260), e.g. the sparklib proof sessions, with
+          # "Could not sync build dir" (cf. alire-project/alire#1762).
+          # 2.1.1 (GNAT 15 runtime) handles long paths.
+          version: 2.1.1
 
       - name: Cache Alire dependencies
         uses: actions/cache@v4
