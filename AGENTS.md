@@ -28,6 +28,20 @@ This file is the entry point for coding agents working on bbt.
 - `make clean` removes test artefacts while keeping built binaries and links.
 - `make distclean` removes everything that can be rebuilt.
 
+## Task triage
+
+When the user asks “what should we do now?” or “what is the priority right now?”,
+check the project backlog and tracked work before proposing new work:
+
+- `docs/dev/issues_index.md` for tracked issues;
+- `docs/proposed_features` for candidate ideas not yet decided;
+- `docs/dev/project.md` for the project TDL and current directions;
+- `docs/dev/fixme_index.md` for actionable fixes and cleanup items;
+- `docs/dev/design_discussions.md` for decisions that constrain the next step.
+
+Use these sources to ground the answer in the repository’s existing work. Do not
+invent a new task before checking whether the need is already tracked elsewhere.
+
 ## Useful references
 
 - `docs/bbt-skill`
