@@ -51,12 +51,18 @@ jobs:
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
         with:
-          # The setup-alire@v5 default (2.1.0) is built with the GNAT 14
-          # runtime, which fails to copy dependency files whose path exceeds
-          # Windows MAX_PATH (260), e.g. the sparklib proof sessions, with
-          # "Could not sync build dir" (cf. alire-project/alire#1762).
-          # 2.1.1 (GNAT 15 runtime) handles long paths.
+          # Same version as the local development environment.
           version: 2.1.1
+
+      - name: Relocate the Alire cache on Windows
+        # The alr GNAT runtime copies files through a 256-character path
+        # buffer: with the default cache under %LOCALAPPDATA%\alire\cache,
+        # the build dir of dependencies with deep trees, such as sparklib,
+        # exceeds it and `alr build` fails with "Could not sync build dir"
+        # (cf. https://github.com/alire-project/alire/issues/1762).
+        # A short cache root keeps every path under the limit.
+        if: runner.os == 'Windows'
+        run: alr settings --global --set cache.dir C:\alr-cache
 
       - name: Cache Alire dependencies
         uses: actions/cache@v4
@@ -65,10 +71,14 @@ jobs:
           # on Windows runners (runneradmin user), it is in %LOCALAPPDATA%\alire:
           # the Linux-only paths left the Windows toolchain out of the cache,
           # and it was fully re-downloaded on each run.
+          # On Windows, the cache itself is relocated to C:\alr-cache
+          # (cf. the relocation step above), and %LOCALAPPDATA%\alire keeps
+          # only the settings and indexes.
           path: |
             ~/.cache/alire
             ~/.local/share/alire
             ~/AppData/Local/alire
+            C:/alr-cache
           key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
           restore-keys: |
             ${{ runner.os }}-alire-
