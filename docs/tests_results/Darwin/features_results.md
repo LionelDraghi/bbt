@@ -332,8 +332,8 @@
 
    ### Scenario: [*when I successfully run* an interactive command that finally exits cleanly](../../features/A130_Successfully_Keyword.md): 
    - OK : Given the new file `to_delete.txt` containing `some data`  
-   - OK : Then the output is `Deleting to_delete.txt`  
    - OK : When I successfully run `./sut delete to_delete.txt`  
+   - OK : Then the output is `Deleting to_delete.txt`  
    - OK : And there is no file `to_delete.txt`  
    - [X] scenario   [*when I successfully run* an interactive command that finally exits cleanly](../../features/A130_Successfully_Keyword.md) pass  
 
