@@ -26,9 +26,12 @@ checks following a `type` or `enter` step apply only to the output
 produced after this step. The prompt displayed before the input is
 ignored: each `type` or `enter` step resets the checked output.
 
-The command input and output are pipes: the program under test is
-expected to flush its prompt before waiting for input (this is the
-default with `Ada.Text_IO`; a C program needs `fflush`).
+The command runs on a pseudo terminal, configured in raw mode: its
+standard output is line buffered, so the prompt is visible before the
+program waits for input, without any explicit flush (the `fflush`
+calls that a C program needed over pipes are no more necessary), the
+input is not echoed, and the output bytes are exact, so the expected
+outputs are the same as over pipes.
 
 _Table of Contents:_
 - [Scenario: answering a key prompt with type](#scenario-answering-a-key-prompt-with-type)

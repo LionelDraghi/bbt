@@ -55,33 +55,35 @@ One of the component of the scenario file will be further analyzed, it’s the s
 ## Command execution and interaction
 
 The commands of the `When I run` steps are executed through the
-[Spawn](https://github.com/AdaCore/spawn) library (Alire dependency
-`spawn`), asynchronously: the listener appends the standard output and
-the standard error to the same files as the previous blocking
-implementation did, and reports the exit code on termination.
+[ada-util](https://github.com/stcarrez/ada-util) library (Alire
+dependency `utilada`), synchronously: the command output and error
+descriptors, exposed by the library raw streams, are polled and
+appended to the same output files as the previous Spawn based
+implementation did, and the exit code is collected when the command
+terminates.
 
 The choice of this library, and the alternatives that were rejected,
 are recorded in [design_discussions.md](design_discussions.md).
 
-Note that `Spawn.Environments.System_Environment` is a snapshot taken at
-elaboration time: the child environment is rebuilt at each command with
-`Ada.Environment_Variables.Iterate`, so that the environment variable
-steps apply to the commands.
+A fresh process object is created for each command, and freed once
+the command is terminated and reaped: contrary to the Spawn monitor,
+the library keeps no process map surviving the command. The child
+environment is set with `Set_Default_Environment` at spawn time, a
+snapshot of the bbt current environment, so that the environment
+variable steps apply to the commands.
 
-Two constraints of the library, found while making bbt work on the
-three platforms, are worth knowing:
-
-- a process object cannot be restarted: a fresh object is created for
-  each command (the Windows monitor fails otherwise);
-- a process object must never be freed: the POSIX monitor keeps a
-  pid to process map with no removal on termination, so a freed object
-  leaves a dangling pointer there, and on macOS, where pids are quickly
-  reused, the exit status is written into freed memory
-  (cf. [spawn#36](https://github.com/AdaCore/spawn/issues/36));
-  the objects are kept alive for the whole run.
-
-When a scenario contains a `When I type` or a `When I enter` step
-(cf. [A290](../features/A290_When_I_Type_Or_Enter.md)), the command is
+When a scenario contains a `When I type` or a `When I enter` step,
+its commands are started on a pseudo terminal allocated by the library
+(`Set_Allocate_TTY`), configured in raw mode by construction: the
+prompts are visible before the program waits for input, without any
+explicit flush, the input is not echoed, and the output bytes are
+exact, so the expected outputs are the same as over pipes
+(cf. [A290](../features/A290_When_I_Type_Or_Enter.md), and
+[proposed_features/pty.md](../proposed_features/pty.md) for the
+experiment results that led to this design). The pseudo terminal is
+given a fixed 80x24 window size (`BBT.Terminal`, through a thin C
+wrapper on `ioctl(TIOCSWINSZ)`, as `ioctl` is variadic and its
+request constant is platform dependent). The command is
 started and not awaited: it is fed across steps, and the synchronization
 relies on two event pumping primitives:
 
@@ -90,11 +92,6 @@ relies on two event pumping primitives:
 - `Wait_Response`: the command has produced some output after the last
   input (or since the command start, when no input was sent yet), and
   then stayed quiet: its response is complete, and can be checked.
-
-The pseudo terminal option, that would remove the flush constraint
-documented in A290, is described in
-[proposed_features/pty.md](../proposed_features/pty.md), with the experiment
-results.
 
 ## Tests
 
@@ -146,4 +143,4 @@ Sources of `sut` are in the `tools` sub-directory.
 
 1. For the sake of clarity, the examples (within docs/examples) use a real life app and you'll need to have in the PATH the exe "tested", that is `gcc`, `rpl`, etc.  
 2. [mlc](https://github.com/becheran/mlc?tab=readme-ov-file#markup-link-checker) is used to check links in all Markdown files.
-3. Alire dependencies, declared in alire.toml: `ansiada` (colors in the results output), and `spawn` (asynchronous command execution, cf. [Command execution and interaction](#command-execution-and-interaction)).
+3. Alire dependencies, declared in alire.toml: `ansiada` (colors in the results output), and `utilada` (command execution and pseudo terminal for the interactive commands, cf. [Command execution and interaction](#command-execution-and-interaction)).

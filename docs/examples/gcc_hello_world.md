@@ -78,10 +78,10 @@ Let's use a regexp to test both.
 
 > This scenario illustrates the `type` and `enter` steps, to interact
 > with a program waiting for user input. `enter` sends a whole line,
-> `type` a single key press. Note the `fflush` calls in the program:
-> as bbt feeds the program through a pipe, the standard output is not
-> a terminal, and thus block buffered: the prompts need an explicit
-> flush to be visible before the program waits for input.
+> `type` a single key press. The program runs on a pseudo terminal,
+> so its prompts are visible while it waits for input even without
+> the `fflush` calls, that are kept here to show that a flushing
+> program behaves the same.
 
 - Given the new file `ask.c` containing
   ```c

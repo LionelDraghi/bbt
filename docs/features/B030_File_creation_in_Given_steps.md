@@ -46,6 +46,10 @@ Alias l="ls -tla"
 
 The nested bbt is run without the `--yes` option: it prompts for the
 erasing confirmation, the scenario answers `Y`, and the file is erased.
+As in all the scenarios below that check the prompt exactly, the nested
+bbt runs with `--no_tty`: the command is on a pseudo terminal, and the
+nested bbt would otherwise detect it and print its status bar in the
+middle of the prompt.
 
 - Given the new file `config.ini` containing `Tmp_dir=/tmp`
 - Given the new `erase_confirm.md` file
@@ -55,7 +59,7 @@ erasing confirmation, the scenario answers `Y`, and the file is erased.
 - Given there is no `config.ini` file
 - Then there is no `config.ini` file
 ~~~
-- When I run `./bbt -q -c erase_confirm.md`
+- When I run `./bbt -q --no_tty -c erase_confirm.md`
 - Then the output is
 ```
 Delete file config.ini?   [Y]es/[N]o/[A]ll
@@ -77,7 +81,7 @@ nested scenario fails.
 - Given there is no `config.ini` file
 - Then there is no `config.ini` file
 ~~~
-- When I run `./bbt -q -c erase_confirm.md`
+- When I run `./bbt -q --no_tty -c erase_confirm.md`
 - Then the output is
 ```
 Delete file config.ini?   [Y]es/[N]o/[A]ll
@@ -102,7 +106,7 @@ whole tree is erased.
 - Given there is no `d1` directory
 - Then there is no `d1` directory
 ~~~
-- When I run `./bbt -q -c erase_dir_confirm.md`
+- When I run `./bbt -q --no_tty -c erase_dir_confirm.md`
 - Then the output is
 ```
 Delete tree d1?   [Y]es/[N]o/[A]ll
@@ -125,7 +129,7 @@ the nested scenario fails.
 - Given there is no `d1` directory
 - Then there is no `d1` directory
 ~~~
-- When I run `./bbt -q -c erase_dir_refuse.md`
+- When I run `./bbt -q --no_tty -c erase_dir_refuse.md`
 - Then the output is
 ```
 Delete tree d1?   [Y]es/[N]o/[A]ll
@@ -154,7 +158,7 @@ the final checks.
 - Then there is a dir `d2`
 - And there is no file `d2/f1`
 ~~~
-- When I run `./bbt -q erase_new_dir_confirm.md`
+- When I run `./bbt -q --no_tty erase_new_dir_confirm.md`
 - Then the output is
 ```
 Delete tree d2?   [Y]es/[N]o/[A]ll
@@ -177,7 +181,7 @@ is, and the nested scenario fails.
 
 - Given the new `d3` directory
 ~~~
-- When I run `./bbt -q erase_new_dir_refuse.md`
+- When I run `./bbt -q --no_tty erase_new_dir_refuse.md`
 - Then the output is
 ```
 Delete tree d3?   [Y]es/[N]o/[A]ll
