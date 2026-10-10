@@ -53,7 +53,7 @@
    ### Scenario: [Replacing confirmed by a typed key](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
    - OK : Given the new `replace_confirm.md` file  
-   - OK : When I run `./bbt -q replace_confirm.md`  
+   - OK : When I run `./bbt -q --no_tty replace_confirm.md`  
    - OK : Then the output is  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
    - OK : And there is a `config.ini` file  
@@ -63,7 +63,7 @@
    ### Scenario: [Replacing refused by a typed key](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
    - OK : Given the new `replace_refuse.md` file  
-   - OK : When I run `./bbt -q replace_refuse.md`  
+   - OK : When I run `./bbt -q --no_tty replace_refuse.md`  
    - OK : Then the output is  
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not overwritten`  
@@ -75,7 +75,7 @@
    - OK : Given the new `match_mode.md` file  
    - OK : When I run `./bbt -q match_mode.md`  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - OK : When I run `./bbt -q --exact_match match_mode.md`  
+   - OK : When I run `./bbt -q --no_tty --exact_match match_mode.md`  
    - OK : Then the output is  
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not overwritten`  
@@ -1128,7 +1128,7 @@
    ### Scenario: [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
    - OK : Given the new `erase_confirm.md` file  
-   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : When I run `./bbt -q --no_tty -c erase_confirm.md`  
    - OK : Then the output is  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
    - OK : And there is no `config.ini` file  
@@ -1137,7 +1137,7 @@
    ### Scenario: [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
    - OK : Given the new `erase_confirm.md` file  
-   - OK : When I run `./bbt -q -c erase_confirm.md`  
+   - OK : When I run `./bbt -q --no_tty -c erase_confirm.md`  
    - OK : Then the output is  
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not deleted`  
@@ -1148,7 +1148,7 @@
    - OK : Given the new `d1` directory  
    - OK : Given the new `d1/f1` file containing `some data`  
    - OK : Given the new `erase_dir_confirm.md` file  
-   - OK : When I run `./bbt -q -c erase_dir_confirm.md`  
+   - OK : When I run `./bbt -q --no_tty -c erase_dir_confirm.md`  
    - OK : Then the output is  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
    - OK : And there is no `d1` directory  
@@ -1158,7 +1158,7 @@
    - OK : Given the new `d1` directory  
    - OK : Given the new `d1/f1` file containing `some data`  
    - OK : Given the new `erase_dir_refuse.md` file  
-   - OK : When I run `./bbt -q -c erase_dir_refuse.md`  
+   - OK : When I run `./bbt -q --no_tty -c erase_dir_refuse.md`  
    - OK : Then the output is  
    - OK : Then I get an error  
    - OK : And the output contains `dir "d1" not deleted`  
@@ -1169,7 +1169,7 @@
    - OK : Given the new `d2` directory  
    - OK : Given the new `d2/f1` file containing `some data`  
    - OK : Given the new `erase_new_dir_confirm.md` file  
-   - OK : When I run `./bbt -q erase_new_dir_confirm.md`  
+   - OK : When I run `./bbt -q --no_tty erase_new_dir_confirm.md`  
    - OK : Then the output is  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
    - OK : And there is a `d2` directory  
@@ -1180,7 +1180,7 @@
    - OK : Given the new `d3` directory  
    - OK : Given the new `d3/f1` file containing `some data`  
    - OK : Given the new `erase_new_dir_refuse.md` file  
-   - OK : When I run `./bbt -q erase_new_dir_refuse.md`  
+   - OK : When I run `./bbt -q --no_tty erase_new_dir_refuse.md`  
    - OK : Then the output is  
    - OK : Then I get an error  
    - OK : And the output contains `dir "d3" not deleted`  
