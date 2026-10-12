@@ -22,13 +22,6 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### High priority
 
-- PTY for interactive commands  
-  Implemented on the `pty` branch (Spawn replaced by ada-util, the
-  commands of the interactive scenarios run on a pseudo terminal in
-  raw mode), all suites green on Linux; pending the Spawn / utilada
-  comparison and the Windows paths validation before arbitration.  
-  cf. [pty](../proposed_features/pty.md)
-
 - Explicit terminal context  
   The interactive scenarios (`type` / `enter`) now always run on a
   pseudo terminal: the "answers fed through a pipe" context

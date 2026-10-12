@@ -28,7 +28,7 @@ updated with a reference to its replacement.
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
-| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Under discussion again (2026-10)    | [pty.md](../proposed_features/pty.md)                                             |
+| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10), implemented  | [pty.md](../proposed_features/pty.md), [PR #41](https://github.com/LionelDraghi/bbt/pull/41), [PR #43](https://github.com/LionelDraghi/bbt/pull/43) |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
 
@@ -36,7 +36,8 @@ The table is sorted by status: the entries under discussion first.
 
 ## D1. Command execution library: Spawn
 
-Status: arbitrated (October 2026), reopened (October 2026)
+Status: arbitrated (October 2026), reopened (October 2026), arbitrated
+again (October 2026): ada-util adopted, implemented
 
 The commands of the `When I run` steps are executed through the
 [Spawn](https://github.com/AdaCore/spawn) library (Alire dependency
@@ -49,11 +50,15 @@ single key press would not be delivered out of canonical mode
 (cf. [pty.md](../proposed_features/pty.md) for the experiments).
 [ada-util](https://github.com/stcarrez/ada-util) solves the three
 problems by construction, and candidate design 2 (replace Spawn by
-ada-util entirely) is implemented on the `pty` branch, all suites
-green on Linux: the arbitration is reopened, pending the comparison
-of the two engines, and the validation of the ada-util Windows
-paths (`Set_Allocate_TTY` is not implemented there, and the command
-output pumping relies on `poll`).
+ada-util entirely) is implemented and merged in main: the comparison
+below arbitrated the choice in favor of ada-util, and the Windows
+paths are ported and validated (`BBT.Pump` on `PeekNamedPipe`, the
+PR #41 CI green on the three platforms, all suites included;
+`Set_Allocate_TTY` is still not implemented there, cf. the Windows
+axis below). The engine is merged through
+[PR #41](https://github.com/LionelDraghi/bbt/pull/41), its
+follow-ups through
+[PR #43](https://github.com/LionelDraghi/bbt/pull/43).
 
 `GNAT.Expect` was rejected after experimenting with both (October 2026,
 with scratch programs):
@@ -106,11 +111,11 @@ Other candidates were reviewed later (October 2026):
 
 ### Comparison Spawn vs ada-util (October 2026)
 
-Candidate design 2 is implemented on the `pty` branch, all suites
+Candidate design 2 was implemented on the `pty` branch, all suites
 green on Linux: the two engines are compared below on facts, the
 Spawn binary being rebuilt from the same commit for the measures,
-and rebuildable through the git history of the branch. The
-arbitration is pending.
+and rebuildable through the git history. The arbitration is done:
+ada-util is adopted (October 2026).
 
 **Complexity and readability.** The library specific code is of
 similar volume (about 245 lines for Spawn, 225 lines plus 92 lines
@@ -269,18 +274,25 @@ filed issue addresses today).
 **Balance.** ada-util wins the complexity (no defensive code),
 the execution time (3x), and the robustness (no library defect
 workaround); the dependencies are close to a wash (one crate
-either way, ada-util being the heavier); Windows is the one axis
-where Spawn clearly wins today. Candidate design 2 is thus the
-better engine on the POSIX platforms, gated on a Windows port of
-the pump to be written and validated.
+either way, ada-util being the heavier); the Windows axis was the
+last gate, and it is lifted: the pump is ported per platform
+(`BBT.Pump`), and the PR #41 CI validated the engine on the three
+platforms, all suites included.
+
+**Decision (October 2026): ada-util is adopted**, and the Spawn
+engine removed. What remains specific to Windows is the pseudo
+terminal absence, cf. the Windows axis above.
 
 References:
 
 - the [spawn lib choice forum thread](https://forum.ada-lang.io/t/spawn-lib-choice/1467);
+- [PR #41](https://github.com/LionelDraghi/bbt/pull/41) and
+  [PR #43](https://github.com/LionelDraghi/bbt/pull/43): the ada-util
+  engine merged in main, and its CI validation on the three platforms;
 - [AdaCore/spawn#36](https://github.com/AdaCore/spawn/issues/36): the
   POSIX monitor dangling pointer on freed process objects, that the
   Spawn engine worked around by never freeing them (visible in the
-  git history of `bbt-tests-actions-commands.adb`, branch `pty`);
+  git history of `bbt-tests-actions-commands.adb`, cf. PR #41);
 - [AdaCore/spawn#37](https://github.com/AdaCore/spawn/issues/37) and
   [AdaCore/spawn#38](https://github.com/AdaCore/spawn/issues/38): the
   two Windows monitor bugs that the Spawn engine worked around (the
