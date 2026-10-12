@@ -184,6 +184,10 @@ All the available steps, classified by what they set up, run or check:
     - When `grep pattern missing_file.txt` fails
     - When I run `grep pattern file1.txt` or `grep pattern file2.txt`
       (the scenario is run once per command of the or list)
+    - When I successfully run `sh -c "cut -f1 list.txt | sort > sorted.txt"`
+      (commands are not run through a shell: to get pipes, redirections
+      or command substitutions interpreted, an explicit shell is
+      required, and its command must be quoted)
 
 **Interacting with a running command**  
 
