@@ -114,6 +114,7 @@ features: setup
 	../docs/features 
 	@ echo
 	@ - rm -f verbose_output_NOK.md verbose_output_OK.md
+	@ - rm -f out.version.txt
 
 examples: setup
 	@ # Check examples
@@ -173,6 +174,7 @@ clean:
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
 	@ - rm -f file_utilities_tests/test_file_utilities.md
 	@ - rm -f blaise_cendrars.txt flowers1.txt flowers2.txt flowers3.txt help_message.txt le_Cid_1.txt le_Cid_2.txt le_Cid_3.txt list_1.txt list_2.txt
+	@ - rm -f out.version.txt
 	@ - rm -f text.1 text.2 text.3 text.4 text.ref tmp.1 tmp.2 tmp.3 tmp.4
 	@ - rm -f cmd_not_found.md compare.md compare_crlf.md contains.md contains_multiline.md create_exec.md failed_doesnt_1.md failed_doesnt_2.md
 	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md

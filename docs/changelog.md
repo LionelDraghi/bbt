@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.5.1-dev] - 2026-??-??**
+  - [Changed]  the shell metacharacter warning is shortened, and now tells how to get the metacharacters interpreted: quote them to pass them as literal arguments, or run an explicit shell, e.g. ``sh -c 'cmd1 | cmd2' `` (cf. docs/features/B115_Warning_On_Shell_Metacharacters.md)
+  - [Fixed]   the shell metacharacter warning was raised on metacharacters inside a quoted command containing backslash escapes (e.g. ``sh -c "cut -d'\"' -f2 > out"``), as the quote state was toggled by quotes inside quotes: the quoting analysis now follows the shell rules (cf. docs/features/B115_Warning_On_Shell_Metacharacters.md)
   - [Changed]  the command execution engine is now based on the ada-util library (Alire crate `utilada`), replacing Spawn: the commands of a scenario with `type` or `enter` steps run on a pseudo terminal in raw mode, so their prompts are visible before they wait for input, without `fflush`, and the sent input is not echoed; the simulated terminal has a fixed 80x24 size (cf. docs/features/A290_When_I_Type_Or_Enter.md and docs/proposed_features/pty.md)
 
 - **[0.5.0] - 2026-10-09**
