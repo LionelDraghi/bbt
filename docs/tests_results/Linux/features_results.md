@@ -1559,6 +1559,12 @@
    - OK : Then output is  
    - [X] scenario   [no warning when the metacharacter is quoted (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
 
+   ### Scenario: [no warning on an escaped quote inside a quoted command (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md): 
+   - OK : Given the new file `escaped_quote_test.md`  
+   - OK : When I run `./bbt -c escaped_quote_test.md`  
+   - OK : Then output is  
+   - [X] scenario   [no warning on an escaped quote inside a quoted command (Unix_Only)](../../features/B115_Warning_On_Shell_Metacharacters.md) pass  
+
    ### Scenario: [no warning on a quoted metacharacter in bbt explain](../../features/B115_Warning_On_Shell_Metacharacters.md): 
    - OK : Given the new file `quoted_glob_test.md`  
    - OK : When I run `./bbt explain quoted_glob_test.md`  
@@ -2180,12 +2186,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 232 scenarios OK
+## Summary : **Success**, 233 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 232   |
+| Successful | 233   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

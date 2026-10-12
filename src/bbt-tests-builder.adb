@@ -208,27 +208,50 @@ package body BBT.Tests.Builder is
    --  On the other hand, quoting is the way to pass a literal
    --  metacharacter as an argument, so metacharacters inside a quoted
    --  part of the command are intentional and do not raise a warning.
+   --  The quoting analysis follows the shell rules: a single quote
+   --  only toggles outside double quotes, a double quote only toggles
+   --  outside single quotes, and a backslash escapes the character
+   --  that follows it.
       In_Single_Quotes : Boolean := False;
       In_Double_Quotes : Boolean := False;
+      I                : Integer  := Cmd'First;
+
    begin
-      for I in Cmd'Range loop
-         if Cmd (I) = ''' then
-            In_Single_Quotes := not In_Single_Quotes;
+      while I <= Cmd'Last loop
+         if In_Single_Quotes then
+            if Cmd (I) = ''' then
+               In_Single_Quotes := False;
+            end if;
+
+         elsif In_Double_Quotes then
+            if Cmd (I) = '\' and then I < Cmd'Last then
+               I := I + 1;
+            elsif Cmd (I) = '"' then
+               In_Double_Quotes := False;
+            end if;
+
+         elsif Cmd (I) = '\' and then I < Cmd'Last then
+            I := I + 1;
+
+         elsif Cmd (I) = ''' then
+            In_Single_Quotes := True;
+
          elsif Cmd (I) = '"' then
-            In_Double_Quotes := not In_Double_Quotes;
-         elsif not In_Single_Quotes and not In_Double_Quotes then
+            In_Double_Quotes := True;
+
+         else
             for Metachar of Shell_Metachars loop
                if Cmd (I) = Metachar then
                   IO.Put_Warning ("the command contains a shell metacharacter ('"
                                   & Cmd (I) & "'), but commands are not run "
-                                  & "through a shell: a command shall not "
-                                  & "contain pipes, redirections, or command "
-                                  & "substitutions; '" & Cmd (I) & "' will be "
-                                  & "passed as an argument to the command", Loc);
+                                  & "through a shell: quote it to pass it as "
+                                  & "a literal argument, or run a shell, "
+                                  & "e.g. `sh -c 'cmd1 | cmd2'`", Loc);
                   return;
                end if;
             end loop;
          end if;
+         I := I + 1;
       end loop;
    end Check_Shell_Metachars;
 

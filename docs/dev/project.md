@@ -58,6 +58,15 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   commands only.  
   cf. [non_interactive_redirect](../proposed_features/non_interactive_redirect.md)
 
+- run in shell step  
+  A dedicated step running the command through a configurable
+  shell (`--shell` setting, `BBT_SHELL` override), for the steps
+  that need pipes, redirections or command substitutions; today the
+  author has to spawn the shell explicitly, e.g.
+  `sh -c "cmd1 | cmd2"`. Under discussion on
+  [GitHub discussion #42](https://github.com/LionelDraghi/bbt/discussions/42).  
+  cf. [run_in_shell](../proposed_features/run_in_shell.md)
+
 - append / remove  
   To append / remove text to an existing text file
 
