@@ -94,6 +94,19 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   alignment, as in diff or git, would give more relevant results.  
   cf. [LCS_diff_alignment](../proposed_features/LCS_diff_alignment.md)
 
+- ignoring volatile parts in comparisons  
+  Time tags, machine dependent absolute paths and Windows versus Unix
+  path syntax frequently break comparisons on parts the scenario does
+  not target; the workarounds (full line regexps in `matches`, sed
+  filtering) are heavy and weaken the stable part of the check. An
+  explicit `ignoring` clause on the comparison steps (`ignoring time`,
+  `ignoring dir`, `ignoring path syntax`, `ignoring <regexp>`) would mask
+  or normalize the volatile parts
+  on both sides before comparing, and the diff display would show the
+  ignored segments in a distinct color, plus the really differing
+  characters in red inside differing lines.  
+  cf. [ignore](../proposed_features/ignore.md)
+
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...
 
