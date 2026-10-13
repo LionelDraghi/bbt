@@ -1073,6 +1073,155 @@
    - [X] scenario   [enter without a running command](../../features/A290_When_I_Type_Or_Enter.md) pass  
 
 
+# Document: [A300_Ignoring.md](../../features/A300_Ignoring.md)  
+  ## Feature: Ignoring volatile parts in comparisons  
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a time tag in the output does not fail the comparison](../../features/A300_Ignoring.md): 
+   - OK : Given the file `log.txt`  
+   - OK : When I run `./sut read log.txt`  
+   - OK : Then I get (ignoring time)  
+   - [X] scenario   [a time tag in the output does not fail the comparison](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [the common clock, date and date-time formats are ignored](../../features/A300_Ignoring.md): 
+   - OK : Given the file `run_a.txt`  
+   - OK : Given the file `run_b.txt`  
+   - OK : Then file `run_a.txt` is equal to file `run_b.txt` (ignoring time)  
+   - [X] scenario   [the common clock, date and date-time formats are ignored](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [only the file name is checked, not the directory](../../features/A300_Ignoring.md): 
+   - OK : Given the file `where.txt`  
+   - OK : When I run `./sut read where.txt`  
+   - OK : Then I get `sut home is C:\prj\bbt` (ignoring dir)  
+   - [X] scenario   [only the file name is checked, not the directory](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a differing file name fails, differing directories do not](../../features/A300_Ignoring.md): 
+   - OK : Given the `where_compare.md` file  
+   - OK : When I run `./bbt where_compare.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `Error : where_ref.txt not equal to expected:`  
+   - [X] scenario   [a differing file name fails, differing directories do not](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a differing stable part still fails](../../features/A300_Ignoring.md): 
+   - OK : Given the `time_compare.md` file  
+   - OK : When I run `./bbt time_compare.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `Error : build_ref.txt not equal to expected:`  
+   - [X] scenario   [a differing stable part still fails](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [time and dir combine on one step](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_log.txt`  
+   - OK : When I run `./sut read build_log.txt`  
+   - OK : Then I get (ignoring time, dir)  
+   - OK : And I get (ignoring time and dir)  
+   - [X] scenario   [time and dir combine on one step](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a time tag does not fail a contains check](../../features/A300_Ignoring.md): 
+   - OK : Given the file `log.txt`  
+   - OK : When I run `./sut read log.txt`  
+   - OK : Then the output contains (ignoring time)  
+   - [X] scenario   [a time tag does not fail a contains check](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [version number does not fail the comparison](../../features/A300_Ignoring.md): 
+   - OK : When I run `./bbt help`  
+   - OK : Then the output contains `bbt version 1.2.3` (ignoring version)  
+   - OK : But the output does not contain `bbt version 1.2.3`  
+   - [X] scenario   [version number does not fail the comparison](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a time tag missing on the actual side fails and warns](../../features/A300_Ignoring.md): 
+   - OK : Given the `warn_compare.md` file  
+   - OK : When I run `./bbt warn_compare.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `Warning`  
+   - [X] scenario   [a time tag missing on the actual side fails and warns](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [the clause on a non comparison step is an error](../../features/A300_Ignoring.md): 
+   - OK : Given the `bad_clause.md` file  
+   - OK : When I run `./bbt bad_clause.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `the (ignoring ...) clause is only allowed on the`  
+   - OK : And output contains `comparison steps`  
+   - [X] scenario   [the clause on a non comparison step is an error](../../features/A300_Ignoring.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -2186,12 +2335,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 233 scenarios OK
+## Summary : **Success**, 243 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 233   |
+| Successful | 243   |
 | Empty      | 0     |
 | Not Run    | 1     |
 
