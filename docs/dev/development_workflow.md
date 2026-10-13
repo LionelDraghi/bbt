@@ -9,31 +9,20 @@ a complete, consistent and validated project state.
 
 Work on the source files without staging, committing or pushing.
 
-The normal development loop is:
+During development, run only the tests directly involved by the change:
+typically the feature file you are working on, iterated on until it is
+green:
 
 ```sh
-cd tests && make features
+cd tests && ./bbt ../docs/features/<the_feature_file.md>
 ```
 
-To run a single test:
-
-```sh
-cd tests && ./bbt <test_file>
-```
-
-Run another suite only when the change concerns it:
-
-```sh
-cd tests && make examples
-cd tests && make non_reg
-cd tests && make unit_testing
-```
-
-Useful direct test commands are:
+For a change impacting the tools, the examples or the non regression
+tests, run the involved suite the same way:
 
 ```sh
 cd tests && ./bbt ../docs/examples
-cd tests && ./bbt ../docs/features
+cd tests && make unit_testing
 ```
 
 When running tests:
@@ -41,7 +30,19 @@ When running tests:
 - add `--exclude Windows_Only` on Linux and macOS;
 - add `--exclude Unix_Only` on Windows.
 
-Run the relevant tests throughout development. Fix failures before continuing.
+Iterate on the involved tests throughout development, and fix failures
+before continuing.
+
+When the involved tests are green, and only then, run the complete
+validation once:
+
+```sh
+make all
+```
+
+and then proceed with the sections below, up to the owner review. There
+is no point in running the complete validation while an involved test
+is still red: fix the red first, validate after.
 
 ## 2. Feature and error-message changes
 
@@ -226,15 +227,26 @@ Present a concise report containing:
 - the files currently modified, staged or untracked;
 - any remaining warning, uncertainty or proposed follow-up.
 
-Then ask explicitly for approval to perform the final validation, commit and
-push.
+Then ask explicitly for approval to commit and push, with a final
+validation only if something changed since the last complete run
+(cf. section 7).
 
 Do not run `git add`, `git commit` or `git push` before receiving this
 approval.
 
 ## 7. Final validation after approval
 
-After the owner gives approval, run the complete validation:
+The final validation re-runs the complete validation performed before
+the owner review (section 1). It is needed only when something that can
+change its results — sources, feature files, tests, build or help
+files — was modified since that green `make all`, typically after fixes
+requested during the review.
+
+If nothing was modified since the `make all` submitted for review, skip
+this section and go directly to staging (section 8): re-running
+`make all` and `make clean` on an unchanged state adds no information.
+
+When a re-validation is needed, run:
 
 ```sh
 make all
