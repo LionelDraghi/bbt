@@ -1199,6 +1199,67 @@
    - OK : And output contains `comparison steps`  
    - [X] scenario   [the clause on a non comparison step is an error](../../features/A300_Ignoring.md) pass  
 
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a duration may vary](../../features/A300_Ignoring.md): 
+   - OK : Given the file `perf.txt`  
+   - OK : When I run `./sut read perf.txt`  
+   - OK : Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)  
+   - [X] scenario   [a duration may vary](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a regexp combines with a named pattern](../../features/A300_Ignoring.md): 
+   - OK : Given the file `count.txt`  
+   - OK : When I run `./sut read count.txt`  
+   - OK : Then I get (ignoring time and [0-9]+)  
+   - [X] scenario   [a regexp combines with a named pattern](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a regexp matching nothing on the actual side fails and warns](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_words.txt`  
+   - OK : Given the file `build_secs.txt`  
+   - OK : Given the `regexp_compare.md` file  
+   - OK : When I run `./bbt regexp_compare.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `Error : build_words.txt not equal to expected:`  
+   - OK : And output contains `pattern matches nothing`  
+   - [X] scenario   [a regexp matching nothing on the actual side fails and warns](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [an illegal regexp in the clause is an error](../../features/A300_Ignoring.md): 
+   - OK : Given the `bad_regexp.md` file  
+   - OK : When I run `./bbt bad_regexp.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `invalid regexp in the ignoring clause`  
+   - [X] scenario   [an illegal regexp in the clause is an error](../../features/A300_Ignoring.md) pass  
+
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
@@ -2284,12 +2345,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 236 scenarios OK
+## Summary : **Success**, 240 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 236   |
+| Successful | 240   |
 | Empty      | 0     |
 | Not Run    | 8     |
 
