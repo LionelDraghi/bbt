@@ -9,8 +9,6 @@ with Ada.Calendar;
 with Interfaces.C;
 with System;
 
-with Util.Streams.Raw;
-
 package body BBT.Pump is
 
    use type Interfaces.C.int;

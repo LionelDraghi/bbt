@@ -86,7 +86,11 @@ the comparison happens, not by rewriting the output beforehand.
   program prints a place that depends on where it was installed, but
   the relevant information is the file or directory name. On Windows,
   `C:\prj\bbt` masks to the same checked `bbt`, the drive letter being
-  part of the masked prefix;
+  part of the masked prefix. Note that location and syntax are two
+  subjects, and that `ignoring dir` neutralizes both at once — a Unix
+  and a Windows print of the same place compare equal; requiring the
+  same path while neutralizing only the syntax is the
+  `ignoring path syntax` job, below;
 - `ignoring path syntax` does not mask anything: it only normalizes the
   way paths are written — `\` to `/`, drive letter prefixes — so that
   the same location, printed as `tests\results.md` on Windows and
@@ -101,7 +105,8 @@ the comparison happens, not by rewriting the output beforehand.
 - Then I get `Build finished in 3.2 seconds` (ignoring `[0-9.]+`)
 ```
 
-Several clauses may be combined on one step (`ignoring time, dir`).
+Several patterns may be combined on one step, separated by commas,
+spaces or `and` (`ignoring time, dir`, `ignoring dir, time and casing`).
 
 ### Semantics
 
@@ -136,6 +141,18 @@ settable at a wider scope:
 
 Precedence to be arbitrated (see open questions).
 
+The first increment, specified and implemented in
+[A300_Ignoring.md](../features/A300_Ignoring.md), covers only the step
+clause, with the `time` and `dir` patterns. The `Given` step and the
+command line option — and with them the precedence question — are
+deferred to a later increment, as is the homogenization of the clause and
+option naming with the existing `ignore_casing`, `ignore_whitespaces` and
+`ignore_blank_lines` settings (cf. the [ignoring design
+discussion](../dev/design_discussions.md)). When that homogenization is
+resumed, the goal will be to bring those settings explicitly into the
+scenario instead of leaving them on the command line, as wished when
+[issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed.
+
 ### Is such a Given in the Gherkin spirit?
 
 The wider scope `Given` step could be objected to: in BDD doctrine,
@@ -160,23 +177,42 @@ warning when a pattern matches nothing on the actual side.
 
 When the comparison fails, the sdiff display (cf.
 [B105](../features/B105_Expected_vs_Actual_Output.md)) must show what was
-neutralized:
+neutralized.
 
-- the segments masked by an ignoring clause are displayed in a distinct
-  color (for instance yellow), so that the eye immediately separates
-  "the scenario ignores this" from "this is the failure". The mask
-  applied to the comparison is the one applied to the display, so the
-  shown diff is exactly the tested diff;
+The current first increment applies the mask to the display: the
+neutralized segments appear as the constant marker `***`, in the tty and
+non-tty outputs alike, so that the shown diff is exactly the tested diff.
+
+The target display, once the
+[LCS alignment proposal](LCS_diff_alignment.md) lands, is:
+
+- on a color terminal, the original, **unmasked** text: the ignored
+  segments are displayed as they were printed, in a distinct color (for
+  instance yellow), so that the eye separates "the scenario ignores
+  this" from "this is the failure" by color only, and the real output of
+  the command stays visible;
 - additionally, on differing lines, the differing characters themselves
   should be highlighted in red instead of the whole line, so that a one
   character difference in a long line draws the eye. This pairs naturally
-  with the [LCS alignment proposal](LCS_diff_alignment.md): the alignment
-  identifies the differing line pairs, an intra-line comparison
-  identifies the differing characters inside a pair.
+  with the LCS alignment: the alignment identifies the differing line
+  pairs, an intra-line comparison identifies the differing characters
+  inside a pair.
 
 Colors are emitted only when the standard output is a terminal, with the
-same rules as the status bar (`--no_tty` wins). In the non-tty outputs
-(Markdown logs, JUnit), the ignored segments keep a textual marker.
+same rules as the status bar (`--no_tty` wins). For the non-tty outputs
+(Markdown logs, JUnit), where no color is available, three textual
+conventions were discussed:
+
+- format stand-ins, in the smk convention: display `HH:MM:SS` for a
+  masked clock value — the data is not visible any more, but its format
+  is explicit;
+- a repeated character, as long as the neutralized field, so that the
+  text alignment and the size of the volatile value are preserved;
+- a constant marker, independent of the masked value.
+
+The constant marker `***` is kept for now, in the tty and non-tty
+outputs: it is simple, and the shown diff is exactly the tested diff;
+the choice will be revisited with the colored display.
 
 ## Impacted code
 
@@ -192,7 +228,8 @@ same rules as the status bar (`--no_tty` wins). In the non-tty outputs
 
 ## Open questions
 
-1. **Keyword**: `(ignoring time)` vs `(ignore time)`. The participle
+1. **Keyword**: `(ignoring time)` vs `(ignore time)`. **Arbitrated
+   (October 2026)**: the step clause uses the participle `ignoring` — it
    reads as a modifier of the comparison ("the output is X, ignoring
    time"), is consistent with the existing "Ignoring Blank Lines"
    naming (A160), and keeps the step a natural English sentence; the
@@ -200,12 +237,20 @@ same rules as the status bar (`--no_tty` wins). In the non-tty outputs
    instruction to the tool, outside the sentence. The imperative stays
    the natural form in the wider scope `Given` step
    (`Given I ignore time and dir in the following steps`), where the
-   subject "I" makes it a plain declarative sentence;
+   subject "I" makes it a plain declarative sentence. The
+   homogenization of this `ignoring` clause and `ignore` imperative with
+   the existing `ignore_casing` and co. keywords and options is
+   deferred, cf. the [ignoring design
+   discussion](../dev/design_discussions.md);
 2. **Scope precedence**: step clause, `Given` step, command line option —
    which wins, and does a narrower clause replace the inherited patterns
-   or add to them?
+   or add to them? **Deferred**: to be arbitrated when the `Given` step
+   and the command line option are implemented;
 3. **Predefined patterns**: which time and date formats exactly, and is
    there a need for a separate `ignoring date` or `ignoring duration`;
+   **settled for the first increment**: the time formats are listed in
+   [A300_Ignoring.md](../features/A300_Ignoring.md), and a separate
+   `ignoring date` or `ignoring duration` is deferred;
 4. **Path clauses**: what counts as a path for `ignoring dir` (leading
    `/`, drive letter, UNC `\\` prefix); and for the format
    normalization, is `ignoring path syntax` the right term
@@ -213,18 +258,29 @@ same rules as the status bar (`--no_tty` wins). In the non-tty outputs
    `--normalize_paths`, since it normalizes rather than ignores?), and
    is it combined with `ignoring dir` automatically, the masked prefix
    making the separator normalization moot on the masked part;
+   **settled for the first increment**: the lexical path rule of
+   `ignoring dir` (including its URL consequence) is specified in
+   [A300_Ignoring.md](../features/A300_Ignoring.md), `ignoring path
+   syntax` is deferred;
 5. **Interaction with the matching modes**: masking happens before the
    `--exact_match` / `ignore_casing` / ... handling (proposal: before,
-   the two mechanisms are orthogonal);
+   the two mechanisms are orthogonal); **settled**: masking first,
+   orthogonal, as specified in
+   [A300_Ignoring.md](../features/A300_Ignoring.md);
 6. **`matches`**: should it accept the clause too, or is it redundant
-   there (the whole line is already a pattern)?
-7. **Warning on a pattern matching nothing** on the actual side: yes
-   (see semantics), or silent?
+   there (the whole line is already a pattern)? **settled for the first
+   increment**: the `matches` steps do not take the clause;
+7. **Warning on a pattern matching nothing** on the actual side:
+   **settled**: yes (see semantics), as specified in
+   [A300_Ignoring.md](../features/A300_Ignoring.md).
 
 ## Scenarios
 
-Illustrative: those scenarios describe the target behavior, they are not
-runnable before the feature is implemented.
+Illustrative: those scenarios describe the target behavior. The step
+clause part (`ignoring time`, `ignoring dir`) is specified and tested in
+[A300_Ignoring.md](../features/A300_Ignoring.md); the scenarios below
+also cover the parts not yet implemented (`ignoring path syntax`,
+`ignoring <regexp>`, the wider scopes).
 
 ### Scenario: a time tag in the output does not fail the comparison
 

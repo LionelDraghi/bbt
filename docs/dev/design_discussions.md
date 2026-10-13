@@ -9,6 +9,7 @@
 - [D6. Scenario timeout](#d6-scenario-timeout)
 - [D7. Status bar rendering](#d7-status-bar-rendering)
 - [D8. Status bar default and --no\_tty](#d8-status-bar-default-and---no_tty)
+- [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -23,6 +24,7 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md), [ignore.md](../proposed_features/ignore.md) |
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
@@ -649,3 +651,61 @@ References:
   [B210_Status_Bar.md](../features/B210_Status_Bar.md) and
   [B150_Deprecated_Options.md](../features/B150_Deprecated_Options.md);
 - the implementation: bbt-cmd_line.adb, bbt-main.adb, bbt-settings.ads.
+
+## D9. Ignoring volatile parts: keyword and first increment
+
+Status: arbitrated (October 2026), first increment implemented
+
+Time tags and machine dependent paths frequently break comparisons on
+parts the scenario does not target. The comparison steps will accept an
+ignoring clause, `(ignoring time)`, `(ignoring dir, time)`, that masks
+the volatile parts on both sides before comparing
+(cf. [ignore.md](../proposed_features/ignore.md) for the problem
+statement and the full design). Decisions:
+
+- the step clause keyword is the participle `ignoring`: it reads as a
+  modifier of the comparison ("the output is X, ignoring time"), is
+  consistent with the existing "Ignoring Blank Lines" naming (A160),
+  and keeps the step a natural English sentence. The rejected
+  alternative was the imperative `(ignore time)`, which would be a
+  bare instruction to the tool, outside the sentence;
+- the future wider scope step keeps the imperative, with the subject
+  "I" that makes it a plain declarative sentence:
+  `Given I ignore time and dir in the following steps`;
+- the first increment is restricted to the step clause, with the
+  `time` and `dir` patterns, specified in
+  [A300_Ignoring.md](../features/A300_Ignoring.md). Deferred to later
+  increments: the `ignoring path syntax` and `ignoring <regexp>`
+  patterns, the `Given` step, the command line option, and with them
+  the precedence between the three scopes;
+- the diff display of the ignored segments is deferred with the LCS
+  alignment proposal. The current display applies the mask, showing
+  the constant marker `***` on both sides, so that the shown diff is
+  exactly the tested diff. Discussed target: on a color terminal, the
+  original unmasked text, with the ignored segments in a distinct
+  color, so that the real output of the command stays visible; in the
+  non-tty outputs, a textual convention among format stand-ins (the
+  smk convention, e.g. `HH:MM:SS` for a masked clock value), a
+  repeated character as long as the neutralized field, or a constant
+  marker. The constant marker `***` is kept for now;
+- the homogenization of the `ignoring` clause and the future option
+  naming with the existing `ignore_casing`, `ignore_whitespaces` and
+  `ignore_blank_lines` keywords and options is deferred. When resumed,
+  the question is not only naming: those settings were kept on the
+  command line because no in-scenario form was found
+  (cf. [issue #18](https://github.com/LionelDraghi/bbt/issues/18),
+  closed as "I had no good idea since that discussion to get the
+  behavior explicit within the scenario, so I close this one, and
+  let's see if the command line option is enough"), and the ignoring
+  clause is precisely the candidate mechanism to bring that
+  information back into the scenario.
+
+References:
+
+- the specification and the scenarios:
+  [A300_Ignoring.md](../features/A300_Ignoring.md);
+- the problem statement and the open questions:
+  [ignore.md](../proposed_features/ignore.md);
+- the laxity settings precedent:
+  [issue #18](https://github.com/LionelDraghi/bbt/issues/18);
+- the owner arbitration of October 2026.

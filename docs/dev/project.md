@@ -99,13 +99,17 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   path syntax frequently break comparisons on parts the scenario does
   not target; the workarounds (full line regexps in `matches`, sed
   filtering) are heavy and weaken the stable part of the check. An
-  explicit `ignoring` clause on the comparison steps (`ignoring time`,
-  `ignoring dir`, `ignoring path syntax`, `ignoring <regexp>`) would mask
-  or normalize the volatile parts
-  on both sides before comparing, and the diff display would show the
-  ignored segments in a distinct color, plus the really differing
-  characters in red inside differing lines.  
-  cf. [ignore](../proposed_features/ignore.md)
+  explicit `ignoring` clause on the comparison steps masks or
+  normalizes the volatile parts on both sides before comparing.  
+  The keyword is arbitrated and the first increment (`ignoring time`
+  and `ignoring dir`, on the step clause) is specified and implemented
+  in [A300_Ignoring.md](../features/A300_Ignoring.md); the `path syntax`
+  and `<regexp>` patterns, the `Given` step, the command line option
+  and the scope precedence are deferred, as is the diff display
+  showing the ignored segments in a distinct color, which pairs with
+  the LCS alignment proposal.  
+  cf. [ignore](../proposed_features/ignore.md) and the
+  [ignoring design discussion](design_discussions.md)
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...

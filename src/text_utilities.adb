@@ -804,6 +804,271 @@ package body Text_Utilities is
       return False;
    end Matches;
 
+   -- -----------------------------------------------------------------------
+   -- Masking of the volatile parts, cf. docs/features/A300_Ignoring.md
+
+   Ignore_Marker : constant String := "***";
+   -- Fixed marker replacing every masked part of the expected and actual
+   -- texts, so that the comparison only checks that something was printed
+   -- where a volatile value stands, not its exact value
+
+   function Is_Digit (C : Character) return Boolean is
+     (C in '0' .. '9');
+
+   function Match_Digits (S     : String;
+                          From  : Positive;
+                          Count : Positive) return Boolean is
+     (From + Count - 1 <= S'Last
+        and then (for all I in From .. From + Count - 1 => Is_Digit (S (I))));
+
+   function Match_Date_At (S : String; From : Positive) return Natural is
+   -- Returns the last index of a date YYYY-MM-DD starting at From,
+   -- 0 if the characters at From do not form a date
+   begin
+      if From + 9 > S'Last
+        or else not Match_Digits (S, From, 4)
+        or else S (From + 4) /= '-'
+        or else not Match_Digits (S, From + 5, 2)
+        or else S (From + 7) /= '-'
+        or else not Match_Digits (S, From + 8, 2)
+      then
+         return 0;
+      end if;
+      return From + 9;
+   end Match_Date_At;
+
+   function Match_Clock_At (S : String; From : Positive) return Natural is
+   -- Returns the last index of a clock time HH:MM, HH:MM:SS or
+   -- HH:MM:SS.S... starting at From, 0 if the characters at From do not
+   -- form a clock time
+      Last : Natural := 0;
+   begin
+      if From + 4 > S'Last
+        or else not Match_Digits (S, From, 2)
+        or else S (From + 2) /= ':'
+        or else not Match_Digits (S, From + 3, 2)
+      then
+         return 0;
+      end if;
+      Last := From + 4;
+      if Last + 2 <= S'Last
+        and then S (Last + 1) = ':'
+        and then Match_Digits (S, Last + 2, 2)
+      then
+         -- HH:MM:SS
+         Last := Last + 3;
+         if Last + 1 <= S'Last and then S (Last + 1) = '.' then
+            -- optional fractional part, one digit or more
+            declare
+               Frac_Last : Natural := Last + 1;
+            begin
+               while Frac_Last + 1 <= S'Last
+                 and then Is_Digit (S (Frac_Last + 1))
+               loop
+                  Frac_Last := @ + 1;
+               end loop;
+               if Frac_Last > Last + 1 then
+                  Last := Frac_Last;
+               end if;
+            end;
+         end if;
+      end if;
+      return Last;
+   end Match_Clock_At;
+
+   function Date_Start_OK (S : String; From : Positive) return Boolean is
+   -- A date must not be embedded in a longer run of digits or dates
+     (From = S'First or else not Is_Digit (S (From - 1)));
+
+   function Date_End_OK (S : String; Last : Natural) return Boolean is
+     (Last = S'Last
+        or else (not Is_Digit (S (Last + 1)) and then S (Last + 1) /= '-'));
+
+   function Clock_Start_OK (S : String; From : Positive) return Boolean is
+   -- A clock time must not be the tail of a longer time or number
+     (From = S'First
+        or else (not Is_Digit (S (From - 1))
+                   and then S (From - 1) /= ':' and then S (From - 1) /= '.'));
+
+   function Clock_End_OK (S : String; Last : Natural) return Boolean is
+     (Last = S'Last
+        or else (not Is_Digit (S (Last + 1))
+                   and then S (Last + 1) /= ':' and then S (Last + 1) /= '.'));
+
+   function Match_Time_At (S : String; From : Positive) return Natural is
+   -- Returns the last index of a date, a clock time or a date-time
+   -- starting at From, 0 if the characters at From do not form one.
+   -- The longest form wins: a date-time before a date, a clock time
+   -- with seconds and fraction before a plain clock time.
+      Date_Last : constant Natural := Match_Date_At (S, From);
+   begin
+      if Date_Last > 0 and then Date_Start_OK (S, From) then
+         if Date_Last < S'Last
+           and then (S (Date_Last + 1) = 'T' or else S (Date_Last + 1) = 't')
+         then
+            -- date-time: a date immediately followed by a clock time
+            declare
+               Clock_Last : constant Natural :=
+                 Match_Clock_At (S, Date_Last + 2);
+            begin
+               if Clock_Last > 0 and then Clock_End_OK (S, Clock_Last) then
+                  return Clock_Last;
+               end if;
+            end;
+         end if;
+         if Date_End_OK (S, Date_Last) then
+            return Date_Last;
+         end if;
+      end if;
+
+      declare
+         Clock_Last : constant Natural := Match_Clock_At (S, From);
+      begin
+         if Clock_Last > 0
+           and then Clock_Start_OK (S, From)
+           and then Clock_End_OK (S, Clock_Last)
+         then
+            return Clock_Last;
+         end if;
+      end;
+
+      return 0;
+   end Match_Time_At;
+
+   procedure Mask_Time (S     : in out Unbounded_String;
+                        Count : in out Natural) is
+   -- Replaces every clock, date or date-time value in S by Ignore_Marker
+      Src : constant String := To_String (S);
+      R   : Unbounded_String;
+      I   : Positive := Src'First;
+   begin
+      while I <= Src'Last loop
+         declare
+            Last : constant Natural := Match_Time_At (Src, I);
+         begin
+            if Last > 0 then
+               Append (R, Ignore_Marker);
+               Count := @ + 1;
+               I     := Last + 1;
+            else
+               Append (R, Src (I));
+               I     := @ + 1;
+            end if;
+         end;
+      end loop;
+      S := R;
+   end Mask_Time;
+
+   procedure Mask_Dir (S     : in out Unbounded_String;
+                       Count : in out Natural) is
+   -- Replaces by Ignore_Marker the directory part of every path in S.
+   -- A path is a maximal sequence of non blank characters containing
+   -- at least one separator (/ or \); everything up to and including
+   -- the last separator is masked, the final component stays checked.
+   -- The drive letter is part of the masked prefix.
+      Src : constant String := To_String (S);
+      R   : Unbounded_String;
+      I   : Positive := Src'First;
+      HT  : Character renames Ada.Characters.Latin_1.HT;
+   begin
+      while I <= Src'Last loop
+         if Src (I) = ' ' or else Src (I) = HT then
+            Append (R, Src (I));
+            I := @ + 1;
+
+         else
+            -- start of a run of non blank characters
+            declare
+               Run_Last : Natural := I;
+               Last_Sep : Natural  := 0;
+            begin
+               while Run_Last < Src'Last
+                 and then Src (Run_Last + 1) /= ' '
+                 and then Src (Run_Last + 1) /= HT
+               loop
+                  Run_Last := @ + 1;
+               end loop;
+               for J in I .. Run_Last loop
+                  if Src (J) = '/' or else Src (J) = '\' then
+                     Last_Sep := J;
+                  end if;
+               end loop;
+               if Last_Sep > 0 then
+                  Append (R, Ignore_Marker);
+                  if Run_Last >= Last_Sep + 1 then
+                     Append (R, Src (Last_Sep + 1 .. Run_Last));
+                  end if;
+                  Count := @ + 1;
+               else
+                  Append (R, Src (I .. Run_Last));
+               end if;
+               I := Run_Last + 1;
+            end;
+         end if;
+      end loop;
+      S := R;
+   end Mask_Dir;
+
+   -- -----------------------------------------------------------------------
+   function Image (P : Ignore_Pattern) return String is
+     (case P is
+         when No_Pattern => "",
+         when Time       => "time",
+         when Dir        => "dir");
+
+   function Image (Patterns : Ignore_Pattern_Set) return String is
+      R : Unbounded_String;
+   begin
+      for P in Ignore_Pattern range Time .. Ignore_Pattern'Last loop
+         if Patterns (P) then
+            if R /= Null_Unbounded_String then
+               Append (R, " and ");
+            end if;
+            Append (R, Image (P));
+         end if;
+      end loop;
+      return To_String (R);
+   end Image;
+
+   function Mask (T        : Text;
+                  Patterns : Ignore_Pattern_Set;
+                  Counts   : out Pattern_Counts) return Text is
+   begin
+      Counts := [others => 0];
+      if Patterns = No_Ignore_Pattern then
+         return T;
+      end if;
+
+      declare
+         R : Text := Empty_Text;
+      begin
+         if T.Is_Empty then
+            return R;
+         end if;
+         for I in T.First_Index .. T.Last_Index loop
+            declare
+               L : Unbounded_String := To_Unbounded_String (T (I));
+            begin
+               if Patterns (Time) then
+                  Mask_Time (L, Counts (Time));
+               end if;
+               if Patterns (Dir) then
+                  Mask_Dir (L, Counts (Dir));
+               end if;
+               R.Append (To_String (L));
+            end;
+         end loop;
+         return R;
+      end;
+   end Mask;
+
+   function Mask (T        : Text;
+                  Patterns : Ignore_Pattern_Set) return Text is
+      Counts : Pattern_Counts;
+   begin
+      return Mask (T, Patterns, Counts);
+   end Mask;
+
    -- --------------------------------------------------------------------------
    function First_Non_Blank_Line (In_Text : Text;
                                   From    : Line_Index := 1) return Natural is

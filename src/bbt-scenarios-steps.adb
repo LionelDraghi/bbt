@@ -128,6 +128,7 @@ package body BBT.Scenarios.Steps is
       Object_File_Name : Unbounded_String         := Null_Unbounded_String;
       Ignore_Order     : Boolean                  := False;
       Executable       : Boolean                  := False;
+      Ignore_Patterns  : Ignore_Pattern_Set       := No_Ignore_Pattern;
    end record;
 
    -- --------------------------------------------------------------------------
@@ -228,6 +229,15 @@ package body BBT.Scenarios.Steps is
                                 State           : in out Parse_State) is separate;
 
    -- --------------------------------------------------------------------------
+   -- Extract the (ignoring ...) clause at the end of the step line, if
+   -- any, set the corresponding Patterns, and return the line truncated
+   -- before the clause, so that the clause is not seen by the lexer
+   function Extract_Ignoring_Clause (Line     : String;
+                                     Loc      : Location_Type;
+                                     Patterns : out Ignore_Pattern_Set)
+                                     return String is separate;
+
+   -- --------------------------------------------------------------------------
    -- Validate the semantic consistency of the parsed step state
    procedure Validate_Step_State (State               : Parse_State;
                                   Loc                 : Location_Type;
@@ -243,7 +253,8 @@ package body BBT.Scenarios.Steps is
       State    : Parse_State;
       Src_Code : Unbounded_String := Null_Unbounded_String;
 
-      Tmp : aliased constant String := To_String (Line);
+      Tmp : aliased String :=
+        Extract_Ignoring_Clause (To_String (Line), Loc, State.Ignore_Patterns);
       TT  : Token_Type;
 
    begin
@@ -371,6 +382,7 @@ package body BBT.Scenarios.Steps is
               Code_Span_Last   => State.Code_Span_Last,
               Executable_File  => State.Executable,
               Ignore_Order     => State.Ignore_Order,
+              Ignore_Patterns  => State.Ignore_Patterns,
               File_Content     => Empty_Text,
               Syntax_Error     => IO.Some_Error);
    end Parse;

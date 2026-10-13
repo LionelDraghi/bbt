@@ -110,4 +110,13 @@ begin
 
    end if;
 
+   if State.Ignore_Patterns /= No_Ignore_Pattern
+     and then State.Action not in Output_Is | Output_Contains | File_Is
+                               | File_Contains | Stderr_Is | Stderr_Contains
+   then
+      IO.Put_Error ("the (ignoring ...) clause is only allowed on the"
+                    & " comparison steps: is, contains, is equal to...",
+                    Loc);
+   end if;
+
 end Validate_Step_State;

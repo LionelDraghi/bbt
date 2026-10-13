@@ -18,6 +18,31 @@ package body BBT.Tests.Actions.Output_Checks is
       Topic     : IO.Extended_Topics  := IO.Step_Actions)
       renames IO.Put_Line;
    pragma Warnings (Off, Put_Debug_Line);
+
+   -- --------------------------------------------------------------------------
+   procedure Mask_Ignored_Parts (Actual   : in out Text;
+                                 Expected : in out Text;
+                                 Step     :        Step_Type'Class) is
+   -- Mask the volatile parts of both sides of the comparison, as stated
+   -- by the (ignoring ...) clause of the step, and warn when one of the
+   -- patterns matches nothing on the actual side: the scenario probably
+   -- declares volatile something the tested program does not print
+      Counts : Pattern_Counts;
+   begin
+      if Step.Data.Ignore_Patterns = No_Ignore_Pattern then
+         return;
+      end if;
+      Expected := Mask (Expected, Step.Data.Ignore_Patterns);
+      Actual   := Mask (Actual, Step.Data.Ignore_Patterns, Counts);
+      for P in Ignore_Pattern range Time .. Ignore_Pattern'Last loop
+         if Step.Data.Ignore_Patterns (P) and then Counts (P) = 0 then
+            IO.Put_Warning ("the ignoring " & Image (P)
+                              & " pattern matches nothing on the actual side",
+                            Step.Location);
+         end if;
+      end loop;
+   end Mask_Ignored_Parts;
+
    -- --------------------------------------------------------------------------
    procedure Check_No_Output (Output : Text;
                               Step      : Step_Type'Class;
@@ -36,7 +61,8 @@ package body BBT.Tests.Actions.Output_Checks is
                         Step      : Step_Type'Class;
                         Verbosity : Verbosity_Levels) is
       use Texts;
-      T2 : constant Text := Get_Expected (Step);
+      T2     : Text := Get_Expected (Step);
+      Actual : Text := Output;
    begin
       -- Put_Debug_Line ("++++++++++ Output_Is Step = " & Step'Image);
       -- Put_Debug_Line ("++++++++++ dir = " & Settings.Launch_Directory);
@@ -44,9 +70,10 @@ package body BBT.Tests.Actions.Output_Checks is
       -- Put_Text (Item => Output);
       Put_Debug_Line ("++++++++++ T2 = ");
       -- Put_Text (Item => T2);
+      Mask_Ignored_Parts (Actual, T2, Step);
       declare
          Success : constant Boolean :=
-           Is_Equal (Output, T2,
+           Is_Equal (Actual, T2,
                      Case_Insensitive   => Settings.Ignore_Casing,
                      Ignore_Blanks      => Settings.Ignore_Whitespaces,
                      Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
@@ -55,7 +82,7 @@ package body BBT.Tests.Actions.Output_Checks is
          -- then comes the side-by-side comparison of expected and actual.
          -- It is computed only on error.
          Msg : Text := (if Success then Empty_Text
-                        else Side_By_Side (T2, Output,
+                        else Side_By_Side (T2, Actual,
                                            Case_Insensitive   => Settings.Ignore_Casing,
                                            Ignore_Whitespaces => Settings.Ignore_Whitespaces));
       begin
@@ -74,18 +101,20 @@ package body BBT.Tests.Actions.Output_Checks is
    procedure Output_Contains (Output    : Text;
                               Step      : Step_Type'Class;
                               Verbosity : Verbosity_Levels) is
-      T2  : constant Text := Get_Expected (Step);
+      T2     : Text := Get_Expected (Step);
+      Actual : Text := Output;
    begin
       Put_Debug_Line ("++++++++++ Output_Contains Step = " & Step'Image);
       Put_Debug_Line ("++++++++++ dir = " & Settings.Launch_Directory);
+      Mask_Ignored_Parts (Actual, T2, Step);
       Put_Step_Result (Step     => Step,
                        Success  => Contains
-                         (Output, T2,
+                         (Actual, T2,
                           Case_Insensitive   => Settings.Ignore_Casing,
                           Ignore_Whitespaces => Settings.Ignore_Whitespaces,
                           Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
                           Sort_Texts         => Step.Data.Ignore_Order),
-                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
+                       Fail_Msg => "Output:  " & Code_Fenced_Image (Actual) &
                          "does not contain expected:  " &
                          Code_Fenced_Image (T2),
                        Loc       => Step.Location,
@@ -213,13 +242,14 @@ package body BBT.Tests.Actions.Output_Checks is
                        Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
-      T2        : constant Text   := Get_Expected (Step);
+      T2        : Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("Files_Is " & File_Name &
                         " T1 = " & T1'Image &
                         " T2 = " & T2'Image);
       if Exists (File_Name) then
          T1 := Get_Text (File_Name);
+         Mask_Ignored_Parts (T1, T2, Step);
          declare
             Success : constant Boolean :=
               Is_Equal (T1, T2,
@@ -280,13 +310,14 @@ package body BBT.Tests.Actions.Output_Checks is
                             Verbosity : Verbosity_Levels) is
       File_Name : constant String := +Step.Data.Subject_String;
       T1        : Text;
-      T2        : constant Text   := Get_Expected (Step);
+      T2        : Text := Get_Expected (Step);
    begin
       Put_Debug_Line ("File_Contains " & File_Name &
                         " T1 = " & T1'Image &
                         " T2 = " & T2'Image);
       if Exists (File_Name) then
          T1 := Get_Text (File_Name);
+         Mask_Ignored_Parts (T1, T2, Step);
          Put_Step_Result (Step     => Step,
                           Success  => Contains
                             (T1, T2,

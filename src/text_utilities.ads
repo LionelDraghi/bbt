@@ -182,6 +182,39 @@ package Text_Utilities is
                      return Boolean;
 
    -- --------------------------------------------------------------------------
+   type Ignore_Pattern is (No_Pattern, Time, Dir);
+   -- The patterns that neutralize the volatile parts of a comparison
+   -- before it happens, as stated by the (ignoring ...) clause of the
+   -- comparison steps (cf. docs/features/A300_Ignoring.md).
+   -- No_Pattern is only the neutral value used to iterate on the real
+   -- patterns.
+
+   type Ignore_Pattern_Set is array (Ignore_Pattern) of Boolean;
+   type Pattern_Counts     is array (Ignore_Pattern) of Natural;
+   No_Ignore_Pattern : constant Ignore_Pattern_Set := [others => False];
+
+   function Image (P : Ignore_Pattern) return String;
+   -- Returns the pattern name as used in the clause: "time", "dir",
+   -- and an empty string for No_Pattern
+
+   function Image (Patterns : Ignore_Pattern_Set) return String;
+   -- Returns the pattern list in the clause syntax: "time",
+   -- "time and dir", ...
+
+   function Mask (T        : Text;
+                  Patterns : Ignore_Pattern_Set;
+                  Counts   : out Pattern_Counts) return Text;
+   -- Returns a copy of T where every substring matching one of the
+   -- selected Patterns is replaced by a fixed marker, and gives in
+   -- Counts the number of matches found for each Pattern. Patterns
+   -- that are not selected are ignored. A pattern that matches
+   -- nothing on the actual side of a comparison most probably declares
+   -- volatile something the tested program does not print.
+
+   function Mask (T        : Text;
+                  Patterns : Ignore_Pattern_Set) return Text;
+
+   -- --------------------------------------------------------------------------
    function Max_Line_Length (In_Text : Text) return Line_Length is
      (Line_Length ([for Line of In_Text => Line'Length]'Reduce (Natural'Max, 0)));
 
