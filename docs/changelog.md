@@ -18,7 +18,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Fixed]   the exit status of a command fed interactively is now checked: the check is deferred to the next step, or to the end of the scenario, and a failure is reported on the successfully run step line
   - [Fixed]   `bbt explain` wrongly announced an overwrite for ``Given the dir `dir1` ``: a directory is only created if not already existing, and an existing one is kept as is
   - [Fixed]   ``Given the file `X` `` on an existing `X` silently kept the old content: the replacement is now proposed if the contents differ
-  - [Added]   `When I type Y` and `When I enter Y` steps, to interact with a command waiting for user input: `type` sends a single key, `enter` sends a whole line (see docs/features/A290_When_I_Type_Or_Enter.md)
+  - [Added]   `When I type Y` and `When I enter Yes` steps, to interact with a command waiting for user input: `type` sends a single key, `enter` sends a whole line (see docs/features/A290_When_I_Type_Or_Enter.md)
   - [Added]   a warning when a run command contains shell metacharacters (`|`, `$`, backtick, `<`, `>`, ...), as commands are not run through a shell
   - [Fixed]   this warning was raised on quoted metacharacters (e.g. `find . -name "*.ad[sb]"`), although quoting is exactly the way to pass a literal metacharacter as an argument
   - [Fixed]   an empty actual output compared to a non empty expected content raised a CONSTRAINT_ERROR and silently passed
