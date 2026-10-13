@@ -148,16 +148,20 @@ Precedence to be arbitrated (see open questions).
 
 The step clause increments, specified and implemented in
 [A300_Ignoring.md](../features/A300_Ignoring.md), cover the step clause,
-with the `time`, `dir`, `version` and `<regexp>` patterns. The `Given` step
+with the `time`, `dir`, `version`, `<regexp>`, `order`, `casing`,
+`whitespaces` and `blank_lines` patterns: the settings patterns bring
+the `ignore_casing` and co. matching settings explicitly into the
+scenario, closing the in-scenario part of
+[issue #18](https://github.com/LionelDraghi/bbt/issues/18), and
+supersede the `unordered` adjective, now deprecated. The command line
+options keep priority, a contradicting clause being ignored with a
+warning. The `Given` step
 and the
 command line option — and with them the precedence question — are
-deferred to a later increment, as is the homogenization of the clause and
-option naming with the existing `ignore_casing`, `ignore_whitespaces` and
-`ignore_blank_lines` settings (cf. the [ignoring design
-discussion](../dev/design_discussions.md)). When that homogenization is
-resumed, the goal will be to bring those settings explicitly into the
-scenario instead of leaving them on the command line, as wished when
-[issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed.
+deferred to a later increment, as is the homogenization of the clause
+and option naming with the existing `ignore_casing`, `ignore_whitespaces`
+and `ignore_blank_lines` options (cf. the [ignoring design
+discussion](../dev/design_discussions.md)).
 
 ### Is such a Given in the Gherkin spirit?
 

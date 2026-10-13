@@ -672,9 +672,16 @@ statement and the full design). Decisions:
 - the future wider scope step keeps the imperative, with the subject
   "I" that makes it a plain declarative sentence:
   `Given I ignore time and dir in the following steps`;
-- the step clause increments are the `time`, `dir`, `version` and
-  `<regexp>` patterns, specified in
-  [A300_Ignoring.md](../features/A300_Ignoring.md). Deferred to later
+- the step clause increments are the `time`, `dir`, `version`,
+  `<regexp>`, `order`, `casing`, `whitespaces` and `blank_lines`
+  patterns, specified in
+  [A300_Ignoring.md](../features/A300_Ignoring.md). The settings
+  patterns bring the `ignore_casing` and co. matching settings back
+  into the scenario, closing the in-scenario part of
+  [issue #18](https://github.com/LionelDraghi/bbt/issues/18); the
+  command line options keep priority, a contradicting clause being
+  ignored with a warning, and the `unordered` adjective is deprecated
+  in favor of `(ignoring order)`. Deferred to later
   increments: the `ignoring path syntax` pattern, the `Given` step, the
   command line option, and with them the precedence between the three
   scopes;

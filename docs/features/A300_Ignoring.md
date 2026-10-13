@@ -20,13 +20,15 @@ the comparison are volatile:
 
 This feature file specifies the step clause increments of the
 [ignoring proposal](../proposed_features/ignore.md): the `time` and `dir`
-patterns, then the `version` pattern and the `<regexp>` escape hatch, on
-the step clause only. The wider scopes (a `Given I ignore ...`
+patterns, then the `version` pattern and the `<regexp>` escape hatch, then
+the `order`, `casing`, `whitespaces` and `blank_lines` settings patterns,
+on the step clause only. The wider scopes (a `Given I ignore ...`
 step, a command line option), the `path syntax` pattern and
-the precedence between scopes are deferred, as is the homogenization with
-the existing `ignore_casing` and co. settings — which, when resumed, should
-bring their behavior explicitly into the scenario instead of leaving it on
-the command line, as wished when
+the precedence between scopes are deferred, as is the homogenization of
+the clause and option naming with the existing `ignore_casing` and co.
+keywords — the settings themselves are now stateable in the scenario
+through the clause (cf. `ignoring order, casing, whitespaces and
+blank_lines` below), closing the in-scenario part wished when
 [issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed. The
 colored diff display of the ignored segments pairs with the
 [LCS alignment proposal](../proposed_features/LCS_diff_alignment.md).
@@ -46,11 +48,12 @@ parentheses:
 - after the operands of a file comparison: ``- Then file `a.txt` is equal to file `b.txt` (ignoring time) ``
 
 Several patterns combine on one clause, separated by commas, spaces or
-`and`, in any mix: `(ignoring time, dir)`, `(ignoring time and dir)`,
-and, once the deferred `casing` pattern lands,
-`(ignoring dir, time and casing)`. The named patterns are `time`, `dir`
-and `version`; any other word of the clause is a custom `regexp` pattern
-(cf. `ignoring <regexp>` below).
+`and`, in any mix: `(ignoring time, dir)`, `(ignoring dir, time and casing)`.
+The masking patterns are the named `time`, `dir` and `version`, and any
+other word of the clause is a custom `regexp` pattern (cf. `ignoring <regexp>`
+below). Four further named patterns state the comparison settings instead
+of masking: `order`, `casing`, `whitespaces` and `blank_lines` (cf.
+`ignoring order, casing, whitespaces and blank_lines` below).
 
 The clause applies to the steps that compare a text with an expected text:
 `I get`, `I get on stderr`, the `output is` / `output contains` family, and
@@ -153,6 +156,32 @@ parsing time. A misspelled pattern name is not an error though: it is a
 legal regexp, matching only itself — most probably nothing on the actual
 side, which the matches-nothing warning makes visible.
 
+## `ignoring order`, `ignoring casing`, `ignoring whitespaces`, `ignoring blank_lines`
+
+Four named patterns do not mask anything: they state, in the scenario,
+how the comparison handles the line order and the text presentation.
+
+- `ignoring order` compares the lines without regard to their order;
+  it supersedes the historical `unordered` adjective, that remains
+  legal but deprecated (cf. [feature `ignoring order`](A140_Unordered_Keyword.md));
+- `ignoring casing`, `ignoring whitespaces` and `ignoring blank_lines`
+  state that the comparison ignores the casing, the white spaces or
+  the blank lines, as the human match default does: they bring the
+  matching settings — previously reachable only through the
+  `--exact_match`, `--ignore_casing`, ... command line options —
+  explicitly into the scenario
+  (cf. [feature exact match](A210_Exact_Match.md)).
+
+Those patterns state the settings, the command line options set them:
+**an option takes priority over a clause**. When the run checks what a
+clause asks to ignore — that is, when `--exact_match` requested the
+exact comparison — the clause is ignored and a warning raises, so that
+the divergence is visible instead of silent. When they agree — the
+human match default, or an `--ignore_casing` and co. option — the clause
+changes nothing: it makes the step self-describing, the reader seeing
+in the scenario itself that, say, the casing is not checked on that
+step.
+
 _Table of Contents:_
 - [Clause syntax](#clause-syntax)
 - [Semantics: masking on both sides](#semantics-masking-on-both-sides)
@@ -160,6 +189,7 @@ _Table of Contents:_
 - [`ignoring dir`](#ignoring-dir)
 - [`ignoring version`](#ignoring-version)
 - [`ignoring <regexp>`](#ignoring-regexp)
+- [`ignoring order`, `ignoring casing`, `ignoring whitespaces`, `ignoring blank_lines`](#ignoring-order-ignoring-casing-ignoring-whitespaces-ignoring-blank_lines)
 - [Background](#background)
   - [Scenario: a time tag in the output does not fail the comparison](#scenario-a-time-tag-in-the-output-does-not-fail-the-comparison)
   - [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)

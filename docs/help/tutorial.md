@@ -233,7 +233,7 @@ All the available steps, classified by what they set up, run or check:
     - Then the output contains `sut version 1.0` (ignoring version)
     - Then the output does not contain `Warning:`
     - Then the output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`
-    - Then I get file (unordered) `flowers2.txt`
+    - Then I get file `flowers2.txt` (ignoring order)
     - Then there is no output
 
 **Checking the error output and the exit code**  

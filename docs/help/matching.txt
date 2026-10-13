@@ -34,8 +34,19 @@ Ignoring volatile parts:
   The regexp follows the usual Perl-like syntax (character classes,
   quantifiers, alternation ...), and, being a single word of the
   clause, cannot contain blanks, commas or parenthesis.
+  Four further named patterns state the comparison settings instead
+  of masking:
+  - order : compares the lines without regard to their order,
+    superseding the deprecated "unordered" adjective
+  - casing, whitespaces, blank_lines : state that the comparison
+    ignores the casing, the white spaces or the blank lines, as the
+    human match default does, bringing the matching settings into
+    the scenario instead of leaving them on the command line
+  The command line options take priority: a clause contradicting
+  --exact_match is ignored, and a warning is raised.
   Several patterns combine, separated by commas or "and":
-  (ignoring time, dir), (ignoring time and [0-9.]+)
+  (ignoring time, dir), (ignoring time and [0-9.]+),
+  (ignoring time and order)
   A pattern that matches nothing on the actual side raises a warning,
   as the neutralization may silently weaken the test, and a word that
   is not a legal regexp is a scenario error, reported at parsing time.

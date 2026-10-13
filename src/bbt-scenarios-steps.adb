@@ -6,7 +6,8 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.Model.Steps,
-     BBT.Scenarios.Steps.Lexer;
+     BBT.Scenarios.Steps.Lexer,
+     BBT.Settings;
 
 with Text_Utilities;
 
@@ -132,6 +133,14 @@ package body BBT.Scenarios.Steps is
       Executable       : Boolean                  := False;
       Ignore_Patterns  : Ignore_Pattern_Set       := No_Ignore_Pattern;
       Ignore_Regexps   : Ignore_Regexp_List       := No_Ignore_Regexp;
+      Order_Clause     : Boolean                  := False;
+      -- Set when the (ignoring order) pattern is in the clause, as
+      -- opposed to the deprecated unordered keyword, that also sets
+      -- Ignore_Order during the lexing
+      Ignoring_Clause  : Boolean                  := False;
+      -- Set when the step line ends with an (ignoring ...) clause,
+      -- whatever its content: the clause is only legal on comparison
+      -- steps
    end record;
 
    -- --------------------------------------------------------------------------
@@ -238,7 +247,8 @@ package body BBT.Scenarios.Steps is
    function Extract_Ignoring_Clause (Line     : String;
                                      Loc      : Location_Type;
                                      Patterns : out Ignore_Pattern_Set;
-                                     Regexps  : out Ignore_Regexp_List)
+                                     Regexps  : out Ignore_Regexp_List;
+                                     Order    : out Boolean)
                                      return String is separate;
 
    -- --------------------------------------------------------------------------
@@ -259,12 +269,19 @@ package body BBT.Scenarios.Steps is
 
       Tmp : aliased String :=
         Extract_Ignoring_Clause (To_String (Line), Loc,
-                                  State.Ignore_Patterns, State.Ignore_Regexps);
+                                  State.Ignore_Patterns, State.Ignore_Regexps,
+                                  State.Order_Clause);
       TT  : Token_Type;
 
    begin
       Code_Block_Expected := False;
       Src_Code := Line;
+
+      -- A clause was found when the step line was truncated before it
+      if State.Order_Clause then
+         State.Ignore_Order := True;
+      end if;
+      State.Ignoring_Clause := Tmp'Length < Length (Line);
 
       Initialize_Lexer;
 

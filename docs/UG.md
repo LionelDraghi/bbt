@@ -183,12 +183,13 @@ This is not always the expected behavior, you may want to check the exact output
 Actually, there is more options to control individually casing, whitespaces and blank lines, refer to the [feature file](features/A210_Exact_Match.md) for more details.
 
 The comparison steps also accept an `(ignoring ...)` clause, that states explicitly in the scenario which parts are volatile — `(ignoring time)` for time tags, `(ignoring dir)` for the directory part of a path, `(ignoring version)` for version numbers, and any other word of the clause is a regexp masking what it matches, as in `(ignoring [0-9.]+)` for a varying duration — and masks them on both sides before comparing (cf. [feature `ignoring`](features/A300_Ignoring.md)).  
-An explicit in-scenario mention of the casing and whitespace settings remains in the TDL (cf. [issue #18](https://github.com/LionelDraghi/bbt/issues/18)).
+The clause also states the matching settings themselves: `(ignoring casing)`, `(ignoring whitespaces)` and `(ignoring blank_lines)` say that the comparison ignores the casing, the white spaces or the blank lines, as the human match default does, and `(ignoring order)` that it ignores the order of the lines. The command line options take priority: a clause contradicting `--exact_match` is ignored, with a warning.
 
 On the other hand, the order of lines in files is generally meaningful.
 But not always. If you want to check the presence of some files in a directory, you don't care in which order they are listed, and you don't want your test to fail on another platform because the `ls` command behavior may be different.
-The "I don't care the line order" behavior is implemented through the `unordered` keyword.  
-(cf. [feature `unordered`](features/A140_Unordered_Keyword.md) for an example).
+The "I don't care the line order" behavior is stated with the `(ignoring order)` clause.
+(cf. [feature `ignoring order`](features/A140_Unordered_Keyword.md)).
+The historical `unordered` adjective remains legal, but is deprecated.
 
 ### Understanding errors
 

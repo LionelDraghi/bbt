@@ -10,7 +10,8 @@ separate (BBT.Scenarios.Steps)
 function Extract_Ignoring_Clause (Line     : String;
                                    Loc      : Location_Type;
                                    Patterns : out Ignore_Pattern_Set;
-                                   Regexps  : out Ignore_Regexp_List)
+                                   Regexps  : out Ignore_Regexp_List;
+                                   Order    : out Boolean)
                                    return String
 is
    use Ada.Strings.Maps,
@@ -21,6 +22,27 @@ is
    Lower_Line   : constant String := Translate (Line, Lower_Case_Map);
    Clause_Start : Natural         := 0;
    Clause_End   : Natural;
+   -- The casing, whitespaces and blank_lines patterns state the matching
+   -- settings: no state to return, the comparison settings keep the
+   -- command line values; a contradiction only raises a warning.
+   -- Order, on the contrary, is a per-step setting, returned in Order.
+   Settings_Pattern : Boolean := False;
+
+   procedure Check_Setting (Word          : String;
+                            Setting       : Boolean;
+                            Option_Symbol : String) is
+   -- Warn when the clause asks to ignore what the command line options
+   -- require to check: the option takes priority over the clause, and
+   -- the divergence must be visible instead of silent
+   begin
+      Settings_Pattern := True;
+      if not Setting then
+         IO.Put_Warning ("the (ignoring " & Word & ") clause is ignored:"
+                          & " the " & Option_Symbol
+                          & " option takes priority over the scenario"
+                          & " clause", Loc);
+      end if;
+   end Check_Setting;
 
    function Is_Legal_Regexp (S : String) return Boolean is
    -- Compiles S, to reject an illegal regexp at parsing time,
@@ -58,6 +80,24 @@ is
       elsif Word = "version" then
          Patterns (Version) := True;
 
+      elsif Word = "order" then
+         Order := True;
+
+      elsif Word = "casing" then
+         Check_Setting ("casing",
+                        Setting       => Settings.Ignore_Casing,
+                        Option_Symbol => "--exact_match");
+
+      elsif Word = "whitespaces" then
+         Check_Setting ("whitespaces",
+                        Setting       => Settings.Ignore_Whitespaces,
+                        Option_Symbol => "--exact_match");
+
+      elsif Word = "blank_lines" then
+         Check_Setting ("blank_lines",
+                        Setting       => Settings.Ignore_Blank_Lines,
+                        Option_Symbol => "--exact_match");
+
       else
          -- Any other word is a custom pattern: a regexp masking the
          -- matching substrings of both sides
@@ -73,6 +113,7 @@ is
 begin
    Patterns := No_Ignore_Pattern;
    Regexps  := No_Ignore_Regexp;
+   Order    := False;
 
    -- The clause is searched from the end, so that a command or an
    -- expected text between backticks containing parenthesis is not
@@ -129,6 +170,7 @@ begin
    end;
 
    if Patterns = No_Ignore_Pattern and then Regexps.Is_Empty
+     and then not Order and then not Settings_Pattern
      and then not IO.Some_Error
    then
       IO.Put_Error ("no pattern given in the ignoring clause", Loc);

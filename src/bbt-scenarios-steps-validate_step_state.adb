@@ -110,8 +110,7 @@ begin
 
    end if;
 
-   if (State.Ignore_Patterns /= No_Ignore_Pattern
-         or else not State.Ignore_Regexps.Is_Empty)
+   if State.Ignoring_Clause
      and then State.Action not in Output_Is | Output_Contains | File_Is
                                | File_Contains | Stderr_Is | Stderr_Contains
    then

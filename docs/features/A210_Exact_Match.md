@@ -10,6 +10,9 @@ To allow those kind of tests, there is a command line option that completely swi
 It is possible to amend `--exact_match` with one or more of `--ignore_casing`, `--ignore_whitespaces` and `--ignore_blank_lines`.
 Each of those option returns to one of the default behavior.
 
+The same settings can be stated in the scenario, on the comparison steps, through the `(ignoring ...)` clause: ``- Then `text.ref` is equal to file `text.1` (ignoring casing) `` ignores the casing on that step, `whitespaces` and `blank_lines` likewise.
+The command line options take priority: a clause contradicting `--exact_match` is ignored, and a warning is raised (cf. [feature `ignoring`](A300_Ignoring.md)).
+
 This test scenario is organized around :
 - a reference file
 - a file that differ from the reference only in casing;
@@ -29,6 +32,8 @@ _Table of Contents_:
 - [Scenario: exact match except for casing and blank lines](#scenario-exact-match-except-for-casing-and-blank-lines)
 - [Scenario: human match ignores CR at line ends](#scenario-human-match-ignores-cr-at-line-ends)
 - [Scenario: exact match is sensitive to CR at line ends](#scenario-exact-match-is-sensitive-to-cr-at-line-ends)
+- [Scenario: an (ignoring casing) clause agreeing with the human match default](#scenario-an-ignoring-casing-clause-agreeing-with-the-human-match-default)
+- [Scenario: an (ignoring casing) clause contradicting --exact_match is ignored and warns](#scenario-an-ignoring-casing-clause-contradicting---exact_match-is-ignored-and-warns)
 
 ### Background:
 
@@ -154,3 +159,32 @@ _Table of Contents_:
   ~~~
   - **NOK** : Then `text.ref` is equal to file `text.4` (compare_crlf.md:2:)
   ~~~
+
+### Scenario: an (ignoring casing) clause agreeing with the human match default
+
+- Given the `compare_clause.md` file
+  ~~~
+  # Scenario:
+  - Then `text.ref` is equal to file `text.1` (ignoring casing)
+  ~~~
+
+- When I run `./bbt compare_clause.md`
+- Then I get no error
+
+Under the human match default, the clause agrees with the settings:
+nothing changes, the comparison ignores the casing and passes — the
+clause makes the step explicit, that is all.
+
+### Scenario: an (ignoring casing) clause contradicting --exact_match is ignored and warns
+
+- When I run `./bbt -k --exact_match compare_clause.md`
+- Then I get an error
+- And output contains `the (ignoring casing) clause is ignored`
+- And output contains
+  ~~~
+  - **NOK** : Then `text.ref` is equal to file `text.1` (ignoring casing) (compare_clause.md:2:)
+  ~~~
+
+The `--exact_match` option takes priority: the clause is ignored, the
+comparison checks the casing and fails on `text.1`, and the warning
+makes the divergence visible instead of silent.
