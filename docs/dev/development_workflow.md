@@ -93,14 +93,19 @@ After changing embedded help:
    `docs/examples/gcc_hello_world.md`;
 3. ensure that test B130 passes.
 
-The embedding is performed by the binder. If `make build` reports that
-everything is up to date but the embedded help is stale, remove:
+gprbuild does not track non-compilable dependency files such as the
+`docs/help/*` texts: a change to the help alone leaves `make build`
+reporting that everything is up to date, while the embedded help is
+stale. The embedding is performed when compiling the unit declaring
+the `External_Initialization` constants (`bbt-cmd_line-put_help.adb`,
+compiled into `bbt-cmd_line`). To force the re-embedding, remove:
 
 ```text
-obj/<profile>/b__bbt-main.*
+obj/<profile>/bbt-cmd_line.o
+obj/<profile>/bbt-cmd_line.ali
 ```
 
-Then rebuild to force the rebind.
+Then rebuild.
 
 For any functional evolution, review whether the following files also need to
 be updated:
