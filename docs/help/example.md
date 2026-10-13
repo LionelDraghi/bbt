@@ -114,3 +114,28 @@ Let's use a regexp to test both.
 - When I type `y`
 - Then the output is `Continuing!`
 - And the exit code is `0`
+
+## Scenario 7 : ignoring a volatile part of the output
+
+> This scenario illustrates the "ignoring" clause: a program printing its
+> build time cannot be tested against a fixed expected output. State the
+> time tag as volatile with `(ignoring time)`: the time is masked on both
+> sides before comparing, and the rest of the line keeps its precise check.
+
+- Given the new file `timed.c` containing
+  ```c
+  #include <stdio.h>
+  int main() {
+  printf("[%s] Hello from a program built at a volatile time\n", __TIME__);
+  return 0;
+  }
+  ```
+- And given there is no `./timed` file
+
+- When I successfully run `gcc timed.c -o timed`
+- And  I run `./timed`
+
+- Then I get (ignoring time)
+  ```
+  [12:34:56] Hello from a program built at a volatile time
+  ```

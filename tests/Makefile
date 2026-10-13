@@ -151,7 +151,7 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) features examples non_reg unit_te
 	@ # scenario files will be wrong!
 	@ # =====================================================================
 	
-	@ - rm -f *.out *.err *.xml file1.tmp main cp tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ - rm -f *.out *.err *.xml file1.tmp main cp timed tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ $(MAKE) -s clean --directory=file_utilities_tests
 
 doc: $(RESULTS_DIR)
@@ -168,7 +168,7 @@ doc: $(RESULTS_DIR)
 # The list may become incomplete when new tests create new files:
 # any file not listed here, for instance a file of your own, is preserved.
 clean:
-	@ - rm -f *.out *.err main cp hello optimize *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
+	@ - rm -f *.out *.err main cp hello optimize timed *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
 	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
 	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md

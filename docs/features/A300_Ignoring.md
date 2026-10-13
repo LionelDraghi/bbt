@@ -48,7 +48,7 @@ Several patterns combine on one clause, separated by commas, spaces or
 `and`, in any mix: `(ignoring time, dir)`, `(ignoring time and dir)`,
 and, once the deferred `casing` pattern lands,
 `(ignoring dir, time and casing)`. The patterns of this increment are
-`time` and `dir`.
+`time`, `dir` and `version`.
 
 The clause applies to the steps that compare a text with an expected text:
 `I get`, `I get on stderr`, the `output is` / `output contains` family, and
@@ -118,17 +118,35 @@ sides, and neutralize only the syntax (cf. the
 A run without any separator (`bbt`) is not a path occurrence and is not
 masked.
 
+## `ignoring version`
+
+`ignoring version` masks version numbers: one, two or three dot separated
+numeric components, optionally followed by a pre-release or build suffix
+starting with `-` or `+`, as in `1.0`, `0.5.1`, `1.2.3-dev`,
+`2.0.0-rc.1+meta`.
+
+The rule is purely lexical, like `ignoring dir`: any isolated `D+.D+(.D+)?`
+is treated as a version, so a decimal number such as `3.2` is masked too.
+A duration in seconds would be better handled by the future
+`ignoring <regexp>` pattern.
+
 _Table of Contents:_
+- [Clause syntax](#clause-syntax)
+- [Semantics: masking on both sides](#semantics-masking-on-both-sides)
+- [`ignoring time`](#ignoring-time)
+- [`ignoring dir`](#ignoring-dir)
+- [`ignoring version`](#ignoring-version)
 - [Background](#background)
-- [Scenario: a time tag in the output does not fail the comparison](#scenario-a-time-tag-in-the-output-does-not-fail-the-comparison)
-- [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)
-- [Scenario: only the file name is checked, not the directory](#scenario-only-the-file-name-is-checked-not-the-directory)
-- [Scenario: a differing file name fails, differing directories do not](#scenario-a-differing-file-name-fails-differing-directories-do-not)
-- [Scenario: a differing stable part still fails](#scenario-a-differing-stable-part-still-fails)
-- [Scenario: time and dir combine on one step](#scenario-time-and-dir-combine-on-one-step)
-- [Scenario: a time tag does not fail a contains check](#scenario-a-time-tag-does-not-fail-a-contains-check)
-- [Scenario: a time tag missing on the actual side fails and warns](#scenario-a-time-tag-missing-on-the-actual-side-fails-and-warns)
-- [Scenario: the clause on a non comparison step is an error](#scenario-the-clause-on-a-non-comparison-step-is-an-error)
+  - [Scenario: a time tag in the output does not fail the comparison](#scenario-a-time-tag-in-the-output-does-not-fail-the-comparison)
+  - [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)
+  - [Scenario: only the file name is checked, not the directory](#scenario-only-the-file-name-is-checked-not-the-directory)
+  - [Scenario: a differing file name fails, differing directories do not](#scenario-a-differing-file-name-fails-differing-directories-do-not)
+  - [Scenario: a differing stable part still fails](#scenario-a-differing-stable-part-still-fails)
+  - [Scenario: time and dir combine on one step](#scenario-time-and-dir-combine-on-one-step)
+  - [Scenario: a time tag does not fail a contains check](#scenario-a-time-tag-does-not-fail-a-contains-check)
+  - [Scenario: version number does not fail the comparison](#scenario-version-number-does-not-fail-the-comparison)
+  - [Scenario: a time tag missing on the actual side fails and warns](#scenario-a-time-tag-missing-on-the-actual-side-fails-and-warns)
+  - [Scenario: the clause on a non comparison step is an error](#scenario-the-clause-on-a-non-comparison-step-is-an-error)
 
 ## Background
 
@@ -271,6 +289,20 @@ the ignoring clause never weakens the stable part of the check.
   ```
   [12:34:56] Building foo
   ```
+
+### Scenario: version number does not fail the comparison
+
+- When I run `./bbt help`
+- Then the output contains `bbt version 1.2.3` (ignoring version)
+
+The expected `1.2.3` is a sample: the actual `bbt version 0.5.1-dev`
+masks to the same marker, whatever the current version is.
+
+- But the output does not contain `bbt version 1.2.3`
+
+Without the clause, the literal comparison fails: there is no `1.2.3` in
+the actual help output, hence the interest of masking instead of editing
+the expected text at each version bump.
 
 ### Scenario: a time tag missing on the actual side fails and warns
 

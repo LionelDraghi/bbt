@@ -149,6 +149,24 @@ If what you want is search for some pattern, then use the "matches" keyword, fol
 Note that the regexp must match the entire line,
 don't forget to put ".*" at the beginning or at the end if necessary.  
 
+If the expected output contains a part that legitimately changes at each
+run — a time tag, a version number, a machine dependent path — then state
+it with an "ignoring" clause instead of rewriting the whole line as a
+regexp: the volatile parts are masked on both sides before comparing,
+and the rest of the line keeps its precise check.
+
+    - Then the output contains `sut version 1.0` (ignoring version)
+
+    - Then I get (ignoring time)
+      ```
+      [12:34:56] Building foo
+      [12:34:57] Done
+      ```
+
+The available patterns are "time", "dir" and "version", and may be
+combined as in `(ignoring time and dir)`.
+Cf. `bbt help matching` for details.  
+
 #### Steps examples, by category  
 
 All the available steps, classified by what they set up, run or check:  
@@ -210,6 +228,7 @@ All the available steps, classified by what they set up, run or check:
       ```
     - Then the output is equal to file `expected.txt`
     - Then the output contains `3 matches replaced`
+    - Then the output contains `sut version 1.0` (ignoring version)
     - Then the output does not contain `Warning:`
     - Then the output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`
     - Then I get file (unordered) `flowers2.txt`

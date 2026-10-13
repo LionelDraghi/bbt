@@ -91,6 +91,11 @@ the comparison happens, not by rewriting the output beforehand.
   and a Windows print of the same place compare equal; requiring the
   same path while neutralizing only the syntax is the
   `ignoring path syntax` job, below;
+- `ignoring version` masks semver-like version numbers — one to three
+  dot separated numeric components, optionally followed by a pre-release
+  or build suffix (`1.0`, `0.5.1`, `1.2.3-dev`, `2.0.0-rc.1+meta`) —
+  the common case of a version tag printed by the tested tool and
+  bumped between two runs;
 - `ignoring path syntax` does not mask anything: it only normalizes the
   way paths are written — `\` to `/`, drive letter prefixes — so that
   the same location, printed as `tests\results.md` on Windows and
@@ -143,7 +148,8 @@ Precedence to be arbitrated (see open questions).
 
 The first increment, specified and implemented in
 [A300_Ignoring.md](../features/A300_Ignoring.md), covers only the step
-clause, with the `time` and `dir` patterns. The `Given` step and the
+clause, with the `time`, `dir` and `version` patterns. The `Given` step
+and the
 command line option — and with them the precedence question — are
 deferred to a later increment, as is the homogenization of the clause and
 option naming with the existing `ignore_casing`, `ignore_whitespaces` and
@@ -249,8 +255,11 @@ the choice will be revisited with the colored display.
 3. **Predefined patterns**: which time and date formats exactly, and is
    there a need for a separate `ignoring date` or `ignoring duration`;
    **settled for the first increment**: the time formats are listed in
-   [A300_Ignoring.md](../features/A300_Ignoring.md), and a separate
-   `ignoring date` or `ignoring duration` is deferred;
+   [A300_Ignoring.md](../features/A300_Ignoring.md), `ignoring version`
+   is added for semver-like numbers, and a separate `ignoring date` or
+   `ignoring duration` is deferred — no other predefined pattern was
+   obvious enough, the `ignoring <regexp>` escape hatch covering the
+   remaining cases;
 4. **Path clauses**: what counts as a path for `ignoring dir` (leading
    `/`, drive letter, UNC `\\` prefix); and for the format
    normalization, is `ignoring path syntax` the right term

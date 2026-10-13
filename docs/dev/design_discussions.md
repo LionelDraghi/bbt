@@ -673,7 +673,7 @@ statement and the full design). Decisions:
   "I" that makes it a plain declarative sentence:
   `Given I ignore time and dir in the following steps`;
 - the first increment is restricted to the step clause, with the
-  `time` and `dir` patterns, specified in
+  `time`, `dir` and `version` patterns, specified in
   [A300_Ignoring.md](../features/A300_Ignoring.md). Deferred to later
   increments: the `ignoring path syntax` and `ignoring <regexp>`
   patterns, the `Given` step, the command line option, and with them

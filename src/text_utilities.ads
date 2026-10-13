@@ -182,7 +182,7 @@ package Text_Utilities is
                      return Boolean;
 
    -- --------------------------------------------------------------------------
-   type Ignore_Pattern is (No_Pattern, Time, Dir);
+   type Ignore_Pattern is (No_Pattern, Time, Dir, Version);
    -- The patterns that neutralize the volatile parts of a comparison
    -- before it happens, as stated by the (ignoring ...) clause of the
    -- comparison steps (cf. docs/features/A300_Ignoring.md).

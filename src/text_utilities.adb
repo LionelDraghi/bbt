@@ -1009,12 +1009,128 @@ package body Text_Utilities is
       S := R;
    end Mask_Dir;
 
+   function Version_Start_OK (S : String; From : Positive) return Boolean is
+   -- A version must not be the tail of a longer number or version
+     (From = S'First
+        or else (not Is_Digit (S (From - 1)) and then S (From - 1) /= '.'));
+
+   function Version_End_OK (S : String; Last : Natural) return Boolean is
+   -- A version must not be the head of a longer number or version:
+   -- the next character is rejected if it is a digit, or a dot
+   -- followed by a digit
+     (Last = S'Last
+        or else (not Is_Digit (S (Last + 1))
+                   and then (S (Last + 1) /= '.'
+                               or else Last + 2 > S'Last
+                               or else not Is_Digit (S (Last + 2)))));
+
+   function Match_Version_At (S : String; From : Positive) return Natural is
+   -- Returns the last index of a version number starting at From,
+   -- 0 if the characters at From do not form one. A version is:
+   --   D+ '.' D+ ('.' D+)? optionally followed by a '-' or '+'
+   --   pre-release or build suffix (a run of letters, digits, dots
+   --   and hyphens), as in 1.0, 0.5.1, 1.2.3-dev, 2.0.0-rc.1+meta
+   begin
+      if not Version_Start_OK (S, From) then
+         return 0;
+      end if;
+
+      declare
+         I : Natural := From;
+      begin
+         -- major
+         while I < S'Last and then Is_Digit (S (I + 1)) loop
+            I := @ + 1;
+         end loop;
+         -- minor
+         if I + 2 > S'Last or else S (I + 1) /= '.' then
+            return 0;
+         end if;
+         I := I + 1; -- on the dot
+         if not Is_Digit (S (I + 1)) then
+            return 0;
+         end if;
+         while I < S'Last and then Is_Digit (S (I + 1)) loop
+            I := @ + 1;
+         end loop;
+         -- optional patch
+         if I + 2 <= S'Last and then S (I + 1) = '.'
+           and then Is_Digit (S (I + 2))
+         then
+            I := I + 2;
+            while I < S'Last and then Is_Digit (S (I + 1)) loop
+               I := @ + 1;
+            end loop;
+         end if;
+         -- optional pre-release or build suffix
+         if I + 1 <= S'Last
+           and then (S (I + 1) = '-' or else S (I + 1) = '+')
+         then
+            declare
+               Suffix_Last : Natural := I + 1;
+            begin
+               while Suffix_Last < S'Last
+                 and then (Is_Digit (S (Suffix_Last + 1))
+                             or else S (Suffix_Last + 1) in 'a' .. 'z'
+                             or else S (Suffix_Last + 1) in 'A' .. 'Z'
+                             or else S (Suffix_Last + 1) = '.'
+                             or else S (Suffix_Last + 1) = '-'
+                             or else S (Suffix_Last + 1) = '+')
+               loop
+                  Suffix_Last := @ + 1;
+               end loop;
+               if Suffix_Last > I + 1 then
+                  -- a trailing dot is punctuation, not a suffix
+                  while Suffix_Last > I + 1
+                    and then S (Suffix_Last) = '.'
+                  loop
+                     Suffix_Last := @ - 1;
+                  end loop;
+                  if Suffix_Last > I + 1 then
+                     I := Suffix_Last;
+                  end if;
+               end if;
+            end;
+         end if;
+         if Version_End_OK (S, I) then
+            return I;
+         else
+            return 0;
+         end if;
+      end;
+   end Match_Version_At;
+
+   procedure Mask_Version (S     : in out Unbounded_String;
+                           Count : in out Natural) is
+   -- Replaces every version number in S by Ignore_Marker
+      Src : constant String := To_String (S);
+      R   : Unbounded_String;
+      I   : Positive := Src'First;
+   begin
+      while I <= Src'Last loop
+         declare
+            Last : constant Natural := Match_Version_At (Src, I);
+         begin
+            if Last > 0 then
+               Append (R, Ignore_Marker);
+               Count := @ + 1;
+               I     := Last + 1;
+            else
+               Append (R, Src (I));
+               I     := @ + 1;
+            end if;
+         end;
+      end loop;
+      S := R;
+   end Mask_Version;
+
    -- -----------------------------------------------------------------------
    function Image (P : Ignore_Pattern) return String is
      (case P is
          when No_Pattern => "",
          when Time       => "time",
-         when Dir        => "dir");
+         when Dir        => "dir",
+         when Version    => "version");
 
    function Image (Patterns : Ignore_Pattern_Set) return String is
       R : Unbounded_String;
@@ -1054,6 +1170,9 @@ package body Text_Utilities is
                end if;
                if Patterns (Dir) then
                   Mask_Dir (L, Counts (Dir));
+               end if;
+               if Patterns (Version) then
+                  Mask_Version (L, Counts (Version));
                end if;
                R.Append (To_String (L));
             end;

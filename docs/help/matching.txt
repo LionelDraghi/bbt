@@ -21,11 +21,13 @@ Ignoring volatile parts:
   the volatile parts on both sides before comparing, keeping the
   stable part precisely checked:
     - Then I get `Build finished in 3.2 s` (ignoring time)
-  Two patterns are available:
+  Three patterns are available:
   - time : masks the common clock, date and date-time values
     (12:34, 12:34:56, 2026-10-13, 2026-10-13T12:34:56 ...)
   - dir  : masks the directory part of a path, the file or directory
     name staying checked
+  - version : masks version numbers (1.0, 0.5.1, 1.2.3-dev,
+    2.0.0-rc.1+meta ...)
   Several patterns combine, separated by commas or "and":
   (ignoring time, dir), (ignoring time and dir)
   A pattern that matches nothing on the actual side raises a warning,

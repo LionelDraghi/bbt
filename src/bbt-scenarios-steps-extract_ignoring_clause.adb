@@ -34,9 +34,12 @@ is
       elsif Word = "dir" or else Word = "directory" then
          Patterns (Dir) := True;
 
+      elsif Word = "version" then
+         Patterns (Version) := True;
+
       else
          IO.Put_Error ("unknown ignoring pattern """ & Word
-                       & """, supported patterns: time, dir", Loc);
+                       & """, supported patterns: time, dir, version", Loc);
       end if;
    end Set_Pattern;
 

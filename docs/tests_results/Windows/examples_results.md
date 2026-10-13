@@ -46,6 +46,14 @@
    - OK : And the exit code is `0`  
    - [X] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) pass  
 
+   ### Scenario: [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md): 
+   - OK : Given the new file `timed.c` containing  
+   - OK : And given there is no `./timed` file  
+   - OK : When I successfully run `gcc timed.c -o timed`  
+   - OK : And  I run `./timed`  
+   - OK : Then I get (ignoring time)  
+   - [X] scenario   [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md) pass  
+
 
 # Document: [rpl_case_insensitivity.md](../../examples/rpl_case_insensitivity.md)  
   ## Feature: 1 : Case insensitivity  
@@ -115,13 +123,21 @@
    - OK : And the exit code is `0`  
    - [X] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) pass  
 
+   ### Scenario: [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md): 
+   - OK : Given the new file `timed.c` containing  
+   - OK : And given there is no `./timed` file  
+   - OK : When I successfully run `gcc timed.c -o timed`  
+   - OK : And  I run `./timed`  
+   - OK : Then I get (ignoring time)  
+   - [X] scenario   [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md) pass  
 
-## Summary : **Success**, 15 scenarios OK
+
+## Summary : **Success**, 17 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 15    |
+| Successful | 17    |
 | Empty      | 0     |
 | Not Run    | 0     |
 

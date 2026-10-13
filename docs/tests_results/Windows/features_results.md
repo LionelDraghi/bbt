@@ -1162,6 +1162,20 @@
    - OK : Given the file `where_other_name.txt`  
    - [X] background [](../../features/A300_Ignoring.md) pass  
 
+   ### Scenario: [version number does not fail the comparison](../../features/A300_Ignoring.md): 
+   - OK : When I run `./bbt help`  
+   - OK : Then the output contains `bbt version 1.2.3` (ignoring version)  
+   - OK : But the output does not contain `bbt version 1.2.3`  
+   - [X] scenario   [version number does not fail the comparison](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
    ### Scenario: [a time tag missing on the actual side fails and warns](../../features/A300_Ignoring.md): 
    - OK : Given the `warn_compare.md` file  
    - OK : When I run `./bbt warn_compare.md`  
@@ -2270,12 +2284,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 235 scenarios OK
+## Summary : **Success**, 236 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 235   |
+| Successful | 236   |
 | Empty      | 0     |
 | Not Run    | 8     |
 
