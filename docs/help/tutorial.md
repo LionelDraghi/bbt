@@ -163,8 +163,10 @@ and the rest of the line keeps its precise check.
       [12:34:57] Done
       ```
 
-The available patterns are "time", "dir" and "version", and may be
-combined as in `(ignoring time and dir)`.
+The named patterns are "time", "dir" and "version", and any other word
+of the clause is a regexp masking what it matches, as in
+`(ignoring [0-9.]+)`. Patterns may be combined as in
+`(ignoring time and dir)`.
 Cf. `bbt help matching` for details.  
 
 #### Steps examples, by category  

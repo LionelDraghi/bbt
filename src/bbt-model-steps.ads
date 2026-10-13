@@ -105,8 +105,10 @@ package BBT.Model.Steps is
       Executable_File  : Boolean                   := False;
       Ignore_Order     : Boolean                   := True;
       Ignore_Patterns  : Ignore_Pattern_Set        := No_Ignore_Pattern;
+      Ignore_Regexps   : Ignore_Regexp_List        := No_Ignore_Regexp;
       -- Patterns of the (ignoring ...) clause, masking the volatile
-      -- parts on both sides before the comparison
+      -- parts on both sides before the comparison: the named patterns
+      -- in Ignore_Patterns, the custom regexps in Ignore_Regexps
       -- (cf. docs/features/A300_Ignoring.md)
       File_Content     : Text                      := Empty_Text;
       Syntax_Error     : Boolean                   := False;

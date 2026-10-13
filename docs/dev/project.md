@@ -101,11 +101,11 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   filtering) are heavy and weaken the stable part of the check. An
   explicit `ignoring` clause on the comparison steps masks or
   normalizes the volatile parts on both sides before comparing.  
-  The keyword is arbitrated and the first increment (`ignoring time`,
-  `ignoring dir` and `ignoring version`, on the step clause) is
-  specified and implemented
+  The keyword is arbitrated and the step clause increments (`ignoring time`,
+  `ignoring dir`, `ignoring version`, and any regexp as in
+  `ignoring [0-9.]+`) are specified and implemented
   in [A300_Ignoring.md](../features/A300_Ignoring.md); the `path syntax`
-  and `<regexp>` patterns, the `Given` step, the command line option
+  pattern, the `Given` step, the command line option
   and the scope precedence are deferred, as is the diff display
   showing the ignored segments in a distinct color, which pairs with
   the LCS alignment proposal.  

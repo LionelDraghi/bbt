@@ -180,6 +180,9 @@ clean:
 	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md
 	@ - rm -f file_is_code_fence.input no_step_in_scenario.input no_step_in_scenario_b.input no_step_or_scenario_in_feature.input vza.input
 	@ - rm -f ask ask.c new_name.txt config.ini erase_confirm.md
+	@ - rm -f bad_clause.md bad_regexp.md regexp_compare.md time_compare.md warn_compare.md where_compare.md
+	@ - rm -f build_log.txt build_no_time.txt build_ref.txt build_secs.txt build_words.txt build_wrong.txt
+	@ - rm -f count.txt log.txt perf.txt run_a.txt run_b.txt where.txt where_other_name.txt where_ref.txt
 
 # distclean also removes the binaries and the links
 distclean: clean

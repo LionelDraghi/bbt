@@ -18,10 +18,11 @@ the comparison are volatile:
   ```
 ```
 
-This feature file specifies the first increment of the
+This feature file specifies the step clause increments of the
 [ignoring proposal](../proposed_features/ignore.md): the `time` and `dir`
-patterns, on the step clause only. The wider scopes (a `Given I ignore ...`
-step, a command line option), the `path syntax` and `<regexp>` patterns and
+patterns, then the `version` pattern and the `<regexp>` escape hatch, on
+the step clause only. The wider scopes (a `Given I ignore ...`
+step, a command line option), the `path syntax` pattern and
 the precedence between scopes are deferred, as is the homogenization with
 the existing `ignore_casing` and co. settings — which, when resumed, should
 bring their behavior explicitly into the scenario instead of leaving it on
@@ -47,8 +48,9 @@ parentheses:
 Several patterns combine on one clause, separated by commas, spaces or
 `and`, in any mix: `(ignoring time, dir)`, `(ignoring time and dir)`,
 and, once the deferred `casing` pattern lands,
-`(ignoring dir, time and casing)`. The patterns of this increment are
-`time`, `dir` and `version`.
+`(ignoring dir, time and casing)`. The named patterns are `time`, `dir`
+and `version`; any other word of the clause is a custom `regexp` pattern
+(cf. `ignoring <regexp>` below).
 
 The clause applies to the steps that compare a text with an expected text:
 `I get`, `I get on stderr`, the `output is` / `output contains` family, and
@@ -127,8 +129,29 @@ starting with `-` or `+`, as in `1.0`, `0.5.1`, `1.2.3-dev`,
 
 The rule is purely lexical, like `ignoring dir`: any isolated `D+.D+(.D+)?`
 is treated as a version, so a decimal number such as `3.2` is masked too.
-A duration in seconds would be better handled by the future
-`ignoring <regexp>` pattern.
+A duration in seconds is better handled by the `ignoring <regexp>` pattern.
+
+## `ignoring <regexp>`
+
+The named patterns cover the common cases; any other volatile value is
+stated with a regexp: **a word of the clause that is not a pattern name is
+a custom pattern**, masking every substring that matches it, like the named
+patterns do:
+
+- ``- Then I get `Build finished in 3.2 s` (ignoring [0-9.]+) ``
+
+The regexp follows the usual Perl-like syntax: character classes,
+`.`, the `*` `+` `?` quantifiers, alternation... Being a single word of
+the clause, it cannot contain blanks, commas or parenthesis, as they
+separate or end the patterns.
+
+Custom patterns combine with the named ones as the other patterns do:
+`(ignoring time and [0-9]+)`.
+
+A word that is not a legal regexp is a scenario error, reported at
+parsing time. A misspelled pattern name is not an error though: it is a
+legal regexp, matching only itself — most probably nothing on the actual
+side, which the matches-nothing warning makes visible.
 
 _Table of Contents:_
 - [Clause syntax](#clause-syntax)
@@ -136,6 +159,7 @@ _Table of Contents:_
 - [`ignoring time`](#ignoring-time)
 - [`ignoring dir`](#ignoring-dir)
 - [`ignoring version`](#ignoring-version)
+- [`ignoring <regexp>`](#ignoring-regexp)
 - [Background](#background)
   - [Scenario: a time tag in the output does not fail the comparison](#scenario-a-time-tag-in-the-output-does-not-fail-the-comparison)
   - [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)
@@ -147,6 +171,10 @@ _Table of Contents:_
   - [Scenario: version number does not fail the comparison](#scenario-version-number-does-not-fail-the-comparison)
   - [Scenario: a time tag missing on the actual side fails and warns](#scenario-a-time-tag-missing-on-the-actual-side-fails-and-warns)
   - [Scenario: the clause on a non comparison step is an error](#scenario-the-clause-on-a-non-comparison-step-is-an-error)
+  - [Scenario: a duration may vary](#scenario-a-duration-may-vary)
+  - [Scenario: a regexp combines with a named pattern](#scenario-a-regexp-combines-with-a-named-pattern)
+  - [Scenario: a regexp matching nothing on the actual side fails and warns](#scenario-a-regexp-matching-nothing-on-the-actual-side-fails-and-warns)
+  - [Scenario: an illegal regexp in the clause is an error](#scenario-an-illegal-regexp-in-the-clause-is-an-error)
 
 ## Background
 
@@ -339,3 +367,77 @@ actual side.
 
 The clause tunes a comparison: on any other step, it is a scenario error,
 not a silently ignored trailing text.
+
+### Scenario: a duration may vary
+
+- Given the file `perf.txt`
+  ```
+  Build finished in 12.76 s
+  ```
+
+- When I run `./sut read perf.txt`
+- Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)
+
+The durations differ, but both mask to the same marker: the step still
+checks that a number was printed, and the rest of the line stays checked.
+
+### Scenario: a regexp combines with a named pattern
+
+- Given the file `count.txt`
+  ```
+  [13:45:12] 42 files processed
+  ```
+
+- When I run `./sut read count.txt`
+- Then I get (ignoring time and [0-9]+)
+  ```
+  [12:34:56] 7 files processed
+  ```
+
+The time tag is masked by the `time` pattern, the file count by the
+custom regexp: the clause mixes named and custom patterns freely.
+
+### Scenario: a regexp matching nothing on the actual side fails and warns
+
+- Given the file `build_words.txt`
+  ```
+  Build finished in twelve s
+  ```
+
+- Given the file `build_secs.txt`
+  ```
+  Build finished in 12.76 s
+  ```
+
+- Given the `regexp_compare.md` file
+  ~~~
+  # Scenario:
+  - Then file `build_words.txt` is equal to file `build_secs.txt` (ignoring [0-9.]+)
+  ~~~
+
+- When I run `./bbt regexp_compare.md`
+- Then I get an error
+- And output contains `Error : build_words.txt not equal to expected:`
+- And output contains `pattern matches nothing`
+
+The expected text masks its `12.76` to a marker, the actual one holds
+`twelve` and keeps no marker: the comparison fails, and the warning
+draws the attention on the custom pattern that matched nothing — the
+same warning as the named patterns raise.
+
+### Scenario: an illegal regexp in the clause is an error
+
+- Given the `bad_regexp.md` file
+  ~~~
+  # Scenario:
+  - When I run `./sut`
+  - Then I get `sut version 1.0` (ignoring [z-a])
+  ~~~
+
+- When I run `./bbt bad_regexp.md`
+- Then I get an error
+- And output contains `invalid regexp in the ignoring clause`
+
+The clause is parsed with the step: an invalid character range is
+rejected at parsing time, not at comparison time, and the scenario is
+not run.

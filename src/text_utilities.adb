@@ -11,6 +11,7 @@ with Ada.Strings.Equal_Case_Insensitive;
 
 with GNAT.OS_Lib;
 with GNAT.Regexp;
+with GNAT.Regpat;
 
 package body Text_Utilities is
 
@@ -1186,6 +1187,54 @@ package body Text_Utilities is
       Counts : Pattern_Counts;
    begin
       return Mask (T, Patterns, Counts);
+   end Mask;
+
+   -- -----------------------------------------------------------------------
+   function Mask (T      : Text;
+                 Regexp : String;
+                 Count  : out Natural) return Text is
+      use GNAT.Regpat;
+      Matcher : constant Pattern_Matcher := Compile (Regexp);
+      R       : Text := Empty_Text;
+   begin
+      Count := 0;
+      if T.Is_Empty then
+         return R;
+      end if;
+
+      for I in T.First_Index .. T.Last_Index loop
+         declare
+            S       : constant String := T (I);
+            Line    : Unbounded_String;
+            Pos     : Natural := S'First;
+            Matches : Match_Array (0 .. 0);
+         begin
+            while Pos <= S'Last loop
+               Match (Matcher, S (Pos .. S'Last), Matches);
+               exit when Matches (0) = No_Match;
+               if Matches (0).First > Matches (0).Last then
+                  -- a zero-width match masks nothing: skip one character
+                  Pos := @ + 1;
+               else
+                  Append (Line, S (Pos .. Matches (0).First - 1));
+                  Append (Line, Ignore_Marker);
+                  Count := @ + 1;
+                  Pos   := Matches (0).Last + 1;
+               end if;
+            end loop;
+            Append (Line, S (Pos .. S'Last));
+            R.Append (To_String (Line));
+         end;
+      end loop;
+      return R;
+   end Mask;
+
+   -- -----------------------------------------------------------------------
+   function Mask (T      : Text;
+                  Regexp : String) return Text is
+      Count : Natural;
+   begin
+      return Mask (T, Regexp, Count);
    end Mask;
 
    -- --------------------------------------------------------------------------

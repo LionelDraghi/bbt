@@ -672,12 +672,12 @@ statement and the full design). Decisions:
 - the future wider scope step keeps the imperative, with the subject
   "I" that makes it a plain declarative sentence:
   `Given I ignore time and dir in the following steps`;
-- the first increment is restricted to the step clause, with the
-  `time`, `dir` and `version` patterns, specified in
+- the step clause increments are the `time`, `dir`, `version` and
+  `<regexp>` patterns, specified in
   [A300_Ignoring.md](../features/A300_Ignoring.md). Deferred to later
-  increments: the `ignoring path syntax` and `ignoring <regexp>`
-  patterns, the `Given` step, the command line option, and with them
-  the precedence between the three scopes;
+  increments: the `ignoring path syntax` pattern, the `Given` step, the
+  command line option, and with them the precedence between the three
+  scopes;
 - the diff display of the ignored segments is deferred with the LCS
   alignment proposal. The current display applies the mask, showing
   the constant marker `***` on both sides, so that the shown diff is

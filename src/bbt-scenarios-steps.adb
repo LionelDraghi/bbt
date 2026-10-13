@@ -17,6 +17,8 @@ with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Ada.Strings.Maps;
 
+with GNAT.Regpat;
+
 use BBT.Scenarios.Steps.Lexer,
     BBT.Model.Steps,
     Text_Utilities,
@@ -129,6 +131,7 @@ package body BBT.Scenarios.Steps is
       Ignore_Order     : Boolean                  := False;
       Executable       : Boolean                  := False;
       Ignore_Patterns  : Ignore_Pattern_Set       := No_Ignore_Pattern;
+      Ignore_Regexps   : Ignore_Regexp_List       := No_Ignore_Regexp;
    end record;
 
    -- --------------------------------------------------------------------------
@@ -234,7 +237,8 @@ package body BBT.Scenarios.Steps is
    -- before the clause, so that the clause is not seen by the lexer
    function Extract_Ignoring_Clause (Line     : String;
                                      Loc      : Location_Type;
-                                     Patterns : out Ignore_Pattern_Set)
+                                     Patterns : out Ignore_Pattern_Set;
+                                     Regexps  : out Ignore_Regexp_List)
                                      return String is separate;
 
    -- --------------------------------------------------------------------------
@@ -254,7 +258,8 @@ package body BBT.Scenarios.Steps is
       Src_Code : Unbounded_String := Null_Unbounded_String;
 
       Tmp : aliased String :=
-        Extract_Ignoring_Clause (To_String (Line), Loc, State.Ignore_Patterns);
+        Extract_Ignoring_Clause (To_String (Line), Loc,
+                                  State.Ignore_Patterns, State.Ignore_Regexps);
       TT  : Token_Type;
 
    begin
@@ -383,6 +388,7 @@ package body BBT.Scenarios.Steps is
               Executable_File  => State.Executable,
               Ignore_Order     => State.Ignore_Order,
               Ignore_Patterns  => State.Ignore_Patterns,
+              Ignore_Regexps   => State.Ignore_Regexps,
               File_Content     => Empty_Text,
               Syntax_Error     => IO.Some_Error);
    end Parse;

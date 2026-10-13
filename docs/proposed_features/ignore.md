@@ -146,9 +146,9 @@ settable at a wider scope:
 
 Precedence to be arbitrated (see open questions).
 
-The first increment, specified and implemented in
-[A300_Ignoring.md](../features/A300_Ignoring.md), covers only the step
-clause, with the `time`, `dir` and `version` patterns. The `Given` step
+The step clause increments, specified and implemented in
+[A300_Ignoring.md](../features/A300_Ignoring.md), cover the step clause,
+with the `time`, `dir`, `version` and `<regexp>` patterns. The `Given` step
 and the
 command line option — and with them the precedence question — are
 deferred to a later increment, as is the homogenization of the clause and
@@ -286,10 +286,11 @@ the choice will be revisited with the colored display.
 ## Scenarios
 
 Illustrative: those scenarios describe the target behavior. The step
-clause part (`ignoring time`, `ignoring dir`) is specified and tested in
+clause part (`ignoring time`, `ignoring dir`, `ignoring <regexp>`) is
+specified and tested in
 [A300_Ignoring.md](../features/A300_Ignoring.md); the scenarios below
 also cover the parts not yet implemented (`ignoring path syntax`,
-`ignoring <regexp>`, the wider scopes).
+the wider scopes).
 
 ### Scenario: a time tag in the output does not fail the comparison
 

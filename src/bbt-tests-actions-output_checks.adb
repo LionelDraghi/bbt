@@ -29,7 +29,9 @@ package body BBT.Tests.Actions.Output_Checks is
    -- declares volatile something the tested program does not print
       Counts : Pattern_Counts;
    begin
-      if Step.Data.Ignore_Patterns = No_Ignore_Pattern then
+      if Step.Data.Ignore_Patterns = No_Ignore_Pattern
+        and then Step.Data.Ignore_Regexps.Is_Empty
+      then
          return;
       end if;
       Expected := Mask (Expected, Step.Data.Ignore_Patterns);
@@ -40,6 +42,20 @@ package body BBT.Tests.Actions.Output_Checks is
                               & " pattern matches nothing on the actual side",
                             Step.Location);
          end if;
+      end loop;
+      for R of Step.Data.Ignore_Regexps loop
+         declare
+            Count : Natural;
+         begin
+            Expected := Mask (Expected, R);
+            Actual   := Mask (Actual, R, Count);
+            if Count = 0 then
+               IO.Put_Warning ("the ignoring """ & R
+                                 & """ pattern matches nothing on the"
+                                 & " actual side",
+                               Step.Location);
+            end if;
+         end;
       end loop;
    end Mask_Ignored_Parts;
 

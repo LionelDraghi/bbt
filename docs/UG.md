@@ -182,7 +182,7 @@ bbt is designed for humans, and is not going to trap users with blank line, whit
 This is not always the expected behavior, you may want to check the exact output. Use then the `--exact_match` option on the command line.  
 Actually, there is more options to control individually casing, whitespaces and blank lines, refer to the [feature file](features/A210_Exact_Match.md) for more details.
 
-The comparison steps also accept an `(ignoring ...)` clause, that states explicitly in the scenario which parts are volatile — `(ignoring time)` for time tags, `(ignoring dir)` for the directory part of a path, `(ignoring version)` for version numbers — and masks them on both sides before comparing (cf. [feature `ignoring`](features/A300_Ignoring.md)).  
+The comparison steps also accept an `(ignoring ...)` clause, that states explicitly in the scenario which parts are volatile — `(ignoring time)` for time tags, `(ignoring dir)` for the directory part of a path, `(ignoring version)` for version numbers, and any other word of the clause is a regexp masking what it matches, as in `(ignoring [0-9.]+)` for a varying duration — and masks them on both sides before comparing (cf. [feature `ignoring`](features/A300_Ignoring.md)).  
 An explicit in-scenario mention of the casing and whitespace settings remains in the TDL (cf. [issue #18](https://github.com/LionelDraghi/bbt/issues/18)).
 
 On the other hand, the order of lines in files is generally meaningful.

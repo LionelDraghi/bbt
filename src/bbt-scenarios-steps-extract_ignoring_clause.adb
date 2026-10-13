@@ -9,7 +9,8 @@ separate (BBT.Scenarios.Steps)
 
 function Extract_Ignoring_Clause (Line     : String;
                                    Loc      : Location_Type;
-                                   Patterns : out Ignore_Pattern_Set)
+                                   Patterns : out Ignore_Pattern_Set;
+                                   Regexps  : out Ignore_Regexp_List)
                                    return String
 is
    use Ada.Strings.Maps,
@@ -21,8 +22,28 @@ is
    Clause_Start : Natural         := 0;
    Clause_End   : Natural;
 
-   procedure Set_Pattern (Word : String) is
-   -- Word is a lowercase word of the pattern list
+   function Is_Legal_Regexp (S : String) return Boolean is
+   -- Compiles S, to reject an illegal regexp at parsing time,
+   -- before any run
+      use GNAT.Regpat;
+   begin
+      -- An exception raised in a declarative part is not handled by
+      -- the enclosing body handlers, hence the inner block
+      declare
+         Matcher : constant Pattern_Matcher := Compile (S);
+         pragma Unreferenced (Matcher);
+      begin
+         return True;
+      end;
+   exception
+      when Expression_Error =>
+         return False;
+   end Is_Legal_Regexp;
+
+   procedure Set_Pattern (Word    : String;
+                          Original : String) is
+   -- Word is a lowercase word of the pattern list, Original the same
+   -- word in the original casing, that a regexp pattern must keep
    begin
       if Word = "" or else Word = "and" then
          -- separators, or an empty word, are not patterns
@@ -38,13 +59,20 @@ is
          Patterns (Version) := True;
 
       else
-         IO.Put_Error ("unknown ignoring pattern """ & Word
-                       & """, supported patterns: time, dir, version", Loc);
+         -- Any other word is a custom pattern: a regexp masking the
+         -- matching substrings of both sides
+         if Is_Legal_Regexp (Original) then
+            Regexps.Append (Original);
+         else
+            IO.Put_Error ("invalid regexp in the ignoring clause: """
+                          & Original & """", Loc);
+         end if;
       end if;
    end Set_Pattern;
 
 begin
    Patterns := No_Ignore_Pattern;
+   Regexps  := No_Ignore_Regexp;
 
    -- The clause is searched from the end, so that a command or an
    -- expected text between backticks containing parenthesis is not
@@ -79,6 +107,8 @@ begin
    declare
       List       : constant String :=
         Lower_Line (Clause_Start + Clause_Marker'Length .. Clause_End - 1);
+      Original_List : constant String :=
+        Line (Clause_Start + Clause_Marker'Length .. Clause_End - 1);
       Separators : constant Character_Set := To_Set (" ,");
       From       : Positive := List'First;
       Last       : Natural;
@@ -93,12 +123,14 @@ begin
          while Last < List'Last and then not Is_In (List (Last + 1), Separators) loop
             Last := @ + 1;
          end loop;
-         Set_Pattern (List (From .. Last));
+         Set_Pattern (List (From .. Last), Original_List (From .. Last));
          From := Last + 1;
       end loop;
    end;
 
-   if Patterns = No_Ignore_Pattern and then not IO.Some_Error then
+   if Patterns = No_Ignore_Pattern and then Regexps.Is_Empty
+     and then not IO.Some_Error
+   then
       IO.Put_Error ("no pattern given in the ignoring clause", Loc);
    end if;
 

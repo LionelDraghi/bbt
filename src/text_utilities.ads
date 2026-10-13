@@ -215,6 +215,27 @@ package Text_Utilities is
                   Patterns : Ignore_Pattern_Set) return Text;
 
    -- --------------------------------------------------------------------------
+   package Ignore_Regexp_Lists is new Ada.Containers.Indefinite_Vectors
+     (Positive, String);
+   subtype Ignore_Regexp_List is Ignore_Regexp_Lists.Vector;
+   No_Ignore_Regexp : Ignore_Regexp_List renames Ignore_Regexp_Lists.Empty_Vector;
+   -- The custom patterns of the (ignoring ...) clause: any word of the
+   -- clause that is not a named pattern is a regexp, masking the
+   -- matching substrings of both sides of the comparison
+   -- (cf. docs/features/A300_Ignoring.md)
+
+   function Mask (T      : Text;
+                  Regexp : String;
+                  Count  : out Natural) return Text;
+   -- Returns a copy of T where every substring matching Regexp is
+   -- replaced by the fixed marker, and gives in Count the number of
+   -- matches found. The regexp is compiled: the caller is expected to
+   -- have validated it beforehand, as the parsing of the clause does.
+
+   function Mask (T      : Text;
+                  Regexp : String) return Text;
+
+   -- --------------------------------------------------------------------------
    function Max_Line_Length (In_Text : Text) return Line_Length is
      (Line_Length ([for Line of In_Text => Line'Length]'Reduce (Natural'Max, 0)));
 
