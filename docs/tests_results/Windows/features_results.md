@@ -348,18 +348,18 @@
 
 
 # Document: [A140_Unordered_Keyword.md](../../features/A140_Unordered_Keyword.md)  
-  ## Feature: when the modifier `unordered` is given after `get`, order of line is ignored  
+  ## Feature: ignoring the order of lines in comparisons  
    ### Background: [](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `flowers1.txt`  
    - OK : Given the file `flowers2.txt`  
    - OK : Given the file `flowers3.txt`  
    - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
 
-   ### Scenario: ["I get" without the modifier](../../features/A140_Unordered_Keyword.md): 
+   ### Scenario: ["I get" without the clause](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `scenario1.md`  
    - OK : When I run `./bbt scenario1.md`  
    - OK : Then I get an error  
-   - [X] scenario   ["I get" without the modifier](../../features/A140_Unordered_Keyword.md) pass  
+   - [X] scenario   ["I get" without the clause](../../features/A140_Unordered_Keyword.md) pass  
 
    ### Background: [](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `flowers1.txt`  
@@ -367,10 +367,21 @@
    - OK : Given the file `flowers3.txt`  
    - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
 
-   ### Scenario: [same "I get" with the modifier](../../features/A140_Unordered_Keyword.md): 
+   ### Scenario: [same "I get" with the clause](../../features/A140_Unordered_Keyword.md): 
+   - OK : When I run `./sut read flowers1.txt`  
+   - OK : Then I get file `flowers2.txt` (ignoring order)  
+   - [X] scenario   [same "I get" with the clause](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Background: [](../../features/A140_Unordered_Keyword.md): 
+   - OK : Given the file `flowers1.txt`  
+   - OK : Given the file `flowers2.txt`  
+   - OK : Given the file `flowers3.txt`  
+   - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Scenario: [same "I get" with the deprecated unordered adjective](../../features/A140_Unordered_Keyword.md): 
    - OK : When I run `./sut read flowers1.txt`  
    - OK : Then I get file (unordered) `flowers2.txt`  
-   - [X] scenario   [same "I get" with the modifier](../../features/A140_Unordered_Keyword.md) pass  
+   - [X] scenario   [same "I get" with the deprecated unordered adjective](../../features/A140_Unordered_Keyword.md) pass  
 
    ### Background: [](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `flowers1.txt`  
@@ -378,11 +389,11 @@
    - OK : Given the file `flowers3.txt`  
    - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
 
-   ### Scenario: ["contains" without the modifier](../../features/A140_Unordered_Keyword.md): 
+   ### Scenario: ["contains" without the clause](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `scenario1.md`  
    - OK : When I run `./bbt scenario1.md`  
    - OK : Then I get an error  
-   - [X] scenario   ["contains" without the modifier](../../features/A140_Unordered_Keyword.md) pass  
+   - [X] scenario   ["contains" without the clause](../../features/A140_Unordered_Keyword.md) pass  
 
    ### Background: [](../../features/A140_Unordered_Keyword.md): 
    - OK : Given the file `flowers1.txt`  
@@ -390,10 +401,33 @@
    - OK : Given the file `flowers3.txt`  
    - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
 
-   ### Scenario: [same "contains" but with the "unordered" modifier](../../features/A140_Unordered_Keyword.md): 
+   ### Scenario: [same "contains" with the clause](../../features/A140_Unordered_Keyword.md): 
+   - OK : When I run `./sut read flowers1.txt`  
+   - OK : Then output contains file `flowers3.txt` (ignoring order)  
+   - [X] scenario   [same "contains" with the clause](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Background: [](../../features/A140_Unordered_Keyword.md): 
+   - OK : Given the file `flowers1.txt`  
+   - OK : Given the file `flowers2.txt`  
+   - OK : Given the file `flowers3.txt`  
+   - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Scenario: [same "contains" with the deprecated unordered adjective](../../features/A140_Unordered_Keyword.md): 
    - OK : When I run `./sut read flowers1.txt`  
    - OK : Then output contains file `flowers3.txt` (unordered)  
-   - [X] scenario   [same "contains" but with the "unordered" modifier](../../features/A140_Unordered_Keyword.md) pass  
+   - [X] scenario   [same "contains" with the deprecated unordered adjective](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Background: [](../../features/A140_Unordered_Keyword.md): 
+   - OK : Given the file `flowers1.txt`  
+   - OK : Given the file `flowers2.txt`  
+   - OK : Given the file `flowers3.txt`  
+   - [X] background [](../../features/A140_Unordered_Keyword.md) pass  
+
+   ### Scenario: [order combines with the masking patterns](../../features/A140_Unordered_Keyword.md): 
+   - OK : Given the file `build_a.txt`  
+   - OK : Given the file `build_b.txt`  
+   - OK : Then file `build_a.txt` is equal to file `build_b.txt` (ignoring time and order)  
+   - [X] scenario   [order combines with the masking patterns](../../features/A140_Unordered_Keyword.md) pass  
 
 
 # Document: [A150_Background_Keyword.md](../../features/A150_Background_Keyword.md)  
@@ -738,6 +772,39 @@
    - OK : Then I get an error  
    - OK : And output contains  
    - [X] scenario   [exact match is sensitive to CR at line ends](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [an (ignoring casing) clause agreeing with the human match default](../../features/A210_Exact_Match.md): 
+   - OK : Given the `compare_clause.md` file  
+   - OK : When I run `./bbt compare_clause.md`  
+   - OK : Then I get no error  
+   - [X] scenario   [an (ignoring casing) clause agreeing with the human match default](../../features/A210_Exact_Match.md) pass  
+
+   ### Background: [](../../features/A210_Exact_Match.md): 
+   - OK : Given the file `text.ref`  
+   - OK : Given the file `text.1`  
+   - OK : Given the file `text.2`  
+   - OK : Given the file `text.3`  
+   - OK : Given the `compare.md` file  
+   - OK : Given the `compare_crlf.md` file  
+   - OK : Given I successfully run `./sut cr_lf text.4`  
+   - [X] background [](../../features/A210_Exact_Match.md) pass  
+
+   ### Scenario: [an (ignoring casing) clause contradicting --exact_match is ignored and warns](../../features/A210_Exact_Match.md): 
+   - OK : When I run `./bbt -k --exact_match compare_clause.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `the (ignoring casing) clause is ignored`  
+   - OK : And output contains  
+   - [X] scenario   [an (ignoring casing) clause contradicting --exact_match is ignored and warns](../../features/A210_Exact_Match.md) pass  
 
 
 # Document: [A220_AsciiDoc_gcc_hello_world.adoc](../../features/A220_AsciiDoc_gcc_hello_world.adoc)  
@@ -2345,12 +2412,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 240 scenarios OK
+## Summary : **Success**, 245 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 240   |
+| Successful | 245   |
 | Empty      | 0     |
 | Not Run    | 8     |
 
