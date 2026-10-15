@@ -103,7 +103,9 @@ package Text_Utilities is
    -- when it is 1, as in git diff.
    -- Unlike in git diff, start is the line number of the first differing
    -- line, not the line number of the first context line, and the counts
-   -- do not include the context lines.
+   -- do not include the context lines. On a side where the hunk has no
+   -- line (a pure insertion or deletion), start is, as in git diff, the
+   -- line number preceding the insertion point, and the count is 0.
    -- Hunks separated by more than twice the context are kept apart, and
    -- closer hunks are merged, as in git diff.
    -- Each hunk is surrounded by up to 3 common lines of context, displayed
@@ -114,10 +116,14 @@ package Text_Utilities is
    -- - ' > ' : only the second file contains the line
    -- Separators are aligned, the column of the separator is the column of
    -- the last character of the longest line in T1, plus one space.
-   -- Fixme: the comparison is positional: an insertion or deletion shifts
-   --  all following pairings, producing misleading "changed" lines.
-   --  A LCS based alignment, as in diff or git, would give more relevant
-   --  results: see docs/proposed_features/LCS_diff_alignment.md
+   -- T1 and T2 are first aligned on their longest common subsequence of
+   -- lines, computed with the Myers algorithm, as diff and git diff do:
+   -- an insertion or deletion is reported as such, and does not shift
+   -- the following pairings. Lines only in one text that occur at the
+   -- same place are paired, and shown as differing lines. When the
+   -- alignment cost is above Max_Alignment_Cost, the texts are paired
+   -- positionally instead, to keep a bounded execution time on
+   -- pathological inputs.
 
    --  -- --------------------------------------------------------------------------
    --  procedure Compare (Text1, Text2       : Text;

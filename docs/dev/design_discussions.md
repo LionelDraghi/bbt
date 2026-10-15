@@ -10,6 +10,7 @@
 - [D7. Status bar rendering](#d7-status-bar-rendering)
 - [D8. Status bar default and --no\_tty](#d8-status-bar-default-and---no_tty)
 - [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment)
+- [D10. Diff display alignment](#d10-diff-display-alignment)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -24,6 +25,7 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
 | [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md), [ignore.md](../proposed_features/ignore.md) |
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
@@ -685,8 +687,8 @@ statement and the full design). Decisions:
   increments: the `ignoring path syntax` pattern, the `Given` step, the
   command line option, and with them the precedence between the three
   scopes;
-- the diff display of the ignored segments is deferred with the LCS
-  alignment proposal. The current display applies the mask, showing
+- the diff display of the ignored segments is deferred; it will pair
+  with the diff display alignment (cf. D10). The current display applies the mask, showing
   the constant marker `***` on both sides, so that the shown diff is
   exactly the tested diff. Discussed target: on a color terminal, the
   original unmasked text, with the ignored segments in a distinct
@@ -716,3 +718,47 @@ References:
 - the laxity settings precedent:
   [issue #18](https://github.com/LionelDraghi/bbt/issues/18);
 - the owner arbitration of October 2026.
+
+## D10. Diff display alignment
+
+Status: arbitrated (October 2026), implemented (October 2026)
+
+The side-by-side display of expected versus actual compared the two
+texts positionally: line N against line N, so an insertion or a
+deletion shifted all the following pairings, and produced "changed"
+lines that did not exist (cf. the third B105 scenario before this
+change). Decisions:
+
+- the two texts are aligned on their longest common subsequence of
+  lines before the display, computed with the Myers algorithm, the
+  basis of `diff` and `git diff`: an insertion or a deletion is
+  reported as such, and does not shift the following pairings;
+- the comparison criteria are those of the display
+  (`Case_Insensitive`, `Ignore_Whitespaces`): the lines matched by
+  the alignment are exactly the lines displayed as common. The
+  `Is_Equal` / `Contains` verdicts are not impacted: only the
+  display of the differences changes;
+- as `sdiff` does, the lines present in only one text that occur at
+  the same place are paired and displayed as differing lines
+  (` | `), the leftovers being displayed alone (` < ` or ` > `);
+- the hunk headers follow the git diff convention on the sides with
+  no line: on a pure insertion or deletion, the start is the line
+  preceding the insertion point, and the count is 0;
+- when the alignment cost (the Myers distance) exceeds
+  `Max_Alignment_Cost` (1000), the texts are paired positionally, as
+  the display did before this change: the alignment of pathological
+  inputs (two large, completely different outputs) stays bounded,
+  and falls back on the previous behavior;
+- rejected alternative: a naive O(N×M) dynamic programming LCS,
+  acceptable for the small bbt fixtures as the proposal noted, but
+  which would hang on the large outputs that Myers handles in O(N·D).
+
+The former proposal docs/proposed_features/LCS_diff_alignment.md is
+removed once implemented, as timeouts.md was (cf. D6).
+
+References:
+
+- the specification and the scenarios:
+  [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md);
+- the implementation: `Text_Utilities.Align` and `Side_By_Side`
+  (src/text_utilities.ads, src/text_utilities.adb).

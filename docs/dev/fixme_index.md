@@ -19,4 +19,3 @@ Location | Text
 [src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):161|      --  Path_To_Scen should be in Scenario_Type to avoid
 [src/bbt-writers-markdown_writers.adb](../../src/bbt-writers-markdown_writers.adb):220|      --  Path_To_Scen should be in Scenario_Type to avoid recomputing
 [src/list_image-unix_predefined_styles.ads](../../src/list_image-unix_predefined_styles.ads):55|   package Simple_One_Per_Line_Style is new Image_Style --  not the right name at all
-[src/text_utilities.ads](../../src/text_utilities.ads):117|   --  the comparison is positional: an insertion or deletion shifts

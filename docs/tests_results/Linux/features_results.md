@@ -1796,6 +1796,19 @@
    - OK : And the output contains  
    - [X] scenario   [full comparison with blank lines on the left and on the right](../../features/B105_Expected_vs_Actual_Output.md) pass  
 
+   ### Background: [](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `reference.txt`  
+   - [X] background [](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
+   ### Scenario: [full comparison with an inserted line](../../features/B105_Expected_vs_Actual_Output.md): 
+   - OK : Given the new file `scen3.md`  
+   - OK : When I run `./bbt --cleanup --yes scen3.md`  
+   - OK : Then there is an error   
+   - OK : And the output contains  
+   - OK : And the output does not contain `This is a test file | an inserted line`  
+   - OK : And the output contains  
+   - [X] scenario   [full comparison with an inserted line](../../features/B105_Expected_vs_Actual_Output.md) pass  
+
 
 # Document: [B110_Spawn.md](../../features/B110_Spawn.md)  
   ## Feature: Command line to spawn processing  
@@ -2463,12 +2476,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 252 scenarios OK
+## Summary : **Success**, 253 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 252   |
+| Successful | 253   |
 | Empty      | 0     |
 | Not Run    | 1     |
 

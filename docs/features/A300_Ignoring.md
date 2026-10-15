@@ -31,7 +31,7 @@ through the clause (cf. `ignoring order, casing, whitespaces and
 blank_lines` below), closing the in-scenario part wished when
 [issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed. The
 colored diff display of the ignored segments pairs with the
-[LCS alignment proposal](../proposed_features/LCS_diff_alignment.md).
+[diff display alignment](../dev/design_discussions.md).
 
 ## Clause syntax
 

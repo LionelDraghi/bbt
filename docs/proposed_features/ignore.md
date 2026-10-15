@@ -193,8 +193,8 @@ The current first increment applies the mask to the display: the
 neutralized segments appear as the constant marker `***`, in the tty and
 non-tty outputs alike, so that the shown diff is exactly the tested diff.
 
-The target display, once the
-[LCS alignment proposal](LCS_diff_alignment.md) lands, is:
+The target display, now that the
+[diff display alignment](../dev/design_discussions.md) has landed, is:
 
 - on a color terminal, the original, **unmasked** text: the ignored
   segments are displayed as they were printed, in a distinct color (for
@@ -204,7 +204,7 @@ The target display, once the
 - additionally, on differing lines, the differing characters themselves
   should be highlighted in red instead of the whole line, so that a one
   character difference in a long line draws the eye. This pairs naturally
-  with the LCS alignment: the alignment identifies the differing line
+  with the diff display alignment: the alignment identifies the differing line
   pairs, an intra-line comparison identifies the differing characters
   inside a pair.
 

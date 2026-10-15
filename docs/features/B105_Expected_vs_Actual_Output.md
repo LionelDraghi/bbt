@@ -9,6 +9,7 @@ _Table of Contents:_
   - [Scenario: full comparison with no error](#scenario-full-comparison-with-no-error)
   - [Scenario: full comparison with error in the middle of the file](#scenario-full-comparison-with-error-in-the-middle-of-the-file)
   - [Scenario: full comparison with blank lines on the left and on the right](#scenario-full-comparison-with-blank-lines-on-the-left-and-on-the-right)
+    - [Scenario: full comparison with an inserted line](#scenario-full-comparison-with-an-inserted-line)
 
 ## Background:
 
@@ -131,6 +132,58 @@ scen2.md:16: Error: input.2 not equal to expected
 - And the output contains
   ```
     - [ ] scenario [](scen2.md) **fails**
+  ```
+
+### Scenario: full comparison with an inserted line
+
+The expected and actual texts are aligned before displaying the
+differences, as `diff` or `git diff` do
+(cf. [LCS_diff_alignment.md](../proposed_features/LCS_diff_alignment.md)):
+a line inserted in the actual text is reported as an insertion, and must
+not turn the following lines into changed pairs.
+
+- Given the new file `scen3.md`
+  ~~~
+  # Scenario
+  - Given the new file `input.3`
+    ```
+    The quick brown fox
+    jumps over the lazy dog
+    an inserted line
+    This is a test file
+    for diff operations
+    It contains exactly
+    ten lines of text
+    
+    Each line is unique
+    and clearly identified
+    for easy comparison
+    in diff tests
+    ```
+  - Then file `input.3` is equal to file `reference.txt` 
+  ~~~
+
+- When I run `./bbt --cleanup --yes scen3.md`
+
+- Then there is an error 
+
+- And the output contains
+  ```md
+scen3.md:17: Error: input.3 not equal to expected:
+@@ -2,0 +3 @@
+The quick brown fox
+jumps over the lazy dog
+                         >   an inserted line
+This is a test file
+for diff operations
+It contains exactly
+  ```
+
+- And the output does not contain `This is a test file | an inserted line`
+
+- And the output contains
+  ```
+    - [ ] scenario   [](scen3.md) **fails**
   ```
 
 

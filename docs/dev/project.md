@@ -89,11 +89,6 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   cf. the [readers and writers organization](design_discussions.md)
   design discussion
 
-- LCS based diff alignment  
-  Error messages compare expected and actual positionally; an LCS based
-  alignment, as in diff or git, would give more relevant results.  
-  cf. [LCS_diff_alignment](../proposed_features/LCS_diff_alignment.md)
-
 - ignoring volatile parts in comparisons  
   Time tags, machine dependent absolute paths and Windows versus Unix
   path syntax frequently break comparisons on parts the scenario does
@@ -108,7 +103,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   pattern, the `Given` step, the command line option
   and the scope precedence are deferred, as is the diff display
   showing the ignored segments in a distinct color, which pairs with
-  the LCS alignment proposal.  
+  the [diff display alignment](design_discussions.md).  
   cf. [ignore](../proposed_features/ignore.md) and the
   [ignoring design discussion](design_discussions.md)
 

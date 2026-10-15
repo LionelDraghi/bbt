@@ -294,34 +294,240 @@ package body Text_Utilities is
    end Pad_To;
 
    -- --------------------------------------------------------------------------
+   --  Alignment of two texts prior to their side-by-side comparison:
+   --  each operation pairs a left and a right line (Match), or carries
+   --  a line present in only one of the texts (Delete, Insert)
+   type Diff_Op_Kind is (Match, Delete, Insert);
+   type Diff_Op is record
+      Kind : Diff_Op_Kind;
+      I    : Line_Index'Base := 0; --  left line index, 0 when none
+      J    : Line_Index'Base := 0; --  right line index, 0 when none
+   end record;
+
+   package Diff_Op_Lists is new Ada.Containers.Indefinite_Vectors
+     (Positive, Diff_Op);
+   subtype Diff_Op_List is Diff_Op_Lists.Vector;
+
+   Max_Alignment_Cost : constant := 1_000;
+   --  Number of insertions, deletions and changed lines above which
+   --  the alignment gives up and the texts are paired positionally,
+   --  to keep a bounded execution time on pathological inputs
+
+   function Align (T1, T2            : Text;
+                   Case_Insensitive   : Boolean;
+                   Ignore_Whitespaces : Boolean) return Diff_Op_List;
+   --  Returns the sequence of Match, Delete and Insert operations
+   --  that aligns T1 and T2 on their longest common subsequence of
+   --  lines, computed with the Myers algorithm, the basis of diff and
+   --  git diff: an insertion or deletion does not shift the following
+   --  pairings. Lines are compared with the same criteria as the
+   --  display (Case_Insensitive, Ignore_Whitespaces).
+
+   function Align (T1, T2            : Text;
+                   Case_Insensitive   : Boolean;
+                   Ignore_Whitespaces : Boolean) return Diff_Op_List is
+      N : constant Natural := Natural (T1.Length);
+      M : constant Natural := Natural (T2.Length);
+
+      --  V (K) holds the furthest abscissa reached on the diagonal
+      --  X - Y = K along the rounds
+      type Diagonal is new Integer range -Max_Alignment_Cost
+        .. Max_Alignment_Cost;
+      V : array (Diagonal) of Natural := [others => 0];
+
+      --  Snapshot of the active diagonals of V at the end of each
+      --  round, flattened in Trace at the offsets Round_Start:
+      --  backtracking the path requires the previous rounds values
+      package Natural_Lists is new Ada.Containers.Indefinite_Vectors
+        (Positive, Natural);
+      Trace       : Natural_Lists.Vector;
+      Round_Start : array (0 .. Max_Alignment_Cost) of Natural :=
+        [others => 0];
+
+      Ops     : Diff_Op_List;
+      Found   : Boolean  := N = 0 and M = 0;
+      Found_D : Natural := 0;
+
+      procedure Snapshot (Round : Natural) is
+      --  Save V (-Round .. Round) in Trace
+      begin
+         Round_Start (Round) := Natural (Trace.Length);
+         for K in -Round .. Round loop
+            Trace.Append (V (Diagonal (K)));
+         end loop;
+      end Snapshot;
+
+   begin
+      if Found then
+         --  Nothing to align
+         return Ops;
+      end if;
+
+      Round_Loop :
+      for D in 0 .. Max_Alignment_Cost loop
+         for K in -D .. D loop
+            --  K and D have the same parity, as in the Myers algorithm
+            if K mod 2 = D mod 2 then
+               declare
+                  X, Y : Natural;
+               begin
+                  if K = -D
+                    or else (K /= D
+                             and then V (Diagonal (K - 1)) < V (Diagonal (K + 1)))
+                  then
+                     X := V (Diagonal (K + 1));
+                  else
+                     X := V (Diagonal (K - 1)) + 1;
+                  end if;
+                  Y := X - K;
+                  while X < N and then Y < M
+                    and then Is_Equal (T1 (Line_Index (X + 1)),
+                                       T2 (Line_Index (Y + 1)),
+                                       Case_Insensitive => Case_Insensitive,
+                                       Ignore_Blanks    => Ignore_Whitespaces)
+                  loop
+                     X := X + 1;
+                     Y := Y + 1;
+                  end loop;
+                  V (Diagonal (K)) := X;
+                  if X >= N and then Y >= M then
+                     Found   := True;
+                     Found_D := D;
+                  end if;
+               end;
+            end if;
+            exit Round_Loop when Found;
+         end loop;
+         Snapshot (D);
+      end loop Round_Loop;
+
+      if not Found then
+         --  The alignment is too costly: pair the lines positionally,
+         --  as the display did before the alignment was introduced
+         declare
+            Common : constant Natural := Natural'Min (N, M);
+         begin
+            for I in 1 .. Common loop
+               if Is_Equal (T1 (Line_Index (I)), T2 (Line_Index (I)),
+                            Case_Insensitive => Case_Insensitive,
+                            Ignore_Blanks    => Ignore_Whitespaces)
+               then
+                  Ops.Append (Diff_Op'(Match, Line_Index (I), Line_Index (I)));
+               else
+                  Ops.Append (Diff_Op'(Delete, Line_Index (I), 0));
+                  Ops.Append (Diff_Op'(Insert, 0, Line_Index (I)));
+               end if;
+            end loop;
+            for I in Common + 1 .. N loop
+               Ops.Append (Diff_Op'(Delete, Line_Index (I), 0));
+            end loop;
+            for J in Common + 1 .. M loop
+               Ops.Append (Diff_Op'(Insert, 0, Line_Index (J)));
+            end loop;
+            return Ops;
+         end;
+      end if;
+
+      --  Backtracking from the last line down to the first: the
+      --  operations are collected in reverse order
+      declare
+         X : Natural := N;
+         Y : Natural := M;
+
+         function Round_V (Round, K : Integer) return Natural is
+         --  The value of V (K) at the end of Round, from the snapshot
+           (Trace.Element (Round_Start (Round) + Natural (K + Round) + 1));
+
+      begin
+         for D in reverse 0 .. Found_D loop
+            if D = 0 then
+               --  The initial snake, from (0, 0)
+               while X > 0 and then Y > 0 loop
+                  Ops.Append (Diff_Op'(Match, Line_Index (X), Line_Index (Y)));
+                  X := X - 1;
+                  Y := Y - 1;
+               end loop;
+
+            else
+               declare
+                  K      : constant Integer := X - Y;
+                  Prev_K : Integer;
+               begin
+                  if K = -D
+                    or else (K /= D
+                             and then Round_V (D - 1, K - 1) < Round_V (D - 1, K + 1))
+                  then
+                     Prev_K := K + 1;
+                  else
+                     Prev_K := K - 1;
+                  end if;
+                  declare
+                     Prev_X : constant Natural := Round_V (D - 1, Prev_K);
+                     Prev_Y : constant Natural := Prev_X - Prev_K;
+                  begin
+                     if Prev_K = K + 1 then
+                        --  Down move: a line of T2 was inserted, then
+                        --  a snake up to (X, Y)
+                        while X > Prev_X and then Y > Prev_Y + 1 loop
+                           Ops.Append (Diff_Op'(Match, Line_Index (X),
+                                        Line_Index (Y)));
+                           X := X - 1;
+                           Y := Y - 1;
+                        end loop;
+                        Ops.Append (Diff_Op'(Insert, 0, Line_Index (Y)));
+                        Y := Y - 1;
+                     else
+                        --  Right move: a line of T1 was deleted, then
+                        --  a snake up to (X, Y)
+                        while Y > Prev_Y and then X > Prev_X + 1 loop
+                           Ops.Append (Diff_Op'(Match, Line_Index (X),
+                                        Line_Index (Y)));
+                           X := X - 1;
+                           Y := Y - 1;
+                        end loop;
+                        Ops.Append (Diff_Op'(Delete, Line_Index (X), 0));
+                        X := X - 1;
+                     end if;
+                  end;
+               end;
+            end if;
+         end loop;
+      end;
+
+      --  The operations were collected backward: reverse them
+      declare
+         Forward : Diff_Op_List;
+      begin
+         if not Ops.Is_Empty then
+            for Idx in reverse Ops.First_Index .. Ops.Last_Index loop
+               Forward.Append (Ops.Element (Idx));
+            end loop;
+         end if;
+         return Forward;
+      end;
+   end Align;
+
+   -- --------------------------------------------------------------------------
    function Side_By_Side (T1, T2            : Text;
                           Case_Insensitive   : Boolean := True;
                           Ignore_Whitespaces : Boolean := True) return Text is
       Sep_Diff       : constant String := " | ";
       Sep_Only_Left  : constant String := " < ";
       Sep_Only_Right : constant String := " > ";
-      Sep_Same       : constant String := "   ";
 
       T1_Max_Len : constant Line_Length := Max_Line_Length (T1);
       Sep_Col    : constant Line_Length := T1_Max_Len + 1;
-
-      --  Line_Index is Positive based, and Last_Index is 0 on an empty Text,
-      --  so these two constants shall be computed on Line_Index'Base,
-      --  otherwise comparing an empty Text raises a CONSTRAINT_ERROR.
-      Last_Common_Index : constant Line_Index'Base :=
-        Line_Index'Min (T1.Last_Index, T2.Last_Index);
-      Last_Index        : constant Line_Index'Base :=
-        Line_Index'Max (T1.Last_Index, T2.Last_Index);
 
       Result : Text := Empty_Text;
 
       --  A hunk is a group of consecutive differing lines,
       --  preceded by a git diff style header
-      In_Hunk    : Boolean    := False;
-      Hunk_Start : Line_Index := T1.First_Index;
-      Exp_Count  : Natural    := 0;
-      Act_Count  : Natural    := 0;
-      Hunk_Lines : Text       := Empty_Text;
+      In_Hunk       : Boolean         := False;
+      Hunk_Start_T1 : Line_Index'Base := 0;
+      Hunk_Start_T2 : Line_Index'Base := 0;
+      Exp_Count     : Natural         := 0;
+      Act_Count     : Natural         := 0;
+      Hunk_Lines    : Text            := Empty_Text;
 
       --  Number of common lines displayed before and after each hunk,
       --  as sdiff does with the -l option: in the left column only
@@ -357,9 +563,11 @@ package body Text_Utilities is
          if In_Hunk then
             --  Hunk header, placed before the leading context,
             --  but pointing at the first differing line
-            Result.Append (String'("@@ -" & Img (Natural (Hunk_Start)) &
+            Result.Append (String'("@@ -" &
+                                     Img (Natural (Hunk_Start_T1)) &
                                      Count_Image (Exp_Count) &
-                                     " +" & Img (Natural (Hunk_Start)) &
+                                     " +" &
+                                     Img (Natural (Hunk_Start_T2)) &
                                      Count_Image (Act_Count) & " @@"));
             --  Leading context, diff lines and inner context
             for L of Hunk_Lines loop
@@ -383,14 +591,15 @@ package body Text_Utilities is
          end if;
       end Flush_Hunk;
 
-      procedure Start_Hunk (I : Line_Index) is
+      procedure Start_Hunk (T1_Start, T2_Start : Line_Index'Base) is
       begin
          if not In_Hunk then
-            In_Hunk    := True;
-            Hunk_Start := I;
-            Exp_Count  := 0;
-            Act_Count  := 0;
-            Hunk_Lines := Leading_Buffer;
+            In_Hunk       := True;
+            Hunk_Start_T1 := T1_Start;
+            Hunk_Start_T2 := T2_Start;
+            Exp_Count     := 0;
+            Act_Count     := 0;
+            Hunk_Lines    := Leading_Buffer;
             Leading_Buffer := Empty_Text;
          else
             --  Continuing hunk: the pending common lines
@@ -403,23 +612,27 @@ package body Text_Utilities is
       end Start_Hunk;
 
    begin
-      for I in T1.First_Index .. Last_Index loop
-         if I <= Last_Common_Index then
-            -- Lines are present in both texts, so we compare them
+      declare
+         Ops : constant Diff_Op_List :=
+           Align (T1, T2, Case_Insensitive, Ignore_Whitespaces);
+         --  Index of the left and right lines of the last Match
+         --  operation seen: the insertion point of the lines that
+         --  are in only one of the texts
+         Last_Match_T1 : Line_Index'Base := 0;
+         Last_Match_T2 : Line_Index'Base := 0;
+         Idx           : Positive := 1;
+
+      begin
+         while Idx <= Natural (Ops.Length) loop
             declare
-               Left  : constant String := T1 (I);
-               Right : constant String := T2 (I);
-               Sep   : constant String := (if Is_Equal (Left, Right,
-                                                       Case_Insensitive => Case_Insensitive,
-                                                       Ignore_Blanks    => Ignore_Whitespaces)
-                                           then Sep_Same
-                                           elsif Right = "" then Sep_Only_Left
-                                           else Sep_Diff);
+               Op : constant Diff_Op := Ops (Idx);
             begin
-               if Sep = Sep_Same then
+               if Op.Kind = Match then
+                  Last_Match_T1 := Op.I;
+                  Last_Match_T2 := Op.J;
                   if In_Hunk then
                      --  Potential inner or trailing context
-                     Pending_Ctx.Append (Left);
+                     Pending_Ctx.Append (T1 (Op.I));
                      if Natural (Pending_Ctx.Length) > 2 * Context_Lines then
                         --  The gap is too large: the hunk ends here.
                         --  Up to Context_Lines of Pending_Ctx are emitted
@@ -433,29 +646,78 @@ package body Text_Utilities is
                      end if;
                   else
                      --  Potential leading context of the next hunk
-                     Roll_Leading_Buffer (Left);
+                     Roll_Leading_Buffer (T1 (Op.I));
                   end if;
+                  Idx := Idx + 1;
+
                else
-                  Start_Hunk (I);
-                  Exp_Count := @ + 1;
-                  Act_Count := @ + 1;
-                  Hunk_Lines.Append (String'(Pad_To (Left, Sep_Col) & Sep & Right));
+                  --  A run of Delete and Insert operations: the lines
+                  --  present in only one of the texts, that occur at
+                  --  the same place
+                  declare
+                     Left_Lines  : Text := Empty_Text;
+                     Right_Lines : Text := Empty_Text;
+                     First_Left  : Line_Index'Base := 0;
+                     First_Right : Line_Index'Base := 0;
+
+                  begin
+                     while Idx <= Natural (Ops.Length)
+                       and then Ops (Idx).Kind /= Match
+                     loop
+                        declare
+                           Group_Op : constant Diff_Op := Ops (Idx);
+                        begin
+                           if Group_Op.Kind = Delete then
+                              if First_Left = 0 then
+                                 First_Left := Group_Op.I;
+                              end if;
+                              Left_Lines.Append (T1 (Group_Op.I));
+                           else
+                              if First_Right = 0 then
+                                 First_Right := Group_Op.J;
+                              end if;
+                              Right_Lines.Append (T2 (Group_Op.J));
+                           end if;
+                        end;
+                        Idx := Idx + 1;
+                     end loop;
+
+                     --  As sdiff does, the lines only in one text that
+                     --  occur at the same place are paired
+                     Start_Hunk ((if First_Left = 0 then Last_Match_T1
+                                  else First_Left),
+                                 (if First_Right = 0 then Last_Match_T2
+                                  else First_Right));
+                     declare
+                        Pairs : constant Natural := Natural'Min
+                          (Natural (Left_Lines.Length),
+                           Natural (Right_Lines.Length));
+                     begin
+                        for K in 1 .. Pairs loop
+                           Exp_Count := @ + 1;
+                           Act_Count := @ + 1;
+                           Hunk_Lines.Append (String'
+                             (Pad_To (Left_Lines (Line_Index (K)), Sep_Col) &
+                                Sep_Diff & Right_Lines (Line_Index (K))));
+                        end loop;
+                        for K in Pairs + 1 .. Natural (Left_Lines.Length) loop
+                           Exp_Count := @ + 1;
+                           Hunk_Lines.Append (String'
+                             (Pad_To (Left_Lines (Line_Index (K)), Sep_Col) &
+                                Sep_Only_Left));
+                        end loop;
+                        for K in Pairs + 1 .. Natural (Right_Lines.Length) loop
+                           Act_Count := @ + 1;
+                           Hunk_Lines.Append (String'
+                             (Pad_To (" ", Sep_Col) & Sep_Only_Right &
+                                Right_Lines (Line_Index (K))));
+                        end loop;
+                     end;
+                  end;
                end if;
             end;
-
-         elsif I <= T1.Last_Index then
-            -- Only the left text has this line
-            Start_Hunk (I);
-            Exp_Count := @ + 1;
-            Hunk_Lines.Append (String'(Pad_To (T1 (I), Sep_Col) & Sep_Only_Left));
-
-         else
-            -- Only the right text has this line
-            Start_Hunk (I);
-            Act_Count := @ + 1;
-            Hunk_Lines.Append (String'(Pad_To (" ", Sep_Col) & Sep_Only_Right & T2 (I)));
-         end if;
-      end loop;
+         end loop;
+      end;
       Flush_Hunk;
 
       return Result;
