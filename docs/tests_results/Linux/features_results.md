@@ -1946,6 +1946,11 @@
    - OK : then the output is equal to file `../docs/help/tutorial.md`  
    - [X] scenario   [tutorial generation](../../features/B130_Cmd_Line_Help.md) pass  
 
+   ### Scenario: [example generation](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help example`   
+   - OK : then the output is equal to file `../docs/help/example.md`  
+   - [X] scenario   [example generation](../../features/B130_Cmd_Line_Help.md) pass  
+
    ### Scenario: [grammar generation](../../features/B130_Cmd_Line_Help.md): 
    - OK : Given the file `expected_grammar`  
    - OK : When I run `./bbt help grammar`   
@@ -1957,11 +1962,6 @@
    - OK : When I run `./bbt help keywords`   
    - OK : then the output is equal to file `expected_keywords`  
    - [X] scenario   [listing keywords](../../features/B130_Cmd_Line_Help.md) pass  
-
-   ### Scenario: [generated example is OK](../../features/B130_Cmd_Line_Help.md): 
-   - OK : When I run `./bbt help example`   
-   - OK : then the output is equal to file `../docs/help/example.md`  
-   - [X] scenario   [generated example is OK](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt`  

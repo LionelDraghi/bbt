@@ -216,7 +216,7 @@ process. Filed on
    [ada-util#73](https://github.com/stcarrez/ada-util/issues/73),
    implemented by
    [PR ada-util#76](https://github.com/stcarrez/ada-util/pull/76)
-   (October 2026, pending review).
+   (October 2026, taken into account upstream).
    Stored in the `Process` record like `Set_Allocate_TTY`, and
    applied by the OS layer after the pseudo terminal opening. It
    would remove the bbt `BBT.Terminal` package and its C wrapper
@@ -229,7 +229,7 @@ process. Filed on
    [ada-util#74](https://github.com/stcarrez/ada-util/issues/74),
    implemented by
    [PR ada-util#75](https://github.com/stcarrez/ada-util/pull/75)
-   (October 2026, pending review).
+   (October 2026, taken into account upstream).
    `Wait (Proc, Timeout)` exposed and honored
    (the OS layer already takes a `Timeout` parameter, ignored on
    Unix and not visible in the public API), or a reaping
@@ -237,6 +237,11 @@ process. Filed on
    true for a terminated but not waited process; it would let bbt
    check the command liveness directly, instead of inferring the
    termination from the output streams end of file.
+
+The proposals are now integrated upstream: what remains is the
+release of the next utilada version, and its publication in Alire,
+so that bbt can raise its `utilada` constraint and use the
+functions.
 
 Candidate designs, to be arbitrated. The guiding design principle is to
 keep a single process library in bbt: a double dependency, with two

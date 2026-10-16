@@ -38,8 +38,10 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   to the library: `Wait_Event` (the missing event model, that would
   also make the Windows pump port trivial), `Set_Terminal_Size`,
   and a non blocking termination check. Filed on stcarrez/ada-util
-  as #72, #73 and #74; #74 is implemented by PR #75 and #73 by
-  PR #76, both pending review.  
+  as #72, #73 and #74; the PRs #75 and #76 were taken into account
+  upstream and closed. What remains is the release of the next
+  utilada version and its publication in Alire, so that bbt can
+  raise its `utilada` constraint and use the functions.  
   cf. [pty](../proposed_features/pty.md)
 
 ### Low priority

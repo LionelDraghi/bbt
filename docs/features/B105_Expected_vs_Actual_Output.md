@@ -138,7 +138,7 @@ scen2.md:16: Error: input.2 not equal to expected
 
 The expected and actual texts are aligned before displaying the
 differences, as `diff` or `git diff` do
-(cf. [LCS_diff_alignment.md](../proposed_features/LCS_diff_alignment.md)):
+(cf. the [design discussion D10](../dev/design_discussions.md#d10-diff-display-alignment)):
 a line inserted in the actual text is reported as an insertion, and must
 not turn the following lines into changed pairs.
 

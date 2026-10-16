@@ -3,7 +3,6 @@ Fixme in current version
 
 Location | Text
 ---------|-----
-[docs/features/B130_Cmd_Line_Help.md](../../docs/features/B130_Cmd_Line_Help.md):175| but I don't know how to test it!
 [src/bbt-cmd_line.adb](../../src/bbt-cmd_line.adb):206|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-io.adb](../../src/bbt-io.adb):9|--   this with inverts the dependency direction: the base output
 [src/bbt-model-documents.adb](../../src/bbt-model-documents.adb):211|      --  to be replaced with a Reduce?

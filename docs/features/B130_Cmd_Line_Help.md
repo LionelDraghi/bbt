@@ -45,6 +45,12 @@ _Table of Contents:_
 - When I run `./bbt help tutorial` 
 - then the output is equal to file `../docs/help/tutorial.md`
 
+
+## Scenario: example generation
+
+- When I run `./bbt help example` 
+- then the output is equal to file `../docs/help/example.md`
+ 
 ## Scenario: grammar generation
 - Given the file `expected_grammar`
 ~~~
@@ -169,10 +175,3 @@ _Table of Contents:_
 - When I run `./bbt help keywords` 
 - then the output is equal to file `expected_keywords`
 
-## Scenario: generated example is OK
-
-Testing that the generated example works is the bare minimum  
-Fixme: but I don't know how to test it!
-
-- When I run `./bbt help example` 
-- then the output is equal to file `../docs/help/example.md`
