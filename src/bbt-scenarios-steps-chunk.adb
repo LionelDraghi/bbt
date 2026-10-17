@@ -32,6 +32,8 @@ package body Chunk is
         or else (Current_Verb = Contains and V = Does_Not_Contain)
         or else (Current_Verb = Matches  and V = Does_Not_Match)
         or else (Current_Verb = Is_V     and V = Is_No)
+        or else (Current_Verb = Run      and V = Run_Shell)
+        or else (Current_Verb = Successful_Run and V = Successful_Run_Shell)
       then
          -- Setting a verb for the first time, or changing it
          -- to the negative form is OK.

@@ -37,6 +37,8 @@ package BBT.Model.Steps is
                     Run_Cmd,
                     Run_Without_Error,
                     Run_With_Error,
+                    Run_Shell_Cmd,
+                    Run_Shell_Without_Error,
                     -- Interactive input actions
                     Type_Text,
                     Enter_Text,

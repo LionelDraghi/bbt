@@ -204,10 +204,11 @@ All the available steps, classified by what they set up, run or check:
     - When `grep pattern missing_file.txt` fails
     - When I run `grep pattern file1.txt` or `grep pattern file2.txt`
       (the scenario is run once per command of the or list)
-    - When I successfully run `sh -c "cut -f1 list.txt | sort > sorted.txt"`
+    - When I successfully run shell `cut -f1 list.txt | sort > sorted.txt`
       (commands are not run through a shell: to get pipes, redirections
-      or command substitutions interpreted, an explicit shell is
-      required, and its command must be quoted)
+      or command substitutions interpreted, a "run shell" step passes
+      the whole command to a shell; the shell is chosen with the
+      --shell option or the BBT_SHELL environment variable)
 
 **Interacting with a running command**  
 

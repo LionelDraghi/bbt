@@ -245,8 +245,8 @@ package body BBT.Tests.Builder is
                   IO.Put_Warning ("the command contains a shell metacharacter ('"
                                   & Cmd (I) & "'), but commands are not run "
                                   & "through a shell: quote it to pass it as "
-                                  & "a literal argument, or run a shell, "
-                                  & "e.g. `sh -c 'cmd1 | cmd2'`", Loc);
+                                  & "a literal argument, or use a ""run "
+                                  & "shell"" step", Loc);
                   return;
                end if;
             end loop;

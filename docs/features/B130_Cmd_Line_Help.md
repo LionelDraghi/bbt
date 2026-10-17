@@ -58,6 +58,9 @@ _Table of Contents:_
 |-------|---------|--------|------------------|--------|-------------------------|---------------------|-------------|  
 | Given |         |        | run              | `text`            | RUN_CMD                 |            | - Given I run `cmd` |  
 | Given |         |        | successfully run | `text`            | RUN_WITHOUT_ERROR       |            | - Given I successfully run `cmd` |  
+| Given |         |        | run shell            | `text`            | RUN_SHELL_CMD           |            | - Given I run shell `cmd1 | cmd2 > out` |  
+| Given |         |        | successfully run shell
+                                                  | `text`            | RUN_SHELL_WITHOUT_ERROR |            | - Given I successfully run shell `cmd1 | cmd2 > out` |  
 | Given |         |        | is               | `file`            | CHECK_FILE_EXISTENCE    |            | - Given there is a `config.ini` file |  
 | Given |         |        | is               | `dir`             | CHECK_DIR_EXISTENCE     |            | - Given there is a `dir1` directory |  
 | Given |         |        | is no            | `file`            | SETUP_NO_FILE           |            | - Given there is no `config.ini` file |  
@@ -77,9 +80,14 @@ _Table of Contents:_
 | When  |         |        | run              | `cmd` [or `cmd`]* | RUN_CMD                 |            | - When I run `cmd` or `cmd2` or `cmd3` |  
 | When  |         |        | successfully run | `text`            | RUN_WITHOUT_ERROR       |            | - When I successfully run `cmd` |  
 | When  |         |        | successfully run | `cmd` [or `cmd`]* | RUN_WITHOUT_ERROR       |            | - When I successfully run `cmd` or `cmd2` or `cmd3` |  
+| When  |         |        | run shell            | `text`            | RUN_SHELL_CMD           |            | - When I run shell `cmd1 | cmd2 > out` |  
+| When  |         |        | successfully run shell
+                                                  | `text`            | RUN_SHELL_WITHOUT_ERROR |            | - When I successfully run shell `cmd1 | cmd2 > out` |  
 | When  |         |        | type             | `text`            | TYPE_TEXT               |            | - When I type `Y` |  
 | When  |         |        | enter            | `text`            | ENTER_TEXT              |            | - When I enter `Y` |  
 | Then  |         |        | successfully run | `text`            | RUN_WITHOUT_ERROR       |            | - Then I successfully run `cmd` |  
+| Then  |         |        | successfully run shell
+                                                  | `text`            | RUN_SHELL_WITHOUT_ERROR |            | - Then I successfully run shell `cmd1 | cmd2 > out` |  
 | Then  |         |        | get              |                   | OUTPUT_IS               |     X      | - Then I get <followed by code fenced lines> |  
 | Then  |         |        | get              | `file`            | OUTPUT_IS               |            | - Then I get file `flowers2.txt` |  
 | Then  |         |        | get              | `text`            | OUTPUT_IS               |            | - Then I get `msg` |  
@@ -143,6 +151,7 @@ _Table of Contents:_
 - but
 - run
 - running
+- shell
 - type
 - enter
 - fail

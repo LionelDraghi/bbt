@@ -13,7 +13,9 @@ with BBT.IO,
      BBT.Writers;
 
 with Ada.Command_Line,
-     Ada.Directories;
+     Ada.Directories,
+     Ada.Environment_Variables,
+     Ada.Strings.Fixed;
 
 use BBT.Scenarios,
     BBT.Scenarios.Files,
@@ -83,6 +85,28 @@ package body BBT.Cmd_Line is
    end Dash_To_Underscore;
 
    -- --------------------------------------------------------------------------
+   function Shell_List_Image (From : Settings.Shell_Kind :=
+                                 Settings.Shell_Kind'First)
+                               return String is
+   -- The list of the valid --shell values, e.g. "sh, bash, ..."
+     (Settings.Shell_Name (From)
+      & (if From = Settings.Shell_Kind'Last then ""
+         else ", " & Shell_List_Image (Settings.Shell_Kind'Succ (From))));
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Shell_Option (Value : String) is
+   -- Common processing of the --shell option value and of the BBT_SHELL
+   -- environment variable
+      OK : Boolean;
+   begin
+      Settings.Set_Shell (Value, OK);
+      if not OK then
+         IO.Put_Error ("invalid shell """ & Value
+                       & """, expecting one of " & Shell_List_Image);
+      end if;
+   end Set_Shell_Option;
+
+   -- --------------------------------------------------------------------------
    procedure Set_Cmd (C : Settings.Command) is
    begin
       if Current_Command = None then
@@ -116,6 +140,12 @@ package body BBT.Cmd_Line is
          -- But if the command line is populated, and no command given,
          -- then the default command is Run.
          return;
+      end if;
+
+      -- The BBT_SHELL environment variable overrides the default shell;
+      -- the --shell option will in turn override it
+      if Ada.Environment_Variables.Exists ("BBT_SHELL") then
+         Set_Shell_Option (Ada.Environment_Variables.Value ("BBT_SHELL"));
       end if;
 
       Opt_Analysis_Loop : while More_Args loop
@@ -244,6 +274,18 @@ package body BBT.Cmd_Line is
                else
                   Go_Next_Arg;
                   Settings.Set_Tmp_Dir (Current_Arg);
+               end if;
+
+            elsif Ada.Strings.Fixed.Index (Cmd, "--shell=") = 1 then
+               Set_Shell_Option
+                 (Cmd (Ada.Strings.Fixed.Index (Cmd, "=") + 1 .. Cmd'Last));
+
+            elsif Cmd = "--shell" then
+               if On_Last_Arg then
+                  IO.Put_Error (Cmd & " must be followed by a shell name");
+               else
+                  Go_Next_Arg;
+                  Set_Shell_Option (Current_Arg);
                end if;
 
             elsif Cmd = "-r" or Cmd = "--recursive" then

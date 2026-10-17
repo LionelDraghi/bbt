@@ -71,6 +71,39 @@ private package BBT.Settings is
    -- except those provided with --select or --include.
 
    -- --------------------------------------------------------------------------
+   type Shell_Kind is (Sh, Bash, Dash, Zsh, Fish, Cmd, Powershell, Pwsh);
+   -- Shells a shell step may run the command string through
+   -- (cf. docs/features/A310_Run_Shell.md)
+
+   function Shell return Shell_Kind;
+   -- The shell selected by the --shell option or the BBT_SHELL
+   -- environment variable, defaulting to Cmd on Windows and Sh
+   -- on the other systems
+
+   procedure Set_Shell (Value : String; OK : out Boolean);
+   -- Set the shell from its name, case-insensitive: "sh", "bash",
+   -- "dash", "zsh", "fish", "cmd", "powershell" or "pwsh". OK is False
+   -- when Value is none of them, and the shell is unchanged.
+
+   function On_Windows return Boolean;
+   -- True when bbt runs on Windows
+
+   function Shell_Name (K : Shell_Kind) return String;
+   -- The lower case name of the shell, as accepted by Set_Shell
+
+   function Shell_Exe (K : Shell_Kind) return String;
+   -- The executable of the shell, resolved through the PATH at run
+   -- time: cmd.exe and powershell.exe are preinstalled on every
+   -- Windows, pwsh is not
+
+   function Shell_Flag (K : Shell_Kind) return String;
+   -- The flag taking the command string as a single argument
+
+   function Shell_Preamble (K : Shell_Kind) return String;
+   -- The preamble injected before the command string to fix the shell
+   -- semantics: without it, a PowerShell `>` redirection re-encodes
+   -- the output as UTF-16
+
    function Stop_On_Error return Boolean is (not Keep_Going);
 
    -- --------------------------------------------------------------------------

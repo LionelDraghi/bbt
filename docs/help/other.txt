@@ -1,5 +1,5 @@
 Other commands:
-  lf | list_files      : list Scenario files found
+  lf | list_files        : list Scenario files found
   he | help grammar      : list possible Steps syntax and associated action
   he | help keywords     : list Step keywords
 
@@ -12,6 +12,11 @@ Other options:
                            for standard output.
   -ed | --exec_dir 'dir' : run command in dir instead of current dir
   -td | --tmp_dir 'dir'  : create .out file in dir instead of current dir
+        --shell 'name'   : shell running the "run shell" steps, among
+                           sh, bash, dash, zsh, fish, cmd, powershell
+                           and pwsh. Defaults to sh on POSIX systems
+                           and cmd.exe on Windows. May also be set
+                           with the BBT_SHELL environment variable.
   -nt | --no_tty         : behave as if the standard output was not
                            a terminal: no status bar, no control
                            sequence in the output

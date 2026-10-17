@@ -64,6 +64,8 @@ begin
 
          when Run              |
               Successful_Run   |
+              Run_Shell        |
+              Successful_Run_Shell |
               Type_Text        |
               Enter_Text       |
               Get              |

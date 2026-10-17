@@ -567,6 +567,37 @@ package body BBT.Tests.Actions.Commands is
    end Dispose_Process;
 
    -- --------------------------------------------------------------------------
+   function Quote_Windows_Arg (S : String) return String is
+   --  Quote S for the Windows command line, per the Microsoft C runtime
+   --  parsing rules: ada-util joins the process arguments with spaces
+   --  without quoting them, so an argument containing a space must be
+   --  quoted here, and its embedded double quotes escaped
+      Result      : Unbounded_String := Null_Unbounded_String;
+      Backslashes : Natural := 0;
+   begin
+      Append (Result, '"');
+      for C of S loop
+         if C = '\' then
+            Backslashes := @ + 1;
+
+         elsif C = '"' then
+            --  A double quote is escaped, preceded by the doubling of
+            --  the backslashes that precede it
+            Append (Result, (1 .. 2 * Backslashes => '\'));
+            Append (Result, "\""");
+            Backslashes := 0;
+
+         else
+            Append (Result, (1 .. Backslashes => '\'));
+            Backslashes := 0;
+            Append (Result, C);
+         end if;
+      end loop;
+      Append (Result, (1 .. Backslashes => '\'));
+      Append (Result, '"');
+      return To_String (Result);
+   end Quote_Windows_Arg;
+
    procedure Run_Cmd (Step                       :     Step_Type'Class;
                       Cmd                        :     String;
                       Output_Name                :     String;
@@ -575,12 +606,12 @@ package body BBT.Tests.Actions.Commands is
                       Spawn_OK                   : out Boolean;
                       Return_Code                : out Integer;
                       Error_Output_Name          :     String := "";
-                      Interactive_Input_Expected :     Boolean := False)
+                      Interactive_Input_Expected :     Boolean := False;
+                      Through_Shell              :     Boolean := False)
    is
       use GNAT.OS_Lib;
       -- Initial_Dir : constant String  := Current_Directory;
-      Spawn_Arg      : constant Argument_List_Access
-        := Argument_String_To_List (Cmd);
+      Spawn_Arg      : Argument_List_Access := null;
       Args           : Util.Strings.Vectors.Vector;
 
    begin
@@ -588,6 +619,10 @@ package body BBT.Tests.Actions.Commands is
                         ", output file = " & Output_Name &
                         (if Interactive_Input_Expected
                          then ", interactive input expected"
+                         else "") &
+                        (if Through_Shell
+                         then ", through " &
+                           Settings.Shell_Name (Settings.Shell)
                          else ""));
 
       --  A previous command should have terminated before this one starts:
@@ -605,67 +640,133 @@ package body BBT.Tests.Actions.Commands is
       --  A new process object is used for each command.
       Dispose_Process;
 
-      -- The first argument should be an executable (e.g. not a bash
-      -- built-in)
-      --
-      -- If it is, replace it by the fully-qualified path name (spawn
-      -- is implemented via execve, which on macOS doesn't
-      -- understand PATH)
-      Find_The_Executable_If_Any :
-      declare
-         Full_Path : GNAT.OS_Lib.String_Access;
-      begin
-         Full_Path := Locate_Exec_On_Path (Spawn_Arg.all (1).all);
-
-         if Exists (Spawn_Arg.all (1).all) and then
-           not Is_Executable_File (Spawn_Arg.all (1).all)
-         then
-            -- IO.Put_Line ("not exec", Verbosity => IO.Normal);
-            Spawn_OK := False;
-            Put_Step_Result
-              (Step      => Step,
-               Success   => Spawn_OK,
-               Fail_Msg  => Spawn_Arg.all (1).all & " not executable",
-               Loc       => Step.Location,
-               Verbosity => Verbosity);
-            return;
-
-         elsif Full_Path = null then
-            -- IO.Put_Line ("not found", Verbosity => IO.Normal);
-            Spawn_OK := False;
-            Put_Step_Result
-              (Step      => Step,
-               Success   => Spawn_OK,
-               Fail_Msg  => Spawn_Arg.all (1).all & " not found",
-               Loc       => Step.Location,
-               Verbosity => Verbosity);
-            return;
-
-         else
-            Put_Debug_Line
-              ("Cmd " & Spawn_Arg.all (1).all & " = " & Full_Path.all);
-            Free (Spawn_Arg.all (1));
-            Spawn_Arg.all (1) := Full_Path;
-
-         end if;
-      end Find_The_Executable_If_Any;
-
-      -- Removes quote on argument
-      for I in 2 .. Spawn_Arg'Last loop
-         -- Put_Debug_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<");
+      if Through_Shell then
+         --  The command string is passed as a single argument to the
+         --  shell set in the settings: it is not split by bbt, and its
+         --  pipes, redirections and command substitutions are
+         --  interpreted by that shell (cf. docs/features/A310_Run_Shell.md)
          declare
-            Tmp : String := Spawn_Arg.all (I).all;
-            I1  : constant Positive := (if Tmp (Tmp'First) = '"' then Tmp'First + 1
-                                        else Tmp'First);
-            I2  : constant Natural := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
-                                       else Tmp'Last);
-            -- ugly and buggy
+            The_Shell : constant Settings.Shell_Kind := Settings.Shell;
+            Full_Path : constant GNAT.OS_Lib.String_Access :=
+              Locate_Exec_On_Path (Settings.Shell_Exe (The_Shell));
          begin
-            Free (Spawn_Arg.all (I));
-            Spawn_Arg.all (I) := new String'(Tmp (I1 .. I2));
+            if Full_Path = null then
+               Spawn_OK := False;
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => Spawn_OK,
+                  Fail_Msg  => Settings.Shell_Exe (The_Shell) & " not found",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               return;
+            end if;
+            Put_Debug_Line
+              ("Shell " & Settings.Shell_Exe (The_Shell)
+               & " = " & Full_Path.all);
+            Args.Append (Full_Path.all);
+            --  The invocation flag may be several arguments, e.g.
+            --  -NoProfile -Command for the PowerShell shells: each is
+            --  appended separately, as ada-util joins the arguments
+            --  without quoting them
+            declare
+               Flag  : constant String := Settings.Shell_Flag (The_Shell);
+               Start : Positive := Flag'First;
+            begin
+               for I in Flag'Range loop
+                  if Flag (I) = ' ' then
+                     Args.Append (Flag (Start .. I - 1));
+                     Start := I + 1;
+                  end if;
+               end loop;
+               Args.Append (Flag (Start .. Flag'Last));
+            end;
+            --  On Windows, the command string must be quoted: ada-util
+            --  joins the arguments with spaces without quoting them,
+            --  and the shell would otherwise receive the command
+            --  truncated at its first space. On the other systems the
+            --  arguments are passed as a real argv array, and the
+            --  command string must be passed verbatim
+            if Settings.On_Windows then
+               Args.Append
+                 (Quote_Windows_Arg
+                    (Settings.Shell_Preamble (The_Shell) & Cmd));
+            else
+               Args.Append (Settings.Shell_Preamble (The_Shell) & Cmd);
+            end if;
          end;
-         -- Put_Debug_Line ("===========" & Spawn_Arg.all (I).all & "<");
-      end loop;
+
+      else
+         -- The first argument should be an executable (e.g. not a bash
+         -- built-in)
+         --
+         -- If it is, replace it by the fully-qualified path name (spawn
+         -- is implemented via execve, which on macOS doesn't
+         -- understand PATH)
+         Spawn_Arg := Argument_String_To_List (Cmd);
+         Find_The_Executable_If_Any :
+         declare
+            Full_Path : GNAT.OS_Lib.String_Access;
+         begin
+            Full_Path := Locate_Exec_On_Path (Spawn_Arg.all (1).all);
+
+            if Exists (Spawn_Arg.all (1).all) and then
+              not Is_Executable_File (Spawn_Arg.all (1).all)
+            then
+               -- IO.Put_Line ("not exec", Verbosity => IO.Normal);
+               Spawn_OK := False;
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => Spawn_OK,
+                  Fail_Msg  => Spawn_Arg.all (1).all & " not executable",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               return;
+
+            elsif Full_Path = null then
+               -- IO.Put_Line ("not found", Verbosity => IO.Normal);
+               Spawn_OK := False;
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => Spawn_OK,
+                  Fail_Msg  => Spawn_Arg.all (1).all & " not found",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               return;
+
+            else
+               Put_Debug_Line
+                 ("Cmd " & Spawn_Arg.all (1).all & " = " & Full_Path.all);
+               Free (Spawn_Arg.all (1));
+               Spawn_Arg.all (1) := Full_Path;
+
+            end if;
+         end Find_The_Executable_If_Any;
+
+         -- Removes quote on argument
+         for I in 2 .. Spawn_Arg'Last loop
+            -- Put_Debug_Line (">>>>>>>>>>" & Spawn_Arg.all (I).all & "<");
+            declare
+               Tmp : String := Spawn_Arg.all (I).all;
+               I1  : constant Positive := (if Tmp (Tmp'First) = '"' then Tmp'First + 1
+                                           else Tmp'First);
+               I2  : constant Natural := (if Tmp (Tmp'Last) = '"' then Tmp'Last - 1
+                                          else Tmp'Last);
+               -- ugly and buggy
+            begin
+               Free (Spawn_Arg.all (I));
+               Spawn_Arg.all (I) := new String'(Tmp (I1 .. I2));
+            end;
+            -- Put_Debug_Line ("===========" & Spawn_Arg.all (I).all & "<");
+         end loop;
+
+         --  The first argument is the command, and the following ones
+         --  are the already split and unquoted arguments: the process
+         --  is created without shell
+         Args.Append (Spawn_Arg.all (1).all);
+         for I in 2 .. Spawn_Arg'Last loop
+            Args.Append (Spawn_Arg.all (I).all);
+         end loop;
+      end if;
 
       --  Truncate the output files, and reset the state.
       --
@@ -717,17 +818,11 @@ package body BBT.Tests.Actions.Commands is
       Input_Bytes        := 0;
       Running            := False;
 
-      --  The first argument is the command, and the following ones are
-      --  the already split and unquoted arguments: the process is
-      --  created without shell
-      Args.Append (Spawn_Arg.all (1).all);
-      for I in 2 .. Spawn_Arg'Last loop
-         Args.Append (Spawn_Arg.all (I).all);
-      end loop;
-
       The_Process := new Util.Processes.Process;
       Set_Shell (The_Process.all, "");
-      --  No /bin/sh, as before: the arguments are split by bbt
+      --  No /bin/sh: the process is spawned directly, either with the
+      --  arguments split by bbt, or with the command string as a single
+      --  argument of the configured shell
       if Interactive_Input_Expected then
          --  The pseudo terminal makes the command prompts visible
          --  before it waits for input, without fflush; the library

@@ -162,6 +162,14 @@ package body BBT.Model.Steps is
         return Prefix_Start & "Run command " & Object_String & Executable
                & " and check that it fails (returns an error)";
 
+      when Run_Shell_Cmd =>
+        return Prefix_Start & "Run command " & Object_String
+               & " in a shell";
+
+      when Run_Shell_Without_Error =>
+        return Prefix_Start & "Run command " & Object_String
+               & " in a shell and check that it does not return an error";
+
       -- Interactive input actions
       when Type_Text =>
         return Prefix_Start & "Type " & Object_String

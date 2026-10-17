@@ -53,14 +53,14 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   commands only.  
   cf. [non_interactive_redirect](../proposed_features/non_interactive_redirect.md)
 
-- run in shell step  
+- run in shell step: implemented (cf.
+  [A310_Run_Shell.md](../features/A310_Run_Shell.md) and the design
+  discussion [D11](design_discussions.md))  
   A dedicated step running the command through a configurable
   shell (`--shell` setting, `BBT_SHELL` override), for the steps
-  that need pipes, redirections or command substitutions; today the
-  author has to spawn the shell explicitly, e.g.
-  `sh -c "cmd1 | cmd2"`. Under discussion on
-  [GitHub discussion #42](https://github.com/LionelDraghi/bbt/discussions/42).  
-  cf. [run_in_shell](../proposed_features/run_in_shell.md)
+  that need pipes, redirections or command substitutions; before it,
+  the author had to spawn the shell explicitly, e.g.
+  `sh -c "cmd1 | cmd2"`.
 
 - append / remove  
   To append / remove text to an existing text file
@@ -106,8 +106,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   and the scope precedence are deferred, as is the diff display
   showing the ignored segments in a distinct color, which pairs with
   the [diff display alignment](design_discussions.md).  
-  cf. [ignore](../proposed_features/ignore.md) and the
-  [ignoring design discussion](design_discussions.md)
+  cf. the [ignoring design discussion](design_discussions.md)
 
 - Table input (In gherkin : `Scenario Outlines` / `Examples` https://cucumber.io/docs/gherkin/reference/)
 May imply to switch to Max Reznik's more sophisticated MarkDown parser...

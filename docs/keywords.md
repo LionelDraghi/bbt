@@ -5,6 +5,7 @@
 - but
 - run
 - running
+- shell
 - type
 - enter
 - fail

@@ -35,6 +35,7 @@ begin
    Put_Line ("   bbt files             : " & One_Line_Image (Document_List));
    Put_Line ("   Initial directory     : " & Launch_Directory);
    Put_Line ("   Exec    directory     : " & Settings.Exec_Dir);
+   Put_Line ("   Shell for shell steps : " & Settings.Shell_Name (Settings.Shell));
    Put_Line ("   Output file directory : " & Settings.Output_File_Dir);
    Put_Line ("   Index directory       : " & Index_Dir);
    Put_Line ("   Index file            : " & Index_File_Name);

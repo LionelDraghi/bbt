@@ -52,6 +52,8 @@ package body BBT.Scenarios.Steps is
                     No_Verb,
                     Run,
                     Successful_Run,
+                    Run_Shell,
+                    Successful_Run_Shell,
                     Get,
                     Get_No,
                     Does_Not_Contain,

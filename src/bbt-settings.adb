@@ -6,6 +6,10 @@
 -- -----------------------------------------------------------------------------
 
 with Ada.Directories;
+with Ada.Strings.Fixed;
+with Ada.Strings.Maps.Constants;
+
+with GNAT.OS_Lib;
 
 package body BBT.Settings is
 
@@ -35,6 +39,77 @@ package body BBT.Settings is
    --             File (File'First .. File'First - 1 + Compared_Length)
    --             = Dir (Dir'First .. Dir'First  - 1 + Compared_Length));
    --  end Is_File_In;
+
+   -- --------------------------------------------------------------------------
+   --  Shells a shell step may run the command string through
+   --  (cf. docs/features/A310_Run_Shell.md): the default is cmd.exe on
+   --  Windows, whose redirections have the POSIX semantics, and sh
+   --  on the other systems
+   function Shell_Name (K : Shell_Kind) return String is
+     (case K is
+         when Sh         => "sh",
+         when Bash       => "bash",
+         when Dash       => "dash",
+         when Zsh        => "zsh",
+         when Fish       => "fish",
+         when Cmd        => "cmd",
+         when Powershell => "powershell",
+         when Pwsh       => "pwsh");
+
+   The_Shell : Shell_Kind :=
+     (if GNAT.OS_Lib.Directory_Separator = '\' then Cmd else Sh);
+
+   function Shell return Shell_Kind is (The_Shell);
+
+   procedure Set_Shell (Value : String; OK : out Boolean) is
+      use Ada.Strings.Fixed, Ada.Strings.Maps.Constants;
+      Lower : constant String :=
+        Translate (Trim (Value, Ada.Strings.Both), Lower_Case_Map);
+   begin
+      OK := False;
+      for K in Shell_Kind loop
+         if Lower = Shell_Name (K) then
+            The_Shell := K;
+            OK := True;
+            exit;
+         end if;
+      end loop;
+   end Set_Shell;
+
+   function On_Windows return Boolean is
+     (GNAT.OS_Lib.Directory_Separator = '\');
+
+   function Shell_Exe (K : Shell_Kind) return String is
+     (case K is
+         when Sh         => "sh",
+         when Bash       => "bash",
+         when Dash       => "dash",
+         when Zsh        => "zsh",
+         when Fish       => "fish",
+         when Cmd        => (if On_Windows then "cmd.exe" else "cmd"),
+         when Powershell => (if On_Windows then "powershell.exe"
+                             else "powershell"),
+         when Pwsh       => (if On_Windows then "pwsh.exe" else "pwsh"));
+
+   function Shell_Flag (K : Shell_Kind) return String is
+   --  The flags taking the command string as a single argument. The
+   --  PowerShell shells need two flags, -NoProfile -Command: a user
+   --  profile could otherwise change the location or the encoding
+   --  defaults at each command run. The flags are appended by
+   --  Run_Cmd as one argument each, ada-util joining the arguments
+   --  without quoting them
+     (case K is
+         when Sh | Bash | Dash | Zsh | Fish => "-c",
+         when Cmd                           => "/c",
+         when Powershell | Pwsh             => "-NoProfile -Command");
+
+   function Shell_Preamble (K : Shell_Kind) return String is
+   --  Note: the preamble restores UTF-8 with a BOM only, in Windows
+   --  PowerShell 5.1 (`utf8NoBOM` only exists from PowerShell 7)
+     (case K is
+         when Powershell | Pwsh =>
+           "$PSDefaultParameterValues['Out-File:Encoding']='utf8'; ",
+         when others => "");
 
    -- --------------------------------------------------------------------------
    function Launch_Directory return String

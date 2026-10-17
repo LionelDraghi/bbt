@@ -223,7 +223,7 @@ package body BBT.Tests.Runner is
       end if;
 
       case Step.Data.Action is
-         when Run_Cmd =>
+         when Run_Cmd | Run_Shell_Cmd =>
             Created_File_List.Add (Output);
             if Error_Output_Name /= "" then
                Created_File_List.Add (Error_Output);
@@ -236,10 +236,11 @@ package body BBT.Tests.Runner is
                      Spawn_OK                   => Spawn_OK,
                      Return_Code                => Return_Code,
                      Error_Output_Name          => Error_Output_Name,
-                     Interactive_Input_Expected => Interactive_Scenario);
+                     Interactive_Input_Expected => Interactive_Scenario,
+                     Through_Shell              => Step.Data.Action = Run_Shell_Cmd);
             Run_Error := not (Spawn_OK);
 
-         when Run_Without_Error =>
+         when Run_Without_Error | Run_Shell_Without_Error =>
             Created_File_List.Add (Output);
             if Error_Output_Name /= "" then
                Created_File_List.Add (Error_Output);
@@ -252,7 +253,9 @@ package body BBT.Tests.Runner is
                      Spawn_OK                   => Spawn_OK,
                      Return_Code                => Return_Code,
                      Error_Output_Name          => Error_Output_Name,
-                     Interactive_Input_Expected => Interactive_Scenario);
+                     Interactive_Input_Expected => Interactive_Scenario,
+                     Through_Shell              =>
+                       Step.Data.Action = Run_Shell_Without_Error);
             Run_Error := not (Spawn_OK);
 
          when Run_With_Error =>

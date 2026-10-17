@@ -28,6 +28,17 @@ begin
          Set_Verb (Run, Loc);
       end if;
 
+   elsif Lower_Keyword = "shell" then
+      -- When I run shell `cmd1 | cmd2`
+      -- The preposition that could precede "shell" is decoration:
+      -- the keywords are "run" and "shell"
+      if Verb = Run then
+         Set_Verb (Run_Shell, Loc);
+
+      elsif Verb = Successful_Run then
+         Set_Verb (Successful_Run_Shell, Loc);
+      end if;
+
    elsif Lower_Keyword = "type" then
       -- When I type `Y`
       Set_Verb (Type_Text, Loc);

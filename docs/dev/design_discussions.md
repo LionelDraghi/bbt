@@ -11,6 +11,7 @@
 - [D8. Status bar default and --no\_tty](#d8-status-bar-default-and---no_tty)
 - [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment)
 - [D10. Diff display alignment](#d10-diff-display-alignment)
+- [D11. Run shell step](#d11-run-shell-step)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -25,8 +26,9 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
 | [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
-| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md), [ignore.md](../proposed_features/ignore.md) |
+| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md) |
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
@@ -659,11 +661,10 @@ References:
 Status: arbitrated (October 2026), first increment implemented
 
 Time tags and machine dependent paths frequently break comparisons on
-parts the scenario does not target. The comparison steps will accept an
+parts the scenario does not target. The comparison steps accept an
 ignoring clause, `(ignoring time)`, `(ignoring dir, time)`, that masks
 the volatile parts on both sides before comparing
-(cf. [ignore.md](../proposed_features/ignore.md) for the problem
-statement and the full design). Decisions:
+(cf. [A300_Ignoring.md](../features/A300_Ignoring.md)). Decisions:
 
 - the step clause keyword is the participle `ignoring`: it reads as a
   modifier of the comparison ("the output is X, ignoring time"), is
@@ -673,7 +674,17 @@ statement and the full design). Decisions:
   bare instruction to the tool, outside the sentence;
 - the future wider scope step keeps the imperative, with the subject
   "I" that makes it a plain declarative sentence:
-  `Given I ignore time and dir in the following steps`;
+  `Given I ignore time and dir in the following steps`. The doctrinal
+  objection — a `Given` tunes the checker, not the system under
+  test — does not hold in bbt: it is deliberately not BDD Gherkin
+  (cf. [B050](../features/B050_Strict_gherkin.md)), and its `Given`
+  steps already arrange the test bench rather than the software
+  under test (`Given the new file`, `Given the environment
+  variable`). The real risk is scope leakage: a Background `Given`
+  silently weakens every comparison of the document, invisible to
+  the reader of a single scenario — mitigated by keeping the step
+  clause for local cases, and by the warning when a pattern matches
+  nothing on the actual side;
 - the step clause increments are the `time`, `dir`, `version`,
   `<regexp>`, `order`, `casing`, `whitespaces` and `blank_lines`
   patterns, specified in
@@ -713,8 +724,6 @@ References:
 
 - the specification and the scenarios:
   [A300_Ignoring.md](../features/A300_Ignoring.md);
-- the problem statement and the open questions:
-  [ignore.md](../proposed_features/ignore.md);
 - the laxity settings precedent:
   [issue #18](https://github.com/LionelDraghi/bbt/issues/18);
 - the owner arbitration of October 2026.
@@ -756,9 +765,120 @@ change). Decisions:
 The former proposal docs/proposed_features/LCS_diff_alignment.md is
 removed once implemented, as timeouts.md was (cf. D6).
 
+Follow-ups left open:
+
+- on a color terminal, the differing characters could be highlighted
+  inside a differing line pair, instead of the whole line: a one
+  character difference in a long line is hard to see otherwise. The
+  alignment identifies the differing line pairs, an intra-line
+  comparison would identify the differing characters inside a pair;
+  this pairs with the deferred colored display of the ignored
+  segments (cf. D9).
+
 References:
 
 - the specification and the scenarios:
   [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md);
 - the implementation: `Text_Utilities.Align` and `Side_By_Side`
   (src/text_utilities.ads, src/text_utilities.adb).
+
+## D11. Run shell step
+
+Status: arbitrated (October 2026), implemented
+
+Context: bbt spawns the commands directly (cf.
+[B110_Spawn.md](../features/B110_Spawn.md)), so a step needing pipes,
+redirections or command substitutions had to spawn the shell
+explicitly in the command, as in the workaround of
+[B115_Warning_On_Shell_Metacharacters.md](../features/B115_Warning_On_Shell_Metacharacters.md):
+verbose, with the shell-level quoting embedded in the Markdown code
+span (double-escaping patterns such as `cut -d'\"'`), and an implicit
+shell, that bbt could not check the command against.
+
+Decision:
+
+- the `run shell` and `successfully run shell` steps pass the whole
+  command string as a single argument to a shell, without splitting
+  it, so that pipes, redirections and command substitutions are
+  interpreted by that shell (cf.
+  [A310_Run_Shell.md](../features/A310_Run_Shell.md));
+- the step keywords are `run` and `shell`: a preposition such as
+  `in` would be pure decoration;
+- the shell is selected with the `--shell` option or the `BBT_SHELL`
+  environment variable, as an enum (`sh`, `bash`, `dash`, `zsh`,
+  `fish`, `cmd`, `powershell`, `pwsh`), resolved through the PATH;
+  each value defines the invocation flag and an optional preamble
+  fixing the shell semantics (a PowerShell preamble setting
+  `Out-File -Encoding utf8`, as a PowerShell `>` redirection
+  re-encodes the output as UTF-16); the flags are `-c` for the
+  POSIX shells, `/c` for `cmd`, `-NoProfile -Command` for the
+  PowerShell ones;
+- the defaults are `sh` on POSIX systems and `cmd.exe` on Windows;
+  the availability facts:
+  - `cmd.exe` is on every Windows since ever, with an instant
+    startup, but a syntax far from POSIX sh (no single quotes,
+    `%VAR%` expanded even inside double quotes, `^` escape) and
+    its own `cmd /c` quoting-stripping rules; it is the only
+    Windows shell whose redirections have the POSIX semantics,
+    hence the default;
+  - `powershell.exe` (Windows PowerShell 5.1) is preinstalled on
+    every Windows since Windows 7 / Server 2008 R2, but no longer
+    actively developed, its `>` redirection re-encodes the output
+    as UTF-16 in 5.1, and its startup is significantly slower than
+    `cmd.exe`;
+  - `pwsh` (PowerShell 7+) is modern and cross-platform, but not
+    preinstalled on client Windows nor on Windows Server up to
+    2022 (side-by-side install via winget, MSI or the Store;
+    Windows Server 2025 ships with PowerShell 7 inbox): it cannot
+    be a default, only a `--shell=pwsh` explicit choice;
+  - the PowerShell shells remain available through the enum,
+    closer to the POSIX sh syntax (single and double quotes, `|`,
+    `>`, `$(...)`), at the price of the `-Command` quoting rules
+    and of the preamble limits above.
+
+Rejected alternatives:
+
+- a shell explicit in the step text (`run in pwsh`, `run in bash`):
+  the cross-platform need it would address is already covered by the
+  tags mechanism and `--select`, and the shell choice is an
+  execution setting, not scenario content;
+- a free-form `--shell` command line (e.g. `--shell="busybox sh -c"`):
+  the invocation flag and the quoting semantics cannot be derived
+  from a raw string, and the plain `run` step already covers the
+  "spawn whatever I want" need;
+- a user-provided suffix (e.g. `| Out-File ... out`): the redirection
+  target belongs to the author's command string, so it cannot come
+  from a command-line setting; the preamble fixes the encoding
+  without touching the command string;
+- bbt managing the shell alone, with no setting: rejected during the
+  discussion, as bbt needs to know the shell to invoke it correctly
+  (invocation flag, preamble) and the user needs a way to choose one.
+
+Implementation note: on Windows, ada-util joins the process arguments
+with spaces without quoting them, so the command string is quoted at
+spawn time (`Quote_Windows_Arg`), and the invocation flags are
+appended as one argument each. The PowerShell shells are invoked with
+`-NoProfile -Command`: a user profile could otherwise change the
+location or the encoding defaults at each command run.
+
+Follow-ups left open:
+
+- the command string of a shell step is not analyzed against the
+  syntax of the configured shell, the metacharacter sets differing
+  between the shells (`?` is not a wildcard in fish, command
+  substitution is `(...)` instead of backticks or `$(...)`, and
+  there is no escape at all inside fish single quotes);
+- the guarantees on the created files and output files are those of
+  the configured shell: a `powershell` step writes UTF-8 with a BOM
+  in 5.1, contrary to a `sh` or `cmd` step that writes raw bytes.
+
+References:
+
+- the specification and the scenarios:
+  [A310_Run_Shell.md](../features/A310_Run_Shell.md);
+- the discussion and the feedback:
+  [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42);
+- the implementation: `BBT.Settings.Shell_Kind`, `Shell_Exe`,
+  `Shell_Flag`, `Shell_Preamble` (src/bbt-settings.ads,
+  src/bbt-settings.adb), the `Through_Shell` parameter of
+  `Run_Cmd` (src/bbt-tests-actions-commands.adb).

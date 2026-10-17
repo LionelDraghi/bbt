@@ -12,6 +12,7 @@ Use this reference to create, improve, validate, or convert bbt scenarios.
 ## Principles
 
 - One scenario = one behavior. Group related scenarios under a `Feature`, and factor common preconditions into a `Background`.
+- Never compromise the readability of a scenario for a side purpose: `Given` is a precondition, and a scenario must not end with a step such as ``- Given there is no `out.txt` file`` whose only purpose is to erase a file created by an earlier step. Leftover files are a concern of the test harness cleanup, not of the scenario.
 - Do not invent expected results. If the source does not state the expected output, insert a clearly marked placeholder and ask the user to confirm it.
 - Prefer stable checks over volatile values (timestamps, absolute paths, environment-specific versions).
 - Add filtering tags for platform-specific scenarios (e.g. `Windows_Only`, `Unix_Only`); see `bbt help filtering`.

@@ -3,7 +3,7 @@
 
 bbt does not run commands through a shell: pipes (`|`), command substitutions (`$(...)`, backticks), redirections (`>`, `<`), and command sequencing (`&&`, `;`) are passed verbatim as arguments to the command. As a step written with such metacharacters can never behave as its author expects, bbt raises a warning when a run command contains shell metacharacters.  
 Quoting is on the other hand the way to pass a literal metacharacter as an argument when commands are not run through a shell, so no warning is raised for metacharacters inside a quoted part of the command.  
-When the metacharacters must be interpreted, the command can be run through an explicit shell, e.g. `sh -c 'cmd1 | cmd2'`.
+When the metacharacters must be interpreted, the command can be run in a "run shell" step, e.g. `When I run shell `cmd1 | cmd2``.
 
 _Table of Contents:_
 - [Scenario: warning when a command contains a pipe](#scenario-warning-when-a-command-contains-a-pipe)
@@ -23,7 +23,7 @@ _Table of Contents:_
 - When I run `./bbt -c pipe_test.md`
 - Then output is
   ```
-  pipe_test.md:2: Warning: the command contains a shell metacharacter ('|'), but commands are not run through a shell: quote it to pass it as a literal argument, or run a shell, e.g. `sh -c 'cmd1 | cmd2'`
+  pipe_test.md:2: Warning: the command contains a shell metacharacter ('|'), but commands are not run through a shell: quote it to pass it as a literal argument, or use a "run shell" step
 
   # Document: [pipe_test.md](pipe_test.md)
   ### Scenario: [](pipe_test.md):
@@ -38,7 +38,7 @@ _Table of Contents:_
 - When I run `./bbt explain pipe_test.md`
 - Then output is
   ```
-  pipe_test.md:2: Warning: the command contains a shell metacharacter ('|'), but commands are not run through a shell: quote it to pass it as a literal argument, or run a shell, e.g. `sh -c 'cmd1 | cmd2'`
+  pipe_test.md:2: Warning: the command contains a shell metacharacter ('|'), but commands are not run through a shell: quote it to pass it as a literal argument, or use a "run shell" step
 
   Document `pipe_test.md`
 

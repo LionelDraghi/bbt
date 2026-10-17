@@ -49,6 +49,14 @@ is still red: fix the red first, validate after.
 Feature files in `docs/features` are the specification. Follow a TDD-first
 approach when changing a feature or an error-message format.
 
+Never compromise the readability of a scenario for a side purpose. In
+particular, a `Given` step is a precondition: do not end a scenario with
+a step such as ``- Given there is no `out.version.txt` file`` whose only
+purpose is to erase a file created by an earlier step. Files left over by
+the commands belong to the test harness cleanup, not to the scenario: let
+`make clean` remove them, and update the `clean` target if it leaves one
+behind.
+
 Avoid snapshot testing, especially for generated files. Refer to
 `docs/bbt-skill` for the project testing approach.
 

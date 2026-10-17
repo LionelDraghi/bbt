@@ -31,7 +31,8 @@ package BBT.Tests.Actions.Commands is
                       Spawn_OK                   : out Boolean;
                       Return_Code                : out Integer;
                       Error_Output_Name          :     String := "";
-                      Interactive_Input_Expected :     Boolean := False);
+                      Interactive_Input_Expected :     Boolean := False;
+                      Through_Shell              :     Boolean := False);
    -- The command output (standard output and standard error) is written to
    -- Output_Name, unless Error_Output_Name is not empty: then the standard
    -- error is written to Error_Output_Name, and Output_Name receives the
@@ -41,6 +42,10 @@ package BBT.Tests.Actions.Commands is
    -- when Run_Cmd returns. With Interactive_Input_Expected, Run_Cmd only
    -- waits for the command to become quiet, and the following steps send
    -- text to the still running command with Send_Input.
+   -- With Through_Shell, the command string is not split by bbt: it is
+   -- passed as a single argument to the shell set in the settings
+   -- (cf. docs/features/A310_Run_Shell.md), that interprets its pipes,
+   -- redirections and command substitutions.
 
    procedure Send_Input (Step           :     Step_Type'Class;
                          With_Newline   :     Boolean;

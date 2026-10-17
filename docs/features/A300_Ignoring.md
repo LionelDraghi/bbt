@@ -18,8 +18,8 @@ the comparison are volatile:
   ```
 ```
 
-This feature file specifies the step clause increments of the
-[ignoring proposal](../proposed_features/ignore.md): the `time` and `dir`
+This feature file specifies the step clause increments
+(cf. [D9](../dev/design_discussions.md)): the `time` and `dir`
 patterns, then the `version` pattern and the `<regexp>` escape hatch, then
 the `order`, `casing`, `whitespaces` and `blank_lines` settings patterns,
 on the step clause only. The wider scopes (a `Given I ignore ...`
@@ -117,8 +117,7 @@ neutralizes both at once: the location is masked, and the masked prefix
 takes its syntax away with it — a Unix and a Windows print of the same
 place compare equal. A later, more specific pattern — the deferred
 `path syntax` — will do the converse: require the *same* path on both
-sides, and neutralize only the syntax (cf. the
-[ignoring proposal](../proposed_features/ignore.md)).
+sides, and neutralize only the syntax (cf. [D9](../dev/design_discussions.md)).
 
 A run without any separator (`bbt`) is not a path occurrence and is not
 masked.

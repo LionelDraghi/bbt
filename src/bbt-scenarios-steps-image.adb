@@ -26,8 +26,10 @@ begin
       when Subject_Text     => return "`text`";
       when No_Verb          => return "";
       when Run              => return "run";
+      when Run_Shell        => return "run shell";
       when Fail             => return "fail";
       when Successful_Run   => return "successfully run";
+      when Successful_Run_Shell => return "successfully run shell";
       when Get              => return "get";
       when Get_No           => return "get no";
       when Does_Not_Contain => return "does not contain";

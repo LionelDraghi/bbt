@@ -40,12 +40,16 @@ begin
    Set (Given, No_SA,  Dir_Subject,  No_Verb,    No_Object, (Create_If_None, False, new String'("- Given the directory `dir1`")));
    Set (Given, No_SA,  No_Subject,   Run,            Obj_Text, (Run_Cmd,           False, new String'("- Given I run `cmd`")));
    Set (Given, No_SA,  No_Subject,   Successful_Run, Obj_Text, (Run_Without_Error, False, new String'("- Given I successfully run `cmd`")));
+   Set (Given, No_SA,  No_Subject,   Run_Shell,      Obj_Text, (Run_Shell_Cmd,           False, new String'("- Given I run shell `cmd1 | cmd2 > out`")));
+   Set (Given, No_SA,  No_Subject,   Successful_Run_Shell, Obj_Text, (Run_Shell_Without_Error, False, new String'("- Given I successfully run shell `cmd1 | cmd2 > out`")));
    Set (Given, No_SA,  Subject_Text, Fail,       No_Object,    (Run_With_Error,    False, new String'("- Given `xmllint mismatched_tag.xml` fails")));
    Set (Given, No_SA,  Env_Var_Subj, Is_V,       Obj_Text,     (Set_Env_Var,       False, new String'("- Given the environment variable `LANG` is `C`")));
    Set (Given, No_SA,  Env_Var_Subj, Is_No,      No_Object,    (Unset_Env_Var,     False, new String'("- Given the environment variable `NO_COLOR` is not set")));
 
    Set (When_P, No_SA, No_Subject, Run,            Obj_Text,     (Run_Cmd,           False, new String'("- When I run `cmd`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Obj_Text,     (Run_Without_Error, False, new String'("- When I successfully run `cmd`")));
+   Set (When_P, No_SA, No_Subject, Run_Shell,      Obj_Text,     (Run_Shell_Cmd,           False, new String'("- When I run shell `cmd1 | cmd2 > out`")));
+   Set (When_P, No_SA, No_Subject, Successful_Run_Shell, Obj_Text, (Run_Shell_Without_Error, False, new String'("- When I successfully run shell `cmd1 | cmd2 > out`")));
    Set (When_P, No_SA, No_Subject, Run,            Command_List, (Run_Cmd,           False, new String'("- When I run `cmd` or `cmd2` or `cmd3`")));
    Set (When_P, No_SA, No_Subject, Successful_Run, Command_List, (Run_Without_Error, False, new String'("- When I successfully run `cmd` or `cmd2` or `cmd3`")));
    Set (When_P, No_SA, No_Subject, Type_Text,      Obj_Text,     (Type_Text,         False, new String'("- When I type `Y`")));
@@ -100,5 +104,6 @@ begin
    Set (Then_P, No_SA, No_Subject,   Get_No,   Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Is_No,    Output_Obj, (No_Output, False, new String'("- Then there is no output")));
    Set (Then_P, No_SA, No_Subject,   Successful_Run, Obj_Text,  (Run_Without_Error, False, new String'("- Then I successfully run `cmd`")));
+   Set (Then_P, No_SA, No_Subject,   Successful_Run_Shell, Obj_Text, (Run_Shell_Without_Error, False, new String'("- Then I successfully run shell `cmd1 | cmd2 > out`")));
    Set (Then_P, No_SA, Subject_Text, Fail,           No_Object, (Run_With_Error,    False, new String'("- Then `xmllint mismatched_tag.xml` fails")));
 end Initialize_Grammar;
