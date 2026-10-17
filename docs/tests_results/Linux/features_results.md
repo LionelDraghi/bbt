@@ -1350,6 +1350,86 @@
    - [X] scenario   [an illegal regexp in the clause is an error](../../features/A300_Ignoring.md) pass  
 
 
+# Document: [A310_Run_Shell.md](../../features/A310_Run_Shell.md)  
+  ## Feature: run shell  
+   ### Scenario: [successfully run shell](../../features/A310_Run_Shell.md): 
+   - OK : When I successfully run shell `echo Hello`  
+   - OK : Then I get no error  
+   - OK : And the output contains `Hello`  
+   - [X] scenario   [successfully run shell](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [shell redirections are interpreted by the shell](../../features/A310_Run_Shell.md): 
+   - OK : Given there is no `hello.txt` file  
+   - OK : When I successfully run shell `echo Hello > hello.txt`  
+   - OK : Then the file `hello.txt` contains `Hello`  
+   - [X] scenario   [shell redirections are interpreted by the shell](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [shell pipes are interpreted by the shell (Unix_Only)](../../features/A310_Run_Shell.md): 
+   - OK : When I run shell `./sut -v | grep sut`  
+   - OK : Then I get no error  
+   - OK : And the output contains `sut`  
+   - [X] scenario   [shell pipes are interpreted by the shell (Unix_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the exit code is the shell command one (Unix_Only)](../../features/A310_Run_Shell.md): 
+   - OK : When I run shell `./sut delay 1 2`  
+   - OK : Then the exit code is `2`  
+   - [X] scenario   [the exit code is the shell command one (Unix_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [no warning on shell metacharacters in a shell step](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt explain shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output does not contain `Warning`  
+   - OK : And the output contains `in a shell`  
+   - [X] scenario   [no warning on shell metacharacters in a shell step](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [invalid shell on the command line](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=xyzabc -c shell_test.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `invalid shell "xyzabc"`  
+   - [X] scenario   [invalid shell on the command line](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the shell is set on the command line (Unix_Only)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=bash -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the shell is set on the command line (Unix_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt -c shell_test.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `**Fail**`  
+   - OK : Given the environment variable `BBT_SHELL` is `bash`  
+   - OK : When I run `./bbt -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the sh shell is set on the command line (Unix_Only)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=sh -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the sh shell is set on the command line (Unix_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the dash shell is set on the command line (Unix_Only) (needs_dash)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=dash -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the dash shell is set on the command line (Unix_Only) (needs_dash)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=pwsh -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../features/B010_Deleting_created_files.md): 
@@ -2476,12 +2556,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 253 scenarios OK
+## Summary : **Success**, 264 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 253   |
+| Successful | 264   |
 | Empty      | 0     |
-| Not Run    | 1     |
+| Not Run    | 6     |
 
