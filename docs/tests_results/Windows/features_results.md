@@ -54,21 +54,49 @@
    - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
    - OK : Given the new `replace_confirm.md` file  
    - OK : When I run `./bbt -q --no_tty replace_confirm.md`  
-   - OK : Then the output is  
-   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - **NOK** : Then the output is (..\docs\features\a005_given.md:137:)  
+..\docs\features\a005_given.md:137: Error: Output not equal to expected:
+   - **NOK** : When I type `Y` (..\docs\features\a005_given.md:141:)  
+..\docs\features\a005_given.md:141: Error: no command is running when reaching this step
+   - **NOK** : Then the output contains `## Summary : **Success**, 1 scenarios OK` (..\docs\features\a005_given.md:142:)  
+..\docs\features\a005_given.md:142: Error: Output:  
+~~~
+Error: cannot prompt for confirmation on a non interactive stdin, use --yes to confirm all operations  
+   - **NOK** : Given the file `config.ini` containing `Tmp_dir=/tmp` (replace_confirm.md:3:)    
+replace_confirm.md:3: Error: file "config.ini" not overwritten  
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 0     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+## Summary : **Success**, 1 scenarios OK
+~~~
+
    - OK : And there is a `config.ini` file  
-   - OK : Then I get no error  
-   - [X] scenario   [Replacing confirmed by a typed key](../../features/A005_Given.md) pass  
+   - **NOK** : Then I get no error (..\docs\features\a005_given.md:144:)  
+..\docs\features\a005_given.md:144: Error: No error expected, but got one ( 1)
+   - [ ] scenario   [Replacing confirmed by a typed key](../../features/A005_Given.md) **fails**  
 
    ### Scenario: [Replacing refused by a typed key](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
    - OK : Given the new `replace_refuse.md` file  
    - OK : When I run `./bbt -q --no_tty replace_refuse.md`  
-   - OK : Then the output is  
+   - **NOK** : Then the output is (..\docs\features\a005_given.md:161:)  
+..\docs\features\a005_given.md:161: Error: Output not equal to expected:
+   - **NOK** : When I type `n` (..\docs\features\a005_given.md:165:)  
+..\docs\features\a005_given.md:165: Error: no command is running when reaching this step
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not overwritten`  
    - OK : And there is a `config.ini` file  
-   - [X] scenario   [Replacing refused by a typed key](../../features/A005_Given.md) pass  
+   - [ ] scenario   [Replacing refused by a typed key](../../features/A005_Given.md) **fails**  
 
    ### Scenario: [The current match mode drives the comparison](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
@@ -76,10 +104,13 @@
    - OK : When I run `./bbt -q match_mode.md`  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
    - OK : When I run `./bbt -q --no_tty --exact_match match_mode.md`  
-   - OK : Then the output is  
+   - **NOK** : Then the output is (..\docs\features\a005_given.md:190:)  
+..\docs\features\a005_given.md:190: Error: Output not equal to expected:
+   - **NOK** : When I type `n` (..\docs\features\a005_given.md:194:)  
+..\docs\features\a005_given.md:194: Error: no command is running when reaching this step
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not overwritten`  
-   - [X] scenario   [The current match mode drives the comparison](../../features/A005_Given.md) pass  
+   - [ ] scenario   [The current match mode drives the comparison](../../features/A005_Given.md) **fails**  
 
 
 # Document: [A006_Given_Executable_File.md](../../features/A006_Given_Executable_File.md)  
@@ -1463,64 +1494,157 @@
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
    - OK : Given the new `erase_confirm.md` file  
    - OK : When I run `./bbt -q --no_tty -c erase_confirm.md`  
-   - OK : Then the output is  
-   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - OK : And there is no `config.ini` file  
-   - [X] scenario   [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:64:)  
+..\docs\features\b030_file_creation_in_given_steps.md:64: Error: Output not equal to expected:
+   - **NOK** : When I type `Y` (..\docs\features\b030_file_creation_in_given_steps.md:68:)  
+..\docs\features\b030_file_creation_in_given_steps.md:68: Error: no command is running when reaching this step
+   - **NOK** : Then the output contains `## Summary : **Success**, 1 scenarios OK` (..\docs\features\b030_file_creation_in_given_steps.md:69:)  
+..\docs\features\b030_file_creation_in_given_steps.md:69: Error: Output:  
+~~~
+Error: cannot prompt for confirmation on a non interactive stdin, use --yes to confirm all operations  
+   - **NOK** : Given there is no `config.ini` file (erase_confirm.md:3:)    
+erase_confirm.md:3: Error: file "config.ini" not deleted  
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 0     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+## Summary : **Success**, 1 scenarios OK
+~~~
+
+   - **NOK** : And there is no `config.ini` file (..\docs\features\b030_file_creation_in_given_steps.md:70:)  
+..\docs\features\b030_file_creation_in_given_steps.md:70: Error: file "config.ini" shouldn't exists
+   - [ ] scenario   [erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
 
    ### Scenario: [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
    - OK : Given the new `erase_confirm.md` file  
    - OK : When I run `./bbt -q --no_tty -c erase_confirm.md`  
-   - OK : Then the output is  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:86:)  
+..\docs\features\b030_file_creation_in_given_steps.md:86: Error: Output not equal to expected:
+   - **NOK** : When I type `n` (..\docs\features\b030_file_creation_in_given_steps.md:90:)  
+..\docs\features\b030_file_creation_in_given_steps.md:90: Error: no command is running when reaching this step
    - OK : Then I get an error  
    - OK : And the output contains `file "config.ini" not deleted`  
    - OK : And there is a `config.ini` file  
-   - [X] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - [ ] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
+
+   ### Scenario: [erasing refused on a non interactive stdin](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_no_input.md` file  
+   - OK : When I run `./bbt -q --no_tty -c erase_no_input.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `use --yes to confirm all operations`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [erasing refused on a non interactive stdin](../../features/B030_File_creation_in_Given_steps.md) pass  
 
    ### Scenario: [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new `d1` directory  
    - OK : Given the new `d1/f1` file containing `some data`  
    - OK : Given the new `erase_dir_confirm.md` file  
    - OK : When I run `./bbt -q --no_tty -c erase_dir_confirm.md`  
-   - OK : Then the output is  
-   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - OK : And there is no `d1` directory  
-   - [X] scenario   [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:134:)  
+..\docs\features\b030_file_creation_in_given_steps.md:134: Error: Output not equal to expected:
+   - **NOK** : When I type `Y` (..\docs\features\b030_file_creation_in_given_steps.md:138:)  
+..\docs\features\b030_file_creation_in_given_steps.md:138: Error: no command is running when reaching this step
+   - **NOK** : Then the output contains `## Summary : **Success**, 1 scenarios OK` (..\docs\features\b030_file_creation_in_given_steps.md:139:)  
+..\docs\features\b030_file_creation_in_given_steps.md:139: Error: Output:  
+~~~
+Error: cannot prompt for confirmation on a non interactive stdin, use --yes to confirm all operations  
+   - **NOK** : Given there is no `d1` directory (erase_dir_confirm.md:3:)    
+erase_dir_confirm.md:3: Error: dir "d1" not deleted  
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 0     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+## Summary : **Success**, 1 scenarios OK
+~~~
+
+   - **NOK** : And there is no `d1` directory (..\docs\features\b030_file_creation_in_given_steps.md:140:)  
+..\docs\features\b030_file_creation_in_given_steps.md:140: Error: dir "d1" shouldn't exists
+   - [ ] scenario   [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
 
    ### Scenario: [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new `d1` directory  
    - OK : Given the new `d1/f1` file containing `some data`  
    - OK : Given the new `erase_dir_refuse.md` file  
    - OK : When I run `./bbt -q --no_tty -c erase_dir_refuse.md`  
-   - OK : Then the output is  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:157:)  
+..\docs\features\b030_file_creation_in_given_steps.md:157: Error: Output not equal to expected:
+   - **NOK** : When I type `n` (..\docs\features\b030_file_creation_in_given_steps.md:161:)  
+..\docs\features\b030_file_creation_in_given_steps.md:161: Error: no command is running when reaching this step
    - OK : Then I get an error  
    - OK : And the output contains `dir "d1" not deleted`  
    - OK : And there is a `d1` directory  
-   - [X] scenario   [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - [ ] scenario   [directory tree erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
 
    ### Scenario: [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new `d2` directory  
    - OK : Given the new `d2/f1` file containing `some data`  
    - OK : Given the new `erase_new_dir_confirm.md` file  
    - OK : When I run `./bbt -q --no_tty erase_new_dir_confirm.md`  
-   - OK : Then the output is  
-   - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:186:)  
+..\docs\features\b030_file_creation_in_given_steps.md:186: Error: Output not equal to expected:
+   - **NOK** : When I type `Y` (..\docs\features\b030_file_creation_in_given_steps.md:190:)  
+..\docs\features\b030_file_creation_in_given_steps.md:190: Error: no command is running when reaching this step
+   - **NOK** : Then the output contains `## Summary : **Success**, 1 scenarios OK` (..\docs\features\b030_file_creation_in_given_steps.md:191:)  
+..\docs\features\b030_file_creation_in_given_steps.md:191: Error: Output:  
+~~~
+Error: cannot prompt for confirmation on a non interactive stdin, use --yes to confirm all operations  
+   - **NOK** : Given the new `d2` directory (erase_new_dir_confirm.md:3:)    
+erase_new_dir_confirm.md:3: Error: dir "d2" not deleted  
+  
+## Summary : **Fail**  
+  
+| Status     | Count |  
+|------------|-------|  
+| Failed     | 1     |  
+| Successful | 0     |  
+| Empty      | 0     |  
+| Not Run    | 0     |  
+
+~~~
+does not contain expected:  
+~~~
+## Summary : **Success**, 1 scenarios OK
+~~~
+
    - OK : And there is a `d2` directory  
-   - OK : And there is no `d2/f1` file  
-   - [X] scenario   [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - **NOK** : And there is no `d2/f1` file (..\docs\features\b030_file_creation_in_given_steps.md:193:)  
+..\docs\features\b030_file_creation_in_given_steps.md:193: Error: file "d2/f1" shouldn't exists
+   - [ ] scenario   [new directory erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
 
    ### Scenario: [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new `d3` directory  
    - OK : Given the new `d3/f1` file containing `some data`  
    - OK : Given the new `erase_new_dir_refuse.md` file  
    - OK : When I run `./bbt -q --no_tty erase_new_dir_refuse.md`  
-   - OK : Then the output is  
+   - **NOK** : Then the output is (..\docs\features\b030_file_creation_in_given_steps.md:209:)  
+..\docs\features\b030_file_creation_in_given_steps.md:209: Error: Output not equal to expected:
+   - **NOK** : When I type `n` (..\docs\features\b030_file_creation_in_given_steps.md:213:)  
+..\docs\features\b030_file_creation_in_given_steps.md:213: Error: no command is running when reaching this step
    - OK : Then I get an error  
    - OK : And the output contains `dir "d3" not deleted`  
    - OK : And there is a `d3` directory  
    - OK : And there is a `d3/f1` file  
-   - [X] scenario   [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
+   - [ ] scenario   [new directory erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) **fails**  
 
 
 # Document: [B040_Find_scenarios.md](../../features/B040_Find_scenarios.md)  
@@ -2482,12 +2606,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 254 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
-| Successful | 254   |
+| Failed     | 9     |
+| Successful | 246   |
 | Empty      | 0     |
 | Not Run    | 16    |
 
