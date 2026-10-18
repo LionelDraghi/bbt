@@ -1400,30 +1400,13 @@
    ### Scenario: [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
    - OK : When I run `./bbt -c shell_test.md`  
-   - **NOK** : Then I get an error (../docs/features/A310_Run_Shell.md:128:)  
-../docs/features/A310_Run_Shell.md:128: Error: Expected error code, got no error
-   - **NOK** : And the output contains `**Fail**` (../docs/features/A310_Run_Shell.md:129:)  
-../docs/features/A310_Run_Shell.md:129: Error: Output:  
-~~~
-  
-# Document: [shell_test.md](shell_test.md)    
-   ### Scenario: [](shell_test.md):   
-   - OK : When I run shell `echo $BASH_VERSION`    
-   - OK : Then the output contains `release`    
-   - [X] scenario   [](shell_test.md) pass    
-  
-## Summary : **Success**, 1 scenarios OK
-~~~
-does not contain expected:  
-~~~
-**Fail**
-~~~
-
+   - OK : Then I get an error  
+   - OK : And the output contains `**Fail**`  
    - OK : Given the environment variable `BBT_SHELL` is `bash`  
    - OK : When I run `./bbt -c shell_test.md`  
    - OK : Then I get no error  
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - [ ] scenario   [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md) **fails**  
+   - [X] scenario   [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md) pass  
 
    ### Scenario: [the sh shell is set on the command line (Unix_Only)](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
@@ -2661,12 +2644,12 @@ does not contain expected:
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 270 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 269   |
+| Failed     | 0     |
+| Successful | 270   |
 | Empty      | 0     |
 | Not Run    | 5     |
 
