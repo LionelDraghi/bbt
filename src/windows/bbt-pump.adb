@@ -33,9 +33,6 @@ package body BBT.Pump is
                              Left      : in System.Address) return Interfaces.C.int;
    pragma Import (Stdcall, Peek_Named_Pipe, "PeekNamedPipe");
 
-   procedure Sleep (Milliseconds : in DWORD);
-   pragma Import (Stdcall, Sleep, "Sleep");
-
    function Get_Last_Error return Interfaces.C.int;
    pragma Import (Stdcall, Get_Last_Error, "GetLastError");
 

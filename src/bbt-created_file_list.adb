@@ -12,7 +12,7 @@ with Ada.Containers.Indefinite_Ordered_Sets,
      Ada.Directories,
      Ada.Text_IO;
 
-with System.OS_Lib;
+with GNAT.OS_Lib;
 
 use BBT.IO,
     Ada,
@@ -76,7 +76,7 @@ package body BBT.Created_File_List  is
             Full : constant String := Full_Name (Dir_Ent);
          begin
             if Name /= "." and then Name /= ".." then
-               if System.OS_Lib.Is_Symbolic_Link (Full) then
+               if GNAT.OS_Lib.Is_Symbolic_Link (Full) then
                   --  Never recurse through a symbolic link: the
                   --  entries behind it are recorded under their real
                   --  path, and removing through the link would escape
