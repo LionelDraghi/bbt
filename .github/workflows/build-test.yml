@@ -86,9 +86,17 @@ jobs:
             ~/.local/share/alire
             ~/AppData/Local/alire
             C:/alr-cache
-          key: ${{ runner.os }}-alire-${{ hashFiles('alire.toml') }}
+          # The key and the restore prefix include the runner image,
+          # not only the OS family: the cached binaries embed the
+          # version of the SDK they were built against, and after the
+          # macOS runner was pinned to macos-15, the cache saved on
+          # the macOS 26 image kept being restored, the linker
+          # warning on every link:
+          # "was built for newer macOS version (26.0) than being
+          # linked (15.0)". An image change must invalidate the cache.
+          key: ${{ matrix.os }}-alire-${{ hashFiles('alire.toml') }}
           restore-keys: |
-            ${{ runner.os }}-alire-
+            ${{ matrix.os }}-alire-
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v4
