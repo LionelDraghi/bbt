@@ -6,13 +6,8 @@
 
 package BBT.Created_File_List is
 -- This package manage the list of files created by bbt when executing
--- the scenarios in a document (that is, a file).
--- This is done by calling Delete_All after running the document.
---
--- When using the -c | --cleanup option, each file and dir in the list is
--- removed by calling Delete_All.
---
--- When NOT Using The -c | --cleanup option, this package has not effect.
+-- the scenarios in a document (that is, a file), and offer a service to remove
+-- them all at once, if the cleanup has been activated
 
    -- --------------------------------------------------------------------------
    procedure Add (Name : String);
@@ -25,6 +20,22 @@ package BBT.Created_File_List is
    -- Just list file currently recorded for deletion
 
    procedure Delete_All;
-   -- Delete all files in the list, and also the file containing the list
+   -- Delete all files in the list, and also the file containing the list,
+   -- if the cleanup has been activated on the command line;
+   -- otherwise, Delete_All has no effect.
+
+   procedure Take_Snapshot;
+   -- Take a recursive snapshot of the current dir (the exec dir),
+   -- storing the full name of every file and dir, whatever their
+   -- creation date: this snapshot is the reference state for
+   -- Delete_New_Entries.
+
+   procedure Delete_New_Entries
+     (Confirm : not null access function (Prompt : String) return Boolean);
+   -- Remove from the current dir every file and dir that is not in
+   -- the snapshot, whatever created it. Contrary to Delete_All, this
+   -- removes entries that bbt did not create itself: the Confirm
+   -- function is called once before removing, and may refuse.
+   -- Symbolic links are ignored: never traversed, never removed.
 
 end BBT.Created_File_List;

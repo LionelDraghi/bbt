@@ -12,6 +12,7 @@
 - [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment)
 - [D10. Diff display alignment](#d10-diff-display-alignment)
 - [D11. Run shell step](#d11-run-shell-step)
+- [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -26,6 +27,7 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
 | [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
 | [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
 | [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md) |
@@ -882,3 +884,57 @@ References:
   `Shell_Flag`, `Shell_Preamble` (src/bbt-settings.ads,
   src/bbt-settings.adb), the `Through_Shell` parameter of
   `Run_Cmd` (src/bbt-tests-actions-commands.adb).
+
+## D12. Full cleanup: snapshot and diff of the exec dir
+
+Status: arbitrated (October 2026), implemented
+
+Context: the `--cleanup` option removes only what bbt itself created
+(the files of the setup steps, the redirected outputs, `Tmp_Dir`), so
+the files and directories created by the tested commands are left
+behind, and the test dir gets polluted.
+
+Decision:
+
+- the `--cleanup=full` option takes a recursive snapshot of the exec
+  dir at the start of each document, and removes at the end every
+  entry that appeared since, whatever created it (cf.
+  [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md));
+- one confirmation per document is asked before removing, through
+  the common confirmation function, so that `--yes` applies
+  uniformly, and the removal is refused on a non interactive stdin;
+- the walk and the removal are based on `Ada.Directories` only,
+  working identically on Linux, Windows and macOS: `Delete_Tree` is
+  never used, as it follows symbolic links and could escape the exec
+  dir; instead, a recursive walk never traverses a link (`System.OS_Lib.Is_Symbolic_Link`),
+  records it as a file, and removes the link as a link; directories
+  are removed empty, their children being deleted first;
+- bbt does not track who created the new entries, only that they were
+  not there at the start: a file written by a concurrent process is
+  removed like any new entry (the B010 caution states it).
+
+Rejected alternatives:
+
+- watching what the child processes actually write, with
+  inotify/fanotify on Linux, FSEvents on macOS and
+  ReadDirectoryChangesW on Windows: three implementations and three
+  sets of subtleties, disproportionate to the gain;
+- a shell tracing approach, as smk does on Linux (ptrace): not
+  portable to the three platforms.
+
+Accepted limitations:
+
+- files that existed before the run and were overwritten by a tested
+  command are not removed (they were there before: not a cleanup
+  problem);
+- transient files, created then deleted by a tested command during
+  the run, are invisible (nothing left to clean).
+
+References:
+
+- the specification and the scenarios:
+  [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md);
+- the implementation: `Take_Snapshot`, `Delete_New_Entries`
+  (src/bbt-created_file_list.adb, src/bbt-created_file_list.ads),
+  the `Full_Cleanup` setting (src/bbt-settings.ads) and the
+  `--cleanup=full` parsing (src/bbt-cmd_line.adb).

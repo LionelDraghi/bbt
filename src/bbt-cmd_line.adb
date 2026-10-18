@@ -106,6 +106,19 @@ package body BBT.Cmd_Line is
    end Set_Shell_Option;
 
    -- --------------------------------------------------------------------------
+   procedure Set_Cleanup_Option (Value : String) is
+   -- Common processing of the --cleanup= option value
+   begin
+      if Value = "full" then
+         Settings.Cleanup      := True;
+         Settings.Full_Cleanup := True;
+      else
+         IO.Put_Error ("invalid cleanup value """ & Value
+                       & """, expecting full");
+      end if;
+   end Set_Cleanup_Option;
+
+   -- --------------------------------------------------------------------------
    procedure Set_Cmd (C : Settings.Command) is
    begin
       if Current_Command = None then
@@ -295,6 +308,10 @@ package body BBT.Cmd_Line is
 
             elsif Cmd = "-Werror" then
                Settings.Warnings_As_Errors := True;
+
+            elsif Ada.Strings.Fixed.Index (Cmd, "--cleanup=") = 1 then
+               Set_Cleanup_Option
+                 (Cmd (Ada.Strings.Fixed.Index (Cmd, "=") + 1 .. Cmd'Last));
 
             elsif Cmd = "-c" or Cmd = "--cleanup" then
                Settings.Cleanup := True;

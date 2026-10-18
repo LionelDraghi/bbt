@@ -47,6 +47,11 @@ private package BBT.Settings is
    List_Settings         : Boolean    := False;
    Yes                   : Boolean    := False;
    Cleanup               : Boolean    := False;
+   Full_Cleanup          : Boolean    := False;
+   -- if set (--cleanup=full), the cleanup removes at the end of each
+   -- document every file and dir that appeared since a snapshot of the
+   -- exec dir taken at document start, whatever created them, instead
+   -- of only what bbt itself created
    Strict_Gherkin        : Boolean    := False;
    Generate_JUnit_Report : Boolean    := False;
    No_TTY                : Boolean    := False;

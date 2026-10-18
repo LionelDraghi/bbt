@@ -46,18 +46,9 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### Low priority
 
-- cleanup level 2, snapshot and diff of the exec dir  
-  The current cleanup removes only the files that bbt itself
-  created; anything created by the tested commands is left behind
-  and the test directory gets polluted. Take a recursive snapshot
-  of the exec dir at document start, and remove at cleanup time
-  the entries that appeared since: a single `Ada.Directories` based
-  diff, working identically on Linux, Windows and macOS, instead
-  of a per-platform file system watch. One confirmation per
-  document before removing, through the common `Confirm`
-  function, so that `--yes` applies uniformly as for every other
-  prompt.  
-  cf. [cleanup_level_2](../proposed_features/cleanup_level_2.md)
+- cleanup level 2, snapshot and diff of the exec dir: implemented as
+  `--cleanup=full` (cf. [B010](../features/B010_Deleting_created_files.md)
+  and the changelog); to be validated on Windows and macOS  
 
 - non interactive commands output redirect  
   Let the child write the output files directly through the

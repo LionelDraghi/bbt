@@ -15,6 +15,7 @@ with BBT.Created_File_List,
      BBT.Status_Bar,
      BBT.Tests.Actions.Commands,
      BBT.Tests.Actions.Environment,
+     BBT.Tests.Actions.File_Operations,
      BBT.Tests.Actions.Output_Checks,
      BBT.Tests.Actions.Setup,
      BBT.Writers,
@@ -571,6 +572,12 @@ package body BBT.Tests.Runner is
 
       Set_Start_Time (Doc);
 
+      if Settings.Full_Cleanup then
+         --  Snapshot of the exec dir before any file of this document
+         --  run is created: the reference state for the full cleanup
+         Created_File_List.Take_Snapshot;
+      end if;
+
       declare
          Path_To_Scen  : constant String
            := Short_Path (From_Dir => Settings.Index_Dir,
@@ -612,6 +619,13 @@ package body BBT.Tests.Runner is
       -- All files and dir created during bbt run of this document
       -- are removed if -c | --cleanup option was used.
       -- Files are not removed when something goes wrong to ease debugging.
+
+      if Settings.Full_Cleanup then
+         --  The full cleanup extends the cleanup to everything that
+         --  appeared since the snapshot, whatever created it
+         Created_File_List.Delete_New_Entries
+           (Confirm => Actions.File_Operations.Confirm'Access);
+      end if;
 
    exception
       when E : others =>

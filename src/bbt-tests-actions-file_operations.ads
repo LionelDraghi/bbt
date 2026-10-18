@@ -21,6 +21,11 @@ package BBT.Tests.Actions.File_Operations is
    function Kind (Name : String) return File_Kind;
    procedure Delete_File (Name : String);
    procedure Delete_Tree (Dir_Name : String);
+   function Confirm (Prompt : String) return Boolean;
+   --  Prompts the user for a confirmation, unless Settings.Yes is set,
+   --  and refuses on a non interactive stdin. All bbt confirmations
+   --  go through this function, so that --yes applies uniformly.
+
    function Confirm_Overwrite (File_Name : String) return Boolean;
    --  Prompts the user for the confirmation of the replacing of an
    --  existing file, unless Settings.Yes is set.
