@@ -1,7 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author: Lionel Draghi
--- SPDX-License-Identifier: APSL-2.0
+-- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
 -- SPDX-FileCopyrightText: 2026 Lionel Draghi
 -- -----------------------------------------------------------------------------
 
