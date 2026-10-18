@@ -408,3 +408,11 @@ docs/dev/project.md
 The proposal may be a short description of the need or a complete feature file
 with scenarios, ready to move to `docs/features` once the decision is made.
 See `docs/proposed_features/pty.md` as an example.
+
+When a proposed feature is completely implemented, its proposal file
+disappears: before deleting it, check that everything useful in it has
+been transposed — the behavior and the scenarios to the relevant file
+in `docs/features`, the design rationale and the rejected alternatives
+to an entry in `docs/dev/design_discussions.md`, and anything else
+(help text, changelog, TDL) to its proper place — then update or remove
+the TDL entry and any reference pointing to the proposal.
