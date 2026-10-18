@@ -14,6 +14,10 @@ confirmation, and the file is kept as is. On a difference, bbt proposes
 to replace the file, and does it on a `Y` answer (or directly with the
 `--yes` option); on a `n` answer, the file is kept as is and the step
 fails.
+On a non interactive standard input (a pipe, a closed or redirected
+input: cron, CI, a nested bbt), bbt does not prompt: the replacement is
+refused, the file is kept as is and the step fails, as on a `n` answer,
+and the error message invites to use `--yes`.
 
 _Table of Contents:_
 - [Scenario: Checking that there is no file or dir](#scenario-checking-that-there-is-no-file-or-dir)

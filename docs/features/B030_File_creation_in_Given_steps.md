@@ -9,7 +9,7 @@ And the `new` keyword has the same intent on an existing homonym:
 ``Given the new directory `dir1` `` starts from a white page, erasing
 the existing `dir1` tree before recreating the directory empty.
 
-When in a test suite, this test should be run with the --yes option, otherwise it will stop and prompt the user to confirm the erasing of the file.
+When in a test suite, this test should be run with the --yes option, otherwise it will stop and prompt the user to confirm the erasing of the file, provided the standard input is an interactive terminal. On a non interactive standard input (a pipe, a closed or redirected input: cron, CI, a nested bbt), bbt does not prompt: the erasing is refused, the step fails, and the error message says how to get the erasing done, with the --yes option.
 
 If run in interactive mode, the expected behavior depends on the user answer : 
 - If it answer "yes", the test will be OK.
@@ -21,6 +21,7 @@ _Table of Contents:_
 - [Scenario : "Given there is no", when there actually is, should erase the file](#scenario--given-there-is-no-when-there-actually-is-should-erase-the-file)
 - [Scenario : erasing confirmed by a typed key](#scenario--erasing-confirmed-by-a-typed-key)
 - [Scenario : erasing refused by a typed key](#scenario--erasing-refused-by-a-typed-key)
+- [Scenario : erasing refused on a non interactive stdin](#scenario--erasing-refused-on-a-non-interactive-stdin)
 - [Scenario : directory tree erasing confirmed by a typed key](#scenario--directory-tree-erasing-confirmed-by-a-typed-key)
 - [Scenario : directory tree erasing refused by a typed key](#scenario--directory-tree-erasing-refused-by-a-typed-key)
 - [Scenario : new directory erasing confirmed by a typed key](#scenario--new-directory-erasing-confirmed-by-a-typed-key)
@@ -89,6 +90,29 @@ Delete file config.ini?   [Y]es/[N]o/[A]ll
 - When I type `n`
 - Then I get an error
 - And the output contains `file "config.ini" not deleted`
+- And there is a `config.ini` file
+
+### Scenario : erasing refused on a non interactive stdin
+
+The nested bbt is run without the `--yes` option, and without any
+`type` step: it is a non interactive command, its standard input is
+a pipe on which nothing will ever be written, so nobody can answer
+the prompt. The erasing is refused, the file is kept, and the
+nested scenario fails with an error telling how to get the erasing
+done. This is also the behavior on any non interactive stdin: a
+closed or redirected input, as in cron or CI.
+
+- Given the new file `config.ini` containing `Tmp_dir=/tmp`
+- Given the new `erase_no_input.md` file
+~~~md
+# Scenario: nested
+
+- Given there is no `config.ini` file
+- Then there is no `config.ini` file
+~~~
+- When I run `./bbt -q --no_tty -c erase_no_input.md`
+- Then I get an error
+- And the output contains `use --yes to confirm all operations`
 - And there is a `config.ini` file
 
 ### Scenario : directory tree erasing confirmed by a typed key

@@ -6,7 +6,8 @@
 
 with BBT.IO,
      BBT.Settings,
-     BBT.Status_Bar;
+     BBT.Status_Bar,
+     Termicap.TTY;
 
 package body BBT.Tests.Actions.File_Operations is
 
@@ -14,14 +15,19 @@ package body BBT.Tests.Actions.File_Operations is
    function Confirm (Prompt : String) return Boolean is
       C : Character;
    begin
-      --  Fixme: Get_Immediate is not robust when bbt has no interactive
-      --  terminal on its standard input: on a closed stdin (cron, CI),
-      --  it raises END_ERROR and crashes bbt instead of failing
-      --  cleanly; on an open but mute stdin (a nested bbt prompting
-      --  without --yes), it blocks forever, and an outer run without
-      --  --scenario_timeout blocks with it. Failing cleanly on a non
-      --  interactive stdin would be safer.
       if Settings.Yes then return True;
+      end if;
+
+      --  Nobody can answer the prompt when the standard input is not
+      --  an interactive terminal: on a closed or redirected stdin
+      --  (cron, CI), Get_Immediate raises END_ERROR, and on an open
+      --  but mute stdin (a nested bbt), it blocks forever. Refuse the
+      --  operation, as on a "N" answer.
+      if not Termicap.TTY.Is_TTY (Termicap.TTY.Stdin) then
+         BBT.IO.Put_Error
+           ("cannot prompt for confirmation on a non interactive stdin, "
+            & "use --yes to confirm all operations");
+         return False;
       end if;
 
       loop
