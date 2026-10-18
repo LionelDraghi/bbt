@@ -1,7 +1,6 @@
 -- -----------------------------------------------------------------------------
 -- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
--- Author: Lionel Draghi
--- SPDX-License-Identifier: APSL-2.0
+-- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
@@ -583,17 +582,17 @@ package body BBT.Tests.Actions.Commands is
          elsif C = '"' then
             --  A double quote is escaped, preceded by the doubling of
             --  the backslashes that precede it
-            Append (Result, (1 .. 2 * Backslashes => '\'));
+            Append (Result, [1 .. 2 * Backslashes => '\']);
             Append (Result, "\""");
             Backslashes := 0;
 
          else
-            Append (Result, (1 .. Backslashes => '\'));
+            Append (Result, [1 .. Backslashes => '\']);
             Backslashes := 0;
             Append (Result, C);
          end if;
       end loop;
-      Append (Result, (1 .. Backslashes => '\'));
+      Append (Result, [1 .. Backslashes => '\']);
       Append (Result, '"');
       return To_String (Result);
    end Quote_Windows_Arg;
