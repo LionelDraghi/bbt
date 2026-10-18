@@ -113,7 +113,7 @@ doc: ./bbt$(EXE_SUFFIX)
 	echo                            >> fixme_index.md
 	echo 'Location | Text'          >> fixme_index.md
 	echo '---------|-----'          >> fixme_index.md
-	grep -rn 'Fixme:' docs/* src/* | sort | sed -E "s/:/|/2;s/Fixme://;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> fixme_index.md
+	grep -rn 'Fixme:' docs/* src/* | LC_ALL=C sort | sed -E "s/:/|/2;s/Fixme://;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> fixme_index.md
 	mv fixme_index.md docs/dev/fixme_index.md
 
 	echo 'Reference to issues in current version'	>  issues_index.md
@@ -121,7 +121,7 @@ doc: ./bbt$(EXE_SUFFIX)
 	echo                                			>> issues_index.md
 	echo 'Location | Text'             			    >> issues_index.md
 	echo '---------|-----'             			    >> issues_index.md
-	grep -rn 'Issue #' docs/* src/* | sort |  sed -E "s/:/|/2;s/Issue #/#/;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> issues_index.md
+	grep -rn 'Issue #' docs/* src/* | LC_ALL=C sort |  sed -E "s/:/|/2;s/Issue #/#/;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> issues_index.md
 	mv issues_index.md docs/dev/issues_index.md
 
 	echo Checking links in md files
