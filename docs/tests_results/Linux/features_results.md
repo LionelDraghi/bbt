@@ -1523,6 +1523,15 @@
    - OK : And there is a `config.ini` file  
    - [X] scenario   [erasing refused by a typed key](../../features/B030_File_creation_in_Given_steps.md) pass  
 
+   ### Scenario: [erasing refused on a non interactive stdin](../../features/B030_File_creation_in_Given_steps.md): 
+   - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
+   - OK : Given the new `erase_no_input.md` file  
+   - OK : When I run `./bbt -q --no_tty -c erase_no_input.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `use --yes to confirm all operations`  
+   - OK : And there is a `config.ini` file  
+   - [X] scenario   [erasing refused on a non interactive stdin](../../features/B030_File_creation_in_Given_steps.md) pass  
+
    ### Scenario: [directory tree erasing confirmed by a typed key](../../features/B030_File_creation_in_Given_steps.md): 
    - OK : Given the new `d1` directory  
    - OK : Given the new `d1/f1` file containing `some data`  
@@ -2556,12 +2565,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 264 scenarios OK
+## Summary : **Success**, 265 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 264   |
+| Successful | 265   |
 | Empty      | 0     |
 | Not Run    | 6     |
 
