@@ -39,9 +39,13 @@ jobs:
     
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest] # List of GitHub Actions platform to run the workflow on
+        # macos-latest runs on the macOS 26 (Tahoe) image since June 2026:
+        # the GNAT FSF 15 linker cannot parse its Xcode 26 SDK .tbd stubs
+        # (arm64e.x1 targets), hence the gnat = ">=16" dependency in
+        # alire.toml; the gnat_native 16.1.0 builds support macOS 26.
     env:
       #  set the value of the environment variable OS_PLATFORM according to the runner OS
-      OS_PLATFORM: ${{ matrix.os == 'windows-latest' && 'Windows' || matrix.os == 'ubuntu-latest' && 'Linux' || matrix.os == 'macos-latest' && 'Darwin' || 'Unknown' }}
+      OS_PLATFORM: ${{ matrix.os == 'windows-latest' && 'Windows' || matrix.os == 'ubuntu-latest' && 'Linux' || startsWith(matrix.os, 'macos') && 'Darwin' || 'Unknown' }}
     runs-on: ${{ matrix.os }} # Run the continuous integration workflow on each OS listed in the matrix.
     
     steps:
@@ -110,7 +114,7 @@ jobs:
 
       - name: Run build and checks
         env:
-          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ matrix.os == 'macos-latest' && '1' || '' }}
+          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos') && '1' || '' }}
           # cf. https://forum.ada-lang.io/t/name-file-casing-error-on-darwin/1795
         run: make -k
 
