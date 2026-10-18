@@ -113,15 +113,18 @@ command is run by the default shell instead of the `--shell` one.
 
 ## Scenario: the shell is set with the BBT_SHELL environment variable (Unix_Only)
 
-With the same nested file, the run without `BBT_SHELL` set fails on
-the default shell, and succeeds once the variable selects bash: this
-is the proof that the environment variable is taken into account.
+`${0##*/}` gives the name of the shell that runs the command string:
+`sh` on the default run, `bash` when the variable selects it. The run
+without `BBT_SHELL` set fails on the default shell, and succeeds once
+the variable selects bash: this is the proof that the environment
+variable is taken into account. A probe on `$BASH_VERSION` would not
+do: on macOS, `/bin/sh` is bash in sh mode, which sets it also.
 
 - Given the new file `shell_test.md`
   ~~~
   # Scenario
-  - When I run shell `echo $BASH_VERSION`
-  - Then the output contains `release`
+  - When I run shell `echo ${0##*/}`
+  - Then the output contains `bash`
   ~~~
 
 - When I run `./bbt -c shell_test.md`
