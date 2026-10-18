@@ -1422,7 +1422,10 @@ does not contain expected:
    - OK : Given there is no dir `dir1`  
    - OK : Given there is no dir `dir3`  
    - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
    - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
    - [X] background [](../../features/B010_Deleting_created_files.md) pass  
 
    ### Scenario: [run without --cleanup](../../features/B010_Deleting_created_files.md): 
@@ -1436,7 +1439,10 @@ does not contain expected:
    - OK : Given there is no dir `dir1`  
    - OK : Given there is no dir `dir3`  
    - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
    - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
    - [X] background [](../../features/B010_Deleting_created_files.md) pass  
 
    ### Scenario: [run with --cleanup](../../features/B010_Deleting_created_files.md): 
@@ -1445,6 +1451,72 @@ does not contain expected:
    - OK : And  there is no `dir3` directory  
    - OK : And  there is no `f1` file  
    - [X] scenario   [run with --cleanup](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [run with --cleanup leaves what the tested command created](../../features/B010_Deleting_created_files.md): 
+   - OK : When I run `./bbt --cleanup create_sut_files.md`  
+   - OK : Then there is a `sut_out.txt` file  
+   - OK : And  there is a `sut_dir` directory  
+   - [X] scenario   [run with --cleanup leaves what the tested command created](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [run with --cleanup=full removes what the tested command created](../../features/B010_Deleting_created_files.md): 
+   - OK : When I run `./bbt --yes --cleanup=full create_sut_files.md`  
+   - OK : Then the output contains `## Summary : **Success**`  
+   - OK : And  there is no `sut_out.txt` file  
+   - OK : And  there is no `sut_dir` directory  
+   - [X] scenario   [run with --cleanup=full removes what the tested command created](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [--cleanup=full keeps pre-existing files](../../features/B010_Deleting_created_files.md): 
+   - OK : Given the new file `precious.txt` containing `keep me`  
+   - OK : When I run `./bbt --yes --cleanup=full create_sut_files.md`  
+   - OK : Then there is a `precious.txt` file  
+   - [X] scenario   [--cleanup=full keeps pre-existing files](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [--cleanup=full removal refused on a non interactive stdin](../../features/B010_Deleting_created_files.md): 
+   - OK : When I run `./bbt --no_tty --cleanup=full create_sut_files.md`  
+   - OK : Then I get an error  
+   - OK : And  the output contains `use --yes to confirm all operations`  
+   - OK : And  there is a `sut_out.txt` file  
+   - [X] scenario   [--cleanup=full removal refused on a non interactive stdin](../../features/B010_Deleting_created_files.md) pass  
 
 
 # Document: [B020_Exec_dir.md](../../features/B020_Exec_dir.md)  
@@ -2611,7 +2683,7 @@ does not contain expected:
 | Status     | Count |
 |------------|-------|
 | Failed     | 9     |
-| Successful | 246   |
+| Successful | 250   |
 | Empty      | 0     |
 | Not Run    | 16    |
 
