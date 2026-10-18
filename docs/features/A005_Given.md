@@ -17,7 +17,10 @@ fails.
 On a non interactive standard input (a pipe, a closed or redirected
 input: cron, CI, a nested bbt), bbt does not prompt: the replacement is
 refused, the file is kept as is and the step fails, as on a `n` answer,
-and the error message invites to use `--yes`.
+and the error message invites to use `--yes`. The commands run by an
+interactive scenario are the exception: their parent feeds their stdin,
+and sets `BBT_FED_STDIN` to commit to it, so that they are prompted on
+their pipe stdin (cf. B030).
 
 _Table of Contents:_
 - [Scenario: Checking that there is no file or dir](#scenario-checking-that-there-is-no-file-or-dir)

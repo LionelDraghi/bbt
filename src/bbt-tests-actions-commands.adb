@@ -835,6 +835,15 @@ package body BBT.Tests.Actions.Commands is
       --  Set_Default_Environment imports the bbt current environment
       --  at spawn time, and thus reflects those steps.
       Set_Default_Environment (The_Process.all);
+      if Interactive_Input_Expected then
+         --  There is no pseudo terminal on Windows: the command stdin
+         --  is a pipe, on which the input steps pump the input. Commit
+         --  to the command that its stdin will be fed, so that its own
+         --  prompts are asked instead of being refused on the non
+         --  interactive stdin (cf. Confirm in File_Operations).
+         Util.Processes.Set_Environment
+           (The_Process.all, "BBT_FED_STDIN", "1");
+      end if;
 
       begin
          Spawn (The_Process.all,

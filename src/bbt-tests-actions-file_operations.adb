@@ -9,24 +9,37 @@ with BBT.IO,
      BBT.Status_Bar,
      Termicap.TTY;
 
+with Ada.Environment_Variables;
+
 package body BBT.Tests.Actions.File_Operations is
 
    -- --------------------------------------------------------------------------
    function Confirm (Prompt : String) return Boolean is
       C : Character;
+
+      procedure Refuse is
+      begin
+         BBT.IO.Put_Error
+           ("cannot prompt for confirmation on a non interactive stdin, "
+            & "use --yes to confirm all operations");
+      end Refuse;
+
    begin
       if Settings.Yes then return True;
       end if;
 
       --  Nobody can answer the prompt when the standard input is not
-      --  an interactive terminal: on a closed or redirected stdin
-      --  (cron, CI), Get_Immediate raises END_ERROR, and on an open
-      --  but mute stdin (a nested bbt), it blocks forever. Refuse the
-      --  operation, as on a "N" answer.
-      if not Termicap.TTY.Is_TTY (Termicap.TTY.Stdin) then
-         BBT.IO.Put_Error
-           ("cannot prompt for confirmation on a non interactive stdin, "
-            & "use --yes to confirm all operations");
+      --  an interactive terminal, and no parent committed to feed it
+      --  (a closed or redirected stdin, cron, CI, or an open but mute
+      --  one, a nested bbt): on the first one, Get_Immediate raises
+      --  END_ERROR, on the second, it blocks forever. Refuse the
+      --  operation, as on a "N" answer. A parent that feeds the input
+      --  of its command (the bbt running an interactive scenario on
+      --  a platform without pseudo terminal) sets BBT_FED_STDIN.
+      if not Termicap.TTY.Is_TTY (Termicap.TTY.Stdin)
+        and then Ada.Environment_Variables.Value ("BBT_FED_STDIN", "") = ""
+      then
+         Refuse;
          return False;
       end if;
 
@@ -36,7 +49,15 @@ package body BBT.Tests.Actions.File_Operations is
          --  at the end of the bar line
          Ada.Text_IO.Put (Prompt);
          Ada.Text_IO.Put_Line ("   [Y]es/[N]o/[A]ll");
-         Ada.Text_IO.Get_Immediate (C);
+         begin
+            Ada.Text_IO.Get_Immediate (C);
+         exception
+            when Ada.Text_IO.End_Error =>
+               --  The stdin was closed since the check above: refuse
+               --  instead of crashing
+               Refuse;
+               return False;
+         end;
          case C is
             when 'N' | 'n' => return False;
             when 'Y' | 'y' => return True;

@@ -9,7 +9,7 @@ And the `new` keyword has the same intent on an existing homonym:
 ``Given the new directory `dir1` `` starts from a white page, erasing
 the existing `dir1` tree before recreating the directory empty.
 
-When in a test suite, this test should be run with the --yes option, otherwise it will stop and prompt the user to confirm the erasing of the file, provided the standard input is an interactive terminal. On a non interactive standard input (a pipe, a closed or redirected input: cron, CI, a nested bbt), bbt does not prompt: the erasing is refused, the step fails, and the error message says how to get the erasing done, with the --yes option.
+When in a test suite, this test should be run with the --yes option, otherwise it will stop and prompt the user to confirm the erasing of the file, provided the standard input is an interactive terminal. On a non interactive standard input (a pipe, a closed or redirected input: cron, CI, a nested bbt), bbt does not prompt: the erasing is refused, the step fails, and the error message says how to get the erasing done, with the --yes option. The commands run by an interactive scenario are the exception: their parent feeds their stdin, and sets `BBT_FED_STDIN` to commit to it, so that they are prompted on their pipe stdin, as needed on Windows where there is no pseudo terminal.
 
 If run in interactive mode, the expected behavior depends on the user answer : 
 - If it answer "yes", the test will be OK.

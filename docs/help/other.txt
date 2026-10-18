@@ -17,6 +17,9 @@ Other options:
                            and pwsh. Defaults to sh on POSIX systems
                            and cmd.exe on Windows. May also be set
                            with the BBT_SHELL environment variable.
+                           bbt sets BBT_FED_STDIN in the commands of
+                           the interactive scenarios, to commit that
+                           their stdin will be fed by the input steps.
   -nt | --no_tty         : behave as if the standard output was not
                            a terminal: no status bar, no control
                            sequence in the output
