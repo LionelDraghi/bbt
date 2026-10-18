@@ -38,11 +38,14 @@ jobs:
       fail-fast: false # Don't stop all the workflows when one of them fails.
     
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest] # List of GitHub Actions platform to run the workflow on
-        # macos-latest runs on the macOS 26 (Tahoe) image since June 2026:
-        # the GNAT FSF 15 linker cannot parse its Xcode 26 SDK .tbd stubs
-        # (arm64e.x1 targets), hence the gnat = ">=16" dependency in
-        # alire.toml; the gnat_native 16.1.0 builds support macOS 26.
+        os: [ubuntu-latest, windows-latest, macos-15] # List of GitHub Actions platform to run the workflow on
+        # macos-15, not macos-latest: the macOS 26 (Tahoe) image ships
+        # Command Line Tools 26.6, whose SDK .tbd stubs list the arm64e.x1
+        # targets; the linker bundled with every GNAT FSF toolchain (15.x
+        # and 16.x alike) rejects them and every link fails with
+        # "malformed file libSystem.tbd" and undefined libc symbols
+        # (cf. https://github.com/alire-project/GNAT-FSF-builds/issues/112).
+        # Switch back to macos-latest once the toolchain linker is fixed.
     env:
       #  set the value of the environment variable OS_PLATFORM according to the runner OS
       OS_PLATFORM: ${{ matrix.os == 'windows-latest' && 'Windows' || matrix.os == 'ubuntu-latest' && 'Linux' || startsWith(matrix.os, 'macos') && 'Darwin' || 'Unknown' }}

@@ -30,10 +30,11 @@ utilada = "^2.8.0"
 [[depends-on]]
 # External_Initialization aspect (src/bbt-cmd_line-put_help.adb) requires
 # the experimental extensions set : FSF GCC 15 / GNAT Pro 25 or later.
-# GNAT FSF 16 is also required on darwin: the linker shipped with the
-# GNAT FSF 15 toolchains cannot parse the Xcode 26 SDK .tbd stubs
-# (arm64e.x1 targets), while the gnat_native 16.1.0 builds explicitly
-# support macOS 15 and macOS 26.
+# GNAT FSF 16 is the current toolchain; note that on darwin the linker
+# bundled with the GNAT FSF toolchains (15.x and 16.x alike) cannot
+# parse the Xcode 26.6+ SDK .tbd stubs (arm64e.x1 targets), so the CI
+# runs on macos-15 until this is fixed upstream
+# (cf. https://github.com/alire-project/GNAT-FSF-builds/issues/112).
 gnat = ">=16"
 
 [[actions]]
