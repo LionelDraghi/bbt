@@ -35,13 +35,16 @@ concurrency:
 
 jobs:
   set_badges_pending:
-    # Before any build or test runs, turn the three platform badges to a
-    # red "being tested" state and publish them, so that a push where
-    # the build fails, or where the tests are not run at all, never
-    # leaves in the README the badges of the previous run: the badges
-    # will only turn blue again when the tests of the new version pass.
+    # Before any build or test runs, turn the three platform badges and
+    # the CI badge to a red "being tested" state and publish them, so
+    # that a push where the build fails, or where the tests are not run
+    # at all, never leaves in the README the badges of the previous run:
+    # the badges will only turn blue again when the tests of the new
+    # version pass. The GitHub-provided workflow badge cannot show an
+    # in-progress state, so the CI badge used in the README is a file
+    # committed in the repo, managed like the platform ones.
     # This is done in a separate job, and not in the first step of the
-    # main jobs, so that a single commit sets the three platforms, and
+    # main jobs, so that a single commit sets all the badges, and
     # the parallel main jobs don't fight over the initial publication.
     name: Set badges to pending
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -56,7 +59,7 @@ jobs:
       - name: Publish red pending badges
         shell: bash
         run: |
-          for P in Linux Darwin Windows; do
+          for P in Linux Darwin Windows CI; do
             curl -sf "https://img.shields.io/badge/${P}-being%20tested-red.svg?style=flat-square" \
               -o docs/tests_results/${P}/badge.svg
           done
@@ -235,4 +238,53 @@ jobs:
             sleep $((i * 10))
           done
           echo "Could not publish ${OS_PLATFORM} test results"
+          exit 1
+
+  publish_ci_badge:
+    # Publish the CI badge shown in the README from the aggregated
+    # result of the main jobs. It is published from a separate job, and
+    # not from within the main jobs, because the badge is per-workflow
+    # run and not per-platform: publishing it from each platform job
+    # would let a green platform overwrite the red badge published by
+    # a failed one, depending on the publication order.
+    name: Publish CI badge
+    needs: main
+    if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Check out the tip of main, that the platform jobs may have
+          # just updated, and not the pushed commit.
+          ref: ${{ github.event_name == 'push' && 'main' || github.ref }}
+
+      - name: Publish CI badge
+        shell: bash
+        run: |
+          if [ "${{ needs.main.result }}" = "success" ]; then
+            curl -sf "https://img.shields.io/badge/CI-passing-brightgreen.svg?style=flat-square" \
+              -o docs/tests_results/CI/badge.svg
+          else
+            curl -sf "https://img.shields.io/badge/CI-failed-red.svg?style=flat-square" \
+              -o docs/tests_results/CI/badge.svg
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/tests_results/CI/badge.svg
+          if git diff --cached --quiet; then
+            echo "CI badge already up to date, nothing to publish"
+            exit 0
+          fi
+          git commit -m "CI: publish CI badge [skip ci]"
+          # Retry with rebase if someone pushed on main in between.
+          for i in 1 2 3 4 5; do
+            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+              echo "CI badge published"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "Push failed (attempt $i), retrying after a delay"
+            sleep $((i * 10))
+          done
+          echo "Could not publish the CI badge"
           exit 1
