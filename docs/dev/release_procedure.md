@@ -330,6 +330,9 @@ Before publication, verify that:
 - the Git tag is available remotely;
 - the GitHub release is published;
 - the required GitHub Actions checks are successful;
+- `alire.toml` pins nothing to a local path: verify that
+  `grep "path =" alire.toml` returns nothing; a crate published with a
+  local pin is broken for its users;
 - the local repository is clean.
 
 The publication command is:

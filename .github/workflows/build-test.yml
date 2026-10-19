@@ -187,6 +187,18 @@ jobs:
             echo "mlc already installed"
           fi
 
+      - name: Clone the pinned sibling crates
+        # alire.toml pins list_image to a sibling directory (../list_image)
+        # during development: the vendored list_image sources that were
+        # in src/ were removed in favor of this dependency, and the
+        # Simple_One_Per_Line_Style used by bbt is only in the master
+        # branch of the list_image repository, not yet in the Alire index.
+        # Clone it next to the bbt checkout so that the pin resolves;
+        # `alr build` then builds it as a regular dependency.
+        shell: bash
+        run: |
+          git clone --depth 1 --branch master https://github.com/LionelDraghi/List_Image ../list_image
+
       - name: Run build and checks
         env:
           GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos') && '1' || '' }}
