@@ -13,6 +13,7 @@ on:                    # Run the workflow for each of the following events:
       - '.github/workflows/**'
       - 'Makefile'
       - 'alire.toml'
+      - 'bbt.gpr'
 
   pull_request:        # - A pull-request is opened or updated.
     paths: *trigger_paths
@@ -33,7 +34,58 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  set_badges_pending:
+    # Before any build or test runs, turn the three platform badges to a
+    # red "being tested" state and publish them, so that a push where
+    # the build fails, or where the tests are not run at all, never
+    # leaves in the README the badges of the previous run: the badges
+    # will only turn blue again when the tests of the new version pass.
+    # This is done in a separate job, and not in the first step of the
+    # main jobs, so that a single commit sets the three platforms, and
+    # the parallel main jobs don't fight over the initial publication.
+    name: Set badges to pending
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    # Never prevent the tests from running because of a failure here
+    # (shields.io unreachable, push rejected, ...): the badges would then
+    # stay in their previous state, which is not worse than before.
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish red pending badges
+        shell: bash
+        run: |
+          for P in Linux Darwin Windows; do
+            curl -sf "https://img.shields.io/badge/${P}-being%20tested-red.svg?style=flat-square" \
+              -o docs/tests_results/${P}/badge.svg
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/tests_results/*/badge.svg
+          if git diff --cached --quiet; then
+            echo "Badges already pending, nothing to publish"
+            exit 0
+          fi
+          git commit -m "CI: set test badges to pending [skip ci]"
+          # Retry with rebase if someone pushed on main in between.
+          for i in 1 2 3 4 5; do
+            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+              echo "Pending badges published"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "Push failed (attempt $i), retrying after a delay"
+            sleep $((i * 10))
+          done
+          echo "Could not publish pending badges"
+          exit 1
+
   main:
+    needs: set_badges_pending
+    # Run even when set_badges_pending was skipped (pull-requests) or
+    # failed: the tests are the priority, the badges are only cosmetic.
+    if: always()
     strategy:
       fail-fast: false # Don't stop all the workflows when one of them fails.
     
