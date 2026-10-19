@@ -14,7 +14,7 @@ typically the feature file you are working on, iterated on until it is
 green:
 
 ```sh
-cd tests && ./bbt ../docs/features/<the_feature_file.md>
+cd tests && ./bbt --cleanup=full ../docs/features/<the_feature_file.md>
 ```
 
 For a change impacting the tools, the examples or the non regression
@@ -52,10 +52,11 @@ approach when changing a feature or an error-message format.
 Never compromise the readability of a scenario for a side purpose. In
 particular, a `Given` step is a precondition: do not end a scenario with
 a step such as ``- Given there is no `out.version.txt` file`` whose only
-purpose is to erase a file created by an earlier step. Files left over by
-the commands belong to the test harness cleanup, not to the scenario: let
-`make clean` remove them, and update the `clean` target if it leaves one
-behind.
+purpose is to erase a file created by an earlier step. Files left over
+by the commands are removed by the harness: the suites run with
+`--cleanup=full`, and a direct run of a single test file should be
+invoked with `--cleanup=full` too, so that bbt removes at the end of
+each document everything created during the run, whatever created it.
 
 Avoid snapshot testing, especially for generated files. Refer to
 `docs/bbt-skill` for the project testing approach.
@@ -210,15 +211,13 @@ unwanted:
 Check the file system directly, not only `git status`. Git-ignored artefacts
 such as `input._`, `expected__` or `cp...` remain invisible to Git.
 
-Files created by `When I run` steps, such as binaries compiled by `gcc`, are
-not tracked by the bbt `--cleanup` option. That option only tracks files
-created by `Given` steps.
+The suites run with `--cleanup=full`, and bbt removes at the end of each
+document every file and dir created during the run, whatever created it:
+`make clean` is only a fallback for direct runs of a single test made
+without `--cleanup=full`, and for interrupted runs.
 
-If `make clean` leaves an unwanted artefact behind, update the clean target so
-that this type of artefact is removed automatically in the future.
-
-After changing the cleanup rules, run `make clean` again and repeat the
-file-system and Git review.
+If a `--cleanup=full` run leaves an unwanted artefact behind, that is a
+bbt bug: fix bbt, do not grow the `clean` target.
 
 ## 6. Owner review and approval
 

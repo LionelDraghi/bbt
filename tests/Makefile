@@ -22,7 +22,7 @@ endif
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 
 # Options common to the three bbt suite invocations below
-COMMON_OPTIONS := --yes --keep_going --cleanup --quiet \
+COMMON_OPTIONS := --yes --keep_going --cleanup=full --quiet \
 --human_match --scenario_timeout 30
 
 all: check
@@ -44,15 +44,17 @@ help:
 	@ echo "                   which require gcc on the PATH"
 	@ echo "  non_reg       : run the non regression tests (non_reg_tests)"
 	@ echo "  unit_testing  : run the file_utilities unit tests"
-	@ echo "  check         : run all the suites, then remove the run artifacts"
+	@ echo "  check         : run all the suites, which remove their own"
+	@ echo "                   run artifacts (--cleanup=full)"
 	@ echo "  doc           : copy the unit test results to $(RESULTS_DIR)"
 	@ echo "                   and fetch the badge"
-	@ echo "  clean         : remove the test run artifacts only,"
-	@ echo "                   keeping the built binaries and links usable"
+	@ echo "  clean         : fallback removing the artifacts of direct"
+	@ echo "                   runs made without --cleanup=full, keeping"
+	@ echo "                   the built binaries and links usable"
 	@ echo "  distclean     : remove everything that can be rebuilt,"
 	@ echo "                   including binaries and links"
 	@ echo ""
-	@ echo "To run a single test: ./bbt <test_file>, cf. AGENTS.md"
+	@ echo "To run a single test: ./bbt --cleanup=full <test_file>"
 
 # To keep the trace of the run on each platform, the test results
 # are stored in a directory per platform (Linux, Windows, Darwin).
@@ -120,8 +122,6 @@ features: setup
 	--index $(RESULTS_DIR)/features_results.md  \
 	../docs/features 
 	@ echo
-	@ - rm -f verbose_output_NOK.md verbose_output_OK.md
-	@ - rm -f out.version.txt
 
 examples: setup
 	@ # Check examples
@@ -158,7 +158,6 @@ check: setup bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) features examples non_reg unit_te
 	@ # scenario files will be wrong!
 	@ # =====================================================================
 	
-	@ - rm -f *.out *.err *.xml file1.tmp main$(EXE_SUFFIX) cp$(EXE_SUFFIX) timed$(EXE_SUFFIX) tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
 	@ $(MAKE) -s clean --directory=file_utilities_tests
 
 doc: $(RESULTS_DIR)
@@ -169,30 +168,16 @@ doc: $(RESULTS_DIR)
 	@ curl -s "$$(cat $(RESULTS_DIR)/badge.url)" -o $(RESULTS_DIR)/badge.svg
 
 
-# clean removes the test run artifacts only, keeping the links.
-# --cleanup tracks only the files created in Given steps, so the
-# files created by When steps remain: they are listed below.
-# The list may become incomplete when new tests create new files:
-# any file not listed here, for instance a file of your own, is preserved.
+# clean is only a fallback: the suites run with --cleanup=full (cf.
+# COMMON_OPTIONS) and bbt removes at the end of each document every
+# file and dir created during the run, whatever created it. A direct
+# run of a single test leaves nothing behind either when invoked as
+# "./bbt --cleanup=full <test_file>". clean then only removes the
+# default output files of plain direct runs, and the unit test
+# results. Any other file, for instance a file of your own, is
+# preserved.
 clean:
-	@ - rm -f *.out *.err main$(EXE_SUFFIX) cp$(EXE_SUFFIX) hello optimize timed$(EXE_SUFFIX) *.created_files tmp.txt output2.txt tmp.md index_*.md expected_grammar expected_keywords input.*
-	@ - rm -f all_results.xml result2.xml time_attribute.xml result.xml windows_results.xml file1.tmp
-	@ - rm -f time_attribute.md escape_test.md simple_test.md file? log.?
-	@ - rm -rf dir* suite_?.md whatever.txt background.md robustness.md filtered_step.md verbose_output_*.md
-	@ - rm -f file_utilities_tests/test_file_utilities.md
-	@ - rm -f blaise_cendrars.txt flowers1.txt flowers2.txt flowers3.txt help_message.txt le_Cid_1.txt le_Cid_2.txt le_Cid_3.txt list_1.txt list_2.txt
-	@ - rm -f out.version.txt
-	@ - rm -f text.1 text.2 text.3 text.4 text.ref tmp.1 tmp.2 tmp.3 tmp.4
-	@ - rm -f hello.txt
-	@ - rm -f cmd_not_found.md compare.md compare_crlf.md contains.md contains_multiline.md create_exec.md failed_doesnt_1.md failed_doesnt_2.md
-	@ - rm -f is.md scenario1.md scenario_with_assertion_error.md scenario_with_syntax_error.md skipped_count_test.md step_markers.md t1.md test_that_should_fail.md
-	@ - rm -f file_is_code_fence.input no_step_in_scenario.input no_step_in_scenario_b.input no_step_or_scenario_in_feature.input vza.input
-	@ - rm -f bad_steps.md empty.md No_Scenario.md too_much_verbs_in_step.md shell_test.md
-	@ - rm -f code_block_missing_at_EOF.md code_block_missing_in_scenario.md code_block_missing_in_step.md code_block_not_closed.md code_block_not_closed2.md
-	@ - rm -f ask ask$(EXE_SUFFIX) ask.c new_name.txt config.ini erase_confirm.md
-	@ - rm -f bad_clause.md bad_regexp.md regexp_compare.md time_compare.md warn_compare.md where_compare.md
-	@ - rm -f build_log.txt build_no_time.txt build_ref.txt build_secs.txt build_words.txt build_wrong.txt
-	@ - rm -f count.txt log.txt perf.txt run_a.txt run_b.txt where.txt where_other_name.txt where_ref.txt
+	@ - rm -f *.out *.err file_utilities_tests/test_file_utilities.md
 
 # distclean also removes the binaries and the links
 distclean: clean
