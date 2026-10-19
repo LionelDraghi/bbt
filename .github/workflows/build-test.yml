@@ -106,6 +106,15 @@ jobs:
     steps:
         # Check-out the repository
       - uses: actions/checkout@v4
+        with:
+          # On main pushes, check out the tip of main instead of the pushed
+          # commit: the set_badges_pending job has just published the red
+          # pending badges there, and starting from that tip is required
+          # for the publish step to commit the regenerated blue badges
+          # again (a file identical to the checked out one is not part of
+          # the commit). On other events (pull-requests, releases), the
+          # default ref is used.
+          ref: ${{ github.event_name == 'push' && 'main' || github.ref }}
 
         # Install and setup Alire package manager
       - uses: alire-project/setup-alire@v5
