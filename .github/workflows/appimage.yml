@@ -37,6 +37,14 @@ jobs:
     steps:
        - name: Checkout
          uses: actions/checkout@v2
+       - name: Clone the pinned sibling crate
+         # alire.toml pins list_image to a sibling directory (../list_image)
+         # during development, and alr2appimage-action runs `alr build` in
+         # the local workspace: clone it next to the bbt checkout so that
+         # the pin resolves (same clone as in build-test.yml).
+         shell: bash
+         run: |
+           git clone --depth 1 --branch master https://github.com/LionelDraghi/List_Image ../list_image
        - name: alr2appimage-action
          uses: mgrojo/alr2appimage-action@main
          with:
