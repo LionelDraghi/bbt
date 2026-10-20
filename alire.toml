@@ -47,9 +47,3 @@ bbt = "validation"
 [[depends-on]]
 termicap = "^1.0.0"
 
-[[depends-on]]
-# replaces the list_image sources that were vendored in src/ until now
-list_image = "*"
-
-[[pins]]
-list_image = { path = "../list_image" }
