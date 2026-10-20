@@ -1,6 +1,6 @@
 name = "bbt"
 description = "Black box test runner"
-version = "0.6.0"
+version = "0.6.1-dev"
 
 authors = ["Lionel Draghi"]
 maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
@@ -32,8 +32,10 @@ utilada = "^2.8.0"
 # the experimental extensions set : FSF GCC 15 / GNAT Pro 25 or later.
 # GNAT FSF 16 is the current toolchain; note that on darwin the linker
 # bundled with the GNAT FSF toolchains (15.x and 16.x alike) cannot
-# parse the Xcode 26.6+ SDK .tbd stubs (arm64e.x1 targets), so the CI
-# runs on macos-15 until this is fixed upstream
+# parse the recent SDK .tbd stubs (arm64e.x1 targets): the Xcode 27 CLT
+# of the macos-latest GitHub runner image fails every link, in our CI as
+# in the alire-index CI, so the CI runs on macos-15 until this is fixed
+# upstream
 # (cf. https://github.com/alire-project/GNAT-FSF-builds/issues/112).
 gnat = ">=16"
 

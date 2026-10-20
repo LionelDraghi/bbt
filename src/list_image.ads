@@ -30,15 +30,15 @@ package List_Image is
    --  package Id_Sets is new Ada.Containers.Indefinite_Hashed_Sets
    --    (String, Ada.Strings.Hash_Case_Insensitive, "=");
    --  Id_Set : Id_Sets.Set;
-   --  ...  
+   --  ...
    --  -- Start of List_Image related declarations -------------------------
    --  use Id_Sets;
    --  package Id_Sets_Cursors is new List_Image.Cursors_Signature
    --    (Container => Id_Sets.Set,
    --     Cursor    => Id_Sets.Cursor);
-   -- 
+   --
    --  function Image (C : Cursor) return String is (Element (C));
-   -- 
+   --
    --  function Id_Set_Image is new List_Image.Image
    --    (Cursors => Id_Sets_Cursors,
    --     Style   => List_Image.Bracketed_List_Style);
