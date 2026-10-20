@@ -1,9 +1,22 @@
+<!-- omit from toc -->
 # Development workflow
 
 This document describes the workflow for normal development tasks.
 
 Its purpose is to keep changes easy to review and ensure that commits contain
 a complete, consistent and validated project state.
+
+- [1. Development loop](#1-development-loop)
+- [2. Feature and error-message changes](#2-feature-and-error-message-changes)
+- [3. Embedded help and generated documentation](#3-embedded-help-and-generated-documentation)
+- [4. Review implementation completeness](#4-review-implementation-completeness)
+- [5. Clean before owner review](#5-clean-before-owner-review)
+- [6. Owner review and approval](#6-owner-review-and-approval)
+- [7. Final validation after approval](#7-final-validation-after-approval)
+- [8. Stage and review the complete generated state](#8-stage-and-review-the-complete-generated-state)
+- [9. Commit, rebase and push](#9-commit-rebase-and-push)
+- [10. Design discussions and proposed features](#10-design-discussions-and-proposed-features)
+
 
 ## 1. Development loop
 

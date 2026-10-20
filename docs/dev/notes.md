@@ -1,4 +1,5 @@
-Notes <!-- omit from toc -->
+<!-- omit from toc -->
+Notes 
 =====
 
 - [Manipulation du code de retour avec bash](#manipulation-du-code-de-retour-avec-bash)

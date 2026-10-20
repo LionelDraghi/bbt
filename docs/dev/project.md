@@ -1,4 +1,5 @@
-Project Status <!-- omit from toc -->
+<!-- omit from toc -->
+Project Status 
 ==============
 
 - [Development Status](#development-status)

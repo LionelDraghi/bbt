@@ -1,3 +1,4 @@
+<!-- omit from toc -->
 # Release procedure
 
 This document is the single reference for:
@@ -11,6 +12,17 @@ This document is the single reference for:
 
 Do not commit, push, tag, create a GitHub release or publish to Alire without
 the owner's explicit approval.
+
+- [1. Release prerequisites](#1-release-prerequisites)
+- [2. Select the release version](#2-select-the-release-version)
+- [3. Set the release version](#3-set-the-release-version)
+- [4. Close the release changelog section](#4-close-the-release-changelog-section)
+- [5. Validate the release locally](#5-validate-the-release-locally)
+- [6. Confirm and commit the release state](#6-confirm-and-commit-the-release-state)
+- [7. Validate the release commit on GitHub](#7-validate-the-release-commit-on-github)
+- [8. Tag and publish the GitHub release](#8-tag-and-publish-the-github-release)
+- [9. Publish to Alire](#9-publish-to-alire)
+- [10. Return to development mode](#10-return-to-development-mode)
 
 ## 1. Release prerequisites
 
@@ -361,8 +373,7 @@ publication issue.
 
 ## 10. Return to development mode
 
-After the GitHub and Alire publication steps are complete, propose the next
-development version.
+After the GitHub and Alire publication steps are complete, propose the next development version.
 
 The new version must use the dash-separated `-dev` suffix.
 

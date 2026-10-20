@@ -1,6 +1,8 @@
-# Developer Guide <!-- omit from toc -->
+<!-- omit from toc -->
+# Developer Guide 
 
 - [Design overview](#design-overview)
+- [Command execution and interaction](#command-execution-and-interaction)
 - [Tests](#tests)
 - [Issues and discussions](#issues-and-discussions)
 - [Development Status](#development-status)
