@@ -20,8 +20,10 @@ on:                    # Run the workflow for each of the following events:
 
   workflow_dispatch:   # - A manual run of the workflow is requested from the GitHub web interface.
 
-  release:
-    types: [created]   # - A release is created.
+  # No release trigger: on a release event, github.ref is refs/tags/x.y.z,
+  # which alr2appimage-action passes as target_commitish to the
+  # create-release API, which rejects it (422), so the run would fail on
+  # every release; the continuous AppImage is refreshed by the push runs.
 
 permissions: write-all
 
@@ -30,8 +32,8 @@ jobs:
     name: Continuous
     runs-on: ubuntu-22.04 # Use the oldest supported ubuntu version for greater compatibility.
     if: github.event_name != 'pull_request'
-    # The AppImage release upload is only meaningful on main pushes and
-    # releases: on a pull request, the release creation fails with an
+    # The AppImage release upload is only meaningful on main pushes:
+    # on a pull request, the release creation fails with an
     # invalid tag_name / target_commitish (the merge ref is not a valid
     # release target), and the check was reported as a PR failure.
     steps:
