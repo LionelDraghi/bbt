@@ -164,13 +164,7 @@ The stable version of [![Alire](https://img.shields.io/endpoint?url=https://alir
 
 #### Status  
 
-The three supported platforms are continuously tested: the badges below are
-updated by the CI on each push, and give the test results of the latest version.
-On each push, the CI first turns the badges red ("being tested"): they only turn
-blue again when the tests of the new version pass, so a red badge means either
-that some tests failed, or that the latest version could not be tested at all.
-The CI badge follows the same rule: green only means that the latest version
-passed all the tests on the three platforms.
+The three supported platforms are continuously tested:
 
 [![](docs/tests_results/CI/badge.svg)](https://github.com/LionelDraghi/bbt/actions/workflows/build-test.yml) 
 

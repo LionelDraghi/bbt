@@ -1,7 +1,7 @@
 <!-- omit from toc -->
 # Changelog
 
-All notable changes from a user perspective to this project will be documented in this file.  
+All notable changes **from a user perspective** to this project will be documented in this file.  
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).

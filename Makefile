@@ -13,14 +13,14 @@ endif
 
 .SILENT:
 
-all: build tools check doc
+all: build check doc
 
 .PHONY : help tools
 help:
 	echo "Usage: make [target]"
 	echo ""
 	echo "Targets:"
-	echo "  all        : build, tools, check and doc (default when no target given)"
+	echo "  all        : build, check and doc (default when no target given)"
 	echo "  build      : build bbt in validation mode"
 	echo "  release    : build bbt in release mode"
 	echo "  tools      : build the sut and rpl tools, and create the"

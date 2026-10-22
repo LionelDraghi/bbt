@@ -2,52 +2,45 @@
 
 This file is the entry point for coding agents working on bbt.
 
-## Non-negotiable rules
-
-- Never stage, commit, push, tag, create a release or publish to Alire without
-  the owner's explicit consent.
-- `git add`, `git commit` and `git push` are forbidden until the owner gives
-  the corresponding go-ahead.
-- If a build, test, documentation, cleanup or publication step fails, stop and
-  report the failure.
-- Do not include unrelated changes, temporary files or unwanted test artefacts.
-- Check repository cleanliness on the file system, not only with `git status`.
-- The repository uses LF line endings on every platform, including Windows.
-
-## Choose the right procedure
-
-- Development work, bug fixes, doc updates, tests, cleanup, review: use
-  `docs/dev/development_workflow.md`
-- Release versioning, tagging, GitHub release, Alire publication: use
-  `docs/dev/release_procedure.md`
+The shared rules for Lionel's Ada projects live in the [reference
+repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)
+and apply here in full:
+non-negotiable git rules, procedure choice, task triage, reference
+policy, skills, and the definition of done. This file keeps only what
+is specific to bbt. The repository uses LF line endings on every
+platform, including Windows.
 
 ## Build pointers
 
-- `make build` builds bbt and project tools.
+The shared build pointers apply ([reference repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)); `make help` is the documentation of record. bbt specifics:
+
+- `make build` builds bbt in validation mode; the tools are built by `make tools`, not by `make build`.
 - `make tools` builds `sut` and `rpl`, and refreshes the test links in `tests/`.
-- `make clean` removes test artefacts while keeping built binaries and links.
-- `make distclean` removes everything that can be rebuilt.
+- `make doc` regenerates the generated docs (help reference files, fixme and issues indexes, badges) and checks the links with mlc.
+- `make install` copies bbt to `~/bin`.
+- Scenario sources live in `docs/features/` and `docs/examples/`; `tests/` is the run directory, and also hosts the unit and non-regression suites (`expect_test`, `file_utilities_tests`, `non_reg_tests`, `spawn_test`, `utilada_test`).
+- Deviation on `clean`: `make clean` removes the test-run artefacts only, keeping the built binaries and links usable; `make distclean` matches the shared full clean (everything that can be rebuilt).
 
-## Task triage
+## Test procedure
 
-When the user asks “what should we do now?” or “what is the priority right now?”,
-check the project backlog and tracked work before proposing new work:
+- To run a specific test: `cd tests && ./bbt <test_file>`
+- To run sanity checks (rapid): `cd tests && ./bbt ../docs/examples`
+- To run functional tests: `cd tests && ./bbt ../docs/features`
+- Add the option `--exclude Windows_Only` when you are on Linux/macOS.
+- Add the option `--exclude Unix_Only` when you are on Windows.
 
-- `docs/dev/issues_index.md` for tracked issues;
-- `docs/proposed_features` for candidate ideas not yet decided;
-- `docs/dev/project.md` for the project TDL and current directions;
-- `docs/dev/fixme_index.md` for actionable fixes and cleanup items;
-- `docs/dev/design_discussions.md` for decisions that constrain the next step.
+## Conditional readings
 
-Use these sources to ground the answer in the repository’s existing work. Do not
-invent a new task before checking whether the need is already tracked elsewhere.
+Read a document only when the task requires it; do not open them all up front.
 
-## Useful references
-
-- `docs/bbt-skill`
-- `docs/dev/developer_guide.md`
-- `docs/dev/design_discussions.md`
-- `docs/dev/fixme_index.md`
-- `docs/proposed_features`
+- To understand and use bbt: `docs/bbt-skill` — this is the bbt agent
+  skill, published from this repository and installed from GitHub
+  (`npx skills add LionelDraghi/bbt --skill bbt-skill`)
+- To prepare or run a release: the [common release procedure on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/release_procedure.md), with the bbt parameters and additions in `docs/dev/release_procedure.md`
+- To choose the next task or find already-tracked work:
+  `docs/dev/issues_index.md`, `docs/dev/project.md`,
+  `docs/dev/fixme_index.md`, `docs/proposed_features`
+- To review or challenge the design: `docs/dev/design_discussions.md`
+- To follow the developer workflow: `docs/dev/developer_guide.md`
 
 bbt is tested mostly with bbt.
