@@ -8,6 +8,7 @@
 - [Overview](#overview)
 - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
 - [A small example](#a-small-example)
+- [Real life examples](#real-life-examples)
 - [Partial parsing](#partial-parsing)
 - [Installation](#installation)
   - [Stable version](#stable-version)
@@ -18,8 +19,6 @@
 - [First use](#first-use)
 - [For AI coding agents](#for-ai-coding-agents)
 - [Some projects using *bbt*](#some-projects-using-bbt)
-  - [By contributors](#by-contributors)
-  - [By users](#by-users)
 - [Help and comments](#help-and-comments)
 - [Further reading](#further-reading)
   - [As a user](#as-a-user)
@@ -114,6 +113,12 @@ And in any case, to see what is taken into account by *bbt* in your file, and wh
 ```
 bbt explain my_scenario.md
 ```   
+
+## Real life examples
+
+More realistic files, with graphics, table of content, etc.:
+- https://github.com/LionelDraghi/topoproof/blob/main/docs/features/orientation.md
+- https://github.com/LionelDraghi/ArchiCheck/blob/master/tests/05_layer_rule.md
   
 ## Partial parsing 
 
@@ -215,14 +220,12 @@ Alternatively, simply copy the [docs/bbt-skill](docs/bbt-skill) directory into t
 
 ## Some projects using *bbt*
 
-### By contributors
 - Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret. Kudos to the first bbt adopter!
 - [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
 - aclida (not yet public) by [Heziode](https://github.com/Heziode)
-
-### By users
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert
+- [acc](https://github.com/LionelDraghi/ArchiCheck), [smk](https://github.com/LionelDraghi/smk), [topoproof](https://github.com/LionelDraghi/topoproof), by Lionel Draghi
 
 ## Help and comments
 - Your comments and feature suggestions are welcome [in *bbt* discussions](https://github.com/LionelDraghi/bbt/discussions);
