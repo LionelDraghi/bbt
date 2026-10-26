@@ -34,13 +34,13 @@
    - OK : Then file `file5` is  
    - [X] scenario   [Creating a file with some content](../../features/A005_Given.md) pass  
 
-   ### Scenario: [An existing file with the expected content is kept as is](../../features/A005_Given.md): 
+   ### Scenario: [An existing file with the expected content is just a leftover](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/tmp`  
    - OK : Given the new `keep_content.md` file  
    - OK : When I run `./bbt -q -c keep_content.md`  
    - OK : Then the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - OK : And there is a `config.ini` file  
-   - [X] scenario   [An existing file with the expected content is kept as is](../../features/A005_Given.md) pass  
+   - OK : And there is no `config.ini` file  
+   - [X] scenario   [An existing file with the expected content is just a leftover](../../features/A005_Given.md) pass  
 
    ### Scenario: [An existing file with a different content is replaced with --yes](../../features/A005_Given.md): 
    - OK : Given the new file `config.ini` containing `Tmp_dir=/other`  
@@ -171,6 +171,41 @@
    - OK : Then I get an error  
    - OK : And output contains   
    - [X] scenario   [Failed "file doesn't contain"](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Background: [](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : Given file `flowers.txt`  
+   - [X] background [](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Scenario: [Successful "output is not" check](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : When I run `./sut read flowers.txt`  
+   - OK : Then output is not `Cactus`  
+   - OK : But the output contains `Rose`  
+   - OK : And I do not get `Cactus`  
+   - OK : And output doesn't contain `Cactus`  
+   - [X] scenario   [Successful "output is not" check](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Background: [](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : Given file `flowers.txt`  
+   - [X] background [](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Scenario: [Failed "output is not"](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : Given the file `failed_is_not.md`  
+   - OK : When I run `./bbt failed_is_not.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `**NOK** : Then output is not`  
+   - OK : And output contains `Output equal to unexpected content:`  
+   - [X] scenario   [Failed "output is not"](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Background: [](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : Given file `flowers.txt`  
+   - [X] background [](../../features/A030_Then_Does_Not_Contain.md) pass  
+
+   ### Scenario: [a negation word on a non negatable step warns](../../features/A030_Then_Does_Not_Contain.md): 
+   - OK : Given the file `warn_negation.md`  
+   - OK : When I run `./bbt warn_negation.md`  
+   - OK : Then I get no error  
+   - OK : And output contains `"no"/"not" ignored: this step form has no negative variant`  
+   - [X] scenario   [a negation word on a non negatable step warns](../../features/A030_Then_Does_Not_Contain.md) pass  
 
 
 # Document: [A040_Example_Keyword.md](../../features/A040_Example_Keyword.md)  
@@ -1057,6 +1092,20 @@
    - OK : Then I get an error  
    - [X] scenario   [wrong error output](../../features/A270_Then_Error_Output.md) pass  
 
+   ### Scenario: [the error output is not](../../features/A270_Then_Error_Output.md): 
+   - OK : When I run `./sut create`  
+   - OK : Then the error output is not `Something went wrong`  
+   - OK : But the error output is `Missing file name`  
+   - OK : And the error output does not contain `version`  
+   - [X] scenario   [the error output is not](../../features/A270_Then_Error_Output.md) pass  
+
+   ### Scenario: [failed "the error output is not"](../../features/A270_Then_Error_Output.md): 
+   - OK : Given the file `failed_stderr_is_not.md`  
+   - OK : When I run `./bbt failed_stderr_is_not.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `**NOK** : Then the error output is not`  
+   - [X] scenario   [failed "the error output is not"](../../features/A270_Then_Error_Output.md) pass  
+
 
 # Document: [A280_Given_Environment_Variable.md](../../features/A280_Given_Environment_Variable.md)  
   ## Feature: environment variables  
@@ -1156,6 +1205,21 @@
    - OK : Then I get (ignoring time)  
    - OK : But the output does not contain  
    - [X] scenario   [a time tag in the output does not fail the comparison](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md): 
+   - OK : When I run shell `echo "[13:45:12] Building foo" 1>&2`  
+   - OK : Then the error output is (ignoring time)  
+   - OK : But the error output is not (ignoring time)  
+   - OK : And the error output does not contain (ignoring time)  
+   - [X] scenario   [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
    - OK : Given the file `build_ref.txt`  
@@ -1350,6 +1414,7 @@
    - OK : Given the file `perf_ref.txt`  
    - OK : Given the file `perf_other.txt`  
    - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
+../docs/features/A300_Ignoring.md:525: Warning: the ignoring location pattern matches nothing on the actual side
    - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
    - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
@@ -1590,6 +1655,84 @@
    - OK : And  the output contains `use --yes to confirm all operations`  
    - OK : And  there is a `sut_out.txt` file  
    - [X] scenario   [--cleanup=full removal refused on a non interactive stdin](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [--cleanup=full removes a pre-existing file with the expected content](../../features/B010_Deleting_created_files.md): 
+   - OK : Given the new file `leftover.txt` containing `some text`  
+   - OK : Given the new `overwrite_same.md` file  
+   - OK : When I run `./bbt -q --yes --cleanup=full overwrite_same.md`  
+   - OK : Then the output contains `## Summary : **Success**`  
+   - OK : And there is no `leftover.txt` file  
+   - [X] scenario   [--cleanup=full removes a pre-existing file with the expected content](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [--cleanup=full removes a file overwritten with --yes](../../features/B010_Deleting_created_files.md): 
+   - OK : Given the new file `replaced.txt` containing `keep me`  
+   - OK : Given the new `overwrite_yes.md` file  
+   - OK : When I run `./bbt -q --yes --cleanup=full overwrite_yes.md`  
+   - OK : Then the output contains `## Summary : **Success**`  
+   - OK : And there is no `replaced.txt` file  
+   - [X] scenario   [--cleanup=full removes a file overwritten with --yes](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [a refused overwrite keeps the pre-existing file](../../features/B010_Deleting_created_files.md): 
+   - OK : Given the new file `refused.txt` containing `keep me`  
+   - OK : Given the new `overwrite_refused.md` file  
+   - OK : When I run `./bbt -q --no_tty overwrite_refused.md`  
+   - OK : Then the output is  
+   - OK : Then I get an error  
+   - OK : And the output contains `file "refused.txt" not overwritten`  
+   - OK : And there is a `refused.txt` file  
+   - OK : And the file `refused.txt` contains `keep me`  
+   - [X] scenario   [a refused overwrite keeps the pre-existing file](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Background: [](../../features/B010_Deleting_created_files.md): 
+   - OK : Given there is no dir `dir1`  
+   - OK : Given there is no dir `dir3`  
+   - OK : Given there is no file `f1`  
+   - OK : Given there is no file `sut_out.txt`  
+   - OK : Given there is no dir `sut_dir`  
+   - OK : Given the new `create_tree.md` file  
+   - OK : Given the new `create_sut_files.md` file  
+   - [X] background [](../../features/B010_Deleting_created_files.md) pass  
+
+   ### Scenario: [a non interactive run refuses the overwrite and keeps the file](../../features/B010_Deleting_created_files.md): 
+   - OK : Given the new file `refused2.txt` containing `keep me`  
+   - OK : Given the new `overwrite_no_tty.md` file  
+   - OK : When I run `./bbt -q --no_tty overwrite_no_tty.md`  
+   - OK : Then I get an error  
+   - OK : And the output contains `use --yes to confirm all operations`  
+   - OK : And the output contains `not overwritten`  
+   - OK : And there is a `refused2.txt` file  
+   - OK : And the file `refused2.txt` contains `keep me`  
+   - [X] scenario   [a non interactive run refuses the overwrite and keeps the file](../../features/B010_Deleting_created_files.md) pass  
 
 
 # Document: [B020_Exec_dir.md](../../features/B020_Exec_dir.md)  
@@ -2148,6 +2291,11 @@
    - OK : then the output is equal to file `../docs/help/matching.txt`  
    - [X] scenario   [matching help](../../features/B130_Cmd_Line_Help.md) pass  
 
+   ### Scenario: [ignoring help](../../features/B130_Cmd_Line_Help.md): 
+   - OK : When I run `./bbt help ignoring`   
+   - OK : then the output is equal to file `../docs/help/ignoring.txt`  
+   - [X] scenario   [ignoring help](../../features/B130_Cmd_Line_Help.md) pass  
+
    ### Scenario: [others help](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help other`   
    - OK : then the output is equal to file `../docs/help/other.txt`  
@@ -2158,6 +2306,7 @@
    - OK : then the output contains file `../docs/help/base.txt`  
    - OK : and  the output contains file `../docs/help/filtering.txt`  
    - OK : and  the output contains file `../docs/help/matching.txt`  
+   - OK : and  the output contains file `../docs/help/ignoring.txt`  
    - OK : and  the output contains file `../docs/help/other.txt`  
    - [X] scenario   [On_All help](../../features/B130_Cmd_Line_Help.md) pass  
 
@@ -2668,6 +2817,7 @@
    - OK : Given the file `t1.md`  
    - OK : When I successfully run `./bbt --strict t1.md`  
    - OK : Then the output contains `t1.md:0: Warning: Multiple When in the same Scenario` (ignoring location)  
+   - OK : But the output does not contain `t1.md:0: Warning: Multiple When in the same Scenario`  
    - [X] scenario   [](../../features/C090_GNU_Error_Msg_Format.md) pass  
 
 
@@ -2691,12 +2841,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 273 scenarios OK
+## Summary : **Success**, 284 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 273   |
+| Successful | 284   |
 | Empty      | 0     |
 | Not Run    | 5     |
 
