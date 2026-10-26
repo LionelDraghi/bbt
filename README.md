@@ -1,6 +1,6 @@
 # *bbt* README <!-- omit from toc -->
 
-[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) [![Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FLionelDraghi%2Fbbt%2Fmain%2Falire.toml&query=%24.version&label=latest&style=flat-square)](https://github.com/LionelDraghi/bbt/blob/main/docs/changelog.md) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+[![Alire](https://img.shields.io/endpoint?url=https://alire.ada.dev/badges/bbt.json)](https://alire.ada.dev/crates/bbt.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
 [![Awarded](https://img.shields.io/badge/Ada_Crate_of_the_Year-2024-blue?style=flat-square)](https://blog.adacore.com/ada-spark-crate-of-the-year-2024-winners-announced) 
 
@@ -169,7 +169,7 @@ The stable version of [![Alire](https://img.shields.io/endpoint?url=https://alir
 
 #### Status  
 
-The three supported platforms are continuously tested:
+[![Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FLionelDraghi%2Fbbt%2Fmain%2Falire.toml&query=%24.version&label=latest&style=flat-square)](https://github.com/LionelDraghi/bbt/blob/main/docs/changelog.md)
 
 [![](docs/tests_results/CI/badge.svg)](https://github.com/LionelDraghi/bbt/actions/workflows/build-test.yml) 
 
