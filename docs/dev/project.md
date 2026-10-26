@@ -47,6 +47,18 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### Low priority
 
+- model types encapsulation: limited private  
+  The model specs (`bbt-model-documents.ads`, `bbt-model-features.ads`,
+  `bbt-model-scenarios.ads`, `bbt-model-steps.ads`) still expose more
+  than needed (`Document_Type` is not private yet, cf. the fixme in the
+  spec). A first pass at making the model types limited private was
+  stashed away unfinished (git stash « passage en limited private du
+  modèle », April 2026, ~100 lines on the model specs only): it is kept
+  as the historical basis, but is two major refactors old — the work is
+  to be redone on the current code base, using the stashed intent as a
+  guide, and completed (cf. also the `Fixme: should be private` marks
+  in the model specs).
+
 - a User Guide entry on snapshot testing / golden files  
   [UG.md](../UG.md) has no section on comparing a whole output against a
   reference file: when it is the right technique, how to keep the
