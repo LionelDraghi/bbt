@@ -1215,7 +1215,7 @@
    - [X] background [](../../features/A300_Ignoring.md) pass  
 
    ### Scenario: [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md): 
-   - OK : When I run shell `echo "[13:45:12] Building foo" 1>&2`  
+   - OK : When I run shell `echo 13:45:12 Building foo 1>&2`  
    - OK : Then the error output is (ignoring time)  
    - OK : But the error output is not (ignoring time)  
    - OK : And the error output does not contain (ignoring time)  
@@ -1414,7 +1414,7 @@
    - OK : Given the file `perf_ref.txt`  
    - OK : Given the file `perf_other.txt`  
    - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
-../docs/features/A300_Ignoring.md:525: Warning: the ignoring location pattern matches nothing on the actual side
+../docs/features/A300_Ignoring.md:527: Warning: the ignoring location pattern matches nothing on the actual side
    - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
    - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
