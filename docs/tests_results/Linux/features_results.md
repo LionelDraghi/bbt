@@ -1215,7 +1215,7 @@
    - [X] background [](../../features/A300_Ignoring.md) pass  
 
    ### Scenario: [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md): 
-   - OK : When I run shell `echo "[13:45:12] Building foo" 1>&2`  
+   - OK : When I run shell `echo 13:45:12 Building foo 1>&2`  
    - OK : Then the error output is (ignoring time)  
    - OK : But the error output is not (ignoring time)  
    - OK : And the error output does not contain (ignoring time)  
@@ -1414,7 +1414,7 @@
    - OK : Given the file `perf_ref.txt`  
    - OK : Given the file `perf_other.txt`  
    - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
-../docs/features/A300_Ignoring.md:525: Warning: the ignoring location pattern matches nothing on the actual side
+../docs/features/A300_Ignoring.md:527: Warning: the ignoring location pattern matches nothing on the actual side
    - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
    - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
@@ -1539,12 +1539,19 @@
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [the dash shell is set on the command line (Unix_Only) (needs_dash)](../../features/A310_Run_Shell.md) pass  
 
-   ### Scenario: [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md): 
+   ### Scenario: [the zsh shell is set on the command line (Unix_Only) (needs_zsh)](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
-   - OK : When I run `./bbt --shell=pwsh -c shell_test.md`  
+   - OK : When I run `./bbt --shell=zsh -c shell_test.md`  
    - OK : Then I get no error  
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md) pass  
+   - [X] scenario   [the zsh shell is set on the command line (Unix_Only) (needs_zsh)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the fish shell is set on the command line (Unix_Only) (needs_fish)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=fish -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the fish shell is set on the command line (Unix_Only) (needs_fish)](../../features/A310_Run_Shell.md) pass  
 
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -2834,12 +2841,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 283 scenarios OK
+## Summary : **Success**, 284 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 283   |
+| Successful | 284   |
 | Empty      | 0     |
-| Not Run    | 6     |
+| Not Run    | 5     |
 

@@ -289,23 +289,25 @@ the same scenario passes whatever the run hour is.
 
 ### Scenario: a time tag in the error output does not fail the comparison
 
-- When I run shell `echo "[13:45:12] Building foo" 1>&2`
+- When I run shell `echo 13:45:12 Building foo 1>&2`
 - Then the error output is (ignoring time)
   ```
-  [12:34:56] Building foo
+  12:34:56 Building foo
   ```
 - But the error output is not (ignoring time)
   ```
-  [12:34:56] Building bar
+  12:34:56 Building bar
   ```
 - And the error output does not contain (ignoring time)
   ```
-  [12:34:56] Building bar
+  12:34:56 Building bar
   ```
 
 The negated comparison steps on the error output accept the clause like
 their positive twin: the tags are masked on both sides before the
-comparison.
+comparison. No quotes nor brackets in the echoed line: the command runs
+through the platform shell, that does not strip them the same way
+(cmd.exe on Windows).
 
 ### Scenario: the common clock, date and date-time formats are ignored
 
