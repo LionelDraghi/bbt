@@ -438,7 +438,9 @@ References:
   LF rule fixes.
 ## D5. Tests.Actions organization
 
-Status: arbitrated (October 2026), implemented (October 2026)
+Status: arbitrated (October 2026), implemented (October 2026),
+revised (October 2026): the process machinery moved to a
+`Actions.Commands.Spawn` child
 
 `BBT.Tests.Actions` mixes in one package body (1728 lines) the
 command machinery (Spawn listener, process and stream state, pumping,
@@ -484,6 +486,19 @@ test machinery invisible to the rest of bbt.
 
 The move is mechanical: cut and paste plus with and use clauses, no
 behavior change, to be verified by the unchanged test suites.
+
+Revision (October 2026): after the split, `Actions.Commands` still mixed
+two levels of abstraction: the process machinery (process and stream
+state, `Pump`, reaping, killing, output capture, ~350 lines) and the test
+semantics that drive it (`Run_Cmd`, the exit status checks, the deferred
+check, the reporting). The process machinery now lives in the
+`Actions.Commands.Spawn` child package, that owns the process and
+streams state, the output capture, the interactive input, and the
+scenario deadline, that only bounds waiting on the running command.
+`Commands` keeps the test semantics: `Run_Cmd`, `Send_Input`, the exit
+status checks, the deferred check (D2), and the reporting. The spawn
+machinery is used by `Commands` only, and matches no runner case
+branch, hence a child of `Commands` rather than a child of `Actions`.
 
 ## D6. Scenario timeout
 
