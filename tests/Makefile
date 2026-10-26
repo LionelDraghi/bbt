@@ -54,7 +54,27 @@ help:
 	@ echo "  distclean     : remove everything that can be rebuilt,"
 	@ echo "                   including binaries and links"
 	@ echo ""
-	@ echo "To run a single test: ./bbt --cleanup=full <test_file>"
+	@ echo "To run a single test: make <test id> (e.g. make A300) from the"
+	@ echo "root directory: it runs the scenario with the right options, and"
+	@ echo "prints the exact command line, ready to be grabbed and tweaked"
+	@ echo "(e.g. replace ./bbt with ./bbt explain, or add -d for traces)."
+
+# --------------------------------------------------------------------------
+# Replay a single functional test by id, e.g. make A300.
+# The id is resolved against ../docs/features (A300 -> A300_*.md), then
+# run with the same options as the features suite. The exact command
+# line is displayed, so that it can be grabbed and tweaked (e.g. with
+# explain or -d).
+A%:
+	@ f=`ls ../docs/features/$@_*.md 2>/dev/null | head -1`; \
+	if [ -z "$$f" ]; then \
+	    echo "no feature test file with id $@ in ../docs/features"; \
+	    exit 1; \
+	fi; \
+	echo "=== running: (cd tests && ./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $$f)"; \
+	./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $$f
+
+
 
 # To keep the trace of the run on each platform, the test results
 # are stored in a directory per platform (Linux, Windows, Darwin).

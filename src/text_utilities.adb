@@ -1386,13 +1386,87 @@ package body Text_Utilities is
       S := R;
    end Mask_Version;
 
+   function Match_Location_At (S : String; From : Positive) return Natural is
+   -- Returns the last index of a source location starting at From,
+   -- 0 if the characters at From do not form one. A location is a
+   -- GNU locator prefix: a colon followed by a line number, and
+   -- optionally a column, in the GNU ":line:column" style or the
+   -- GNAT/bbt "line.column" style, closed by the colon separating
+   -- the locator from the message. The file name stays visible,
+   -- only the line and column groups are masked. Two guards keep
+   -- the pattern narrow: the colon group is not preceded by a
+   -- digit, so that a clock time as in 12:34:56 is not cut in the
+   -- middle, and the match is closed by a colon, so that plain
+   -- numbers, durations or port numbers are not mistaken for one.
+   begin
+      if S (From) /= ':' then
+         return 0;
+      end if;
+      if From > S'First and then Is_Digit (S (From - 1)) then
+         return 0;
+      end if;
+      declare
+         I : Natural := From;
+      begin
+         -- the line number
+         while I < S'Last and then Is_Digit (S (I + 1)) loop
+            I := @ + 1;
+         end loop;
+         if I = From then
+            return 0;
+         end if;
+         -- the optional column, ":l:c" or "l.c" style
+         if I + 2 <= S'Last
+           and then (S (I + 1) = ':' or else S (I + 1) = '.')
+           and then Is_Digit (S (I + 2))
+         then
+            I := I + 2;
+            while I < S'Last and then Is_Digit (S (I + 1)) loop
+               I := @ + 1;
+            end loop;
+         end if;
+         -- closed by the locator/message separator
+         if I < S'Last and then S (I + 1) = ':' then
+            return I;
+         else
+            return 0;
+         end if;
+      end;
+   end Match_Location_At;
+
+   procedure Mask_Location (S     : in out Unbounded_String;
+                            Count : in out Natural) is
+   -- Replaces every GNU locator in S by Ignore_Marker, the file
+   -- name staying visible
+      Src : constant String := To_String (S);
+      R   : Unbounded_String;
+      I   : Positive := Src'First;
+   begin
+      while I <= Src'Last loop
+         declare
+            Last : constant Natural := Match_Location_At (Src, I);
+         begin
+            if Last > 0 then
+               Append (R, Ignore_Marker);
+               Count := @ + 1;
+               I     := Last + 1;
+            else
+               Append (R, Src (I));
+               I     := @ + 1;
+            end if;
+         end;
+      end loop;
+      S := R;
+   end Mask_Location;
+
    -- -----------------------------------------------------------------------
    function Image (P : Ignore_Pattern) return String is
      (case P is
          when No_Pattern => "",
          when Time       => "time",
          when Dir        => "dir",
-         when Version    => "version");
+         when Version    => "version",
+         when Location   => "location");
 
    function Image (Patterns : Ignore_Pattern_Set) return String is
       R : Unbounded_String;
@@ -1435,6 +1509,9 @@ package body Text_Utilities is
                end if;
                if Patterns (Version) then
                   Mask_Version (L, Counts (Version));
+               end if;
+               if Patterns (Location) then
+                  Mask_Location (L, Counts (Location));
                end if;
                R.Append (To_String (L));
             end;

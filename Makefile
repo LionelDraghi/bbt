@@ -97,6 +97,12 @@ check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	echo === running tests
 	$(MAKE) -s check --directory=tests
 
+# Replay a single functional test by id, e.g. make A300,
+# with the same options as the features suite (delegated to tests/).
+A%:
+	@ $(MAKE) -s --directory=tests $@
+
+
 	#=# echo
 	#=# echo === coverage report
 	#=# alr gnatcov coverage --annotate=html --output-dir gnatcov_out --level=stmt --projects bbt.gpr *.srctrace

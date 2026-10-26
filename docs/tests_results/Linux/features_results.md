@@ -1154,6 +1154,7 @@
    - OK : Given the file `log.txt`  
    - OK : When I run `./sut read log.txt`  
    - OK : Then I get (ignoring time)  
+   - OK : But the output does not contain  
    - [X] scenario   [a time tag in the output does not fail the comparison](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -1168,6 +1169,7 @@
    - OK : Given the file `run_a.txt`  
    - OK : Given the file `run_b.txt`  
    - OK : Then file `run_a.txt` is equal to file `run_b.txt` (ignoring time)  
+   - OK : But file `run_a.txt` is not equal to file `run_b.txt`  
    - [X] scenario   [the common clock, date and date-time formats are ignored](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -1182,6 +1184,7 @@
    - OK : Given the file `where.txt`  
    - OK : When I run `./sut read where.txt`  
    - OK : Then I get `sut home is C:\prj\bbt` (ignoring dir)  
+   - OK : But the output does not contain `sut home is C:\prj\bbt`  
    - [X] scenario   [only the file name is checked, not the directory](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -1227,6 +1230,7 @@
    - OK : When I run `./sut read build_log.txt`  
    - OK : Then I get (ignoring time, dir)  
    - OK : And I get (ignoring time and dir)  
+   - OK : But the output does not contain  
    - [X] scenario   [time and dir combine on one step](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -1241,6 +1245,7 @@
    - OK : Given the file `log.txt`  
    - OK : When I run `./sut read log.txt`  
    - OK : Then the output contains (ignoring time)  
+   - OK : But the output does not contain  
    - [X] scenario   [a time tag does not fail a contains check](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -1300,7 +1305,53 @@
    - OK : Given the file `perf.txt`  
    - OK : When I run `./sut read perf.txt`  
    - OK : Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)  
+   - OK : But the output does not contain `Build finished in 3.2 s`  
    - [X] scenario   [a duration may vary](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a source location in the output does not fail the comparison](../../features/A300_Ignoring.md): 
+   - OK : Given the file `warn_ref.txt`  
+   - OK : Given the file `warn_other.txt`  
+   - OK : Then file `warn_ref.txt` is not equal to file `warn_other.txt`  
+   - OK : But file `warn_ref.txt` is equal to file `warn_other.txt` (ignoring location)  
+   - [X] scenario   [a source location in the output does not fail the comparison](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a locator in the GNAT style is masked as well](../../features/A300_Ignoring.md): 
+   - OK : Given the file `gnu_loc.txt`  
+   - OK : Given the file `gnu_other.txt`  
+   - OK : Then file `gnu_loc.txt` is equal to file `gnu_other.txt` (ignoring location)  
+   - OK : But file `gnu_loc.txt` is not equal to file `gnu_other.txt`  
+   - [X] scenario   [a locator in the GNAT style is masked as well](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a duration is not mistaken for a location](../../features/A300_Ignoring.md): 
+   - OK : Given the file `perf_ref.txt`  
+   - OK : Given the file `perf_other.txt`  
+   - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
+   - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
+   - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
    - OK : Given the file `build_ref.txt`  
@@ -1314,6 +1365,7 @@
    - OK : Given the file `count.txt`  
    - OK : When I run `./sut read count.txt`  
    - OK : Then I get (ignoring time and [0-9]+)  
+   - OK : But the output does not contain  
    - [X] scenario   [a regexp combines with a named pattern](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
@@ -2134,19 +2186,19 @@
    ### Scenario: [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - OK : and  the output contains `bbt version 1.2.3` (ignoring version)  
    - [X] scenario   [calling bbt without parameter or with -h put the normal help 1/3](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt help`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - OK : and  the output contains `bbt version 1.2.3` (ignoring version)  
    - [X] scenario   [calling bbt without parameter or with -h put the normal help 2/3](../../features/B130_Cmd_Line_Help.md) pass  
 
    ### Scenario: [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md): 
    - OK : When I run `./bbt he`  
    - OK : then the output contains file `../docs/help/base.txt`  
-   - OK : and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`  
+   - OK : and  the output contains `bbt version 1.2.3` (ignoring version)  
    - [X] scenario   [calling bbt without parameter or with -h put the normal help 3/3](../../features/B130_Cmd_Line_Help.md) pass  
 
 
@@ -2210,37 +2262,32 @@
    - OK : Given the file `simple_test.md` containing  
    - OK : When I run `./bbt --junit result.xml simple_test.md`  
    - OK : Then I get no error  
-   - OK : And file `result.xml` contains `<?xml version="1.0" encoding="UTF-8"?>`  
-   - OK : And file `result.xml` matches `<testsuites name="result" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
-   - OK : And file `result.xml` matches `  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
-   - OK : And file `result.xml` matches `    <testcase name="Passing test" classname="" time="[0-9]*\.[0-9]*"/>`  
-   - OK : And file `result.xml` contains  
+   - OK : And the file `result.xml` is (ignoring time="[0-9.]+")  
    - [X] scenario   [1 : Basic file with only a single scenario](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: Skipped tests count  
    ### Background: [](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `file1` file  
    - OK : Given there is no `file2` file  
-   - OK : Given the scenarios file `skipped_count_test.md`   
+   - OK : Given the scenarios file `skipped_count_test.md`  
    - [X] background [](../../features/B160_JUnit_XML_Export.md) pass  
 
    ### Scenario: [1: both scenario are run](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `all_results.xml` file  
    - OK : When I successfully run `./bbt --junit all_results.xml skipped_count_test.md`  
-   - OK : Then I get no error  
-   - OK : And file `all_results.xml` matches `<testsuites name="all_results" tests="2" failures="0" errors="0" skipped="0" time="[0-9]*\.[0-9]*">`  
+   - OK : Then file `all_results.xml` contains (ignoring time="[0-9.]+")  
    - [X] scenario   [1: both scenario are run](../../features/B160_JUnit_XML_Export.md) pass  
 
    ### Background: [](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `file1` file  
    - OK : Given there is no `file2` file  
-   - OK : Given the scenarios file `skipped_count_test.md`   
+   - OK : Given the scenarios file `skipped_count_test.md`  
    - [X] background [](../../features/B160_JUnit_XML_Export.md) pass  
 
    ### Scenario: [2 : one scenario is skipped](../../features/B160_JUnit_XML_Export.md): 
    - OK : Given there is no `windows_results.xml` file  
    - OK : When I successfully run `./bbt --junit windows_results.xml --select @Windows_Specific skipped_count_test.md`  
-   - OK : Then file `windows_results.xml` matches `<testsuites name="windows_results" tests="2" failures="0" errors="0" skipped="1" time="[0-9]*\.[0-9]*">`  
+   - OK : Then file `windows_results.xml` contains (ignoring time="[0-9.]+")  
    - [X] scenario   [2 : one scenario is skipped](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: xml robustness  
@@ -2249,7 +2296,7 @@
    - OK : Given the file `escape_test.md` containing  
    - OK : When I run `./bbt --junit result2.xml escape_test.md`  
    - OK : Then I get no error  
-   - OK : And file `result2.xml` matches `    <testcase name="Title with Quotation mark &quot; Ampersand &amp; Greater and less than &lt; &gt; or Apostrophe &apos;&quot;" classname="" time="[0-9]*\.[0-9]*"/>`  
+   - OK : And the file `result2.xml` is (ignoring time="[0-9.]+")  
    - [X] scenario   [Test XML escaping with special characters](../../features/B160_JUnit_XML_Export.md) pass  
 
   ## Feature: Time Attribute (@Flaky results depends on execution time on the plafform)  
@@ -2620,7 +2667,7 @@
    ### Scenario: [](../../features/C090_GNU_Error_Msg_Format.md): 
    - OK : Given the file `t1.md`  
    - OK : When I successfully run `./bbt --strict t1.md`  
-   - OK : Then the output matches `t1.md:[0-9]*: Warning: Multiple When in the same Scenario.*`  
+   - OK : Then the output contains `t1.md:0: Warning: Multiple When in the same Scenario` (ignoring location)  
    - [X] scenario   [](../../features/C090_GNU_Error_Msg_Format.md) pass  
 
 
@@ -2644,12 +2691,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 270 scenarios OK
+## Summary : **Success**, 273 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 270   |
+| Successful | 273   |
 | Empty      | 0     |
 | Not Run    | 5     |
 

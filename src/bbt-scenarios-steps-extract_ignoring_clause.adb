@@ -79,6 +79,9 @@ is
       elsif Word = "version" then
          Patterns (Version) := True;
 
+      elsif Word = "location" then
+         Patterns (Location) := True;
+
       elsif Word = "order" then
          Order := True;
 

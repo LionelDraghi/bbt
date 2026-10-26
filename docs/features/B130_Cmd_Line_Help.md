@@ -10,14 +10,14 @@ _Table of Contents:_
 - [Scenario: others help](#scenario-others-help)
 - [Scenario: On\_All help](#scenario-on_all-help)
 - [Scenario: tutorial generation](#scenario-tutorial-generation)
+- [Scenario: example generation](#scenario-example-generation)
 - [Scenario: grammar generation](#scenario-grammar-generation)
 - [Scenario: listing keywords](#scenario-listing-keywords)
-- [Scenario: generated example is OK](#scenario-generated-example-is-ok)
 
 ## Scenario: calling bbt without parameter or with -h put the normal help
 - When I run `./bbt` or `./bbt help` or `./bbt he`
 - then the output contains file `../docs/help/base.txt`
-- and  the output matches `bbt version [0-9]+\.[0-9]+\.[0-9]+.*`
+- and  the output contains `bbt version 1.2.3` (ignoring version)
 
 (The trailing .* keeps the test happy with a version such as 3.2.2-dev)
 

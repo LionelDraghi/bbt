@@ -23,6 +23,25 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### High priority
 
+- negated steps silently test the opposite when the form has no "not"/"no"
+  variant  
+  bbt keeps only the keywords and parameters it recognizes, and silently
+  drops the rest of the sentence. On a step form that has no negated
+  variant, a negation written in the free text is therefore dropped, and
+  the check tests exactly the opposite of what the author wrote.
+  Reproduced: after a `- Then I get ...`, the step
+  ``- But I do not get `xyzzy` `` is parsed as a second *positive* `I get`
+  check (`bbt explain` shows "Check that output is `xyzzy`"): a scenario
+  meaning to assert the absence of a string silently asserts its presence,
+  and fails — or worse, passes — in the opposite sense, with no error and
+  no warning. Only some check families have a negated form
+  (`does not contain`, `is not equal to`, `I get no error`, ...); any other
+  attempt at negation is silently inverted. The fix is either to reject, at
+  parsing time, any step whose free text carries a negation word the form
+  does not support, or to provide a negated variant for every check family.
+  Discovered while adding the `But` steps of
+  [A300_Ignoring.md](../features/A300_Ignoring.md).
+
 - Explicit terminal context  
   The interactive scenarios (`type` / `enter`) now always run on a
   pseudo terminal: the "answers fed through a pipe" context
@@ -47,6 +66,13 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### Low priority
 
+- masking patterns scope and danger: review whether the doc, help and
+  examples warn enough about the `(ign ...)` clauses dangers - silently
+  weakened checks, too broad patterns, interactions between named
+  patterns (e.g. a clock time vs a location). The `version` pattern is
+  too permissive: it masks any isolated decimal, not only version
+  numbers, so durations in compared files are silently filtered too.
+  To be treated later.
 - cleanup level 2, snapshot and diff of the exec dir: implemented as
   `--cleanup=full` (cf. [B010](../features/B010_Deleting_created_files.md)
   and the changelog); to be validated on Windows and macOS  

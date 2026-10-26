@@ -2,11 +2,18 @@
 
 This file is the entry point for coding agents working on bbt.
 
+**Before any other action, read the shared template referenced below
+and follow it** -- local copy at `../ada-project-template/AGENTS.template.md`
+when present, otherwise fetch the GitHub URL.
+
 The shared rules for Lionel's Ada projects live in the [reference
 repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)
 and apply here in full:
-non-negotiable git rules, procedure choice, task triage, reference
-policy, skills, and the definition of done. This file keeps only what
+non-negotiable git rules (in brief: no `git add`, commit, push, tag,
+release or Alire publish without the owner's explicit, post-review
+consent), procedure choice, task triage, reference
+policy, skills, Ada tooling (Serena MCP first), and the definition of
+done. This file keeps only what
 is specific to bbt. The repository uses LF line endings on every
 platform, including Windows.
 
@@ -23,7 +30,11 @@ The shared build pointers apply ([reference repository on GitHub](https://github
 
 ## Test procedure
 
-- To run a specific test: `cd tests && ./bbt <test_file>`
+- To run a specific test: `make A300` (where `A300` is the id that starts
+  the test file name). It runs the scenario with the right options for
+  the platform and prints the exact command line; grab that line to
+  rerun or tweak it, e.g. replace `./bbt` with `./bbt explain`, or add
+  `-d` for debug traces.
 - To run sanity checks (rapid): `cd tests && ./bbt ../docs/examples`
 - To run functional tests: `cd tests && ./bbt ../docs/features`
 - Add the option `--exclude Windows_Only` when you are on Linux/macOS.

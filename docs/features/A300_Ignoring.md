@@ -10,13 +10,13 @@ the need and weaken the check on the stable part.
 The comparison steps accept an **ignoring clause** that states which parts of
 the comparison are volatile:
 
-```
+~~~
 - Then I get (ignoring time)
   ```
   [12:34:56] Building foo
   [12:34:57] Done
   ```
-```
+~~~
 
 This feature file specifies the step clause increments
 (cf. [D9](../dev/design_discussions.md)): the `time` and `dir`
@@ -133,6 +133,22 @@ The rule is purely lexical, like `ignoring dir`: any isolated `D+.D+(.D+)?`
 is treated as a version, so a decimal number such as `3.2` is masked too.
 A duration in seconds is better handled by the `ignoring <regexp>` pattern.
 
+## `ignoring location`
+
+`ignoring location` masks source locations, as formatted by bbt and the
+tools following the GNU Standard (cf. `BBT.IO.Image` and
+[the GNU guidelines](https://www.gnu.org/prep/standards/html_node/Errors.html)):
+a colon followed by a line number, and an optional column, either in
+the GNU `:line:column` style or in the GNAT/bbt `line.column` style.
+The locator must be closed by the colon that separates it from the
+message, so that a bare `file:12` reference, a duration as in
+`elapsed:3.2 s` or a port number as in `host:8080` are not masked.
+
+Two guards keep the pattern narrow: the colon group is not preceded
+by a digit, so that a clock time as in `12:34:56` is not cut in the
+middle, and the match is closed by a colon, so that only a line/column
+prefix is masked.
+
 ## `ignoring <regexp>`
 
 The named patterns cover the common cases; any other volatile value is
@@ -187,6 +203,7 @@ _Table of Contents:_
 - [`ignoring time`](#ignoring-time)
 - [`ignoring dir`](#ignoring-dir)
 - [`ignoring version`](#ignoring-version)
+- [`ignoring location`](#ignoring-location)
 - [`ignoring <regexp>`](#ignoring-regexp)
 - [`ignoring order`, `ignoring casing`, `ignoring whitespaces`, `ignoring blank_lines`](#ignoring-order-ignoring-casing-ignoring-whitespaces-ignoring-blank_lines)
 - [Background](#background)
@@ -201,6 +218,9 @@ _Table of Contents:_
   - [Scenario: a time tag missing on the actual side fails and warns](#scenario-a-time-tag-missing-on-the-actual-side-fails-and-warns)
   - [Scenario: the clause on a non comparison step is an error](#scenario-the-clause-on-a-non-comparison-step-is-an-error)
   - [Scenario: a duration may vary](#scenario-a-duration-may-vary)
+  - [Scenario: a source location in the output does not fail the comparison](#scenario-a-source-location-in-the-output-does-not-fail-the-comparison)
+  - [Scenario: a locator in the GNAT style is masked as well](#scenario-a-locator-in-the-gnat-style-is-masked-as-well)
+  - [Scenario: a duration is not mistaken for a location](#scenario-a-duration-is-not-mistaken-for-a-location)
   - [Scenario: a regexp combines with a named pattern](#scenario-a-regexp-combines-with-a-named-pattern)
   - [Scenario: a regexp matching nothing on the actual side fails and warns](#scenario-a-regexp-matching-nothing-on-the-actual-side-fails-and-warns)
   - [Scenario: an illegal regexp in the clause is an error](#scenario-an-illegal-regexp-in-the-clause-is-an-error)
@@ -249,6 +269,11 @@ _Table of Contents:_
   [12:34:56] Building foo
   [12:34:57] Done
   ```
+- But the output does not contain
+  ```
+  [12:34:56] Building foo
+  [12:34:57] Done
+  ```
 
 The time tags differ between the actual output and the expected text, and
 the same scenario passes whatever the run hour is.
@@ -268,6 +293,7 @@ the same scenario passes whatever the run hour is.
   ```
 
 - Then file `run_a.txt` is equal to file `run_b.txt` (ignoring time)
+- But file `run_a.txt` is not equal to file `run_b.txt`
 
 ### Scenario: only the file name is checked, not the directory
 
@@ -278,6 +304,7 @@ the same scenario passes whatever the run hour is.
 
 - When I run `./sut read where.txt`
 - Then I get `sut home is C:\prj\bbt` (ignoring dir)
+- But the output does not contain `sut home is C:\prj\bbt`
 
 The same scenario passes on Unix and on Windows: the directory parts
 `/home/lionel/prj/` and `C:\prj\` are masked, the `bbt` name is checked.
@@ -332,6 +359,11 @@ the ignoring clause never weakens the stable part of the check.
   [12:34:56] Building C:\prj\bbt\foo.o
   [12:34:57] Done
   ```
+- But the output does not contain
+  ```
+  [12:34:56] Building C:\prj\bbt\foo.o
+  [12:34:57] Done
+  ```
 
 ### Scenario: a time tag does not fail a contains check
 
@@ -343,6 +375,10 @@ the ignoring clause never weakens the stable part of the check.
 
 - When I run `./sut read log.txt`
 - Then the output contains (ignoring time)
+  ```
+  [12:34:56] Building foo
+  ```
+- But the output does not contain
   ```
   [12:34:56] Building foo
   ```
@@ -406,9 +442,62 @@ not a silently ignored trailing text.
 
 - When I run `./sut read perf.txt`
 - Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)
+- But the output does not contain `Build finished in 3.2 s`
 
 The durations differ, but both mask to the same marker: the step still
 checks that a number was printed, and the rest of the line stays checked.
+
+### Scenario: a source location in the output does not fail the comparison
+
+- Given the file `warn_ref.txt`
+  ```
+  t1.md:12: Warning: Multiple When in the same Scenario
+  ```
+
+- Given the file `warn_other.txt`
+  ```
+  t1.md:7: Warning: Multiple When in the same Scenario
+  ```
+
+- Then file `warn_ref.txt` is not equal to file `warn_other.txt`
+- But file `warn_ref.txt` is equal to file `warn_other.txt` (ignoring location)
+
+The line numbers differ, the file names are identical: the locations
+are masked, the file names are not.
+
+### Scenario: a locator in the GNAT style is masked as well
+
+- Given the file `gnu_loc.txt`
+  ```
+  t1.md:12.34: Warning: Multiple When in the same Scenario
+  ```
+
+- Given the file `gnu_other.txt`
+  ```
+  t1.md:7.56: Warning: Multiple When in the same Scenario
+  ```
+
+- Then file `gnu_loc.txt` is equal to file `gnu_other.txt` (ignoring location)
+- But file `gnu_loc.txt` is not equal to file `gnu_other.txt`
+
+### Scenario: a duration is not mistaken for a location
+
+- Given the file `perf_ref.txt`
+  ```
+  elapsed:3.2 s
+  ```
+
+- Given the file `perf_other.txt`
+  ```
+  elapsed:4.1 s
+  ```
+
+- Then file `perf_ref.txt` is not equal to file `perf_other.txt`
+- And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)
+
+The `3.2` is preceded by `:`, but the locator pattern requires a
+trailing colon: the duration is not masked. The `time` pattern covers
+durations; the `location` pattern covers source positions.
 
 ### Scenario: a regexp combines with a named pattern
 
@@ -419,6 +508,10 @@ checks that a number was printed, and the rest of the line stays checked.
 
 - When I run `./sut read count.txt`
 - Then I get (ignoring time and [0-9]+)
+  ```
+  [12:34:56] 7 files processed
+  ```
+- But the output does not contain
   ```
   [12:34:56] 7 files processed
   ```
