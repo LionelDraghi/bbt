@@ -1193,12 +1193,11 @@
    - [X] background [](../../features/A300_Ignoring.md) pass  
 
    ### Scenario: [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md): 
-   - OK : When I run shell `echo "[13:45:12] Building foo" 1>&2`  
-   - **NOK** : Then the error output is (ignoring time) (..\docs\features\a300_ignoring.md:293:)  
-..\docs\features\a300_ignoring.md:293: Error: Output not equal to expected:
+   - OK : When I run shell `echo 13:45:12 Building foo 1>&2`  
+   - OK : Then the error output is (ignoring time)  
    - OK : But the error output is not (ignoring time)  
    - OK : And the error output does not contain (ignoring time)  
-   - [ ] scenario   [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md) **fails**  
+   - [X] scenario   [a time tag in the error output does not fail the comparison](../../features/A300_Ignoring.md) pass  
 
    ### Background: [](../../features/A300_Ignoring.md): 
    - OK : Given the file `build_ref.txt`  
@@ -1393,7 +1392,7 @@
    - OK : Given the file `perf_ref.txt`  
    - OK : Given the file `perf_other.txt`  
    - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
-..\docs\features\a300_ignoring.md:525: Warning: the ignoring location pattern matches nothing on the actual side
+..\docs\features\a300_ignoring.md:527: Warning: the ignoring location pattern matches nothing on the actual side
    - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
    - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
@@ -2761,12 +2760,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 273 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 272   |
+| Failed     | 0     |
+| Successful | 273   |
 | Empty      | 0     |
 | Not Run    | 16    |
 
