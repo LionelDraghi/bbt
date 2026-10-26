@@ -29,7 +29,12 @@ the clause and option naming with the existing `ignore_casing` and co.
 keywords — the settings themselves are now stateable in the scenario
 through the clause (cf. `ignoring order, casing, whitespaces and
 blank_lines` below), closing the in-scenario part wished when
-[issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed. The
+[issue #18](https://github.com/LionelDraghi/bbt/issues/18) was closed.
+The vocabulary is settled meanwhile: the step construct is a
+**clause** — the `(ignoring ...)` clause —, the words it states are
+**patterns** (the named and regexp masking patterns, the settings
+patterns), and *option* stays reserved for the command line flags
+(`--ignore_casing` and co). The
 colored diff display of the ignored segments pairs with the
 [diff display alignment](../dev/design_discussions.md).
 
@@ -55,12 +60,15 @@ below). Four further named patterns state the comparison settings instead
 of masking: `order`, `casing`, `whitespaces` and `blank_lines` (cf.
 `ignoring order, casing, whitespaces and blank_lines` below).
 
-The clause applies to the steps that compare a text with an expected text:
-`I get`, `I get on stderr`, the `output is` / `output contains` family, and
-the `file is equal to` / `file contains` family. The negated forms
-(`does not contain`...) do not take the clause: ignoring a pattern in a
-non-containment check is meaningless. The `matches` steps do not take it
-either: the expected text is already a pattern there.
+The clause applies to the comparison steps that compare a text with an
+expected text: `I get`, `I get on stderr`, the `output is` / `output
+contains` family, and the `file is equal to` / `file contains` family —
+their negated forms included: the clause masks the volatile parts on
+both sides before the (inverted) comparison. The `matches` / `does not
+match` steps do not take it yet: when allowed, the clause will mask the
+volatile parts of the actual line outside of what the regexp already
+matches, the regexp itself being applied as is (cf. the TDL in
+[project.md](../dev/project.md)).
 
 ## Semantics: masking on both sides
 
@@ -208,6 +216,7 @@ _Table of Contents:_
 - [`ignoring order`, `ignoring casing`, `ignoring whitespaces`, `ignoring blank_lines`](#ignoring-order-ignoring-casing-ignoring-whitespaces-ignoring-blank_lines)
 - [Background](#background)
   - [Scenario: a time tag in the output does not fail the comparison](#scenario-a-time-tag-in-the-output-does-not-fail-the-comparison)
+  - [Scenario: a time tag in the error output does not fail the comparison](#scenario-a-time-tag-in-the-error-output-does-not-fail-the-comparison)
   - [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)
   - [Scenario: only the file name is checked, not the directory](#scenario-only-the-file-name-is-checked-not-the-directory)
   - [Scenario: a differing file name fails, differing directories do not](#scenario-a-differing-file-name-fails-differing-directories-do-not)
@@ -277,6 +286,26 @@ _Table of Contents:_
 
 The time tags differ between the actual output and the expected text, and
 the same scenario passes whatever the run hour is.
+
+### Scenario: a time tag in the error output does not fail the comparison
+
+- When I run shell `echo "[13:45:12] Building foo" 1>&2`
+- Then the error output is (ignoring time)
+  ```
+  [12:34:56] Building foo
+  ```
+- But the error output is not (ignoring time)
+  ```
+  [12:34:56] Building bar
+  ```
+- And the error output does not contain (ignoring time)
+  ```
+  [12:34:56] Building bar
+  ```
+
+The negated comparison steps on the error output accept the clause like
+their positive twin: the tags are masked on both sides before the
+comparison.
 
 ### Scenario: the common clock, date and date-time formats are ignored
 

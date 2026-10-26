@@ -118,9 +118,9 @@ London
 - Then the output contains
 ```
 8: - Run command `grep -i rom Cities.lst`   
-9: - Check that output is `Roma`
+9: - Check that the output is `Roma`
 10: - Run command `grep -i rom Cities.lst`   
-11: - Check that output is `Roma`
+11: - Check that the output is `Roma`
 12: - Run command `grep -i rom Cities.lst`   
-13: - Check that output is `Roma`
+13: - Check that the output is `Roma`
 ``` 

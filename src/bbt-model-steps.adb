@@ -32,6 +32,8 @@ package body BBT.Model.Steps is
       Output.New_Line;
       Output.Put ("   Action           = " & S.Action'Image);
       Output.New_Line;
+      Output.Put ("   Negated          = " & S.Negated'Image);
+      Output.New_Line;
       Output.Put ("   Src_Code         = " & S.Src_Code'Image);
       Output.New_Line;
       Output.Put ("   Subject string   = " & S.Subject_String'Image);
@@ -88,53 +90,102 @@ package body BBT.Model.Steps is
           elsif File_Content_Available then Prefix_If_Found & Code_Fenced_File_Content
           else If_Not_Found);
 
-      function Output_Is return String is
+      --  The comparison step explanations, parameterized by the checked
+      --  flow: "output" for the standard output, "error output" for the
+      --  standard error
+      function Output_Is (Subject : String := "output") return String is
          (if    Obj_String_Available   then
-           "that output is " & Object_String
+            "that the " & Subject & " is"
+            & (if Step.Data.Negated then " not " else " ") & Object_String
           elsif File_Content_Available then
-            "that output is " & Code_Fenced_File_Content
+            "that the " & Subject & " is"
+            & (if Step.Data.Negated then " not " else " ")
+            & Code_Fenced_File_Content
           else
-            "that output is as in file " & Object_File_Name);
+            "that the " & Subject & " is"
+            & (if Step.Data.Negated then " different from the content of file "
+               else " equal to the content of file ")
+            & Object_File_Name);
 
-      function Output_Contains return String is
+      function Output_Contains (Subject : String := "output") return String is
          (if    Obj_String_Available   then
-           "that output contains " & Object_String
+            "that the " & Subject
+            & (if Step.Data.Negated then " does not contain " else " contains ")
+            & Object_String
           elsif File_Content_Available then
-            "that output contains " & Code_Fenced_File_Content
+            "that the " & Subject
+            & (if Step.Data.Negated then " does not contain " else " contains ")
+            & Code_Fenced_File_Content
           else
-            "that output contains as in file " & Object_File_Name);
+            "that the " & Subject
+            & (if Step.Data.Negated then " does not contain " else " contains ")
+            & "the content of file " & Object_File_Name);
 
-      function Output_Does_Not_Contain return String is
-         (if    Obj_String_Available   then
-            "that output does not contain " & Object_String
-          elsif File_Content_Available then
-            "that output does not contain " & Code_Fenced_File_Content
-          else
-            "that output does not contain as in file " & Object_File_Name);
+      --  The (ignoring ...) clause is part of the comparison semantics:
+      --  it shows in the explanation, with the same syntax as in the
+      --  step line
+      function Ignoring_Clause return String is
+         Patterns : constant String :=
+                      Text_Utilities.Image (Step.Data.Ignore_Patterns);
+      begin
+         if Patterns = "" and then not Step.Data.Ignore_Order
+            and then Step.Data.Ignore_Regexps.Is_Empty
+         then
+            return "";
+         end if;
+         declare
+            R     : Unbounded_String := To_Unbounded_String (" (ignoring ");
+            First : Boolean          := True;
 
-      -- "that output ..." -> "that error output ..."
-      function On_Error_Output (Explanation : String) return String is
-         ("that error " & Explanation (Explanation'First + 5 .. Explanation'Last));
+            procedure Add (Item : String) is
+            begin
+               if not First then
+                  Append (R, ", ");
+               end if;
+               Append (R, Item);
+               First := False;
+            end Add;
+
+         begin
+            if Patterns /= "" then
+               Add (Patterns);
+            end if;
+            if Step.Data.Ignore_Order then
+               Add ("order");
+            end if;
+            for Regexp of Step.Data.Ignore_Regexps loop
+               Add ("/" & Regexp & "/");
+            end loop;
+            Append (R, ")");
+            return To_String (R);
+         end;
+      end Ignoring_Clause;
 
    begin
       case Step.Data.Action is
       when None =>
-         return Prefix & "*** Unrecognized step **** ";
+         return Prefix_Start & "Unrecognized step";
 
       -- Setup actions
-      when Setup_No_File =>
-         return Prefix & "that there is no file " & Object_File_Name
-                & " (erase it if needed)";
-
-      when Setup_No_Dir =>
-        return Prefix & "that there is no directory " & Object_File_Name
-               & " (erase it if needed)";
-
       when Check_File_Existence =>
-         return Prefix & "that file " & Object_File_Name & " exists";
+         return Prefix
+           & (if Step.Data.Negated
+              then (if Step.Data.Cat = Given_Step
+                    then "that there is no file " & Object_File_Name
+                         & " (erase it if needed)"
+                    else "that the file " & Object_File_Name
+                         & " does not exist")
+              else "that the file " & Object_File_Name & " exists");
 
       when Check_Dir_Existence  =>
-        return Prefix & "that directory " & Object_File_Name & " exists";
+        return Prefix
+          & (if Step.Data.Negated
+             then (if Step.Data.Cat = Given_Step
+                   then "that there is no directory " & Object_File_Name
+                        & " (erase it if needed)"
+                   else "that the directory " & Object_File_Name
+                        & " does not exist")
+             else "that the directory " & Object_File_Name & " exists");
 
       when Erase_And_Create     =>
         return Prefix_Start & "Create a new " & File_Kind
@@ -179,91 +230,75 @@ package body BBT.Model.Steps is
                & " followed by a newline to the running command";
 
       -- Check actions
-      when Check_No_File =>
-        return Prefix & "that file " & Object_File_Name & " does not exist";
-
-      when Check_No_Dir =>
-        return Prefix & "that directory " & Object_File_Name
-               & " does not exist";
-
       when Error_Return_Code =>
-        return Prefix & "that command returns an error";
-
-      when No_Error_Return_Code =>
-        return Prefix & "that command does not return an error";
+        return Prefix & (if Step.Data.Negated
+                         then "that the command does not return an error"
+                         else "that the command returns an error");
 
       when Output_Is =>
-         return Prefix & Output_Is;
+         return Prefix & Output_Is & Ignoring_Clause;
 
       when Output_Contains =>
-         return Prefix & Output_Contains;
-
-      when Output_Does_Not_Contain =>
-         return Prefix & Output_Does_Not_Contain;
+         return Prefix & Output_Contains & Ignoring_Clause;
 
       when Output_Matches =>
-         return Prefix & "that command output matches regex " & Object_String;
-
-      when Output_Does_Not_Match =>
-         return Prefix & "that command output does not match regex "
-                & Object_String;
+         return Prefix & (if Step.Data.Negated
+                          then "that the command output does not match regex "
+                          else "that the command output matches regex ")
+                & Object_String & Ignoring_Clause;
 
       when File_Matches =>
-         return Prefix & "that file " & Subject_String
-                & " content matches regex " & Object_String;
-
-      when File_Does_Not_Match =>
-         return Prefix & "that file " & Subject_String
-                & " content does not match regex " & Object_String;
+         return Prefix & "that the content of file " & Subject_String
+                & (if Step.Data.Negated
+                   then " does not match regex "
+                   else " matches regex ")
+                & Object_String & Ignoring_Clause;
 
       when File_Is =>
-         return Prefix & "that file " & Subject_String
-                & Optional_Content (Prefix_If_Found => " content is exactly ",
-                                    If_Not_Found    => " ?????????? exists");
-
-      when File_Is_Not =>
-         return Prefix & "that file " & Subject_String & Optional_Content
-                  (Prefix_If_Found => " is different from ",
-                   If_Not_Found    => " ??????????? exists");
+         return Prefix & "that the content of file " & Subject_String
+                & Optional_Content
+                  (Prefix_If_Found => (if Step.Data.Negated
+                                       then " is different from "
+                                       else " is exactly "),
+                   If_Not_Found    => " is missing"
+                                      & " (no expected content provided)")
+                & Ignoring_Clause;
 
       when File_Contains =>
-         return Prefix & "that file "
-                & Subject_String
-                & (if Step.Data.Ignore_Order then " (ignoring lines order)"
-                   else "")
-                & Optional_Content (Prefix_If_Found => " contains ");
+         return Prefix & "that the file " & Subject_String
+                & Optional_Content
+                  (Prefix_If_Found => (if Step.Data.Negated
+                                       then " does not contain "
+                                       else " contains "))
+                & Ignoring_Clause;
 
-      when File_Does_Not_Contain =>
-         return Prefix & "that file " & Subject_String
-                & (if Step.Data.Ignore_Order then " (ignoring lines order)"
-                   else "")
-                & Optional_Content (Prefix_If_Found => " does not contain ");
-
-      when No_Output =>
-         return Prefix & "that last command produces no output";
+      when Output_Not_Empty =>
+         return Prefix & (if Step.Data.Negated
+                          then "that the last command produces no output"
+                          else "that the last command produces output");
 
       when Set_Env_Var =>
-         return Prefix_Start & "Set environment variable " & Subject_String
-                & " to " & Object_String & " for the scenario";
-
-      when Unset_Env_Var =>
-         return Prefix_Start & "Unset environment variable " & Subject_String
-                & " for the scenario";
+         return Prefix_Start
+           & (if Step.Data.Negated then "Unset" else "Set")
+           & " environment variable " & Subject_String
+           & (if Step.Data.Negated then "" else " to " & Object_String)
+           & " for the scenario";
 
       when Stderr_Is =>
-         return Prefix & On_Error_Output (Output_Is);
+         return Prefix & Output_Is ("error output") & Ignoring_Clause;
 
       when Stderr_Contains =>
-         return Prefix & On_Error_Output (Output_Contains);
+         return Prefix & Output_Contains ("error output") & Ignoring_Clause;
 
-      when Stderr_Does_Not_Contain =>
-         return Prefix & On_Error_Output (Output_Does_Not_Contain);
-
-      when No_Stderr =>
-         return Prefix & "that last command produces no error output";
+      when Stderr_Not_Empty =>
+         return Prefix & (if Step.Data.Negated
+                          then "that the last command produces no error output"
+                          else "that the last command produces error output");
 
       when Exit_Code_Is =>
-         return Prefix & "that last command exit code is " & Object_String;
+         return Prefix & "that the exit code of the last command is"
+                & (if Step.Data.Negated then " not" else "")
+                & " " & Object_String;
 
       end case;
 

@@ -23,25 +23,6 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### High priority
 
-- negated steps silently test the opposite when the form has no "not"/"no"
-  variant  
-  bbt keeps only the keywords and parameters it recognizes, and silently
-  drops the rest of the sentence. On a step form that has no negated
-  variant, a negation written in the free text is therefore dropped, and
-  the check tests exactly the opposite of what the author wrote.
-  Reproduced: after a `- Then I get ...`, the step
-  ``- But I do not get `xyzzy` `` is parsed as a second *positive* `I get`
-  check (`bbt explain` shows "Check that output is `xyzzy`"): a scenario
-  meaning to assert the absence of a string silently asserts its presence,
-  and fails — or worse, passes — in the opposite sense, with no error and
-  no warning. Only some check families have a negated form
-  (`does not contain`, `is not equal to`, `I get no error`, ...); any other
-  attempt at negation is silently inverted. The fix is either to reject, at
-  parsing time, any step whose free text carries a negation word the form
-  does not support, or to provide a negated variant for every check family.
-  Discovered while adding the `But` steps of
-  [A300_Ignoring.md](../features/A300_Ignoring.md).
-
 - Explicit terminal context  
   The interactive scenarios (`type` / `enter`) now always run on a
   pseudo terminal: the "answers fed through a pipe" context
@@ -65,6 +46,35 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   cf. [pty](../proposed_features/pty.md)
 
 ### Low priority
+
+- a User Guide entry on snapshot testing / golden files  
+  [UG.md](../UG.md) has no section on comparing a whole output against a
+  reference file: when it is the right technique, how to keep the
+  reference stable (time tags, paths, version numbers, ... masked with
+  the `(ignoring ...)` clause), how to generate and refresh the
+  reference file, and when to prefer focused `is` / `contains` /
+  `matches` checks instead. cf. [A080_Then_Output_Equal_To_File.md](../features/A080_Then_Output_Equal_To_File.md),
+  [A300_Ignoring.md](../features/A300_Ignoring.md) and the bbt skill
+  authoring principles on expected results.
+
+- the (ignoring ...) clause on the matches steps  
+  The clause is currently accepted on the comparison steps `is`,
+  `contains` and their negated forms, on output, file and error output,
+  but rejected on `matches` / `does not match`. The semantics, when
+  allowed, is arbitrated: the clause masks the volatile parts **of the
+  actual line, outside of what the regexp already matches** — the
+  regexp itself is applied as is, never masked. In other words, each
+  part of the line must be either matched by the regexp or masked by
+  the clause: the regexp states the stable part it checks precisely,
+  and the clause neutralizes the rest (a varying counter, a time tag,
+  a path ...), instead of forcing the regexp to abstract the volatile
+  parts itself.  
+  The change is twofold: the classification in Validate_Step_State
+  (bbt-scenarios-steps-validate_step_state.adb), and the check itself,
+  which must combine the regexp spans and the clause masks on the line
+  before deciding (the other comparisons mask both sides before
+  comparing, which does not transpose to a regexp).  
+  Scenarios to be added in [A300_Ignoring.md](../features/A300_Ignoring.md).
 
 - masking patterns scope and danger: review whether the doc, help and
   examples warn enough about the `(ign ...)` clauses dangers - silently

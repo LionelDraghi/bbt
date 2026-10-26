@@ -112,13 +112,12 @@ begin
    end if;
 
    if State.Ignoring_Clause
-     and then State.Action not in Output_Is | -- fixme: Output_Is_Not |
-                                  Output_Contains | Output_Does_Not_Contain|
-                                  File_Is | File_Is_Not |
-                                  File_Contains | File_Does_Not_Contain |
-                                  Stderr_Is | -- fixme: StdErr_Is_Not
-                                  Stderr_Contains -- fixme: Stderr_Does_Not_Contain
+     and then State.Action not in Output_Is | Output_Contains |
+                                  File_Is | File_Contains |
+                                  Stderr_Is | Stderr_Contains
    then
+      --  Negated comparison steps resolve to the same actions, the
+      --  negation being carried by the step polarity
       IO.Put_Error ("the (ignoring ...) clause is only allowed on the"
                     & " comparison steps: is, is not, contains, does not contain...",
                     Loc);

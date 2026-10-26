@@ -30,14 +30,10 @@ begin
       when Successful_Run   => return "successfully run";
       when Successful_Run_Shell => return "successfully run shell";
       when Get              => return "get";
-      when Get_No           => return "get no";
-      when Does_Not_Contain => return "does not contain";
       when Contains         => return "contains";
       when Matches          => return "matches";
-      when Does_Not_Match   => return "does not match";
       when Containing       => return "containing";
       when Is_V             => return "is";
-      when Is_No            => return "is no";
       when Type_Text        => return "type";
       when Enter_Text       => return "enter";
       when No_Object        => return "";

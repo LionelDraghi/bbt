@@ -88,8 +88,7 @@ package body BBT.Tests.Runner is
          (for some S of Parent (Step).Step_List =>
              S.Data.Action in Stderr_Is
                             | Stderr_Contains
-                            | Stderr_Does_Not_Contain
-                            | No_Stderr);
+                            | Stderr_Not_Empty);
       -- When the scenario checks the error output, the commands it runs
       -- write their standard error to Error_Output, and their standard
       -- output alone to Output.
@@ -133,14 +132,11 @@ package body BBT.Tests.Runner is
 
          elsif Step.Data.Action in Output_Is
                                  | Output_Contains
-                                 | Output_Does_Not_Contain
                                  | Output_Matches
-                                 | Output_Does_Not_Match
-                                 | No_Output
+                                 | Output_Not_Empty
                                  | Stderr_Is
                                  | Stderr_Contains
-                                 | Stderr_Does_Not_Contain
-                                 | No_Stderr
+                                 | Stderr_Not_Empty
          then
             --  The output of a still running command is checked once its
             --  response to the last input is complete.
@@ -186,14 +182,11 @@ package body BBT.Tests.Runner is
 
       if Step.Data.Action in Output_Is
                            | Output_Contains
-                           | Output_Does_Not_Contain
                            | Output_Matches
-                           | Output_Does_Not_Match
-                           | No_Output
+                           | Output_Not_Empty
                            | Stderr_Is
                            | Stderr_Contains
-                           | Stderr_Does_Not_Contain
-                           | No_Stderr
+                           | Stderr_Not_Empty
       then
          -- The output file may not exist, for instance when the command
          -- of a previous run step could not be spawned, and the run
@@ -203,8 +196,7 @@ package body BBT.Tests.Runner is
             File_Name : constant String :=
                           (if Step.Data.Action in Stderr_Is
                                                       | Stderr_Contains
-                                                      | Stderr_Does_Not_Contain
-                                                      | No_Stderr
+                                                      | Stderr_Not_Empty
                            then Error_Output else Output);
          begin
             if not Ada.Directories.Exists (File_Name) then
@@ -290,64 +282,65 @@ package body BBT.Tests.Runner is
 
 
          when Error_Return_Code =>
-            Return_Error (Last_Exit_Code, Step, Verbosity);
-
-         when No_Error_Return_Code =>
-            Return_No_Error (Last_Exit_Code, Step, Verbosity);
+            --  The negated form ("I get no error") inverts the check
+            if Step.Data.Negated then
+               Return_No_Error (Last_Exit_Code, Step, Verbosity);
+            else
+               Return_Error (Last_Exit_Code, Step, Verbosity);
+            end if;
 
          when Output_Is =>
             Output_Is (Output_Since_Input (Get_Text (Output)),
                        Step, Verbosity);
 
-         when No_Output =>
-            Check_No_Output
+         when Output_Not_Empty =>
+            Output_Not_Empty
               (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when Output_Contains =>
             Output_Contains (Output_Since_Input (Get_Text (Output)),
                              Step, Verbosity);
 
-         when Output_Does_Not_Contain =>
-            Output_Does_Not_Contain
-              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
-
          when Output_Matches =>
             Output_Matches
-              (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
-
-         when Output_Does_Not_Match =>
-            Output_Does_Not_Match
               (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
 
          when File_Matches =>
             File_Matches (Step, Verbosity);
 
-         when File_Does_Not_Match =>
-            File_Does_Not_Match (Step, Verbosity);
-
          when File_Is =>
             Files_Is (Step, Verbosity);
-
-         when File_Is_Not =>
-            Files_Is_Not (Step, Verbosity);
 
          when File_Contains =>
             File_Contains (Step, Verbosity);
 
-         when File_Does_Not_Contain =>
-            File_Does_Not_Contain (Step, Verbosity);
-
-         when Check_No_File =>
-            Check_No_File (Subject_Or_Object_String (Step), Step, Verbosity);
-
-         when Check_No_Dir =>
-            Check_No_Dir (Subject_Or_Object_String (Step), Step, Verbosity);
-
          when Check_File_Existence =>
-            Check_File_Existence (Subject_Or_Object_String (Step), Step, Verbosity);
+            --  The negated form checks that the file doesn't exist, and,
+            --  in a Given setup step, erases any leftover file
+            if Step.Data.Negated then
+               if Step.Data.Cat = Given_Step then
+                  Setup_No_File (Step, Verbosity);
+               else
+                  Check_No_File (Subject_Or_Object_String (Step),
+                                 Step, Verbosity);
+               end if;
+            else
+               Check_File_Existence (Subject_Or_Object_String (Step),
+                                     Step, Verbosity);
+            end if;
 
          when Check_Dir_Existence =>
-            Check_Dir_Existence (Subject_Or_Object_String (Step), Step, Verbosity);
+            if Step.Data.Negated then
+               if Step.Data.Cat = Given_Step then
+                  Setup_No_Dir (Step, Verbosity);
+               else
+                  Check_No_Dir (Subject_Or_Object_String (Step),
+                                Step, Verbosity);
+               end if;
+            else
+               Check_Dir_Existence (Subject_Or_Object_String (Step),
+                                    Step, Verbosity);
+            end if;
 
          when Create_If_None =>
             Create_If_None (Step, Verbosity);
@@ -355,17 +348,13 @@ package body BBT.Tests.Runner is
          when Erase_And_Create =>
             Erase_And_Create (Step, Verbosity);
 
-         when Setup_No_File =>
-            Setup_No_File (Step, Verbosity);
-
-         when Setup_No_Dir =>
-            Setup_No_Dir (Step, Verbosity);
-
          when Set_Env_Var =>
-            Set_Env_Var (Step, Verbosity);
-
-         when Unset_Env_Var =>
-            Unset_Env_Var (Step, Verbosity);
+            --  The negated form ("is not set") unsets the variable
+            if Step.Data.Negated then
+               Unset_Env_Var (Step, Verbosity);
+            else
+               Set_Env_Var (Step, Verbosity);
+            end if;
 
          when Stderr_Is =>
             Output_Is (Stderr_Since_Input (Get_Text (Error_Output)),
@@ -375,13 +364,10 @@ package body BBT.Tests.Runner is
             Output_Contains (Stderr_Since_Input (Get_Text (Error_Output)),
                              Step, Verbosity);
 
-         when Stderr_Does_Not_Contain =>
-            Output_Does_Not_Contain
-              (Stderr_Since_Input (Get_Text (Error_Output)), Step, Verbosity);
-
-         when No_Stderr =>
-            Check_No_Output (Stderr_Since_Input (Get_Text (Error_Output)),
-                             Step, Verbosity);
+         when Stderr_Not_Empty =>
+            Output_Not_Empty
+              (Stderr_Since_Input (Get_Text (Error_Output)),
+               Step, Verbosity);
 
          when Exit_Code_Is =>
             Exit_Code_Is (Last_Exit_Code, Step, Verbosity);

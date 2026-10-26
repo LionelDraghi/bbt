@@ -51,9 +51,11 @@ Ignored text
 - Then I get 
 
 ```
-Document `scenario_to_explain.md`  
-5: Feature `F1`  
-9: Scenario `B1`  
+Document `scenario_to_explain.md`
+
+5: Feature `F1`
+
+9: Scenario `B1`
 ```
 
 ## Scenario explain action Setup_No_File
@@ -68,9 +70,10 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that there is no file `config.ini` (erase it if needed)  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that there is no file `config.ini` (erase it if needed)
 ~~~
 
 ## Scenario explain action Setup_No_Dir
@@ -85,9 +88,10 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that there is no directory `dir1` (erase it if needed)  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that there is no directory `dir1` (erase it if needed)
 ~~~
 
 ## Scenario explain action Check_File_Existence
@@ -103,10 +107,11 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that file `config.ini` exists  
-3: - Check that file `config.ini` exists  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that the file `config.ini` exists
+3: - Check that the file `config.ini` exists
 ~~~
 
 ## Scenario explain action Check_Dir_Existence
@@ -121,10 +126,11 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that directory `dir1` exists  
-3: - Check that directory `dir1` exists  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that the directory `dir1` exists
+3: - Check that the directory `dir1` exists
 ~~~
 
 ## Scenario explain action Erase_And_Create
@@ -143,14 +149,16 @@ line_A
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Create a new directory (overwrite if existing) named `dir1`  
-3: - Create a new file (overwrite if existing) named `file1` containing `string_A`  
-4: - Create a new file (overwrite if existing) named `file2` containing   
-~~~  
-line_A  
-~~~  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Create a new directory (overwrite if existing) named `dir1`
+3: - Create a new file (overwrite if existing) named `file1` containing `string_A`
+4: - Create a new file (overwrite if existing) named `file2` containing 
+~~~
+line_A
+~~~
+
 ```
 
 ## Scenario explain action Create_If_None
@@ -170,14 +178,16 @@ line_A
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Create a directory (if not already existing) named `dir1`  
-3: - Create a file (overwritten if content differs) named `file1` containing `string_A`  
-4: - Create a file (overwritten if content differs) named `file2` containing   
-~~~  
-line_A  
-~~~  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Create a directory (if not already existing) named `dir1`
+3: - Create a file (overwritten if content differs) named `file1` containing `string_A`
+4: - Create a file (overwritten if content differs) named `file2` containing 
+~~~
+line_A
+~~~
+
 ```
 
 ## Scenario explain action Run
@@ -193,10 +203,11 @@ line_A
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Run command `sut --help`
-3: - Run command `sut --help`
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Run command `sut --help` 
+3: - Run command `sut --help` 
 ```
 
 ## Scenario explain action Run_Without_Error
@@ -212,10 +223,11 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Run command `sut --help` and check that it does not return an error    
-3: - Run command `sut --help` and check that it does not return an error 
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Run command `sut --help`  and check that it does not return an error
+3: - Run command `sut --help`  and check that it does not return an error
 ```
 
 ## Scenario explain action Check_No_File
@@ -231,10 +243,11 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that there is no file `config.ini` (erase it if needed)  
-3: - Check that file `config.ini` does not exist
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that there is no file `config.ini` (erase it if needed)
+3: - Check that the file `config.ini` does not exist
 ~~~
 
 ## Scenario explain action Check_No_Dir
@@ -249,10 +262,11 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Ensure that there is no directory `dir1` (erase it if needed)  
-3: - Check that directory `dir1` does not exist
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Ensure that there is no directory `dir1` (erase it if needed)
+3: - Check that the directory `dir1` does not exist
 ~~~
 
 ## Scenario explain action Error_Return_Code and No_Error_Return_Code
@@ -270,12 +284,13 @@ Document `scenario_to_explain.md`
 
 - Then I get 
 ~~~
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Check that command does not return an error  
-3: - Check that command does not return an error  
-4: - Check that command returns an error  
-5: - Check that command returns an error
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the command does not return an error
+3: - Check that the command does not return an error
+4: - Check that the command returns an error
+5: - Check that the command returns an error
 ~~~
 
 ## Scenario explain action Output_Is
@@ -300,19 +315,22 @@ line_B
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Check that output is as in file `expected.txt`  
-3: - Check that output is   
-~~~  
-line_A  
-~~~  
-7: - Check that output is `msg`  
-8: - Check that output is as in file `flowers2.txt`  
-9: - Check that output is   
-~~~  
-line_B  
-~~~  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the output is equal to the content of file `expected.txt`
+3: - Check that the output is 
+~~~
+line_A
+~~~
+
+7: - Check that the output is `msg`
+8: - Check that the output is equal to the content of file `flowers2.txt`
+9: - Check that the output is 
+~~~
+line_B
+~~~
+
 ```
 
 ## Scenario explain action Output_Contains and Output_Does_Not_Contain
@@ -338,20 +356,23 @@ line_B
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Check that output contains `text`  
-3: - Check that output contains as in file `expected.txt`  
-4: - Check that output contains   
-~~~  
-line_A  
-~~~  
-8: - Check that output does not contain `text`  
-9: - Check that output does not contain as in file `expected.txt`  
-10: - Check that output does not contain   
-~~~  
-line_B  
-~~~  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the output contains `text`
+3: - Check that the output contains the content of file `expected.txt`
+4: - Check that the output contains 
+~~~
+line_A
+~~~
+
+8: - Check that the output does not contain `text`
+9: - Check that the output does not contain the content of file `expected.txt`
+10: - Check that the output does not contain 
+~~~
+line_B
+~~~
+
 ```
 
 ## Scenario explain action Output|File_Matches and Output|File_Does_Not_Match
@@ -369,12 +390,13 @@ line_B
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-1: Scenario `1`  
-2: - Check that file `config.ini` content matches regex `regexp`  
-3: - Check that file `config.ini` content does not match regex `regexp`  
-4: - Check that command output matches regex `regexp`  
-5: - Check that command output does not match regex `regexp`
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the content of file `config.ini` matches regex `regexp`
+3: - Check that the content of file `config.ini` does not match regex `regexp`
+4: - Check that the command output matches regex `regexp`
+5: - Check that the command output does not match regex `regexp`
 ```
 
 ## Scenario explain action File_Is and File_Is_Not
@@ -395,17 +417,17 @@ line_A
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-  
-1: Scenario `1`  
-2: - Check that file `config.ini` content is exactly `mode=silent`  
-3: - Check that file `config.ini` content is exactly `expected/config.ini` 
-4: - Check that file `config.ini` content is exactly   
-~~~  
-line_A  
-~~~  
-  
-8: - Check that file `config.ini` is different from `previous_config.ini`
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the content of file `config.ini` is exactly `mode=silent`
+3: - Check that the content of file `config.ini` is exactly `expected/config.ini`
+4: - Check that the content of file `config.ini` is exactly 
+~~~
+line_A
+~~~
+
+8: - Check that the content of file `config.ini` is different from `previous_config.ini`
 ```
 
 ## Scenario explain action File_Contains and File_Does_Not_Contain
@@ -431,22 +453,23 @@ line_B
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-  
-1: Scenario `1`  
-2: - Check that file `config.ini` contains `mode=silent`  
-3: - Check that file `config.ini` contains `snippet.txt`  
-4: - Check that file `config.ini` contains   
-~~~  
-line_A  
-~~~  
-  
-8: - Check that file `config.ini` does not contain `mode=silent`  
-9: - Check that file `config.ini` does not contain `snippet.txt`  
-10: - Check that file `config.ini` does not contain   
-~~~  
-line_B  
-~~~  
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the file `config.ini` contains `mode=silent`
+3: - Check that the file `config.ini` contains `snippet.txt`
+4: - Check that the file `config.ini` contains 
+~~~
+line_A
+~~~
+
+8: - Check that the file `config.ini` does not contain `mode=silent`
+9: - Check that the file `config.ini` does not contain `snippet.txt`
+10: - Check that the file `config.ini` does not contain 
+~~~
+line_B
+~~~
+
 ```
 ## Scenario explain action No_Output
 
@@ -461,11 +484,11 @@ line_B
 
 - Then I get 
 ```
-Document `scenario_to_explain.md`  
-  
-1: Scenario `1`  
-2: - Check that last command produces no output  
-3: - Check that last command produces no output
+Document `scenario_to_explain.md`
+
+1: Scenario `1`
+2: - Check that the last command produces no output
+3: - Check that the last command produces no output
 ```
 
 ## Scenario explain Invalid Step
@@ -486,7 +509,7 @@ scenario_to_explain.md:2: Error: Unrecognized Step "Then the command should comp
 ~~~
 - And the output contains
 ~~~
-2: - Check *** Unrecognized step **** 
+2: - Unrecognized step
 ~~~
 
 - When I run `./bbt -q explain scenario_to_explain.md`

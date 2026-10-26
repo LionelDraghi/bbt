@@ -23,7 +23,7 @@ Basic commands:
   ex | explain           : explain what bbt understands from Scenario files
                            (do not run the scenarios)
   he | help              : base help
-  he | help filtering | matching | other | debug
+  he | help filtering | matching | ignoring | other | debug
                          : help on one of the topic
   he | help tutorial     : print a tutorial 
   he | help example      : print an example scenario file

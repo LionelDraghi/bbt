@@ -80,12 +80,9 @@ begin
      or Lower_Keyword = "doesnt"
      or Lower_Keyword = "doesn't"
    then
-      State.Not_Met := True;
-      if Verb = Is_V then
-         Set_Verb (Is_No, Loc);
-      elsif Verb = Get then
-         Set_Verb (Get_No, Loc);
-      end if;
+      --  The negation is not attached to a specific verb: it sets the
+      --  step polarity, checked once the action is resolved (cf. Parse)
+      State.Negated := True;
 
    elsif Lower_Keyword = "fail"
      or Lower_Keyword = "fails"
@@ -131,20 +128,12 @@ begin
    elsif Lower_Keyword = "contains" or
      Lower_Keyword = "contain"
    then
-      if State.Not_Met then
-         Set_Verb (Does_Not_Contain, Loc);
-      else
-         Set_Verb (Contains, Loc);
-      end if;
+      Set_Verb (Contains, Loc);
 
    elsif Lower_Keyword = "match" or
      Lower_Keyword = "matches"
    then
-      if State.Not_Met then
-         Set_Verb (Does_Not_Match, Loc);
-      else
-         Set_Verb (Matches, Loc);
-      end if;
+      Set_Verb (Matches, Loc);
 
    elsif Lower_Keyword = "containing" then
       Set_Verb (Containing, Loc);

@@ -22,16 +22,22 @@ package BBT.Model.Steps is
      Extended_Step_Categories'Succ (Unknown) ..
      Extended_Step_Categories'Last;
 
+   --  Every check action is declared in its positive form; the negated
+   --  forms ("no", "not", "does not"...) are not part of the grammar:
+   --  they set the step Negated flag below, and the check procedures
+   --  invert their result accordingly (cf. Negatable in
+   --  BBT.Scenarios.Steps for the list of negatable actions).
    type Actions is (None,
                     -- Setup actions
-                    Setup_No_File,
-                    Setup_No_Dir,
                     Check_File_Existence,
+                    -- negated: Given, erase the file if needed;
+                    --          Then, check that the file doesn't exist
                     Check_Dir_Existence,
+                    -- negated: same, for directories
                     Erase_And_Create,
                     Create_If_None,
                     Set_Env_Var,
-                    Unset_Env_Var,
+                    -- negated: unset the environment variable
                     -- Run actions
                     Run_Cmd,
                     Run_Without_Error,
@@ -42,27 +48,30 @@ package BBT.Model.Steps is
                     Type_Text,
                     Enter_Text,
                     -- Check actions
-                    Check_No_File,
-                    Check_No_Dir,
                     Error_Return_Code,
-                    No_Error_Return_Code,
+                    -- negated: no error return code
                     Output_Is,
+                    -- negated: output is different from expected
+                    Output_Not_Empty,
+                    -- negated: empty output
                     Output_Contains,
-                    Output_Does_Not_Contain,
+                    -- negated: output does not contain expected
                     Output_Matches,
-                    Output_Does_Not_Match,
-                    File_Matches,
-                    File_Does_Not_Match,
+                    -- negated: output does not match expected
                     File_Is,
-                    File_Is_Not,
+                    -- negated: file content is different from expected
                     File_Contains,
-                    File_Does_Not_Contain,
-                    No_Output,
+                    -- negated: file does not contain expected
+                    File_Matches,
+                    -- negated: file does not match expected
                     Stderr_Is,
+                    -- negated: error output is different from expected
                     Stderr_Contains,
-                    Stderr_Does_Not_Contain,
-                    No_Stderr,
+                    -- negated: error output does not contain expected
+                    Stderr_Not_Empty,
+                    -- negated: empty error output
                     Exit_Code_Is);
+                    -- negated: exit code different from expected
 
    type Step_Type;
    type Step_Maybe is access all Step_Type;
@@ -85,6 +94,11 @@ package BBT.Model.Steps is
    type Step_Data is record
       Cat              : Extended_Step_Categories  := Unknown;
       Action           : Actions                   := None;
+      Negated          : Boolean                   := False;
+      -- Set when the step wording carries a negation ("no", "not",
+      -- "does not"...). Only meaningful for negatable actions (cf.
+      -- BBT.Scenarios.Steps); the check procedures invert their
+      -- comparison result when it is set.
       Src_Code         : Unbounded_String          := Null_Unbounded_String;
       Subject_String   : Unbounded_String          := Null_Unbounded_String;
       Object_String    : Unbounded_String          := Null_Unbounded_String;

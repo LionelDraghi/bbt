@@ -13,6 +13,7 @@
 - [D10. Diff display alignment](#d10-diff-display-alignment)
 - [D11. Run shell step](#d11-run-shell-step)
 - [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir)
+- [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -27,6 +28,7 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)                     | Arbitrated (2026-10), implemented  | [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md), [bbt-scenarios-steps.adb](../../src/bbt-scenarios-steps.adb) |
 | [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
 | [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
 | [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
@@ -953,3 +955,83 @@ References:
   (src/bbt-created_file_list.adb, src/bbt-created_file_list.ads),
   the `Full_Cleanup` setting (src/bbt-settings.ads) and the
   `--cleanup=full` parsing (src/bbt-cmd_line.adb).
+
+## D13. Negation as a step polarity
+
+### Subject
+
+The step grammar had a negated twin for each negatable verb and action
+(`is` / `is no`, `get` / `get no`, `contains` / `does not contain`, ...),
+duplicated in the token list, in the grammar table, in the check
+procedures, and mutated at parsing time by the `no` / `not` keywords.
+The duplication was asymmetrical — some families had no negated variant
+— and a negation word in the free text of a step without a negated
+variant silently tested the opposite (the high priority TDL entry
+closed by this change): ``- But I do not get `xyzzy` `` was parsed as a
+*positive* `I get` check, as the negation was dropped with the rest of
+the non interpreted text.
+
+### Decision
+
+The negation is not a verb nor an action: it is a bit carried by the
+step, as `successfully` already is for the run steps.
+
+- the negation words (`no`, `not`, `dont`, `doesnt`, `doesn't`) only set
+  `State.Negated` during parsing, whatever their position in the
+  sentence — the word order is no longer significant;
+- the grammar is stated in its positive form only; the negated verb and
+  action twins are gone;
+- once the action is resolved, a negation on a non negatable action
+  warns (`"no"/"not" ignored: this step form has no negative variant`)
+  and the step is parsed as positive — a warning, not an error, as the
+  negation word may be part of the free, non interpreted, text;
+- on a negatable action, the polarity is carried by
+  `Step_Data.Negated`, and the check procedures report
+  `Success := Matched xor Negated`, with a negation specific failure
+  message;
+- the actions whose negated form is another *operation* rather than an
+  inverted comparison keep their dedicated procedures, selected at
+  dispatch on the bit: the `Given` existence checks erase a leftover
+  entry when negated, the negated environment variable step unsets the
+  variable, the negated `I get error` checks the return code.
+
+The negatable actions are the comparison and existence checks, listed by
+`Negatable` in `bbt-scenarios-steps.adb`. A new check family gets its
+negated form by declaring the positive action and, if negatable,
+implementing the polarity in its check procedure: no grammar entry, no
+new verb.
+
+### Alternatives rejected
+
+- keeping paired actions with a `Negate : Actions -> Actions` mapping
+  table: two negation mechanisms would coexist (the table for the
+  missing variants, the paired procedures for the others), and the
+  implementation duplication would stay;
+- rejecting with an error any step whose free text carries a negation
+  word on a non negatable form: too strict for a word that may belong
+  to the free text; the warning keeps the scenario runnable while
+  making the dropped negation visible (pinned by a scenario in
+  [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md)).
+
+### Consequences
+
+The negated forms that had no variant come for free: `the output is
+not`, `the error output is not`, `the exit code is not`, and the
+positive `there is output` / `I get output`. The grammar table
+(`bbt help grammar`) shrinks accordingly, and the `(ignoring ...)`
+clause gaps on the negated comparisons are closed, the negated steps
+resolving to the same actions as their positive twin.
+
+References:
+
+- the scenarios:
+  [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md),
+  [A270_Then_Error_Output.md](../features/A270_Then_Error_Output.md),
+  [A300_Ignoring.md](../features/A300_Ignoring.md);
+- the implementation: `Negatable` and the resolution in `Parse`
+  (src/bbt-scenarios-steps.adb), `Step_Data.Negated`
+  (src/bbt-model-steps.ads), the merged check procedures
+  (src/bbt-tests-actions-output_checks.adb) and the dispatch on the
+  polarity (src/bbt-tests-runner.adb);
+- the remaining related work: the `(ignoring ...)` clause on the
+  `matches` steps (cf. the TDL in [project.md](project.md)).

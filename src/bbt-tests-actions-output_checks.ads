@@ -16,9 +16,15 @@ with Text_Utilities; use Text_Utilities;
 
 package BBT.Tests.Actions.Output_Checks is
 
-   procedure Check_No_Output (Output    : Text;
-                              Step      : Step_Type'Class;
-                              Verbosity : Verbosity_Levels);
+   --  All the comparison checks below are stated in their positive form;
+   --  they honor the step polarity (Step_Data.Negated): when set, the
+   --  comparison result is inverted, and the failure message adapted.
+
+   procedure Output_Not_Empty (Output    : Text;
+                               Step      : Step_Type'Class;
+                               Verbosity : Verbosity_Levels);
+   --  Checks that the output is not empty, or empty when the step is
+   --  negated ("there is no output")
 
    procedure Output_Is (Output    : Text;
                         Step      : Step_Type'Class;
@@ -26,27 +32,15 @@ package BBT.Tests.Actions.Output_Checks is
    procedure Output_Contains (Output    : Text;
                               Step      : Step_Type'Class;
                               Verbosity : Verbosity_Levels);
-   procedure Output_Does_Not_Contain (Output    : Text;
-                                      Step      : Step_Type'Class;
-                                      Verbosity : Verbosity_Levels);
    procedure Output_Matches (Output    : Text;
                              Step      : Step_Type'Class;
                              Verbosity : Verbosity_Levels);
-   procedure Output_Does_Not_Match (Output    : Text;
-                                    Step      : Step_Type'Class;
-                                    Verbosity : Verbosity_Levels);
 
    procedure File_Matches (Step      : Step_Type'Class;
                            Verbosity : Verbosity_Levels);
-   procedure File_Does_Not_Match (Step      : Step_Type'Class;
-                                   Verbosity : Verbosity_Levels);
    procedure Files_Is (Step      : Step_Type'Class;
                        Verbosity : Verbosity_Levels);
-   procedure Files_Is_Not (Step      : Step_Type'Class;
-                           Verbosity : Verbosity_Levels);
    procedure File_Contains (Step      : Step_Type'Class;
                             Verbosity : Verbosity_Levels);
-   procedure File_Does_Not_Contain (Step      : Step_Type'Class;
-                                    Verbosity : Verbosity_Levels);
 
 end BBT.Tests.Actions.Output_Checks;

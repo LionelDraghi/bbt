@@ -26,6 +26,7 @@ private package BBT.Settings is
    type Help_Topic is (Base,
                        Filtering,
                        Matching,
+                       Ignoring,
                        Other,
                        Debug,
                        Tutorial,

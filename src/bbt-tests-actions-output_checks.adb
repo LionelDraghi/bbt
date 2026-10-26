@@ -59,17 +59,20 @@ package body BBT.Tests.Actions.Output_Checks is
    end Mask_Ignored_Parts;
 
    -- --------------------------------------------------------------------------
-   procedure Check_No_Output (Output : Text;
-                              Step      : Step_Type'Class;
-                              Verbosity : Verbosity_Levels) is
-      use Texts;
+   procedure Output_Not_Empty (Output    : Text;
+                               Step      : Step_Type'Class;
+                               Verbosity : Verbosity_Levels) is
    begin
       Put_Step_Result (Step     => Step,
-                       Success  => Output = Empty_Text,
-                       Fail_Msg => String'("output not null : " & Output'Image),
+                       Success  => (not Text_Utilities.Is_Empty (Output))
+                                     xor Step.Data.Negated,
+                       Fail_Msg => (if Step.Data.Negated
+                                    then String'("output not null : "
+                                                 & Output'Image)
+                                    else String'("no output found")),
                        Loc       => Step.Location,
                        Verbosity => Verbosity);
-   end Check_No_Output;
+   end Output_Not_Empty;
 
    -- --------------------------------------------------------------------------
    procedure Output_Is (Output    : Text;
@@ -87,12 +90,13 @@ package body BBT.Tests.Actions.Output_Checks is
       -- Put_Text (Item => T2);
       Mask_Ignored_Parts (Actual, T2, Step);
       declare
-         Success : constant Boolean :=
+         Matched : constant Boolean :=
            Is_Equal (Actual, T2,
                      Case_Insensitive   => Settings.Ignore_Casing,
                      Ignore_Blanks      => Settings.Ignore_Whitespaces,
                      Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
                      Sort_Texts         => Step.Data.Ignore_Order);
+         Success : constant Boolean := Matched xor Step.Data.Negated;
          -- First line of Msg is the error message,
          -- then comes the side-by-side comparison of expected and actual.
          -- It is computed only on error.
@@ -102,7 +106,9 @@ package body BBT.Tests.Actions.Output_Checks is
                                            Ignore_Whitespaces => Settings.Ignore_Whitespaces));
       begin
          if not Success then
-            Msg.Prepend ("Output not equal to expected:");
+            Msg.Prepend (if Step.Data.Negated
+                         then "Output equal to unexpected content:"
+                         else "Output not equal to expected:");
          end if;
          Put_Step_Result (Step     => Step,
                           Success  => Success,
@@ -122,55 +128,43 @@ package body BBT.Tests.Actions.Output_Checks is
       Put_Debug_Line ("++++++++++ Output_Contains Step = " & Step'Image);
       Put_Debug_Line ("++++++++++ dir = " & Settings.Launch_Directory);
       Mask_Ignored_Parts (Actual, T2, Step);
-      Put_Step_Result (Step     => Step,
-                       Success  => Contains
-                         (Actual, T2,
-                          Case_Insensitive   => Settings.Ignore_Casing,
-                          Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                          Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                          Sort_Texts         => Step.Data.Ignore_Order),
-                       Fail_Msg => "Output:  " & Code_Fenced_Image (Actual) &
-                         "does not contain expected:  " &
-                         Code_Fenced_Image (T2),
-                       Loc       => Step.Location,
-                       Verbosity => Verbosity);
-   end Output_Contains;
-
-   -- --------------------------------------------------------------------------
-   procedure Output_Does_Not_Contain (Output : Text;
-                                      Step      : Step_Type'Class;
-                                      Verbosity : Verbosity_Levels) is
-      T2  : constant Text := Get_Expected (Step);
-   begin
-      Put_Debug_Line ("Output_Does_Not_Contain ");
       declare
-         Success : constant Boolean :=
-           not Contains (Output, T2,
-                         Case_Insensitive   => Settings.Ignore_Casing,
-                         Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                         Sort_Texts         => Step.Data.Ignore_Order);
-         -- First line of Msg gives the position of the intruder,
-         -- then come the intruder lines. It is computed only on error.
+         Matched : constant Boolean :=
+           Contains
+             (Actual, T2,
+              Case_Insensitive   => Settings.Ignore_Casing,
+              Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+              Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+              Sort_Texts         => Step.Data.Ignore_Order);
+         Success : constant Boolean := Matched xor Step.Data.Negated;
+         -- On failure, Msg is either the missing expected content, or,
+         -- when the step is negated, the position and content of the
+         -- intruder. It is computed only on error.
          Msg : Text := Empty_Text;
       begin
          if not Success then
-            declare
-               I : constant Line_Index'Base :=
-                 Index_Of (Output, T2,
-                           Case_Insensitive   => Settings.Ignore_Casing,
-                           Ignore_Whitespaces => Settings.Ignore_Whitespaces);
-               -- Last line of the intruder, limited by the end of Output
-               Last : constant Line_Index :=
-                 Line_Index'Min (I + Line_Index (T2.Length) - 1,
-                                 Output.Last_Index);
-            begin
-               Msg.Append (String'("Output contains unexpected at line" &
-                                   I'Image & ":"));
-               for J in I .. Last loop
-                  Msg.Append (Output (J));
-               end loop;
-            end;
+            if Step.Data.Negated then
+               declare
+                  I : constant Line_Index'Base :=
+                    Index_Of (Output, T2,
+                              Case_Insensitive   => Settings.Ignore_Casing,
+                              Ignore_Whitespaces => Settings.Ignore_Whitespaces);
+                  -- Last line of the intruder, limited by the end of Output
+                  Last : constant Line_Index :=
+                    Line_Index'Min (I + Line_Index (T2.Length) - 1,
+                                    Output.Last_Index);
+               begin
+                  Msg.Append (String'("Output contains unexpected at line" &
+                                      I'Image & ":"));
+                  for J in I .. Last loop
+                     Msg.Append (Output (J));
+                  end loop;
+               end;
+            else
+               Msg.Append ("Output:  " & Code_Fenced_Image (Actual) &
+                           "does not contain expected:  " &
+                           Code_Fenced_Image (T2));
+            end if;
          end if;
          Put_Step_Result (Step     => Step,
                           Success  => Success,
@@ -178,7 +172,7 @@ package body BBT.Tests.Actions.Output_Checks is
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
       end;
-   end Output_Does_Not_Contain;
+   end Output_Contains;
 
    -- --------------------------------------------------------------------------
    procedure Output_Matches (Output : Text;
@@ -188,27 +182,15 @@ package body BBT.Tests.Actions.Output_Checks is
    begin
       Put_Debug_Line ("Output_Matches ");
       Put_Step_Result (Step     => Step,
-                       Success  => Text_Utilities.Matches (Output, Regexp),
+                       Success  => Text_Utilities.Matches (Output, Regexp)
+                                     xor Step.Data.Negated,
                        Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
-                         "does not match expected:  " & Regexp,
+                         (if Step.Data.Negated
+                          then "match unexpected:  "
+                          else "does not match expected:  ") & Regexp,
                        Loc       => Step.Location,
                        Verbosity => Verbosity);
    end Output_Matches;
-
-   -- --------------------------------------------------------------------------
-   procedure Output_Does_Not_Match (Output : Text;
-                                    Step      : Step_Type'Class;
-                                    Verbosity : Verbosity_Levels) is
-      Regexp : constant String := Get_Expected (Step) (1);
-   begin
-      Put_Debug_Line ("Output_Does_Not_Match ");
-      Put_Step_Result (Step     => Step,
-                       Success  => not Text_Utilities.Matches (Output, Regexp),
-                       Fail_Msg => "Output:  " & Code_Fenced_Image (Output) &
-                         "match unexpected:  " & Regexp,
-                       Loc       => Step.Location,
-                       Verbosity => Verbosity);
-   end Output_Does_Not_Match;
 
    -- --------------------------------------------------------------------------
    procedure File_Matches (Step      : Step_Type'Class;
@@ -221,36 +203,18 @@ package body BBT.Tests.Actions.Output_Checks is
       if Exists (File_Name) then
          T1 := Get_Text (File_Name);
          Put_Step_Result (Step     => Step,
-                          Success  => Text_Utilities.Matches (T1, Regexp),
+                          Success  => Text_Utilities.Matches (T1, Regexp)
+                                        xor Step.Data.Negated,
                           Fail_Msg => "File:  " & File_Name &
-                            " does not match expected:  " & Regexp,
+                            (if Step.Data.Negated
+                             then " should not match:  "
+                             else " does not match expected:  ") & Regexp,
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end File_Matches;
-
-   -- --------------------------------------------------------------------------
-   procedure File_Does_Not_Match (Step      : Step_Type'Class;
-                                  Verbosity : Verbosity_Levels) is
-      Regexp    : constant String := Get_Expected (Step) (1);
-      File_Name : constant String := +Step.Data.Subject_String;
-      T1        : Text;
-   begin
-      Put_Debug_Line ("File_Does_Not_Match ");
-      if Exists (File_Name) then
-         T1 := Get_Text (File_Name);
-         Put_Step_Result (Step     => Step,
-                          Success  => not Text_Utilities.Matches (T1, Regexp),
-                          Fail_Msg => "File:  " & File_Name &
-                            " should not match:  " & Regexp,
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
-      else
-         IO.Put_Error ("No file " & File_Name, Step.Location);
-      end if;
-   end File_Does_Not_Match;
 
    -- --------------------------------------------------------------------------
    procedure Files_Is (Step      : Step_Type'Class;
@@ -266,22 +230,28 @@ package body BBT.Tests.Actions.Output_Checks is
          T1 := Get_Text (File_Name);
          Mask_Ignored_Parts (T1, T2, Step);
          declare
-            Success : constant Boolean :=
+            Matched : constant Boolean :=
               Is_Equal (T1, T2,
                         Case_Insensitive   => Settings.Ignore_Casing,
                         Ignore_Blanks      => Settings.Ignore_Whitespaces,
                         Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
                         Sort_Texts         => Step.Data.Ignore_Order);
+            Success : constant Boolean := Matched xor Step.Data.Negated;
             -- First line of Msg is the error message,
             -- then comes the side-by-side comparison of expected and actual.
             -- It is computed only on error.
-            Msg : Text := (if Success then Empty_Text
-                           else Side_By_Side (T2, T1,
-                                              Case_Insensitive   => Settings.Ignore_Casing,
-                                              Ignore_Whitespaces => Settings.Ignore_Whitespaces));
+            Msg : Text := Empty_Text;
          begin
             if not Success then
-               Msg.Prepend (File_Name & " not equal to expected:");
+               if Step.Data.Negated then
+                  Msg.Append (File_Name & " expected to be different from " &
+                              Code_Fenced_Image (T2));
+               else
+                  Msg := Side_By_Side (T2, T1,
+                                       Case_Insensitive   => Settings.Ignore_Casing,
+                                       Ignore_Whitespaces => Settings.Ignore_Whitespaces);
+                  Msg.Prepend (File_Name & " not equal to expected:");
+               end if;
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => Success,
@@ -293,32 +263,6 @@ package body BBT.Tests.Actions.Output_Checks is
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
    end Files_Is;
-
-   -- --------------------------------------------------------------------------
-   procedure Files_Is_Not (Step      : Step_Type'Class;
-                           Verbosity : Verbosity_Levels) is
-      File_Name : constant String := +Step.Data.Subject_String;
-      T1        : Text;
-      T2        : constant Text   := Get_Expected (Step);
-   begin
-      Put_Debug_Line ("Files_Is_Not " & File_Name);
-      if Exists (File_Name) then
-         T1 := Get_Text (File_Name);
-         Put_Step_Result (Step     => Step,
-                          Success  => not Is_Equal
-                            (T1, T2,
-                             Case_Insensitive   => Settings.Ignore_Casing,
-                             Ignore_Blanks      => Settings.Ignore_Whitespaces,
-                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                             Sort_Texts         => Step.Data.Ignore_Order),
-                          Fail_Msg => File_Name & " expected to be different from " &
-                            Code_Fenced_Image (T2),
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
-      else
-         IO.Put_Error ("No file " & File_Name, Step.Location);
-      end if;
-   end Files_Is_Not;
 
    -- --------------------------------------------------------------------------
    procedure File_Contains (Step      : Step_Type'Class;
@@ -333,62 +277,44 @@ package body BBT.Tests.Actions.Output_Checks is
       if Exists (File_Name) then
          T1 := Get_Text (File_Name);
          Mask_Ignored_Parts (T1, T2, Step);
-         Put_Step_Result (Step     => Step,
-                          Success  => Contains
-                            (T1, T2,
-                             Case_Insensitive   => Settings.Ignore_Casing,
-                             Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                             Sort_Texts         => Step.Data.Ignore_Order),
-                          Fail_Msg => File_Name &
-                            " does not contain expected:  " &
-                            Code_Fenced_Image (T2),
-                          Loc       => Step.Location,
-                          Verbosity => Verbosity);
-      else
-         IO.Put_Error ("No file " & File_Name, Step.Location);
-      end if;
-   end File_Contains;
-
-   -- --------------------------------------------------------------------------
-   procedure File_Does_Not_Contain (Step      : Step_Type'Class;
-                                    Verbosity : Verbosity_Levels) is
-      File_Name : constant String := +Step.Data.Subject_String;
-      T1        : Text;
-      T2        : constant Text   := Get_Expected (Step);
-   begin
-      Put_Debug_Line ("File_Does_Not_Contain " & File_Name);
-      if Exists (File_Name) then
-         T1 := Get_Text (File_Name);
          declare
-            Success : constant Boolean :=
-              not Contains (T1, T2,
-                            Case_Insensitive   => Settings.Ignore_Casing,
-                            Ignore_Whitespaces => Settings.Ignore_Whitespaces,
-                            Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
-                            Sort_Texts         => Step.Data.Ignore_Order);
-            -- First line of Msg gives the position of the intruder,
-            -- then come the intruder lines. It is computed only on error.
+            Matched : constant Boolean :=
+              Contains
+                (T1, T2,
+                 Case_Insensitive   => Settings.Ignore_Casing,
+                 Ignore_Whitespaces => Settings.Ignore_Whitespaces,
+                 Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
+                 Sort_Texts         => Step.Data.Ignore_Order);
+            Success : constant Boolean := Matched xor Step.Data.Negated;
+            -- On failure, Msg is either the missing expected content, or,
+            -- when the step is negated, the position and content of the
+            -- intruder. It is computed only on error.
             Msg : Text := Empty_Text;
          begin
             if not Success then
-               declare
-                  I : constant Line_Index'Base :=
-                    Index_Of (T1, T2,
-                              Case_Insensitive   => Settings.Ignore_Casing,
-                              Ignore_Whitespaces => Settings.Ignore_Whitespaces);
-                  -- Last line of the intruder, limited by the end of the file
-                  Last : constant Line_Index :=
-                    Line_Index'Min (I + Line_Index (T2.Length) - 1,
-                                    T1.Last_Index);
-               begin
-                  Msg.Append (String'(File_Name &
-                                      " contains unexpected at line" &
-                                      I'Image & ":"));
-                  for J in I .. Last loop
-                     Msg.Append (T1 (J));
-                  end loop;
-               end;
+               if Step.Data.Negated then
+                  declare
+                     I : constant Line_Index'Base :=
+                       Index_Of (T1, T2,
+                                 Case_Insensitive   => Settings.Ignore_Casing,
+                                 Ignore_Whitespaces => Settings.Ignore_Whitespaces);
+                     -- Last line of the intruder, limited by the end of the file
+                     Last : constant Line_Index :=
+                       Line_Index'Min (I + Line_Index (T2.Length) - 1,
+                                       T1.Last_Index);
+                  begin
+                     Msg.Append (String'(File_Name &
+                                         " contains unexpected at line" &
+                                         I'Image & ":"));
+                     for J in I .. Last loop
+                        Msg.Append (T1 (J));
+                     end loop;
+                  end;
+               else
+                  Msg.Append (File_Name &
+                              " does not contain expected:  " &
+                              Code_Fenced_Image (T2));
+               end if;
             end if;
             Put_Step_Result (Step     => Step,
                              Success  => Success,
@@ -399,6 +325,6 @@ package body BBT.Tests.Actions.Output_Checks is
       else
          IO.Put_Error ("No file " & File_Name, Step.Location);
       end if;
-   end File_Does_Not_Contain;
+   end File_Contains;
 
 end BBT.Tests.Actions.Output_Checks;

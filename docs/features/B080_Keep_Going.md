@@ -176,10 +176,10 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
 
   1: Scenario `1`
   2: - Run command `./sut -h` 
-  3: - Check that command does not return an error
+  3: - Check that the command does not return an error
 
   5: Scenario `2`
-  6: - Run *** Unrecognized step **** 
+  6: - Unrecognized step
   ```
 
 # Scenario: explain scenario_with_syntax_error with `-k`
@@ -192,13 +192,13 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
 
   1: Scenario `1`
   2: - Run command `./sut -h` 
-  3: - Check that command does not return an error
+  3: - Check that the command does not return an error
 
   5: Scenario `2`
-  6: - Run *** Unrecognized step **** 
-  9: - Check that command does not return an error
+  6: - Unrecognized step
+  9: - Check that the command does not return an error
 
   14: Scenario `3`
   15: - Run command `./sut -v` 
-  16: - Check that command does not return an error
+  16: - Check that the command does not return an error
   ```

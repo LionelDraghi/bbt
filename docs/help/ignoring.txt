@@ -1,0 +1,39 @@
+The (ignoring ...) clause:
+  The comparison steps accept an (ignoring ...) clause, that masks
+  the volatile parts on both sides before comparing, keeping the
+  stable part precisely checked:
+    - Then I get `Build finished in 3.2 s` (ignoring time)
+  Three named patterns are available:
+  - time : masks the common clock, date and date-time values
+    (12:34, 12:34:56, 2026-10-13, 2026-10-13T12:34:56 ...)
+  - dir  : masks the directory part of a path, the file or directory
+    name staying checked
+  - version : masks version numbers (1.0, 0.5.1, 1.2.3-dev,
+    2.0.0-rc.1+meta ...)
+  Any other word in the clause is a regexp, masking every substring
+  that matches it, for any other volatile value:
+    - Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)
+  The regexp follows the usual Perl-like syntax (character classes,
+  quantifiers, alternation ...), and, being a single word of the
+  clause, cannot contain blanks, commas or parenthesis.
+  Four further named patterns state the comparison settings instead
+  of masking:
+  - order : compares the lines without regard to their order,
+    superseding the deprecated "unordered" adjective
+  - casing, whitespaces, blank_lines : state that the comparison
+    ignores the casing, the white spaces or the blank lines, as the
+    human match default does, bringing the matching settings into
+    the scenario instead of leaving them on the command line
+    (cf. "bbt help matching" for the command line options)
+  The command line options take priority: a clause contradicting
+  --exact_match is ignored, and a warning is raised.
+  Several patterns combine, separated by commas or "and":
+  (ignoring time, dir), (ignoring time and [0-9.]+),
+  (ignoring time and order)
+  A pattern that matches nothing on the actual side raises a warning,
+  as the neutralization may silently weaken the test, and a word that
+  is not a legal regexp is a scenario error, reported at parsing time.
+  The clause is accepted on the comparison steps and their negated
+  forms (is, is not, contains, does not contain ...), whatever the
+  checked flow: standard output, file or error output.
+  cf. docs/features/A300_Ignoring.md

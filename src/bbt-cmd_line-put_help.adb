@@ -18,6 +18,7 @@ procedure Put_Help (Topic : Settings.Help_Topic) is
    Base_Help      : constant String with External_Initialization => "../docs/help/base.txt";
    Filtering_Help : constant String with External_Initialization => "../docs/help/filtering.txt";
    Matching_Help  : constant String with External_Initialization => "../docs/help/matching.txt";
+   Ignoring_Help  : constant String with External_Initialization => "../docs/help/ignoring.txt";
    Other_Help     : constant String with External_Initialization => "../docs/help/other.txt";
    Debug_Help     : constant String with External_Initialization => "../docs/help/debug.txt";
    Tutorial_Help  : constant String with External_Initialization => "../docs/help/tutorial.md";
@@ -30,6 +31,7 @@ begin
                         Put_Line (Base_Help);
       when Filtering => Put_Line (Filtering_Help);
       when Matching  => Put_Line (Matching_Help);
+      when Ignoring  => Put_Line (Ignoring_Help);
       when Other     => Put_Line (Other_Help);
          -- Put_Line ("   -ot  | --output_tag 'tag' : include a specific tag in the results file");
       when Debug     => Put_Line (Debug_Help);

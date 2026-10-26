@@ -65,7 +65,8 @@ Most structural mistakes are visible in `bbt explain` output. Check that:
 - a code block immediately follows its step, with no blank line in between;
 - no bbt step keyword appears in free text outside scenarios;
 - bbt keeps only the keywords and parameters of a step, and ignores the rest
-  of the sentence: a negation in the free text is ignored, and the check is
-  then the opposite of the intended one. For instance, ``- then the output
-  never contains `Error` `` checks that the output *contains* `Error`: write
-  what bbt should check, using the step keywords.
+  of the sentence: a negation must use the recognized words - `no`, `not`,
+  `doesn't` - as in ``- Then the output does not contain `Error` ``;
+  ``- then the output never contains `Error` `` checks that the output
+  *contains* `Error`, as "never" is free text. On a step form without a
+  negated variant, a negation word is ignored with a warning.

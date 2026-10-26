@@ -48,20 +48,20 @@ package body BBT.Scenarios.Steps is
                     Exit_Subj,    -- "the exit code"
                     Env_Var_Subj,      -- "the environment variable `NAME`"
                     -- Verbs ------------------------------------------------
+                    --  Negated forms ("is no", "get no", "does not
+                    --  contain"...) are not distinct verbs: the negation
+                    --  words set State.Negated, and the resulting polarity
+                    --  is carried by Step_Data.Negated.
                     No_Verb,
                     Run,
                     Successful_Run,
                     Run_Shell,
                     Successful_Run_Shell,
                     Get,
-                    Get_No,
-                    Does_Not_Contain,
                     Contains,
                     Matches,
-                    Does_Not_Match,
                     Containing,
                     Is_V,
-                    Is_No,
                     Fail,
                     Type_Text,
                     Enter_Text,
@@ -104,6 +104,22 @@ package body BBT.Scenarios.Steps is
    type Grammar is array (Prepositions, Subject_Attrib,
                           Subjects, Verbs, Objects) of Grammar_Items;
 
+   --  Check and setup actions that support a negated form: the negation
+   --  words ("no", "not", "does not"...) don't select a distinct verb or
+   --  action, they set the step polarity (Step_Data.Negated), and the
+   --  action procedure inverts its comparison result. Any other action
+   --  triggers a warning when the step line contains a negation word.
+   function Negatable (A : Actions) return Boolean is
+     (case A is
+      when Check_File_Existence | Check_Dir_Existence | Set_Env_Var |
+           Error_Return_Code     | Exit_Code_Is |
+           Output_Is             | Output_Not_Empty |
+           Output_Contains       | Output_Matches |
+           File_Is               | File_Contains | File_Matches |
+           Stderr_Is             | Stderr_Contains | Stderr_Not_Empty
+        => True,
+      when others => False);
+
    -- Create the complete BBT grammar
    procedure Initialize_Grammar (G : in out Grammar) is separate;
 
@@ -119,7 +135,9 @@ package body BBT.Scenarios.Steps is
       Code_Span_First  : Natural                  := 0; -- = 0 until first Code_Span is meet
       Code_Span_Last   : Natural                  := 0; -- = 0 until first Code_Span is meet
 
-      Not_Met          : Boolean                  := False;
+      Negated          : Boolean                  := False;
+      -- Set by any negation word ("no", "not", "does not"...) met in the
+      -- step line, whatever its position in the sentence
       Prep             : Prepositions             := Prepositions'First;
       Subject_Attr     : Subject_Attrib           := No_SA;
       Subject          : Subjects                 := No_Subject;
@@ -384,6 +402,22 @@ package body BBT.Scenarios.Steps is
             IO.Put_Error ("Unrecognized step """ & To_String (Line) & """", Loc);
 
          else
+            if State.Negated then
+               if Negatable (State.Action) then
+                  --  The negation is carried to the check procedure as
+                  --  the step polarity
+                  null;
+               else
+                  --  The negation word may be part of the free, non
+                  --  interpreted, part of the step line: warn, don't
+                  --  reject, and parse the step as positive.
+                  IO.Put_Warning
+                    ("""no""/""not"" ignored: this step form has no"
+                     & " negative variant", Loc);
+                  State.Negated := False;
+               end if;
+            end if;
+
             Validate_Step_State (State,
                                  Loc,
                                  Chunk.Verb,
@@ -395,6 +429,7 @@ package body BBT.Scenarios.Steps is
 
       return (Cat              => State.Cat,
               Action           => State.Action,
+              Negated          => State.Negated,
               Src_Code         => Src_Code,
               Subject_String   => State.Subject_String,
               Object_String    => State.Object_String,

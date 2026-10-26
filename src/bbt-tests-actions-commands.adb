@@ -673,9 +673,14 @@ package body BBT.Tests.Actions.Commands is
       Put_Debug_Line ("Exit_Code_Is " & Expected'Image & ", last ="
                       & Last_Returned_Code'Image);
       Put_Step_Result (Step      => Step,
-                       Success   => Last_Returned_Code = Expected,
-                       Fail_Msg  => "Expected exit code" & Expected'Image
-                                    & ", got" & Last_Returned_Code'Image,
+                       Success   => (Last_Returned_Code = Expected)
+                                      xor Step.Data.Negated,
+                       Fail_Msg  => (if Step.Data.Negated
+                                     then "Exit code should differ from"
+                                            & Expected'Image
+                                            & ", got" & Last_Returned_Code'Image
+                                     else "Expected exit code" & Expected'Image
+                                          & ", got" & Last_Returned_Code'Image),
                        Loc       => Step.Location,
                        Verbosity => Verbosity);
    end Exit_Code_Is;

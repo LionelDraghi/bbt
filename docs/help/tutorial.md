@@ -233,6 +233,7 @@ All the available steps, classified by what they set up, run or check:
     - Then the output contains `3 matches replaced`
     - Then the output contains `sut version 1.0` (ignoring version)
     - Then the output does not contain `Warning:`
+    - Then the output is not `Error:`
     - Then the output matches `sut version v[0-9]+\.[0-9]+\.[0-9]+`
     - Then I get file `flowers2.txt` (ignoring order)
     - Then there is no output
@@ -240,10 +241,12 @@ All the available steps, classified by what they set up, run or check:
 **Checking the error output and the exit code**  
 
     - Then the error output contains `No such file or directory`
+    - Then the error output is not `No such file or directory`
     - Then there is no error output
     - Then I get an error
     - Then I get no error
     - Then the exit code is `2`
+    - Then the exit code is not `2`
 
 **Checking files and directories**  
 
@@ -256,6 +259,15 @@ All the available steps, classified by what they set up, run or check:
     - Then the file `config.ini` contains `lang=am`
     - Then the file `config.ini` does not contain `secret`
     - Then the file `list` matches `.*string.*`
+
+**Negating a check**  
+
+Any comparison step can be negated with the negation words - `no`,
+`not`, `do not`, `doesn't` - whatever their position in the sentence,
+as in `the output is not`, `the error output does not contain` or
+`the exit code is not`. A negation word on a step form that cannot be
+negated, like the run steps, is ignored with a warning: the step keeps
+its positive meaning.
 
 ## Help  
 

@@ -50,9 +50,8 @@ begin
 
    elsif In_Object_Part and then State.Object = No_Object then
       case Current_Verb is
-         when No_Verb |
-              Is_No   =>
-            -- Those verbs are always followed by a file/dir name
+         when No_Verb =>
+            -- Always followed by a file/dir name
             if State.File_Type = Directory then
                State.Object := Obj_Dir_Name;
                --  Put_Debug_Line ("  Object = Obj_Dir_Name", Loc);
@@ -68,11 +67,8 @@ begin
               Type_Text        |
               Enter_Text       |
               Get              |
-              Get_No           |
               Contains         |
               Matches          |
-              Does_Not_Contain |
-              Does_Not_Match   |
               Containing       =>
             -- Those verbs are always followed by a text
             State.Object := Obj_Text;

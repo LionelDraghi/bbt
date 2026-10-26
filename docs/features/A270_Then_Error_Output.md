@@ -15,6 +15,8 @@ _Table of Contents:_
 - [Scenario: error output in a code block](#scenario-error-output-in-a-code-block)
 - [Scenario: without error output step, the outputs stay merged](#scenario-without-error-output-step-the-outputs-stay-merged)
 - [Scenario: wrong error output](#scenario-wrong-error-output)
+- [Scenario: the error output is not](#scenario-the-error-output-is-not)
+- [Scenario: failed "the error output is not"](#scenario-failed-the-error-output-is-not)
 
 ### Scenario: error message on the error output
 
@@ -60,3 +62,22 @@ No BBT_SURELY_UNSET_VARIABLE environment variable
 
 - When I run `./bbt wrong_error_output.md`
 - Then I get an error
+
+### Scenario: the error output is not
+
+- When I run `./sut create`
+- Then the error output is not `Something went wrong`
+- But the error output is `Missing file name`
+- And the error output does not contain `version`
+
+### Scenario: failed "the error output is not"
+
+- Given the file `failed_stderr_is_not.md`
+```
+# Scenario :
+- When I run `./sut create`
+- Then the error output is not `Missing file name`
+```
+- When I run `./bbt failed_stderr_is_not.md`
+- Then I get an error
+- And output contains `**NOK** : Then the error output is not`
