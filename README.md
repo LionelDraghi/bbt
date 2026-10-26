@@ -177,6 +177,8 @@ The three supported platforms are continuously tested:
 [![](docs/tests_results/Darwin/badge.svg)](docs/tests_results/Darwin/features_results.md)
 [![](docs/tests_results/Windows/badge.svg)](docs/tests_results/Windows/features_results.md) 
 
+![](docs/metrics/loc.svg) ![](docs/metrics/complexity.svg)
+
 #### Building from sources
 ```sh
 git clone https://github.com/LionelDraghi/bbt  

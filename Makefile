@@ -124,6 +124,9 @@ doc: ./bbt$(EXE_SUFFIX)
 	grep -rn 'Issue #' docs/* src/* | LC_ALL=C sort |  sed -E "s/:/|/2;s/Issue #/#/;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> issues_index.md
 	mv issues_index.md docs/dev/issues_index.md
 
+	echo === metrics badges
+	./tools/gen_metrics_badges.sh
+
 	echo Checking links in md files
 ifeq ($(OS), Windows_NT)
 	- mlc --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
