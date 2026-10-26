@@ -25,7 +25,10 @@ RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 COMMON_OPTIONS := --yes --keep_going --cleanup=full --quiet \
 --human_match --scenario_timeout 30
 
+# The empty recipe is required: without it, make would pick the
+# catch-all single-test rule below to "build" all, and fail.
 all: check
+	@:
 
 .PHONY : help clean distclean setup check features examples non_reg unit_testing doc
 
@@ -60,12 +63,14 @@ help:
 	@ echo "(e.g. replace ./bbt with ./bbt explain, or add -d for traces)."
 
 # --------------------------------------------------------------------------
-# Replay a single functional test by id, e.g. make A300.
-# The id is resolved against ../docs/features (A300 -> A300_*.md), then
-# run with the same options as the features suite. The exact command
-# line is displayed, so that it can be grabbed and tweaked (e.g. with
-# explain or -d).
-A%:
+# Replay a single functional test by id, e.g. make A300 or make B010.
+# The id is the beginning of the test file name, resolved against
+# ../docs/features, and the file is run with the same options as the
+# features suite. The exact command line is displayed, so that it can
+# be grabbed and tweaked (e.g. replace ./bbt with ./bbt explain, or add
+# -d for traces). Explicit targets above always take precedence; an
+# unknown id just reports that no test file matches.
+%:
 	@ f=`ls ../docs/features/$@_*.md 2>/dev/null | head -1`; \
 	if [ -z "$$f" ]; then \
 	    echo "no feature test file with id $@ in ../docs/features"; \

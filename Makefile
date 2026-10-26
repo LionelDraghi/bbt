@@ -13,7 +13,18 @@ endif
 
 .SILENT:
 
+# The empty recipes below are required: without a recipe, make would
+# pick the catch-all single-test rule at the bottom to "build" those
+# targets, delegating them to tests/ and replaying the suites.
 all: build check doc
+	@:
+
+bbt$(EXE_SUFFIX): build
+	@:
+sut$(EXE_SUFFIX): tools
+	@:
+rpl$(EXE_SUFFIX): tools
+	@:
 
 .PHONY : help tools
 help:
@@ -27,6 +38,9 @@ help:
 	echo "                sut, bbt and gcc links in tests/"
 	echo "  check      : run the tests (features, examples, non regression"
 	echo "                and unit tests)"
+	echo "  features   : run the functional tests only (docs/features)"
+	echo "  examples   : run the sanity checks only (docs/examples)"
+	echo "  sanity     : alias of examples"
 	echo "  doc        : regenerate the generated docs (help reference files,"
 	echo "                indexes, badges) and check the links with mlc"
 	echo "  install    : copy bbt to ~/bin"
@@ -36,10 +50,6 @@ help:
 	echo "                including binaries and links"
 	echo ""
 	echo "Refer to AGENTS.md and docs/dev/developer_guide.md for more details."
-
-bbt$(EXE_SUFFIX): build
-sut$(EXE_SUFFIX): tools
-rpl$(EXE_SUFFIX): tools
 
 # A full alr build re-syncs every dependency crate and the whole toolchain
 # into the alire cache, which takes minutes on Windows, even when nothing
@@ -97,9 +107,20 @@ check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	echo === running tests
 	$(MAKE) -s check --directory=tests
 
-# Replay a single functional test by id, e.g. make A300,
+features: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
+	$(MAKE) -s features --directory=tests
+
+examples: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
+	$(MAKE) -s examples --directory=tests
+
+# Alias: the sanity alias must carry an explicit (empty) recipe, else
+# make would pick the catch-all single-test rule below to build it.
+sanity: examples
+	@:
+
+# Replay a single functional test by id, e.g. make A300 or make B010,
 # with the same options as the features suite (delegated to tests/).
-A%:
+%:
 	@ $(MAKE) -s --directory=tests $@
 
 

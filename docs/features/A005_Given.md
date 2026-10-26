@@ -28,7 +28,7 @@ _Table of Contents:_
 - [Scenario: An existing directory is kept as is](#scenario-an-existing-directory-is-kept-as-is)
 - [Scenario: Checking that there is a file with some content](#scenario-checking-that-there-is-a-file-with-some-content)
 - [Scenario: Creating a file with some content](#scenario-creating-a-file-with-some-content)
-- [Scenario: An existing file with the expected content is kept as is](#scenario-an-existing-file-with-the-expected-content-is-kept-as-is)
+- [Scenario: An existing file with the expected content is just a leftover](#an-existing-file-with-the-expected-content-is-just-a-leftover)
 - [Scenario: An existing file with a different content is replaced with --yes](#scenario-an-existing-file-with-a-different-content-is-replaced-with---yes)
 - [Scenario: Replacing confirmed by a typed key](#scenario-replacing-confirmed-by-a-typed-key)
 - [Scenario: Replacing refused by a typed key](#scenario-replacing-refused-by-a-typed-key)
@@ -80,12 +80,15 @@ beta
 zeta
 ~~~
 
-### Scenario: An existing file with the expected content is kept as is
+### Scenario: An existing file with the expected content is just a leftover
 
 The nested bbt is run without the `--yes` option: a
 ``Given the file `` step on an existing file whose content matches the
-expected one does not prompt for any confirmation, and the file is
-kept as is.
+expected one does not prompt for any confirmation, and does not
+rewrite the file. A file holding the expected content is just a
+leftover from a previous run, not a user file: it joins the deletion
+list, and the cleanup removes it like any other run artifact (cf. the
+deletion feature).
 
 - Given the new file `config.ini` containing `Tmp_dir=/tmp`
 - Given the new `keep_content.md` file
@@ -97,7 +100,7 @@ kept as is.
 ~~~
 - When I run `./bbt -q -c keep_content.md`
 - Then the output contains `## Summary : **Success**, 1 scenarios OK`
-- And there is a `config.ini` file
+- And there is no `config.ini` file
 
 ### Scenario: An existing file with a different content is replaced with --yes
 

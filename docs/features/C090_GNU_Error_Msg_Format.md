@@ -25,3 +25,9 @@ We create a scenario with multiple When, and run it with the "strict" option, in
 
 - When I successfully run `./bbt --strict t1.md`
 - Then the output contains `t1.md:0: Warning: Multiple When in the same Scenario` (ignoring location)
+- But the output does not contain `t1.md:0: Warning: Multiple When in the same Scenario`
+
+The actual warnings point at the real `t1.md` lines, so the literal
+location 0 of the expected text is never in the output: the `But` step
+proves that the `Then` step matches only thanks to the `ignoring
+location` clause.

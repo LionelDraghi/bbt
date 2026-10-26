@@ -4,11 +4,12 @@
 Scenarios may create a lot of file and directory during run, and that's tedious to remove.  
 The --cleanup option is here to ensure that those files are removed after run.
 
-Obviously, bbt never removes (unless a bug!) files and dir present when you started bbt.
+bbt never removes a pre-existing file or directory that no Given step touches. A pre-existing file that a Given step overwrites is different: with the expected content, it is just a leftover from a previous run, and overwriting it needs no consent; with a different content, the overwrite needs an explicit one. In both cases the overwritten file joins the deletion list, and is removed like any other run artifact. The only way to keep a pre-existing file is to refuse the overwrite — answering no on the prompt, or implicitly on a non interactive stdin.
 
 > [!CAUTION] 
 > With `--cleanup`, bbt will remove:
-> 1. files that he did create;
+> 1. files that he did create or overwrote, including pre-existing ones
+>    (see above);
 > 2. directories that he did create, the whole tree, including files and subdirectories that he didn't create!
 >
 > With `--cleanup=full`, bbt will additionally remove every file and directory
@@ -33,6 +34,10 @@ _Table of Contents_:
 - [Scenario: run with --cleanup=full removes what the tested command created](#scenario-run-with---cleanupfull-removes-what-the-tested-command-created)
 - [Scenario: --cleanup=full keeps pre-existing files](#scenario---cleanupfull-keeps-pre-existing-files)
 - [Scenario: --cleanup=full removal refused on a non interactive stdin](#scenario---cleanupfull-removal-refused-on-a-non-interactive-stdin)
+- [Scenario: --cleanup=full removes a pre-existing file with the expected content](#scenario---cleanupfull-removes-a-pre-existing-file-with-the-expected-content)
+- [Scenario: --cleanup=full removes a file overwritten with --yes](#scenario---cleanupfull-removes-a-file-overwritten-with---yes)
+- [Scenario: a refused overwrite keeps the pre-existing file](#a-refused-overwrite-keeps-the-pre-existing-file)
+- [Scenario: a non interactive run refuses the overwrite and keeps the file](#a-non-interactive-run-refuses-the-overwrite-and-keeps-the-file)
 
 ### Background:
 
@@ -115,3 +120,91 @@ how to get them removed.
 - Then I get an error
 - And  the output contains `use --yes to confirm all operations`
 - And  there is a `sut_out.txt` file
+
+### Scenario: --cleanup=full removes a pre-existing file with the expected content
+
+A file left over by a previous run, holding the very content the
+scenario is about to write, is not a user file: bbt silently overwrites
+it, puts it on the deletion list, and `--cleanup=full` removes it at
+the end of the run like any other run artifact. This is what clears
+the residues left over by direct runs without `--cleanup`.
+
+- Given the new file `leftover.txt` containing `some text`
+- Given the new `overwrite_same.md` file
+  ~~~md
+  # Scenario: overwrite with the same content
+
+  - Given the file `leftover.txt` containing `some text`
+  - Then there is a `leftover.txt` file
+  ~~~
+- When I run `./bbt -q --yes --cleanup=full overwrite_same.md`
+
+- Then the output contains `## Summary : **Success**`
+- And there is no `leftover.txt` file
+
+### Scenario: --cleanup=full removes a file overwritten with --yes
+
+A pre-existing file with a different content is only overwritten with an
+explicit consent. With `--yes`, the consent is given, the previous
+content is lost anyway, so the file joins the deletion list and is
+removed at the end of the run.
+
+- Given the new file `replaced.txt` containing `keep me`
+- Given the new `overwrite_yes.md` file
+  ~~~md
+  # Scenario: overwrite with --yes
+
+  - Given the file `replaced.txt` containing `new content`
+  - Then there is a `replaced.txt` file
+  ~~~
+- When I run `./bbt -q --yes --cleanup=full overwrite_yes.md`
+
+- Then the output contains `## Summary : **Success**`
+- And there is no `replaced.txt` file
+
+### Scenario: a refused overwrite keeps the pre-existing file
+
+The only case where a pre-existing file survives: the user answers no
+to the overwrite prompt. The step fails, the file is not on the
+deletion list, and it keeps its original content.
+
+- Given the new file `refused.txt` containing `keep me`
+- Given the new `overwrite_refused.md` file
+  ~~~md
+  # Scenario: overwrite refused
+
+  - Given the file `refused.txt` containing `new content`
+  - Then there is a `refused.txt` file
+  ~~~
+- When I run `./bbt -q --no_tty overwrite_refused.md`
+- Then the output is
+```
+Overwrite file refused.txt?   [Y]es/[N]o/[A]ll
+```
+- When I type `n`
+- Then I get an error
+- And the output contains `file "refused.txt" not overwritten`
+- And there is a `refused.txt` file
+- And the file `refused.txt` contains `keep me`
+
+### Scenario: a non interactive run refuses the overwrite and keeps the file
+
+Same rule, implicit refusal: without `--yes` and without anybody able
+to answer the prompt, the overwrite is refused, the step fails, and the
+file keeps its original content.
+
+- Given the new file `refused2.txt` containing `keep me`
+- Given the new `overwrite_no_tty.md` file
+  ~~~md
+  # Scenario: overwrite refused on a pipe
+
+  - Given the file `refused2.txt` containing `new content`
+  - Then there is a `refused2.txt` file
+  ~~~
+- When I run `./bbt -q --no_tty overwrite_no_tty.md`
+
+- Then I get an error
+- And the output contains `use --yes to confirm all operations`
+- And the output contains `not overwritten`
+- And there is a `refused2.txt` file
+- And the file `refused2.txt` contains `keep me`

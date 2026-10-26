@@ -128,8 +128,12 @@ package body BBT.Tests.Actions.Setup is
                             Ignore_Blank_Lines => Settings.Ignore_Blank_Lines,
                             Sort_Texts         => Step.Data.Ignore_Order)
             then
-               --  The existing file already has the expected content,
-               --  in the current match mode: nothing to do.
+               --  The existing file already has the expected content, in the
+               --  current match mode: no rewrite needed. But a file holding
+               --  the expected content is a leftover from a previous run,
+               --  not a user file, so it joins the deletion list, and is
+               --  removed at the end like any other run artifact.
+               Created_File_List.Add (File_Name);
                Put_Step_Result (Step     => Step,
                                 Success  => True,
                                 Fail_Msg => "File " & File_Name'Image &

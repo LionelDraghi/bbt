@@ -10065,25 +10065,25 @@
       </unit>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-tests-actions-setup.adb">
-      <metric name="all_lines">285</metric>
-      <metric name="code_lines">236</metric>
-      <metric name="comment_lines">28</metric>
+      <metric name="all_lines">289</metric>
+      <metric name="code_lines">237</metric>
+      <metric name="comment_lines">31</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">10.60</metric>
+      <metric name="comment_percentage">11.56</metric>
       <metric name="blank_lines">21</metric>
-      <metric name="average_lines_in_bodies">26.12</metric>
+      <metric name="average_lines_in_bodies">26.25</metric>
       <metric name="spark_lines">0</metric>
       <unit name="BBT.Tests.Actions.Setup" kind="package body" line="17" col="1">
-         <metric name="all_lines">269</metric>
-         <metric name="code_lines">229</metric>
-         <metric name="comment_lines">23</metric>
+         <metric name="all_lines">273</metric>
+         <metric name="code_lines">230</metric>
+         <metric name="comment_lines">26</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">9.12</metric>
+         <metric name="comment_percentage">10.15</metric>
          <metric name="blank_lines">17</metric>
          <metric name="all_subprograms">8</metric>
-         <metric name="all_stmts">52</metric>
+         <metric name="all_stmts">53</metric>
          <metric name="all_dcls">47</metric>
-         <metric name="lsloc">99</metric>
+         <metric name="lsloc">100</metric>
          <metric name="unit_nesting">1</metric>
          <metric name="construct_nesting">5</metric>
          <unit name="Entry_Exists" kind="expression function" line="27" col="4">
@@ -10172,15 +10172,15 @@
             <metric name="extra_exit_points">0</metric>
          </unit>
          <unit name="Create_If_None" kind="procedure body" line="105" col="4">
-            <metric name="all_lines">73</metric>
-            <metric name="code_lines">64</metric>
-            <metric name="comment_lines">7</metric>
+            <metric name="all_lines">77</metric>
+            <metric name="code_lines">65</metric>
+            <metric name="comment_lines">10</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">9.85</metric>
+            <metric name="comment_percentage">13.33</metric>
             <metric name="blank_lines">2</metric>
-            <metric name="all_stmts">16</metric>
+            <metric name="all_stmts">17</metric>
             <metric name="all_dcls">4</metric>
-            <metric name="lsloc">20</metric>
+            <metric name="lsloc">21</metric>
             <metric name="construct_nesting">3</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">2</metric>
@@ -10193,7 +10193,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Check_File_Existence" kind="procedure body" line="180" col="4">
+         <unit name="Check_File_Existence" kind="procedure body" line="184" col="4">
             <metric name="all_lines">21</metric>
             <metric name="code_lines">21</metric>
             <metric name="comment_lines">0</metric>
@@ -10215,7 +10215,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Check_Dir_Existence" kind="procedure body" line="203" col="4">
+         <unit name="Check_Dir_Existence" kind="procedure body" line="207" col="4">
             <metric name="all_lines">22</metric>
             <metric name="code_lines">22</metric>
             <metric name="comment_lines">0</metric>
@@ -10237,7 +10237,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Check_No_File" kind="procedure body" line="227" col="4">
+         <unit name="Check_No_File" kind="procedure body" line="231" col="4">
             <metric name="all_lines">12</metric>
             <metric name="code_lines">12</metric>
             <metric name="comment_lines">0</metric>
@@ -10259,7 +10259,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Check_No_Dir" kind="procedure body" line="241" col="4">
+         <unit name="Check_No_Dir" kind="procedure body" line="245" col="4">
             <metric name="all_lines">12</metric>
             <metric name="code_lines">12</metric>
             <metric name="comment_lines">0</metric>
@@ -10281,7 +10281,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Setup_No_File" kind="procedure body" line="255" col="4">
+         <unit name="Setup_No_File" kind="procedure body" line="259" col="4">
             <metric name="all_lines">13</metric>
             <metric name="code_lines">13</metric>
             <metric name="comment_lines">0</metric>
@@ -10303,7 +10303,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Setup_No_Dir" kind="procedure body" line="270" col="4">
+         <unit name="Setup_No_Dir" kind="procedure body" line="274" col="4">
             <metric name="all_lines">13</metric>
             <metric name="code_lines">13</metric>
             <metric name="comment_lines">0</metric>
@@ -16010,11 +16010,11 @@
       <metric name="essential_complexity">1.00</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
-   <metric name="all_lines">14974</metric>
-   <metric name="code_lines">9786</metric>
-   <metric name="comment_lines">3245</metric>
+   <metric name="all_lines">14978</metric>
+   <metric name="code_lines">9787</metric>
+   <metric name="comment_lines">3248</metric>
    <metric name="eol_comments">77</metric>
-   <metric name="comment_percentage">25.49</metric>
+   <metric name="comment_percentage">25.50</metric>
    <metric name="blank_lines">1943</metric>
    <metric name="average_lines_in_bodies">19.78</metric>
    <metric name="spark_lines">0</metric>
@@ -16022,9 +16022,9 @@
    <metric name="all_types">71</metric>
    <metric name="public_subprograms">196</metric>
    <metric name="all_subprograms">363</metric>
-   <metric name="all_stmts">2705</metric>
+   <metric name="all_stmts">2706</metric>
    <metric name="all_dcls">3621</metric>
-   <metric name="lsloc">6326</metric>
+   <metric name="lsloc">6327</metric>
    <metric name="average_complexity">3.22</metric>
    <coupling>
       <file name="/home/lionel/prj/bbt/src/bbt.ads">
