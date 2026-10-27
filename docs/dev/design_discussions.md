@@ -32,7 +32,7 @@ updated with a reference to its replacement.
 | [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
 | [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
 | [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
-| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10)                 | [A300_Ignoring.md](../features/A300_Ignoring.md) |
+| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10), step clause implemented | [A300_Ignoring.md](../features/A300_Ignoring.md) |
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
 | [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
@@ -677,7 +677,7 @@ References:
 
 ## D9. Ignoring volatile parts: keyword and first increment
 
-Status: arbitrated (October 2026), first increment implemented
+Status: arbitrated (October 2026), step clause implemented
 
 Time tags and machine dependent paths frequently break comparisons on
 parts the scenario does not target. The comparison steps accept an
@@ -713,8 +713,9 @@ the volatile parts on both sides before comparing
   [issue #18](https://github.com/LionelDraghi/bbt/issues/18); the
   command line options keep priority, a contradicting clause being
   ignored with a warning, and the `unordered` adjective is deprecated
-  in favor of `(ignoring order)`. Deferred to later
-  increments: the `ignoring path syntax` pattern, the `Given` step, the
+  in favor of `(ignoring order)`. The `ignoring path syntax` pattern
+  is implemented since (cf. A300_Ignoring.md). Still deferred to later
+  increments: the `Given` step, the
   command line option, and with them the precedence between the three
   scopes;
 - the diff display of the ignored segments is deferred; it will pair

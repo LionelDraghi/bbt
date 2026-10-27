@@ -3,13 +3,19 @@ The (ignoring ...) clause:
   the volatile parts on both sides before comparing, keeping the
   stable part precisely checked:
     - Then I get `Build finished in 3.2 s` (ignoring time)
-  Three named patterns are available:
+  Five named patterns are available:
   - time : masks the common clock, date and date-time values
     (12:34, 12:34:56, 2026-10-13, 2026-10-13T12:34:56 ...)
   - dir  : masks the directory part of a path, the file or directory
     name staying checked
   - version : masks version numbers (1.0, 0.5.1, 1.2.3-dev,
     2.0.0-rc.1+meta ...)
+  - location : masks source locations, as formatted by bbt and the
+    GNU tools (t1.md:12:, t1.md:12.34: ...)
+  - path syntax : rewrites the compared texts with the Unix path
+    syntax (backslashes to slashes, "C:" drive prefix removed)
+    instead of masking: the path itself stays checked, and a Unix
+    and a Windows print of the same place compare equal
   Any other word in the clause is a regexp, masking every substring
   that matches it, for any other volatile value:
     - Then I get `Build finished in 3.2 s` (ignoring [0-9.]+)
@@ -31,7 +37,9 @@ The (ignoring ...) clause:
   (ignoring time, dir), (ignoring time and [0-9.]+),
   (ignoring time and order)
   A pattern that matches nothing on the actual side raises a warning,
-  as the neutralization may silently weaken the test, and a word that
+  as the neutralization may silently weaken the test (the path syntax
+  pattern excepted: a normalization that rewrites nothing is a no-op),
+  and a word that
   is not a legal regexp is a scenario error, reported at parsing time.
   The clause is accepted on the comparison steps and their negated
   forms (is, is not, contains, does not contain ...), whatever the

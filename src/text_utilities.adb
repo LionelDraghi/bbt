@@ -1460,13 +1460,50 @@ package body Text_Utilities is
    end Mask_Location;
 
    -- -----------------------------------------------------------------------
+   procedure Normalize_Path_Syntax (S : in out Unbounded_String) is
+   -- Rewrites every path in S with the Unix syntax: backslashes become
+   -- slashes, and a Windows drive prefix ("C:") is removed. Both sides
+   -- of a comparison being normalized the same way, the location a path
+   -- designates stays checked: only its writing changes, a Unix and a
+   -- Windows print of the same place comparing equal.
+   -- The drive prefix is a single letter, not preceded by an
+   -- alphanumeric character, followed by a colon and a path separator:
+   -- "C:\prj\bbt" and "C:/prj/bbt" normalize to "/prj/bbt", whereas the
+   -- "s:" of "https://..." is left alone.
+      Src : constant String := To_String (S);
+      I   : Positive := Src'First;
+   begin
+      S := Null_Unbounded_String;
+      while I <= Src'Last loop
+         if Src (I) = '\' then
+            Append (S, '/');
+            I := @ + 1;
+         elsif Ada.Characters.Handling.Is_Letter (Src (I))
+           and then (I = Src'First
+                       or else
+                     not Ada.Characters.Handling.Is_Alphanumeric (Src (I - 1)))
+           and then I + 2 <= Src'Last
+           and then Src (I + 1) = ':'
+           and then (Src (I + 2) = '/' or else Src (I + 2) = '\')
+         then
+            -- a Windows drive prefix: the letter and the colon are dropped
+            I := @ + 2;
+         else
+            Append (S, Src (I));
+            I := @ + 1;
+         end if;
+      end loop;
+   end Normalize_Path_Syntax;
+
+   -- -----------------------------------------------------------------------
    function Image (P : Ignore_Pattern) return String is
      (case P is
-         when No_Pattern => "",
-         when Time       => "time",
-         when Dir        => "dir",
-         when Version    => "version",
-         when Location   => "location");
+         when No_Pattern  => "",
+         when Time        => "time",
+         when Dir         => "dir",
+         when Version     => "version",
+         when Location    => "location",
+         when Path_Syntax => "path syntax");
 
    function Image (Patterns : Ignore_Pattern_Set) return String is
       R : Unbounded_String;
@@ -1501,6 +1538,9 @@ package body Text_Utilities is
             declare
                L : Unbounded_String := To_Unbounded_String (T (I));
             begin
+               if Patterns (Path_Syntax) then
+                  Normalize_Path_Syntax (L);
+               end if;
                if Patterns (Time) then
                   Mask_Time (L, Counts (Time));
                end if;

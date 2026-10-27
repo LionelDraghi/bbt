@@ -166,8 +166,43 @@ begin
          while Last < List'Last and then not Is_In (List (Last + 1), Separators) loop
             Last := @ + 1;
          end loop;
-         Set_Pattern (List (From .. Last), Original_List (From .. Last));
-         From := Last + 1;
+
+         if List (From .. Last) = "path" then
+            -- The "path syntax" pattern is the only two-word one: peek
+            -- the next word, and fall back to the regexp
+            -- interpretation of "path" when it is not there
+            declare
+               Next_From : Positive := Last + 1;
+               Next_Last : Natural;
+            begin
+               while Next_From <= List'Last
+                 and then Is_In (List (Next_From), Separators)
+               loop
+                  Next_From := @ + 1;
+               end loop;
+               Next_Last := Next_From;
+               while Next_Last < List'Last
+                 and then not Is_In (List (Next_Last + 1), Separators)
+               loop
+                  Next_Last := @ + 1;
+               end loop;
+               if Next_From <= List'Last
+                 and then List (Next_From .. Next_Last) = "syntax"
+               then
+                  Patterns (Path_Syntax) := True;
+                  From := Next_Last + 1;
+
+               else
+                  Set_Pattern (List (From .. Last),
+                               Original_List (From .. Last));
+                  From := Last + 1;
+               end if;
+            end;
+
+         else
+            Set_Pattern (List (From .. Last), Original_List (From .. Last));
+            From := Last + 1;
+         end if;
       end loop;
    end;
 

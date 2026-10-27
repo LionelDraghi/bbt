@@ -1274,6 +1274,84 @@
    - OK : Given the file `where_other_name.txt`  
    - [X] background [](../../features/A300_Ignoring.md) pass  
 
+   ### Scenario: [a Windows and a Unix print of the same path compare equal](../../features/A300_Ignoring.md): 
+   - OK : Given the file `win_path.txt`  
+   - OK : Given the file `unix_path.txt`  
+   - OK : Then file `win_path.txt` is equal to file `unix_path.txt` (ignoring path syntax)  
+   - OK : But file `win_path.txt` is not equal to file `unix_path.txt`  
+   - [X] scenario   [a Windows and a Unix print of the same path compare equal](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [mixed syntaxes of the same path compare equal](../../features/A300_Ignoring.md): 
+   - OK : Given the file `back_slash.txt`  
+   - OK : Given the file `forward_slash.txt`  
+   - OK : Given the file `no_drive.txt`  
+   - OK : Then file `back_slash.txt` is equal to file `forward_slash.txt` (ignoring path syntax)  
+   - OK : And  file `back_slash.txt` is equal to file `no_drive.txt` (ignoring path syntax)  
+   - OK : And  file `forward_slash.txt` is equal to file `no_drive.txt` (ignoring path syntax)  
+   - [X] scenario   [mixed syntaxes of the same path compare equal](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a differing path still fails](../../features/A300_Ignoring.md): 
+   - OK : Given the file `other_path.txt`  
+   - OK : Given the `path_compare.md` file  
+   - OK : When I run `./bbt path_compare.md`  
+   - OK : Then I get an error  
+   - OK : And output contains `Error : win_path.txt not equal to expected:`  
+   - [X] scenario   [a differing path still fails](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [URL colons and clock times are not drive prefixes](../../features/A300_Ignoring.md): 
+   - OK : Given the file `log_a.txt`  
+   - OK : Given the file `log_b.txt`  
+   - OK : Then file `log_a.txt` is not equal to file `log_b.txt` (ignoring path syntax)  
+   - OK : But file `log_a.txt` is equal to file `log_b.txt` (ignoring path syntax and time)  
+   - [X] scenario   [URL colons and clock times are not drive prefixes](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
+   ### Scenario: [a regexp combines with path syntax, and sees the rewritten text](../../features/A300_Ignoring.md): 
+   - OK : Given the file `count_win.txt`  
+   - OK : Given the file `count_ref.txt`  
+   - OK : Then file `count_win.txt` is equal to file `count_ref.txt` (ignoring path syntax and [0-9]+)  
+   - OK : But file `count_win.txt` is not equal to file `count_ref.txt`  
+   - [X] scenario   [a regexp combines with path syntax, and sees the rewritten text](../../features/A300_Ignoring.md) pass  
+
+   ### Background: [](../../features/A300_Ignoring.md): 
+   - OK : Given the file `build_ref.txt`  
+   - OK : Given the file `build_wrong.txt`  
+   - OK : Given the file `build_no_time.txt`  
+   - OK : Given the file `where_ref.txt`  
+   - OK : Given the file `where_other_name.txt`  
+   - [X] background [](../../features/A300_Ignoring.md) pass  
+
    ### Scenario: [a differing stable part still fails](../../features/A300_Ignoring.md): 
    - OK : Given the `time_compare.md` file  
    - OK : When I run `./bbt time_compare.md`  
@@ -1414,7 +1492,7 @@
    - OK : Given the file `perf_ref.txt`  
    - OK : Given the file `perf_other.txt`  
    - OK : Then file `perf_ref.txt` is not equal to file `perf_other.txt`  
-../docs/features/A300_Ignoring.md:527: Warning: the ignoring location pattern matches nothing on the actual side
+../docs/features/A300_Ignoring.md:673: Warning: the ignoring location pattern matches nothing on the actual side
    - OK : And  file `perf_ref.txt` is not equal to file `perf_other.txt` even when (ignoring location)  
    - [X] scenario   [a duration is not mistaken for a location](../../features/A300_Ignoring.md) pass  
 
@@ -1572,12 +1650,19 @@
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [the dash shell is set on the command line (Unix_Only) (needs_dash)](../../features/A310_Run_Shell.md) pass  
 
-   ### Scenario: [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md): 
+   ### Scenario: [the zsh shell is set on the command line (Unix_Only) (needs_zsh)](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
-   - OK : When I run `./bbt --shell=pwsh -c shell_test.md`  
+   - OK : When I run `./bbt --shell=zsh -c shell_test.md`  
    - OK : Then I get no error  
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md) pass  
+   - [X] scenario   [the zsh shell is set on the command line (Unix_Only) (needs_zsh)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the fish shell is set on the command line (Unix_Only) (needs_fish)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=fish -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the fish shell is set on the command line (Unix_Only) (needs_fish)](../../features/A310_Run_Shell.md) pass  
 
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -2867,12 +2952,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 287 scenarios OK
+## Summary : **Success**, 293 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 287   |
+| Successful | 293   |
 | Empty      | 0     |
-| Not Run    | 6     |
+| Not Run    | 5     |
 

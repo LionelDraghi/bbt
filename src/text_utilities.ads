@@ -187,12 +187,16 @@ package Text_Utilities is
                      return Boolean;
 
    -- --------------------------------------------------------------------------
-   type Ignore_Pattern is (No_Pattern, Time, Dir, Version, Location);
+   type Ignore_Pattern is
+     (No_Pattern, Time, Dir, Version, Location, Path_Syntax);
    -- The patterns that neutralize the volatile parts of a comparison
    -- before it happens, as stated by the (ignoring ...) clause of the
    -- comparison steps (cf. docs/features/A300_Ignoring.md).
    -- No_Pattern is only the neutral value used to iterate on the real
    -- patterns.
+   -- All patterns but Path_Syntax mask the matching substrings;
+   -- Path_Syntax rewrites the path syntax instead (backslashes to
+   -- slashes, drive prefix removed), keeping the path itself checked.
 
    type Ignore_Pattern_Set is array (Ignore_Pattern) of Boolean;
    type Pattern_Counts     is array (Ignore_Pattern) of Natural;

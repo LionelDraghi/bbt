@@ -22,8 +22,9 @@ This feature file specifies the step clause increments
 (cf. [D9](../dev/design_discussions.md)): the `time` and `dir`
 patterns, then the `version` pattern and the `<regexp>` escape hatch, then
 the `order`, `casing`, `whitespaces` and `blank_lines` settings patterns,
-on the step clause only. The wider scopes (a `Given I ignore ...`
-step, a command line option), the `path syntax` pattern and
+then the `location` and `path syntax` patterns, on the step clause only.
+The wider scopes (a `Given I ignore ...`
+step, a command line option) and
 the precedence between scopes are deferred, as is the homogenization of
 the clause and option naming with the existing `ignore_casing` and co.
 keywords — the settings themselves are now stateable in the scenario
@@ -117,18 +118,47 @@ the final component — the file or directory name — stays checked:
 The rule is purely lexical: any non blank run containing a separator is
 treated as a path, so a URL such as `https://example.net/page` masks to a
 checked `page` as well. This consequence is accepted for now; it may be
-refined together with the `path syntax` pattern.
+refined later.
 
 Two subjects are entangled in a path: the *location* it designates, and
 the *syntax* of its writing (`\` vs `/`, drive letter). `ignoring dir`
 neutralizes both at once: the location is masked, and the masked prefix
 takes its syntax away with it — a Unix and a Windows print of the same
-place compare equal. A later, more specific pattern — the deferred
-`path syntax` — will do the converse: require the *same* path on both
-sides, and neutralize only the syntax (cf. [D9](../dev/design_discussions.md)).
+place compare equal. The more specific `ignoring path syntax` pattern
+does the converse: it keeps the path itself checked, and neutralizes
+only the syntax (cf. `ignoring path syntax` below).
 
 A run without any separator (`bbt`) is not a path occurrence and is not
 masked.
+
+## `ignoring path syntax`
+
+`ignoring path syntax` does not mask anything: it rewrites the compared
+texts with a single path syntax before the comparison. The *same* path
+is then required on both sides — unlike `ignoring dir`, that
+neutralizes the location as well —, but a Unix and a Windows print of
+that path compare equal, as in `C:\user` vs `/user`:
+
+- every backslash becomes a slash, path or not: the rewrite is purely
+  lexical, `C:\prj\bbt` rewrites to `C:/prj/bbt`, and a `12\34`
+  timestamp to `12/34`. The consequence is accepted, as the
+  corresponding `ignoring dir` one: the two sides are rewritten the
+  same way, so only texts differing by a `\` vs `/` writing are
+  equalized;
+- a Windows drive prefix is removed: a single letter, not preceded by
+  an alphanumeric character, followed by a colon and a separator.
+  `C:\user` and `c:/user` rewrite to `/user`, whereas the `s:` of
+  `https://...` and the colons of a `12:34` clock time are left alone;
+- everything else is untouched: the path location itself stays checked.
+
+The rewrite happens first, on the expected text and the actual one,
+before the masking patterns: the `dir` pattern and the custom regexp
+patterns see the rewritten text, and a regexp is stated with slashes,
+whatever the syntax of the compared output.
+
+As the pattern is a normalization and not a mask, it raises no
+matches-nothing warning: rewriting nothing is a no-op, not a sign that
+the scenario ignores something never printed.
 
 ## `ignoring version`
 
@@ -210,6 +240,7 @@ _Table of Contents:_
 - [Semantics: masking on both sides](#semantics-masking-on-both-sides)
 - [`ignoring time`](#ignoring-time)
 - [`ignoring dir`](#ignoring-dir)
+- [`ignoring path syntax`](#ignoring-path-syntax)
 - [`ignoring version`](#ignoring-version)
 - [`ignoring location`](#ignoring-location)
 - [`ignoring <regexp>`](#ignoring-regexp)
@@ -220,6 +251,11 @@ _Table of Contents:_
   - [Scenario: the common clock, date and date-time formats are ignored](#scenario-the-common-clock-date-and-date-time-formats-are-ignored)
   - [Scenario: only the file name is checked, not the directory](#scenario-only-the-file-name-is-checked-not-the-directory)
   - [Scenario: a differing file name fails, differing directories do not](#scenario-a-differing-file-name-fails-differing-directories-do-not)
+  - [Scenario: a Windows and a Unix print of the same path compare equal](#scenario-a-windows-and-a-unix-print-of-the-same-path-compare-equal)
+  - [Scenario: mixed syntaxes of the same path compare equal](#scenario-mixed-syntaxes-of-the-same-path-compare-equal)
+  - [Scenario: a differing path still fails](#scenario-a-differing-path-still-fails)
+  - [Scenario: URL colons and clock times are not drive prefixes](#scenario-url-colons-and-clock-times-are-not-drive-prefixes)
+  - [Scenario: a regexp combines with path syntax, and sees the rewritten text](#scenario-a-regexp-combines-with-path-syntax-and-sees-the-rewritten-text)
   - [Scenario: a differing stable part still fails](#scenario-a-differing-stable-part-still-fails)
   - [Scenario: time and dir combine on one step](#scenario-time-and-dir-combine-on-one-step)
   - [Scenario: a time tag does not fail a contains check](#scenario-a-time-tag-does-not-fail-a-contains-check)
@@ -353,8 +389,118 @@ The same scenario passes on Unix and on Windows: the directory parts
 - And output contains `Error : where_ref.txt not equal to expected:`
 
 The directories `/home/lionel/prj/` are identical here, but the final names
-`bbt` and `other` differ: unlike `ignoring path syntax`, the name after the
-masked directory stays checked.
+`bbt` and `other` differ: the name after the masked directory stays
+checked — masking a directory part never checks the location in
+between, but it never masks the name it ends with either.
+
+### Scenario: a Windows and a Unix print of the same path compare equal
+
+- Given the file `win_path.txt`
+  ```
+  sut home is C:\prj\bbt
+  ```
+
+- Given the file `unix_path.txt`
+  ```
+  sut home is /prj/bbt
+  ```
+
+- Then file `win_path.txt` is equal to file `unix_path.txt` (ignoring path syntax)
+- But file `win_path.txt` is not equal to file `unix_path.txt`
+
+The same path, printed by a Windows tool in the expected text and by a
+Unix one on the actual side: only the writing differs, and the clause
+neutralizes it — `C:\prj\bbt` and `/prj/bbt` rewrite to the same
+`/prj/bbt`, drive prefix removed, backslashes turned to slashes.
+Without the clause, the paths differ and the comparison fails.
+
+### Scenario: mixed syntaxes of the same path compare equal
+
+- Given the file `back_slash.txt`
+  ```
+  cd c:\user\foo
+  ```
+
+- Given the file `forward_slash.txt`
+  ```
+  cd C:/user/foo
+  ```
+
+- Given the file `no_drive.txt`
+  ```
+  cd /user/foo
+  ```
+
+- Then file `back_slash.txt` is equal to file `forward_slash.txt` (ignoring path syntax)
+- And  file `back_slash.txt` is equal to file `no_drive.txt` (ignoring path syntax)
+- And  file `forward_slash.txt` is equal to file `no_drive.txt` (ignoring path syntax)
+
+All the syntax variants of one path — separator writing, drive prefix
+casing, drive prefix presence — rewrite to the same `/user/foo`.
+
+### Scenario: a differing path still fails
+
+- Given the file `other_path.txt`
+  ```
+  sut home is /prj/other
+  ```
+
+- Given the `path_compare.md` file
+  ~~~
+  # Scenario:
+  - Then file `win_path.txt` is equal to file `other_path.txt` (ignoring path syntax)
+  ~~~
+
+- When I run `./bbt path_compare.md`
+- Then I get an error
+- And output contains `Error : win_path.txt not equal to expected:`
+
+Ignoring the path syntax does not ignore the path: `bbt` and `other`
+are two different places, whatever their writing, and the comparison
+fails as it would without the clause.
+
+### Scenario: URL colons and clock times are not drive prefixes
+
+- Given the file `log_a.txt`
+  ```
+  done at 12:34, see https://example.net/x
+  ```
+
+- Given the file `log_b.txt`
+  ```
+  done at 23:45, see https://example.net/x
+  ```
+
+- Then file `log_a.txt` is not equal to file `log_b.txt` (ignoring path syntax)
+- But file `log_a.txt` is equal to file `log_b.txt` (ignoring path syntax and time)
+
+The rule is purely lexical: the `s:` of `https://` is not preceded by a
+non alphanumeric character, and the `34:` of the clock time is not
+followed by a separator — no drive prefix is stripped, and no time
+value is masked by the path syntax pattern alone. The `time` pattern
+covers the time values, and combines with `path syntax` on one clause.
+
+### Scenario: a regexp combines with path syntax, and sees the rewritten text
+
+- Given the file `count_win.txt`
+  ```
+  3 files in C:\prj\bbt\tests
+  ```
+
+- Given the file `count_ref.txt`
+  ```
+  7 files in /prj/bbt/tests
+  ```
+
+- Then file `count_win.txt` is equal to file `count_ref.txt` (ignoring path syntax and [0-9]+)
+- But file `count_win.txt` is not equal to file `count_ref.txt`
+
+The path syntax rewrite happens before the custom regexp masking: the
+`[0-9]+` pattern masks the file counts on both sides, and the paths
+compare equal after normalization. A regexp word of the clause is
+stated with slashes, whatever the syntax of the compared output — on
+the Windows print `C:\prj\bbt\tests`, the regexp sees the rewritten
+`/prj/bbt/tests` and not the original backslashes.
 
 ### Scenario: a differing stable part still fails
 

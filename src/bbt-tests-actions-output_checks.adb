@@ -35,7 +35,10 @@ package body BBT.Tests.Actions.Output_Checks is
       end if;
       Expected := Mask (Expected, Step.Data.Ignore_Patterns);
       Actual   := Mask (Actual, Step.Data.Ignore_Patterns, Counts);
-      for P in Ignore_Pattern range Time .. Ignore_Pattern'Last loop
+      -- The matches-nothing warning is for the masking patterns only:
+      -- a path syntax normalization that rewrites nothing is a no-op,
+      -- not a sign that the scenario ignores something never printed
+      for P in Ignore_Pattern range Time .. Location loop
          if Step.Data.Ignore_Patterns (P) and then Counts (P) = 0 then
             IO.Put_Warning ("the ignoring " & Image (P)
                               & " pattern matches nothing on the actual side",
