@@ -1500,6 +1500,39 @@
    - OK : And the output contains `in a shell`  
    - [X] scenario   [no warning on shell metacharacters in a shell step](../../features/A310_Run_Shell.md) pass  
 
+   ### Scenario: [run shell with alternatives](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 2 scenarios OK`  
+   - OK : And the output contains `echo one > alt.txt`  
+   - OK : And the output contains `echo two > alt.txt`  
+   - [X] scenario   [run shell with alternatives](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [successfully run shell with alternatives](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 2 scenarios OK`  
+   - OK : And the output contains `echo one > alt.txt`  
+   - OK : And the output contains `echo two > alt.txt`  
+   - [X] scenario   [successfully run shell with alternatives](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the run qualifiers are position independent](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the run qualifiers are position independent](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [warning on an inapplicable qualifier](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `Warning`  
+   - OK : And the output contains `successfully" ignored`  
+   - [X] scenario   [warning on an inapplicable qualifier](../../features/A310_Run_Shell.md) pass  
+
    ### Scenario: [invalid shell on the command line](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
    - OK : When I run `./bbt --shell=xyzabc -c shell_test.md`  
@@ -1516,11 +1549,11 @@
 
    ### Scenario: [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md): 
    - OK : Given the new file `shell_test.md`  
-   - OK : When I run `./bbt -c shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
    - OK : Then I get an error  
    - OK : And the output contains `**Fail**`  
    - OK : Given the environment variable `BBT_SHELL` is `bash`  
-   - OK : When I run `./bbt -c shell_test.md`  
+   - OK : When I run `./bbt -c --yes shell_test.md`  
    - OK : Then I get no error  
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [the shell is set with the BBT_SHELL environment variable (Unix_Only)](../../features/A310_Run_Shell.md) pass  
@@ -2841,12 +2874,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 284 scenarios OK
+## Summary : **Success**, 288 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 284   |
+| Successful | 288   |
 | Empty      | 0     |
 | Not Run    | 5     |
 
