@@ -21,22 +21,16 @@ begin
       State.Executable := True;
 
    elsif Lower_Keyword = "run" or Lower_Keyword = "running" then
-      if State.Successfully_Met then
-         Set_Verb (Successful_Run, Loc);
-      else
-         Set_Verb (Run, Loc);
-      end if;
+      Set_Verb (Run, Loc);
 
    elsif Lower_Keyword = "shell" then
       -- When I run shell `cmd1 | cmd2`
+      -- "shell" is a run verb qualifier, not a distinct verb: like the
+      -- negation words, it sets a flag, and the run action is derived
+      -- from the qualifiers when the step is resolved (cf. Parse).
       -- The preposition that could precede "shell" is decoration:
       -- the keywords are "run" and "shell"
-      if Verb = Run then
-         Set_Verb (Run_Shell, Loc);
-
-      elsif Verb = Successful_Run then
-         Set_Verb (Successful_Run_Shell, Loc);
-      end if;
+      State.Shell_Met := True;
 
    elsif Lower_Keyword = "type" then
       -- When I type `Y`

@@ -52,11 +52,12 @@ package body BBT.Scenarios.Steps is
                     --  contain"...) are not distinct verbs: the negation
                     --  words set State.Negated, and the resulting polarity
                     --  is carried by Step_Data.Negated.
+                    --  The same for the run verb qualifiers: "shell" and
+                    --  "successfully" set State.Shell_Met and
+                    --  State.Successfully_Met, and the run action is
+                    --  derived from them when the step is resolved.
                     No_Verb,
                     Run,
-                    Successful_Run,
-                    Run_Shell,
-                    Successful_Run_Shell,
                     Get,
                     Contains,
                     Matches,
@@ -128,6 +129,14 @@ package body BBT.Scenarios.Steps is
    -- Type to hold parsing state for separate procedures
    type Parse_State is record
       Successfully_Met : Boolean                  := False;
+      -- Set by the "successfully" keyword, whatever its position in
+      -- the step line: it is a run verb qualifier, not a distinct
+      -- verb (cf. Shell_Met below and the negation words).
+
+      Shell_Met        : Boolean                  := False;
+      -- Set by the "shell" keyword: a run verb qualifier, combined
+      -- with Successfully_Met to derive the run action when the
+      -- step is resolved (cf. Parse)
 
       Or_Met           : Natural                  := 0;
       Cmd_List         : Model.Steps.Cmd_List     := Model.Steps.Empty_Cmd_List;
@@ -391,6 +400,30 @@ package body BBT.Scenarios.Steps is
                                       State.Subject,
                                       Chunk.Verb,
                                       State.Object).Action;
+
+         --  The run verb qualifiers ("shell", "successfully") are not
+         --  grammar entries: like the negation words, they set flags,
+         --  and the resulting action is derived here (cf. Step_Data.Negated).
+         if State.Action = Run_Cmd then
+            if State.Shell_Met then
+               State.Action := (if State.Successfully_Met
+                                then Run_Shell_Without_Error
+                                else Run_Shell_Cmd);
+            elsif State.Successfully_Met then
+               State.Action := Run_Without_Error;
+            end if;
+
+         else
+            if State.Successfully_Met then
+               IO.Put_Warning ("""successfully"" ignored: this step form"
+                               & " has no ""successfully"" variant", Loc);
+            end if;
+            if State.Shell_Met then
+               IO.Put_Warning ("""shell"" ignored: this step form"
+                               & " has no ""shell"" variant", Loc);
+            end if;
+         end if;
+
          Put_Debug_Line ("---- Prep = " & State.Prep'Image
                          & ", Subject = " & State.Subject'Image
                          & ", Attr = " & State.Subject_Attr'Image

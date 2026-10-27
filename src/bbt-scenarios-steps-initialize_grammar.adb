@@ -65,6 +65,10 @@ begin
    --  not", "does not contain", "no"...) are not grammar entries: the
    --  negation words set the step polarity (Step_Data.Negated), valid
    --  for the negatable actions (cf. Negatable in BBT.Scenarios.Steps).
+   --  The same for the run verb qualifiers: "shell" and "successfully"
+   --  are not distinct verbs, they set flags, and the run action is
+   --  derived from them in Parse. In the examples below, the
+   --  [qualifier] notation states that the qualifier is optional.
    Set ([Given], No_SA,  No_Subject,   Is_V,      Obj_File_Name, Check_File_Existence, "there is a `config.ini` file");
    Set ([Given], No_SA,  No_Subject,   Is_V,      Obj_Dir_Name,  Check_Dir_Existence,  "there is a `dir1` directory");
    Set ([Given], New_SA, Subject_File, Containing, Obj_Text,     Erase_And_Create,     "the new file `config.ini` containing `lang=it`");
@@ -75,18 +79,14 @@ begin
    Set ([Given], No_SA,  Subject_File, No_Verb,    No_Object,    Create_If_None,       Code_Block => True, Example => "the file `config.ini` <followed by code fenced lines>");
    Set ([Given], New_SA, Dir_Subject,  No_Verb,    No_Object,    Erase_And_Create,     "the new directory `dir1`");
    Set ([Given], No_SA,  Dir_Subject,  No_Verb,    No_Object,    Create_If_None,       "the directory `dir1`");
-   Set ([Given, When_P], No_SA, No_Subject, Run,                  Obj_Text, Run_Cmd,                 "I run `cmd`");
-   Set ([Given, When_P, Then_P], No_SA, No_Subject, Successful_Run, Obj_Text, Run_Without_Error,      "I successfully run `cmd`");
-   Set ([Given, When_P], No_SA, No_Subject, Run_Shell,            Obj_Text, Run_Shell_Cmd,           "I run shell `cmd1 | cmd2 > out`");
-   Set ([Given, When_P, Then_P], No_SA, No_Subject, Successful_Run_Shell, Obj_Text, Run_Shell_Without_Error, "I successfully run shell `cmd1 | cmd2 > out`");
+   Set ([Given, When_P, Then_P], No_SA, No_Subject, Run, Obj_Text, Run_Cmd, "I [successfully] run [shell] `cmd`");
    Set ([Given, Then_P], No_SA,  Subject_Text, Fail,       No_Object,    Run_With_Error,       "`xmllint mismatched_tag.xml` fails");
    Set ([Given], No_SA,  Env_Var_Subj, Is_V,       Obj_Text,     Set_Env_Var,          "the environment variable `LANG` is `C`");
    Set ([Given], No_SA,  Env_Var_Subj, Is_V,       No_Object,    Set_Env_Var,          "the environment variable `NO_COLOR` is set");
    --  The negated form of the last rule ("is not set") unsets the
    --  variable (cf. Run_Step in BBT.Tests.Runner)
 
-   Set ((When_P), No_SA, No_Subject, Run,            Command_List, Run_Cmd,           "I run `cmd` or `cmd2` or `cmd3`");
-   Set ((When_P), No_SA, No_Subject, Successful_Run, Command_List, Run_Without_Error, "I successfully run `cmd` or `cmd2` or `cmd3`");
+   Set ((When_P), No_SA, No_Subject, Run,            Command_List, Run_Cmd,           "I [successfully] run [shell] `cmd` or `cmd2` or `cmd3`");
    Set ((When_P), No_SA, No_Subject, Type_Text,      Obj_Text,     Type_Text,         "I type `Y`");
    Set ((When_P), No_SA, No_Subject, Enter_Text,     Obj_Text,     Enter_Text,        "I enter `Y`");
 

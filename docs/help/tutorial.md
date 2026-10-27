@@ -209,6 +209,11 @@ All the available steps, classified by what they set up, run or check:
       or command substitutions interpreted, a "run shell" step passes
       the whole command to a shell; the shell is chosen with the
       --shell option or the BBT_SHELL environment variable)
+    - When I run shell `echo a > a.txt` or `echo b > b.txt`
+      (shell steps accept or alternatives too: the shell qualifier
+      applies to all the alternatives)
+      (the "successfully" and "shell" qualifiers of "run" are
+      recognized whatever their position around the command)
 
 **Interacting with a running command**  
 

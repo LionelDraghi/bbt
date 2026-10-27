@@ -3,6 +3,7 @@ Fixme in current version
 
 Location | Text
 ---------|-----
+[docs/dev/project.md](../../docs/dev/project.md):59|  guide, and completed (cf. also the ` should be private` marks
 [src/bbt-cmd_line.adb](../../src/bbt-cmd_line.adb):248|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-io.adb](../../src/bbt-io.adb):8|--   this with inverts the dependency direction: the base output
 [src/bbt-model-documents.adb](../../src/bbt-model-documents.adb):210|      --  to be replaced with a Reduce?

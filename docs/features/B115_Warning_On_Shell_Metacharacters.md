@@ -109,5 +109,5 @@ quoted argument of the `sh -c`, and must not raise a warning.
   Document `quoted_glob_test.md`
 
   1: Scenario ``
-  2: - Run command `find . -name "*.ad[sb]"`
+  2: - Run command `find . -name "*.ad[sb]"`  and check that it does not return an error
   ```

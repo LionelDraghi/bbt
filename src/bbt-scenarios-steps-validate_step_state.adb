@@ -101,7 +101,7 @@ begin
                    & ", Cmd_List.Is_Empty = " & State.Cmd_List.Is_Empty'Image
                    & ", No_Object_String = " & No_Object_String'Image, Loc);
 
-   if Verb in Run | Successful_Run | Run_Shell | Successful_Run_Shell
+   if Verb = Run
      and State.Action = None
    then
       IO.Put_Error ("Command to run not provided (should be between backticks)", Loc);

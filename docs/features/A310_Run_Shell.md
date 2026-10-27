@@ -7,6 +7,8 @@ split by bbt, so that pipes, redirections and command substitutions are
 interpreted by that shell, contrary to the plain run step that spawns
 the command directly (cf. [B110_Spawn.md](B110_Spawn.md) and
 [B115_Warning_On_Shell_Metacharacters.md](B115_Warning_On_Shell_Metacharacters.md)).
+Like the plain run step, a `run shell` step accepts alternatives with
+the `or` keyword, and the shell applies to all of them.
 No shell metacharacter warning is raised on a shell step: the
 metacharacters are then expected to be interpreted by the shell.
 
@@ -26,6 +28,10 @@ _Table of Contents:_
 - [Scenario: the exit code is the shell command one (Unix\_Only)](#scenario-the-exit-code-is-the-shell-command-one-unix_only)
 - [Scenario: shell redirections on Windows (Windows\_Only)](#scenario-shell-redirections-on-windows-windows_only)
 - [Scenario: no warning on shell metacharacters in a shell step](#scenario-no-warning-on-shell-metacharacters-in-a-shell-step)
+- [Scenario: run shell with alternatives](#scenario-run-shell-with-alternatives)
+- [Scenario: successfully run shell with alternatives](#scenario-successfully-run-shell-with-alternatives)
+- [Scenario: the run qualifiers are position independent](#scenario-the-run-qualifiers-are-position-independent)
+- [Scenario: warning on an inapplicable qualifier](#scenario-warning-on-an-inapplicable-qualifier)
 - [Scenario: invalid shell on the command line](#scenario-invalid-shell-on-the-command-line)
 - [Scenario: the shell is set on the command line (Unix\_Only)](#scenario-the-shell-is-set-on-the-command-line-unix_only)
 - [Scenario: the shell is set with the BBT\_SHELL environment variable (Unix\_Only)](#scenario-the-shell-is-set-with-the-bbt_shell-environment-variable-unix_only)
@@ -83,6 +89,80 @@ bytes, as `sh` does.
 - And the output does not contain `Warning`
 - And the output contains `in a shell`
 
+## Scenario: run shell with alternatives
+
+Like the plain run step, a `run shell` step accepts alternatives with
+the `or` keyword. The `shell` qualifier applies to the whole step, so
+each alternative is run through the shell: the scenario is duplicated,
+one duplicate per alternative, and each duplicate keeps its shell
+status (cf. [B110_Spawn.md](B110_Spawn.md) for the duplication
+mechanism).
+
+- Given the new file `shell_test.md`
+  ~~~
+  # Scenario
+  - When I run shell `echo one > alt.txt` or `echo two > alt.txt`
+  - Then I get no error
+  ~~~
+
+- When I run `./bbt -c --yes shell_test.md`
+- Then I get no error
+- And the output contains `## Summary : **Success**, 2 scenarios OK`
+- And the output contains `echo one > alt.txt`
+- And the output contains `echo two > alt.txt`
+
+## Scenario: successfully run shell with alternatives
+
+Same with the `successfully` qualifier: the exit status check applies
+to each alternative.
+
+- Given the new file `shell_test.md`
+  ~~~
+  # Scenario
+  - When I successfully run shell `echo one > alt.txt` or `echo two > alt.txt`
+  - Then I get no error
+  ~~~
+
+- When I run `./bbt -c --yes shell_test.md`
+- Then I get no error
+- And the output contains `## Summary : **Success**, 2 scenarios OK`
+- And the output contains `echo one > alt.txt`
+- And the output contains `echo two > alt.txt`
+
+## Scenario: the run qualifiers are position independent
+
+`shell` and `successfully` are qualifiers of the `run` verb, not
+distinct verbs: like the negation words, they are recognized whatever
+their position in the step line.
+
+- Given the new file `shell_test.md`
+  ~~~
+  # Scenario
+  - When I run shell `echo Hello > hi.txt` successfully
+  - Then the file `hi.txt` contains `Hello`
+  ~~~
+
+- When I run `./bbt -c --yes shell_test.md`
+- Then I get no error
+- And the output contains `## Summary : **Success**, 1 scenarios OK`
+
+## Scenario: warning on an inapplicable qualifier
+
+A qualifier that cannot apply to the step action is not silently
+ignored, but reported, like an inapplicable negation word.
+
+- Given the new file `shell_test.md`
+  ~~~
+  # Scenario
+  - When I run `./sut -v`
+  - Then the output successfully contains `sut`
+  ~~~
+
+- When I run `./bbt -c --yes shell_test.md`
+- Then I get no error
+- And the output contains `Warning`
+- And the output contains `successfully" ignored`
+
 ## Scenario: invalid shell on the command line
 
 - Given the new file `shell_test.md`
@@ -127,11 +207,11 @@ do: on macOS, `/bin/sh` is bash in sh mode, which sets it also.
   - Then the output contains `bash`
   ~~~
 
-- When I run `./bbt -c shell_test.md`
+- When I run `./bbt -c --yes shell_test.md`
 - Then I get an error
 - And the output contains `**Fail**`
 - Given the environment variable `BBT_SHELL` is `bash`
-- When I run `./bbt -c shell_test.md`
+- When I run `./bbt -c --yes shell_test.md`
 - Then I get no error
 - And the output contains `## Summary : **Success**, 1 scenarios OK`
 

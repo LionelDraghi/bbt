@@ -24,15 +24,10 @@ package body Chunk is
    -- --------------------------------------------------------------------------
    procedure Set_Verb (V : Verbs; Loc : Location_Type := No_Location) is
    begin
-      --  Only allow setting a verb for the first time, or refining it
-      --  ("run" -> "run shell"). Negated verb forms are not distinct
-      --  verbs anymore: negation words set State.Negated instead.
-      if Current_Verb = No_Verb
-        or else (Current_Verb = Run      and V = Run_Shell)
-        or else (Current_Verb = Successful_Run and V = Successful_Run_Shell)
-      then
-         -- Setting a verb for the first time, or changing it
-         -- to the negative form is OK.
+      --  Only allow setting a verb for the first time. The run verb
+      --  qualifiers ("shell", "successfully") and the negation words
+      --  are not distinct verbs: they set flags instead (cf. Parse).
+      if Current_Verb = No_Verb then
          Current_Verb := V;
          -- When a verb is set, the subject part is ended
          Subject_Part_Ended := True;

@@ -1035,3 +1035,74 @@ References:
   polarity (src/bbt-tests-runner.adb);
 - the remaining related work: the `(ignoring ...)` clause on the
   `matches` steps (cf. the TDL in [project.md](project.md)).
+
+## D14. Run verb qualifiers
+
+### Subject
+
+The run family enumerated each qualifier combination as a distinct verb
+and action pair: `Run` / `Run_Cmd`, `Successful_Run` /
+`Run_Without_Error`, `Run_Shell` / `Run_Shell_Cmd`,
+`Successful_Run_Shell` / `Run_Shell_Without_Error`. Each new qualifier
+would double the verbs, the grammar entries and the resolution cases,
+and the qualifier words were order dependent: `successfully` had to
+precede `run`, `shell` had to follow it (with a special case in the
+chunk logic to allow `run shell` in the same chunk), and a qualifier
+met outside its expected position was silently dropped —
+``- When I run `cmd` successfully`` was parsed as a plain run, and the
+`run shell` + `or` alternatives combination was not even representable
+in the grammar.
+
+### Decision
+
+Like the negation words (cf. D13), `shell` and `successfully` are not
+verbs: they are run verb qualifiers, carried as parsing flags
+(`State.Shell_Met`, `State.Successfully_Met`), and the run action is
+derived once the step is resolved:
+
+- a single `Run` verb token and two grammar entries, one per object
+  form (`cmd` and `cmd or cmd2`); the qualifier combinations are
+  documented with the `[qualifier]` optional notation in the grammar
+  examples;
+- the derivation in `Parse` combines the flags:
+  `Run_Cmd` | `Run_Without_Error` | `Run_Shell_Cmd` |
+  `Run_Shell_Without_Error` — the `Actions` enum and the runner
+  dispatch are unchanged, and the duplication of the `or` alternatives
+  (cf. B110) preserves the derived action: in a `run shell` step with
+  alternatives, the shell applies to all of them;
+- a qualifier on a non run action warns
+  (`"successfully" ignored: this step form has no "successfully"
+  variant`), mirroring the inapplicable negation warning;
+- the qualifiers are recognized whatever their position around the
+  command.
+
+### Alternatives rejected
+
+- adding the two `Command_List` grammar entries for the existing
+  `Run_Shell` and `Successful_Run_Shell` verbs: it would have fixed
+  the immediate gap, but kept the 2^n verb enumeration and the order
+  dependencies for the next qualifier;
+- deriving the action in the grammar table by extending the token
+  enum: same combinatorial issue, and the table lookup could not see
+  the flags anyway.
+
+### Consequences
+
+`run shell `cmd1` or `cmd2`` and `successfully run shell` with
+alternatives come for free, a future run qualifier is a flag and a
+derivation case instead of a verb, verb, action and grammar entry
+duplication is gone, and `Then I run `cmd`` — previously only valid
+with `successfully` — is now accepted wherever `successfully run` was,
+as the grammar cannot distinguish a bare `run` from its qualified
+forms before the flags are known.
+
+References:
+
+- the scenarios:
+  [A310_Run_Shell.md](../features/A310_Run_Shell.md),
+  [A130_Successfully_Keyword.md](../features/A130_Successfully_Keyword.md);
+- the implementation: the qualifier derivation in `Parse`
+  (src/bbt-scenarios-steps.adb), `State.Shell_Met`
+  (src/bbt-scenarios-steps.adb), the simplified `Set_Verb`
+  (src/bbt-scenarios-steps-chunk.adb) and the merged grammar entries
+  (src/bbt-scenarios-steps-initialize_grammar.adb).
