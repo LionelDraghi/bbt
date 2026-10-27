@@ -852,10 +852,13 @@
    ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : Given the new file `main.c`  
    - OK : And given there is no `main` file  
-   - OK : When I successfully run `gcc main.c -o main`  
-   - OK : And  I run `./main`  
-   - OK : Then the output is `Hello, World!`  
-   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
+   - **NOK** : When I successfully run `gcc main.c -o main` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:42:)  
+..\docs\features\a220_asciidoc_gcc_hello_world.adoc:42: Error: the scenario timeout of 30s expired
+   - **NOK** : And  I run `./main` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:43:)  
+..\docs\features\a220_asciidoc_gcc_hello_world.adoc:43: Error: the scenario timeout of 30s expired
+   - **NOK** : Then the output is `Hello, World!` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:45:)  
+..\docs\features\a220_asciidoc_gcc_hello_world.adoc:45: Error: the scenario timeout of 30s expired
+   - [ ] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) **fails**  
 
 
 # Document: [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
@@ -1526,6 +1529,13 @@
    - OK : Then I get no error  
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [the powershell shell is set on the command line (Windows_Only)](../../features/A310_Run_Shell.md) pass  
+
+   ### Scenario: [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md): 
+   - OK : Given the new file `shell_test.md`  
+   - OK : When I run `./bbt --shell=pwsh -c shell_test.md`  
+   - OK : Then I get no error  
+   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
+   - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md) pass  
 
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
@@ -2786,12 +2796,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 276 scenarios OK
+## Summary : **Fail**
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 0     |
+| Failed     | 1     |
 | Successful | 276   |
 | Empty      | 0     |
-| Not Run    | 17    |
+| Not Run    | 16    |
 
