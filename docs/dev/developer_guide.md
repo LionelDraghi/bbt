@@ -81,7 +81,7 @@ prompts are visible before the program waits for input, without any
 explicit flush, the input is not echoed, and the output bytes are
 exact, so the expected outputs are the same as over pipes
 (cf. [A290](../features/A290_When_I_Type_Or_Enter.md), and
-[proposed_features/pty.md](../proposed_features/pty.md) for the
+[proposed/pty.md](../proposed/pty.md) for the
 experiment results that led to this design). The pseudo terminal is
 given a fixed 80x24 window size (`BBT.Terminal`, through a thin C
 wrapper on `ioctl(TIOCSWINSZ)`, as `ioctl` is variadic and its
@@ -129,7 +129,7 @@ On each push on main, the CI republishes the results and badges of the three pla
 
 - [Changelog](../changelog.md)
 - [Fixme](fixme_index.md)
-- [References to issue in code and tests](issues_index.md)
+- [Concerns](concerns.md)
 
 ## Development environment
 

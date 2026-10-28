@@ -443,7 +443,7 @@ package body BBT.Tests.Actions.Commands.Spawn is
          --  before it waits for input, without fflush; the library
          --  configures the terminal slave in raw mode: no echo, no
          --  canonical mode, no CR LF translation
-         --  (cf. docs/proposed_features/pty.md)
+         --  (cf. docs/proposed/pty.md)
          Set_Allocate_TTY (The_Process.all);
       end if;
       --  The command inherits the bbt environment, including the
@@ -495,7 +495,7 @@ package body BBT.Tests.Actions.Commands.Spawn is
          --  (0x0) would make any program querying its terminal size
          --  misbehave, and the simulated terminal must be
          --  indistinguishable from a real one
-         --  (cf. docs/proposed_features/pty.md)
+         --  (cf. docs/proposed/pty.md)
          BBT.Terminal.Set_Size (int (Out_Raw.Get_File));
       end if;
 

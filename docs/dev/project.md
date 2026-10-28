@@ -19,7 +19,7 @@ Project Status
 
 ## TDL
 
-Note that Ideas are welcomed. You may submit yours through [Issue](https://github.com/LionelDraghi/bbt/issues), or by directly pushing a new file in docs/features/proposed_features.
+Note that Ideas are welcomed. You may submit yours through [Issue](https://github.com/LionelDraghi/bbt/issues), or by directly pushing a new file in docs/proposed.
 
 ### High priority
 
@@ -32,7 +32,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   keyword, e.g. `When I run in a terminal`, pipes staying the
   default, would let a scenario state the deployment context it
   tests, instead of the harness inferring it from the steps.  
-  cf. [pty](../proposed_features/pty.md)
+  cf. [pty](../proposed/pty.md)
 
 - ada-util upstream proposals  
   Three functions that would simplify the bbt engine and add value
@@ -43,7 +43,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   upstream and closed. What remains is the release of the next
   utilada version and its publication in Alire, so that bbt can
   raise its `utilada` constraint and use the functions.  
-  cf. [pty](../proposed_features/pty.md)
+  cf. [pty](../proposed/pty.md)
 
 ### Low priority
 
@@ -104,7 +104,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   library redirections, instead of pumping, for the commands that
   run to completion; the pump would remain for the interactive
   commands only.  
-  cf. [non_interactive_redirect](../proposed_features/non_interactive_redirect.md)
+  cf. [non_interactive_redirect](../proposed/non_interactive_redirect.md)
 
 - run in shell step: implemented (cf.
   [A310_Run_Shell.md](../features/A310_Run_Shell.md) and the design

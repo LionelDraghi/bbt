@@ -13,7 +13,7 @@ private package BBT.Terminal is
    --  The size given to the pseudo terminal allocated to the interactive
    --  commands: the simulated terminal must be indistinguishable from
    --  a real one for a program querying its size
-   --  (cf. docs/proposed_features/pty.md)
+   --  (cf. docs/proposed/pty.md)
 
    procedure Set_Size (Fd : Interfaces.C.int);
    --  Fix the window size of the terminal behind the descriptor Fd to

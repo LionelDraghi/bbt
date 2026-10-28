@@ -3,23 +3,21 @@
 This file is the entry point for coding agents working on bbt.
 
 **Before any other action, read the shared template referenced below
-and follow it** -- local copy at `../ada-project-template/AGENTS.template.md`
-when present, otherwise fetch the GitHub URL.
+and follow it.**
 
 The shared rules for Lionel's Ada projects live in the [reference
-repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)
+repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.md)
 and apply here in full:
 non-negotiable git rules (in brief: no `git add`, commit, push, tag,
 release or Alire publish without the owner's explicit, post-review
-consent), procedure choice, task triage, reference
-policy, skills, Ada tooling (Serena MCP first), and the definition of
-done. This file keeps only what
+consent), procedure choice, reference
+policy, skills, Ada tooling (Serena MCP first). This file keeps only what
 is specific to bbt. The repository uses LF line endings on every
 platform, including Windows.
 
 ## Build pointers
 
-The shared build pointers apply ([reference repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)); `make help` is the documentation of record. bbt specifics:
+The shared build pointers apply ([reference repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.md)); `make help` is the documentation of record. bbt specifics:
 
 - `make build` builds bbt in validation mode; the tools are built by `make tools`, not by `make build`.
 - `make tools` builds `sut` and `rpl`, and refreshes the test links in `tests/`.
@@ -49,8 +47,8 @@ Read a document only when the task requires it; do not open them all up front.
   (`npx skills add LionelDraghi/bbt --skill bbt-skill`)
 - To prepare or run a release: the [common release procedure on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/release_procedure.md), with the bbt parameters and additions in `docs/dev/release_procedure.md`
 - To choose the next task or find already-tracked work:
-  `docs/dev/issues_index.md`, `docs/dev/project.md`,
-  `docs/dev/fixme_index.md`, `docs/proposed_features`
+  `docs/dev/concerns.md`, `docs/dev/project.md`,
+  `docs/dev/fixme_index.md`, `docs/proposed`
 - To review or challenge the design: `docs/dev/design_discussions.md`
 - To follow the developer workflow: `docs/dev/developer_guide.md`
 

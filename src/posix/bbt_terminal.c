@@ -2,7 +2,7 @@
  *
  * bbt gives the pseudo terminal allocated to the interactive commands
  * a fixed window size, so that a program querying its terminal size
- * behaves as on a real terminal (cf. docs/proposed_features/pty.md).
+ * behaves as on a real terminal (cf. docs/proposed/pty.md).
  *
  * ioctl is variadic (int ioctl(int, unsigned long, ...)), so Ada
  * cannot import it directly: this wrapper gives it a fixed signature,

@@ -38,7 +38,7 @@ updated with a reference to its replacement.
 | [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
 | [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
-| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10), implemented  | [pty.md](../proposed_features/pty.md), [PR #41](https://github.com/LionelDraghi/bbt/pull/41), [PR #43](https://github.com/LionelDraghi/bbt/pull/43) |
+| [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10), implemented  | [pty.md](../proposed/pty.md), [PR #41](https://github.com/LionelDraghi/bbt/pull/41), [PR #43](https://github.com/LionelDraghi/bbt/pull/43) |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
 
@@ -57,7 +57,7 @@ The Spawn pseudo terminal (October 2026) left the child terminal
 unconfigured: no `tcsetattr`, no descriptor exposed, so the echo and
 the `CR` `LF` translation would pollute the checked outputs, and a
 single key press would not be delivered out of canonical mode
-(cf. [pty.md](../proposed_features/pty.md) for the experiments).
+(cf. [pty.md](../proposed/pty.md) for the experiments).
 [ada-util](https://github.com/stcarrez/ada-util) solves the three
 problems by construction, and candidate design 2 (replace Spawn by
 ada-util entirely) is implemented and merged in main: the comparison
@@ -116,7 +116,7 @@ Other candidates were reviewed later (October 2026):
   stdout and stderr redirection to files, and the `Set_Allocate_TTY`
   pseudo terminal option. It is the documented fallback for the pseudo
   terminal feature, cf.
-  [proposed_features/pty.md](../proposed_features/pty.md), not a
+  [proposed/pty.md](../proposed/pty.md), not a
   replacement for the current execution engine.
 
 ### Comparison Spawn vs ada-util (October 2026)
@@ -167,7 +167,7 @@ mechanisms differ (library deferred event against end of file then
 reap), the semantics are the same. On the other hand, the flush
 constraint on the tested programs is gone by construction, and the
 pseudo terminal comes configured (raw mode), where Spawn left it
-unconfigurable (cf. [pty.md](../proposed_features/pty.md)).
+unconfigurable (cf. [pty.md](../proposed/pty.md)).
 
 Verdict on this axis: the ada-util engine reads better, control
 flow and state transitions being explicit, at the cost of about 70
@@ -549,7 +549,7 @@ References:
 
 - the specification and the scenarios:
   [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md);
-- the former proposal docs/proposed_features/timeouts.md, removed
+- the former proposal docs/proposed/timeouts.md, removed
   once implemented.
 
 ## D7. Status bar rendering
@@ -782,7 +782,7 @@ change). Decisions:
   acceptable for the small bbt fixtures as the proposal noted, but
   which would hang on the large outputs that Myers handles in O(N·D).
 
-The former proposal docs/proposed_features/LCS_diff_alignment.md is
+The former proposal docs/proposed/LCS_diff_alignment.md is
 removed once implemented, as timeouts.md was (cf. D6).
 
 Follow-ups left open:
