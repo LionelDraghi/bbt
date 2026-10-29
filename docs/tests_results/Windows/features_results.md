@@ -852,13 +852,10 @@
    ### Scenario: [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc): 
    - OK : Given the new file `main.c`  
    - OK : And given there is no `main` file  
-   - **NOK** : When I successfully run `gcc main.c -o main` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:42:)  
-..\docs\features\a220_asciidoc_gcc_hello_world.adoc:42: Error: the scenario timeout of 30s expired
-   - **NOK** : And  I run `./main` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:43:)  
-..\docs\features\a220_asciidoc_gcc_hello_world.adoc:43: Error: the scenario timeout of 30s expired
-   - **NOK** : Then the output is `Hello, World!` (..\docs\features\a220_asciidoc_gcc_hello_world.adoc:45:)  
-..\docs\features\a220_asciidoc_gcc_hello_world.adoc:45: Error: the scenario timeout of 30s expired
-   - [ ] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) **fails**  
+   - OK : When I successfully run `gcc main.c -o main`  
+   - OK : And  I run `./main`  
+   - OK : Then the output is `Hello, World!`  
+   - [X] scenario   [compiling and executing an hello word](../../features/A220_AsciiDoc_gcc_hello_world.adoc) pass  
 
 
 # Document: [A230_select_exclude_include.md](../../features/A230_select_exclude_include.md)  
@@ -2874,12 +2871,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 282 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 281   |
+| Failed     | 0     |
+| Successful | 282   |
 | Empty      | 0     |
 | Not Run    | 16    |
 
