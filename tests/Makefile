@@ -156,6 +156,11 @@ examples: setup
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
 	@ echo
+	@ # The usage documents are not run (their scenarios need some
+	@ # non available exes), but they are parsed by bbt, so that we
+	@ # can check that they are valid.
+	./bbt --quiet explain ../docs/usages
+	@ echo
 
 non_reg: setup
 	@ # Then run non reg tests

@@ -119,6 +119,27 @@ bbt explain my_scenario.md
 More realistic files, with graphics, table of content, etc.:
 - https://github.com/LionelDraghi/topoproof/blob/main/docs/features/orientation.md
 - https://github.com/LionelDraghi/ArchiCheck/blob/master/docs/features/05_layer_rule.md
+
+## Other uses
+
+*bbt* is not limited to checking specs and examples. Two other uses
+are illustrated in [docs/usages](docs/usages):
+
+1. **An assignment hand-out with its grading suite**:
+   [cs215_assignment.md](docs/usages/cs215_assignment.md) is a programming
+   assignment whose public test suite is the grading suite: the
+   professor runs the very same document the students already have.
+   No surprise for the students, no separate grading material to
+   maintain.
+2. **A self-contained bug report**:
+   [gprbuild_167_External_Initialization.md](docs/usages/gprbuild_167_External_Initialization.md)
+   is a real bug report written as an executable scenario. It is a real
+   comfort for maintainers to impose the bbt format: no copy-paste, no
+   missing file, everything needed to reproduce is in the document. CI
+   integration can then be fully automatic: a flow checks that the
+   scenario is red on the current version, and green after applying
+   the fix pull request. Once fixed, the file is moved to the
+   non-regression suite and keeps guarding against a reintroduction.
   
 ## Partial parsing 
 
