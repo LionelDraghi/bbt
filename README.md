@@ -118,7 +118,7 @@ bbt explain my_scenario.md
 
 More realistic files, with graphics, table of content, etc.:
 - https://github.com/LionelDraghi/topoproof/blob/main/docs/features/orientation.md
-- https://github.com/LionelDraghi/ArchiCheck/blob/master/tests/05_layer_rule.md
+- https://github.com/LionelDraghi/ArchiCheck/blob/master/docs/features/05_layer_rule.md
   
 ## Partial parsing 
 
