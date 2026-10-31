@@ -51,4 +51,5 @@ jobs:
          uses: mgrojo/alr2appimage-action@main
          with:
              alireVersion: "nightly"
+             alr2appimageArgs: "--terminal"
              ### tagName: "${{ github.ref_name }}-continuous
