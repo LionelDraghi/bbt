@@ -76,6 +76,14 @@ package BBT.Model.Steps is
    type Step_Type;
    type Step_Maybe is access all Step_Type;
 
+   --  --------------------------------------------------------------------------
+   --  GUI step payload, used only by the GUI actions (cf.
+   --  docs/proposed/gui_vocabulary.md). Kept in the shared Step_Data
+   --  record - no variant type: the fields stay empty for CLI steps.
+   --  GUI_Role and GUI_Access_Name are free strings; freezing the MVP
+   --  role set is still an open question of the proposal.
+   type GUI_Widget_States is (GUI_Any, GUI_Enabled, GUI_Disabled);
+
    --  -------------------------------------------------------------------------
    --  A step may include multiple commands with the syntax
    --  "-When I run "cmd1" or "cmd2" or "cmd3" ..."
@@ -127,6 +135,10 @@ package BBT.Model.Steps is
       -- (cf. docs/features/A300_Ignoring.md)
       File_Content     : Text                      := Empty_Text;
       Syntax_Error     : Boolean                   := False;
+
+      GUI_Role         : Unbounded_String          := Null_Unbounded_String;
+      GUI_Access_Name  : Unbounded_String          := Null_Unbounded_String;
+      GUI_Widget_State : GUI_Widget_States         := GUI_Any;
    end record with Put_Image => Put_Image;
 
    -- --------------------------------------------------------------------------

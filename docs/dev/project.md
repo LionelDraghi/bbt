@@ -47,6 +47,11 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
 
 ### Low priority
 
+- AppImage tooling trial  
+  Trial the AppImage produced by the new `alr2appimage-action` setup
+  (install and run the image from a test release) before switching
+  the release workflow to it.
+
 - model types encapsulation: limited private  
   The model specs (`bbt-model-documents.ads`, `bbt-model-features.ads`,
   `bbt-model-scenarios.ads`, `bbt-model-steps.ads`) still expose more

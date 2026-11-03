@@ -18,6 +18,14 @@ private package BBT.Scenarios.Steps.Lexer is
 
    procedure Initialize_Lexer;
 
+   procedure Register_Keyword (K : String);
+   --  Register one keyword spelling in the lexer keyword set. The set
+   --  is no longer a flat hardcoded list: it is built by the rule set
+   --  initializers (cf. Initialize_Grammar in BBT.Scenarios.Steps), so
+   --  that a vocabulary extension registers its own keywords without
+   --  altering the base lexer. K must be lower case: Is_A_Keyword
+   --  lowercases the token before lookup.
+
    function Next_Token (Line     : access constant String;
                         First    :    out Positive; -- Index of first character in token
                         Last     :    out Natural;  -- Index of last character in token

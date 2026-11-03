@@ -6,6 +6,8 @@ the details remain in the authoritative source.
 
 | Priority | Concern | Kind | Source | Status |
 |---|---|---|---|---|
+| P3 | The authoring guide should explain stdout vs stderr for the program under test: warnings emitted as normal work (e.g. a binding generator reporting non-bindable constructs) belong on standard output, next to the normal output; standard error is for when the tool is in difficulty (crash, cannot complete). Scenario examples should show both cases | Quality | [authoring.md](../bbt-skill/references/authoring.md) | Open |
+| P3 | The authoring guide should make clear that `contains` accepts a fenced block of one or more consecutive expected lines, checked among other lines that have nothing to do with the scenario; and when to prefer `is` with the whole expected output, or `contains` with the few meaningful lines, instead of a single short string that pins nothing (e.g. checking a count without the lines that explain it) | Quality | [authoring.md](../bbt-skill/references/authoring.md) | Open |
 | (none open) | | | | |
 
 ## Priority definitions

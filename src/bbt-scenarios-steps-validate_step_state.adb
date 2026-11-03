@@ -22,8 +22,7 @@ is
       (Is_Null (State.Object_File_Name));
 
 begin
-   Code_Block_Expected := The_Grammar
-     (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
+   Code_Block_Expected := Lookup (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
 
    case State.Subject is
       when No_Subject | Output_Subj | Subject_Text | Stderr_Subj =>

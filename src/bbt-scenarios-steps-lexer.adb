@@ -23,44 +23,17 @@ package body BBT.Scenarios.Steps.Lexer is
 
    package String_Arrays is new Ada.Containers.Indefinite_Vectors (Positive,
                                                                    String);
-   Keywords : constant String_Arrays.Vector
-     := ["given",
-         "when",
-         "then",
-         "and",      -- "and" and "but" are equivalent to "Given" if they
-         "but",
-         "run",
-         "running",  -- "When I run" = "When running"
-         "shell",    -- "When I run shell `cmd1 | cmd2`"
-         "type",     -- "When I type `Y`"
-         "enter",    -- "When I enter `Y`"
-         "fail",     -- "fail" = "fails"
-         "fails",
-         "executable",
-         "get",
-         "new",
-         "no",       -- "no" = "not" = "dont"
-         "not",
-         "dont",
-         "doesnt",
-         "doesn't",
-         "error",
-         "exit",       -- "the exit code is `2`"
-         "environment", -- "the environment variable `NAME` is `value`"
-         "is",
-         "or",
-         "output",
-         "contain",
-         "contains",
-         "containing",
-         "matches",
-         "match",
-         "successfully",
-         "file",
-         "dir",
-         "directory",
-         "unordered"];
-   -- NB : all keywords must be here in lower case!
+   --  The keyword set is built by registration from the rule set
+   --  initializers (cf. Register_Keyword), not hardcoded here.
+   Keywords : String_Arrays.Vector;
+
+   --  NB : all keywords must be registered in lower case!
+
+   -- -----------------------------------------------------------------------
+   procedure Register_Keyword (K : String) is
+   begin
+      Keywords.Append (K);
+   end Register_Keyword;
 
    -- -----------------------------------------------------------------------
    function Is_A_Keyword (S      : access constant String;

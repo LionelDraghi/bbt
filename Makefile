@@ -148,11 +148,11 @@ doc: ./bbt$(EXE_SUFFIX)
 
 	echo Checking links in md files
 ifeq ($(OS), Windows_NT)
-	- mlc --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
 else ifeq ($(PLATFORM), Darwin)
-	- mlc --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
 else ifeq ($(PLATFORM), Linux)
-	- mlc --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
 else
 	echo "Unknown platform $(PLATFORM)"
 	exit 1

@@ -50,6 +50,12 @@ package body BBT.Model.Steps is
       Output.New_Line;
       Output.Put ("   Syntax_Error     = " & S.Syntax_Error'Image);
       Output.New_Line;
+      Output.Put ("   GUI_Role         = " & S.GUI_Role'Image);
+      Output.New_Line;
+      Output.Put ("   GUI_Access_Name  = " & S.GUI_Access_Name'Image);
+      Output.New_Line;
+      Output.Put ("   GUI_Widget_State = " & S.GUI_Widget_State'Image);
+      Output.New_Line;
    end Put_Image;
 
    -- --------------------------------------------------------------------------

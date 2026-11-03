@@ -10,6 +10,7 @@ with BBT.Model.Steps,
 
 with Text_Utilities;
 
+with Ada.Containers.Vectors;
 with Ada.Directories;
 with Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants;
@@ -101,9 +102,29 @@ package body BBT.Scenarios.Steps is
       Example             : Example_String := new String'("");
    end record;
 
-   -- Full grammar definition, with default "no action" values
-   type Grammar is array (Prepositions, Subject_Attrib,
-                          Subjects, Verbs, Objects) of Grammar_Items;
+   --  Rule sets: CLI and GUI rules share the same registry and the
+   --  same parse engine, but are stated in separate initializers, so
+   --  that a vocabulary extension never perturbs CLI parsing.
+   type Rule_Sets is (CLI_Set, GUI_Set);
+
+   --  Grammar rule key: the step signature
+   type Grammar_Key is record
+      Prep : Prepositions;
+      SA   : Subject_Attrib;
+      Sub  : Subjects;
+      Verb : Verbs;
+      Obj  : Objects;
+   end record;
+
+   --  One registered grammar rule: a key mapped to the item it resolves to
+   type Grammar_Rule is record
+      Set  : Rule_Sets;
+      Key  : Grammar_Key;
+      Item : Grammar_Items;
+   end record;
+
+   package Rule_Registries is new Ada.Containers.Vectors
+     (Index_Type => Positive, Element_Type => Grammar_Rule);
 
    --  Check and setup actions that support a negated form: the negation
    --  words ("no", "not", "does not"...) don't select a distinct verb or
@@ -121,10 +142,41 @@ package body BBT.Scenarios.Steps is
         => True,
       when others => False);
 
-   -- Create the complete BBT grammar
-   procedure Initialize_Grammar (G : in out Grammar) is separate;
+   --  The sparse grammar registry
+   The_Rules : Rule_Registries.Vector;
 
-   The_Grammar : Grammar;
+   --  Return the grammar item registered for the given step signature,
+   --  or a default "no action" item when no rule matches.
+   function Lookup (Prep : Prepositions;
+                    SA   : Subject_Attrib;
+                    Sub  : Subjects;
+                    Verb : Verbs;
+                    Obj  : Objects)
+                    return Grammar_Items is
+   begin
+      for R of The_Rules loop
+         if    R.Key.Prep = Prep
+           and then R.Key.SA   = SA
+           and then R.Key.Sub  = Sub
+           and then R.Key.Verb = Verb
+           and then R.Key.Obj  = Obj
+         then
+            return R.Item;
+         end if;
+      end loop;
+
+      return (Action => None,
+              Code_Block_Expected => False,
+              Example => new String'(""));
+   end Lookup;
+
+   -- Create the complete BBT grammar
+   procedure Initialize_Grammar is separate;
+
+   --  Register the GUI rule set (rules and keywords), after the CLI
+   --  ones. Empty as long as the GUI vocabulary is not implemented,
+   --  cf. [gui_vocabulary](docs/proposed/gui_vocabulary.md).
+   procedure Initialize_GUI_Grammar is separate;
 
    -- Type to hold parsing state for separate procedures
    type Parse_State is record
@@ -231,19 +283,11 @@ package body BBT.Scenarios.Steps is
    begin
       Ada.Text_IO.Put_Line ("| Prep  |         |Subject |       Verb       | Object |         Action          | Code block expected | Use Example |  ");
       Ada.Text_IO.Put_Line ("|-------|---------|--------|------------------|--------|-------------------------|---------------------|-------------|  ");
-      for P in The_Grammar'Range (1) loop -- A of G when A /= None loop
-         for SA in The_Grammar'Range (2) loop -- A of G when A /= None loop
-            for S in The_Grammar'Range (3) loop -- A of G when A /= None loop
-               for V in The_Grammar'Range (4) loop -- A of G when A /= None loop
-                  for O in The_Grammar'Range (5) loop -- A of G when A /= None loop
-                     if The_Grammar (P, SA, S, V, O).Action /= None then
-                        Put_Rule (P, SA, S, V, O,
-                                  The_Grammar (P, SA, S, V, O));
-                     end if;
-                  end loop;
-               end loop;
-            end loop;
-         end loop;
+      for R of The_Rules loop
+         if R.Item.Action /= None then
+            Put_Rule (R.Key.Prep, R.Key.SA, R.Key.Sub, R.Key.Verb, R.Key.Obj,
+                      R.Item);
+         end if;
       end loop;
    end Put_Grammar;
 
@@ -395,11 +439,11 @@ package body BBT.Scenarios.Steps is
 
          end loop Line_Processing;
 
-         State.Action := The_Grammar (State.Prep,
-                                      State.Subject_Attr,
-                                      State.Subject,
-                                      Chunk.Verb,
-                                      State.Object).Action;
+         State.Action := Lookup (State.Prep,
+                                 State.Subject_Attr,
+                                 State.Subject,
+                                 Chunk.Verb,
+                                 State.Object).Action;
 
          --  The run verb qualifiers ("shell", "successfully") are not
          --  grammar entries: like the negation words, they set flags,
@@ -476,10 +520,14 @@ package body BBT.Scenarios.Steps is
               Ignore_Patterns  => State.Ignore_Patterns,
               Ignore_Regexps   => State.Ignore_Regexps,
               File_Content     => Empty_Text,
-              Syntax_Error     => IO.Some_Error);
+              Syntax_Error     => IO.Some_Error,
+              GUI_Role         => Null_Unbounded_String,
+              GUI_Access_Name  => Null_Unbounded_String,
+              GUI_Widget_State => GUI_Any);
    end Parse;
 
 begin
-   Initialize_Grammar (The_Grammar);
+   Initialize_Grammar;
+   Initialize_GUI_Grammar;
 
 end BBT.Scenarios.Steps;
