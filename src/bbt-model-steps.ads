@@ -70,8 +70,16 @@ package BBT.Model.Steps is
                     -- negated: error output does not contain expected
                     Stderr_Not_Empty,
                     -- negated: empty error output
-                    Exit_Code_Is);
+                    Exit_Code_Is,
                     -- negated: exit code different from expected
+                    -- GUI actions (cf. docs/proposed/gui_vocabulary.md),
+                    -- all of them resolving through the selected backend
+                    GUI_Window_Appears,
+                    GUI_Window_Contains,
+                    GUI_Widget_Exists,
+                    GUI_Widget_State,
+                    -- negated: widget in the other state
+                    GUI_Press_Widget);
 
    type Step_Type;
    type Step_Maybe is access all Step_Type;

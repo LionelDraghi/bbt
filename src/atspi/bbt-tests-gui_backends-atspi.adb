@@ -9,6 +9,7 @@
 --  automatic, correlation with the launched application by process id.
 
 with Ada.Calendar;          use Ada.Calendar;
+with Ada.Directories;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Unchecked_Conversion;
@@ -21,6 +22,12 @@ package body BBT.Tests.GUI_Backends.Atspi is
 
    App_Pid         : GNAT.OS_Lib.Process_Id;
    Target_Pid      : Integer := 0;
+   Target_Name     : GNAT.OS_Lib.String_Access;
+   Target_Name_Set : Boolean := False;
+   --  Correlation key fallback: the simple name of the launched
+   --  binary, for the applications that do not expose themselves
+   --  under the launched pid (a python wrapper pattern: e.g.
+   --  gnome-calculator shows up on the bus as another process)
    Observed        : Unbounded_String := Null_Unbounded_String;
    Last_Text       : Unbounded_String := Null_Unbounded_String;
 
@@ -111,6 +118,17 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end;
    end C_String_Of;
 
+   --  Is that desktop application ours? by pid first, then by the
+   --  simple name of the launched binary.
+
+   function Correlates (App_Name : String; App_Pid_On_Bus : int)
+                        return Boolean is
+   begin
+      return (Target_Pid > 0
+                and then Integer (App_Pid_On_Bus) = Target_Pid)
+        or else (Target_Name_Set and then App_Name = Target_Name.all);
+   end Correlates;
+
    --  The application's window frame: a window of the process the
    --  backend launched (correlation by pid), optionally title-matched.
    --  The caller owns the returned reference.
@@ -127,10 +145,12 @@ package body BBT.Tests.GUI_Backends.Atspi is
               Atspi_Accessible_Get_Child_At_Index (Desktop, int (A - 1));
          begin
             if App /= System.Null_Address
-              and then Target_Pid > 0
-              and then Integer
-                         (Atspi_Accessible_Get_Process_Id
-                            (App, System.Null_Address)) = Target_Pid
+              and then Correlates
+                         (C_String_Of
+                            (Atspi_Accessible_Get_Name
+                               (App, System.Null_Address)),
+                          Atspi_Accessible_Get_Process_Id
+                            (App, System.Null_Address))
             then
                for W in 1 .. Atspi_Accessible_Get_Child_Count (App) loop
                   declare
@@ -244,6 +264,9 @@ package body BBT.Tests.GUI_Backends.Atspi is
          raise No_Backend_Available with "cannot launch " & Binary_Path;
       end if;
       Target_Pid := GNAT.OS_Lib.Pid_To_Integer (App_Pid);
+      Target_Name := new String'
+        (Ada.Directories.Simple_Name (Binary_Path));
+      Target_Name_Set := True;
    end Launch;
 
    function Window_Appears (Expected_Title : String := "") return Boolean is
@@ -277,10 +300,12 @@ package body BBT.Tests.GUI_Backends.Atspi is
               Atspi_Accessible_Get_Child_At_Index (Desktop, int (A - 1));
          begin
             if App /= System.Null_Address
-              and then Target_Pid > 0
-              and then Integer
-                         (Atspi_Accessible_Get_Process_Id
-                            (App, System.Null_Address)) = Target_Pid
+              and then Correlates
+                         (C_String_Of
+                            (Atspi_Accessible_Get_Name
+                               (App, System.Null_Address)),
+                          Atspi_Accessible_Get_Process_Id
+                            (App, System.Null_Address))
             then
                return App;
             end if;
@@ -517,6 +542,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
          GNAT.OS_Lib.Kill (App_Pid);
          GNAT.OS_Lib.Wait_Process (Status, Success);
          Target_Pid := 0;
+         Target_Name_Set := False;
+         GNAT.OS_Lib.Free (Target_Name);
       end if;
    end Shutdown;
 
@@ -584,5 +611,34 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end loop;
       return False;
    end Widget_Enabled;
+
+
+   --  Semantic activation of the named widget: the first AT-SPI
+   --  action of the first widget of role Role named Name.
+
+   function Press_Widget (Role : String; Name : String) return Boolean is
+      Deadline : constant Time := Clock + 6.0;
+      Frame, Found : System.Address;
+   begin
+      while Clock < Deadline loop
+         Frame := Window_Of ("");
+         if Frame /= System.Null_Address then
+            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
+            G_Object_Unref (Frame);
+            if Found /= System.Null_Address then
+               declare
+                  Done : constant Boolean :=
+                    Atspi_Action_Do_Action
+                      (Found, 0, System.Null_Address) /= 0;
+               begin
+                  G_Object_Unref (Found);
+                  return Done;
+               end;
+            end if;
+         end if;
+         delay 0.2;
+      end loop;
+      return False;
+   end Press_Widget;
 
 end BBT.Tests.GUI_Backends.Atspi;

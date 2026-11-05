@@ -4,6 +4,7 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
+with BBT.Tests.GUI_Backends;
 with BBT.IO,
      BBT.Settings,
      BBT.Scenarios,
@@ -104,6 +105,19 @@ package body BBT.Cmd_Line is
                        & """, expecting one of " & Shell_List_Image);
       end if;
    end Set_Shell_Option;
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Backend_Option (Value : String) is
+   -- Common processing of the --backend option value
+   begin
+      if Value = "atspi" then
+         BBT.Tests.GUI_Backends.Selected
+           := BBT.Tests.GUI_Backends.GUI_Atspi;
+      else
+         IO.Put_Error ("invalid backend """ & Value
+                       & """, expecting atspi");
+      end if;
+   end Set_Backend_Option;
 
    -- --------------------------------------------------------------------------
    procedure Set_Cleanup_Option (Value : String) is
@@ -298,6 +312,18 @@ package body BBT.Cmd_Line is
                else
                   Go_Next_Arg;
                   Set_Shell_Option (Current_Arg);
+               end if;
+
+            elsif Ada.Strings.Fixed.Index (Cmd, "--backend=") = 1 then
+               Set_Backend_Option
+                 (Cmd (Ada.Strings.Fixed.Index (Cmd, "=") + 1 .. Cmd'Last));
+
+            elsif Cmd = "--backend" then
+               if On_Last_Arg then
+                  IO.Put_Error (Cmd & " must be followed by a backend name");
+               else
+                  Go_Next_Arg;
+                  Set_Backend_Option (Current_Arg);
                end if;
 
             elsif Cmd = "-r" or Cmd = "--recursive" then

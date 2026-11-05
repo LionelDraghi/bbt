@@ -51,6 +51,13 @@ running platform (Linux first, via AT-SPI / libatspi).
   the scenario: `--backend=web|atspi|...` (same option name as
   GuiVerb's, plus the `GUIVERB_BACKEND` environment variable
   precedent).
+- A second candidate backend, keeping GuiVerb in sync: its **Adi2**
+  backend (Adi.MCP development bridge), which observes and drives a
+  probe-instrumented application over a file IPC session namespaced
+  by the launched pid (`docs/proposed/adi2_probe_audit.md` in GuiVerb
+  for the naming conventions). Its plain pid correlation and its
+  non-a11y transport make it a natural fit for the `--headless` CI
+  option.
 - A `--headless` option runs GUI steps in CI without an interactive
   display, on the backends where it is possible (headless browser for
   web, virtual display or hidden accessibility bus for AT-SPI), with a

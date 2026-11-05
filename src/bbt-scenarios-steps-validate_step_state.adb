@@ -25,7 +25,8 @@ begin
    Code_Block_Expected := Lookup (State.Prep, State.Subject_Attr, State.Subject, Verb, State.Object).Code_Block_Expected;
 
    case State.Subject is
-      when No_Subject | Output_Subj | Subject_Text | Stderr_Subj =>
+      when No_Subject | Output_Subj | Text_Subj | Stderr_Subj |
+           Window_Subj =>
          null;
 
       when Exit_Subj =>
@@ -51,14 +52,14 @@ begin
             IO.Put_Error ("Variable name expected in subject phrase (should be between backticks)", Loc);
          end if;
 
-      when Subject_File =>
+      when File_Subj =>
          if No_Subject_String then
             IO.Put_Error ("File name expected in subject phrase (should be between backticks)", Loc);
             Code_Block_Expected := False;
             -- No sense to have a random error after a syntax error
          end if;
 
-      when Dir_Subject =>
+      when Dir_Subj =>
          if No_Subject_String then
             IO.Put_Error ("Dir name expected in subject phrase (should be between backticks)", Loc);
          end if;
@@ -66,7 +67,8 @@ begin
    end case;
 
    case State.Object is
-      when No_Object | Output_Obj | Stderr_Obj | Obj_Text | Command_List | Error =>
+      when No_Object | Obj_Output | Obj_Stderr | Obj_Text | Obj_Command_List
+         | Obj_Error | Obj_Window_Name | Obj_Widget_Name | Obj_Widget_State =>
          null;
 
       when Obj_File_Name =>

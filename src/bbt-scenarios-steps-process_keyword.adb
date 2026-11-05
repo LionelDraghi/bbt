@@ -53,8 +53,8 @@ begin
       else
          State.Or_Met := @ + 1;
          State.Cmd_Expected := True;
-         if State.Object /= Command_List then
-            State.Object := Command_List;
+         if State.Object /= Obj_Command_List then
+            State.Object := Obj_Command_List;
             -- There should already be a code span, let's move it in the list
             State.Cmd_List.Append (To_String (State.Object_String));
             State.Object_String := Null_Unbounded_String;
@@ -82,16 +82,16 @@ begin
      or Lower_Keyword = "fails"
    then
       Set_Verb (Fail, Loc);
-      State.Subject := Subject_Text;
+      State.Subject := Text_Subj;
 
    elsif Lower_Keyword = "successfully" then
       State.Successfully_Met := True;
 
    elsif Lower_Keyword = "error" then
-      State.Object := Error;
+      State.Object := Obj_Error;
 
    elsif Lower_Keyword = "output" then
-      if State.Object = Error then
+      if State.Object = Obj_Error then
          -- "error output": the standard error of the last command
          --    Then the error output contains `unknown option`
          --    Then there is no error output
@@ -99,12 +99,12 @@ begin
             State.Subject := Stderr_Subj;
             State.Object  := No_Object;
          else
-            State.Object := Stderr_Obj;
+            State.Object := Obj_Stderr;
          end if;
       elsif In_Subject_Part then
          State.Subject := Output_Subj;
       else
-         State.Object := Output_Obj;
+         State.Object := Obj_Output;
       end if;
 
    elsif Lower_Keyword = "exit" then
@@ -140,7 +140,7 @@ begin
       State.File_Type := Directory;
 
       if In_Subject_Part then
-         State.Subject := Dir_Subject;
+         State.Subject := Dir_Subj;
 
       elsif In_Object_Part then
          State.Object := Obj_Dir_Name;
@@ -153,7 +153,7 @@ begin
       State.File_Type := Ordinary_File;
 
       if In_Subject_Part then
-         State.Subject := Subject_File;
+         State.Subject := File_Subj;
 
       elsif In_Object_Part then
          State.Object := Obj_File_Name;
@@ -164,6 +164,48 @@ begin
 
    elsif Lower_Keyword = "unordered" then
       State.Ignore_Order := True;
+
+   elsif Lower_Keyword = "window" then
+      -- "Then a window appears", "a `title` window appears",
+      -- "Then the window contains `text`"
+      if In_Subject_Part then
+         State.Subject := Window_Subj;
+      else
+         State.Object  := Obj_Window_Name;
+      end if;
+
+   elsif Lower_Keyword = "button"
+     or Lower_Keyword = "textbox"
+     or Lower_Keyword = "dialog"
+   then
+      --  An MVP role word: the widget role goes to the GUI payload;
+      --  in the subject part it also resets a wrongly categorized
+      --  subject (a code span met before the role word is a widget
+      --  name, not a file name)
+      State.GUI_Role := To_Unbounded_String (Lower_Keyword);
+      if In_Object_Part and then State.Object = No_Object then
+         State.Object := Obj_Widget_Name;
+      elsif In_Subject_Part then
+         State.Subject := No_Subject;
+      end if;
+
+   elsif Lower_Keyword = "appears" then
+      Set_Verb (Appears, Loc);
+
+   elsif Lower_Keyword = "press" then
+      Set_Verb (Press, Loc);
+
+   elsif Lower_Keyword = "enabled"
+     or Lower_Keyword = "disabled"
+   then
+      --  "Then the `name` `role` is enabled / disabled"
+      State.GUI_Widget_State :=
+        (if Lower_Keyword = "enabled"
+         then Model.Steps.GUI_Enabled
+         else Model.Steps.GUI_Disabled);
+      if In_Object_Part then
+         State.Object := Obj_Widget_State;
+      end if;
 
    end if;
    -- Put_Debug_Line ("  after Process_Keyword, state = " & State'Image, Loc);

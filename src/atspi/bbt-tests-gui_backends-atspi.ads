@@ -40,4 +40,9 @@ package BBT.Tests.GUI_Backends.Atspi is
    --  The user-visible enabled state of the named widget (STATE_
    --  SENSITIVE on GTK 4, which never emits STATE_ENABLED).
 
+
+   function Press_Widget (Role : String; Name : String) return Boolean;
+   --  Semantic activation of the named widget (the first AT-SPI
+   --  action, not injected input)
+
 end BBT.Tests.GUI_Backends.Atspi;

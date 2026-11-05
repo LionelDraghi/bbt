@@ -36,11 +36,11 @@ begin
 
    if In_Subject_Part and then State.Subject = No_Subject then
       if State.File_Type = Directory then
-         State.Subject := Dir_Subject;
-         --  Put_Debug_Line ("  Subject = Dir_Subject", Loc);
+         State.Subject := Dir_Subj;
+         --  Put_Debug_Line ("  Subject = Dir_Subj", Loc);
       else
-         State.Subject := Subject_File;
-         --  Put_Debug_Line ("  Subject = Subject_File", Loc);
+         State.Subject := File_Subj;
+         --  Put_Debug_Line ("  Subject = File_Subj", Loc);
       end if;
 
    elsif In_Object_Part and State.Cmd_Expected then
@@ -63,6 +63,7 @@ begin
          when Run              |
               Type_Text        |
               Enter_Text       |
+              Press            |
               Get              |
               Contains         |
               Matches          |
@@ -93,10 +94,11 @@ begin
 
             end if;
 
-         when Fail =>
+         when Fail | Appears =>
             -- We are in a
             --    Then `cmd` fails
-            -- step, so there should be no code span after the verb
+            -- or a "a window appears" step: there should be no code
+            -- span after those verbs
             Put_Warning ("Unexpected code span after verb " &
                          Current_Verb'Image &
                          " in step " & State.Cat'Image & ", ignored.", Loc);

@@ -306,6 +306,26 @@ package body BBT.Model.Steps is
                 & (if Step.Data.Negated then " not" else "")
                 & " " & Object_String;
 
+      when GUI_Window_Appears =>
+         return Prefix & "that a window appears";
+
+      when GUI_Window_Contains =>
+         return Prefix & "that the window contains the text "
+           & (if Step.Data.Negated then "..." else Object_String);
+
+      when GUI_Widget_Exists =>
+         return Prefix & "that there is a widget named "
+           & Object_String;
+
+      when GUI_Widget_State =>
+         return Prefix & "that the widget "
+           & (if Step.Data.Negated then "is not " else "is ")
+           & "in the expected state";
+
+      when GUI_Press_Widget =>
+         return Prefix & "that we press the widget "
+           & (if Step.Data.Negated then "..." else Object_String);
+
       end case;
 
    end Explain;

@@ -56,4 +56,12 @@ package body BBT.Tests.GUI_Backends.Atspi is
       return False;
    end Widget_Enabled;
 
+
+   function Press_Widget
+     (Role : String; Name : String) return Boolean is
+      pragma Unreferenced (Role, Name);
+   begin
+      return False;
+   end Press_Widget;
+
 end BBT.Tests.GUI_Backends.Atspi;

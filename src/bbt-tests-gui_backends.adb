@@ -79,4 +79,14 @@ package body BBT.Tests.GUI_Backends is
       end case;
    end Widget_Enabled;
 
+   function Press_Widget (Role : String; Name : String) return Boolean is
+   begin
+      case Selected is
+         when GUI_Atspi =>
+            return Atspi.Press_Widget (Role, Name);
+         when No_Backend =>
+            return False;
+      end case;
+   end Press_Widget;
+
 end BBT.Tests.GUI_Backends;

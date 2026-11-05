@@ -40,14 +40,15 @@ package body BBT.Scenarios.Steps is
                     New_SA,
                     -- Subjects ---------------------------------------------
                     No_Subject,
-                    Dir_Subject,  -- dir name
-                    Subject_File, -- file name
-                    Subject_Text, -- content of code span or following
+                    Dir_Subj,  -- dir name
+                    File_Subj, -- file name
+                    Text_Subj, -- content of code span or following
                     --               code fenced lines, before verb
                     Output_Subj,
                     Stderr_Subj, -- "the error output"
                     Exit_Subj,    -- "the exit code"
                     Env_Var_Subj,      -- "the environment variable `NAME`"
+                    Window_Subj,       -- "the window"
                     -- Verbs ------------------------------------------------
                     --  Negated forms ("is no", "get no", "does not
                     --  contain"...) are not distinct verbs: the negation
@@ -67,17 +68,26 @@ package body BBT.Scenarios.Steps is
                     Fail,
                     Type_Text,
                     Enter_Text,
+                    Appears,
+                    Press,
                     -- Objects ----------------------------------------------
                     No_Object,
-                    Output_Obj,
-                    Stderr_Obj, -- "there is no error output"
+                    Obj_Output,
+                    Obj_Stderr, -- "there is no error output"
                     Obj_File_Name,
                     Obj_Dir_Name, -- file or dir name
                     Obj_Text, -- content of code span on the same line or
                     --           code fenced block expected on following lines,
                     --           after the verb.
-                    Command_List,
-                    Error,
+                    Obj_Command_List,
+                    Obj_Error,
+                    Obj_Window_Name,
+                    -- a window name, as in "a `title` window appears"
+                    Obj_Widget_Name,
+                    -- a widget accessible name, as in
+                    -- "there is a button named `Continue`"
+                    Obj_Widget_State,
+                    -- the "enabled/disabled" of a widget state step
                     -- Adjectives
                     Unordered);
 
@@ -138,7 +148,9 @@ package body BBT.Scenarios.Steps is
            Output_Is             | Output_Not_Empty |
            Output_Contains       | Output_Matches |
            File_Is               | File_Contains | File_Matches |
-           Stderr_Is             | Stderr_Contains | Stderr_Not_Empty
+           Stderr_Is             | Stderr_Contains | Stderr_Not_Empty |
+           GUI_Window_Appears    | GUI_Window_Contains |
+           GUI_Widget_Exists     | GUI_Widget_State
         => True,
       when others => False);
 
@@ -169,6 +181,70 @@ package body BBT.Scenarios.Steps is
               Code_Block_Expected => False,
               Example => new String'(""));
    end Lookup;
+
+   type Preposition_Lists is array (Positive range <>) of Prepositions;
+
+   procedure Set_One (Prep       : Prepositions;
+                      Sub_Attrib : Subject_Attrib;
+                      Sub        : Subjects;
+                      Verb       : Verbs;
+                      Object     : Objects;
+                      Action     : Actions;
+                      Code_Block : Boolean;
+                      Example    : String) is
+      --  State one grammar rule. The example string is stored prefixed
+      --  with the preposition, so that a rule shared by several
+      --  prepositions is stated only once.
+      Grammar_Error : exception;
+   begin
+      for R of The_Rules loop
+         if    R.Key.Prep = Prep
+           and then R.Key.SA   = Sub_Attrib
+           and then R.Key.Sub  = Sub
+           and then R.Key.Verb = Verb
+           and then R.Key.Obj  = Object
+         then
+            raise Grammar_Error with "Grammar already initialized for " &
+              Prep'Image & ", " & Sub_Attrib'Image & ", " & Sub'Image & ", " &
+              Verb'Image & ", " & Object'Image;
+         end if;
+      end loop;
+      The_Rules.Append
+        (Grammar_Rule'(Set  => CLI_Set,
+                       Key  => Grammar_Key'(Prep, Sub_Attrib, Sub, Verb,
+                                            Object),
+                       Item => (Action,
+                                Code_Block,
+                                new String'("- " & Image (Prep) & " "
+                                            & Example))));
+   end Set_One;
+
+   procedure Set (Prep       : Prepositions;
+                  Sub_Attrib : Subject_Attrib;
+                  Sub        : Subjects;
+                  Verb       : Verbs;
+                  Object     : Objects;
+                  Action     : Actions;
+                  Example    : String;
+                  Code_Block : Boolean := False) is
+   begin
+      Set_One (Prep, Sub_Attrib, Sub, Verb, Object, Action, Code_Block, Example);
+   end Set;
+
+   procedure Set (Preps      : Preposition_Lists;
+                  Sub_Attrib : Subject_Attrib;
+                  Sub        : Subjects;
+                  Verb       : Verbs;
+                  Object     : Objects;
+                  Action     : Actions;
+                  Example    : String;
+                  Code_Block : Boolean := False) is
+   begin
+      for Prep of Preps loop
+         Set_One (Prep, Sub_Attrib, Sub, Verb, Object, Action, Code_Block, Example);
+      end loop;
+   end Set;
+
 
    -- Create the complete BBT grammar
    procedure Initialize_Grammar is separate;
@@ -221,6 +297,12 @@ package body BBT.Scenarios.Steps is
       -- Set when the step line ends with an (ignoring ...) clause,
       -- whatever its content: the clause is only legal on comparison
       -- steps
+
+      GUI_Role         : Unbounded_String         := Null_Unbounded_String;
+      GUI_Access_Name  : Unbounded_String         := Null_Unbounded_String;
+      GUI_Widget_State : Model.Steps.GUI_Widget_States := Model.Steps.GUI_Any;
+      -- The GUI payload, only meaningful on the GUI actions (cf.
+      -- docs/proposed/gui_vocabulary.md)
    end record;
 
    -- --------------------------------------------------------------------------
@@ -504,6 +586,22 @@ package body BBT.Scenarios.Steps is
 
       end if;
 
+      if State.Action in GUI_Window_Appears | GUI_Window_Contains |
+                          GUI_Widget_Exists | GUI_Widget_State | GUI_Press_Widget
+      then
+         --  The widget or window name: the object's code span, or, for
+         --  the forms where it shows up in the subject phrase ("the
+         --  `name` `role` is enabled", "a `title` window appears"),
+         --  the subject's
+         if State.Object_String /= Null_Unbounded_String then
+            State.GUI_Access_Name := State.Object_String;
+         else
+            State.GUI_Access_Name := State.Subject_String;
+         end if;
+         State.Object_String   := Null_Unbounded_String;
+         State.Subject_String  := Null_Unbounded_String;
+      end if;
+
       return (Cat              => State.Cat,
               Action           => State.Action,
               Negated          => State.Negated,
@@ -521,9 +619,9 @@ package body BBT.Scenarios.Steps is
               Ignore_Regexps   => State.Ignore_Regexps,
               File_Content     => Empty_Text,
               Syntax_Error     => IO.Some_Error,
-              GUI_Role         => Null_Unbounded_String,
-              GUI_Access_Name  => Null_Unbounded_String,
-              GUI_Widget_State => GUI_Any);
+              GUI_Role         => State.GUI_Role,
+              GUI_Access_Name  => State.GUI_Access_Name,
+              GUI_Widget_State => State.GUI_Widget_State);
    end Parse;
 
 begin

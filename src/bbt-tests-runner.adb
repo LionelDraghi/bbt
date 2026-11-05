@@ -18,6 +18,8 @@ with BBT.Created_File_List,
      BBT.Tests.Actions.File_Operations,
      BBT.Tests.Actions.Output_Checks,
      BBT.Tests.Actions.Setup,
+     BBT.Tests.GUI_Backends,
+     BBT.Tests.GUI_Backends,
      BBT.Writers,
      File_Utilities,
      Text_Utilities;
@@ -33,6 +35,7 @@ use BBT.Created_File_List,
     BBT.Tests.Actions.Environment,
     BBT.Tests.Actions.Output_Checks,
     BBT.Tests.Actions.Setup,
+    BBT.Tests.GUI_Backends,
     BBT.Writers,
     Text_Utilities;
 
@@ -214,6 +217,34 @@ package body BBT.Tests.Runner is
          end;
       end if;
 
+      if Step.Data.Action = Run_Cmd
+        and then GUI_Backends.Selected /= No_Backend
+      then
+         --  GUI launch (cf. docs/proposed/gui_vocabulary.md): with a
+         --  backend selected, the "When I run" of a GUI scenario
+         --  spawns the application through the backend, which owns
+         --  the accessibility environment setup and the pid
+         --  correlation, instead of the CLI pump capture
+         declare
+            Cmd : constant String := To_String (Step.Data.Object_String);
+         begin
+            GUI_Backends.Launch (Cmd);
+         exception
+            when E : GUI_Backends.No_Backend_Available =>
+               Put_Step_Result (Step      => Step,
+                                Success   => False,
+                                Fail_Msg  => Ada.Exceptions.Exception_Message (E),
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+               Run_Error := True;
+               Set_End_Time (Step);
+               return;
+         end;
+
+         Set_End_Time (Step);
+         return;
+      end if;
+
       case Step.Data.Action is
          when Run_Cmd | Run_Shell_Cmd =>
             Created_File_List.Add (Output);
@@ -304,6 +335,116 @@ package body BBT.Tests.Runner is
          when Output_Matches =>
             Output_Matches
               (Output_Since_Input (Get_Text (Output)), Step, Verbosity);
+
+         when GUI_Window_Appears =>
+            --  Bounded poll: OK when the expected window shows up
+            if GUI_Backends.Window_Appears
+                 (To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "no window appears (expected title: """
+                            & """" & To_String (Step.Data.GUI_Access_Name)
+                            & """)",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
+
+         when GUI_Window_Contains =>
+            if GUI_Backends.Window_Contains
+                 (To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "the window does not contain "
+                            & """" & To_String (Step.Data.GUI_Access_Name) & """",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
+
+         when GUI_Widget_Exists =>
+            if GUI_Backends.Widget_Named
+                 (To_String (Step.Data.GUI_Role),
+                  To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "no " & To_String (Step.Data.GUI_Role)
+                            & " named """
+                            & To_String (Step.Data.GUI_Access_Name) & """",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
+
+         when GUI_Widget_State =>
+            --  The check inverts with the step polarity, like the CLI
+            --  comparisons: "is not enabled" expects the other state
+            if GUI_Backends.Widget_Enabled
+                 (To_String (Step.Data.GUI_Role),
+                  To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => To_String (Step.Data.GUI_Role)
+                            & " """ & To_String (Step.Data.GUI_Access_Name)
+                            & """ not in the expected state",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
+
+         when GUI_Press_Widget =>
+            if GUI_Backends.Press_Widget
+                 (To_String (Step.Data.GUI_Role),
+                  To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "cannot press " & To_String (Step.Data.GUI_Role)
+                            & " """ & To_String (Step.Data.GUI_Access_Name)
+                            & """",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
 
          when File_Matches =>
             File_Matches (Step, Verbosity);
@@ -664,6 +805,8 @@ package body BBT.Tests.Runner is
          end if;
 
       end loop;
+
+      GUI_Backends.Shutdown;
 
    end Run_All;
 
