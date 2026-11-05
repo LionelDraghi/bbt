@@ -6,9 +6,11 @@ project BBT is
    --  are selected per host OS, only one of the two dirs below is used
    case Bbt_Config.Alire_Host_OS is
       when "windows" =>
-         for Source_Dirs use ("src", "src/Alire_config", "src/windows");
+         for Source_Dirs use ("src", "src/Alire_config", "src/windows",
+                              "src/no_gui");
       when others =>
-         for Source_Dirs use ("src", "src/Alire_config", "src/posix");
+         for Source_Dirs use ("src", "src/Alire_config", "src/posix",
+                              "src/atspi");
    end case;
 
    --  src/posix holds the C wrapper on ioctl(TIOCSWINSZ), only compiled
@@ -82,7 +84,13 @@ project BBT is
    end Builder;
 
    package Linker is
-      for Switches ("ada") use ("-g");
+      case Bbt_Config.Alire_Host_OS is
+         when "linux" =>
+            for Switches ("ada") use ("-g", "-l:libatspi.so.0",
+                                      "-lgobject-2.0", "-lglib-2.0");
+         when others =>
+            for Switches ("ada") use ("-g");
+      end case;
    end Linker;
 
    package Pretty_Printer is
