@@ -211,28 +211,28 @@
       <metric name="max_loop_nesting">1.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-cmd_line.adb">
-      <metric name="all_lines">478</metric>
-      <metric name="code_lines">330</metric>
-      <metric name="comment_lines">65</metric>
+      <metric name="all_lines">504</metric>
+      <metric name="code_lines">351</metric>
+      <metric name="comment_lines">67</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">16.45</metric>
-      <metric name="blank_lines">83</metric>
-      <metric name="average_lines_in_bodies">30.39</metric>
+      <metric name="comment_percentage">16.02</metric>
+      <metric name="blank_lines">86</metric>
+      <metric name="average_lines_in_bodies">29.45</metric>
       <metric name="spark_lines">0</metric>
-      <unit name="BBT.Cmd_Line" kind="package body" line="24" col="1">
-         <metric name="all_lines">455</metric>
-         <metric name="code_lines">316</metric>
-         <metric name="comment_lines">60</metric>
+      <unit name="BBT.Cmd_Line" kind="package body" line="25" col="1">
+         <metric name="all_lines">480</metric>
+         <metric name="code_lines">336</metric>
+         <metric name="comment_lines">62</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">15.95</metric>
-         <metric name="blank_lines">79</metric>
-         <metric name="all_subprograms">10</metric>
-         <metric name="all_stmts">142</metric>
-         <metric name="all_dcls">36</metric>
-         <metric name="lsloc">178</metric>
+         <metric name="comment_percentage">15.57</metric>
+         <metric name="blank_lines">82</metric>
+         <metric name="all_subprograms">11</metric>
+         <metric name="all_stmts">150</metric>
+         <metric name="all_dcls">38</metric>
+         <metric name="lsloc">188</metric>
          <metric name="unit_nesting">1</metric>
          <metric name="construct_nesting">8</metric>
-         <unit name="Go_Next_Arg" kind="procedure body" line="33" col="4">
+         <unit name="Go_Next_Arg" kind="procedure body" line="34" col="4">
             <metric name="all_lines">4</metric>
             <metric name="code_lines">4</metric>
             <metric name="comment_lines">0</metric>
@@ -251,7 +251,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Go_Back_Previous_Arg" kind="procedure body" line="39" col="4">
+         <unit name="Go_Back_Previous_Arg" kind="procedure body" line="40" col="4">
             <metric name="all_lines">4</metric>
             <metric name="code_lines">4</metric>
             <metric name="comment_lines">0</metric>
@@ -270,7 +270,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="On_Last_Arg" kind="function body" line="45" col="4">
+         <unit name="On_Last_Arg" kind="function body" line="46" col="4">
             <metric name="all_lines">5</metric>
             <metric name="code_lines">5</metric>
             <metric name="comment_lines">0</metric>
@@ -289,7 +289,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Current_Arg" kind="function body" line="52" col="4">
+         <unit name="Current_Arg" kind="function body" line="53" col="4">
             <metric name="all_lines">5</metric>
             <metric name="code_lines">5</metric>
             <metric name="comment_lines">0</metric>
@@ -308,7 +308,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="More_Args" kind="function body" line="59" col="4">
+         <unit name="More_Args" kind="function body" line="60" col="4">
             <metric name="all_lines">5</metric>
             <metric name="code_lines">5</metric>
             <metric name="comment_lines">0</metric>
@@ -327,7 +327,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Dash_To_Underscore" kind="function body" line="66" col="4">
+         <unit name="Dash_To_Underscore" kind="function body" line="67" col="4">
             <metric name="all_lines">19</metric>
             <metric name="code_lines">16</metric>
             <metric name="comment_lines">2</metric>
@@ -349,7 +349,7 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Shell_List_Image" kind="expression function" line="87" col="4">
+         <unit name="Shell_List_Image" kind="expression function" line="88" col="4">
             <metric name="all_lines">7</metric>
             <metric name="code_lines">6</metric>
             <metric name="comment_lines">1</metric>
@@ -370,7 +370,7 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Set_Shell_Option" kind="procedure body" line="96" col="4">
+         <unit name="Set_Shell_Option" kind="procedure body" line="97" col="4">
             <metric name="all_lines">11</metric>
             <metric name="code_lines">9</metric>
             <metric name="comment_lines">2</metric>
@@ -392,7 +392,29 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_Cleanup_Option" kind="procedure body" line="109" col="4">
+         <unit name="Set_Backend_Option" kind="procedure body" line="110" col="4">
+            <metric name="all_lines">11</metric>
+            <metric name="code_lines">10</metric>
+            <metric name="comment_lines">1</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">9.09</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">2</metric>
+            <metric name="lsloc">5</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">1</metric>
+               <metric name="in_parameters">1</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">1</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">0</metric>
+         </unit>
+         <unit name="Set_Cleanup_Option" kind="procedure body" line="123" col="4">
             <metric name="all_lines">11</metric>
             <metric name="code_lines">10</metric>
             <metric name="comment_lines">1</metric>
@@ -414,7 +436,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_Cmd" kind="procedure body" line="122" col="4">
+         <unit name="Set_Cmd" kind="procedure body" line="136" col="4">
             <metric name="all_lines">9</metric>
             <metric name="code_lines">9</metric>
             <metric name="comment_lines">0</metric>
@@ -436,42 +458,42 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Put_Settings" kind="procedure body stub" line="133" col="4">
+         <unit name="Put_Settings" kind="procedure body stub" line="147" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Put_Help" kind="procedure body stub" line="134" col="4">
+         <unit name="Put_Help" kind="procedure body stub" line="148" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Put_Trace_Topics" kind="procedure body stub" line="135" col="4">
+         <unit name="Put_Trace_Topics" kind="procedure body stub" line="149" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Analyze" kind="procedure body" line="138" col="4">
-            <metric name="all_lines">339</metric>
-            <metric name="code_lines">237</metric>
+         <unit name="Analyze" kind="procedure body" line="152" col="4">
+            <metric name="all_lines">351</metric>
+            <metric name="code_lines">247</metric>
             <metric name="comment_lines">39</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">14.13</metric>
-            <metric name="blank_lines">63</metric>
-            <metric name="all_stmts">120</metric>
+            <metric name="comment_percentage">13.63</metric>
+            <metric name="blank_lines">65</metric>
+            <metric name="all_stmts">125</metric>
             <metric name="all_dcls">8</metric>
-            <metric name="lsloc">128</metric>
+            <metric name="lsloc">133</metric>
             <metric name="construct_nesting">7</metric>
             <metric name="all_parameters">0</metric>
-            <metric name="statement_complexity">66</metric>
+            <metric name="statement_complexity">69</metric>
             <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">66</metric>
+            <metric name="cyclomatic_complexity">69</metric>
             <metric name="essential_complexity">6</metric>
             <metric name="max_loop_nesting">2</metric>
             <metric name="extra_exit_points">3</metric>
          </unit>
       </unit>
-      <metric name="statement_complexity">7.45</metric>
-      <metric name="expression_complexity">0.09</metric>
-      <metric name="cyclomatic_complexity">7.54</metric>
-      <metric name="essential_complexity">1.45</metric>
+      <metric name="statement_complexity">7.25</metric>
+      <metric name="expression_complexity">0.08</metric>
+      <metric name="cyclomatic_complexity">7.33</metric>
+      <metric name="essential_complexity">1.41</metric>
       <metric name="max_loop_nesting">2.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-cmd_line.ads">
@@ -3795,25 +3817,25 @@
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-model-steps.adb">
-      <metric name="all_lines">431</metric>
-      <metric name="code_lines">335</metric>
+      <metric name="all_lines">451</metric>
+      <metric name="code_lines">350</metric>
       <metric name="comment_lines">39</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">10.42</metric>
-      <metric name="blank_lines">57</metric>
-      <metric name="average_lines_in_bodies">34.90</metric>
+      <metric name="comment_percentage">10.02</metric>
+      <metric name="blank_lines">62</metric>
+      <metric name="average_lines_in_bodies">36.40</metric>
       <metric name="spark_lines">0</metric>
       <unit name="BBT.Model.Steps" kind="package body" line="15" col="1">
-         <metric name="all_lines">417</metric>
-         <metric name="code_lines">329</metric>
+         <metric name="all_lines">437</metric>
+         <metric name="code_lines">344</metric>
          <metric name="comment_lines">34</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">9.36</metric>
-         <metric name="blank_lines">54</metric>
+         <metric name="comment_percentage">8.99</metric>
+         <metric name="blank_lines">59</metric>
          <metric name="all_subprograms">10</metric>
-         <metric name="all_stmts">95</metric>
+         <metric name="all_stmts">100</metric>
          <metric name="all_dcls">62</metric>
-         <metric name="lsloc">157</metric>
+         <metric name="lsloc">162</metric>
          <metric name="unit_nesting">3</metric>
          <metric name="construct_nesting">6</metric>
          <unit name="Put_Image" kind="procedure body" line="18" col="4">
@@ -3861,27 +3883,27 @@
             <metric name="extra_exit_points">0</metric>
          </unit>
          <unit name="Explain" kind="function body" line="62" col="4">
-            <metric name="all_lines">250</metric>
-            <metric name="code_lines">205</metric>
+            <metric name="all_lines">270</metric>
+            <metric name="code_lines">220</metric>
             <metric name="comment_lines">10</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">4.65</metric>
-            <metric name="blank_lines">35</metric>
-            <metric name="all_stmts">41</metric>
+            <metric name="comment_percentage">4.34</metric>
+            <metric name="blank_lines">40</metric>
+            <metric name="all_stmts">46</metric>
             <metric name="all_dcls">28</metric>
-            <metric name="lsloc">69</metric>
+            <metric name="lsloc">74</metric>
             <metric name="unit_nesting">2</metric>
             <metric name="construct_nesting">5</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">25</metric>
-            <metric name="expression_complexity">19</metric>
-            <metric name="cyclomatic_complexity">44</metric>
+            <metric name="statement_complexity">30</metric>
+            <metric name="expression_complexity">22</metric>
+            <metric name="cyclomatic_complexity">52</metric>
             <metric name="essential_complexity">2</metric>
             <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">24</metric>
+            <metric name="extra_exit_points">29</metric>
             <unit name="File_Kind" kind="expression function" line="72" col="7">
                <metric name="all_lines">4</metric>
                <metric name="code_lines">4</metric>
@@ -4096,7 +4118,7 @@
                </unit>
             </unit>
          </unit>
-         <unit name="Set_Parent" kind="procedure body" line="314" col="4">
+         <unit name="Set_Parent" kind="procedure body" line="334" col="4">
             <metric name="all_lines">5</metric>
             <metric name="code_lines">5</metric>
             <metric name="comment_lines">0</metric>
@@ -4118,7 +4140,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Get_Expected" kind="function body" line="321" col="4">
+         <unit name="Get_Expected" kind="function body" line="341" col="4">
             <metric name="all_lines">40</metric>
             <metric name="code_lines">27</metric>
             <metric name="comment_lines">10</metric>
@@ -4139,7 +4161,7 @@
             <metric name="essential_complexity">2</metric>
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">3</metric>
-            <unit name="File_Exists" kind="expression function" line="323" col="7">
+            <unit name="File_Exists" kind="expression function" line="343" col="7">
                <metric name="all_lines">4</metric>
                <metric name="code_lines">4</metric>
                <metric name="comment_lines">0</metric>
@@ -4161,7 +4183,7 @@
                <metric name="max_loop_nesting">0</metric>
             </unit>
          </unit>
-         <unit name="Create_Step" kind="expression function" line="363" col="4">
+         <unit name="Create_Step" kind="expression function" line="383" col="4">
             <metric name="all_lines">12</metric>
             <metric name="code_lines">12</metric>
             <metric name="comment_lines">0</metric>
@@ -4182,7 +4204,7 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Set_Filter" kind="procedure body" line="377" col="4">
+         <unit name="Set_Filter" kind="procedure body" line="397" col="4">
             <metric name="all_lines">7</metric>
             <metric name="code_lines">7</metric>
             <metric name="comment_lines">0</metric>
@@ -4204,7 +4226,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_Has_Syntax_Error" kind="procedure body" line="386" col="4">
+         <unit name="Set_Has_Syntax_Error" kind="procedure body" line="406" col="4">
             <metric name="all_lines">7</metric>
             <metric name="code_lines">7</metric>
             <metric name="comment_lines">0</metric>
@@ -4226,7 +4248,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Has_Syntax_Error" kind="expression function" line="395" col="4">
+         <unit name="Has_Syntax_Error" kind="expression function" line="415" col="4">
             <metric name="all_lines">2</metric>
             <metric name="code_lines">2</metric>
             <metric name="comment_lines">0</metric>
@@ -4247,7 +4269,7 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Apply_Filters_To" kind="procedure body" line="399" col="4">
+         <unit name="Apply_Filters_To" kind="procedure body" line="419" col="4">
             <metric name="all_lines">21</metric>
             <metric name="code_lines">16</metric>
             <metric name="comment_lines">2</metric>
@@ -4269,7 +4291,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Parent" kind="expression function" line="422" col="4">
+         <unit name="Parent" kind="expression function" line="442" col="4">
             <metric name="all_lines">2</metric>
             <metric name="code_lines">2</metric>
             <metric name="comment_lines">0</metric>
@@ -4290,7 +4312,7 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Last_Step" kind="expression function" line="426" col="4">
+         <unit name="Last_Step" kind="expression function" line="446" col="4">
             <metric name="all_lines">4</metric>
             <metric name="code_lines">4</metric>
             <metric name="comment_lines">0</metric>
@@ -4312,18 +4334,18 @@
             <metric name="max_loop_nesting">0</metric>
          </unit>
       </unit>
-      <metric name="statement_complexity">2.41</metric>
-      <metric name="expression_complexity">1.66</metric>
-      <metric name="cyclomatic_complexity">4.08</metric>
+      <metric name="statement_complexity">2.62</metric>
+      <metric name="expression_complexity">1.79</metric>
+      <metric name="cyclomatic_complexity">4.41</metric>
       <metric name="essential_complexity">1.12</metric>
       <metric name="max_loop_nesting">1.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-model-steps.ads">
-      <metric name="all_lines">203</metric>
-      <metric name="code_lines">103</metric>
-      <metric name="comment_lines">74</metric>
+      <metric name="all_lines">211</metric>
+      <metric name="code_lines">108</metric>
+      <metric name="comment_lines">77</metric>
       <metric name="eol_comments">3</metric>
-      <metric name="comment_percentage">43.50</metric>
+      <metric name="comment_percentage">43.24</metric>
       <metric name="blank_lines">26</metric>
       <metric name="average_lines_in_bodies">0.00</metric>
       <metric name="spark_lines">0</metric>
@@ -4331,21 +4353,21 @@
          <metric name="contract">2</metric>
          <metric name="post">1</metric>
          <metric name="contract_complete">nyi</metric>
-         <metric name="all_lines">191</metric>
-         <metric name="code_lines">99</metric>
-         <metric name="comment_lines">69</metric>
+         <metric name="all_lines">199</metric>
+         <metric name="code_lines">104</metric>
+         <metric name="comment_lines">72</metric>
          <metric name="eol_comments">3</metric>
-         <metric name="comment_percentage">42.85</metric>
+         <metric name="comment_percentage">42.61</metric>
          <metric name="blank_lines">23</metric>
          <metric name="public_types">7</metric>
          <metric name="all_types">6</metric>
          <metric name="public_subprograms">12</metric>
          <metric name="all_stmts">0</metric>
-         <metric name="all_dcls">100</metric>
-         <metric name="lsloc">100</metric>
+         <metric name="all_dcls">105</metric>
+         <metric name="lsloc">105</metric>
          <metric name="unit_nesting">1</metric>
          <metric name="construct_nesting">1</metric>
-         <unit name="Filtered_By_Default" kind="expression function" line="95" col="4">
+         <unit name="Filtered_By_Default" kind="expression function" line="103" col="4">
             <metric name="contract">0</metric>
             <metric name="post">0</metric>
             <metric name="contract_complete">nyi</metric>
@@ -4366,84 +4388,84 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Set_Parent" kind="procedure" line="150" col="4">
+         <unit name="Set_Parent" kind="procedure" line="158" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Create_Step" kind="function" line="153" col="4">
+         <unit name="Create_Step" kind="function" line="161" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">3</metric>
                <metric name="in_parameters">3</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Put_Image" kind="procedure" line="158" col="4">
+         <unit name="Put_Image" kind="procedure" line="166" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Put_Image" kind="procedure" line="161" col="4">
+         <unit name="Put_Image" kind="procedure" line="169" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Explain" kind="function" line="166" col="4">
+         <unit name="Explain" kind="function" line="174" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Get_Expected" kind="function" line="170" col="4">
+         <unit name="Get_Expected" kind="function" line="178" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Apply_Filters_To" kind="procedure" line="175" col="4">
+         <unit name="Apply_Filters_To" kind="procedure" line="183" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Parent" kind="function" line="178" col="3">
+         <unit name="Parent" kind="function" line="186" col="3">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Set_Filter" kind="procedure" line="185" col="4">
+         <unit name="Set_Filter" kind="procedure" line="193" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Set_Has_Syntax_Error" kind="procedure" line="189" col="4">
+         <unit name="Set_Has_Syntax_Error" kind="procedure" line="197" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Has_Syntax_Error" kind="function" line="191" col="4">
+         <unit name="Has_Syntax_Error" kind="function" line="199" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Last_Step" kind="function" line="200" col="4">
+         <unit name="Last_Step" kind="function" line="208" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
@@ -6104,66 +6126,65 @@
       <metric name="max_loop_nesting">2.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-image.adb">
-      <metric name="all_lines">46</metric>
-      <metric name="code_lines">39</metric>
+      <metric name="all_lines">52</metric>
+      <metric name="code_lines">45</metric>
       <metric name="comment_lines">5</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">11.36</metric>
+      <metric name="comment_percentage">10.00</metric>
       <metric name="blank_lines">2</metric>
-      <metric name="average_lines_in_bodies">38.00</metric>
+      <metric name="average_lines_in_bodies">44.00</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Image" kind="function body" line="9" col="1">
-         <metric name="all_lines">38</metric>
-         <metric name="code_lines">38</metric>
+         <metric name="all_lines">44</metric>
+         <metric name="code_lines">44</metric>
          <metric name="comment_lines">0</metric>
          <metric name="eol_comments">0</metric>
          <metric name="comment_percentage">0.00</metric>
          <metric name="blank_lines">0</metric>
          <metric name="all_subprograms">1</metric>
-         <metric name="all_stmts">34</metric>
+         <metric name="all_stmts">40</metric>
          <metric name="all_dcls">2</metric>
-         <metric name="lsloc">36</metric>
+         <metric name="lsloc">42</metric>
          <metric name="construct_nesting">2</metric>
          <metric name="all_parameters">1</metric>
             <metric name="in_parameters">1</metric>
             <metric name="out_parameters">0</metric>
             <metric name="in_out_parameters">0</metric>
-         <metric name="statement_complexity">33</metric>
+         <metric name="statement_complexity">39</metric>
          <metric name="expression_complexity">0</metric>
-         <metric name="cyclomatic_complexity">33</metric>
+         <metric name="cyclomatic_complexity">39</metric>
          <metric name="essential_complexity">2</metric>
          <metric name="max_loop_nesting">0</metric>
-         <metric name="extra_exit_points">32</metric>
+         <metric name="extra_exit_points">38</metric>
       </unit>
-      <metric name="statement_complexity">33.00</metric>
+      <metric name="statement_complexity">39.00</metric>
       <metric name="expression_complexity">0.00</metric>
-      <metric name="cyclomatic_complexity">33.00</metric>
+      <metric name="cyclomatic_complexity">39.00</metric>
       <metric name="essential_complexity">2.00</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-initialize_grammar.adb">
-      <metric name="all_lines">182</metric>
-      <metric name="code_lines">149</metric>
-      <metric name="comment_lines">22</metric>
+      <metric name="all_lines">119</metric>
+      <metric name="code_lines">93</metric>
+      <metric name="comment_lines">19</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">12.86</metric>
-      <metric name="blank_lines">11</metric>
-      <metric name="average_lines_in_bodies">48.40</metric>
+      <metric name="comment_percentage">16.96</metric>
+      <metric name="blank_lines">7</metric>
+      <metric name="average_lines_in_bodies">65.50</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Initialize_Grammar" kind="procedure body" line="8" col="1">
-         <metric name="all_lines">175</metric>
-         <metric name="code_lines">148</metric>
-         <metric name="comment_lines">17</metric>
+         <metric name="all_lines">112</metric>
+         <metric name="code_lines">92</metric>
+         <metric name="comment_lines">14</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">10.30</metric>
-         <metric name="blank_lines">10</metric>
-         <metric name="all_types">1</metric>
-         <metric name="all_subprograms">5</metric>
-         <metric name="all_stmts">93</metric>
-         <metric name="all_dcls">33</metric>
-         <metric name="lsloc">126</metric>
+         <metric name="comment_percentage">13.20</metric>
+         <metric name="blank_lines">6</metric>
+         <metric name="all_subprograms">2</metric>
+         <metric name="all_stmts">86</metric>
+         <metric name="all_dcls">2</metric>
+         <metric name="lsloc">88</metric>
          <metric name="unit_nesting">1</metric>
-         <metric name="construct_nesting">4</metric>
+         <metric name="construct_nesting">2</metric>
          <metric name="all_parameters">0</metric>
          <metric name="statement_complexity">1</metric>
          <metric name="expression_complexity">0</metric>
@@ -6190,100 +6211,35 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_One" kind="procedure body" line="56" col="4">
-            <metric name="all_lines">34</metric>
-            <metric name="code_lines">31</metric>
-            <metric name="comment_lines">3</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">8.82</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">4</metric>
-            <metric name="all_dcls">11</metric>
-            <metric name="lsloc">15</metric>
-            <metric name="construct_nesting">3</metric>
-            <metric name="all_parameters">8</metric>
-               <metric name="in_parameters">8</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">3</metric>
-            <metric name="expression_complexity">4</metric>
-            <metric name="cyclomatic_complexity">7</metric>
-            <metric name="essential_complexity">3</metric>
-            <metric name="max_loop_nesting">1</metric>
-            <metric name="extra_exit_points">1</metric>
-         </unit>
-         <unit name="Set" kind="procedure body" line="91" col="4">
-            <metric name="all_lines">11</metric>
-            <metric name="code_lines">11</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">9</metric>
-            <metric name="lsloc">10</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">8</metric>
-               <metric name="in_parameters">8</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Set" kind="procedure body" line="103" col="4">
-            <metric name="all_lines">13</metric>
-            <metric name="code_lines">13</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">2</metric>
-            <metric name="all_dcls">10</metric>
-            <metric name="lsloc">12</metric>
-            <metric name="construct_nesting">2</metric>
-            <metric name="all_parameters">8</metric>
-               <metric name="in_parameters">8</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">2</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">2</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">1</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
       </unit>
-      <metric name="statement_complexity">1.60</metric>
-      <metric name="expression_complexity">0.80</metric>
-      <metric name="cyclomatic_complexity">2.40</metric>
-      <metric name="essential_complexity">1.39</metric>
-      <metric name="max_loop_nesting">1.00</metric>
+      <metric name="statement_complexity">1.00</metric>
+      <metric name="expression_complexity">0.00</metric>
+      <metric name="cyclomatic_complexity">1.00</metric>
+      <metric name="essential_complexity">1.00</metric>
+      <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-initialize_gui_grammar.adb">
-      <metric name="all_lines">17</metric>
-      <metric name="code_lines">5</metric>
-      <metric name="comment_lines">10</metric>
+      <metric name="all_lines">50</metric>
+      <metric name="code_lines">28</metric>
+      <metric name="comment_lines">15</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">66.66</metric>
-      <metric name="blank_lines">2</metric>
-      <metric name="average_lines_in_bodies">4.00</metric>
+      <metric name="comment_percentage">34.88</metric>
+      <metric name="blank_lines">7</metric>
+      <metric name="average_lines_in_bodies">19.00</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Initialize_GUI_Grammar" kind="procedure body" line="14" col="1">
-         <metric name="all_lines">4</metric>
-         <metric name="code_lines">4</metric>
-         <metric name="comment_lines">0</metric>
+         <metric name="all_lines">37</metric>
+         <metric name="code_lines">27</metric>
+         <metric name="comment_lines">5</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">0.00</metric>
-         <metric name="blank_lines">0</metric>
-         <metric name="all_subprograms">1</metric>
-         <metric name="all_stmts">1</metric>
-         <metric name="all_dcls">1</metric>
-         <metric name="lsloc">2</metric>
-         <metric name="construct_nesting">1</metric>
+         <metric name="comment_percentage">15.62</metric>
+         <metric name="blank_lines">5</metric>
+         <metric name="all_subprograms">2</metric>
+         <metric name="all_stmts">15</metric>
+         <metric name="all_dcls">2</metric>
+         <metric name="lsloc">17</metric>
+         <metric name="unit_nesting">1</metric>
+         <metric name="construct_nesting">2</metric>
          <metric name="all_parameters">0</metric>
          <metric name="statement_complexity">1</metric>
          <metric name="expression_complexity">0</metric>
@@ -6291,6 +6247,25 @@
          <metric name="essential_complexity">1</metric>
          <metric name="max_loop_nesting">0</metric>
          <metric name="extra_exit_points">0</metric>
+         <unit name="Register_Keywords" kind="procedure body" line="19" col="4">
+            <metric name="all_lines">11</metric>
+            <metric name="code_lines">11</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">8</metric>
+            <metric name="all_dcls">1</metric>
+            <metric name="lsloc">9</metric>
+            <metric name="construct_nesting">1</metric>
+            <metric name="all_parameters">0</metric>
+            <metric name="statement_complexity">1</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">1</metric>
+            <metric name="essential_complexity">1</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">0</metric>
+         </unit>
       </unit>
       <metric name="statement_complexity">1.00</metric>
       <metric name="expression_complexity">0.00</metric>
@@ -6544,20 +6519,20 @@
       </unit>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-process_code_span.adb">
-      <metric name="all_lines">105</metric>
-      <metric name="code_lines">60</metric>
-      <metric name="comment_lines">33</metric>
+      <metric name="all_lines">107</metric>
+      <metric name="code_lines">61</metric>
+      <metric name="comment_lines">34</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">35.48</metric>
+      <metric name="comment_percentage">35.78</metric>
       <metric name="blank_lines">12</metric>
-      <metric name="average_lines_in_bodies">59.00</metric>
+      <metric name="average_lines_in_bodies">60.00</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Process_Code_Span" kind="procedure body" line="9" col="1">
-         <metric name="all_lines">97</metric>
-         <metric name="code_lines">59</metric>
-         <metric name="comment_lines">28</metric>
+         <metric name="all_lines">99</metric>
+         <metric name="code_lines">60</metric>
+         <metric name="comment_lines">29</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">32.18</metric>
+         <metric name="comment_percentage">32.58</metric>
          <metric name="blank_lines">10</metric>
          <metric name="all_subprograms">1</metric>
          <metric name="all_stmts">23</metric>
@@ -6582,58 +6557,58 @@
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-process_keyword.adb">
-      <metric name="all_lines">171</metric>
-      <metric name="code_lines">109</metric>
-      <metric name="comment_lines">27</metric>
+      <metric name="all_lines">213</metric>
+      <metric name="code_lines">139</metric>
+      <metric name="comment_lines">34</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">19.85</metric>
-      <metric name="blank_lines">35</metric>
-      <metric name="average_lines_in_bodies">108.00</metric>
+      <metric name="comment_percentage">19.65</metric>
+      <metric name="blank_lines">40</metric>
+      <metric name="average_lines_in_bodies">138.00</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Process_Keyword" kind="procedure body" line="9" col="1">
-         <metric name="all_lines">163</metric>
-         <metric name="code_lines">108</metric>
-         <metric name="comment_lines">22</metric>
+         <metric name="all_lines">205</metric>
+         <metric name="code_lines">138</metric>
+         <metric name="comment_lines">29</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">16.92</metric>
-         <metric name="blank_lines">33</metric>
+         <metric name="comment_percentage">17.36</metric>
+         <metric name="blank_lines">38</metric>
          <metric name="all_subprograms">1</metric>
-         <metric name="all_stmts">50</metric>
+         <metric name="all_stmts">62</metric>
          <metric name="all_dcls">5</metric>
-         <metric name="lsloc">55</metric>
+         <metric name="lsloc">67</metric>
          <metric name="construct_nesting">4</metric>
          <metric name="all_parameters">3</metric>
             <metric name="in_parameters">2</metric>
             <metric name="out_parameters">0</metric>
             <metric name="in_out_parameters">1</metric>
-         <metric name="statement_complexity">35</metric>
-         <metric name="expression_complexity">0</metric>
-         <metric name="cyclomatic_complexity">35</metric>
+         <metric name="statement_complexity">44</metric>
+         <metric name="expression_complexity">2</metric>
+         <metric name="cyclomatic_complexity">46</metric>
          <metric name="essential_complexity">1</metric>
          <metric name="max_loop_nesting">0</metric>
          <metric name="extra_exit_points">0</metric>
       </unit>
-      <metric name="statement_complexity">35.00</metric>
-      <metric name="expression_complexity">0.00</metric>
-      <metric name="cyclomatic_complexity">35.00</metric>
+      <metric name="statement_complexity">44.00</metric>
+      <metric name="expression_complexity">2.00</metric>
+      <metric name="cyclomatic_complexity">46.00</metric>
       <metric name="essential_complexity">1.00</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps-validate_step_state.adb">
-      <metric name="all_lines">125</metric>
-      <metric name="code_lines">91</metric>
+      <metric name="all_lines">127</metric>
+      <metric name="code_lines">93</metric>
       <metric name="comment_lines">14</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">13.33</metric>
+      <metric name="comment_percentage">13.08</metric>
       <metric name="blank_lines">20</metric>
-      <metric name="average_lines_in_bodies">90.00</metric>
+      <metric name="average_lines_in_bodies">92.00</metric>
       <metric name="spark_lines">0</metric>
       <unit name="Validate_Step_State" kind="procedure body" line="9" col="1">
-         <metric name="all_lines">117</metric>
-         <metric name="code_lines">90</metric>
+         <metric name="all_lines">119</metric>
+         <metric name="code_lines">92</metric>
          <metric name="comment_lines">9</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">9.09</metric>
+         <metric name="comment_percentage">8.91</metric>
          <metric name="blank_lines">18</metric>
          <metric name="all_subprograms">1</metric>
          <metric name="all_stmts">32</metric>
@@ -6733,26 +6708,26 @@
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps.adb">
-      <metric name="all_lines">533</metric>
-      <metric name="code_lines">368</metric>
-      <metric name="comment_lines">91</metric>
-      <metric name="eol_comments">13</metric>
-      <metric name="comment_percentage">22.65</metric>
-      <metric name="blank_lines">74</metric>
-      <metric name="average_lines_in_bodies">36.33</metric>
+      <metric name="all_lines">631</metric>
+      <metric name="code_lines">446</metric>
+      <metric name="comment_lines">104</metric>
+      <metric name="eol_comments">14</metric>
+      <metric name="comment_percentage">21.45</metric>
+      <metric name="blank_lines">81</metric>
+      <metric name="average_lines_in_bodies">31.55</metric>
       <metric name="spark_lines">0</metric>
       <unit name="BBT.Scenarios.Steps" kind="package body" line="30" col="1">
-         <metric name="all_lines">504</metric>
-         <metric name="code_lines">350</metric>
-         <metric name="comment_lines">86</metric>
-         <metric name="eol_comments">13</metric>
-         <metric name="comment_percentage">22.70</metric>
-         <metric name="blank_lines">68</metric>
-         <metric name="all_types">7</metric>
-         <metric name="all_subprograms">5</metric>
-         <metric name="all_stmts">90</metric>
-         <metric name="all_dcls">156</metric>
-         <metric name="lsloc">246</metric>
+         <metric name="all_lines">602</metric>
+         <metric name="code_lines">428</metric>
+         <metric name="comment_lines">99</metric>
+         <metric name="eol_comments">14</metric>
+         <metric name="comment_percentage">21.44</metric>
+         <metric name="blank_lines">75</metric>
+         <metric name="all_types">8</metric>
+         <metric name="all_subprograms">8</metric>
+         <metric name="all_stmts">103</metric>
+         <metric name="all_dcls">196</metric>
+         <metric name="lsloc">299</metric>
          <metric name="unit_nesting">2</metric>
          <metric name="construct_nesting">7</metric>
          <metric name="statement_complexity">1</metric>
@@ -6761,15 +6736,15 @@
          <metric name="essential_complexity">1</metric>
          <metric name="max_loop_nesting">0</metric>
          <metric name="extra_exit_points">0</metric>
-         <unit name="Image" kind="function body stub" line="93" col="4">
+         <unit name="Image" kind="function body stub" line="103" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Negatable" kind="expression function" line="134" col="4">
-            <metric name="all_lines">10</metric>
-            <metric name="code_lines">10</metric>
+         <unit name="Negatable" kind="expression function" line="144" col="4">
+            <metric name="all_lines">12</metric>
+            <metric name="code_lines">12</metric>
             <metric name="comment_lines">0</metric>
             <metric name="eol_comments">0</metric>
             <metric name="comment_percentage">0.00</metric>
@@ -6788,7 +6763,7 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Lookup" kind="function body" line="150" col="4">
+         <unit name="Lookup" kind="function body" line="162" col="4">
             <metric name="all_lines">22</metric>
             <metric name="code_lines">21</metric>
             <metric name="comment_lines">0</metric>
@@ -6810,13 +6785,79 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">1</metric>
          </unit>
-         <unit name="Initialize_Grammar" kind="procedure body stub" line="174" col="4">
+         <unit name="Set_One" kind="procedure body" line="187" col="4">
+            <metric name="all_lines">34</metric>
+            <metric name="code_lines">31</metric>
+            <metric name="comment_lines">3</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">8.82</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">4</metric>
+            <metric name="all_dcls">11</metric>
+            <metric name="lsloc">15</metric>
+            <metric name="construct_nesting">3</metric>
+            <metric name="all_parameters">8</metric>
+               <metric name="in_parameters">8</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">3</metric>
+            <metric name="expression_complexity">4</metric>
+            <metric name="cyclomatic_complexity">7</metric>
+            <metric name="essential_complexity">3</metric>
+            <metric name="max_loop_nesting">1</metric>
+            <metric name="extra_exit_points">1</metric>
+         </unit>
+         <unit name="Set" kind="procedure body" line="222" col="4">
+            <metric name="all_lines">11</metric>
+            <metric name="code_lines">11</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">1</metric>
+            <metric name="all_dcls">9</metric>
+            <metric name="lsloc">10</metric>
+            <metric name="construct_nesting">1</metric>
+            <metric name="all_parameters">8</metric>
+               <metric name="in_parameters">8</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">1</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">1</metric>
+            <metric name="essential_complexity">1</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">0</metric>
+         </unit>
+         <unit name="Set" kind="procedure body" line="234" col="4">
+            <metric name="all_lines">13</metric>
+            <metric name="code_lines">13</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">2</metric>
+            <metric name="all_dcls">10</metric>
+            <metric name="lsloc">12</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">8</metric>
+               <metric name="in_parameters">8</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">1</metric>
+            <metric name="max_loop_nesting">1</metric>
+            <metric name="extra_exit_points">0</metric>
+         </unit>
+         <unit name="Initialize_Grammar" kind="procedure body stub" line="250" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Initialize_GUI_Grammar" kind="procedure body stub" line="179" col="4">
+         <unit name="Initialize_GUI_Grammar" kind="procedure body stub" line="255" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Chunk" kind="package" line="228" col="4">
+         <unit name="Chunk" kind="package" line="310" col="4">
             <metric name="all_lines">7</metric>
             <metric name="code_lines">7</metric>
             <metric name="comment_lines">0</metric>
@@ -6828,26 +6869,26 @@
             <metric name="lsloc">8</metric>
             <metric name="unit_nesting">1</metric>
             <metric name="construct_nesting">1</metric>
-            <unit name="Initialize" kind="procedure" line="229" col="7">
+            <unit name="Initialize" kind="procedure" line="311" col="7">
                <metric name="all_parameters">0</metric>
             </unit>
-            <unit name="Set_Verb" kind="procedure" line="230" col="7">
+            <unit name="Set_Verb" kind="procedure" line="312" col="7">
                <metric name="all_parameters">2</metric>
                   <metric name="in_parameters">2</metric>
                   <metric name="out_parameters">0</metric>
                   <metric name="in_out_parameters">0</metric>
             </unit>
-            <unit name="Verb" kind="function" line="231" col="7">
+            <unit name="Verb" kind="function" line="313" col="7">
                <metric name="all_parameters">0</metric>
             </unit>
-            <unit name="In_Subject_Part" kind="function" line="232" col="7">
+            <unit name="In_Subject_Part" kind="function" line="314" col="7">
                <metric name="all_parameters">0</metric>
             </unit>
-            <unit name="In_Object_Part" kind="function" line="233" col="7">
+            <unit name="In_Object_Part" kind="function" line="315" col="7">
                <metric name="all_parameters">0</metric>
             </unit>
          </unit>
-         <unit name="Put_Rule" kind="procedure body" line="238" col="4">
+         <unit name="Put_Rule" kind="procedure body" line="320" col="4">
             <metric name="all_lines">37</metric>
             <metric name="code_lines">30</metric>
             <metric name="comment_lines">0</metric>
@@ -6869,7 +6910,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Put_Grammar" kind="procedure body" line="282" col="4">
+         <unit name="Put_Grammar" kind="procedure body" line="364" col="4">
             <metric name="all_lines">11</metric>
             <metric name="code_lines">11</metric>
             <metric name="comment_lines">0</metric>
@@ -6888,7 +6929,7 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Put_Keywords" kind="procedure body" line="295" col="4">
+         <unit name="Put_Keywords" kind="procedure body" line="377" col="4">
             <metric name="all_lines">4</metric>
             <metric name="code_lines">4</metric>
             <metric name="comment_lines">0</metric>
@@ -6907,57 +6948,57 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Process_Keyword" kind="procedure body stub" line="302" col="4">
+         <unit name="Process_Keyword" kind="procedure body stub" line="384" col="4">
             <metric name="all_parameters">3</metric>
                <metric name="in_parameters">2</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Process_Code_Span" kind="procedure body stub" line="308" col="4">
+         <unit name="Process_Code_Span" kind="procedure body stub" line="390" col="4">
             <metric name="all_parameters">6</metric>
                <metric name="in_parameters">5</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Extract_Ignoring_Clause" kind="function body stub" line="319" col="4">
+         <unit name="Extract_Ignoring_Clause" kind="function body stub" line="401" col="4">
             <metric name="all_parameters">5</metric>
                <metric name="in_parameters">2</metric>
                <metric name="out_parameters">3</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Validate_Step_State" kind="procedure body stub" line="328" col="4">
+         <unit name="Validate_Step_State" kind="procedure body stub" line="410" col="4">
             <metric name="all_parameters">4</metric>
                <metric name="in_parameters">3</metric>
                <metric name="out_parameters">1</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Parse" kind="function body" line="334" col="4">
-            <metric name="all_lines">194</metric>
-            <metric name="code_lines">150</metric>
-            <metric name="comment_lines">14</metric>
+         <unit name="Parse" kind="function body" line="416" col="4">
+            <metric name="all_lines">210</metric>
+            <metric name="code_lines">161</metric>
+            <metric name="comment_lines">18</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">8.53</metric>
-            <metric name="blank_lines">30</metric>
-            <metric name="all_stmts">55</metric>
+            <metric name="comment_percentage">10.05</metric>
+            <metric name="blank_lines">31</metric>
+            <metric name="all_stmts">61</metric>
             <metric name="all_dcls">13</metric>
-            <metric name="lsloc">68</metric>
+            <metric name="lsloc">74</metric>
             <metric name="construct_nesting">6</metric>
             <metric name="all_parameters">3</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">1</metric>
                <metric name="in_out_parameters">1</metric>
-            <metric name="statement_complexity">23</metric>
+            <metric name="statement_complexity">25</metric>
             <metric name="expression_complexity">2</metric>
-            <metric name="cyclomatic_complexity">25</metric>
+            <metric name="cyclomatic_complexity">27</metric>
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
       </unit>
-      <metric name="statement_complexity">4.85</metric>
-      <metric name="expression_complexity">1.14</metric>
-      <metric name="cyclomatic_complexity">6.00</metric>
-      <metric name="essential_complexity">1.28</metric>
+      <metric name="statement_complexity">4.19</metric>
+      <metric name="expression_complexity">1.20</metric>
+      <metric name="cyclomatic_complexity">5.40</metric>
+      <metric name="essential_complexity">1.39</metric>
       <metric name="max_loop_nesting">1.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-scenarios-steps.ads">
@@ -11485,275 +11526,275 @@
       </unit>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-tests-gui_backends.adb">
-      <metric name="all_lines">59</metric>
-      <metric name="code_lines">42</metric>
-      <metric name="comment_lines">6</metric>
+      <metric name="all_lines">92</metric>
+      <metric name="code_lines">77</metric>
+      <metric name="comment_lines">4</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">12.50</metric>
+      <metric name="comment_percentage">4.93</metric>
       <metric name="blank_lines">11</metric>
-      <metric name="average_lines_in_bodies">4.87</metric>
+      <metric name="average_lines_in_bodies">9.25</metric>
       <metric name="spark_lines">0</metric>
-      <unit name="BBT.Tests.GUI_Backends" kind="package body" line="10" col="1">
-         <metric name="all_lines">50</metric>
-         <metric name="code_lines">41</metric>
+      <unit name="BBT.Tests.GUI_Backends" kind="package body" line="8" col="1">
+         <metric name="all_lines">85</metric>
+         <metric name="code_lines">76</metric>
          <metric name="comment_lines">0</metric>
          <metric name="eol_comments">0</metric>
          <metric name="comment_percentage">0.00</metric>
          <metric name="blank_lines">9</metric>
          <metric name="all_subprograms">8</metric>
-         <metric name="all_stmts">8</metric>
-         <metric name="all_dcls">17</metric>
-         <metric name="lsloc">25</metric>
+         <metric name="all_stmts">24</metric>
+         <metric name="all_dcls">18</metric>
+         <metric name="lsloc">42</metric>
          <metric name="unit_nesting">1</metric>
-         <metric name="construct_nesting">2</metric>
-         <unit name="Launch" kind="procedure body" line="12" col="4">
-            <metric name="all_lines">5</metric>
-            <metric name="code_lines">5</metric>
+         <metric name="construct_nesting">3</metric>
+         <unit name="Launch" kind="procedure body" line="10" col="4">
+            <metric name="all_lines">10</metric>
+            <metric name="code_lines">10</metric>
             <metric name="comment_lines">0</metric>
             <metric name="eol_comments">0</metric>
             <metric name="comment_percentage">0.00</metric>
             <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
+            <metric name="all_stmts">3</metric>
             <metric name="all_dcls">2</metric>
-            <metric name="lsloc">3</metric>
-            <metric name="construct_nesting">1</metric>
+            <metric name="lsloc">5</metric>
+            <metric name="construct_nesting">2</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
+            <metric name="statement_complexity">2</metric>
             <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">1</metric>
          </unit>
-         <unit name="Kill_Last" kind="procedure body" line="18" col="4">
-            <metric name="all_lines">4</metric>
-            <metric name="code_lines">4</metric>
+         <unit name="Shutdown" kind="procedure body" line="21" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
             <metric name="comment_lines">0</metric>
             <metric name="eol_comments">0</metric>
             <metric name="comment_percentage">0.00</metric>
             <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
+            <metric name="all_stmts">3</metric>
             <metric name="all_dcls">1</metric>
-            <metric name="lsloc">2</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Window_Appears" kind="function body" line="23" col="4">
-            <metric name="all_lines">5</metric>
-            <metric name="code_lines">5</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">2</metric>
-            <metric name="lsloc">3</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">1</metric>
-               <metric name="in_parameters">1</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Observed_Title" kind="function body" line="29" col="4">
-            <metric name="all_lines">4</metric>
-            <metric name="code_lines">4</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">1</metric>
-            <metric name="lsloc">2</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Window_Contains" kind="function body" line="34" col="4">
-            <metric name="all_lines">5</metric>
-            <metric name="code_lines">5</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">2</metric>
-            <metric name="lsloc">3</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">1</metric>
-               <metric name="in_parameters">1</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Dialog_Appears" kind="function body" line="40" col="4">
-            <metric name="all_lines">5</metric>
-            <metric name="code_lines">5</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">2</metric>
-            <metric name="lsloc">3</metric>
-            <metric name="construct_nesting">1</metric>
-            <metric name="all_parameters">1</metric>
-               <metric name="in_parameters">1</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
-            <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
-            <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
-         </unit>
-         <unit name="Widget_Named" kind="function body" line="46" col="4">
-            <metric name="all_lines">5</metric>
-            <metric name="code_lines">5</metric>
-            <metric name="comment_lines">0</metric>
-            <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">0.00</metric>
-            <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
-            <metric name="all_dcls">3</metric>
             <metric name="lsloc">4</metric>
-            <metric name="construct_nesting">1</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">1</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">0</metric>
+         </unit>
+         <unit name="Window_Appears" kind="function body" line="31" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">2</metric>
+            <metric name="lsloc">5</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">1</metric>
+               <metric name="in_parameters">1</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">1</metric>
+         </unit>
+         <unit name="Observed_Title" kind="function body" line="41" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">1</metric>
+            <metric name="lsloc">4</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">1</metric>
+         </unit>
+         <unit name="Window_Contains" kind="function body" line="51" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">2</metric>
+            <metric name="lsloc">5</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">1</metric>
+               <metric name="in_parameters">1</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">1</metric>
+         </unit>
+         <unit name="Widget_Named" kind="function body" line="61" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">3</metric>
+            <metric name="lsloc">6</metric>
+            <metric name="construct_nesting">2</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">2</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
+            <metric name="statement_complexity">2</metric>
             <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
             <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
+            <metric name="extra_exit_points">1</metric>
          </unit>
-         <unit name="Widget_Enabled" kind="function body" line="52" col="4">
-            <metric name="all_lines">6</metric>
-            <metric name="code_lines">6</metric>
+         <unit name="Widget_Enabled" kind="function body" line="71" col="4">
+            <metric name="all_lines">10</metric>
+            <metric name="code_lines">10</metric>
             <metric name="comment_lines">0</metric>
             <metric name="eol_comments">0</metric>
             <metric name="comment_percentage">0.00</metric>
             <metric name="blank_lines">0</metric>
-            <metric name="all_stmts">1</metric>
+            <metric name="all_stmts">3</metric>
             <metric name="all_dcls">3</metric>
-            <metric name="lsloc">4</metric>
-            <metric name="construct_nesting">1</metric>
+            <metric name="lsloc">6</metric>
+            <metric name="construct_nesting">2</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">2</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
-            <metric name="statement_complexity">1</metric>
+            <metric name="statement_complexity">2</metric>
             <metric name="expression_complexity">0</metric>
-            <metric name="cyclomatic_complexity">1</metric>
-            <metric name="essential_complexity">1</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
             <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">0</metric>
+            <metric name="extra_exit_points">1</metric>
+         </unit>
+         <unit name="Press_Widget" kind="function body" line="82" col="4">
+            <metric name="all_lines">9</metric>
+            <metric name="code_lines">9</metric>
+            <metric name="comment_lines">0</metric>
+            <metric name="eol_comments">0</metric>
+            <metric name="comment_percentage">0.00</metric>
+            <metric name="blank_lines">0</metric>
+            <metric name="all_stmts">3</metric>
+            <metric name="all_dcls">3</metric>
+            <metric name="lsloc">6</metric>
+            <metric name="construct_nesting">2</metric>
+            <metric name="all_parameters">2</metric>
+               <metric name="in_parameters">2</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+            <metric name="statement_complexity">2</metric>
+            <metric name="expression_complexity">0</metric>
+            <metric name="cyclomatic_complexity">2</metric>
+            <metric name="essential_complexity">2</metric>
+            <metric name="max_loop_nesting">0</metric>
+            <metric name="extra_exit_points">1</metric>
          </unit>
       </unit>
-      <metric name="statement_complexity">1.00</metric>
+      <metric name="statement_complexity">2.00</metric>
       <metric name="expression_complexity">0.00</metric>
-      <metric name="cyclomatic_complexity">1.00</metric>
-      <metric name="essential_complexity">1.00</metric>
+      <metric name="cyclomatic_complexity">2.00</metric>
+      <metric name="essential_complexity">1.87</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-tests-gui_backends.ads">
-      <metric name="all_lines">69</metric>
-      <metric name="code_lines">15</metric>
-      <metric name="comment_lines">40</metric>
+      <metric name="all_lines">55</metric>
+      <metric name="code_lines">14</metric>
+      <metric name="comment_lines">27</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">72.72</metric>
+      <metric name="comment_percentage">65.85</metric>
       <metric name="blank_lines">14</metric>
       <metric name="average_lines_in_bodies">0.00</metric>
       <metric name="spark_lines">0</metric>
-      <unit name="BBT.Tests.GUI_Backends" kind="package" line="18" col="1">
+      <unit name="BBT.Tests.GUI_Backends" kind="package" line="11" col="1">
          <metric name="contract">0</metric>
          <metric name="post">0</metric>
          <metric name="contract_complete">nyi</metric>
-         <metric name="all_lines">52</metric>
-         <metric name="code_lines">15</metric>
-         <metric name="comment_lines">25</metric>
+         <metric name="all_lines">45</metric>
+         <metric name="code_lines">14</metric>
+         <metric name="comment_lines">19</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">62.50</metric>
+         <metric name="comment_percentage">57.57</metric>
          <metric name="blank_lines">12</metric>
          <metric name="public_types">1</metric>
          <metric name="all_types">1</metric>
          <metric name="public_subprograms">8</metric>
          <metric name="all_stmts">0</metric>
-         <metric name="all_dcls">22</metric>
-         <metric name="lsloc">22</metric>
+         <metric name="all_dcls">23</metric>
+         <metric name="lsloc">23</metric>
          <metric name="unit_nesting">1</metric>
          <metric name="construct_nesting">1</metric>
-         <unit name="Launch" kind="procedure" line="31" col="4">
+         <unit name="Launch" kind="procedure" line="22" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Kill_Last" kind="procedure" line="37" col="4">
+         <unit name="Shutdown" kind="procedure" line="26" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Window_Appears" kind="function" line="40" col="4">
+         <unit name="Window_Appears" kind="function" line="29" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Observed_Title" kind="function" line="46" col="4">
+         <unit name="Observed_Title" kind="function" line="33" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Window_Contains" kind="function" line="50" col="4">
+         <unit name="Window_Contains" kind="function" line="37" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Dialog_Appears" kind="function" line="55" col="4">
-            <metric name="contract_complexity">1</metric>
-            <metric name="all_parameters">1</metric>
-               <metric name="in_parameters">1</metric>
-               <metric name="out_parameters">0</metric>
-               <metric name="in_out_parameters">0</metric>
-         </unit>
-         <unit name="Widget_Named" kind="function" line="59" col="4">
+         <unit name="Widget_Named" kind="function" line="42" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">2</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Widget_Enabled" kind="function" line="64" col="4">
+         <unit name="Widget_Enabled" kind="function" line="46" col="4">
+            <metric name="contract_complexity">1</metric>
+            <metric name="all_parameters">2</metric>
+               <metric name="in_parameters">2</metric>
+               <metric name="out_parameters">0</metric>
+               <metric name="in_out_parameters">0</metric>
+         </unit>
+         <unit name="Press_Widget" kind="function" line="51" col="4">
             <metric name="contract_complexity">1</metric>
             <metric name="all_parameters">2</metric>
                <metric name="in_parameters">2</metric>
@@ -11763,28 +11804,28 @@
       </unit>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-tests-runner.adb">
-      <metric name="all_lines">670</metric>
-      <metric name="code_lines">491</metric>
-      <metric name="comment_lines">87</metric>
+      <metric name="all_lines">811</metric>
+      <metric name="code_lines">616</metric>
+      <metric name="comment_lines">95</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">15.05</metric>
-      <metric name="blank_lines">92</metric>
-      <metric name="average_lines_in_bodies">48.66</metric>
+      <metric name="comment_percentage">13.36</metric>
+      <metric name="blank_lines">100</metric>
+      <metric name="average_lines_in_bodies">62.44</metric>
       <metric name="spark_lines">0</metric>
-      <unit name="BBT.Tests.Runner" kind="package body" line="45" col="1">
-         <metric name="all_lines">626</metric>
-         <metric name="code_lines">457</metric>
-         <metric name="comment_lines">82</metric>
+      <unit name="BBT.Tests.Runner" kind="package body" line="46" col="1">
+         <metric name="all_lines">766</metric>
+         <metric name="code_lines">581</metric>
+         <metric name="comment_lines">90</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">15.21</metric>
-         <metric name="blank_lines">87</metric>
+         <metric name="comment_percentage">13.41</metric>
+         <metric name="blank_lines">95</metric>
          <metric name="all_subprograms">9</metric>
-         <metric name="all_stmts">181</metric>
-         <metric name="all_dcls">65</metric>
-         <metric name="lsloc">246</metric>
+         <metric name="all_stmts">211</metric>
+         <metric name="all_dcls">67</metric>
+         <metric name="lsloc">278</metric>
          <metric name="unit_nesting">1</metric>
          <metric name="construct_nesting">5</metric>
-         <unit name="Subject_Or_Object_String" kind="expression function" line="56" col="4">
+         <unit name="Subject_Or_Object_String" kind="expression function" line="57" col="4">
             <metric name="all_lines">3</metric>
             <metric name="code_lines">3</metric>
             <metric name="comment_lines">0</metric>
@@ -11805,64 +11846,64 @@
             <metric name="essential_complexity">1</metric>
             <metric name="max_loop_nesting">0</metric>
          </unit>
-         <unit name="Run_Step" kind="procedure" line="63" col="4">
+         <unit name="Run_Step" kind="procedure" line="64" col="4">
             <metric name="all_parameters">3</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">1</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Scenario" kind="procedure" line="66" col="4">
+         <unit name="Run_Scenario" kind="procedure" line="67" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Background" kind="procedure" line="68" col="4">
+         <unit name="Run_Background" kind="procedure" line="69" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Doc_Background" kind="procedure" line="70" col="4">
+         <unit name="Run_Doc_Background" kind="procedure" line="71" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Feature_Background" kind="procedure" line="71" col="4">
+         <unit name="Run_Feature_Background" kind="procedure" line="72" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Scenario_List" kind="procedure" line="72" col="4">
+         <unit name="Run_Scenario_List" kind="procedure" line="73" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">0</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">1</metric>
          </unit>
-         <unit name="Run_Step" kind="procedure body" line="75" col="4">
-            <metric name="all_lines">324</metric>
-            <metric name="code_lines">254</metric>
-            <metric name="comment_lines">30</metric>
+         <unit name="Run_Step" kind="procedure body" line="76" col="4">
+            <metric name="all_lines">462</metric>
+            <metric name="code_lines">377</metric>
+            <metric name="comment_lines">38</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">10.56</metric>
-            <metric name="blank_lines">40</metric>
-            <metric name="all_stmts">92</metric>
-            <metric name="all_dcls">15</metric>
-            <metric name="lsloc">107</metric>
+            <metric name="comment_percentage">9.15</metric>
+            <metric name="blank_lines">47</metric>
+            <metric name="all_stmts">121</metric>
+            <metric name="all_dcls">17</metric>
+            <metric name="lsloc">138</metric>
             <metric name="construct_nesting">4</metric>
             <metric name="all_parameters">3</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">1</metric>
                <metric name="in_out_parameters">1</metric>
-            <metric name="statement_complexity">43</metric>
-            <metric name="expression_complexity">2</metric>
-            <metric name="cyclomatic_complexity">45</metric>
-            <metric name="essential_complexity">11</metric>
+            <metric name="statement_complexity">54</metric>
+            <metric name="expression_complexity">3</metric>
+            <metric name="cyclomatic_complexity">57</metric>
+            <metric name="essential_complexity">12</metric>
             <metric name="max_loop_nesting">0</metric>
-            <metric name="extra_exit_points">6</metric>
-            <unit name="Checks_Error_Output" kind="expression function" line="87" col="7">
+            <metric name="extra_exit_points">7</metric>
+            <unit name="Checks_Error_Output" kind="expression function" line="88" col="7">
                <metric name="all_lines">5</metric>
                <metric name="code_lines">5</metric>
                <metric name="comment_lines">0</metric>
@@ -11880,7 +11921,7 @@
                <metric name="essential_complexity">1</metric>
                <metric name="max_loop_nesting">0</metric>
             </unit>
-            <unit name="Error_Output_Name" kind="expression function" line="96" col="7">
+            <unit name="Error_Output_Name" kind="expression function" line="97" col="7">
                <metric name="all_lines">2</metric>
                <metric name="code_lines">2</metric>
                <metric name="comment_lines">0</metric>
@@ -11898,7 +11939,7 @@
                <metric name="essential_complexity">1</metric>
                <metric name="max_loop_nesting">0</metric>
             </unit>
-            <unit name="Interactive_Scenario" kind="expression function" line="99" col="7">
+            <unit name="Interactive_Scenario" kind="expression function" line="100" col="7">
                <metric name="all_lines">3</metric>
                <metric name="code_lines">3</metric>
                <metric name="comment_lines">0</metric>
@@ -11917,7 +11958,7 @@
                <metric name="max_loop_nesting">0</metric>
             </unit>
          </unit>
-         <unit name="Run_Scenario" kind="procedure body" line="401" col="4">
+         <unit name="Run_Scenario" kind="procedure body" line="540" col="4">
             <metric name="all_lines">42</metric>
             <metric name="code_lines">29</metric>
             <metric name="comment_lines">3</metric>
@@ -11939,7 +11980,7 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">1</metric>
          </unit>
-         <unit name="Run_Feature" kind="procedure body" line="445" col="4">
+         <unit name="Run_Feature" kind="procedure body" line="584" col="4">
             <metric name="all_lines">13</metric>
             <metric name="code_lines">12</metric>
             <metric name="comment_lines">0</metric>
@@ -11961,7 +12002,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Run_Background" kind="procedure body" line="460" col="4">
+         <unit name="Run_Background" kind="procedure body" line="599" col="4">
             <metric name="all_lines">11</metric>
             <metric name="code_lines">10</metric>
             <metric name="comment_lines">1</metric>
@@ -11983,7 +12024,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">1</metric>
          </unit>
-         <unit name="Run_Doc_Background" kind="procedure body" line="473" col="4">
+         <unit name="Run_Doc_Background" kind="procedure body" line="612" col="4">
             <metric name="all_lines">19</metric>
             <metric name="code_lines">18</metric>
             <metric name="comment_lines">1</metric>
@@ -12005,7 +12046,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Run_Feature_Background" kind="procedure body" line="494" col="4">
+         <unit name="Run_Feature_Background" kind="procedure body" line="633" col="4">
             <metric name="all_lines">23</metric>
             <metric name="code_lines">22</metric>
             <metric name="comment_lines">1</metric>
@@ -12027,7 +12068,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Run_Scenario_List" kind="procedure body" line="519" col="4">
+         <unit name="Run_Scenario_List" kind="procedure body" line="658" col="4">
             <metric name="all_lines">24</metric>
             <metric name="code_lines">17</metric>
             <metric name="comment_lines">7</metric>
@@ -12049,7 +12090,7 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Run_Doc" kind="procedure body" line="545" col="4">
+         <unit name="Run_Doc" kind="procedure body" line="684" col="4">
             <metric name="all_lines">79</metric>
             <metric name="code_lines">52</metric>
             <metric name="comment_lines">13</metric>
@@ -12071,16 +12112,16 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">3</metric>
          </unit>
-         <unit name="Run_All" kind="procedure body" line="626" col="4">
-            <metric name="all_lines">43</metric>
-            <metric name="code_lines">24</metric>
+         <unit name="Run_All" kind="procedure body" line="765" col="4">
+            <metric name="all_lines">45</metric>
+            <metric name="code_lines">25</metric>
             <metric name="comment_lines">11</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">31.42</metric>
-            <metric name="blank_lines">8</metric>
-            <metric name="all_stmts">14</metric>
+            <metric name="comment_percentage">30.55</metric>
+            <metric name="blank_lines">9</metric>
+            <metric name="all_stmts">15</metric>
             <metric name="all_dcls">5</metric>
-            <metric name="lsloc">19</metric>
+            <metric name="lsloc">20</metric>
             <metric name="construct_nesting">4</metric>
             <metric name="all_parameters">0</metric>
             <metric name="statement_complexity">7</metric>
@@ -12091,10 +12132,10 @@
             <metric name="extra_exit_points">0</metric>
          </unit>
       </unit>
-      <metric name="statement_complexity">6.07</metric>
-      <metric name="expression_complexity">1.00</metric>
-      <metric name="cyclomatic_complexity">7.07</metric>
-      <metric name="essential_complexity">2.53</metric>
+      <metric name="statement_complexity">6.92</metric>
+      <metric name="expression_complexity">1.07</metric>
+      <metric name="cyclomatic_complexity">8.00</metric>
+      <metric name="essential_complexity">2.61</metric>
       <metric name="max_loop_nesting">2.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-tests-runner.ads">
@@ -16342,22 +16383,22 @@
       <metric name="essential_complexity">1.00</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
-   <metric name="all_lines">15316</metric>
-   <metric name="code_lines">9911</metric>
-   <metric name="comment_lines">3437</metric>
-   <metric name="eol_comments">60</metric>
-   <metric name="comment_percentage">26.19</metric>
-   <metric name="blank_lines">1968</metric>
-   <metric name="average_lines_in_bodies">19.51</metric>
+   <metric name="all_lines">15650</metric>
+   <metric name="code_lines">10195</metric>
+   <metric name="comment_lines">3458</metric>
+   <metric name="eol_comments">61</metric>
+   <metric name="comment_percentage">25.77</metric>
+   <metric name="blank_lines">1997</metric>
+   <metric name="average_lines_in_bodies">20.11</metric>
    <metric name="spark_lines">0</metric>
    <metric name="public_types">31</metric>
    <metric name="all_types">76</metric>
    <metric name="public_subprograms">199</metric>
-   <metric name="all_subprograms">375</metric>
-   <metric name="all_stmts">2746</metric>
-   <metric name="all_dcls">3670</metric>
-   <metric name="lsloc">6416</metric>
-   <metric name="average_complexity">3.22</metric>
+   <metric name="all_subprograms">377</metric>
+   <metric name="all_stmts">2843</metric>
+   <metric name="all_dcls">3691</metric>
+   <metric name="lsloc">6534</metric>
+   <metric name="average_complexity">3.31</metric>
    <coupling>
       <file name="/home/lionel/prj/bbt/src/bbt.ads">
          <unit name="BBT" line="28" col="1">
@@ -16367,9 +16408,9 @@
       </file>
       <file name="/home/lionel/prj/bbt/src/bbt-cmd_line.ads">
          <unit name="BBT.Cmd_Line" line="11" col="9">
-            <metric name="control_fan-out_coupling">13</metric>
+            <metric name="control_fan-out_coupling">14</metric>
             <metric name="control_fan-in_coupling">0</metric>
-            <metric name="unit_fan-out_coupling">17</metric>
+            <metric name="unit_fan-out_coupling">18</metric>
             <metric name="unit_fan-in_coupling">0</metric>
          </unit>
       </file>
@@ -16650,11 +16691,11 @@
          </unit>
       </file>
       <file name="/home/lionel/prj/bbt/src/bbt-tests-gui_backends.ads">
-         <unit name="BBT.Tests.GUI_Backends" line="18" col="1">
+         <unit name="BBT.Tests.GUI_Backends" line="11" col="1">
             <metric name="control_fan-out_coupling">0</metric>
-            <metric name="control_fan-in_coupling">0</metric>
+            <metric name="control_fan-in_coupling">2</metric>
             <metric name="unit_fan-out_coupling">2</metric>
-            <metric name="unit_fan-in_coupling">0</metric>
+            <metric name="unit_fan-in_coupling">2</metric>
          </unit>
       </file>
       <file name="/home/lionel/prj/bbt/src/bbt-tests-runner.ads">
@@ -16672,9 +16713,9 @@
             <metric name="tagged_fan-in_coupling">3</metric>
             <metric name="hierarchy_fan-in_coupling">0</metric>
             <metric name="control_fan-out_coupling">8</metric>
-            <metric name="control_fan-in_coupling">9</metric>
+            <metric name="control_fan-in_coupling">8</metric>
             <metric name="unit_fan-out_coupling">11</metric>
-            <metric name="unit_fan-in_coupling">9</metric>
+            <metric name="unit_fan-in_coupling">8</metric>
          </unit>
       </file>
       <file name="/home/lionel/prj/bbt/src/bbt-writers-asciidoc_writer.ads">
