@@ -187,6 +187,19 @@ jobs:
             echo "mlc already installed"
           fi
 
+      - name: Setup AT-SPI backend dev packages (Linux)
+        # The AT-SPI GUI backend links -l:libatspi.so.0, -lgobject-2.0
+        # and -lglib-2.0: the images carry the runtime libraries, but
+        # the linker needs the -dev symlink of each. Source_Dirs only
+        # include src/atspi on Linux (per bbt.gpr), so this step is a
+        # Linux-only no-op elsewhere; it stays to keep the steps
+        # identical across the matrix.
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libatspi2.0-dev libglib2.0-dev
+
       - name: Clone the pinned sibling crates
         # alire.toml pins list_image to a sibling directory (../list_image)
         # during development: the vendored list_image sources that were

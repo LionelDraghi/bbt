@@ -3,14 +3,20 @@ with "src/Alire_config/bbt_config.gpr";
 project BBT is
 
    --  The Status_Bar.Platform body is platform dependent: the bodies
-   --  are selected per host OS, only one of the two dirs below is used
+   --  are selected per host OS, only one of the two dirs below is used.
+   --  Same for the GUI backends: AT-SPI is only available on Linux;
+   --  Windows and macOS use the no_gui backend, whose bodies are
+   --  clean "unsupported" errors, per the GUI vocabulary proposal.
    case Bbt_Config.Alire_Host_OS is
       when "windows" =>
          for Source_Dirs use ("src", "src/Alire_config", "src/windows",
                               "src/no_gui");
-      when others =>
+      when "linux" =>
          for Source_Dirs use ("src", "src/Alire_config", "src/posix",
                               "src/atspi");
+      when others =>
+         for Source_Dirs use ("src", "src/Alire_config", "src/posix",
+                              "src/no_gui");
    end case;
 
    --  src/posix holds the C wrapper on ioctl(TIOCSWINSZ), only compiled
