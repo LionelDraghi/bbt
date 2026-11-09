@@ -52,3 +52,10 @@
 | Then  |         |        | is         | output            | OUTPUT_NOT_EMPTY        |            | - Then there is output |  
 | Then  |         |        | get        | output            | OUTPUT_NOT_EMPTY        |            | - Then I get output |  
 | Then  |         | exit   | is         | `text`            | EXIT_CODE_IS            |            | - Then the exit code is `2` |  
+| Then  |         | window | appears    |                   | GUI_WINDOW_APPEARS      |            | - Then a window appears / a `title` window appears |  
+| Then  |         |        | is         | `window name`     | GUI_WINDOW_APPEARS      |            | - Then there is a window named `title` |  
+| Then  |         |        | is         | `widget name`     | GUI_WIDGET_EXISTS       |            | - Then there is a `role` named `name` |  
+| Then  |         |        | is         | enabled | disabled
+                                                            | GUI_WIDGET_STATE        |            | - Then the `name` `role` is enabled / disabled |  
+| Then  |         | window | contains   | `text`            | GUI_WINDOW_CONTAINS     |            | - Then the window contains `text` |  
+| When  |         |        | press      | `text`            | GUI_PRESS_WIDGET        |            | - When I press the `name` `role` |  

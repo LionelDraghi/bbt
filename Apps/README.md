@@ -9,7 +9,7 @@ Each sub-directory is a named application. Each application:
 
 - has a behavior specification, in a Markdown file at the root of its
   directory, stating its requirements as numbered `[Gnnn]` items traced
-  in [docs/specifications.md](../docs/specifications.md);
+  in [docs/UG.md](../docs/UG.md);
 - holds one implementation sub-directory per GUI backend (`web/`,
   `gtk4/`, `adi2/`), each providing a runnable app binary built from
   the same behavior spec.

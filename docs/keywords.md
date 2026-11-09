@@ -34,3 +34,11 @@
 - dir
 - directory
 - unordered
+- window
+- appears
+- button
+- textbox
+- dialog
+- press
+- enabled
+- disabled

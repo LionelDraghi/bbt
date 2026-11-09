@@ -583,7 +583,7 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_Feature (F : in out Feature_Type'Class) is
    begin
-      Writers.Put_Feature_Start (F);
+      BBT.Writers.Put_Feature_Start (F);
       Set_Start_Time (F);
 
       if F.Scenario_List.Is_Empty then

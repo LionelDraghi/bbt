@@ -6,7 +6,7 @@ All notable changes **from a user perspective** to this project will be document
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-- **[0.6.1-dev] - 2026-??-??**
+- **[0.6.1] - 2026-11-09**
   - [Added]   experimental GUI testing GUI steps, driven by a pluggable backend (`--backend`, first one: AT-SPI on Linux, `--headless` for CI); the vocabulary concepts — role, accessible name, state — follow WAI-ARIA (cf. docs/proposed/gui_vocabulary.md)
   - [Added]   the `ignoring path syntax` named pattern of the `(ignoring ...)` clause rewrites the compared texts with the Unix path syntax — backslashes to slashes, `C:` drive prefix removed — instead of masking: the path itself stays checked, and a Unix and a Windows print of the same place compare equal, as in `C:\user` vs `/user`; the rewrite happens before the masking patterns, and a regexp word of the clause sees the rewritten text (cf. docs/features/A300_Ignoring.md)
   - [Added]   a dedicated `help ignoring` topic, gathering the documentation of the `(ignoring ...)` clause (patterns, settings, warnings), the `help matching` topic keeping the command line matching options and pointing to it (cf. docs/features/B130_Cmd_Line_Help.md)

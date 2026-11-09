@@ -8,7 +8,7 @@ specification, and its scenarios are the executable form of the
 requirements below.
 
 The functional requirements are derived from the
-[TodoMVC application spec](https://github.com/todomvc),
+[TodoMVC application spec](https://github.com/tastejs/todomvc),
 chapter *Functionality*. The GUI vocabulary requirements they exercise
 (launch, window and widget lookup, state, press...) are defined in
 `docs/specifications.md`, section GUI: this application is their
