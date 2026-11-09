@@ -51,5 +51,9 @@ jobs:
          uses: mgrojo/alr2appimage-action@main
          with:
              alireVersion: "nightly"
+             #  Continuous of the tool: candidate fix for the AppDir
+             #  0700 permission failure (appimagetool refuses it, run
+             #  42545248701). Back to 1.0.0 if it does not hold.
+             alr2appimageVersion: "continuous"
              alr2appimageArgs: "--use-version --terminal"
              ### tagName: "${{ github.ref_name }}-continuous
