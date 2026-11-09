@@ -3,8 +3,8 @@
 -- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
 -- -----------------------------------------------------------------------------
 
---  (Linux only) real backend child of BBT.Tests.GUI_Backends, from
---  GuiVerb's binding to libatspi.
+--  (Linux only) real backend child of BBT.Tests.GUI_Backends, its
+--  own libatspi binding: direct imports, no dev headers required.
 
 package BBT.Tests.GUI_Backends.Atspi is
 

@@ -3,10 +3,10 @@
 -- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
 -- SPDX-FileCopyrightText: 2026, Lionel Draghi
 -- -----------------------------------------------------------------------------
---  AT-SPI backend, extracted and adapted from GuiVerb
---  (https://github.com/LionelDraghi/GuiVerb), its own Ada binding to
---  libatspi: direct imports, accessibility bus connection lazy and
---  automatic, correlation with the launched application by process id.
+--  AT-SPI backend (Linux). Own libatspi binding: direct imports, no
+--  dev headers required, accessibility bus connection lazy and
+--  automatic, correlation with the launched application by process
+--  id, with an application name fallback for wrapper processes.
 
 with Ada.Calendar;          use Ada.Calendar;
 with Ada.Directories;
@@ -255,7 +255,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
       Binary : GNAT.OS_Lib.String_Access :=
         new String'(Binary_Path);
       Binary_List : constant GNAT.OS_Lib.Argument_List :=
-        (1 => Binary);
+        [Binary];
    begin
       App_Pid := GNAT.OS_Lib.Non_Blocking_Spawn
         (Binary_Path, Binary_List);
@@ -353,6 +353,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       return To_String (Last_Text);
    end Observed_Text;
 
+   pragma Unreferenced (Observed_Text);
+
    function Button_Named (Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
       Frame    : System.Address;
@@ -373,6 +375,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end loop;
       return False;
    end Button_Named;
+
+   pragma Unreferenced (Button_Named);
 
    function Button_Enabled (Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
@@ -398,6 +402,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end loop;
       return False;
    end Button_Enabled;
+
+   pragma Unreferenced (Button_Enabled);
 
    function Press_Button (Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
@@ -426,6 +432,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       return False;
    end Press_Button;
 
+   pragma Unreferenced (Press_Button);
+
    --  The application node: the desktop application of the process
    --  the backend launched. The caller owns the returned reference.
    function Dialog_Appears (Expected_Name : String := "") return Boolean is
@@ -448,6 +456,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end loop;
       return False;
    end Dialog_Appears;
+
+   pragma Unreferenced (Dialog_Appears);
 
    --  Depth-first search for a text field named Name (rôle text —
    --  GTK 4 maps Entry and PasswordEntry to that role, Q022).
@@ -507,6 +517,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       return False;
    end Text_Field_Named;
 
+   pragma Unreferenced (Text_Field_Named);
+
    function Field_Focused (Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
       App      : System.Address;
@@ -533,6 +545,8 @@ package body BBT.Tests.GUI_Backends.Atspi is
       end loop;
       return False;
    end Field_Focused;
+
+   pragma Unreferenced (Field_Focused);
 
    procedure Shutdown is
       Status  : GNAT.OS_Lib.Process_Id;

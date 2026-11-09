@@ -13,11 +13,9 @@ drive it or observe it. The tooling should let a bbt scenario launch a
 GUI application, drive it, and assert on what the user perceives — the
 same way bbt launches a CLI program and asserts on its output.
 
-The vocabulary and the semantics are designed against WAI-ARIA concepts
-(role, accessible name, state), as already prototyped in GuiVerb and
-documented in its [scenario vocabulary]. GuiVerb serves as the design
-reference; this proposal makes bbt autonomous — no dependency on the
-GuiVerb runner.
+The vocabulary and the semantics follow WAI-ARIA concepts (role,
+accessible name, state), so that a scenario asserts on what the user
+perceives through the same grammar engine as the CLI one.
 
 ## Intended outcome
 
@@ -46,16 +44,14 @@ running platform (Linux first, via AT-SPI / libatspi).
 - Model: `Step_Data` gains GUI payload fields (role, accessible name,
   state), used only by GUI actions.
 - A new execution layer abstracts GUI backends: first AT-SPI on Linux,
-  then a webdriver backend for web applications, following GuiVerb's
-  backend split. The backend is selected on the command line, not in
-  the scenario: `--backend=web|atspi|...` (same option name as
-  GuiVerb's, plus the `GUIVERB_BACKEND` environment variable
-  precedent).
-- A second candidate backend, keeping GuiVerb in sync: its **Adi2**
+  then a webdriver backend for web applications. The backend is
+  selected on the command line, not in
+  the scenario (`--backend=atspi` on the command line, with
+  `BBT_BACKEND=atspi` as the usual environment variable fallback).
+- A second candidate backend: the **Adi2**
   backend (Adi.MCP development bridge), which observes and drives a
   probe-instrumented application over a file IPC session namespaced
-  by the launched pid (`docs/proposed/adi2_probe_audit.md` in GuiVerb
-  for the naming conventions). Its plain pid correlation and its
+  by the launched pid. Its plain pid correlation and its
   non-a11y transport make it a natural fit for the `--headless` CI
   option.
 - A `--headless` option runs GUI steps in CI without an interactive
@@ -67,9 +63,8 @@ running platform (Linux first, via AT-SPI / libatspi).
 
 ### MVP vocabulary
 
-Aligned with GuiVerb's implemented set (see its
-`docs/features/scenario_vocabulary.md`), which bbt scenarios already
-resemble:
+Aligned with the MVP sets prototyped in the older GUI test projects,
+which bbt scenarios already resemble:
 
 | Step | Meaning |
 |---|---|
@@ -84,9 +79,9 @@ resemble:
 ## Non-goals
 
 - Mouse-position driven interaction, pixel comparison, screenshots
-  (GuiVerb F070 territory; a later proposal).
-- Full ARIA vocabulary (Milestones 2-3 of GuiVerb: landmarks, tables,
-  drag and drop, key events) — this proposal only opens the way.
+  (GUI-tool territory; a later proposal).
+- Full ARIA vocabulary (later milestones: landmarks, tables,
+  drag and drop, key events). This proposal only opens the way.
 - Browser/webdriver backends.
 - Any change to CLI-only scenario behavior.
 
@@ -125,9 +120,9 @@ resemble:
 - When I run `bbt gui_scenario.md`
 - Then the only scenario step result is passed
 
-(GuiVerb's witness applications serve as the program under test; the
-witness access environment setup is part of the backend's job, not the
-scenario's.)
+(The applications under test are small witness programs, launched by
+the backend like any scenario binary; their accessibility environment
+setup is part of the backend's job, not the scenario's.)
 
 ## Design implications
 
@@ -142,15 +137,13 @@ scenario's.)
   state) — still one record, no variant type.
 - Runner: the GUI backend choice is a runner setting, like the
   platform; `BBT.Tests.Runner` dispatches GUI actions to it.
-- GuiVerb is the design reference for the backend API surface (launch,
-  poll with bounded deadline, shutdown) and for the accessibility bus
-  handling (libatspi, lazy init, no D-Bus programming); bbt needs its
-  own Ada binding or a reworked extraction of GuiVerb's.
+- The backend API surface is launch, poll with bounded deadline,
+  shutdown; bbt has its own Ada binding.
   
 ## Open questions
 
 - Backend-first order (AT-SPI only at first, webdriver later).
-- How best to freeze the MVP role set (GuiVerb F050 set) and to report
+- How best to freeze the MVP role set, and how to report
   an unknown role.
 - Whether `eventually` becomes a general step qualifier (retry with
   deadline) usable on CLI steps too, or stays GUI-specific.

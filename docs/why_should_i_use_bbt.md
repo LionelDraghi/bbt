@@ -46,4 +46,19 @@ You can push it on GitHub without further processing.
 To see what it looks like, consider [*bbt* own tests](tests_results/Linux/features_results.md).  
 
 Test results are generated when running *bbt*, by just using the `--output | -o` option.
+
+## Prefer end-to-end tests
+
+Everything above boils down to one guideline, the same one that
+[Sergio Delgado's frontend-testing best practices](https://github.com/sergiodxa/agent-skills)
+summarize in four rules:
+
+- **Prefer E2E tests over unit tests** — test the whole system, not isolated pieces;
+- **Minimize mocking** — if you need complex mocks, write an E2E test instead;
+- **Test behavior, not implementation** — assert what users see and do, not how the code is organized;
+- **Don't test UI components directly** — exercise them through the user path.
+
+*bbt* applies exactly this philosophy, with an extra twist: since scenarios
+need no driver other than the CLI, and no mocking at all, they can live
+right in the README — one single source of truth for documentation and tests.
   

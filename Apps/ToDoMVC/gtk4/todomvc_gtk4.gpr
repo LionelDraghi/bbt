@@ -1,0 +1,19 @@
+-- ---------------------------------------------------------------------------
+-- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+-- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+-- SPDX-FileCopyrightText: 2026 Lionel Draghi
+-- ---------------------------------------------------------------------------
+with "gtkada.gpr";
+
+project TodoMvc_Gtk4 is
+
+   for Source_Dirs use ("src");
+   for Object_Dir use "obj";
+   for Exec_Dir use ".";
+   for Main use ("todomvc");
+
+   package Compiler is
+      for Switches ("ada") use ("-gnat2022", "-gnatwa");
+   end Compiler;
+
+end TodoMvc_Gtk4;

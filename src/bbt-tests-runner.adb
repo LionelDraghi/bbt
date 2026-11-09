@@ -19,8 +19,6 @@ with BBT.Created_File_List,
      BBT.Tests.Actions.Output_Checks,
      BBT.Tests.Actions.Setup,
      BBT.Tests.GUI_Backends,
-     BBT.Tests.GUI_Backends,
-     BBT.Writers,
      File_Utilities,
      Text_Utilities;
 

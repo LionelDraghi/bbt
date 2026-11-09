@@ -9,6 +9,7 @@
 - [What does the behavior description look like?](#what-does-the-behavior-description-look-like)
 - [A small example](#a-small-example)
 - [Real life examples](#real-life-examples)
+- [Other uses](#other-uses)
 - [Partial parsing](#partial-parsing)
 - [Installation](#installation)
   - [Stable version](#stable-version)
@@ -24,7 +25,6 @@
   - [As a user](#as-a-user)
   - [As a developer](#as-a-developer)
   - [As a curious reader](#as-a-curious-reader)
-  - [Reading map](#reading-map)
 
 
 ## Overview
@@ -271,15 +271,5 @@ The reading is organized by role:
 - A very short intro to the genesis of the project: [My dream way of testing](https://dev.to/lioneldraghi/my-dream-way-of-testing-8m9)
 - [Comparables](docs/comparables.md): existing comparables and inspiring references
 - [bbt on the web](docs/bbt_on_the_net.md)
-
-### Reading map
-
-Some documents are worth reading for several roles:
-
-| Document                                                                | As a user | As a developer | As a curious reader |
-|-------------------------------------------------------------------------|:---------:|:--------------:|:-------------------:|
-| [References](docs/references.md): syntax, grammar, non obvious behavior |     x     |       x        |                     |
-| [Changelog](docs/changelog.md)                                          |     x     |       x        |          x          |
-| [Project status](docs/dev/project.md): tests, TDL                           |           |       x        |          x          |
 
 [^1]: More precisely, *bbt* complies (mostly) with [Markdown with Gherkin (MDG)](https://github.com/cucumber/gherkin/blob/main/MARKDOWN_WITH_GHERKIN.md#markdown-with-gherkin), a convention to embed Gherkin scenarios in GitHub Flavored Markdown files. 

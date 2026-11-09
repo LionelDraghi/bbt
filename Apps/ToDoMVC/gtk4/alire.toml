@@ -1,0 +1,21 @@
+# bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+# SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+# SPDX-FileCopyrightText: 2026 Lionel Draghi
+
+name = "todomvc_gtk4"
+description = "ToDoMVC witness app (GTK4), for the bbt GUI vocabulary"
+version = "0.1.0-dev"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+
+executables = ["todomvc"]
+
+[[depends-on]]
+gtkada4 = "^27.0.0"
+
+[[pins]]
+gtkada4 = { url='https://github.com/AdaCore/gtkada' }
