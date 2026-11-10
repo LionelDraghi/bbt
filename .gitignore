@@ -42,3 +42,9 @@ tests/file_utilities_tests/test_file_utilities.md
 
 # Misc scratch
 /tmp/
+
+# Web debugger (gnoga) assets, deployed next to the binary by BBT.GUI
+/html/
+/js/
+/tests/html/
+/tests/js/

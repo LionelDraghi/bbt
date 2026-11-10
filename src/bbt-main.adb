@@ -7,6 +7,7 @@
 with BBT.IO,
      BBT.Model.Documents,
      BBT.Cmd_Line,
+     BBT.GUI,
      BBT.Scenarios.Files,
      BBT.Scenarios.Readers.Adoc_Reader,
      BBT.Scenarios.Readers.MDG_Reader,
@@ -83,7 +84,7 @@ begin
       -- Default, for when there is no explicit --output
    end if;
 
-   if not Settings.No_TTY then
+   if not (Settings.No_TTY or else Settings.Gui) then
       --  The status bar is the default, when the standard output is
       --  a terminal; --no_tty disables it, and wins over
       --  --force_status_bar.
@@ -141,7 +142,14 @@ begin
       Status_Bar.Put_Activity ("Analyzing documents");
       Analyze_Documents;
 
-      if IO.No_Error or Settings.Keep_Going then
+      if Settings.Gui then
+         --  GUI mode: hand over the execution to the interactive
+         --  debugger window, and print the results when it closes.
+         BBT.GUI.Run;
+         Model.Documents.Sum_Results (Model.Documents.Doc_List.all);
+         Writers.Put_Overall_Results;
+
+      elsif IO.No_Error or Settings.Keep_Going then
          -- Real run --
          Status_Bar.Put_Activity ("Running non filtered items");
          Tests.Runner.Run_All;

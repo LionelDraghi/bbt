@@ -1605,13 +1605,6 @@
    - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [the powershell shell is set on the command line (Windows_Only)](../../features/A310_Run_Shell.md) pass  
 
-   ### Scenario: [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md): 
-   - OK : Given the new file `shell_test.md`  
-   - OK : When I run `./bbt --shell=pwsh -c shell_test.md`  
-   - OK : Then I get no error  
-   - OK : And the output contains `## Summary : **Success**, 1 scenarios OK`  
-   - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../features/A310_Run_Shell.md) pass  
-
 
 # Document: [B010_Deleting_created_files.md](../../features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
@@ -2871,12 +2864,12 @@
    - [X] scenario   [](../../features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 282 scenarios OK
+## Summary : **Success**, 281 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 282   |
+| Successful | 281   |
 | Empty      | 0     |
-| Not Run    | 16    |
+| Not Run    | 17    |
 

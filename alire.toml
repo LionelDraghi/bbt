@@ -49,3 +49,6 @@ bbt = "validation"
 [[depends-on]]
 termicap = "^1.0.0"
 
+[[depends-on]]
+gnoga = "^2.2.3"
+

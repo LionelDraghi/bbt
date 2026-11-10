@@ -41,6 +41,8 @@ private package BBT.Settings is
 
    -- --------------------------------------------------------------------------
    Keep_Going            : Boolean    := False; -- if set, do not exit on assertion failure
+   Gui                   : Boolean    := False;
+   -- --gui: run under the interactive debugger window
    Ignore_Errors         : Boolean    := False; -- if set, return no error code when a test fails
    Warnings_As_Errors    : Boolean    := False;
    No_File_Given         : Boolean    := True;

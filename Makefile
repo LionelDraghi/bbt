@@ -26,7 +26,7 @@ sut$(EXE_SUFFIX): tools
 rpl$(EXE_SUFFIX): tools
 	@:
 
-.PHONY : help tools
+.PHONY : all help tools build release check features examples sanity doc install
 help:
 	echo "Usage: make [target]"
 	echo ""
@@ -41,6 +41,8 @@ help:
 	echo "  features   : run the functional tests only (docs/features)"
 	echo "  examples   : run the sanity checks only (docs/examples)"
 	echo "  sanity     : alias of examples"
+	echo "  GUI=1      : modifier: run features/examples/check (and a single"
+	echo "               test) under the interactive bbt --gui debugger window"
 	echo "  doc        : regenerate the generated docs (help reference files,"
 	echo "                indexes, badges) and check the links with mlc"
 	echo "  install    : copy bbt to ~/bin"
@@ -73,9 +75,13 @@ build:
 	echo
 	echo === building bbt for dev
 	mkdir -p obj
+	# The gnoga crate (web debugger) carries test fixtures with path
+	# depths that break Alir's build dir sync on Windows: trim the
+	# cached copies before any extraction or build (cf. the script
+	# header, idempotent, no-op without gnoga).
+	@ ./tools/prepare_gnoga.sh
 	if [ ! -f $(ALIRE_STAMP) ] \
 	    || [ alire/alire.lock -nt $(ALIRE_STAMP) ] \
-	    || [ alire/alire.toml -nt $(ALIRE_STAMP) ] \
 	    || [ src/Alire_config/bbt_config.gpr -nt $(ALIRE_STAMP) ] \
 	    || [ "`cat $(ALIRE_STAMP) 2>/dev/null`" != "validation" ]; then \
 	    echo === full alire sync and build; \
