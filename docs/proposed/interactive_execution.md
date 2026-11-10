@@ -1,5 +1,26 @@
 # Interactive Execution and Debugging
 
+> **Status — partially implemented (v0.6.1-dev).**
+>
+> Done: controllable execution (halt points before each step,
+> scenario, feature and file), execution events carrying stable
+> source locations, the Step and Continue commands (Continue with a
+> scope, and run to the end in the absence of breakpoints), and the
+> first control API client: the web debugger of `bbt --gui` (embedded
+> gnoga server), merged from the interactive_execution branch.
+>
+> Two deviations from the text below: the GUI is web based (gnoga)
+> rather than native - the terminal sharing argument stands, and the
+> embedded server keeps `--gui` self contained, with the browser as
+> the display; and the command set is Step / Continue only, the
+> proposal's other commands being gated on breakpoint support.
+>
+> Remaining: breakpoints (Set_Breakpoint / Clear_Breakpoint, their
+> GUI support, and the "Continue until the next breakpoint"
+> semantics), the explicit Pause command, step output and error
+> visualisation in the debugger, an automated control API test, and
+> the HAC scripting client.
+
 ## Motivation
 
 BBT makes Markdown directly executable.
