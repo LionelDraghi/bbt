@@ -2,7 +2,7 @@
 # Should be called with 
 # 	@ $(MAKE) doc DOC_DIR=$(RESULTS_DIR) EXE_SUFFIX=$(EXE_SUFFIX) --directory=file_utilities_tests 
 
-.PHONY : clean test_file_utilities
+.PHONY : all clean doc build check test_file_utilities
 
 all: check
 

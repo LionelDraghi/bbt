@@ -5,6 +5,7 @@
 -- -----------------------------------------------------------------------------
 
 with BBT.Created_File_List,
+     BBT.Execution_Control,
      BBT.Model,
      BBT.Model.Documents,
      BBT.Model.Features,
@@ -23,6 +24,7 @@ with BBT.Created_File_List,
      Text_Utilities;
 
 use BBT.Created_File_List,
+    BBT.Execution_Control,
     BBT.Model,
     BBT.Model.Documents,
     BBT.Model.Features,
@@ -541,6 +543,22 @@ package body BBT.Tests.Runner is
       Run_Error : Boolean := False;
       Verbosity : constant Verbosity_Levels :=
                     (if Scen.Is_Background then Verbose else Normal);
+      Scen_Label : constant Ada.Strings.Unbounded.Unbounded_String :=
+                     (if Scen.Is_Background
+                      then Ada.Strings.Unbounded.Null_Unbounded_String
+                      else To_Unbounded_String (+Scen.Name));
+      Feature_Label : constant Ada.Strings.Unbounded.Unbounded_String :=
+                        (if Scen.Is_Background
+                           or else Scen.Parent = null
+                           or else not Is_In_Feature (Scen)
+                         --  Scenarios directly attached to a document
+                         --  are parented by the document itself: no
+                         --  feature to display.
+                         then Ada.Strings.Unbounded.Null_Unbounded_String
+                         else To_Unbounded_String (+Scen.Parent.Name));
+      --  The display labels of the current scenario and its feature,
+      --  empty for background scenarios: their steps are conceptually
+      --  part of the parent scenario.
    begin
       Reset_Error_Counts;
       if Scen.Filtered then
@@ -556,13 +574,32 @@ package body BBT.Tests.Runner is
          Put_Scenario_Start (Scen, Verbosity);
 
          Step_Processing : for Step of Scen.Step_List loop
+            if Stopping_At (Next_Step) then
+               Notify ((Kind     => Before_Step,
+                        Location => Step.Location,
+                        Failed   => False,
+                        Label    => Scen_Label,
+                        Feature  => Feature_Label));
+            end if;
+            --  Before the halt: at a step stop, the highlighted line is
+            --  the one about to run, debugger style.
+            Halt (Next_Step);
             Status_Bar.Tick;
             Run_Step (Step      => Step,
                       Run_Error => Run_Error,
                       Verbosity => Verbosity);
+            Notify ((Kind     => After_Step,
+                     Location => Step.Location,
+                     Failed   => Run_Error,
+                     Label    => Scen_Label,
+                     Feature  => Feature_Label));
+            if Run_Error then
+               Halt_On_Error;
+            end if;
             Add_Result (Success => (not Run_Error) and IO.No_Error,
                         To      => Scen);
-            exit Step_Processing when IO.Some_Error and Settings.Stop_On_Error;
+            exit Step_Processing when IO.Some_Error and Settings.Stop_On_Error
+                                       and not Controls_Execution;
 
          end loop Step_Processing;
 
@@ -583,6 +620,17 @@ package body BBT.Tests.Runner is
    -- --------------------------------------------------------------------------
    procedure Run_Feature (F : in out Feature_Type'Class) is
    begin
+      if Stopping_At (Next_Feature) then
+         Notify ((Kind     => Before_Feature,
+                  Location => F.Location,
+                  Failed   => False,
+                  Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
+                  Feature  => To_Unbounded_String (+F.Name)));
+      end if;
+      --  Just before the halt, so a stop at a feature boundary shows
+      --  the incoming feature on the debugger's location line.
+
+      Halt (Next_Feature);
       BBT.Writers.Put_Feature_Start (F);
       Set_Start_Time (F);
 
@@ -658,6 +706,20 @@ package body BBT.Tests.Runner is
    procedure Run_Scenario_List (L : in out Scenario_Lists.Vector) is
    begin
       for Scen of L loop
+         if not Scen.Is_Background then
+            if Stopping_At (Next_Scenario) then
+               Notify ((Kind     => Before_Scenario,
+                        Location => Scen.Location,
+                        Failed   => False,
+                        Label    => To_Unbounded_String (+Scen.Name),
+                        Feature  => (if Is_In_Feature (Scen)
+                                     then To_Unbounded_String (+Scen.Parent.Name)
+                                     else Ada.Strings.Unbounded.Null_Unbounded_String)));
+            end if;
+            --  Before the halt: at a scenario boundary stop, the
+            --  location line already shows the incoming scenario.
+         end if;
+         Halt (Next_Scenario);
          Set_Scenario_Deadline;
          --  The timeout budget covers the scenario and its backgrounds
          --  (cf. the design discussion D6), not the cleanup.
@@ -676,7 +738,8 @@ package body BBT.Tests.Runner is
          Reset_Interactive_State;
          -- Variables set in the scenario or its backgrounds apply to that
          -- scenario only.
-         exit when IO.Some_Error and not Settings.Keep_Going;
+         exit when IO.Some_Error and not Settings.Keep_Going
+                    and not Controls_Execution;
       end loop;
    end Run_Scenario_List;
 
@@ -685,6 +748,7 @@ package body BBT.Tests.Runner is
       use File_Utilities;
       --  File_Count : constant Natural :=
       --                 Natural (Tests.Builder.The_Tests_List.Length);
+      -- package CVer is new GNAT.Compiler_Version;
       -- package CVer is new GNAT.Compiler_Version;
 
    begin
@@ -696,6 +760,18 @@ package body BBT.Tests.Runner is
       end if;
 
       Set_Start_Time (Doc);
+
+      if Stopping_At (Next_File) then
+         Notify ((Kind     => Before_File,
+                  Location => Doc.Location,
+                  Failed   => False,
+                  Label    => To_Unbounded_String (+Doc.Name),
+                  Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
+      end if;
+      --  Source the debugger with the incoming file before stopping:
+      --  pausing at a file boundary changes the page content.
+
+      Halt (Next_File);
 
       if Settings.Full_Cleanup then
          --  Snapshot of the exec dir before any file of this document
@@ -721,7 +797,9 @@ package body BBT.Tests.Runner is
          -- Run scenarios directly attached to the document
          -- (that is not in a Feature)
          Run_Scenario_List (Doc.Scenario_List);
-         if IO.Some_Error and Settings.Stop_On_Error then
+         if IO.Some_Error and Settings.Stop_On_Error
+                            and not Controls_Execution
+         then
             Set_End_Time (Doc);
             return;
          end if;
@@ -729,7 +807,9 @@ package body BBT.Tests.Runner is
          for F of Doc.Feature_List loop
             -- Then run scenarios attached to each Feature
             Run_Feature (F);
-            if IO.Some_Error and Settings.Stop_On_Error then
+            if IO.Some_Error and Settings.Stop_On_Error
+                               and not Controls_Execution
+            then
                Set_End_Time (Doc);
                return;
             end if;
@@ -769,6 +849,12 @@ package body BBT.Tests.Runner is
       -- First, let's move to a different exec dir, if any
       Ada.Directories.Set_Directory (Settings.Exec_Dir);
 
+      Notify ((Kind     => Execution_Started,
+               Failed   => False,
+               Location => No_Location,
+               Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
+               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
+
       if not Ada.Directories.Exists (Settings.Tmp_Dir) then
          Created_File_List.Add (Settings.Tmp_Dir);
          Ada.Directories.Create_Path (Settings.Tmp_Dir);
@@ -798,11 +884,19 @@ package body BBT.Tests.Runner is
       for D of Doc_List.all loop
          Run_Doc (D);
 
-         if IO.Some_Error and Settings.Stop_On_Error then
+         if IO.Some_Error and Settings.Stop_On_Error
+                            and not Controls_Execution
+         then
             exit;
          end if;
 
       end loop;
+
+      Notify ((Kind     => Execution_Finished,
+               Failed   => False,
+               Location => No_Location,
+               Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
+               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
 
       GUI_Backends.Shutdown;
 

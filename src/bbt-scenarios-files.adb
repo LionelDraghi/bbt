@@ -10,12 +10,15 @@ with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
 with BBT.Model.Steps;
+with BBT.Execution_Control;             use BBT.Execution_Control;
 with BBT.Model;                         use BBT.Model;
 with BBT.IO;
 with BBT.Scenarios.Readers;             use BBT.Scenarios.Readers;
 with BBT.Scenarios.Steps;
 with BBT.Settings;                      use BBT.Settings;
 with BBT.Tests.Builder;                 use BBT.Tests.Builder;
+
+with Text_Utilities;                    use Text_Utilities;
 
 with List_Image;
 
@@ -156,6 +159,12 @@ package body BBT.Scenarios.Files is
       Lexer_Context : Parsing_Context := Initialize_Context;
       Loc           : Location_Type   := Location (File_Name, 0);
 
+      The_Lines : Text := Empty_Text;
+      --  The verbatim file content, to be handed over to the execution
+      --  control layer for interactive display clients. No extra file
+      --  access: the lines are duplicated on the fly, from the very
+      --  same reads as the parsing.
+
       File_Format : constant Valid_Input_Format := Readers.Format (File_Name);
 
    begin
@@ -194,6 +203,7 @@ package body BBT.Scenarios.Files is
             function Attrib_Padding is new Padding (Line_Kind);
 
          begin
+            The_Lines := The_Lines & Line;
             Put_Debug_Line (Attrib.Kind'Image & Attrib_Padding (Attrib.Kind)
                             & Line'Image, Loc);
             case Attrib.Kind is
@@ -235,6 +245,12 @@ package body BBT.Scenarios.Files is
          end Line_Processing;
 
       end loop;
+
+      Set_Source (File_Name => BBT.IO.File (Loc),
+                  Content   => The_Lines);
+      --  Keyed on the normalized file name, i.e. the same string that
+      --  step and document locations carry, so that the interactive
+      --  display clients retrieve the source without file access.
 
       Tests.Builder.Close_Document (Loc);
 

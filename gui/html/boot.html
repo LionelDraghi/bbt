@@ -1,0 +1,85 @@
+<!doctype HTML>
+<HTML>
+   <HEAD>
+      <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+      <meta http-equiv="Pragma" content="no-cache" />
+      <meta http-equiv="Expires" content="0" />
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>bbt debugger</title>
+      <script src="/js/jquery.min.js" type="text/javascript"></script>
+      <script src="/js/boot.js" type="text/javascript"></script>
+      <script src="/js/mermaid.min.js" type="text/javascript"></script>
+      <script src="/js/page.js" type="text/javascript"></script>
+      <style>
+         body { font-family: sans-serif; margin: 10px; background: #fafafa; }
+         #topbar { margin-bottom: 4px; }
+         #topbar button { margin-right: 6px; padding: 4px 10px; }
+         #status { display: inline-block; margin-left: 10px; color: #444; }
+         #locbar { margin-bottom: 6px; color: #666; font-size: 10pt; }
+         #locbar .loc { display: inline; }
+         #locbar .progress {
+            display: block;
+            margin-top: 3px;
+            height: 4px;
+            background: #e8e8e8;
+            border-radius: 2px;
+         }
+         #progress_fill {
+            display: block;
+            height: 100%;
+            width: 0px;
+            background: #4a90d9;
+            border-radius: 2px;
+            transition: width 0.3s;
+         }
+         #content {
+            position: relative;
+            font-family: "Cascadia Mono", Consolas, Menlo, monospace;
+            font-size: 10pt;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 0;
+            overflow: auto;
+            max-height: 85vh;
+            white-space: pre;
+            counter-reset: ln;
+            scroll-behavior: smooth;
+         }
+         .line { padding: 0 8px 0 0; border-radius: 3px; }
+         /* Line numbers: a gutter column, kept, by CSS counters, in sync
+            with the file lines: one div.line per source line */
+         .line::before {
+            counter-increment: ln;
+            content: counter(ln);
+            display: inline-block;
+            width: 3em;
+            padding: 0 8px 0 6px;
+            margin-right: 10px;
+            text-align: right;
+            color: #b0b0b0;
+            background: #f4f4f4;
+            border-right: 1px solid #e4e4e4;
+            user-select: none;
+            pointer-events: none;
+         }
+         .hl   { background: #ffef99; }
+         .hl::before { background: #ffe27a; color: #5a4a00; font-weight: bold; }
+         .fail { background: #ffb3a7; }
+         .fence { background: #f6f8fa; }
+         .md_h1 { font-weight: bold; font-size: 115%; color: #222; margin-top: 6px; }
+         .md_h2 { font-weight: bold; font-size: 108%; color: #333; margin-top: 4px; }
+         .md_h3 { font-weight: bold; color: #444; }
+         code { background: #eee; padding: 0 3px; border-radius: 2px; font-family: inherit; }
+         a.toc { color: #0366d6; text-decoration: none; cursor: pointer; }
+         a.toc:hover { text-decoration: underline; }
+         .quote { color: #6a737d; font-style: italic; }
+         .mm { color: #666; background: #fbfbfd; }
+         .mm svg { display: block; margin: 4px 0; max-width: 100%; }
+      </style>
+   </HEAD>
+<BODY>
+</BODY>
+<noscript>Your browser must support JavaScript and be HTML 5 compliant to see this site.</noscript>
+</HTML>

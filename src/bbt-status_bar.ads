@@ -52,4 +52,12 @@ private package BBT.Status_Bar is
    --  Redraw the bar at the current position, if the current line is clean.
    --  Called by BBT.IO after a completed line.
 
+   --  -------------------------------------------------------------------------
+   function Scenarios_Done   return Natural;
+   function Scenarios_Failed return Natural;
+   function Scenarios_Total  return Natural;
+   --  Progress counters, for display clients (e.g. the GUI progress
+   --  bar). Scenarios_Done counts scenarios ended so far, and stays
+   --  meaningful while paused in the middle of the run.
+
 end BBT.Status_Bar;

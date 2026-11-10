@@ -210,6 +210,11 @@ package body BBT.Status_Bar is
    end Clear;
 
    --  -------------------------------------------------------------------------
+   function Scenarios_Done   return Natural is (Done_Scenarios);
+   function Scenarios_Failed return Natural is (Failed_Scenarios);
+   function Scenarios_Total  return Natural is (Total_Scenarios);
+
+   --  -------------------------------------------------------------------------
    procedure Draw is
       --  When scenarios have failed, the whole bar is red, so that the
       --  failure cannot be missed, whatever happens next

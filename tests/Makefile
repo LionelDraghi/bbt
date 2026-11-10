@@ -25,12 +25,22 @@ RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 COMMON_OPTIONS := --yes --keep_going --cleanup=full --quiet \
 --human_match --scenario_timeout 30
 
+# GUI=1 : interactive debug session under the bbt --gui debugger
+# window instead of the batch run. No scenario timeout (the deadline
+# is wall clock, so halt time would count against it, cf. bbt-main),
+# and in features, no test report output (junit, badge, index):
+# a debug session is not a check.
+ifneq ($(GUI),)
+COMMON_OPTIONS := --yes --cleanup=full --quiet --human_match
+endif
+
 # The empty recipe is required: without it, make would pick the
 # catch-all single-test rule below to "build" all, and fail.
 all: check
 	@:
 
-.PHONY : help clean distclean setup check features examples non_reg unit_testing doc
+.PHONY : all help clean distclean setup check features examples non_reg \
+         unit_testing doc build refresh_bbt
 
 help:
 	@ echo "Usage: make [target]"
@@ -61,6 +71,8 @@ help:
 	@ echo "root directory: it runs the scenario with the right options, and"
 	@ echo "prints the exact command line, ready to be grabbed and tweaked"
 	@ echo "(e.g. replace ./bbt with ./bbt explain, or add -d for traces)."
+	@ echo "Add GUI=1 to run under the interactive bbt --gui debugger"
+	@ echo "window (cf. the features suite's report options)."
 
 # --------------------------------------------------------------------------
 # Replay a single functional test by id, e.g. make A300 or make B010.
@@ -76,8 +88,8 @@ help:
 	    echo "no feature test file with id $@ in ../docs/features"; \
 	    exit 1; \
 	fi; \
-	echo "=== running: (cd tests && ./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $$f)"; \
-	./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $$f
+	echo "=== running: (cd tests && ./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $(if $(GUI),--gui,) $$f)"; \
+	./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $(if $(GUI),--gui,) $$f
 
 
 
@@ -138,21 +150,21 @@ features: setup
 	@ # Then test all the features
 	@ echo 1. features tests ================
 	@ ./bbt --version
-	./bbt $(COMMON_OPTIONS) \
+	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
 	--exclude @Flaky \
 	$(EXCLUDE) \
 	$(NEEDS_SHELL_EXCLUDE) \
-	--generate_badge $(RESULTS_DIR)/badge.url   \
-	--junit $(RESULTS_DIR)/features_results.xml \
-	--index $(RESULTS_DIR)/features_results.md  \
-	../docs/features 
+	$(if $(GUI),,--generate_badge $(RESULTS_DIR)/badge.url)  \
+	$(if $(GUI),,--junit $(RESULTS_DIR)/features_results.xml) \
+	$(if $(GUI),,--index $(RESULTS_DIR)/features_results.md)  \
+	../docs/features
 	@ echo
 
 examples: setup
 	@ # Check examples
 	@ echo 2. examples check ================
 	@ ./bbt --version
-	./bbt $(COMMON_OPTIONS) \
+	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
 	@ echo
@@ -166,9 +178,9 @@ non_reg: setup
 	@ # Then run non reg tests
 	@ echo 3. non regression tests ==========
 	@ ./bbt --version
-	./bbt $(COMMON_OPTIONS) \
-	--index $(RESULTS_DIR)/non_reg_tests.md \
-	../tests/non_reg_tests 
+	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
+	$(if $(GUI),,--index $(RESULTS_DIR)/non_reg_tests.md) \
+	../tests/non_reg_tests
 	@ echo
 
 unit_testing:

@@ -56,7 +56,8 @@ termicap = "^1.0.0"
 [[depends-on]]
 libglib = "*"
 
-[available.'case(os)']
-linux = true
-'...' = false
+#  The interactive execution debugger is served by an embedded gnoga
+#  web server (src/bbt-gui, cf. the interactive execution proposal).
+[[depends-on]]
+gnoga = "^2.2.3"
 

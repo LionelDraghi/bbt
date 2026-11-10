@@ -332,6 +332,9 @@ package body BBT.Cmd_Line is
             elsif Cmd = "-k" or Cmd = "--keep_going" then
                Settings.Keep_Going := True;
 
+            elsif Cmd = "--gui" then
+               Settings.Gui := True;
+
             elsif Cmd = "-Werror" then
                Settings.Warnings_As_Errors := True;
 
