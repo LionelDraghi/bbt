@@ -91,7 +91,10 @@ build:
 	    || [ "`cat $(ALIRE_STAMP) 2>/dev/null`" != "validation" ]; then \
 	    echo === full alire sync and build; \
 	    alr --non-interactive update \
-	      && ./tools/prepare_gnoga.sh \
+	      || (echo === dirty index clone, resetting community; \
+	          alr index --reset-community \
+	          && alr --non-interactive update); \
+	    ./tools/prepare_gnoga.sh \
 	      && alr --non-interactive build --validation \
 	      && echo validation > $(ALIRE_STAMP); \
 	else \
