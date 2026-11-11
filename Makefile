@@ -79,13 +79,20 @@ build:
 	# depths that break Alir's build dir sync on Windows: trim the
 	# cached copies before any extraction or build (cf. the script
 	# header, idempotent, no-op without gnoga).
+	# Alire deploys new dependency crates (e.g. a first gnoga
+	# download) during the sync itself, and the gnoga copies must be
+	# trimmed and patched after this deploy, before the build: the
+	# preparation thus runs twice, before the sync for updates of
+	# already cached crates, and after it for freshly deployed ones.
 	@ ./tools/prepare_gnoga.sh
 	if [ ! -f $(ALIRE_STAMP) ] \
 	    || [ alire/alire.lock -nt $(ALIRE_STAMP) ] \
 	    || [ src/Alire_config/bbt_config.gpr -nt $(ALIRE_STAMP) ] \
 	    || [ "`cat $(ALIRE_STAMP) 2>/dev/null`" != "validation" ]; then \
 	    echo === full alire sync and build; \
-	    alr --non-interactive build --validation \
+	    alr --non-interactive update \
+	      && ./tools/prepare_gnoga.sh \
+	      && alr --non-interactive build --validation \
 	      && echo validation > $(ALIRE_STAMP); \
 	else \
 	    echo === fast incremental build, dependencies unchanged; \

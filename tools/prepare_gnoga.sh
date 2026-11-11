@@ -26,7 +26,9 @@ Patch_Rules="$Script_Dir/../patches/gnoga-*.sed"
 
 Trimmed=0
 Patched=0
-for Cache in "$LOCALAPPDATA/alire/cache" "$HOME/.local/share/alire/cache"; do
+# LOCALAPPDATA is only set on Windows, hence the default: pick up
+# the gnoga copies wherever the Alire cache lives.
+for Cache in "${LOCALAPPDATA:-}/alire/cache" "$HOME/.local/share/alire/cache"; do
    [ -d "$Cache" ] || continue
    for Gnoga in $("$Find_Cmd" "$Cache/releases" "$Cache/builds" \
                     -maxdepth 1 -type d -name 'gnoga_*' 2>/dev/null); do
