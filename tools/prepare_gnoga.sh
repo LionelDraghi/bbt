@@ -28,9 +28,14 @@ Trimmed=0
 Patched=0
 # LOCALAPPDATA is only set on Windows, hence the default: pick up
 # the gnoga copies wherever the Alire cache lives.
-for Cache in "${LOCALAPPDATA:-}/alire/cache" "$HOME/.local/share/alire/cache"; do
+for Cache in "${LOCALAPPDATA:-}/alire/cache" "$HOME/.local/share/alire/cache" \
+             "$Script_Dir/../alire/cache"; do
    [ -d "$Cache" ] || continue
+   # The sandbox cache (last candidate) holds the copies the build
+   # really compiles with Alir 2.x; releases/ and builds/ are the
+   # older user-level layout, kept for compatibility.
    for Gnoga in $("$Find_Cmd" "$Cache/releases" "$Cache/builds" \
+                   "$Cache/dependencies" \
                     -maxdepth 1 -type d -name 'gnoga_*' 2>/dev/null); do
       for Trim in deps/zanyblue/src/test deps/zanyblue/doc \
                   deps/zanyblue/examples demo test ; do
