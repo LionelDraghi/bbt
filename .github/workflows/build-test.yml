@@ -162,6 +162,21 @@ jobs:
           restore-keys: |
             ${{ matrix.os }}-alire-
 
+      - name: Refresh the community index and raise the solver timeout
+        # The community index clone travels in the restored cache, and
+        # a hybrid checkout state (untracked files against a refreshed
+        # remote head) is rejected by the index update: "untracked
+        # working tree files would be overwritten by merge". The
+        # clone is rebuildable cache state, so simply rebuild it with
+        # the alr recovery command. The solver timeout is raised at
+        # the same time: the alr default is very short, and resolution
+        # timed out on windows-latest (workaround borrowed from the
+        # alire-index CI scripts).
+        shell: bash
+        run: |
+          alr index --reset-community
+          alr settings --global --set solver.timeout 120
+
       - name: Cache Cargo dependencies
         uses: actions/cache@v4
         with:
