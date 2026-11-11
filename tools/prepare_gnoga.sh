@@ -26,9 +26,26 @@ Patch_Rules="$Script_Dir/../patches/gnoga-*.sed"
 
 Trimmed=0
 Patched=0
+# Alr's reusable cache root, when relocated: a cache moved far away
+# from the hardcoded candidates below (e.g. C:\alr-cache on the CI,
+# cf. the "Relocate the Alire cache on Windows" build-test.yml step)
+# is invisible to them. Keep the value only if it names an existing
+# directory (alr may print warnings on stdout), and convert Windows
+# backslashes: msys find handles forward slashes more reliably.
+Alr_Cache=""
+if command -v alr >/dev/null 2>&1; then
+   Alr_Cache="$(alr settings --global --get cache.dir 2>/dev/null \
+                | tr -d '\r\n' || true)"
+   Alr_Cache="${Alr_Cache//\\//}"
+   [ -d "$Alr_Cache" ] || Alr_Cache=""
+fi
 # LOCALAPPDATA is only set on Windows, hence the default: pick up
-# the gnoga copies wherever the Alire cache lives.
-for Cache in "${LOCALAPPDATA:-}/alire/cache" "$HOME/.local/share/alire/cache" \
+# the gnoga copies wherever the Alire cache lives. dependencies/
+# is the workspace sandbox layout (alr 2.x), releases/ and builds/
+# the user-level layouts (alr 1.x and relocated cache roots).
+for Cache in "${Alr_Cache:-/nonexistent}" \
+             "${Alr_Cache:-/nonexistent}/cache" \
+             "${LOCALAPPDATA:-}/alire/cache" "$HOME/.local/share/alire/cache" \
              "$Script_Dir/../alire/cache"; do
    [ -d "$Cache" ] || continue
    # The sandbox cache (last candidate) holds the copies the build
