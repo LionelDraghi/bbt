@@ -11,6 +11,7 @@ Location | Text
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):65|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios-files.adb](../../src/bbt-scenarios-files.adb):193|            --  to be moved in Text_Utilities or so
 [src/bbt-scenarios-steps-validate_step_state.adb](../../src/bbt-scenarios-steps-validate_step_state.adb):15|   -- To move in Text_Utilities
+[src/bbt-junit_writer.adb](../../src/bbt-junit_writer.adb):136|   --  total time for all docs not implemented: the root `testsuites` element reports the elapsed time of a single document instead of the sum over all documents
 [src/bbt-scenarios.ads](../../src/bbt-scenarios.ads):57|   --  To be moved as dispatching in Writers
 [src/bbt-tests-actions-commands.adb](../../src/bbt-tests-actions-commands.adb):216|      --   a command producing its output in bursts separated by
 [src/bbt-tests-runner.adb](../../src/bbt-tests-runner.adb):118|      --  defensive code that should be replaced by

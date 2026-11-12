@@ -31,24 +31,10 @@ tests/gcc
 tests/gcc.exe
 tests/rpl
 tests/rpl.exe
-tests/main
-tests/main.c
-tests/main.exe
-tests/cp
-tests/cp.exe
 tests/file_utilities_tests/test_file_utilities
 tests/file_utilities_tests/test_file_utilities.exe
-tests/file_utilities_tests/test_file_utilities.md
 
-# Misc scratch
-/tmp/
-
-# Web debugger (gnoga) assets, deployed next to the binary by BBT.GUI
-/html/
-/js/
-/tests/html/
-/tests/js/
-
-# Deployed jstree themes
-/css/
-/tests/css/
+# The test run artifacts, including the fixtures that the scenarios
+# recreate at each run, are NOT listed here: they must stay visible
+# in git status, and they are removed by make clean (see
+# tests/Makefile and the root Makefile clean targets).

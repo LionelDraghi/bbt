@@ -156,7 +156,7 @@ doc: ./bbt$(EXE_SUFFIX)
 	echo                            >> fixme_index.md
 	echo 'Location | Text'          >> fixme_index.md
 	echo '---------|-----'          >> fixme_index.md
-	grep -rn 'Fixme:' docs/* src/* | LC_ALL=C sort | sed -E "s/:/|/2;s/Fixme://;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> fixme_index.md
+	grep -rni 'Fixme:' docs/* src/* | LC_ALL=C sort | sed -E "s/:/|/2;s/[Ff][Ii][Xx][Mm][Ee]://;s/(^[^:]*)/[\1](\.\.\/\.\.\/\1)/" >> fixme_index.md
 	mv fixme_index.md docs/dev/fixme_index.md
 
 	echo === metrics badges
@@ -192,7 +192,8 @@ install: ./bbt$(EXE_SUFFIX)
 clean:
 	echo --- clean:
 	@ $(MAKE) -s clean --directory=tests
-	@ - rm -rf config.ini *.out dir* tmp.txt output2.txt main main.c tmp
+	@ - rm -rf config.ini *.out dir* tmp.txt output2.txt \
+	  main main.c main$(EXE_SUFFIX) tmp html js css
 	echo OK
 	echo
 

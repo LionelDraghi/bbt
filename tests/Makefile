@@ -214,12 +214,20 @@ doc: $(RESULTS_DIR)
 # COMMON_OPTIONS) and bbt removes at the end of each document every
 # file and dir created during the run, whatever created it. A direct
 # run of a single test leaves nothing behind either when invoked as
-# "./bbt --cleanup=full <test_file>". clean then only removes the
-# default output files of plain direct runs, and the unit test
-# results. Any other file, for instance a file of your own, is
-# preserved.
+# "./bbt --cleanup=full <test_file>". clean then removes the default
+# output files, the unit test results and the run debris of plain
+# direct runs: the fixture files and executables that the scenarios
+# recreate at each run (they must stay out of .gitignore, so that a
+# leftover is visible in git status), and the directories they
+# create. Nothing here is kept, except the built binaries and links
+# that the deviation above preserves; any other file, for instance a
+# file of your own, is preserved.
 clean:
 	@ - rm -f *.out *.err file_utilities_tests/test_file_utilities.md
+	@ - rm -f config.ini main.c ask.c cp.c timed.c
+	@ - rm -f main main$(EXE_SUFFIX) ask ask$(EXE_SUFFIX) \
+	     cp cp$(EXE_SUFFIX) timed timed$(EXE_SUFFIX)
+	@ - rm -rf inc dir* html js css
 
 # distclean also removes the binaries and the links
 distclean: clean

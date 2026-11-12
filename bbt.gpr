@@ -30,54 +30,60 @@ project BBT is
    for Main use ("bbt-main.adb");
 
    package Compiler is
-      for Switches ("ada") use ("-gnat2022",
-                                "-g",
-                                "-O0",
-                                "-gnatQ",
-                                "-gnatf",
-                                "-gnato",
-                                "-fstack-check",
-                                "-gnata",
-                                "-gnateE",
-                                "-gnatVa",
-                                "-gnatwa",
-                                "-gnatX0",
-                                "-gnatyabefhiklnprtx");
-      -- -gnatQ : Don't quit
-      -- -gnatf : Full errors
-      -- -gnato : Intermediate overflows to be handled in strict mode.
-      -- -fstack-check : stack checking
-      -- -gnata : assertions
-      -- -gnateE : extra infos in exception messages
-      -- -gnatVa : all validity checks
-      -- -gnatwa : activate most optional warning messages
-      -- -gnatX0 : experimental extensions (for External_Initialization aspect)
+      --  Per-profile objectives:
+      --  - development: iterate fast towards the executable, no
+      --    runtime assertions, static checks still enforced
+      --  - validation: find errors - all checks embedded, no
+      --    time-costly optimization
+      --  - release: deliver an optimized executable, no check and
+      --    no style enforcement
       --
-      -- Style checking :
-      -- a : Check attribute casing
-      -- b : Blanks not allowed at statement end
-      -- e : Check end/exit labels
-      -- f : No form feeds or vertical tabs
-      -- h : No horizontal tabs
-      -- i : Check if-then layout
-      -- k : Check keyword casing
-      -- l : Check layout
-      -- n : Check casing of entities in Standard
-      -- p : Check pragma casing
-      -- r : Check references
-      -- t : Check token spacing
-      --removed  M100 : Set maximum line length
-      -- x : Check extra parentheses.
+      --  -gnatX0 is the level 0 GNAT extension set, required by the
+      --  External_Initialization aspect (bbt-cmd_line-put_help.adb)
+      --
+      --  Style check letters (-gnaty...), per GNAT 16:
+      --  a attribute casing, b no blanks at end of lines, e end/exit
+      --  labels, f no form feeds, h no tabs, i if-then layout, k
+      --  keyword casing, l layout, n Standard casing, p pragma
+      --  casing, r references casing, t token spacing, x no extra
+      --  parentheses
 
-      -- for Default_Switches ("ada") use --Bbt_Config.Ada_Compiler_Switches & "-gnat2022";
-      --                                  ( -- "--coverage",
-      --                                   "-gnat2022",
-      --                                   "-g",
-      --                                   -- "-pg",
-      --                                   "-gnata",
-      --  "-gnatVa",
-      --  -- "-gnatwc.df.fj.jk.klm.op.p.q_qr.r_r.s.itu.wa",
-      --  "-gnatyaCefhIknOprxtAbilu");
+      --  Common to all profiles (cf. comments above): -gnatX0 is
+      --  required by every profile, it compiles
+      --  bbt-cmd_line-put_help.adb.
+      Common_Switches :=
+        ("-gnat2022",   --  Ada 2022 mode
+         "-g",          --  debug info
+         "-gnatX0",     --  level 0 extensions (External_Initialization)
+         "-gnatf",      --  full errors, verbose details
+         "-gnatwa");    --  most optional warnings
+
+      --  Profile-specific additions, on top of Common_Switches:
+      case Bbt_Config.Build_Profile is
+
+         when "development" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-O0",                    --  no optimization, fast compile
+               "-gnatQ",                 --  don't quit, emit ali on errors
+               "-gnatyabefhiklnprtx");   --  style checks, cf. legend
+
+         when "validation" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-gnatyabefhiklnprtx",    --  style checks, cf. legend
+               "-gnato",                 --  overflow checks, strict mode
+               "-fstack-check",          --  stack overflow checks
+               "-gnata",                 --  assertions and contracts enabled
+               "-gnateE",                --  extra infos in exception messages
+               "-gnatVa");               --  all validity checks
+
+         when "release" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-O3",                    --  full optimization
+               "-gnatn");                --  cross-unit inlining
+      end case;
    end Compiler;
 
    package Binder is
