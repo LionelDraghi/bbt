@@ -47,6 +47,31 @@ document.addEventListener ('click', function (event) {
    center_line (e.getAttribute ('data-ln'));
 });
 
+/* The tree panel's width is adjustable through the #divider handle.
+   Delegated mousedown: the divider is inserted by the server at
+   connection time, after this script has run. The drag sets #nav's
+   flex basis inline (it overrides the layout default), clamped to
+   keep room for the content pane. */
+$(document).on ('mousedown', '#divider', function (event) {
+   event.preventDefault ();
+   var nav = document.getElementById ('nav');
+   var move = function (event) {
+      if (!nav) { return; }
+      var x = event.clientX - nav.getBoundingClientRect ().left;
+      x = Math.max (150, Math.min (x, window.innerWidth - 300));
+      nav.style.flexBasis = x + 'px';
+      nav.style.width = x + 'px';
+   };
+   var stop = function () {
+      document.removeEventListener ('mousemove', move);
+      document.removeEventListener ('mouseup', stop);
+      document.body.style.userSelect = '';
+   };
+   document.addEventListener ('mousemove', move);
+   document.addEventListener ('mouseup', stop);
+   document.body.style.userSelect = 'none';
+});
+
 /* Step and failure highlights are requested by the server with a
    'bbt:highlight' custom event on #content: it clears the previous
    highlights, tags the target line, and keeps it in view. */

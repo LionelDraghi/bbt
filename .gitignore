@@ -48,3 +48,7 @@ tests/file_utilities_tests/test_file_utilities.md
 /js/
 /tests/html/
 /tests/js/
+
+# Deployed jstree themes
+/css/
+/tests/css/
