@@ -6,7 +6,6 @@
 
 with Ada.Directories;
 with Ada.Containers.Indefinite_Ordered_Maps;
-with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
@@ -31,11 +30,8 @@ use BBT.Execution_Control;
 
 with BBT.Model;
 with BBT.Model.Documents;
-with BBT.Model.Features;
-with BBT.Model.Scenarios;
 
 with BBT.IO;
-with BBT.Status_Bar;
 with BBT.Tests.Runner;
 with Text_Utilities;
 use Text_Utilities;
@@ -144,11 +140,8 @@ package body BBT.GUI is
    Nav          : Gnoga.Gui.Element.Common.DIV_Access;
    Mainrow      : Gnoga.Gui.Element.Common.DIV_Access;
    Tree         : Gnoga.Gui.Plugin.JSTree.JSTree_Access;
-   Tree_Channel : Gnoga.Gui.Element.Common.DIV_Access;
    --  The POC v4 layout widgets created per connection: Mainrow
-   --  (nav + content side by side), Nav (the scenario tree panel),
-   --  Tree_Channel (the hidden message sink for tree selections;
-   --  cf. the tree section below).
+   --  (nav + content side by side), Nav (the scenario tree panel).
 
    Stop_On_Err : Boolean := True;
    --  Mirror of the runtime Pause_On_Error switch, for the toggle
@@ -588,7 +581,8 @@ package body BBT.GUI is
       use Location_Node_Maps;
 
       Prefix : constant String := File_Name & "|";
-      C      : Cursor := Floor (Line_Node, Prefix & Line_Image (Line));
+      C      : constant Cursor
+         := Floor (Line_Node, Prefix & Line_Image (Line));
 
       Target : constant String :=
                  (if Line = 0
@@ -1144,8 +1138,8 @@ package body BBT.GUI is
       Gnoga.Gui.Plugin.JSTree.Display_Tree
         (Tree, Options =>
                   (Core    => (DblClick_Toggle => False, others => <>),
-                   Plugins => (Gnoga.Gui.Plugin.JSTree.WholeRow => True,
-                               others                          => <>)));
+                   Plugins => [Gnoga.Gui.Plugin.JSTree.WholeRow => True,
+                                others                       => <>]));
       --  WholeRow: each node spans the panel width, so the click
       --  target is the whole row, not just the (short) node text.
       Nav.all.jQuery_Execute
