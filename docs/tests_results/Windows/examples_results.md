@@ -38,21 +38,13 @@
    ### Scenario: [6 : interacting with a program prompt](../../examples/gcc_hello_world.md): 
    - OK : Given the new file `ask.c` containing  
    - OK : And given there is no `./ask` file  
-   - **NOK** : When I run `./ask` (..\docs\examples\gcc_hello_world.md:106:)  
-..\docs\examples\gcc_hello_world.md:106: Error: the command is still running
-   - **NOK** : Then the output is `What is your name?` (..\docs\examples\gcc_hello_world.md:107:)  
-..\docs\examples\gcc_hello_world.md:107: Error: Output not equal to expected:
-   - **NOK** : When I enter `bbt` (..\docs\examples\gcc_hello_world.md:108:)  
-..\docs\examples\gcc_hello_world.md:108: Error: cannot send input to the command
    - OK : When I successfully run `gcc ask.c -o ask`  
-   - **NOK** : Then the output is (..\docs\examples\gcc_hello_world.md:109:)  
-..\docs\examples\gcc_hello_world.md:109: Error: Output not equal to expected:
-   - **NOK** : When I type `y` (..\docs\examples\gcc_hello_world.md:114:)  
-..\docs\examples\gcc_hello_world.md:114: Error: no command is running when reaching this step
-   - **NOK** : Then the output is `Continuing!` (..\docs\examples\gcc_hello_world.md:115:)  
-..\docs\examples\gcc_hello_world.md:115: Error: Output not equal to expected:
+   - OK : When I run `./ask`  
+   - OK : Then the output is `What is your name?`  
+   - OK : Then the output is  
+   - OK : Then the output is `Continuing!`  
    - OK : And the exit code is `0`  
-   - [ ] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) **fails**  
+   - [X] scenario   [6 : interacting with a program prompt](../../examples/gcc_hello_world.md) pass  
 
    ### Scenario: [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md): 
    - OK : Given the new file `timed.c` containing  
@@ -140,12 +132,12 @@
    - [X] scenario   [7 : ignoring a volatile part of the output](../../examples/gcc_hello_world.md) pass  
 
 
-## Summary : **Fail**
+## Summary : **Success**, 17 scenarios OK
 
 | Status     | Count |
 |------------|-------|
-| Failed     | 1     |
-| Successful | 16    |
+| Failed     | 0     |
+| Successful | 17    |
 | Empty      | 0     |
 | Not Run    | 0     |
 
