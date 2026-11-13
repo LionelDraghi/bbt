@@ -3,7 +3,7 @@
 
 Given steps are the first leg of the three-legged Steps stool.
 It is meant to check and setup the execution environment, by:
-- checking some dir or file exists or doesn't exists, or by
+- checking some dir or file exists or doesn't exist, or by
 - running something that should be run first.
 
 _Table of Contents:_

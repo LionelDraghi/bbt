@@ -314,7 +314,7 @@ package body BBT.Tests.Actions is
          Put_Step_Result (Step     => Step,
                           Success  => False,
                           Fail_Msg => "Expected file " &
-                            File_Name'Image & " doesn't exists",
+                            File_Name'Image & " doesn't exist",
                           Loc       => Step.Location,
                           Verbosity => Verbosity);
       end if;
@@ -337,7 +337,7 @@ package body BBT.Tests.Actions is
          Put_Step_Result (Step     => Step,
                           Success  => False,
                           Fail_Msg => "Expected dir " &
-                            Dir_Name'Image & " doesn't exists in Exec_Dir "
+                            Dir_Name'Image & " doesn't exist in Exec_Dir "
                           & Settings.Exec_Dir,
                           Loc       => Step.Location,
                           Verbosity => Verbosity);

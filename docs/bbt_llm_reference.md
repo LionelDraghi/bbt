@@ -451,7 +451,7 @@ item3
 
 **✅ Correct:**
 ```markdown
-- then the output doesn't contains `Error`
+- then the output doesn't contain `Error`
 ```
 
 ## COMPLETE EXAMPLES
