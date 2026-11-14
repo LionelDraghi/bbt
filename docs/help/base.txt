@@ -17,6 +17,9 @@ Basic options:
   -v | --verbose
   -q | --quiet        : no message unless error,
                         Warnings are also ignored
+  -h | --help         : display this help and exit
+       --version      : output version information and exit
+
 
 Basic commands:
        run               : the default command
