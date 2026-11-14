@@ -6,6 +6,11 @@ All notable changes **from a user perspective** to this project will be document
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), (guidelines at the bottom of the page).  
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+- **[0.7.0-dev] - 2026-??-??**
+  - [Added]   the `--gui` option runs the scenarios under an interactive debugger window in the browser, served by an embedded web server (cf. docs/proposed/interactive_execution.md): the Markdown scenario is the main view, with the current step highlighted, Step and Continue controls, a pause at each step, scenario, feature, file or error (configurable), and a terminal panel replaying the bbt messages, including for a browser connecting later or reloading the page
+  - [Changed] with `GUI=1`, `make check`, `make features` and a single scenario run open under the `bbt --gui` debugger window instead of a batch run: a debug session is not a check, it gets no scenario timeout and no test report output
+  - [Fixed]   the debugger progress display no longer counts the background steps against the step totals: they are re-run for every scenario under their scope, so only steps run exactly once are counted
+
 - **[0.6.1] - 2026-11-09**
   - [Added]   experimental GUI testing GUI steps, driven by a pluggable backend (`--backend`, first one: AT-SPI on Linux, `--headless` for CI); the vocabulary concepts — role, accessible name, state — follow WAI-ARIA (cf. docs/proposed/gui_vocabulary.md)
   - [Added]   the `ignoring path syntax` named pattern of the `(ignoring ...)` clause rewrites the compared texts with the Unix path syntax — backslashes to slashes, `C:` drive prefix removed — instead of masking: the path itself stays checked, and a Unix and a Windows print of the same place compare equal, as in `C:\user` vs `/user`; the rewrite happens before the masking patterns, and a regexp word of the clause sees the rewritten text (cf. docs/features/A300_Ignoring.md)
