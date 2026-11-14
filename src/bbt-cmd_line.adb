@@ -209,7 +209,7 @@ package body BBT.Cmd_Line is
             elsif Cmd = "tt" then
                Set_Cmd (List_Trace_Topics);
 
-            elsif Cmd in "help" | "he" | "-h" then
+            elsif Cmd in "help" | "he" | "-h" | "--help" then
                Set_Cmd (Help);
                if not On_Last_Arg then
                   -- help may be followed by an help topic
