@@ -11,6 +11,17 @@ else
 	EXE_SUFFIX :=
 endif
 
+# Test results directories (cf. AGENTS.md, Test results, and the
+# template project): the local runs of the suites write to
+# docs/tests_results/<platform>/<profile>/, git-ignored; only CI runs
+# are recorded, staged at the same paths by the CI workflows (with
+# git add -f), so that a local run can be diffed, in the editor,
+# against the last committed run of the same profile. Outputs are
+# comparable; the run times are not (two machines never agree).
+PROFILE ?= validation
+RESULTS_ROOT := docs/tests_results/$(PLATFORM)
+RESULTS_DIR = $(RESULTS_ROOT)/$(PROFILE)
+
 .SILENT:
 
 # The empty recipes below are required: without a recipe, make would
@@ -26,21 +37,27 @@ sut$(EXE_SUFFIX): tools
 rpl$(EXE_SUFFIX): tools
 	@:
 
-.PHONY : all help tools build release check features examples sanity doc install
+.PHONY : all help tools build build-release release check test-run features examples sanity doc install
 help:
 	echo "Usage: make [target]"
 	echo ""
 	echo "Targets:"
-	echo "  all        : build, check and doc (default when no target given)"
-	echo "  build      : build bbt in validation mode"
-	echo "  release    : build bbt in release mode"
-	echo "  tools      : build the sut and rpl tools, and create the"
-	echo "                sut, bbt and gcc links in tests/"
-	echo "  check      : run the tests (features, examples, non regression"
-	echo "                and unit tests)"
-	echo "  features   : run the functional tests only (docs/features)"
-	echo "  examples   : run the sanity checks only (docs/examples)"
-	echo "  sanity     : alias of examples"
+	echo "  all          : build, check and doc (default when no target given)"
+	echo "  build        : build bbt in validation mode"
+	echo "  build-release: build bbt in release mode (no test replay)"
+	echo "  release      : full release chain: complete clean (distclean),"
+	echo "                 release builds (bbt and tools), then a full"
+	echo "                 test replay on the release executable, with the"
+	echo "                 results under $(RESULTS_ROOT)/release;"
+	echo "                 only a green replay unlocks the release"
+	echo "  tools        : build the sut and rpl tools, and create the"
+	echo "                 sut, bbt and gcc links in tests/"
+	echo "  check        : run the tests (features, examples, non regression"
+	echo "                 and unit tests) on the validation executable,"
+	echo "                 results under $(RESULTS_DIR)"
+	echo "  features     : run the functional tests only (docs/features)"
+	echo "  examples     : run the sanity checks only (docs/examples)"
+	echo "  sanity       : alias of examples"
 	echo "  GUI=1      : modifier: run features/examples/check (and a single"
 	echo "               test) under the interactive bbt --gui debugger window"
 	echo "  doc        : regenerate the generated docs (help reference files,"
@@ -110,18 +127,50 @@ build:
 
 	@ $(MAKE) -s refresh_bbt --directory=tests
 
-release:
+# The standalone release build of bbt, without test replay. It runs
+# after a distclean in the release chain below (the stamp is then
+# gone: alr re-syncs and recompiles everything), or alone on an
+# up-to-date build tree.
+build-release:
 	echo
 	echo === building bbt for release
+	mkdir -p obj
+	# Same gnoga preparation as build, required before and after a
+	# full sync (cf. the build target comment).
+	@ ./tools/prepare_gnoga.sh
 	alr --non-interactive build --release \
 	  && echo release > $(ALIRE_STAMP)
-	@ $(MAKE) -s refresh_bbt --directory=tests
 	# Alire profiles : --release --validation --development (default)
+	@ $(MAKE) -s refresh_bbt --directory=tests
 
-check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
-	# --------------------------------------------------------------------
-	echo === running tests
-	$(MAKE) -s check --directory=tests
+# The full release chain (cf. the template and the shared
+# release_procedure.md): a profile never reuses another profile's
+# results, and only a green replay unlocks the release. The chain
+# starts from a complete clean (distclean), rebuilds bbt in release
+# mode and the tools (which also recreates the tests/ links and the
+# unit test program), then replays the whole suite on the release
+# executable, writing the results under $(RESULTS_ROOT)/release.
+# bbt is rebuilt before the tools: the tools target runs the tests/
+# setup, which refreshes the links from the binaries.
+release:
+	echo
+	echo === full release chain: distclean, release builds, replay
+	$(MAKE) distclean
+	$(MAKE) build-release
+	$(MAKE) tools
+	$(MAKE) -s PROFILE=release test-run
+
+check: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX) test-run
+	@:
+
+# The suite runner shared by check and release (cf. the template):
+# the tests are the same, the profile only selects the executable
+# under test (the tests/ link refreshed by the build targets) and the
+# results directory. Delegated sequentially, not as a dependency, so
+# that the release chain fully orders its own steps.
+test-run:
+	echo '=== running the tests (profile: $(PROFILE))'
+	@ $(MAKE) -s check --directory=tests RESULTS_DIR=../$(RESULTS_DIR)
 
 features: bbt$(EXE_SUFFIX) sut$(EXE_SUFFIX)
 	$(MAKE) -s features --directory=tests
@@ -194,6 +243,11 @@ clean:
 	@ $(MAKE) -s clean --directory=tests
 	@ - rm -rf config.ini *.out dir* tmp.txt output2.txt \
 	  main main.c main$(EXE_SUFFIX) tmp html js css
+	# The local results (ignored files in the profile directories) go
+	# as well, but the tracked CI records at the same paths stay, so
+	# that a local run can still be diffed against the last committed
+	# one (cf. AGENTS.md, Test results).
+	@ - git clean -fqX $(RESULTS_ROOT)/validation $(RESULTS_ROOT)/release
 	echo OK
 	echo
 

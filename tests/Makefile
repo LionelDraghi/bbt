@@ -19,7 +19,15 @@ else
 	REFRESH := ln -fs
 endif
 
-RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
+# Local test results land in a profile-suffixed directory: validation
+# by default, release when replayed by the release chain (cf. the
+# root Makefile). The whole docs/tests_results level is git-ignored:
+# only CI runs are recorded, staged at the same paths by the CI
+# workflows with git add -f, so that a local run can be diffed, in
+# the editor, against the last committed run of the same profile
+# (outputs are comparable, run times are not).
+PROFILE ?= validation
+RESULTS_DIR ?= ../docs/tests_results/$(PLATFORM)/$(PROFILE)
 
 # The GUI assets used by the bbt --gui debugger, in tests/: junction
 # links to ../gui on Windows, symlinks on the other platforms (recreated
@@ -251,6 +259,9 @@ clean:
 	@ - rm -f main main$(EXE_SUFFIX) ask ask$(EXE_SUFFIX) \
 	     cp cp$(EXE_SUFFIX) timed timed$(EXE_SUFFIX)
 	@ - rm -rf inc dir* html js css
+	# Same policy as the root clean: drop the ignored local results,
+	# keep the tracked CI records (diffable against new local runs).
+	@ - git clean -fqX $(RESULTS_DIR)
 	@ if [ -d ../gui ]; then $(MAKE) -s gui_assets; fi
 
 # distclean also removes the binaries and the links

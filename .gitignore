@@ -40,6 +40,26 @@ tests/file_utilities_tests/test_file_utilities.exe
 /tests/js
 /tests/css
 
+# GUI assets copied next to the executable by Deploy_Assets
+# (src/bbt-gui.adb) at each --gui run, from the tracked gui/ sources.
+# Removed by make clean, alongside the bbt binary they belong to.
+/html
+/js
+/css
+
+# Local test results (docs/tests_results/<platform>/<profile>): this
+# level is git-ignored, only CI runs are recorded, staged by the CI
+# workflows with git add -f at the same paths, so that a local run
+# can be diffed against the last committed run of the same profile
+# (cf. AGENTS.md, Test results).
+docs/tests_results/
+
+# The GUI assets deployed next to the test executable: copies next
+# to an installed bbt, junction links to gui/ in the dev tree.
+/tests/html
+/tests/js
+/tests/css
+
 # The test run artifacts, including the fixtures that the scenarios
 # recreate at each run, are NOT listed here: they must stay visible
 # in git status, and they are removed by make clean (see

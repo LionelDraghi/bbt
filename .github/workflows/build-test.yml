@@ -59,13 +59,19 @@ jobs:
       - name: Publish red pending badges
         shell: bash
         run: |
-          for P in Linux Darwin Windows CI; do
+          for P in Linux Darwin Windows; do
             curl -sf "https://img.shields.io/badge/${P}-being%20tested-red.svg?style=flat-square" \
-              -o docs/tests_results/${P}/badge.svg
+              -o docs/tests_results/${P}/validation/badge.svg
           done
+          curl -sf "https://img.shields.io/badge/CI-being%20tested-red.svg?style=flat-square" \
+            -o docs/tests_results/CI/badge.svg
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/tests_results/*/badge.svg
+          # docs/tests_results is git-ignored (cf. AGENTS.md, Test
+          # results): CI runs are the only recorded ones, staged here
+          # by explicit git add -f.
+          git add -f docs/tests_results/*/validation/badge.svg \
+                     docs/tests_results/CI/badge.svg
           if git diff --cached --quiet; then
             echo "Badges already pending, nothing to publish"
             exit 0
@@ -235,29 +241,32 @@ jobs:
 
       - name: Save summary
         if: always()
-        run: cat docs/tests_results/${OS_PLATFORM}/features_results.md >> ${GITHUB_STEP_SUMMARY} || echo "no results available"
+        run: cat docs/tests_results/${OS_PLATFORM}/validation/features_results.md >> ${GITHUB_STEP_SUMMARY} || echo "no results available"
         shell: bash
 
       - name: tests results publishing
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/features_results.xml
+          report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/validation/features_results.xml
 
       - name: Publish test results and badges
-        # make -k above regenerated docs/tests_results/${OS_PLATFORM} in the
-        # runner workspace, but did not commit it: publish it, so that the
+        # make -k above regenerated docs/tests_results/${OS_PLATFORM}/validation
+        # in the runner workspace, but did not commit it: publish it, so that the
         # badges shown in the README are updated by the CI, and not only by
         # a manual run on each platform. The publication happens even when
         # some tests fail, so that the badges reflect the actual status
         # (red when tests failed); only main is published, so that
         # pull-requests do not change the published status.
+        # docs/tests_results is git-ignored (cf. AGENTS.md, Test results),
+        # and CI runs are the only recorded ones: hence the explicit
+        # git add -f at the same paths.
         if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/tests_results/${OS_PLATFORM}
+          git add -f docs/tests_results/${OS_PLATFORM}/validation
           if git diff --cached --quiet; then
             echo "No change in docs/tests_results/${OS_PLATFORM}, nothing to publish"
             exit 0
@@ -310,7 +319,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/tests_results/CI/badge.svg
+          git add -f docs/tests_results/CI/badge.svg
           if git diff --cached --quiet; then
             echo "CI badge already up to date, nothing to publish"
             exit 0
