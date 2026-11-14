@@ -193,9 +193,9 @@ The stable version of [![Alire](https://img.shields.io/endpoint?url=https://alir
 [![Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FLionelDraghi%2Fbbt%2Fmain%2Falire.toml&query=%24.version&label=latest&style=flat-square)](https://github.com/LionelDraghi/bbt/blob/main/docs/changelog.md) ![](docs/metrics/loc.svg) ![](docs/metrics/complexity.svg)
 
 
-[![](docs/tests_results/CI/badge.svg)](https://github.com/LionelDraghi/bbt/actions/workflows/build-test.yml) [![](docs/tests_results/Linux/badge.svg)](docs/tests_results/Linux/features_results.md) 
-[![](docs/tests_results/Darwin/badge.svg)](docs/tests_results/Darwin/features_results.md)
-[![](docs/tests_results/Windows/badge.svg)](docs/tests_results/Windows/features_results.md) 
+[![](docs/tests_results/CI/badge.svg)](https://github.com/LionelDraghi/bbt/actions/workflows/build-test.yml) [![](docs/tests_results/Linux/validation/badge.svg)](docs/tests_results/Linux/validation/features_results.md) 
+[![](docs/tests_results/Darwin/validation/badge.svg)](docs/tests_results/Darwin/validation/features_results.md)
+[![](docs/tests_results/Windows/validation/badge.svg)](docs/tests_results/Windows/validation/features_results.md) 
 
 
 #### Building from sources

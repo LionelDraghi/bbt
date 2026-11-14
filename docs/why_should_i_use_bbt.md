@@ -43,7 +43,7 @@ To run only a selection `bbt --select "Sanity check" tests`
 The output cross-references the executed scenario files: if a test fails, just click on the link and you are in the scenario.  
 You can push it on GitHub without further processing.  
 
-To see what it looks like, consider [*bbt* own tests](tests_results/Linux/features_results.md).  
+To see what it looks like, consider [*bbt* own tests](tests_results/Linux/validation/features_results.md).  
 
 Test results are generated when running *bbt*, by just using the `--output | -o` option.
 
