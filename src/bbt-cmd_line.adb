@@ -4,7 +4,6 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with BBT.Tests.GUI_Backends;
 with BBT.IO,
      BBT.Settings,
      BBT.Scenarios,
@@ -16,6 +15,8 @@ with Ada.Command_Line,
      Ada.Directories,
      Ada.Environment_Variables,
      Ada.Strings.Fixed;
+
+with GNAT.OS_Lib;
 
 use BBT.Scenarios,
     BBT.Scenarios.Files,
@@ -107,17 +108,55 @@ package body BBT.Cmd_Line is
    end Set_Shell_Option;
 
    -- --------------------------------------------------------------------------
-   procedure Set_Backend_Option (Value : String) is
-   -- Common processing of the --backend option value
+   procedure Replace_By_Backend is
+   --  The bbt process replaces itself with the bbt_<kind> backend
+   --  executable found in the PATH, forwarding the command line
+   --  arguments unchanged, except for the --gui=<kind> option itself.
+   --  If the executable is not found, bbt fails before running any
+   --  scenario (cf. docs/proposed/crate_restructuring.md).
+      use Ada.Command_Line, GNAT.OS_Lib;
+
+      Exe_Name  : constant String := "bbt_" & Settings.Gui_Backend;
+      Full_Path : constant GNAT.OS_Lib.String_Access :=
+        GNAT.OS_Lib.Locate_Exec_On_Path (Exe_Name);
+
+      Ignore  : constant String := "--gui=";
+      --  The launcher option forwarded as skipped argument, see below
+
+      Args : GNAT.OS_Lib.Argument_List (1 .. Ada.Command_Line.Argument_Count);
+      Last : Natural := 0;
+      Code : Integer;
+
    begin
-      if Value = "atspi" then
-         BBT.Tests.GUI_Backends.Selected
-           := BBT.Tests.GUI_Backends.GUI_Atspi;
+      if Full_Path = null then
+         IO.Put_Error
+           (Exe_Name
+            & " executable not found in PATH; install it with: alr install "
+            & Exe_Name);
       else
-         IO.Put_Error ("invalid backend """ & Value
-                       & """, expecting atspi");
+         --  Forward the arguments unchanged, minus the --gui=<kind>
+         --  option itself
+         for I in 1 .. Ada.Command_Line.Argument_Count loop
+            if Ada.Strings.Fixed.Index (Ada.Command_Line.Argument (I), Ignore)
+               /= 1
+            then
+               Last := Last + 1;
+               Args (Last) := new String'(Ada.Command_Line.Argument (I));
+            end if;
+         end loop;
+
+         Code := GNAT.OS_Lib.Spawn (Program_Name => Exe_Name,
+                                    Args         => Args (1 .. Last));
+         Settings.Gui_Backend_Ran := True;
+
+         if Code < 0 then
+            Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+         else
+            Ada.Command_Line.Set_Exit_Status
+              (Ada.Command_Line.Exit_Status (Code mod 256));
+         end if;
       end if;
-   end Set_Backend_Option;
+   end Replace_By_Backend;
 
    -- --------------------------------------------------------------------------
    procedure Set_Cleanup_Option (Value : String) is
@@ -314,17 +353,14 @@ package body BBT.Cmd_Line is
                   Set_Shell_Option (Current_Arg);
                end if;
 
-            elsif Ada.Strings.Fixed.Index (Cmd, "--backend=") = 1 then
-               Set_Backend_Option
+            elsif Ada.Strings.Fixed.Index (Cmd, "--gui=") = 1 then
+               --  GUI backend launcher (cf.
+               --  docs/proposed/crate_restructuring.md): the exact
+               --  "--gui" form below runs the interactive debugger,
+               --  --gui=<kind> delegates the run to the backend
+               --  executable
+               Settings.Set_Gui_Backend
                  (Cmd (Ada.Strings.Fixed.Index (Cmd, "=") + 1 .. Cmd'Last));
-
-            elsif Cmd = "--backend" then
-               if On_Last_Arg then
-                  IO.Put_Error (Cmd & " must be followed by a backend name");
-               else
-                  Go_Next_Arg;
-                  Set_Backend_Option (Current_Arg);
-               end if;
 
             elsif Cmd = "-r" or Cmd = "--recursive" then
                Settings.Recursive := True;
@@ -498,6 +534,14 @@ package body BBT.Cmd_Line is
       end loop Opt_Analysis_Loop;
 
       -- --------------------------------------------------------------------------
+      --  GUI backend launcher: when --gui=<kind> was given, the bbt
+      --  process is replaced by the backend executable, and nothing
+      --  runs in this bbt process
+      if Settings.Gui_Backend /= "" then
+         Replace_By_Backend;
+         return;
+      end if;
+
       if Debug_Mode then
          Put_Settings;
       end if;

@@ -18,7 +18,7 @@ with Interfaces.C;          use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
 
-package body BBT.Tests.GUI_Backends.Atspi is
+package body BBT.Backends.Gtk4 is
 
    App_Pid         : GNAT.OS_Lib.Process_Id;
    Target_Pid      : Integer := 0;
@@ -251,7 +251,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
       return True;
    end Scan_For_Window;
 
-   procedure Launch (Binary_Path : String) is
+   procedure Atspi_Launch (Binary_Path : String) is
       Binary : GNAT.OS_Lib.String_Access :=
         new String'(Binary_Path);
       Binary_List : constant GNAT.OS_Lib.Argument_List :=
@@ -267,9 +267,9 @@ package body BBT.Tests.GUI_Backends.Atspi is
       Target_Name := new String'
         (Ada.Directories.Simple_Name (Binary_Path));
       Target_Name_Set := True;
-   end Launch;
+   end Atspi_Launch;
 
-   function Window_Appears (Expected_Title : String := "") return Boolean is
+   function Atspi_Window_Appears (Expected_Title : String := "") return Boolean is
       Deadline : constant Time := Clock + 6.0;
       Found    : Boolean := False;
    begin
@@ -281,12 +281,12 @@ package body BBT.Tests.GUI_Backends.Atspi is
          end if;
       end loop;
       return Found;
-   end Window_Appears;
+   end Atspi_Window_Appears;
 
-   function Observed_Title return String is
+   function Atspi_Observed_Title return String is
    begin
       return To_String (Observed);
-   end Observed_Title;
+   end Atspi_Observed_Title;
 
    function App_Node return System.Address is
       Desktop : constant System.Address := Atspi_Get_Desktop (0);
@@ -321,7 +321,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
    --  deadline: the application window appears, then its subtree
    --  builds, and a previous step may still be propagating.
 
-   function Window_Contains (Expected : String) return Boolean is
+   function Atspi_Window_Contains (Expected : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
       App      : System.Address;
    begin
@@ -346,7 +346,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
          delay 0.2;
       end loop;
       return False;
-   end Window_Contains;
+   end Atspi_Window_Contains;
 
    function Observed_Text return String is
    begin
@@ -548,7 +548,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
 
    pragma Unreferenced (Field_Focused);
 
-   procedure Shutdown is
+   procedure Atspi_Shutdown is
       Status  : GNAT.OS_Lib.Process_Id;
       Success : Boolean;
    begin
@@ -559,7 +559,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
          Target_Name_Set := False;
          GNAT.OS_Lib.Free (Target_Name);
       end if;
-   end Shutdown;
+   end Atspi_Shutdown;
 
 
    --  -----------------------------------------------------------------------
@@ -579,7 +579,7 @@ package body BBT.Tests.GUI_Backends.Atspi is
    --  Generic form of the role based searches, used by the parent
    --  dispatch for the whole MVP widget vocabulary.
 
-   function Widget_Named (Role : String; Name : String) return Boolean is
+   function Atspi_Widget_Named (Role : String; Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
       Frame, Found : System.Address;
    begin
@@ -596,9 +596,9 @@ package body BBT.Tests.GUI_Backends.Atspi is
          delay 0.2;
       end loop;
       return False;
-   end Widget_Named;
+   end Atspi_Widget_Named;
 
-   function Widget_Enabled
+   function Atspi_Widget_Enabled
      (Role : String; Name : String) return Boolean
    is
       Deadline : constant Time := Clock + 6.0;
@@ -624,13 +624,13 @@ package body BBT.Tests.GUI_Backends.Atspi is
          delay 0.2;
       end loop;
       return False;
-   end Widget_Enabled;
+   end Atspi_Widget_Enabled;
 
 
    --  Semantic activation of the named widget: the first AT-SPI
    --  action of the first widget of role Role named Name.
 
-   function Press_Widget (Role : String; Name : String) return Boolean is
+   function Atspi_Press_Widget (Role : String; Name : String) return Boolean is
       Deadline : constant Time := Clock + 6.0;
       Frame, Found : System.Address;
    begin
@@ -653,6 +653,77 @@ package body BBT.Tests.GUI_Backends.Atspi is
          delay 0.2;
       end loop;
       return False;
+   end Atspi_Press_Widget;
+
+   --  -----------------------------------------------------------------------
+   --  The dispatching primitives, one per root operation: thin
+   --  wrappers on the local subprograms above, dispatched from
+   --  BBT.Backends.Selected (set to Registered'Access by
+   --  the bbt_gtk4 main).
+
+   procedure Launch
+     (The_Backend : in out Gtk4_Backend;
+      Binary_Path : String)
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      Atspi_Launch (Binary_Path);
+   end Launch;
+
+   procedure Shutdown (The_Backend : in out Gtk4_Backend) is
+      pragma Unreferenced (The_Backend);
+   begin
+      Atspi_Shutdown;
+   end Shutdown;
+
+   function Window_Appears
+     (The_Backend : Gtk4_Backend; Expected_Title : String := "")
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Window_Appears (Expected_Title);
+   end Window_Appears;
+
+   function Observed_Title (The_Backend : Gtk4_Backend) return String is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Observed_Title;
+   end Observed_Title;
+
+   function Window_Contains
+     (The_Backend : Gtk4_Backend; Expected : String) return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Window_Contains (Expected);
+   end Window_Contains;
+
+   function Widget_Named
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Widget_Named (Role, Name);
+   end Widget_Named;
+
+   function Widget_Enabled
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Widget_Enabled (Role, Name);
+   end Widget_Enabled;
+
+   function Press_Widget
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Press_Widget (Role, Name);
    end Press_Widget;
 
-end BBT.Tests.GUI_Backends.Atspi;
+end BBT.Backends.Gtk4;

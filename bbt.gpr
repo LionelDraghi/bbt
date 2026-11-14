@@ -1,28 +1,14 @@
 with "src/Alire_config/bbt_config.gpr";
+with "bbt_lib.gpr";
 
 project BBT is
 
-   --  The Status_Bar.Platform body is platform dependent: the bodies
-   --  are selected per host OS, only one of the two dirs below is used.
-   --  Same for the GUI backends: AT-SPI is only available on Linux;
-   --  Windows and macOS use the no_gui backend, whose bodies are
-   --  clean "unsupported" errors, per the GUI vocabulary proposal.
-   case Bbt_Config.Alire_Host_OS is
-      when "windows" =>
-         for Source_Dirs use ("src", "src/Alire_config", "src/windows",
-                              "src/no_gui");
-      when "linux" =>
-         for Source_Dirs use ("src", "src/Alire_config", "src/posix",
-                              "src/atspi");
-      when others =>
-         for Source_Dirs use ("src", "src/Alire_config", "src/posix",
-                              "src/no_gui");
-   end case;
+   --  The executable side of the bbt crate: a thin main on top of
+   --  BBT_Lib (cf. docs/proposed/crate_restructuring.md). The engine
+   --  logic lives in the library; the GUI backends are separate
+   --  executables in the backends/ crates, launched with --gui=<kind>.
 
-   --  src/posix holds the C wrapper on ioctl(TIOCSWINSZ), only compiled
-   --  on the platforms with pseudo terminal support: the C sources are
-   --  then only in the non Windows source dirs
-   for Languages use ("Ada", "C");
+   for Source_Dirs use ("src/main");
 
    for Object_Dir use "obj/" & Bbt_Config.Build_Profile;
    for Create_Missing_Dirs use "True";
@@ -95,23 +81,12 @@ project BBT is
       for Default_Switches ("ada") use ("-j2");
    end Builder;
 
-   package Linker is
-      case Bbt_Config.Alire_Host_OS is
-         when "linux" =>
-            for Switches ("ada") use ("-g", "-l:libatspi.so.0",
-                                      "-lgobject-2.0", "-lglib-2.0");
-         when others =>
-            for Switches ("ada") use ("-g");
-      end case;
-   end Linker;
-
    package Pretty_Printer is
       for Default_Switches ("ada") use ("-A0", "-M80", "-W8", "--no-separate-loop-then", "-l2", "-c2", "-A1", "-A2", "-A4", "-A5", "-A3");
    end Pretty_Printer;
 
    package Coverage is
-         for Switches ("*") use ("--level=stmt");
+      for Switches ("*") use ("--level=stmt");
    end Coverage;
 
 end BBT;
-

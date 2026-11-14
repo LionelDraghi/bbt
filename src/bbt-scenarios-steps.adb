@@ -589,6 +589,10 @@ package body BBT.Scenarios.Steps is
       if State.Action in GUI_Window_Appears | GUI_Window_Contains |
                           GUI_Widget_Exists | GUI_Widget_State | GUI_Press_Widget
       then
+         --  Remember the document GUI vocabulary usage, so that BBT.Main
+         --  can fail eagerly when no backend was selected
+         Some_Gui_Steps := True;
+
          --  The widget or window name: the object's code span, or, for
          --  the forms where it shows up in the subject phrase ("the
          --  `name` `role` is enabled", "a `title` window appears"),

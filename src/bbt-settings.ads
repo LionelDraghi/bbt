@@ -71,11 +71,15 @@ private package BBT.Settings is
    Current_Command       : Command    := None;
    Current_Topic         : Help_Topic := Base;
    Selection_Mode        : Boolean    := False;
-   -- In the default mode no File/Feature/Scenario etc. is filtered except those
-   -- provided with --exclude on command line.
-   -- But if the user wants to select specific items by using --select, the
-   -- Selection_Mode will be set, and all items will be filtered
-   -- except those provided with --select or --include.
+   Gui_Backend_Ran       : Boolean    := False;
+   --  Set when the --gui=<kind> launcher has spawned the backend
+   --  process and propagated its exit status: BBT.Main then returns
+   --  immediately (the run happened in the backend process)
+   --  In the default mode no File/Feature/Scenario etc. is filtered except those
+   --  provided with --exclude on command line.
+   --  But if the user wants to select specific items by using --select, the
+   --  Selection_Mode will be set, and all items will be filtered
+   --  except those provided with --select or --include.
 
    -- --------------------------------------------------------------------------
    type Shell_Kind is (Sh, Bash, Dash, Zsh, Fish, Cmd, Powershell, Pwsh);
@@ -150,5 +154,12 @@ private package BBT.Settings is
    -- --------------------------------------------------------------------------
    procedure Set_Badge_File_Name (File_Name : String);
    function Badge_File_Name return String;
+
+   --  --------------------------------------------------------------------------
+   procedure Set_Gui_Backend (Name : String);
+   function Gui_Backend return String;
+   --  The GUI backend kind registered with the --gui=<kind> launcher
+   --  option, empty when none (cf.
+   --  docs/proposed/crate_restructuring.md)
 
 end BBT.Settings;

@@ -23,7 +23,8 @@ package body BBT.Settings is
    Exec_Dir_Name,
    Tmp_Dir_Name,
    Badge_Name,
-   JUnit_File_Name : access String := null;
+   JUnit_File_Name,
+   Gui_Backend_Name : access String := null;
 
    -- --------------------------------------------------------------------------
    --  function Is_File_In (File, Dir : String) return Boolean is
@@ -131,6 +132,15 @@ package body BBT.Settings is
    end Set_JUnit_File;
 
    function JUnit_File return String is (JUnit_File_Name.all);
+
+   -- --------------------------------------------------------------------------
+   procedure Set_Gui_Backend (Name : String) is
+   begin
+      Gui_Backend_Name := new String'(Name);
+   end Set_Gui_Backend;
+
+   function Gui_Backend return String is
+     (if Gui_Backend_Name = null then "" else Gui_Backend_Name.all);
 
    -- --------------------------------------------------------------------------
    procedure Set_Tmp_Dir (Dir_Name : String) is

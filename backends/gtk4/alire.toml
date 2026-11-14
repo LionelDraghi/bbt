@@ -1,0 +1,33 @@
+name = "bbt_gtk4"
+description = "GTK 4 / AT-SPI GUI backend for the bbt black box tester"
+version = "0.6.1"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+tags = ["test", "testing", "gherkin", "gui", "gtk", "atspi"]
+
+executables = ["bbt_gtk4"]
+
+[[depends-on]]
+#  The bbt core library: the engine, the grammar and the GUI
+#  vocabulary; the backend main registers the concrete backend in
+#  BBT.Backends.Selected and runs the BBT.Driver.
+bbt = "^0.6.1"
+
+[[depends-on]]
+#  The AT-SPI binding links -l:libatspi.so.0, -lgobject-2.0 and
+#  -lglib-2.0 (per bbt_gtk4.gpr): the index CI machines hold the glib
+#  dev symlinks only through the libglib external, and the backend is
+#  Linux-only.
+libglib = "*"
+
+#  The gnoga dependency of the core (the embedded interactive
+#  debugger) is a dependency of this crate too, through bbt.
+
+#  Note: this manifest targets publication (cf.
+#  docs/proposed/crate_restructuring.md, development plan step 2);
+#  local development builds backends/gtk4 directly against the
+#  sibling bbt sources with gprbuild, no path pin yet.

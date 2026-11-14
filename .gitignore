@@ -3,6 +3,7 @@ alire.lock
 bin/
 config/
 obj/
+lib/
 src/Alire_config
 tests/spawn_test/
 tests/expect_test/
@@ -19,6 +20,8 @@ desktop.ini
 # Binaries and links
 /bbt
 /bbt.exe
+/backends/gtk4/bbt_gtk4
+/backends/gtk4/bbt_gtk4.exe
 /sut
 /sut.exe
 /rpl

@@ -19,7 +19,7 @@ with BBT.Created_File_List,
      BBT.Tests.Actions.File_Operations,
      BBT.Tests.Actions.Output_Checks,
      BBT.Tests.Actions.Setup,
-     BBT.Tests.GUI_Backends,
+     BBT.Backends,
      File_Utilities,
      Text_Utilities;
 
@@ -35,7 +35,7 @@ use BBT.Created_File_List,
     BBT.Tests.Actions.Environment,
     BBT.Tests.Actions.Output_Checks,
     BBT.Tests.Actions.Setup,
-    BBT.Tests.GUI_Backends,
+    BBT.Backends,
     BBT.Writers,
     Text_Utilities;
 
@@ -218,7 +218,7 @@ package body BBT.Tests.Runner is
       end if;
 
       if Step.Data.Action = Run_Cmd
-        and then GUI_Backends.Selected /= No_Backend
+        and then BBT.Backends.Selected /= null
       then
          --  GUI launch (cf. docs/proposed/gui_vocabulary.md): with a
          --  backend selected, the "When I run" of a GUI scenario
@@ -228,9 +228,9 @@ package body BBT.Tests.Runner is
          declare
             Cmd : constant String := To_String (Step.Data.Object_String);
          begin
-            GUI_Backends.Launch (Cmd);
+            BBT.Backends.Launch (Cmd);
          exception
-            when E : GUI_Backends.No_Backend_Available =>
+            when E : BBT.Backends.No_Backend_Available =>
                Put_Step_Result (Step      => Step,
                                 Success   => False,
                                 Fail_Msg  => Ada.Exceptions.Exception_Message (E),
@@ -338,7 +338,7 @@ package body BBT.Tests.Runner is
 
          when GUI_Window_Appears =>
             --  Bounded poll: OK when the expected window shows up
-            if GUI_Backends.Window_Appears
+            if BBT.Backends.Window_Appears
                  (To_String (Step.Data.GUI_Access_Name))
             then
                Put_Step_Result (Step      => Step,
@@ -359,7 +359,7 @@ package body BBT.Tests.Runner is
             end if;
 
          when GUI_Window_Contains =>
-            if GUI_Backends.Window_Contains
+            if BBT.Backends.Window_Contains
                  (To_String (Step.Data.GUI_Access_Name))
             then
                Put_Step_Result (Step      => Step,
@@ -379,7 +379,7 @@ package body BBT.Tests.Runner is
             end if;
 
          when GUI_Widget_Exists =>
-            if GUI_Backends.Widget_Named
+            if BBT.Backends.Widget_Named
                  (To_String (Step.Data.GUI_Role),
                   To_String (Step.Data.GUI_Access_Name))
             then
@@ -403,7 +403,7 @@ package body BBT.Tests.Runner is
          when GUI_Widget_State =>
             --  The check inverts with the step polarity, like the CLI
             --  comparisons: "is not enabled" expects the other state
-            if GUI_Backends.Widget_Enabled
+            if BBT.Backends.Widget_Enabled
                  (To_String (Step.Data.GUI_Role),
                   To_String (Step.Data.GUI_Access_Name))
             then
@@ -425,7 +425,7 @@ package body BBT.Tests.Runner is
             end if;
 
          when GUI_Press_Widget =>
-            if GUI_Backends.Press_Widget
+            if BBT.Backends.Press_Widget
                  (To_String (Step.Data.GUI_Role),
                   To_String (Step.Data.GUI_Access_Name))
             then
@@ -905,7 +905,7 @@ package body BBT.Tests.Runner is
                Feature  => Ada.Strings.Unbounded.Null_Unbounded_String,
                Is_Background => False));
 
-      GUI_Backends.Shutdown;
+      BBT.Backends.Shutdown;
 
    end Run_All;
 

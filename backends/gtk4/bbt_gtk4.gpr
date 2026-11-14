@@ -1,0 +1,81 @@
+-- -----------------------------------------------------------------------------
+-- bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+-- SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+-- SPDX-FileCopyrightText: 2026, Lionel Draghi
+-- -----------------------------------------------------------------------------
+
+with "../../bbt_lib.gpr";
+
+with "../../src/Alire_config/bbt_config.gpr";
+
+project BBT_Gtk4 is
+
+   --  The GTK 4 backend crate: the bbt_gtk4 executable, which
+   --  registers the AT-SPI accessibility backend and runs the bbt
+   --  driver on top of the BBT_Lib archive (Linux only; cf.
+   --  docs/proposed/crate_restructuring.md). The bbt core CLI
+   --  delegates to this executable with --gui=gtk4.
+
+   for Source_Dirs use ("src");
+   for Exec_Dir use "./";
+   for Main use ("bbt_gtk4-main.adb");
+   for Object_Dir use "obj";
+   for Create_Missing_Dirs use "True";
+
+   package Builder is
+      for Executable ("bbt_gtk4-main.adb") use "bbt_gtk4";
+      for Default_Switches ("ada") use ("-j2");
+   end Builder;
+
+   --  libatspi direct binding, plus the glib objects it needs (no dev
+   --  headers required). Those flags live here, and not in the bbt
+   --  core anymore: a CLI-only bbt user never links them
+   --  (cf. docs/proposed/crate_restructuring.md).
+   package Linker is
+      for Switches ("ada") use ("-g", "-l:libatspi.so.0",
+                                "-lgobject-2.0", "-lglib-2.0");
+   end Linker;
+
+   package Compiler is
+      --  Same per-profile switch policy as bbt_lib.gpr (kept in sync:
+      --  the backend executables are built and validated with the
+      --  same profiles as the core).
+      Common_Switches :=
+        ("-gnat2022",   --  Ada 2022 mode
+         "-g",          --  debug info
+         "-gnatX0",     --  level 0 extensions (External_Initialization)
+         "-gnatf",      --  full errors, verbose details
+         "-gnatwa");    --  most optional warnings
+
+      case Bbt_Config.Build_Profile is
+
+         when "development" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-O0",
+               "-gnatQ",
+               "-gnatyabefhiklnprtx");
+
+         when "validation" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-gnatyabefhiklnprtx",
+               "-gnato",
+               "-fstack-check",
+               "-gnata",
+               "-gnateE",
+               "-gnatVa");
+
+         when "release" =>
+            for Switches ("ada") use
+              Common_Switches &
+              ("-O3",
+               "-gnatn");
+      end case;
+   end Compiler;
+
+   package Binder is
+      for Switches ("ada") use ("-Es", "-E");
+   end Binder;
+
+end BBT_Gtk4;

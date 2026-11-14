@@ -81,6 +81,13 @@ package BBT.Model.Steps is
                     -- negated: widget in the other state
                     GUI_Press_Widget);
 
+   Some_Gui_Steps : Boolean := False;
+   --  Set when a step of the GUI vocabulary is processed (cf.
+   --  BBT.Scenarios.Steps): BBT.Main fails at analysis time, before
+   --  any scenario runs, when GUI steps are present and no backend was
+   --  selected with --gui=<kind>
+   --  (cf. docs/proposed/crate_restructuring.md).
+
    type Step_Type;
    type Step_Maybe is access all Step_Type;
 
