@@ -5,9 +5,12 @@
 -----------------------------------------------------------------------------
 
 with Ada.Directories;
+with Ada.Calendar;
+use  Ada.Calendar;
 with Ada.Containers.Indefinite_Ordered_Maps;
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Ada.Strings.Maps;
 with Ada.Strings.Unbounded;
 use Ada.Strings.Unbounded;
 with Ada.Text_IO;
@@ -35,6 +38,9 @@ with BBT.IO;
 with BBT.Tests.Runner;
 with Text_Utilities;
 use Text_Utilities;
+
+with Ada.Characters.Handling;
+with File_Utilities;
 
 package body BBT.GUI is
 
@@ -136,6 +142,7 @@ package body BBT.GUI is
    File_Btn     : Gnoga.Gui.Element.Common.Button_Access;
    Finish_Btn   : Gnoga.Gui.Element.Common.Button_Access;
    Stop_Toggle  : Gnoga.Gui.Element.Common.Button_Access;
+   Expand_Toggle : Gnoga.Gui.Element.Common.Button_Access;
 
    Nav          : Gnoga.Gui.Element.Common.DIV_Access;
    Mainrow      : Gnoga.Gui.Element.Common.DIV_Access;
@@ -146,6 +153,23 @@ package body BBT.GUI is
    Stop_On_Err : Boolean := True;
    --  Mirror of the runtime Pause_On_Error switch, for the toggle
    --  button label.
+
+   Auto_Expand : Boolean := True;
+   --  Mirror of the page's Auto expand toggle: when on, the tree is
+   --  expanded and scrolled to the current node at each stop; when
+   --  off, nodes are only selected, and the document node - the only
+   --  one always visible - stays highlighted.
+
+   Terminal : Gnoga.Gui.Element.Common.DIV_Access;
+   --  The debugging terminal, under the scenario window: shows the
+   --  run's console output (commands run, outputs, warnings,
+   --  errors), fed by BBT.IO through the Set_Sink hook. It takes a
+   --  quarter of the page's height by default (cf. #terminal in
+   --  boot.html).
+
+   Last_Term : Ada.Strings.Unbounded.Unbounded_String;
+   --  The terminal output so far, HTML-escaped one div per line,
+   --  replayed whole to a late or reloaded connection.
 
    package Location_Node_Maps is
      new Ada.Containers.Indefinite_Ordered_Maps
@@ -158,6 +182,27 @@ package body BBT.GUI is
    --  is in a feature's introduction). The padding keeps an ordered
    --  map's Floor lookup finding the node at or before the line.
    --  Filled by Build_Tree; read with Select_Tree_Node.
+
+   Doc_Node : Location_Node_Maps.Map;
+   --  Normalized file name -> id of the document's own tree node.
+   --  The map's keys are normalized by Norm, so that a file name
+   --  typed on the command line, an absolute Windows path or the
+   --  location's Short_Path form all hit the same entry. Filled by
+   --  Build_Tree.
+
+   Node_Info : Location_Node_Maps.Map;
+   --  Tree node id -> "file|line (9 digits)", the location the node
+   --  carries, read by Show_Tree_Node. The node ids are opaque
+   --  ("n1", "n2", ...): they must not carry any path separator, as
+   --  Windows backslashes would be eaten by the JS string literals
+   --  of the generated element creation scripts (a DOM id losing its
+   --  '\', hence unfindable by Select_Tree_Node).
+
+   Id_Seq : Natural := 0;
+   --  Last number handed out by New_Node_Id.
+
+   function New_Node_Id return String;
+   --  A fresh opaque node id.
 
    procedure Show_Tree_Node (Node_Id : String);
    procedure Select_Tree_Node (File_Name : String; Line : Natural);
@@ -527,48 +572,119 @@ package body BBT.GUI is
       Padded (Padded'Last - Raw'Length + 1 .. Padded'Last) := Raw;
       return Padded;
    end Line_Image;
+
+   function New_Node_Id return String is
+   --  A fresh opaque tree node id: no path, no separator turned into
+   --  a JS string, so the generated gnoga creation scripts cannot
+   --  corrupt it (cf. the Node_Info comment).
+   begin
+      Id_Seq := Id_Seq + 1;
+      return "n" & Trimmed_Image (Id_Seq);
+   end New_Node_Id;
    --  Zero padded (9 digits): keeps '<file>|<line>' keys ordering
    --  numerically, so a map Floor lookup finds the node at or
    --  before the line.
 
-   procedure Show_Tree_Node (Node_Id : String) is
-      --  Decodes a node id ("f:file", "F:file:line" or "S:file:line")
-      --  into the usual Show_File + Highlight_Line display. The last
-      --  ':' of an S: or F: id separates the line: file names may
-      --  carry colons of their own (Windows paths), hence the
-      --  backward scan.
-      File : String := Node_Id;
-      Line : Natural := 0;
-      Sep  : Natural;
+   --------------------------------------------------------------------------
+   --  Node ids embed file paths, injected in JavaScript string
+   --  literals: backslashes (Windows paths) and single quotes (file
+   --  names) must be escaped, or JS reads them as escape sequences
+   --  ('\new' would turn into a line feed) and get_node misses the
+   --  node, silently disabling the whole tree follow-up.
+
+   function JS_Literal (S : String) return String is
+      Buffer : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      if Node_Id'Length >= 3
-        and then (Node_Id (Node_Id'First .. Node_Id'First + 1) = "S:"
-                  or else Node_Id (Node_Id'First .. Node_Id'First + 1) = "F:")
-      then
-         Sep := Ada.Strings.Fixed.Index
-           (Node_Id, ":", From => Node_Id'Last,
-            Going => Ada.Strings.Backward);
-         if Sep > Node_Id'First + 2 then
-            Line := Natural'Value (Node_Id (Sep + 1 .. Node_Id'Last));
-            File := Node_Id (Node_Id'First + 2 .. Sep - 1);
-         end if;
-      elsif Node_Id'Length >= 3
-        and then Node_Id (Node_Id'First .. Node_Id'First + 1) = "f:"
-      then
-         File := Node_Id (Node_Id'First + 2 .. Node_Id'Last);
+      for C of S loop
+         case C is
+            when '\'    => Append (Buffer, "\\\\");
+            when '''    => Append (Buffer, "\\'");
+            when others => Append (Buffer, [C]);
+         end case;
+      end loop;
+      return Ada.Strings.Unbounded.To_String (Buffer);
+   end JS_Literal;
+
+   --------------------------------------------------------------------------
+
+   function Norm (S : String) return String is
+      --  Map keys normalization: same file, same key, whatever the
+      --  form the name came in (the raw command line argument in
+      --  Build_Tree, the Short_Path-ed location form elsewhere):
+      --  separator folding and, on Windows only, case folding.
+      use Ada.Strings.Fixed;
+      Slashed : constant String :=
+                  Translate (Source   => S,
+                             Mapping  => Ada.Strings.Maps.To_Mapping ("\", "/"));
+   begin
+      if File_Utilities.On_Windows then
+         declare
+            Result : String := Slashed;
+         begin
+            for I in Result'Range loop
+               Result (I) := Ada.Characters.Handling.To_Lower (Result (I));
+            end loop;
+            return Result;
+         end;
+      else
+         return Slashed;
+      end if;
+   end Norm;
+
+   procedure Terminal_Sink (Item : String) is
+      --  Appends one console line to the terminal panel and scrolls
+      --  the panel to the bottom (only the panel's own scrollTop is
+      --  touched). Also recorded in Last_Term, as one escaped div
+      --  per line, to be replayed whole to a late or reloaded
+      --  connection.
+      Safe : constant String :=
+               JS_Literal (To_String (Escape (Item)));
+   begin
+      Append (Last_Term,
+              "<div class=""tline"">" & To_String (Escape (Item)) & "</div>");
+      if UI_State.Wired then
+         Terminal.jQuery_Execute
+           (UXStrings.From_UTF_8
+              ("append ('<div class=""tline"">" & Safe & "</div>');"
+               & "document.getElementById ('terminal').scrollTop"
+               & " = 1000000;"));
+      end if;
+   end Terminal_Sink;
+
+   procedure Show_Tree_Node (Node_Id : String) is
+      --  A user selection in the tree: Node_Id is the opaque id given
+      --  at node creation ("n<seq>"), and Node_Info maps it back to
+      --  "file|line (9 digits)". Displays the same way as a run stop:
+      --  the file source, and the line highlighted when a non zero
+      --  one is registered (a document node carries no line).
+      use Location_Node_Maps;
+
+   begin
+      if not Node_Info.Contains (Node_Id) then
+         --  Not one of our node ids (a programmatic select not fully
+         --  suppressed, say): keep the run display untouched.
+         return;
       end if;
 
-      if Cur_File /= To_Unbounded_String (File)
-        and then not Text_Utilities.Is_Empty (Get_Source (File))
-      then
-         Show_File (File);
-      end if;
-      if Line > 0 then
-         Highlight_Line (Ada.Text_IO.Count (Line), Hl => True);
+      declare
+         Padded_Line : constant String := Node_Info.Element (Node_Id);
+         Sep  : constant Natural :=
+                          Ada.Strings.Fixed.Index (Padded_Line, "|");
+         File : constant String :=
+                  Padded_Line (Padded_Line'First .. Sep - 1);
+         Line : constant Natural :=
+                  Natural'Value (Padded_Line (Sep + 1 .. Padded_Line'Last));
+      begin
+         if Cur_File /= To_Unbounded_String (File)
+           and then not Text_Utilities.Is_Empty (Get_Source (File))
+         then
+            Show_File (File);
+         end if;
+         if Line > 0 then
+            Highlight_Line (Ada.Text_IO.Count (Line), Hl => True);
+         end if;
          Loc_Msg.Inner_HTML (UXStrings.From_UTF_8 ("selected: " & File));
-      else
-         Loc_Msg.Inner_HTML (UXStrings.From_UTF_8 ("selected: " & File));
-      end if;
+      end;
    end Show_Tree_Node;
 
    procedure Select_Tree_Node (File_Name : String; Line : Natural) is
@@ -578,21 +694,61 @@ package body BBT.GUI is
       --  node for a zero line. Programmatic selects suppress the
       --  jstree events: the page's click handler is the one that
       --  reports user selections.
+      --
+      --  The document node is selected whatever the mode: it is
+      --  always visible, so the file name stays highlighted even
+      --  when the tree is folded. The target node is selected too:
+      --  jstree keeps selections on hidden nodes, and shows them
+      --  when the user unfolds. The select_node calls pass false as
+      --  their third argument (prevent_open): without it, a jstree
+      --  select silently expands the whole ancestor chain on its
+      --  own, whatever the Auto_Expand switch below.
+      --
+      --  With Auto_Expand on, the target node and all its ancestors
+      --  are opened as well (no animation, so the layout is ready
+      --  right away), and the tree panel is scrolled so that the
+      --  node is centered - only #navtree's scrollTop is touched,
+      --  never the page's. With Auto_Expand off, no expansion, no
+      --  scroll.
       use Location_Node_Maps;
 
-      Prefix : constant String := File_Name & "|";
+      Prefix : constant String := Norm (File_Name) & "|";
       C      : constant Cursor
          := Floor (Line_Node, Prefix & Line_Image (Line));
 
       Target : constant String :=
-                 (if Line = 0
-                  then "f:" & File_Name
-                  elsif C /= No_Element
+                 (if C /= No_Element
+                        and then Key (C)'Length >= Prefix'Length
                         and then Key (C)
                                    (Key (C)'First .. Key (C)'First
                                                       + Prefix'Length - 1)
                               = Prefix
                   then Element (C)
+                  else "");
+
+      Doc_Id : constant String :=
+                 JS_Literal
+                   (if Doc_Node.Contains (Norm (File_Name))
+                    then Doc_Node.Element (Norm (File_Name))
+                    else "");
+      Node_Id : constant String := JS_Literal (Target);
+
+      Expand : constant String :=
+                 (if Auto_Expand
+                  then "if (n) {"
+                       & " for (var i = 0; i < n.parents.length; i++) {"
+                       & "  if (n.parents[i] !== '#')"
+                       & "    inst.open_node (n.parents[i], false, 0); }"
+                       & " if (n.children.length > 0)"
+                       & "   inst.open_node (n, false, 0);"
+                       & " var nc = document.getElementById ('navtree');"
+                       & " var el = document.getElementById (n.id);"
+                       & " if (nc && el) {"
+                       & "  var nb = nc.getBoundingClientRect (),"
+                       & "      eb = el.getBoundingClientRect ();"
+                       & "  nc.scrollTop += eb.top - nb.top"
+                       & "                 - (nc.clientHeight"
+                       & "                    - el.offsetHeight) / 2; } }"
                   else "");
    begin
       if UI_State.Wired
@@ -602,9 +758,13 @@ package body BBT.GUI is
            (Status_Text.Connection_ID,
             UXStrings.From_UTF_8
               ("$('#navtree').jstree('deselect_all', true);"
-               & "var n = $('#navtree').jstree(true).get_node('" & Target & "');"
-               & "if (n) { $('#navtree').jstree('open_node', n);"
-               & " $('#navtree').jstree('select_node', n, true); }"));
+               & "var inst = $('#navtree').jstree(true);"
+               & "var d = inst.get_node ('" & Doc_Id & "');"
+               & "if (d) { inst.select_node (d, true, false); }"
+               & "var n = inst.get_node ('" & Node_Id & "');"
+               & "if (n && (!d || n.id !== d.id))"
+               & " { inst.select_node (n, true, false); }"
+               & Expand));
       end if;
    end Select_Tree_Node;
 
@@ -630,83 +790,92 @@ package body BBT.GUI is
          Node_Id   : String)
       is
       begin
-         Line_Node.Include (File_Name & "|" & Line_Image (Line), Node_Id);
+         Line_Node.Include (Norm (File_Name) & "|" & Line_Image (Line),
+                            Node_Id);
+         Node_Info.Include (Node_Id,
+                            File_Name & "|" & Line_Image (Line));
       end Register;
+
+      ------------------------------------------------------------------
+
+      procedure Add_Document_Tree (D : BBT.Model.Documents.Document_Type'Class) is
+      --  One branch per analyzed document: the document node, then
+      --  its scenarios (for documents with no features), then its
+      --  features and their scenarios. Every node gets a fresh
+      --  opaque id (New_Node_Id) and registers its location.
+      begin
+         declare
+            File   : constant String := To_String (D.Name);
+            Doc_Id : constant String := New_Node_Id;
+         begin
+            It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
+            Tree.Add_Item (UXStrings.From_UTF_8 (File), It.all,
+                           UXStrings.From_UTF_8 (Doc_Id));
+            Register (File, Location_Line (D.Location), Doc_Id);
+            Doc_Node.Include (Norm (File), Doc_Id);
+
+            Sub := new Gnoga.Gui.Plugin.JSTree.JSTree_Type;
+            Tree.Add_Sub_Tree (It.all, Sub.all);
+
+            --  The document's scenarios, for documents with no
+            --  features: the scenarios read the document's own
+            --  scenario list.
+            for S of D.Scenario_List loop
+               if not S.Is_Background
+                 and then not S.Filtered
+               then
+                  declare
+                     Scen_Id : constant String := New_Node_Id;
+                  begin
+                     It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
+                     Sub.Add_Item (UXStrings.From_UTF_8 (To_String (S.Name)),
+                                   It.all, UXStrings.From_UTF_8 (Scen_Id));
+                     Register (File, Location_Line (S.Location), Scen_Id);
+                  end;
+               end if;
+            end loop;
+
+            --  The features, then their scenarios
+            for F of D.Feature_List loop
+               if not F.Filtered then
+                  declare
+                     Fea_Id : constant String := New_Node_Id;
+                  begin
+                     It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
+                     Sub.Add_Item (UXStrings.From_UTF_8 (To_String (F.Name)),
+                                   It.all, UXStrings.From_UTF_8 (Fea_Id));
+                     Register (File, Location_Line (F.Location), Fea_Id);
+
+                     Sub := new Gnoga.Gui.Plugin.JSTree.JSTree_Type;
+                     Tree.Add_Sub_Tree (It.all, Sub.all);
+
+                     for S of F.Scenario_List loop
+                        if not S.Is_Background
+                          and then not S.Filtered
+                        then
+                           declare
+                              Scen_Id : constant String := New_Node_Id;
+                           begin
+                              It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
+                              Sub.Add_Item
+                                (UXStrings.From_UTF_8 (To_String (S.Name)),
+                                 It.all, UXStrings.From_UTF_8 (Scen_Id));
+                              Register (File, Location_Line (S.Location), Scen_Id);
+                           end;
+                        end if;
+                     end loop;
+                  end;
+               end if;
+            end loop;
+         end;
+      end Add_Document_Tree;
 
    begin
       Tree.Add_Root_Tree (Nav.all, "navtree");
 
       for D of BBT.Model.Documents.Doc_List.all loop
          if not D.Filtered then
-            declare
-               File : constant String := To_String (D.Name);
-            begin
-               It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
-               Tree.Add_Item (UXStrings.From_UTF_8 (File), It.all,
-                              UXStrings.From_UTF_8 ("f:" & File));
-               Register (File, Location_Line (D.Location), "f:" & File);
-
-               Sub := new Gnoga.Gui.Plugin.JSTree.JSTree_Type;
-               Tree.Add_Sub_Tree (It.all, Sub.all);
-
-               --  The document's scenarios, for documents with no
-               --  features: the scenarios read the document's own
-               --  scenario list.
-               for S of D.Scenario_List loop
-                  if not S.Is_Background
-                    and then not S.Filtered
-                  then
-                     declare
-                        Scen_Id : constant String :=
-                                    "S:" & File & ":"
-                                      & Trimmed_Image (Location_Line (S.Location));
-                     begin
-                        It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
-                        Sub.Add_Item (UXStrings.From_UTF_8 (To_String (S.Name)),
-                                      It.all, UXStrings.From_UTF_8 (Scen_Id));
-                        Register (File, Location_Line (S.Location), Scen_Id);
-                     end;
-                  end if;
-               end loop;
-
-               --  The features, then their scenarios
-               for F of D.Feature_List loop
-                  if not F.Filtered then
-                     declare
-                        Fea_Id : constant String :=
-                                   "f:" & File & ":"
-                                     & Trimmed_Image (Location_Line (F.Location));
-                     begin
-                        It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
-                        Sub.Add_Item (UXStrings.From_UTF_8 (To_String (F.Name)),
-                                      It.all, UXStrings.From_UTF_8 (Fea_Id));
-                        Register (File, Location_Line (F.Location), Fea_Id);
-
-                        Sub := new Gnoga.Gui.Plugin.JSTree.JSTree_Type;
-                        Tree.Add_Sub_Tree (It.all, Sub.all);
-
-                        for S of F.Scenario_List loop
-                           if not S.Is_Background
-                             and then not S.Filtered
-                           then
-                              declare
-                                 Scen_Id : constant String :=
-                                             "S:" & File & ":"
-                                               & Trimmed_Image
-                                                   (Location_Line (S.Location));
-                              begin
-                                 It := new Gnoga.Gui.Plugin.JSTree.JSTree_Item_Type;
-                                 Sub.Add_Item
-                                   (UXStrings.From_UTF_8 (To_String (S.Name)),
-                                    It.all, UXStrings.From_UTF_8 (Scen_Id));
-                                 Register (File, Location_Line (S.Location), Scen_Id);
-                              end;
-                           end if;
-                        end loop;
-                     end;
-                  end if;
-               end loop;
-            end;
+            Add_Document_Tree (D);
          end if;
       end loop;
    end Build_Tree;
@@ -716,8 +885,8 @@ package body BBT.GUI is
       Node   : in     Gnoga.String)
    is
       pragma Unreferenced (Object);
-      --  Called on a tree node selection: Node is the id given at
-      --  creation ("f:<file>", "f:<file>:<line>" or "S:<file>:<line>").
+      --  Called on a tree node selection: Node is the opaque id given
+      --  at node creation ("n<seq>"), resolved by Show_Tree_Node.
    begin
       Show_Tree_Node (String (UXStrings.To_UTF_8 (Node)));
    end On_Tree_Select;
@@ -814,9 +983,28 @@ package body BBT.GUI is
                Last_Scen := E.Label;
             end if;
          when After_Step =>
-            Steps_Done := Steps_Done + 1;
+            --  Background steps are re-run for every scenario under
+            --  their scope (cf. Run_Background): they are not counted
+            --  against the step total, exactly like Model_Steps_Total
+            --  skips their steps when computing the total.
+            if not E.Is_Background then
+               Steps_Done := Steps_Done + 1;
+            end if;
             --  Counted whatever the page state: the counter is run
             --  state, replayed to late connections by Update_Progress.
+
+            --  What the run frowards: keep the last location the same
+            --  way a pause would, so that the display follows the run
+            --  live (a Continue leaves the stop handling behind).
+            Last_Line := Location_Line (E.Location);
+            Last_Loc_File := To_Unbounded_String (BBT.IO.File (E.Location));
+            Last_File     := Last_Loc_File;
+            if Length (E.Feature) > 0 then
+               Last_Feature := E.Feature;
+            end if;
+            if Length (E.Label) > 0 then
+               Last_Scen := E.Label;
+            end if;
          when Execution_Finished =>
             Last_Status := To_Unbounded_String ("Execution finished");
       end case;
@@ -858,6 +1046,14 @@ package body BBT.GUI is
                   --  A paused after failure is a real halt: the tree
                   --  follows, like at any other stop.
                end if;
+            else
+               --  Live display of the step that just ran, whatever the
+               --  release mode: at step stops the line was already
+               --  displayed by Before_Step, and in Continue / Finish
+               --  mode it is the only update of the display while the
+               --  run goes through its halt points. The status line
+               --  keeps the release message ("running to ...").
+               Show_Location (E.Location);
             end if;
 
       end case;
@@ -931,6 +1127,68 @@ package body BBT.GUI is
       end if;
    end On_Toggle_Stop_On_Error;
 
+   procedure On_Toggle_Auto_Expand
+     (Object : in out Gnoga.Gui.Base.Base_Type'Class)
+   is
+      pragma Unreferenced (Object);
+   begin
+      Auto_Expand := not Auto_Expand;
+      if Auto_Expand then
+         Expand_Toggle.Remove_Class ("off");
+         Expand_Toggle.Add_Class ("on");
+         Expand_Toggle.Inner_HTML
+          (UXStrings.From_UTF_8 ("Auto expand: ON"));
+         --  Apply it right away to the current location, so that the
+         --  tree follows without waiting for the next stop.
+         if Length (Last_Loc_File) > 0 then
+            Select_Tree_Node (To_String (Last_Loc_File), Last_Line);
+         end if;
+      else
+         Expand_Toggle.Remove_Class ("on");
+         Expand_Toggle.Add_Class ("off");
+         Expand_Toggle.Inner_HTML
+          (UXStrings.From_UTF_8 ("Auto expand: OFF"));
+      end if;
+   end On_Toggle_Auto_Expand;
+
+   function Same_Asset (Source, Target : String) return Boolean is
+   --  True when Target already holds Source's exact content, as
+   --  detected through size and modification time. Covers both a
+   --  fresh copy with preserved stamp and, mainly, the deployed
+   --  directories being links to the gui/ sources: then Target and
+   --  Source are the same physical file, and re-copying it onto
+   --  itself must not happen.
+      use Ada.Directories;
+   begin
+      if Ada.Directories.Exists (Target)
+        and then Ada.Directories.Kind (Target) = Ada.Directories.Ordinary_File
+        and then Ada.Directories.Kind (Source) = Ada.Directories.Ordinary_File
+        and then Ada.Directories.Size (Source)
+                   = Ada.Directories.Size (Target)
+        and then Ada.Directories.Modification_Time (Source)
+                   = Ada.Directories.Modification_Time (Target)
+      then
+         return True;
+      end if;
+      return False;
+   exception
+      when Ada.Directories.Name_Error =>
+         return False;
+   end Same_Asset;
+
+   --------------------------------------------------------------------------
+
+   procedure Refresh_File (Source, Target : String) is
+   --  Copy Source onto Target, unless Target is already the same
+   --  physical content (cf. Same_Asset).
+   begin
+      if not Same_Asset (Source, Target) then
+         Ada.Directories.Copy_File (Source, Target);
+      end if;
+   end Refresh_File;
+
+   --------------------------------------------------------------------------
+
    procedure Copy_Tree (Source : String; Target : String) is
       --  A recursive copy: Ada.Directories.Copy_File takes only
       --  single files, and jstree's themed css carries images next
@@ -958,7 +1216,7 @@ package body BBT.GUI is
                if Kind (Dir_Ent) = Directory then
                   Copy_Tree (Full, Target & "/" & Name);
                else
-                  Copy_File (Full, Target & "/" & Name);
+                  Refresh_File (Full, Target & "/" & Name);
                end if;
             end if;
          end;
@@ -969,7 +1227,10 @@ package body BBT.GUI is
    --------------------------------------------------------------------------
    --  Deployment of the js and html assets next to the executable:
    --  gnoga looks for them relative to the application directory
-   --  (cf. gui/README.md). Idempotent: re-copied at each --gui run.
+   --  (cf. gui/README.md). Idempotent: files are re-copied at each
+   --  --gui run, but only when they differ (the deployed html/, js/
+   --  and css/ directories may also be links to gui/, then Same_Asset
+   --  keeps Copy_File from writing onto its own source).
    --------------------------------------------------------------------------
 
    procedure Deploy_Assets is
@@ -998,18 +1259,18 @@ package body BBT.GUI is
       Ada.Directories.Create_Path (Exe_Dir & "js");
       Ada.Directories.Create_Path (Exe_Dir & "css");
       begin
-         Ada.Directories.Copy_File (Src & "/html/boot.html",
-                                    Exe_Dir & "html/boot.html");
-         Ada.Directories.Copy_File (Src & "/js/boot.js",
-                                    Exe_Dir & "js/boot.js");
-         Ada.Directories.Copy_File (Src & "/js/jquery.min.js",
-                                    Exe_Dir & "js/jquery.min.js");
-         Ada.Directories.Copy_File (Src & "/js/mermaid.min.js",
-                                    Exe_Dir & "js/mermaid.min.js");
-         Ada.Directories.Copy_File (Src & "/js/page.js",
-                                    Exe_Dir & "js/page.js");
-         Ada.Directories.Copy_File (Src & "/js/jstree.min.js",
-                                    Exe_Dir & "js/jstree.min.js");
+         Refresh_File (Src & "/html/boot.html",
+                       Exe_Dir & "html/boot.html");
+         Refresh_File (Src & "/js/boot.js",
+                       Exe_Dir & "js/boot.js");
+         Refresh_File (Src & "/js/jquery.min.js",
+                       Exe_Dir & "js/jquery.min.js");
+         Refresh_File (Src & "/js/mermaid.min.js",
+                       Exe_Dir & "js/mermaid.min.js");
+         Refresh_File (Src & "/js/page.js",
+                       Exe_Dir & "js/page.js");
+         Refresh_File (Src & "/js/jstree.min.js",
+                       Exe_Dir & "js/jstree.min.js");
          Copy_Tree (Src & "/css/jstree_themes",
                     Exe_Dir & "css/jstree_themes");
       exception
@@ -1035,8 +1296,11 @@ package body BBT.GUI is
    is
       View : Gnoga.Gui.View.View_Type;
       Bar  : Gnoga.Gui.Element.Common.DIV_Type;
+      Progress_Row : Gnoga.Gui.Element.Common.DIV_Type;
       Statusbar : Gnoga.Gui.Element.Common.DIV_Type;
       Divider : Gnoga.Gui.Element.Common.DIV_Type;
+      Divider_T : Gnoga.Gui.Element.Common.DIV_Type;
+      Bottom  : Gnoga.Gui.Element.Common.DIV_Access;
       --  The tree panel's drag handle, between Nav and Content.
    begin
       Loc_Msg     := new Gnoga.Gui.Element.Common.P_Type;
@@ -1051,8 +1315,16 @@ package body BBT.GUI is
       File_Btn    := new Gnoga.Gui.Element.Common.Button_Type;
       Finish_Btn  := new Gnoga.Gui.Element.Common.Button_Type;
       Stop_Toggle := new Gnoga.Gui.Element.Common.Button_Type;
+      Expand_Toggle := new Gnoga.Gui.Element.Common.Button_Type;
 
-      View.Create (Main_Window);
+      View.Create (Main_Window, "root");
+      --  An id, so that the boot.html CSS can style the page's root
+      --  column (the View is the only direct child of body). gnoga
+      --  initializes the View with its own inline styles, which take
+      --  precedence over any stylesheet rule, so the page column flex
+      --  layout is set inline here as well.
+      View.Style ("display", "flex");
+      View.Style ("flex-direction", "column");
 
       Bar.Create (View, "", "topbar");
 
@@ -1080,25 +1352,45 @@ package body BBT.GUI is
         (UXStrings.From_UTF_8 (if Stop_On_Err then "on" else "off"));
       --  Green when armed, red when disarmed (cf. boot.html)
 
-      --  The status bar, editor style: just under the buttons, the
-      --  location line on the left, the progress bar in the middle,
-      --  the run status on the right.
-      Statusbar.Create (View, "", "statusbar");
-      Loc_Msg.Create (Statusbar, "", "loc");
-
-      Progress.Create (Statusbar, "", "progress");
+      --  The progress bar and the run status, on their own row to the
+      --  left, between the buttons row and the location line (the CSS
+      --  keeps the row compact).
+      Progress_Row.Create (View, "", "progressrow");
+      Progress.Create (Progress_Row, "", "progress");
       Progress_Text.Create (Progress.all, "", "progress_text");
       Progress_Fill.Create (Progress.all, "", "progress_fill");
+      Status_Text.Create (Progress_Row, "starting", "status");
 
-      Status_Text.Create (Statusbar, "starting", "status");
+      --  The navigation line (the file > feature > scenario
+      --  breadcrumb), alone on its own row, under the buttons.
+      Statusbar.Create (View, "", "statusbar");
+      Loc_Msg.Create (Statusbar, "", "loc");
 
       --  The main row: the scenario tree on the left, the file
       --  content on the right. Nav first: it hosts the tree, that
       --  Build_Tree attaches to it.
+      --  The bottom area: the terminal (the run's console output),
+      --  a quarter of the page height by default, below the main
+      --  row. #bottom is the flex column wrapper, matching the CSS.
+      Bottom := new Gnoga.Gui.Element.Common.DIV_Type;
+      Bottom.Create (View, "", "bottom");
+
       Mainrow := new Gnoga.Gui.Element.Common.DIV_Type;
-      Mainrow.Create (View, "", "mainrow");
+      Mainrow.Create (Bottom.all, "", "mainrow");
       Nav     := new Gnoga.Gui.Element.Common.DIV_Type;
       Nav.Create (Mainrow.all, "", "nav");
+
+      --  The Auto expand toggle, at the top of the tree panel: it
+      --  belongs to the tree, not to the run controls. Build_Tree
+      --  appends the tree after it, so the button stays as the
+      --  panel's header (#nav is a flex column, cf. boot.html).
+      Expand_Toggle.Create (Nav.all, UXStrings.From_UTF_8 ("Auto expand: ON"),
+                            "auto_expand");
+      Expand_Toggle.On_Click_Handler
+        (On_Toggle_Auto_Expand'Unrestricted_Access);
+      Expand_Toggle.Add_Class (UXStrings.From_UTF_8 ("on"));
+      --  Green when armed (the tree follows the run), blue when
+      --  disarmed (only the visible nodes keep their highlight).
 
       --  The drag handle adjusting the tree panel's width (the drag
       --  itself is handled by page.js, cf. #divider there).
@@ -1106,6 +1398,20 @@ package body BBT.GUI is
 
       Content := new Gnoga.Gui.Element.Common.DIV_Type;
       Content.Create (Mainrow.all, "", "content");
+
+      --  The debugging terminal, under the scenario window: the
+      --  run's console output as forwarded by BBT.IO's Set_Sink
+      --  hook. A block element inside #bottom, below the nav +
+      --  content row, taking a quarter of the page height by
+      --  default (cf. #terminal in boot.html). Filled live from
+      --  then on, and replayed below once wired.
+      --  The drag handle above it adjusts the terminal's height
+      --  (the drag itself is handled by page.js, cf. #tdivider
+      --  there).
+      Divider_T.Create (Bottom.all, "", "tdivider");
+
+      Terminal := new Gnoga.Gui.Element.Common.DIV_Type;
+      Terminal.Create (Bottom.all, "", "terminal");
 
       --  Replay the display state for a late or reloaded tab: the
       --  connection typically arrives after the run paused at the
@@ -1153,18 +1459,24 @@ package body BBT.GUI is
       --  Programmatic selects bypass it: select_node's third argument
       --  suppresses the jstree event.
 
-      --  Replay the tree selection too: a late or reloaded tab
-      --  typically arrives after the run paused at a halt point.
+      --  Mark the session as wired before the replay below, and
+      --  BEFORE holding the connection: Connection.Hold blocks until
+      --  the connection is released (i.e. closed), so anything after
+      --  it would only run on a dead page. Select_Tree_Node and the
+      --  live updates are gated on Wired; the state to replay is
+      --  already in Last_*, and the page just rebuilt it, so live
+      --  updates from now on can target it.
+      UI_State.Set_Wired (True);
+
+      --  Replay the tree selection and terminal output: a late or
+      --  reloaded tab typically lands after the run already hit a
+      --  halt point.
+      if Length (Last_Term) > 0 then
+         Terminal.Inner_HTML (UXStrings.From_UTF_8 (To_String (Last_Term)));
+      end if;
       if Length (Last_Loc_File) > 0 then
          Select_Tree_Node (To_String (Last_Loc_File), Last_Line);
       end if;
-
-      --  Mark the session as wired BEFORE holding the connection:
-      --  Connection.Hold blocks until the connection is released (i.e.
-      --  closed), so anything after it would only run on a dead page.
-      --  The state to replay is already in Last_*, and the page just
-      --  rebuilt it, so live updates from now on can target it.
-      UI_State.Set_Wired (True);
 
       Connection.Hold;
       --  Prevents this connection's finalization while the run keeps
@@ -1247,6 +1559,12 @@ package body BBT.GUI is
       end Port_In_Use;
 
    begin
+      --  The debugging terminal mirrors everything the run's output
+      --  layer would print: registered before anything else, so that
+      --  even the analysis output lands in the page (and in the
+      --  late-connection replay).
+      BBT.IO.Set_Sink (Terminal_Sink'Access);
+
       Deploy_Assets;
 
       while Port_In_Use (Port) loop

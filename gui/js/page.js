@@ -72,6 +72,29 @@ $(document).on ('mousedown', '#divider', function (event) {
    document.body.style.userSelect = 'none';
 });
 
+/* The terminal panel's height is adjustable through the #tdivider
+   handle, between the mainrow and the terminal. Dragging up grows the
+   terminal (it sets #terminal's flex basis inline, overriding the
+   25vh layout default), clamped to leave room for the mainrow. */
+$(document).on ('mousedown', '#tdivider', function (event) {
+   event.preventDefault ();
+   var term = document.getElementById ('terminal');
+   var move = function (event) {
+      if (!term) { return; }
+      var h = event.clientY - term.getBoundingClientRect ().top;
+      h = Math.max (30, Math.min (h, window.innerHeight / 2));
+      term.style.flexBasis = h + 'px';
+   };
+   var stop = function () {
+      document.removeEventListener ('mousemove', move);
+      document.removeEventListener ('mouseup', stop);
+      document.body.style.userSelect = '';
+   };
+   document.addEventListener ('mousemove', move);
+   document.addEventListener ('mouseup', stop);
+   document.body.style.userSelect = 'none';
+});
+
 /* Step and failure highlights are requested by the server with a
    'bbt:highlight' custom event on #content: it clears the previous
    highlights, tags the target line, and keeps it in view. */

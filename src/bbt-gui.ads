@@ -27,6 +27,12 @@
 
 private package BBT.GUI is
 
+   procedure Terminal_Sink (Item : String);
+   --  The GUI terminal display sink, registered in BBT.IO at Run
+   --  (cf. Set_Sink there): one complete message line per call,
+   --  appended to the terminal panel, and recorded for the replay to
+   --  a browser connecting later (or a page just reloaded).
+
    procedure Run;
    --  Open the debugger page (starting the embedded gnoga server,
    --  and the user's browser on its address), start the test run of

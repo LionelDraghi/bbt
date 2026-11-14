@@ -12,36 +12,72 @@
       <script src="/js/mermaid.min.js" type="text/javascript"></script>
       <script src="/js/page.js" type="text/javascript"></script>
       <style>
-         body { font-family: sans-serif; margin: 10px; background: #fafafa; }
+         /* The page is a flex column: the three header rows are fixed,
+            #bottom takes the rest, the terminal a quarter of the
+            viewport. No magic height offset. */
+         body { font-family: sans-serif; margin: 0; background: #fafafa;
+                height: 100vh; display: flex; flex-direction: column; }
+         body > div#root { flex: 1 1 auto; min-height: 0;
+                           display: flex; flex-direction: column; }
+         #root > * { flex: none; }
          #topbar {
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 5px 10px;
-            margin-bottom: 6px;
+            padding: 8px 8px 2px;
          }
-         #topbar button { margin: 0; }
-         /* Stop on error: a big toggle, green when armed (ON), blue
-            when disarmed (OFF, not red: a disarmed switch is not a
-            problem) — cf. the POC's #stop_on styling */
-         #stop_toggle { font-weight: bold; }
-         #stop_toggle.on { background: #2f855a; }
-         #stop_toggle.on:hover { background: #276749; }
-         #stop_toggle.off { background: #2b6cb0; }
-         #stop_toggle.off:hover { background: #2a4d7f; }
-         /* The status bar, editor style: just under the buttons, the
-            location line on the left, progress in the middle, run
-            status on the right. The POC's #statusbar styling,
-            migrated. */
+         #topbar button, #progressrow button { margin: 0; padding: 2px 10px; }
+         /* Stop on error / Auto expand: toggles, green when armed
+            (ON), blue when disarmed (OFF, not red: a disarmed switch
+            is not a problem) — cf. the POC's #stop_on styling.
+            A classic raised/sunken look: ON gets the light border on
+            the top/left and the dark one on the bottom/right
+            (button up), OFF gets it the other way round (button
+            pressed in). */
+         #stop_toggle, #auto_expand { font-weight: bold; }
+         #stop_toggle.on, #auto_expand.on {
+            background: #2f855a;
+            border-width: 2px;
+            border-style: solid;
+            border-top-color: #8fd6a9;
+            border-left-color: #8fd6a9;
+            border-bottom-color: #1d4a2f;
+            border-right-color: #1d4a2f;
+         }
+         #stop_toggle.on:hover, #auto_expand.on:hover { background: #276749; }
+         #stop_toggle.off, #auto_expand.off {
+            background: #2b6cb0;
+            border-width: 2px;
+            border-style: solid;
+            border-top-color: #163964;
+            border-left-color: #163964;
+            border-bottom-color: #7fb3e0;
+            border-right-color: #7fb3e0;
+         }
+         #stop_toggle.off:hover, #auto_expand.off:hover { background: #2a4d7f; }
+         /* The progress row: the progress bar and the run status, on
+            the left, just under the buttons and above the location
+            line. */
+         #progressrow {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1px 8px;
+            font-size: 14px;
+         }
+         #progressrow .status { margin: 0; color: #718096; }
+         /* The status bar, editor style: the location line on the
+            left, the progress in the middle, run status on the right.
+            The POC's #statusbar styling, migrated. */
          #statusbar {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 5px 10px;
+            padding: 1px 8px;
             background: #e2e8f0;
             border-bottom: 1px solid #cbd5e0;
-            margin-bottom: 10px;
-            font-size: small;
+            font-size: 14px;
+            line-height: 1.1;
          }
          #statusbar .loc { margin: 0; color: #2d3748; }
          #statusbar .status { margin: 0 0 0 auto; color: #718096; }
@@ -49,7 +85,7 @@
             position: relative;
             flex: 1;
             max-width: 300px;
-            height: 14px;
+            height: 20px;
             background: #cbd5e0;
             border-radius: 4px;
             overflow: hidden;
@@ -60,8 +96,8 @@
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 9pt;
-            line-height: 14px;
+            font-size: 11pt;
+            line-height: 20px;
             color: #2d3748;
             margin: 0;
          }
@@ -72,15 +108,51 @@
             border-radius: 2px;
             transition: width 0.3s;
          }
-         #mainrow { display: flex; gap: 10px; height: calc(100vh - 108px); }
+         #bottom {
+         display: flex;
+         flex-direction: column;
+         flex: 1 1 auto;
+         min-height: 0;
+      }
+      #bottom #mainrow {
+         flex: 1 1 auto;
+         min-height: 0;
+         display: flex;
+         gap: 10px;
+      }
+      #bottom #terminal {
+         flex: 0 0 25vh;
+         overflow: auto;
+         background: #1e1e1e;
+         border-top: 1px solid #cbd5e0;
+         font-family: "Cascadia Mono", Consolas, Menlo, monospace;
+         font-size: 10pt;
+         padding: 4px 0;
+      }
+      #bottom #terminal .tline {
+         color: #d6d6d6;
+         padding: 0 8px 0 0;
+         border-radius: 3px;
+      }
          #nav {
             flex: 0 0 280px;
+            display: flex;
+            flex-direction: column;
             background: white;
             border: 1px solid #ccc;
             border-radius: 4px;
             padding: 6px;
-            overflow: auto;
+            overflow: hidden;
+            gap: 6px;
          }
+         /* The Auto expand toggle, own header of the tree panel */
+         #nav #auto_expand {
+            flex: none;
+            width: 100%;
+            margin: 0;
+         }
+         /* The tree itself scrolls, not the panel header */
+         #nav #navtree { flex: 1 1 auto; overflow: auto; }
          #divider {
             flex: 0 0 7px;
             cursor: col-resize;
@@ -88,6 +160,15 @@
             border-left: 1px solid #cbd5e0;
          }
          #divider:hover { background: #cbd5e0; }
+         /* The terminal panel's height drag handle, between the
+            nav + content row and the terminal */
+         #tdivider {
+            flex: 0 0 7px;
+            cursor: row-resize;
+            background: #eef2f7;
+            border-top: 1px solid #cbd5e0;
+         }
+         #tdivider:hover { background: #cbd5e0; }
          #content {
             position: relative;
             flex: 1 1 auto;

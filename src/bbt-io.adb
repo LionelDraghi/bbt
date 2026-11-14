@@ -23,6 +23,28 @@ package body BBT.IO is
    -- --------------------------------------------------------------------------
    Errors_Count       : Natural          := 0;
    Warnings_Count     : Natural          := 0;
+   Sink               : Access_To_Sink   := null;
+   --  The GUI terminal display sink, registered by the GUI (only).
+   --  Called before the terminal display, from whatever task formats
+   --  the message: the sink is responsible for its own thread safety
+   --  (gnoga's message dispatch is multi tasking safe).
+
+   procedure Set_Sink (To : Access_To_Sink) is
+   begin
+      Sink := To;
+   end Set_Sink;
+
+   procedure Emit (Line : String);
+   --  Forwards one complete message line to the registered sink, if
+   --  any. No empty lines: bare New_Line produces no terminal output.
+
+   procedure Emit (Line : String) is
+   begin
+      if Line'Length > 0 and then Sink /= null then
+         Sink.all (Line);
+      end if;
+   end Emit;
+
    Tee_Enabled        : Boolean          := False;
    Was_Tee_Enabled    : Boolean          := False;
    Tee_File_Verbosity : Verbosity_Levels := Normal;
@@ -136,6 +158,7 @@ package body BBT.IO is
    procedure Put_Exception (Msg      : String;
                             Location : Location_Type := No_Location) is
    begin
+      Emit (Image (Location) & " Exception : " & Msg);
       Text_IO.Put_Line (Text_IO.Standard_Error,
                         Image (Location) & " Exception : " & Msg);
    end Put_Exception;
@@ -279,6 +302,7 @@ package body BBT.IO is
    begin
       if Print_On_Standard_Output then
          Status_Bar.Clear;
+         Emit (Prefix & Item);
          Text_IO.Put_Line (Prefix & Item);
          Status_Bar.Draw;
       end if;
@@ -301,6 +325,7 @@ package body BBT.IO is
          Status_Bar.Clear;
          --  No Draw here: the line is not complete, and the bar is
          --  redrawn at the next completed line
+         Emit (Prefix & Item);
          Text_IO.Put (Prefix & Item);
       end if;
       if Print_In_Tee_File (Verbosity, Topic) then

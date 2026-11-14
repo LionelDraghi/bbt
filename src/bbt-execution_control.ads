@@ -46,6 +46,11 @@ private package BBT.Execution_Control is
                  Ada.Strings.Unbounded.Null_Unbounded_String;
       --  Plain text attached to progress events, e.g. the current
       --  scenario on Before_Scenario and step events, empty otherwise.
+      Is_Background : Boolean := False;
+      --  True on the Step events of a doc or feature background. Those
+      --  are re-run for every scenario under their scope, so display
+      --  clients must not count them against the step total: each
+      --  Counted step runs exactly once per run.
    end record;
 
    type Scope is (Next_Step, Next_Scenario, Next_Feature, Next_File);

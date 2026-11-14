@@ -147,6 +147,15 @@ private package BBT.IO is
    procedure Restore_Tee;
    -- Restore the state before last Pause_Tee call.
 
+   type Access_To_Sink is access procedure (Line : String);
+   procedure Set_Sink (To : Access_To_Sink);
+   --  Register a display sink for the debugger GUI terminal: every
+   --  message that reaches an output (whatever the verbosity filter
+   --  or the Tee state) is also forwarded to the sink, as one
+   --  complete line. Not called for bare New_Line. This is the
+   --  output hook discussed in the design notes (cf. the Fixme on
+   --  the Status_Bar dependency in the package body).
+
    -- --------------------------------------------------------------------------
    -- Error_Count and Warning_Count return the number of call to Put_Error
    -- and Put_Warning.

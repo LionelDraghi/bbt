@@ -21,6 +21,29 @@ endif
 
 RESULTS_DIR := ../docs/tests_results/$(PLATFORM)
 
+# The GUI assets used by the bbt --gui debugger, in tests/: junction
+# links to ../gui on Windows, symlinks on the other platforms (recreated
+# by clean, and by setup). When Deploy_Assets (src/bbt-gui.adb) finds
+# links, Same_Asset keeps it from re-copying the assets onto themselves.
+ifeq ($(OS), Windows_NT)
+# $(CURDIR) is a POSIX path here, cygpath turns it into the C:\ form
+# mklink demands.
+gui_assets:
+	@ W=$$(cygpath -w "$(CURDIR)") ; \
+	  for A in html js css ; do \
+	    if [ -e $$A ] ; then \
+	      echo "  $$A already there" ; \
+	    else \
+	      cmd //c "mklink /J $$W\\$$A $$W\\..\\gui\\$$A" ; \
+	    fi ; \
+	  done
+else
+gui_assets:
+	@ ln -fs ../gui/html html
+	@ ln -fs ../gui/js js
+	@ ln -fs ../gui/css css
+endif
+
 # Options common to the three bbt suite invocations below
 COMMON_OPTIONS := --yes --keep_going --cleanup=full --quiet \
 --human_match --scenario_timeout 30
@@ -40,7 +63,7 @@ all: check
 	@:
 
 .PHONY : all help clean distclean setup check features examples non_reg \
-         unit_testing doc build refresh_bbt
+         unit_testing doc build refresh_bbt gui_assets
 
 help:
 	@ echo "Usage: make [target]"
@@ -228,6 +251,7 @@ clean:
 	@ - rm -f main main$(EXE_SUFFIX) ask ask$(EXE_SUFFIX) \
 	     cp cp$(EXE_SUFFIX) timed timed$(EXE_SUFFIX)
 	@ - rm -rf inc dir* html js css
+	@ if [ -d ../gui ]; then $(MAKE) -s gui_assets; fi
 
 # distclean also removes the binaries and the links
 distclean: clean

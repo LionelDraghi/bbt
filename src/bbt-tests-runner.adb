@@ -579,7 +579,8 @@ package body BBT.Tests.Runner is
                         Location => Step.Location,
                         Failed   => False,
                         Label    => Scen_Label,
-                        Feature  => Feature_Label));
+                        Feature  => Feature_Label,
+                        Is_Background => Scen.Is_Background));
             end if;
             --  Before the halt: at a step stop, the highlighted line is
             --  the one about to run, debugger style.
@@ -592,7 +593,8 @@ package body BBT.Tests.Runner is
                      Location => Step.Location,
                      Failed   => Run_Error,
                      Label    => Scen_Label,
-                     Feature  => Feature_Label));
+                     Feature  => Feature_Label,
+                     Is_Background => Scen.Is_Background));
             if Run_Error then
                Halt_On_Error;
             end if;
@@ -625,7 +627,8 @@ package body BBT.Tests.Runner is
                   Location => F.Location,
                   Failed   => False,
                   Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
-                  Feature  => To_Unbounded_String (+F.Name)));
+                  Feature  => To_Unbounded_String (+F.Name),
+                  Is_Background => False));
       end if;
       --  Just before the halt, so a stop at a feature boundary shows
       --  the incoming feature on the debugger's location line.
@@ -714,7 +717,8 @@ package body BBT.Tests.Runner is
                         Label    => To_Unbounded_String (+Scen.Name),
                         Feature  => (if Is_In_Feature (Scen)
                                      then To_Unbounded_String (+Scen.Parent.Name)
-                                     else Ada.Strings.Unbounded.Null_Unbounded_String)));
+                                     else Ada.Strings.Unbounded.Null_Unbounded_String),
+                        Is_Background => False));
             end if;
             --  Before the halt: at a scenario boundary stop, the
             --  location line already shows the incoming scenario.
@@ -766,7 +770,8 @@ package body BBT.Tests.Runner is
                   Location => Doc.Location,
                   Failed   => False,
                   Label    => To_Unbounded_String (+Doc.Name),
-                  Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
+                  Feature  => Ada.Strings.Unbounded.Null_Unbounded_String,
+                  Is_Background => False));
       end if;
       --  Source the debugger with the incoming file before stopping:
       --  pausing at a file boundary changes the page content.
@@ -853,7 +858,8 @@ package body BBT.Tests.Runner is
                Failed   => False,
                Location => No_Location,
                Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
-               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
+               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String,
+               Is_Background => False));
 
       if not Ada.Directories.Exists (Settings.Tmp_Dir) then
          Created_File_List.Add (Settings.Tmp_Dir);
@@ -896,7 +902,8 @@ package body BBT.Tests.Runner is
                Failed   => False,
                Location => No_Location,
                Label    => Ada.Strings.Unbounded.Null_Unbounded_String,
-               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String));
+               Feature  => Ada.Strings.Unbounded.Null_Unbounded_String,
+               Is_Background => False));
 
       GUI_Backends.Shutdown;
 
