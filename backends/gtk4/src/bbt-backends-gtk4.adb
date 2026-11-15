@@ -13,10 +13,11 @@ with Ada.Directories;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Unchecked_Conversion;
-with GNAT.OS_Lib;
+with BBT_Backends.Polling; use BBT_Backends.Polling;
 with Interfaces.C;          use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
+with GNAT.OS_Lib;
 
 package body BBT.Backends.Gtk4 is
 
@@ -270,17 +271,12 @@ package body BBT.Backends.Gtk4 is
    end Atspi_Launch;
 
    function Atspi_Window_Appears (Expected_Title : String := "") return Boolean is
-      Deadline : constant Time := Clock + 6.0;
-      Found    : Boolean := False;
+      function Try return Boolean is
+        (Scan_For_Window (Expected_Title));
+      function Poll is new Eventually (Try);
    begin
       Observed := Null_Unbounded_String;
-      while Clock < Deadline and then not Found loop
-         Found := Scan_For_Window (Expected_Title);
-         if not Found then
-            delay 0.2;
-         end if;
-      end loop;
-      return Found;
+      return Poll;
    end Atspi_Window_Appears;
 
    function Atspi_Observed_Title return String is
@@ -322,30 +318,28 @@ package body BBT.Backends.Gtk4 is
    --  builds, and a previous step may still be propagating.
 
    function Atspi_Window_Contains (Expected : String) return Boolean is
-      Deadline : constant Time := Clock + 6.0;
-      App      : System.Address;
+      function Try return Boolean is
+         App : constant System.Address := App_Node;
+      begin
+         if App = System.Null_Address then
+            return False;
+         end if;
+         --  The window text of the application: every window of
+         --  the application in the tree — a dialog opens in its
+         --  own window (unlike a DOM dialog, which stays in the
+         --  parent document's text).
+         declare
+            Text : constant String := Gather_Text (App);
+         begin
+            G_Object_Unref (App);
+            Last_Text := To_Unbounded_String (Text);
+            return Ada.Strings.Fixed.Index (Text, Expected) /= 0;
+         end;
+      end Try;
+      function Poll is new Eventually (Try);
    begin
       Last_Text := Null_Unbounded_String;
-      while Clock < Deadline loop
-         App := App_Node;
-         if App /= System.Null_Address then
-            --  The window text of the application: every window of
-            --  the application in the tree — a dialog opens in its
-            --  own window (unlike a DOM dialog, which stays in the
-            --  parent document's text).
-            declare
-               Text : constant String := Gather_Text (App);
-            begin
-               G_Object_Unref (App);
-               Last_Text := To_Unbounded_String (Text);
-               if Ada.Strings.Fixed.Index (Text, Expected) /= 0 then
-                  return True;
-               end if;
-            end;
-         end if;
-         delay 0.2;
-      end loop;
-      return False;
+      return Poll;
    end Atspi_Window_Contains;
 
    function Observed_Text return String is
@@ -580,50 +574,58 @@ package body BBT.Backends.Gtk4 is
    --  dispatch for the whole MVP widget vocabulary.
 
    function Atspi_Widget_Named (Role : String; Name : String) return Boolean is
-      Deadline : constant Time := Clock + 6.0;
-      Frame, Found : System.Address;
-   begin
-      while Clock < Deadline loop
-         Frame := Window_Of ("");
-         if Frame /= System.Null_Address then
-            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
-            G_Object_Unref (Frame);
-            if Found /= System.Null_Address then
-               G_Object_Unref (Found);
-               return True;
-            end if;
+      function Try return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
+         if Frame = System.Null_Address then
+            return False;
          end if;
-         delay 0.2;
-      end loop;
-      return False;
+         Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
+         G_Object_Unref (Frame);
+         if Found /= System.Null_Address then
+            G_Object_Unref (Found);
+            return True;
+         end if;
+         return False;
+      end Try;
+      function Poll is new Eventually (Try);
+   begin
+      return Poll;
    end Atspi_Widget_Named;
 
    function Atspi_Widget_Enabled
      (Role : String; Name : String) return Boolean
    is
-      Deadline : constant Time := Clock + 6.0;
-      Frame, Found : System.Address;
-   begin
-      while Clock < Deadline loop
-         Frame := Window_Of ("");
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
          if Frame /= System.Null_Address then
             Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
             G_Object_Unref (Frame);
-            if Found /= System.Null_Address then
-               declare
-                  Enabled : constant Boolean :=
-                    Atspi_State_Set_Contains
-                      (Atspi_Accessible_Get_State_Set (Found),
-                       State_Sensitive) /= 0;
-               begin
-                  G_Object_Unref (Found);
-                  return Enabled;
-               end;
-            end if;
+            Widget := Found;
          end if;
-         delay 0.2;
-      end loop;
-      return False;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Enabled return Boolean is
+         In_State : constant Boolean :=
+           Atspi_State_Set_Contains
+             (Atspi_Accessible_Get_State_Set (Widget),
+              State_Sensitive) /= 0;
+      begin
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return In_State;
+      end Enabled;
+
+      function Poll is new Eventually_Get (Present   => Present,
+                                           Observed  => Enabled);
+   begin
+      return Poll;
    end Atspi_Widget_Enabled;
 
 
@@ -631,28 +633,33 @@ package body BBT.Backends.Gtk4 is
    --  action of the first widget of role Role named Name.
 
    function Atspi_Press_Widget (Role : String; Name : String) return Boolean is
-      Deadline : constant Time := Clock + 6.0;
-      Frame, Found : System.Address;
-   begin
-      while Clock < Deadline loop
-         Frame := Window_Of ("");
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
          if Frame /= System.Null_Address then
             Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
             G_Object_Unref (Frame);
-            if Found /= System.Null_Address then
-               declare
-                  Done : constant Boolean :=
-                    Atspi_Action_Do_Action
-                      (Found, 0, System.Null_Address) /= 0;
-               begin
-                  G_Object_Unref (Found);
-                  return Done;
-               end;
-            end if;
+            Widget := Found;
          end if;
-         delay 0.2;
-      end loop;
-      return False;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Pressed return Boolean is
+         Done : constant Boolean :=
+           Atspi_Action_Do_Action (Widget, 0, System.Null_Address) /= 0;
+      begin
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return Done;
+      end Pressed;
+
+      function Poll is new Eventually_Get (Present   => Present,
+                                           Observed  => Pressed);
+   begin
+      return Poll;
    end Atspi_Press_Widget;
 
    --  -----------------------------------------------------------------------

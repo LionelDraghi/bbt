@@ -12,8 +12,6 @@
 --  application by process id, with an application name fallback for
 --  wrapper processes.
 
-with BBT.Backends;
-
 package BBT.Backends.Gtk4 is
 
    Backend_Kind : constant String := "gtk4";

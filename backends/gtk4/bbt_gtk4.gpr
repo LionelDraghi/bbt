@@ -5,6 +5,7 @@
 -- -----------------------------------------------------------------------------
 
 with "../../bbt_lib.gpr";
+with "../../backends/common/bbt_backends.gpr";
 
 with "../../src/Alire_config/bbt_config.gpr";
 

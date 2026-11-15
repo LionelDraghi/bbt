@@ -1,0 +1,23 @@
+# bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+# SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+# SPDX-FileCopyrightText: 2026 Lionel Draghi
+
+name = "bbt_backends"
+description = "Shared support library for the bbt GUI backends"
+version = "0.6.1"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+tags = ["test", "testing", "gherkin", "markdown", "tdd", "bdd", "gui"]
+
+[[depends-on]]
+#  The bbt core library: the harness the backends serve. The shared
+#  helpers of this crate (polling, text normalization) are pure Ada
+#  for now, the core dependency is the crate contract
+#  (cf. docs/proposed/crate_restructuring.md); local development
+#  builds backends/common directly against the sibling sources, no
+#  path pin yet, like the backend crates.
+bbt = "^0.6.1"

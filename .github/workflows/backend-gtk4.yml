@@ -1,0 +1,123 @@
+name: Backend gtk4
+
+# The per-backend CI (cf. docs/proposed/crate_restructuring.md,
+# acceptance criteria): builds the backend crate and its witness
+# application, and runs the shared GUI scenario suite
+# (backends/scenarios) headlessly, on the platforms the backend
+# supports. The gtk4 backend is Linux only, one OS in the matrix.
+
+on:                    # Run the workflow for each of the following events:
+  push:                # - The main branch is pushed or updated.
+    branches:
+      - main
+    paths: &trigger_paths
+      - 'backends/**'
+      - 'Apps/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'docs/features/**'
+      - 'alire.toml'
+      - 'bbt.gpr'
+      - 'bbt_lib.gpr'
+      - '.github/workflows/backend-gtk4.yml'
+  pull_request:        # - A pull-request is opened or updated.
+    paths: *trigger_paths
+
+  workflow_dispatch:   # - A manual run of the workflow is requested.
+
+permissions: write-all
+
+concurrency:
+  # A new push cancels the run still in flight, on the model of the
+  # main build-and-test workflow.
+  group: backend-gtk4-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Build and test the gtk4 backend (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: alire-project/setup-alire@v5
+        with:
+          # Same version as the local development environment.
+          version: 2.1.1
+
+      - name: Refresh the community index and raise the solver timeout
+        # Same recipe as the main build-and-test workflow.
+        shell: bash
+        run: |
+          alr index --reset-community
+          alr settings --global --set solver.timeout 120
+
+      - name: Cache Alire dependencies (core)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/alire
+            ~/.local/share/alire
+          key: ${{ runner.os }}-backend-gtk4-alire-${{ hashFiles('alire.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-alire-
+
+      - name: Setup the backend dev packages (Linux)
+        # The gtk4 backend links -l:libatspi.so.0, -lgobject-2.0 and
+        # -lglib-2.0 (the images carry the runtime libraries, the
+        # linker needs the -dev symlink of each); the witness app is
+        # a GTK 4 application, and the headless run needs Xvfb and
+        # an accessibility registry reachable on the session bus.
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libatspi2.0-dev libglib2.0-dev \
+                                  libgtk-4-dev xvfb at-spi2-core
+
+      - name: Clone the pinned sibling crates
+        # Same as the main workflow: alire.toml pins list_image to a
+        # sibling directory during development.
+        shell: bash
+        run: |
+          git clone --depth 1 --branch master https://github.com/LionelDraghi/List_Image ../list_image
+
+      - name: Build the bbt core
+        # The backends link the static libbbt.a built by the core;
+        # building the core also populates the Alire cache the
+        # backend builds rely on for their GPR_PROJECT_PATH.
+        shell: bash
+        run: alr -q build
+
+      - name: Build the backend crates
+        # Both crates build locally against the sibling core sources
+        # (gprbuild in the Alire environment, no path pin yet: the
+        # manifests target publication).
+        shell: bash
+        run: |
+          alr exec -- gprbuild -q -P backends/common/bbt_backends.gpr -j2
+          alr exec -- gprbuild -q -P backends/gtk4/bbt_gtk4.gpr -j2
+
+      - name: Build the witness application
+        # The gtkada4 sources of the witness pin must be materialized
+        # (a first alr build) and built once by their own build
+        # system before the final alr build, cf.
+        # Apps/ToDoMVC/gtk4/README.md.
+        shell: bash
+        run: |
+          (cd Apps/ToDoMVC/gtk4 && alr -q build) || true
+          make -C Apps/ToDoMVC/gtk4/alire/cache/pins/gtkada4 -j2 static
+          (cd Apps/ToDoMVC/gtk4 && alr -q build)
+
+      - name: Run the shared GUI scenario suite headlessly
+        # A headless run needs a display (Xvfb) and a session bus
+        # with the accessibility registry (org.a11y.Bus activates
+        # at-spi2-registryd on demand). First headless iteration:
+        # check the output on a failure before trusting the setup.
+        shell: bash
+        run: |
+          export PATH="$(pwd)/backends/gtk4:$PATH"
+          xvfb-run -a dbus-run-session -- bash -c '
+            cd Apps/ToDoMVC/gtk4
+            bbt_gtk4 --yes --keep_going ./scenarios
+          '

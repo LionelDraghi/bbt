@@ -15,11 +15,9 @@ help:
 	@echo "Targets:"
 	@echo "  all   - build the app (default target)"
 	@echo "  build - build ./$(APP) with Alire"
-	@echo "  check - run the bbt scenarios exercising this app"
+	@echo "  check - run the shared GUI scenarios (backends/scenarios,"\
+	        " linked in ./scenarios) with --gui=gtk4"
 	@echo "  clean - remove everything that can be rebuilt, and run residues"
-	@echo ""
-	@echo "The per-backend runnable scenarios (see Apps/ToDoMVC/ToDoMVC.md)"
-	@echo "are not in place yet: check reports it and does not fail."
 
 build:
 	alr build
@@ -29,8 +27,7 @@ check:
 	   echo "No $(APP) binary: run 'make build' first."; \
 	   exit 1; \
 	fi
-	@bbt $(BBT_OPTIONS) ./scenarios 2>/dev/null || \
-	  echo "No runnable scenarios yet (cf. the GUI vocabulary proposal)."
+	bbt $(BBT_OPTIONS) --gui=gtk4 ./scenarios
 
 clean:
 	alr clean
