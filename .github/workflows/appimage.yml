@@ -1,5 +1,5 @@
-# Build using Alire and upload an AppImage to the GitHub releases section.
-name: Build and upload AppImage
+# Build using Alire and upload Linux packages (AppImage, RPM, Deb) to the GitHub releases section.
+name: Build and upload packages
 
 on:                    # Run the workflow for each of the following events:
   push:                # - A branch is pushed or updated.
@@ -54,6 +54,6 @@ jobs:
              #  The 1.1.0-dev upstream artefacts are named
              #  alr2appimage-1.1.0-dev-x86_64.AppImage: the action
              #  downloads by version-tagged filename (v1.0.0 here).
-             alr2appimageVersion: "1.0.0"
-             alr2appimageArgs: "--use-version --terminal"
+             alr2appimageVersion: 1.1.1
+             alr2appimageArgs: "-o appimage,deb,rpm --use-version --terminal --single-exe"
              ### tagName: "${{ github.ref_name }}-continuous
