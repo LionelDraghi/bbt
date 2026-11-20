@@ -59,7 +59,7 @@ jobs:
           path: |
             ~/.cache/alire
             ~/.local/share/alire
-          key: ${{ runner.os }}-backend-gtk4-alire-${{ hashFiles('alire.toml') }}
+          key: ${{ runner.os }}-backend-gtk4-alire-${{ hashFiles('alire.toml', 'backends/**/alire.toml') }}
           restore-keys: |
             ${{ runner.os }}-alire-
 

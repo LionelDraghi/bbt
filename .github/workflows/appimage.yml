@@ -14,6 +14,8 @@ on:                    # Run the workflow for each of the following events:
       - 'docs/help/**'
       - 'Makefile'
       - 'alire.toml'
+      - 'bbt.gpr'
+      - 'bbt_lib.gpr'
   
   pull_request:        # - A pull-request is opened or updated.
     paths: *trigger_paths
@@ -38,7 +40,7 @@ jobs:
     # release target), and the check was reported as a PR failure.
     steps:
        - name: Checkout
-         uses: actions/checkout@v2
+         uses: actions/checkout@v4
        - name: Clone the pinned sibling crate
          # alire.toml pins list_image to a sibling directory (../list_image)
          # during development, and alr2appimage-action runs `alr build` in
