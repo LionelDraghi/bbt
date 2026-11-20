@@ -16,7 +16,7 @@
   - [Latest version](#latest-version)
     - [Status](#status)
     - [Building from sources](#building-from-sources)
-    - [AppImage (Linux only)](#appimage-linux-only)
+    - [AppImage, deb and rpm (Linux only)](#appimage-deb-and-rpm-linux-only)
 - [First use](#first-use)
 - [For AI coding agents](#for-ai-coding-agents)
 - [Some projects using *bbt*](#some-projects-using-bbt)
@@ -205,11 +205,16 @@ cd bbt
 alr build 
 ```
 
-#### AppImage (Linux only)
-Download the AppImage [here](https://github.com/LionelDraghi/bbt/releases), and:  
+#### AppImage, deb and rpm (Linux only)
+Download the [AppImage](https://github.com/LionelDraghi/bbt/releases/download/continuous/bbt-0.7.0-dev-x86_64.AppImage), the [deb](https://github.com/LionelDraghi/bbt/releases/download/continuous/bbt-0.7.0-dev-amd64.deb) or the [rpm](https://github.com/LionelDraghi/bbt/releases/download/continuous/bbt-0.7.0-dev-1.x86_64.rpm) package from the [continuous release](https://github.com/LionelDraghi/bbt/releases/tag/continuous) (refreshed at each push on main; the file names carry the current version), and:  
 ```sh
-chmod +x bbt-0.6.1-dev-x86_64.AppImage
-ln -s bbt-0.6.1-dev-x86_64.AppImage bbt
+chmod +x bbt-0.7.0-dev-x86_64.AppImage
+ln -s bbt-0.7.0-dev-x86_64.AppImage bbt
+```
+or, for the deb and rpm packages:
+```sh
+sudo dpkg -i bbt-0.7.0-dev-amd64.deb
+sudo rpm -i bbt-0.7.0-dev-1.x86_64.rpm
 ```
 
 (Thanks to @mgrojo and [Alr2AppImage](https://github.com/mgrojo/alr2appimage)).  
