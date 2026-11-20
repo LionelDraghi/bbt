@@ -30,7 +30,7 @@ PROFILE ?= validation
 RESULTS_DIR ?= ../docs/tests_results/$(PLATFORM)/$(PROFILE)
 
 # The GUI assets used by the bbt --gui debugger, in tests/: junction
-# links to ../gui on Windows, symlinks on the other platforms (recreated
+# links to ../bbt_dbg on Windows, symlinks on the other platforms (recreated
 # by clean, and by setup). When Deploy_Assets (src/bbt-gui.adb) finds
 # links, Same_Asset keeps it from re-copying the assets onto themselves.
 ifeq ($(OS), Windows_NT)
@@ -42,14 +42,14 @@ gui_assets:
 	    if [ -e $$A ] ; then \
 	      echo "  $$A already there" ; \
 	    else \
-	      cmd //c "mklink /J $$W\\$$A $$W\\..\\gui\\$$A" ; \
+	      cmd //c "mklink /J $$W\\$$A $$W\\..\\bbt_dbg\\$$A" ; \
 	    fi ; \
 	  done
 else
 gui_assets:
-	@ ln -fs ../gui/html html
-	@ ln -fs ../gui/js js
-	@ ln -fs ../gui/css css
+	@ ln -fs ../bbt_dbg/html html
+	@ ln -fs ../bbt_dbg/js js
+	@ ln -fs ../bbt_dbg/css css
 endif
 
 # Options common to the three bbt suite invocations below
@@ -262,7 +262,7 @@ clean:
 	# Same policy as the root clean: drop the ignored local results,
 	# keep the tracked CI records (diffable against new local runs).
 	@ - git clean -fqX $(RESULTS_DIR)
-	@ if [ -d ../gui ]; then $(MAKE) -s gui_assets; fi
+	@ if [ -d ../bbt_dbg ]; then $(MAKE) -s gui_assets; fi
 
 # distclean also removes the binaries and the links
 distclean: clean

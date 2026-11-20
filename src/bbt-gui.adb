@@ -1155,7 +1155,7 @@ package body BBT.GUI is
    --  True when Target already holds Source's exact content, as
    --  detected through size and modification time. Covers both a
    --  fresh copy with preserved stamp and, mainly, the deployed
-   --  directories being links to the gui/ sources: then Target and
+   --  directories being links to the bbt_dbg/ sources: then Target and
    --  Source are the same physical file, and re-copying it onto
    --  itself must not happen.
       use Ada.Directories;
@@ -1227,9 +1227,9 @@ package body BBT.GUI is
    --------------------------------------------------------------------------
    --  Deployment of the js and html assets next to the executable:
    --  gnoga looks for them relative to the application directory
-   --  (cf. gui/README.md). Idempotent: files are re-copied at each
+   --  (cf. bbt_dbg/README.md). Idempotent: files are re-copied at each
    --  --gui run, but only when they differ (the deployed html/, js/
-   --  and css/ directories may also be links to gui/, then Same_Asset
+   --  and css/ directories may also be links to bbt_dbg/, then Same_Asset
    --  keeps Copy_File from writing onto its own source).
    --------------------------------------------------------------------------
 
@@ -1238,10 +1238,10 @@ package body BBT.GUI is
 
       function Source_Dir return String is
       begin
-         if Ada.Directories.Exists (Exe_Dir & "gui/html/boot.html") then
-            return Exe_Dir & "gui";
-         elsif Ada.Directories.Exists (Exe_Dir & "../gui/html/boot.html") then
-            return Exe_Dir & "../gui";
+         if Ada.Directories.Exists (Exe_Dir & "bbt_dbg/html/boot.html") then
+            return Exe_Dir & "bbt_dbg";
+         elsif Ada.Directories.Exists (Exe_Dir & "../bbt_dbg/html/boot.html") then
+            return Exe_Dir & "../bbt_dbg";
          else
             return "";
          end if;
