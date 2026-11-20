@@ -99,14 +99,20 @@ jobs:
           alr exec -- gprbuild -q -P backends/gtk4/bbt_gtk4.gpr -j2
 
       - name: Build the witness application
-        # The gtkada4 sources of the witness pin must be materialized
-        # (a first alr build) and built once by their own build
-        # system before the final alr build, cf.
-        # Apps/ToDoMVC/gtk4/README.md.
+        # The GtkAda pin static library must be built by its own build
+        # system before the final alr build links the app. The first
+        # alr build fails at that link by design (libgtkada.a does not
+        # exist yet) and materializes the pins, cf.
+        # Apps/ToDoMVC/gtk4/README.md. The bare GtkAda make needs the
+        # Alire environment: gprbuild resolves the Ada compiler through
+        # the PATH and GPR_PROJECT_PATH exported by alr exec, while
+        # setup-alire installs the toolchains without exporting them
+        # (in versioned directories, gnat_26.x.y_hash/gprbuild_26.0.1_*,
+        # not exportable by a fixed path).
         shell: bash
         run: |
-          (cd Apps/ToDoMVC/gtk4 && alr -q build) || true
-          make -C Apps/ToDoMVC/gtk4/alire/cache/pins/gtkada4 -j2 static
+          (cd Apps/ToDoMVC/gtk4 && alr -q build) || echo "First build failure expected: materializes the pins"
+          (cd Apps/ToDoMVC/gtk4 && alr exec -- make -C alire/cache/pins/gtkada4 -j2 static)
           (cd Apps/ToDoMVC/gtk4 && alr -q build)
 
       - name: Run the shared GUI scenario suite headlessly
