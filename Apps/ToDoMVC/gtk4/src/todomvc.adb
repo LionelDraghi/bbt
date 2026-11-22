@@ -4,8 +4,7 @@
 -- SPDX-FileCopyrightText: 2026 Lionel Draghi
 -- -----------------------------------------------------------------------------
 --  GTK 4 implementation of the ToDoMVC witness app (cf. the behavior
---  spec in Apps/ToDoMVC/ToDoMVC.md). Same structure and idioms as the
---  GuiVerb apps/witness reference: Gtk.Main.Init first, an explicit
+--  spec in Apps/ToDoMVC/ToDoMVC.md). Gtk.Main.Init first, an explicit
 --  window presentation, and the event loop pumped with
 --  Main_Context_Iteration.
 --
@@ -13,10 +12,18 @@
 --  text and the accessible name are the same, and both are set
 --  explicitly, so that scenarios resolve every control by role +
 --  accessible name, independently from the GTK name propagation
---  defaults:
+--  defaults. The new todo input is the exception: its accessible name
+--  is "New task" (a subject, like every other widget), and its
+--  placeholder text "What needs to be done?" is a visual hint only.
 --
---    entry  "What needs to be done?"        new todo input
+--    entry  "New task"                     new todo input (placeholder:
+--                                          "What needs to be done?")
 --    button "Create"                        todo creation (single)
+--    list   "To do"                          todos still to be done
+--    list   "Done"                           completed todos (G080)
+--                                           (each slot is a visible zone:
+--                                           colored-border outline and
+--                                           header label, visual only)
 --    button "Mark all as complete"          mark-all toggle
 --    button "Complete"                      item completion toggle (one per row)
 --    button "Edit"                          edition trigger (single, on the
@@ -56,17 +63,27 @@ with Interfaces.C;
 with Interfaces.C.Strings;
 with System;
 
+with Glib.Action;
+with Glib.Action_Group;
 with Glib.Main;
 with Glib.Object;
+with Glib.Simple_Action;
+with Glib.Simple_Action_Group;
+with Glib.Variant;
+with Gdk.Display;
 with Gtk.Box;
 with Gtk.Button;
+with Gtk.Css_Provider;
 with Gtk.Enums;
 with Gtk.Event_Controller_Focus;
 with Gtk.Frame;
 with Gtk.GEntry;
 with Gtk.Gesture_Click;
 with Gtk.Label;
+with Gtk.List_Box;
+with Gtk.List_Box_Row;
 with Gtk.Main;
+with Gtk.Style_Context;
 with Gtk.Toggle_Button;
 with Gtk.Widget;
 with Gtk.Window;
@@ -104,7 +121,16 @@ procedure TodoMvc is
    Main_Box      : Gtk.Box.Gtk_Box;
    Top_Bar       : Gtk.Box.Gtk_Box;
    List_Frame    : Gtk.Frame.Gtk_Frame;
-   List_Box      : Gtk.Box.Gtk_Box;
+   List_Slots    : Gtk.Box.Gtk_Box;
+   --  The two semantic lists (cf. the [List] section of the spec):
+   --  they carry the accessible names the GUI vocabulary targets.
+   Todo_List     : Gtk.List_Box.Gtk_List_Box;
+   Done_List     : Gtk.List_Box.Gtk_List_Box;
+   Todo_Slot     : Gtk.Box.Gtk_Box;
+   Done_Slot     : Gtk.Box.Gtk_Box;
+   Todo_List_Label   : Gtk.Label.Gtk_Label;
+   Done_List_Label   : Gtk.Label.Gtk_Label;
+   List_Css_Provider : Gtk.Css_Provider.Gtk_Css_Provider;
    Filter_Box    : Gtk.Box.Gtk_Box;
    New_Todo      : Gtk.GEntry.Gtk_Entry;
    Create_Button : Gtk.Button.Gtk_Button;
@@ -128,6 +154,13 @@ procedure TodoMvc is
    --  True while the view reflects a programmatic change: editors do
    --  not commit, and the signals of synchronized widgets do not
    --  trigger new model changes.
+
+   --  Per-row slot: the row's select action, used by the handler to
+   --  recover the row's todo index (cf. Build_Row and
+   --  On_Action_Activate).
+   use type Glib.Simple_Action.Gsimple_Action;
+   Actions_For_Todos : array (1 .. Max_Todos)
+     of Glib.Simple_Action.Gsimple_Action := (others => null);
 
    Quit_Requested : Boolean := False;
 
@@ -383,9 +416,61 @@ procedure TodoMvc is
    is
       pragma Unreferenced (N_Press, X, Y);
    begin
-      Selected := Index_Of (Self.Get_Widget.Get_Name);
-      Update_View;
+      if not Guard then
+         --  A real click on a todo title: any open edition commits
+         --  first (blur then click).
+         if Editing /= 0 then
+            Commit_Edition;
+         end if;
+         Selected := Index_Of (Self.Get_Widget.Get_Name);
+         Update_View;
+      end if;
    end On_Row_Clicked;
+
+   procedure On_Action_Activate
+     (Action    : access Glib.Simple_Action.Gsimple_Action_Record'Class;
+      Parameter : Glib.Variant.Gvariant)
+   is
+      pragma Unreferenced (Parameter);
+   begin
+      if not Guard then
+         --  The select action of a row (the AT-SPI action of a test
+         --  pressing the todo title): selecting the todo, exactly
+         --  like a click on its title — and like a real click, any
+         --  open edition commits first (blur then click).
+         if Editing /= 0 then
+            Commit_Edition;
+         end if;
+         for I in Actions_For_Todos'Range loop
+            if Actions_For_Todos (I) = Glib.Simple_Action.Gsimple_Action (Action)
+            then
+               Selected := I;
+               Update_View;
+            end if;
+         end loop;
+      end if;
+   end On_Action_Activate;
+
+   procedure On_Row_Activated
+     (Self : access Gtk.List_Box.Gtk_List_Box_Record'Class;
+      Row  : not null access Gtk.List_Box_Row.Gtk_List_Box_Row_Record'Class)
+   is
+      pragma Unreferenced (Self);
+      Box   : constant Gtk.Box.Gtk_Box := Gtk.Box.Gtk_Box (Row.Get_Child);
+      Label : constant Gtk.Widget.Gtk_Widget := Box.Get_First_Child;
+   begin
+      if not Guard then
+         --  The row's AT-SPI activation (the press action of a test
+         --  targeting the todo title, and the keyboard equivalent):
+         --  selecting the todo, exactly like a click on its title —
+         --  any open edition commits first (blur then click).
+         if Editing /= 0 then
+            Commit_Edition;
+         end if;
+         Selected := Index_Of (Label.Get_Name);
+         Update_View;
+      end if;
+   end On_Row_Activated;
 
    procedure On_Edit_Activate
      (Self : access Gtk.GEntry.Gtk_Entry_Record'Class)
@@ -507,12 +592,14 @@ procedure TodoMvc is
    --  visible state and the accessible names trivially synchronised
    --  with the model, and the widget-name based handlers stateless.
 
-   procedure Remove_Children (Box : not null access Gtk.Box.Gtk_Box_Record'Class) is
+   procedure Remove_Children
+     (Box : not null access Gtk.List_Box.Gtk_List_Box_Record'Class)
+   is
       use type Gtk.Widget.Gtk_Widget;
       Child : Gtk.Widget.Gtk_Widget;
    begin
       loop
-         Child := Box.Get_First_Child;
+         Child := Gtk.Widget.Gtk_Widget (Box).Get_First_Child;
          exit when Child = null;
          Box.Remove (Child);
       end loop;
@@ -523,6 +610,7 @@ procedure TodoMvc is
       procedure Build_Row (Index : Positive) is
          Title  : constant String := Title_Of (Index);
          Row    : Gtk.Box.Gtk_Box;
+         Row_Wrapper : Gtk.List_Box_Row.Gtk_List_Box_Row;
          Row_Label : Gtk.Label.Gtk_Label;
          Complete_Btn : Gtk.Button.Gtk_Button;
          Row_Editor   : Gtk.GEntry.Gtk_Entry;
@@ -542,6 +630,38 @@ procedure TodoMvc is
 
       begin
          Gtk.Box.Gtk_New (Row, Gtk.Enums.Orientation_Horizontal, 6);
+
+         --  The row is wrapped in an explicit Gtk_List_Box_Row: it is
+         --  the semantic list item (AT-SPI role list item, G080),
+         --  named with the todo title, and the press target when a
+         --  test activates (selects) the todo.
+         Gtk.List_Box_Row.Gtk_New (Row_Wrapper);
+         Row_Wrapper.Set_Child (Row);
+         Set_Accessible_Name (Row_Wrapper, Title);
+
+         --  The row's select action: exposed on the AT-SPI Action
+         --  interface (the press target when a test activates the
+         --  todo title), resolved back to a todo index by the
+         --  handler (cf. Actions_For_Todos).
+         declare
+            Select_Action : Glib.Simple_Action.Gsimple_Action;
+            No_Param      : Glib.Variant.Gvariant_Type := null;
+            Row_Group     : Glib.Simple_Action_Group.Gsimple_Action_Group;
+         begin
+            Glib.Simple_Action.G_New (Select_Action, "select", No_Param);
+            Select_Action.On_Activate
+              (On_Action_Activate'Unrestricted_Access);
+            Glib.Simple_Action_Group.G_New (Row_Group);
+            Row_Group.Add_Action
+              (Glib.Simple_Action.Implements_Gaction.To_Interface
+                 (Select_Action));
+            Row_Wrapper.Insert_Action_Group
+              ("todo",
+               Glib.Simple_Action_Group.Implements_Gaction_Group.To_Interface
+                 (Row_Group));
+            Actions_For_Todos (Index) := Select_Action;
+         end;
+
 
          Gtk.Label.Gtk_New (Row_Label, Title);
          Row_Label.Set_Hexpand (True);
@@ -601,8 +721,15 @@ procedure TodoMvc is
             Row_Editor.Set_Visible (False);
          end if;
 
-         List_Box.Append (Row);
-         Row.Set_Visible (True);
+         --  The list holds the todo rows: a todo still to be done sits
+         --  in the [To do] list, a completed one in the [Done] list -
+         --  the two semantic lists of the naming contract (G080).
+         if Done (Index) then
+            Done_List.Append (Row_Wrapper);
+         else
+            Todo_List.Append (Row_Wrapper);
+         end if;
+         Row_Wrapper.Set_Visible (True);
          case Filter is
             when All_Filter       => null;
             when Active_Filter    =>
@@ -610,12 +737,15 @@ procedure TodoMvc is
             when Completed_Filter =>
                Row.Set_Visible (Done (Index));
          end case;
+         Row_Wrapper.Set_Visible (Filter = All_Filter
+                                  or else Done (Index) = (Filter = Completed_Filter));
       end Build_Row;
 
    begin
       Guard := True;
 
-      Remove_Children (List_Box);
+      Remove_Children (Todo_List);
+      Remove_Children (Done_List);
       --  Todos appear in their creation order, whatever their
       --  completion state (per spec).
       for I in 1 .. Last loop
@@ -752,7 +882,7 @@ begin
 
    Gtk.GEntry.Gtk_New (New_Todo);
    New_Todo.Set_Placeholder_Text ("What needs to be done?");
-   Set_Accessible_Name (New_Todo, "What needs to be done?");
+   Set_Accessible_Name (New_Todo, "New task");
    New_Todo.Set_Name ("new-todo");
    New_Todo.Set_Hexpand (True);
    Top_Bar.Append (New_Todo);
@@ -784,13 +914,63 @@ begin
       end;
    end loop;
 
-   Gtk.Box.Gtk_New (List_Box, Gtk.Enums.Orientation_Vertical, 6);
+   Gtk.Box.Gtk_New (List_Slots, Gtk.Enums.Orientation_Vertical, 6);
 
-   --  The list is set off from the surrounding window content: the
-   --  frame (a hollow box) wraps it, per spec.
+   Gtk.List_Box.Gtk_New (Todo_List);
+   Set_Accessible_Name (Todo_List, "To do");
+   Gtk.List_Box.Gtk_New (Done_List);
+   Set_Accessible_Name (Done_List, "Done");
+   Todo_List.On_Row_Activated (On_Row_Activated'Unrestricted_Access);
+   Done_List.On_Row_Activated (On_Row_Activated'Unrestricted_Access);
+
+   --  The list slots are visible display zones: a labeled header with
+   --  the list's name, and a colored border around each slot, so that
+   --  the empty lists still read as two distinguishable zones (per
+   --  spec, G080: an empty list stays exposed). The colors match the
+   --  row text colors: blue for a todo still to be done, green for a
+   --  completed one. The labels and borders are visual only: the
+   --  lists' accessible names are the ones set above.
+   Gtk.Css_Provider.Gtk_New (List_Css_Provider);
+   Gtk.Css_Provider.Load_From_Data
+     (List_Css_Provider,
+      ".to-do-zone { border: 1px solid #1565c0; border-radius: 6px;"
+      & " min-height: 90px; }"
+      & ".done-zone { border: 1px solid #2e7d32; border-radius: 6px;"
+      & " min-height: 90px; }");
+   Gtk.Style_Context.Add_Provider_For_Display
+     (Gdk.Display.Get_Default,
+      Gtk.Css_Provider.Implements_Gtk_Style_Provider.To_Interface
+        (List_Css_Provider),
+      600);
+
+   Gtk.Box.Gtk_New (Todo_Slot, Gtk.Enums.Orientation_Vertical, 6);
+   Gtk.Box.Gtk_New (Done_Slot, Gtk.Enums.Orientation_Vertical, 6);
+
+   Gtk.Label.Gtk_New (Todo_List_Label, "To do");
+   Todo_List_Label.Set_Xalign (0.0);
+   Gtk.Label.Gtk_New (Done_List_Label, "Done");
+   Done_List_Label.Set_Xalign (0.0);
+   Todo_List_Label.Set_Markup
+     ("<span foreground=""#1565c0""><b>To do</b></span>");
+   Done_List_Label.Set_Markup
+     ("<span foreground=""#2e7d32""><b>Done</b></span>");
+
+   Todo_List.Add_Css_Class ("to-do-zone");
+   Done_List.Add_Css_Class ("done-zone");
+
+   Todo_Slot.Append (Todo_List_Label);
+   Todo_Slot.Append (Todo_List);
+   List_Slots.Append (Todo_Slot);
+
+   Done_Slot.Append (Done_List_Label);
+   Done_Slot.Append (Done_List);
+   List_Slots.Append (Done_Slot);
+
+   --  The lists are set off from the surrounding window content: the
+   --  frame (a hollow box) wraps them, per spec.
 
    Gtk.Frame.Gtk_New (List_Frame);
-   List_Frame.Set_Child (List_Box);
+   List_Frame.Set_Child (List_Slots);
    Main_Box.Append (List_Frame);
 
    --  The selection-scoped controls: unique Edit and Delete buttons,

@@ -85,4 +85,66 @@ package body BBT.Backends is
       end if;
    end Press_Widget;
 
+   function Widget_Contains
+     (Role, Name, Expected : String) return Boolean
+   is
+   begin
+      if Selected = null then
+         return False;
+      else
+         return Selected.Widget_Contains (Role, Name, Expected);
+      end if;
+   end Widget_Contains;
+
+   function Widget_Is_Empty (Role : String; Name : String) return Boolean is
+   begin
+      if Selected = null then
+         return False;
+      else
+         return Selected.Widget_Is_Empty (Role, Name);
+      end if;
+   end Widget_Is_Empty;
+
+   function Widget_Item_Count (Role : String; Name : String) return Natural is
+   begin
+      if Selected = null then
+         return 0;
+      else
+         return Selected.Widget_Item_Count (Role, Name);
+      end if;
+   end Widget_Item_Count;
+
+   function Type_Into
+     (Role : String; Name : String; Text : String) return Boolean
+   is
+   begin
+      if Selected = null then
+         return False;
+      else
+         Selected.Type_Into (Role, Name, Text);
+         return True;
+      end if;
+   end Type_Into;
+
+   function Enter_Into
+     (Role : String; Name : String; Text : String) return Boolean
+   is
+   begin
+      if Selected = null then
+         return False;
+      else
+         Selected.Enter_Into (Role, Name, Text);
+         return True;
+      end if;
+   end Enter_Into;
+
+   function Close_Window (Title : String := "") return Boolean is
+   begin
+      if Selected = null then
+         return False;
+      else
+         return Selected.Close_Window (Title);
+      end if;
+   end Close_Window;
+
 end BBT.Backends;

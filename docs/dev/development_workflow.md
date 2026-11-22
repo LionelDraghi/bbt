@@ -27,8 +27,20 @@ typically the feature file you are working on, iterated on until it is
 green:
 
 ```sh
-cd tests && ./bbt --cleanup=full ../docs/features/<the_feature_file.md>
+make -C tests <the test id>
 ```
+
+where the test id is the prefix of the feature file name (e.g.
+`make -C tests B170` for `docs/cli_features/B170_Explain.md`). The
+target prints the exact `./bbt` command line it runs: grab it to rerun
+or tweak the invocation (e.g. replace `./bbt` with `./bbt explain`, or
+add `-d` for debug traces).
+
+A GUI feature id (e.g. `make -C tests G005`) resolves to the witness
+stories tagged `[Gnnn]` on their steps (Apps/ToDoMVC/docs/features),
+and runs them through the gtk4 backend, reusing the backends/Makefile
+wiring. To run a single story by file name:
+`make -C backends check-gtk4 STORY=add_a_task.md`.
 
 For a change impacting the tools, the examples or the non regression
 tests, run the involved suite the same way:
@@ -59,7 +71,7 @@ is still red: fix the red first, validate after.
 
 ## 2. Feature and error-message changes
 
-Feature files in `docs/features` are the specification. Follow a TDD-first
+Feature files in `docs/cli_features` are the specification. Follow a BDD
 approach when changing a feature or an error-message format.
 
 Never compromise the readability of a scenario for a side purpose. In
@@ -418,13 +430,13 @@ docs/dev/project.md
 ```
 
 The proposal may be a short description of the need or a complete feature file
-with scenarios, ready to move to `docs/features` once the decision is made.
+with scenarios, ready to move to `docs/cli_features` once the decision is made.
 See `docs/proposed/pty.md` as an example.
 
 When a proposed feature is completely implemented, its proposal file
 disappears: before deleting it, check that everything useful in it has
 been transposed — the behavior and the scenarios to the relevant file
-in `docs/features`, the design rationale and the rejected alternatives
+in `docs/cli_features`, the design rationale and the rejected alternatives
 to an entry in `docs/dev/design_discussions.md`, and anything else
 (help text, changelog, TDL) to its proper place — then update or remove
 the TDL entry and any reference pointing to the proposal.

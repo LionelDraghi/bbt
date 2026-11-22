@@ -3,7 +3,7 @@ name: Backend gtk4
 # The per-backend CI (cf. docs/proposed/crate_restructuring.md,
 # acceptance criteria): builds the backend crate and its witness
 # application, and runs the shared GUI scenario suite
-# (backends/scenarios) headlessly, on the platforms the backend
+# (Apps/ToDoMVC/docs/cli_features) headlessly, on the platforms the backend
 # supports. The gtk4 backend is Linux only, one OS in the matrix.
 
 on:                    # Run the workflow for each of the following events:
@@ -15,7 +15,7 @@ on:                    # Run the workflow for each of the following events:
       - 'Apps/**'
       - 'src/**'
       - 'tests/**'
-      - 'docs/features/**'
+      - 'docs/cli_features/**'
       - 'alire.toml'
       - 'bbt.gpr'
       - 'bbt_lib.gpr'

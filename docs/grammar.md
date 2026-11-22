@@ -57,5 +57,12 @@
 | Then  |         |        | is         | `widget name`     | GUI_WIDGET_EXISTS       |            | - Then there is a `role` named `name` |  
 | Then  |         |        | is         | enabled | disabled
                                                             | GUI_WIDGET_STATE        |            | - Then the `name` `role` is enabled / disabled |  
+| Then  |         |        | contains   | `text`            | GUI_WIDGET_CONTAINS     |            | - Then the `name` `role` contains `text` |  
+| Then  |         |        | is         | empty             | GUI_WIDGET_EMPTY        |            | - Then the `name` `role` is empty |  
+| Then  |         |        | has        | `<n>` items       | GUI_WIDGET_ITEM_COUNT   |            | - Then the `name` `role` has `<n>` items |  
 | Then  |         | window | contains   | `text`            | GUI_WINDOW_CONTAINS     |            | - Then the window contains `text` |  
 | When  |         |        | press      | `text`            | GUI_PRESS_WIDGET        |            | - When I press the `name` `role` |  
+| When  |         |        | close      | `window name`     | GUI_CLOSE_WINDOW        |            | - When I close the window / the `title` window |  
+| When  |         |        | type       | `widget name`     | GUI_TYPE_INTO           |            | - When I type `text` into the `name` textbox |  
+| When  |         |        | enter      | `widget name`     | GUI_ENTER_INTO          |            | - When I enter `text` into the `name` textbox |  
+| Then  |         |        | enter      | `widget name`     | GUI_ENTER_INTO          |            | - Then I enter `text` into the `name` textbox |  

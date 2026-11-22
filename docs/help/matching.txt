@@ -20,4 +20,4 @@ Human vs exact matching:
   the volatile parts and the matching settings in the scenario
   itself:
     - Then I get `Build finished in 3.2 s` (ignoring time)
-  cf. "bbt help ignoring" and docs/features/A300_Ignoring.md
+  cf. "bbt help ignoring" and docs/cli_features/A300_Ignoring.md

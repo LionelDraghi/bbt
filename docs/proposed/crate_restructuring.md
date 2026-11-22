@@ -16,7 +16,15 @@ community index).
 - [Non-goals](#non-goals)
 - [Acceptance criteria](#acceptance-criteria)
 - [Specification](#specification)
+  - [One repository, several crates](#one-repository-several-crates)
+  - [Backend injection](#backend-injection)
+  - [Launcher](#launcher)
+  - [Shared suite and cross tables](#shared-suite-and-cross-tables)
+  - [Migration of the GUI prototypes](#migration-of-the-gui-prototypes)
+  - [Development plan](#development-plan)
 - [Executable scenarios](#executable-scenarios)
+  - [Scenario: a GUI step without any backend aborts with a selection hint](#scenario-a-gui-step-without-any-backend-aborts-with-a-selection-hint)
+  - [Scenario: `--gui` with a missing backend executable gives an install hint](#scenario---gui-with-a-missing-backend-executable-gives-an-install-hint)
 - [Verification beyond bbt](#verification-beyond-bbt)
 - [Design implications](#design-implications)
 - [Open questions](#open-questions)
@@ -36,10 +44,10 @@ A CLI-only user of bbt already pays `libglib`, and would pay for every
 future backend stack. `alr install bbt` must return to a light,
 CLI-centric installation.
 
-Meanwhile, the GuiVerb repository holds the prototypes of these
-backends and of the witness applications. Keeping two repositories in
-sync costs more than it returns: GuiVerb is transitional and must be
-migrated into the new crates, then retired.
+Meanwhile, the prototypes of these backends and of the witness
+applications live in a separate prototypes repository. Keeping two
+repositories in sync costs more than it returns: the prototypes are
+transitional and must be migrated into the new crates, then retired.
 
 ## Intended outcome
 
@@ -51,18 +59,18 @@ bbt/                              # single git repository
 ├── alire.toml                    # crate "bbt": engine lib + CLI
 │                                 #   + embedded gnoga debugger
 │                                 #   no backend dependency anymore
-└── backends/
-    ├── common/                   # crate "bbt_backends" (library)
-    ├── gtk4/                     # crate "bbt_gtk4"      (executable)
-    │                             #   dependency: libglib — Linux
-    ├── webapp/                   # crate "bbt_webapp"    (executable)
-    ├── adi2/                     # crate "bbt_adi2"      (executable)
-    ├── witness_gtk4/             # crate "witness_gtk4"   (executable)
-    ├── witness_webapp/           # crate "witness_webapp" (executable,
-    │                             #   two targets: gnoga app + static
-    │                             #   ARIA-markup page)
-    ├── witness_adi2/             # crate "witness_adi2"   (executable)
-    └── scenarios/                # shared GUI scenario suite (data,
+├── backends/
+│   ├── common/                   # crate "bbt_backends" (library)
+│   ├── gtk4/                     # crate "bbt_gtk4"      (executable)
+│   │                             #   dependency: libglib — Linux
+│   ├── webapp/                   # crate "bbt_webapp"    (executable)
+│   └── adi2/                     # crate "bbt_adi2"      (executable)
+└── Apps/                         # the witness applications (test
+                                  #   targets, not products, CI-bound)
+    └── ToDoMVC/                  # ToDoMVC, its per-backend
+        │                         #   implementations (gtk4/, ...)
+        └── docs/
+            └── scenarios/        # shared GUI scenario suite (data,
                                   #   not a crate)
 ```
 
@@ -106,7 +114,9 @@ today. No grammar extension API is introduced by this proposal.
 - Create `backends/common` (`bbt_backends` library: polling,
   harness deadline, text normalization, diagnostics shared by
   backends; sole dependency: bbt), the per-backend executable crates,
-  the witness crates, and the shared scenario suite.
+  and the shared scenario suite; the witness applications live in
+  `Apps/` (already the case for the ToDoMVC gtk4 witness, crate
+  `todomvc_gtk4`).
 - Publish every crate from its subdirectory (index `[origin]`
   `subdir`, as done by `aaa`/`aaa_texts` in the community index),
   versioned in lockstep during a common release procedure.
@@ -128,15 +138,16 @@ today. No grammar extension API is introduced by this proposal.
 - No grammar extension API: the grammar stays in one place, in the
   core. A future proposal may introduce the open rule patterns and
   the extension payload once the GUI vocabulary has stabilized.
-- No witness crate in the `depends-on` of any backend crate: only CI
-  pins them by path. `alr test` of a published backend crate runs a
-  sanity subset only.
-- GuiVerb is not kept alive as a product: it is migrated then
-  archived.
+- No witness crate (`Apps/`) in the `depends-on` of any backend
+  crate: only the backend CIs pin them by path for a full run.
+  `alr test` of a published backend crate runs a sanity subset
+  only.
+- The prototypes repository is not kept alive as a product: its
+  content is migrated then archived.
 
 ## Acceptance criteria
 
-- The existing `docs/features` and `docs/examples` suites pass
+- The existing `docs/cli_features` and `docs/examples` suites pass
   unchanged after the restructuring.
 - A clean workspace `alr build` of the root crate resolves no other
   GUI stack than gnoga; `libglib` appears nowhere in the root
@@ -145,7 +156,7 @@ today. No grammar extension API is introduced by this proposal.
   identifies its backend.
 - The scenarios of this document pass.
 - Each backend crate has its own CI, running the
-  `backends/scenarios` suite against its witness application on its
+  `Apps/ToDoMVC/docs/features` suite against its witness application on its
   supported platforms, and updating its rows in the cross tables.
 - `alr publish --skip-submit` succeeds for each new crate.
 
@@ -206,36 +217,39 @@ The executables of the backends are named `bbt_gtk4`, `bbt_webapp`,
 removed, with no deprecation path. A backends crate has a minimal main
 of its own; all
 engine logic lives in the core library. The witness applications
-(`witness_gtk4`, etc.) exercise the full vocabulary against real GUI
+(`Apps/`, e.g. the ToDoMVC GTK 4 witness, crate `todomvc_gtk4`)
+exercise the full vocabulary against real GUI
 toolkits; they are test targets, not products.
 
 `witness_aria` is not a toolkit: it is a static web page exercising
 the WAI-ARIA authoring-practice markup (roles, accessible names,
-states, landmarks, focus) across the webapp vocabulary. For the
-webapp backend, the single `witness_webapp` crate carries both
-targets: the interactive gnoga application, and the static page,
-which needs no build and is served as data.
+states, landmarks, focus) across the webapp vocabulary. The witness
+is the ToDoMVC application, one app, one behavior spec: each
+backend has one implementation directory under `Apps/ToDoMVC`, and
+for the webapp backend the single `Apps/ToDoMVC/web` crate carries
+both targets: the interactive gnoga application, and the static
+page, which needs no build and is served as data.
 
 ### Shared suite and cross tables
 
-`backends/scenarios/*.md` contains the common GUI scenario suite:
+`Apps/ToDoMVC/docs/features/*.md` contains the common GUI scenario suite:
 the same steps run against each backend and its witness. A step
 supported by a backend has its scenario passing in that backend CI;
 a step port with a failing cell is exactly what must appear in the
 cross tables, maintained in `docs/backends.md`.
 
-### Migration of GuiVerb
+### Migration of the GUI prototypes
 
-| GuiVerb content                            | Destination                    |
+| Prototypes content                         | Destination                    |
 |--------------------------------------------|--------------------------------|
-| `guiverb_scenario` (own parser)            | dropped: single core grammar   |
-| `guiverb_atspi`                            | `backends/gtk4`                |
-| `guiverb_webdriver`                        | `backends/webapp`              |
-| `guiverb_adimcp`                           | `backends/adi2`               |
-| witness gnoga apps (`apps/witness`, `apps/witness_gnoga`) | `backends/witness_webapp` (dynamic target, dedup to arbitrate) |
-| `apps/witness_aria` (static ARIA-markup page) | `backends/witness_webapp` (static target) |
-| `apps/witness_adi2` | `backends/witness_adi2` |
-| `tests/scenarios`, `docs/proposed/f...`    | `backends/scenarios` + core grammar |
+| the prototype scenario parser              | dropped: single core grammar   |
+| the AT-SPI backend prototype               | `backends/gtk4`                |
+| the webdriver backend prototype            | `backends/webapp`              |
+| the Adi2 backend prototype                 | `backends/adi2`               |
+| witness gnoga apps (`apps/witness`, `apps/witness_gnoga`) | `Apps/ToDoMVC/web` (dynamic target, dedup to arbitrate) |
+| `apps/witness_aria` (static ARIA-markup page) | `Apps/ToDoMVC/web` (static target) |
+| `apps/witness_adi2` | `Apps/ToDoMVC/adi2` |
+| `tests/scenarios`, `docs/proposed/f...`    | `Apps/ToDoMVC/docs/features` + core grammar |
 | manifesto, comparables, roadmap documents  | selective merge into bbt docs |
 | the Adi2 library                           | extracted first into its own crate (see development plan) |
 
@@ -247,22 +261,25 @@ The repository is then archived read-only.
    backend injection replacing the GPR case; `src/atspi` moves to
    `backends/gtk4`; `libglib` removed from the root manifest;
    launcher `--gui`.
-2. **First backend** — `backends/common`, `backends/gtk4`,
-   `backends/witness_gtk4`; its CI runs the first shared scenarios;
-   initial cross tables with one backend column.
-3. **Webapp** — migration of `guiverb_webdriver`; one
-   `backends/witness_webapp` crate with its two targets (static
+2. **First backend** — `backends/common`, `backends/gtk4`, and the
+   ToDoMVC witness GTK 4 implementation (`Apps/ToDoMVC/gtk4`); its
+   CI runs the first shared scenarios; initial cross tables with one
+   backend column.
+3. **Webapp** — migration of the webdriver backend prototype; the
+   ToDoMVC web
+   implementation, `Apps/ToDoMVC/web`, with its two targets (static
    ARIA page + gnoga app); own CI, own platforms.
-4. **Adi2** — migration of `guiverb_adimcp` and its witness; the
+4. **Adi2** — migration of the Adi2 backend prototype and its
+   witness; the
    dependency on [github.com/ovenpasta/adi2](https://github.com/ovenpasta/adi2)
    (own manifest) is declared by git URL until its publication in
    the community index.
 5. **Vocabulary absorption** — validated steps of
-   `docs/proposed/f005`…`f075` land one by one in the single core
+   `docs/proposed/G025`…`G075` land one by one in the single core
    grammar, each with its entries in the shared suite and in the
    cross tables.
-6. **Retirement** — merge of remaining GuiVerb docs into bbt docs;
-   GuiVerb archived.
+6. **Retirement** — merge of remaining prototype docs into bbt
+   docs; the prototypes repository archived.
 
 ## Executable scenarios
 
@@ -334,8 +351,8 @@ Error: bbt_nosuch executable not found in PATH; install it with: alr install bbt
   library in the community index, or keep the git-URL dependency in
   `backends/adi2`?
 - Witness crates: published like the backend crates, or CI-only?
-- The exact widget set of the dynamic webapp witness: GuiVerb holds
-  two gnoga-served applications (`apps/witness` and
+- The exact widget set of the dynamic webapp witness: the
+  prototypes hold two gnoga-served applications (`apps/witness` and
   `apps/witness_gnoga`); only one is kept.
 
 ## Finalization target

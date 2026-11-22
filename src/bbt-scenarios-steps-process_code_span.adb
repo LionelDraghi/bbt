@@ -64,10 +64,12 @@ begin
               Type_Text        |
               Enter_Text       |
               Press            |
+              Close            |
               Get              |
               Contains         |
               Matches          |
-              Containing       =>
+              Containing       |
+              Has_V            =>
             -- Those verbs are always followed by a text
             State.Object := Obj_Text;
             --  Put_Debug_Line ("  Object = Obj_Text", Loc);

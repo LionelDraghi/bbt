@@ -8,7 +8,7 @@ on:                    # Run the workflow for each of the following events:
       - 'src/**'
       - 'tests/**'
       - 'tools/**'
-      - 'docs/features/**'
+      - 'docs/cli_features/**'
       - 'docs/examples/**'
       - '.github/workflows/**'
       - 'Makefile'

@@ -1237,27 +1237,56 @@ package body BBT.GUI is
       Exe_Dir : constant String := UXStrings.To_UTF_8 (Gnoga.Server.Executable_Directory);
 
       function Source_Dir return String is
+         --  The bbt_dbg/ sources live at the repository root: next to
+         --  the bbt executable in the dev tree, one level up for a bbt
+         --  built in a subdirectory, two levels up for a backend
+         --  executable (backends/<kind>/), etc. Walk up the tree
+         --  instead of hardcoding a depth.
+         use Ada.Strings.Unbounded;
+         Prefix : Unbounded_String := To_Unbounded_String (Exe_Dir);
       begin
-         if Ada.Directories.Exists (Exe_Dir & "bbt_dbg/html/boot.html") then
-            return Exe_Dir & "bbt_dbg";
-         elsif Ada.Directories.Exists (Exe_Dir & "../bbt_dbg/html/boot.html") then
-            return Exe_Dir & "../bbt_dbg";
-         else
-            return "";
-         end if;
+         for Level in 0 .. 4 loop
+            declare
+               Dir : constant String := To_String (Prefix);
+            begin
+               if Ada.Directories.Exists (Dir & "bbt_dbg/html/boot.html") then
+                  return Dir & "bbt_dbg";
+               end if;
+            end;
+            Prefix := Prefix & "../";
+         end loop;
+         return "";
       end Source_Dir;
 
       Src : constant String := Source_Dir;
 
    begin
-      if Src = "" then
-         --  No assets around: the boot page will display a warning
-         return;
-      end if;
-
       Ada.Directories.Create_Path (Exe_Dir & "html");
       Ada.Directories.Create_Path (Exe_Dir & "js");
       Ada.Directories.Create_Path (Exe_Dir & "css");
+
+      if Src = "" then
+         --  No assets around: serve a boot page that just displays
+         --  the problem, instead of crashing the server when the
+         --  browser connects and gnoga fails to load a missing
+         --  boot.html.
+         declare
+            F : Ada.Text_IO.File_Type;
+         begin
+            Ada.Text_IO.Create (F, Ada.Text_IO.Out_File, Exe_Dir & "html/boot.html");
+            Ada.Text_IO.Put_Line
+              (F,
+               "<!DOCTYPE html><html><head><title>bbt debugger</title></head>"
+               & "<body><h2>bbt debugger: GUI assets not found</h2>"
+               & "<p>No gui/ asset directory (html, js, css) could be located "
+               & "next to or above the executable. Run the debugger from a "
+               & "location where the gui/ sources are reachable.</p>"
+               & "</body></html>");
+            Ada.Text_IO.Close (F);
+         end;
+         return;
+      end if;
+
       begin
          Refresh_File (Src & "/html/boot.html",
                        Exe_Dir & "html/boot.html");

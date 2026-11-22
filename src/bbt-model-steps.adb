@@ -56,6 +56,8 @@ package body BBT.Model.Steps is
       Output.New_Line;
       Output.Put ("   GUI_Widget_State = " & S.GUI_Widget_State'Image);
       Output.New_Line;
+      Output.Put ("   GUI_Entry_Text   = " & S.GUI_Entry_Text'Image);
+      Output.New_Line;
    end Put_Image;
 
    -- --------------------------------------------------------------------------
@@ -311,20 +313,70 @@ package body BBT.Model.Steps is
 
       when GUI_Window_Contains =>
          return Prefix & "that the window contains the text "
-           & (if Step.Data.Negated then "..." else Object_String);
+           & (if Step.Data.Negated
+              then """..."""
+              else Wrap_In_Backticks (+Step.Data.GUI_Access_Name));
 
       when GUI_Widget_Exists =>
-         return Prefix & "that there is a widget named "
-           & Object_String;
+         return Prefix & "that there is a " & (+Step.Data.GUI_Role)
+           & " named " & Wrap_In_Backticks (+Step.Data.GUI_Access_Name);
 
       when GUI_Widget_State =>
-         return Prefix & "that the widget "
+         return Prefix & "that the " & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name) & " "
            & (if Step.Data.Negated then "is not " else "is ")
-           & "in the expected state";
+           & (case Step.Data.GUI_Widget_State is
+              when GUI_Enabled => "enabled", when others => "disabled");
+
+      when GUI_Type_Into =>
+         return Prefix_Start & "Type "
+           & Wrap_In_Backticks (+Step.Data.GUI_Entry_Text) & " into the "
+           & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+           & " (set the field value, without validating it)";
+
+      when GUI_Enter_Into =>
+         return Prefix_Start & "Enter "
+           & Wrap_In_Backticks (+Step.Data.GUI_Entry_Text) & " into the "
+           & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+           & " (set the field value, then validate it)";
+
+      when GUI_Close_Window =>
+         return Prefix_Start & "Close "
+           & (if Step.Data.GUI_Access_Name = Null_Unbounded_String
+              then "the window"
+              else "the "
+                   & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+                   & " window");
 
       when GUI_Press_Widget =>
-         return Prefix & "that we press the widget "
-           & (if Step.Data.Negated then "..." else Object_String);
+         return Prefix & "that the " & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+           & (if Step.Data.Negated
+              then """ is not pressed"""
+              else " is pressed");
+
+      when GUI_Widget_Contains =>
+         return Prefix & "that the " & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name) & " "
+           & (if Step.Data.Negated then "does not contain " else "contains ")
+           & Wrap_In_Backticks (+Step.Data.GUI_Widget_Text);
+
+      when GUI_Widget_Empty =>
+         return Prefix & "that the " & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+           & (if Step.Data.Negated
+              then " is not empty"
+              else " is empty");
+
+      when GUI_Widget_Item_Count =>
+         return Prefix & "that the " & (+Step.Data.GUI_Role) & " "
+           & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+           & (if Step.Data.Negated
+              then " has not "
+              else " has ")
+           & Wrap_In_Backticks (+Step.Data.GUI_Widget_Text) & " items";
 
       end case;
 

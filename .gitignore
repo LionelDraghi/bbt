@@ -22,6 +22,9 @@ desktop.ini
 /bbt.exe
 /backends/gtk4/bbt_gtk4
 /backends/gtk4/bbt_gtk4.exe
+/Apps/ToDoMVC/gtk4/todomvc
+/Apps/ToDoMVC/gtk4/todomvc.exe
+/Apps/ToDoMVC/gtk4/todos.state
 /sut
 /sut.exe
 /rpl
@@ -49,6 +52,9 @@ tests/file_utilities_tests/test_file_utilities.exe
 /html
 /js
 /css
+/backends/gtk4/html
+/backends/gtk4/js
+/backends/gtk4/css
 
 # Local test results (docs/tests_results/<platform>/<profile>): this
 # level is git-ignored, only CI runs are recorded, staged by the CI
@@ -56,12 +62,6 @@ tests/file_utilities_tests/test_file_utilities.exe
 # can be diffed against the last committed run of the same profile
 # (cf. AGENTS.md, Test results).
 docs/tests_results/
-
-# The GUI assets deployed next to the test executable: copies next
-# to an installed bbt, junction links to gui/ in the dev tree.
-/tests/html
-/tests/js
-/tests/css
 
 # The test run artifacts, including the fixtures that the scenarios
 # recreate at each run, are NOT listed here: they must stay visible

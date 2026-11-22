@@ -16,7 +16,7 @@
 
 package BBT_Backends is
 
-   Harness_Deadline : constant Duration := 6.0;
+   Harness_Deadline : constant Duration := 12.0;
    --  The default bounded time a GUI state change gets: window
    --  creation, accessibility subtree build, event propagation and
    --  widget state settling are asynchronous. The ToDoMVC witness

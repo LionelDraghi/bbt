@@ -36,6 +36,8 @@ begin
       when Enter_Text       => return "enter";
       when Appears          => return "appears";
       when Press            => return "press";
+      when Close            => return "close";
+      when Has_V            => return "has";
       when No_Object        => return "";
       when Obj_Output       => return "output";
       when Obj_Stderr       => return "error output";
@@ -47,6 +49,8 @@ begin
       when Obj_Window_Name  => return "`window name`";
       when Obj_Widget_Name  => return "`widget name`";
       when Obj_Widget_State => return "enabled | disabled";
+      when Obj_Widget_Empty => return "empty";
+      when Obj_Widget_Count => return "`<n>` items";
       when Unordered        => return "unordered";
    end case;
 end Image;

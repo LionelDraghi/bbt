@@ -83,7 +83,7 @@ help:
 	@ echo "                   and rpl links in tests/"
 	@ echo "  refresh_bbt   : refresh the bbt link only, so that a direct"
 	@ echo "                   ./bbt run in tests/ never uses a stale binary"
-	@ echo "  features      : run the functional tests (docs/features)"
+	@ echo "  features      : run the functional tests (docs/cli_features)"
 	@ echo "  examples      : run the sanity checks (docs/examples),"
 	@ echo "                   which require gcc on the PATH"
 	@ echo "  non_reg       : run the non regression tests (non_reg_tests)"
@@ -102,22 +102,40 @@ help:
 	@ echo "root directory: it runs the scenario with the right options, and"
 	@ echo "prints the exact command line, ready to be grabbed and tweaked"
 	@ echo "(e.g. replace ./bbt with ./bbt explain, or add -d for traces)."
+	@ echo "CLI ids resolve against ../docs/cli_features, GUI ids (Gnnn)"
+	@ echo "against the stories tagged [Gnnn] in Apps/ToDoMVC/docs/features,"
+	@ echo "run through the gtk4 backend (backends/Makefile)."
 	@ echo "Add GUI=1 to run under the interactive bbt --gui debugger"
 	@ echo "window (cf. the features suite's report options)."
 
 # --------------------------------------------------------------------------
 # Replay a single functional test by id, e.g. make A300 or make B010.
 # The id is the beginning of the test file name, resolved against
-# ../docs/features, and the file is run with the same options as the
-# features suite. The exact command line is displayed, so that it can
+# ../docs/cli_features, and the file is run with the same options as the
+# features suite. If no CLI file matches, the id is looked for as a GUI
+# feature id (Gnnn): the stories of Apps/ToDoMVC/docs/features tagged
+# [id] on their steps are run through the gtk4 backend, reusing the
+# backends/Makefile wiring (core and backend executable in PATH,
+# witness app). The exact command line is displayed, so that it can
 # be grabbed and tweaked (e.g. replace ./bbt with ./bbt explain, or add
 # -d for traces). Explicit targets above always take precedence; an
 # unknown id just reports that no test file matches.
 %:
-	@ f=`ls ../docs/features/$@_*.md 2>/dev/null | head -1`; \
+	@ f=`ls ../docs/cli_features/$@_*.md 2>/dev/null | head -1`; \
 	if [ -z "$$f" ]; then \
-	    echo "no feature test file with id $@ in ../docs/features"; \
-	    exit 1; \
+	    g=`grep -lF "[$@]" ../Apps/ToDoMVC/docs/features/*.md 2>/dev/null | tr '\n' ' '`; \
+	    if [ -z "$$g" ]; then \
+	      echo "no feature test file with id $@ in ../docs/cli_features,"; \
+	      echo "nor tagged [$@] in the GUI stories (../Apps/ToDoMVC/docs/features)"; \
+	      exit 1; \
+	    fi; \
+	    s=""; for p in $$g; do s="$$s $$(basename $$p)"; done; \
+	    s=$${s# }; \
+	    echo "=== running: GUI feature $@, stories: $$s"; \
+	    $(MAKE) -s --directory=../backends witness-gtk4; \
+	    $(MAKE) -s --directory=../backends check-gtk4 \
+	            BBT_OPTIONS="--keep_going --cleanup=full" STORY="$$s"; \
+	    exit 0; \
 	fi; \
 	echo "=== running: (cd tests && ./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $(if $(GUI),--gui,) $$f)"; \
 	./bbt $(COMMON_OPTIONS) $(EXCLUDE) $(NEEDS_SHELL_EXCLUDE) $(if $(GUI),--gui,) $$f
@@ -188,7 +206,7 @@ features: setup
 	$(if $(GUI),,--generate_badge $(RESULTS_DIR)/badge.url)  \
 	$(if $(GUI),,--junit $(RESULTS_DIR)/features_results.xml) \
 	$(if $(GUI),,--index $(RESULTS_DIR)/features_results.md)  \
-	../docs/features
+	../docs/cli_features
 	@ echo
 
 examples: setup
@@ -259,6 +277,15 @@ clean:
 	@ - rm -f main main$(EXE_SUFFIX) ask ask$(EXE_SUFFIX) \
 	     cp cp$(EXE_SUFFIX) timed timed$(EXE_SUFFIX)
 	@ - rm -rf inc dir* html js css
+	# Test-run artifacts left by the scenarios: files written by the
+	# spawned tools and by the nested bbt runs, which --cleanup=full
+	# does not track. Same policy as the fixtures above: recreated at
+	# each run, visible in git status, removed here (cf. .gitignore).
+	@ - rm -f alt.txt hello.txt hi.txt new_name.txt \
+	       file1.tmp text.4 input.1 input.2 input.3 out.version.txt
+	@ - rm -f index_4.md verbose_output_NOK.md verbose_output_OK.md \
+	       time_attribute.md time_attribute.xml
+	@ - rm -f all_results.xml result.xml result2.xml windows_results.xml
 	# Same policy as the root clean: drop the ignored local results,
 	# keep the tracked CI records (diffable against new local runs).
 	@ - git clean -fqX $(RESULTS_DIR)

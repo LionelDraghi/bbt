@@ -79,7 +79,39 @@ package BBT.Model.Steps is
                     GUI_Widget_Exists,
                     GUI_Widget_State,
                     -- negated: widget in the other state
-                    GUI_Press_Widget);
+                    GUI_Widget_Contains,
+                    -- negated: the widget subtree does not contain the
+                    -- expected text
+                    GUI_Widget_Empty,
+                    -- negated: the widget holds at least one child
+                    GUI_Widget_Item_Count,
+                    -- the named container holds the given number of
+                    -- children (the "`To do` list has `3` items" step,
+                    -- G080), the count carried by GUI_Widget_Text;
+                    -- negated: the count differs
+                    GUI_Type_Into,
+                    -- input into the named textbox: set the field
+                    -- value (ARIA accessible value / AT-SPI
+                    -- EditableText), and does not validate it: the
+                    -- validation is a semantic press on an application
+                    -- action (cf. GUI_Press_Widget), not an injected
+                    -- Enter
+                    GUI_Press_Widget,
+                    -- semantic activation of the named widget (the
+                    -- first AT-SPI action, not injected input)
+                    GUI_Enter_Into,
+                    --  input into the named textbox, then validation:
+                    --  the value set of GUI_Type_Into, followed by the
+                    --  field commit (the Enter key). The commit is a
+                    --  synthesized key press, not an AT-SPI action:
+                    --  the entries' activate action is a silent no-op
+                    --  on GTK 4 (cf. G035)
+                    GUI_Close_Window);
+                    --  close the named window, or the application's
+                    --  only window when no name is given: the
+                    --  accessibility close action of the window (the
+                    --  window.close AT-SPI action on GTK 4), not a
+                    --  process kill (G095)
 
    Some_Gui_Steps : Boolean := False;
    --  Set when a step of the GUI vocabulary is processed (cf.
@@ -147,13 +179,18 @@ package BBT.Model.Steps is
       -- Patterns of the (ignoring ...) clause, masking the volatile
       -- parts on both sides before the comparison: the named patterns
       -- in Ignore_Patterns, the custom regexps in Ignore_Regexps
-      -- (cf. docs/features/A300_Ignoring.md)
+      -- (cf. docs/cli_features/A300_Ignoring.md)
       File_Content     : Text                      := Empty_Text;
       Syntax_Error     : Boolean                   := False;
 
       GUI_Role         : Unbounded_String          := Null_Unbounded_String;
       GUI_Access_Name  : Unbounded_String          := Null_Unbounded_String;
       GUI_Widget_State : GUI_Widget_States         := GUI_Any;
+      GUI_Widget_Text  : Unbounded_String          := Null_Unbounded_String;
+      --  The text expected inside the named widget subtree, for the
+      --  GUI_Widget_Contains action
+      GUI_Entry_Text   : Unbounded_String          := Null_Unbounded_String;
+      --  The text to type, for the GUI_Type_Into action
    end record with Put_Image => Put_Image;
 
    -- --------------------------------------------------------------------------

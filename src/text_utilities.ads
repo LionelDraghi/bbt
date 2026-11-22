@@ -191,7 +191,7 @@ package Text_Utilities is
      (No_Pattern, Time, Dir, Version, Location, Path_Syntax);
    -- The patterns that neutralize the volatile parts of a comparison
    -- before it happens, as stated by the (ignoring ...) clause of the
-   -- comparison steps (cf. docs/features/A300_Ignoring.md).
+   -- comparison steps (cf. docs/cli_features/A300_Ignoring.md).
    -- No_Pattern is only the neutral value used to iterate on the real
    -- patterns.
    -- All patterns but Path_Syntax mask the matching substrings;
@@ -231,7 +231,7 @@ package Text_Utilities is
    -- The custom patterns of the (ignoring ...) clause: any word of the
    -- clause that is not a named pattern is a regexp, masking the
    -- matching substrings of both sides of the comparison
-   -- (cf. docs/features/A300_Ignoring.md)
+   -- (cf. docs/cli_features/A300_Ignoring.md)
 
    function Mask (T      : Text;
                   Regexp : String;

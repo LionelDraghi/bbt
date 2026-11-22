@@ -24,12 +24,22 @@ procedure Initialize_GUI_Grammar is
       Lexer.Register_Keyword ("textbox");
       Lexer.Register_Keyword ("dialog");
       Lexer.Register_Keyword ("press");
+      Lexer.Register_Keyword ("close");
+      Lexer.Register_Keyword ("select");
       Lexer.Register_Keyword ("enabled");
       Lexer.Register_Keyword ("disabled");
+      Lexer.Register_Keyword ("into");
+      Lexer.Register_Keyword ("list");
+      Lexer.Register_Keyword ("listitem");
+      Lexer.Register_Keyword ("empty");
+      Lexer.Register_Keyword ("has");
+      Lexer.Register_Keyword ("items");
+      Lexer.Register_Keyword ("item");
    end Register_Keywords;
 
 begin
    Register_Keywords;
+   Current_Set := GUI_Set;
    --  GUI checks, Then steps
    Set ([Then_P], No_SA, Window_Subj, Appears, No_Object,
         GUI_Window_Appears, "a window appears / a `title` window appears");
@@ -41,10 +51,27 @@ begin
    Set ([Then_P], No_SA, No_Subject, Is_V, Obj_Widget_State,
         GUI_Widget_State, "the `name` `role` is enabled / disabled");
 
+   Set ([Then_P], No_SA, No_Subject, Contains, Obj_Text,
+        GUI_Widget_Contains, "the `name` `role` contains `text`");
+   Set ([Then_P], No_SA, No_Subject, Is_V, Obj_Widget_Empty,
+        GUI_Widget_Empty, "the `name` `role` is empty");
+
+   Set ([Then_P], No_SA, No_Subject, Has_V, Obj_Widget_Count,
+        GUI_Widget_Item_Count,
+        "the `name` `role` has `<n>` items");
+
    --  GUI actions & window checks
    Set ([Then_P], No_SA, Window_Subj, Contains, Obj_Text,
         GUI_Window_Contains, "the window contains `text`");
+
    Set ([When_P], No_SA, No_Subject, Press, Obj_Text,
         GUI_Press_Widget, "I press the `name` `role`");
+   Set ([When_P], No_SA, No_Subject, Close, Obj_Window_Name,
+        GUI_Close_Window,
+        "I close the window / the `title` window");
+   Set ([When_P], No_SA, No_Subject, Type_Text, Obj_Widget_Name,
+        GUI_Type_Into, "I type `text` into the `name` textbox");
+   Set ([When_P, Then_P], No_SA, No_Subject, Enter_Text, Obj_Widget_Name,
+        GUI_Enter_Into, "I enter `text` into the `name` textbox");
 
 end Initialize_GUI_Grammar;

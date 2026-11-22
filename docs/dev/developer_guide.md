@@ -98,7 +98,7 @@ relies on two event pumping primitives:
 ## Tests
 
 `make` or `make check` run different kind of tests :
-1. First of all, this is what it was designed to achive, all feature descriptions in docs/features
+1. First of all, all feature descriptions in docs/cli_features
 
 2. Examples from the documentation in docs/examples
 
@@ -137,7 +137,7 @@ Some external tools are required to fully run the Makefile, and
 I don't know whether they are available on Windows, Mac-OS or even on all Linux distributions.  
 I try to minimise the number of those dependencies, and also try to choose widely available tools.
 
-No external tools are required to compile and run all tests (within docs/features), except the gnat compiler and Alire.
+No external tools are required to compile and run all tests (within docs/cli_features), except the gnat compiler and Alire.
 To avoid external dependencies, a false exe named `sut` (that means Software Under Test) is used for `bbt` tests own needs.  
 Sources of `sut` are in the `tools` sub-directory.
 

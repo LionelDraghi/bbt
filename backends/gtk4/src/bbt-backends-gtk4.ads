@@ -63,8 +63,59 @@ package BBT.Backends.Gtk4 is
    overriding function Press_Widget
      (The_Backend : Gtk4_Backend; Role : String; Name : String)
       return Boolean;
-   --  Semantic activation of the named widget (the first AT-SPI
-   --  action, not injected input)
+
+   overriding function Widget_Contains
+     (The_Backend : Gtk4_Backend; Role, Name, Expected : String)
+      return Boolean;
+   --  The rendered text of the named widget subtree contains the
+   --  expected text (list content checks, G080)
+
+   overriding function Widget_Is_Empty
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Boolean;
+   --  The named container widget holds no child
+
+   overriding function Widget_Item_Count
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Natural;
+   --  The number of children of the named container widget (G080)
+
+   overriding procedure Type_Into
+     (The_Backend : in out Gtk4_Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String);
+   --  Types Text into the named text field: sets its contents through
+   --  the AT-SPI EditableText interface (a semantic value set, not
+   --  injected input), and raises No_Backend_Available when no
+   --  editable field of that name is reachable
+
+   overriding procedure Enter_Into
+     (The_Backend : in out Gtk4_Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String);
+   --  The Type_Into value set, then the field commit: a synthesized
+   --  Return key press (X11 XTEST), sent to the focused entry. The
+   --  AT-SPI activate action is not usable for that: GTK 4 dispatches
+   --  it to gtk_widget_activate and discards the outcome, a silent
+   --  no-op for entries (no activation signal on the widget class).
+   --  Raises No_Backend_Available when the field is not reachable or
+   --  no X11 display is available for the injection
+
+   overriding function Close_Window
+     (The_Backend : Gtk4_Backend; Title : String := "")
+      return Boolean;
+   --  Closes the window named Title — or the application's only
+   --  window when no title is given, an error if the application
+   --  exposes several — through the window.close AT-SPI action of
+   --  the frame accessible (a graceful Gtk close request, the
+   --  application's own close path, cf. G095), selected by action
+   --  name, never by index: the frame action set is toolkit version
+   --  dependent. The answer is True when the window is gone from the
+   --  accessibility tree within the harness deadline, dying with the
+   --  process reaped (its main loop ended, or the process-level
+   --  fallback close); False when no such window exists
 
    Registered : aliased Gtk4_Backend;
    --  The singleton backend instance: the bbt_gtk4 main sets

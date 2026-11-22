@@ -274,6 +274,52 @@ as in `the output is not`, `the error output does not contain` or
 negated, like the run steps, is ignored with a warning: the step keeps
 its positive meaning.
 
+## GUI testing
+
+bbt can also drive and observe graphical applications, with the same
+scenarios and the same Given / When / Then grammar: the GUI steps
+assert on the interface the way the user perceives it, designating
+widgets by **role** and **accessible name** (the WAI-ARIA concepts),
+whatever the toolkit behind. What you type or press is not injected
+input: it is the semantic action, as announced by the accessibility
+API. There is no backend reference in the scenarios: the GUI backend
+is selected on the command line, `bbt --gui=<kind>` (currently `gtk4`
+on Linux), so that the same scenario runs on several backends
+unchanged.
+
+**Testing a GUI application**
+
+    - When I run `./todomvc`
+    - Then a window appears
+    - Then a `To do` window appears (variant with the window title)
+    - Then the window contains `What needs to be done?` (the placeholder hint)
+    - Then there is a textbox named `New task`
+    - Then the `Create` button is enabled / disabled
+    - Then the `To do` list is empty
+    - Then the `To do` list contains `Buy milk`
+    - When I press the `Create` button
+    - When I type `Buy milk` into the `New task` textbox
+
+(The roles are the frozen MVP set — `button`, `textbox`,
+`dialog`, `list`, ... — cf. `bbt help grammar` for the recognized
+forms. All the comparison forms above are negatable, as the CLI
+checks.)
+
+A GUI scenario looks like any other scenario:
+
+    ## Scenario: The user adds a task
+
+    - Given there is no file `todos.state`
+    - When I run `./todomvc`
+    - Then a window appears
+    - And there is a textbox named `New task`
+    - When I type `Buy milk` into the `New task` textbox
+    - And I press the `Create` button
+    - Then the `To do` list contains `Buy milk`
+
+Cf. the GUI vocabulary specifications (docs/specifications.md) and
+the supported backends (docs/backends.md).
+
 ## Help  
 
 To get a complete view on step's grammar, with examples:  

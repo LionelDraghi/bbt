@@ -68,7 +68,8 @@ begin
 
    case State.Object is
       when No_Object | Obj_Output | Obj_Stderr | Obj_Text | Obj_Command_List
-         | Obj_Error | Obj_Window_Name | Obj_Widget_Name | Obj_Widget_State =>
+         | Obj_Error | Obj_Window_Name | Obj_Widget_Name | Obj_Widget_State
+         | Obj_Widget_Empty | Obj_Widget_Count =>
          null;
 
       when Obj_File_Name =>
@@ -110,6 +111,12 @@ begin
    elsif Verb in Type_Text | Enter_Text and State.Action = None then
       IO.Put_Error ("Input text not provided (should be between backticks)", Loc);
 
+   elsif State.Action in GUI_Type_Into | GUI_Enter_Into
+     and then Is_Null (State.GUI_Entry_Text)
+   then
+      IO.Put_Error
+        ("both the text to type and the field name are expected in code"
+         & " spans, as in: I type `text` into the `name` textbox", Loc);
    end if;
 
    if State.Ignoring_Clause

@@ -1067,7 +1067,7 @@ package body Text_Utilities is
    end Matches;
 
    -- -----------------------------------------------------------------------
-   -- Masking of the volatile parts, cf. docs/features/A300_Ignoring.md
+   -- Masking of the volatile parts, cf. docs/cli_features/A300_Ignoring.md
 
    Ignore_Marker : constant String := "***";
    -- Fixed marker replacing every masked part of the expected and actual

@@ -162,7 +162,7 @@ Not done yet, to be arbitrated with the Spawn / utilada comparison:
 the validation of the Windows paths (the C `poll` import, and
 `Set_Allocate_TTY` being not implemented on Windows, where the
 commands keep the pipes behavior), and the move of the scenarios
-below to docs/features once the design is arbitrated.
+below to docs/cli_features once the design is arbitrated.
 
 The PR #41 CI confirms the diagnostic (October 2026): the engine is
 green on Linux and on macOS, and the Windows build failed at link

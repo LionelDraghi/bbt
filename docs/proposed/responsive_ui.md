@@ -6,10 +6,10 @@ Proposed
 
 ## Context
 
-GuiVerb is being merged into BBT, bringing behaviour-driven GUI testing into the
-general BBT scenario model.
+bbt brings behaviour-driven GUI testing into the general bbt scenario
+model through its GUI vocabulary.
 
-The initial GuiVerb vocabulary is largely inspired by WAI-ARIA:
+The GUI vocabulary is largely inspired by WAI-ARIA:
 
 - accessible roles such as `button`, `tree`, `textbox`, etc.;
 - accessible names;
@@ -36,7 +36,7 @@ viewport:
 ARIA does not define the concept of a viewport. Viewports belong to the Web/CSS
 rendering model, notably CSSOM View.
 
-GuiVerb/BBT therefore needs a small vocabulary describing the rendering
+bbt therefore needs a small vocabulary describing the rendering
 environment in addition to the ARIA-derived vocabulary describing the interface.
 
 ## Proposal
@@ -181,7 +181,7 @@ not alter the meaning of individual steps.
 
 ## Vocabulary Model
 
-This proposal introduces a useful distinction in the GuiVerb/BBT vocabulary.
+This proposal introduces a useful distinction in the bbt GUI vocabulary.
 
 ### Interface vocabulary
 

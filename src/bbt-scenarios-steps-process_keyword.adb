@@ -6,6 +6,7 @@
 
 separate (BBT.Scenarios.Steps)
 
+
 procedure Process_Keyword (Tok      : String;
                            Loc      : Location_Type;
                            State    : in out Parse_State) is
@@ -16,7 +17,7 @@ procedure Process_Keyword (Tok      : String;
                                                  Mapping => Lower_Case_Map);
 
 begin
-   -- Put_Debug_Line ("  In Process_Keyword, Keyword = " & Lower_Keyword, Loc);
+   Put_Debug_Line ("  In Process_Keyword, Keyword = " & Lower_Keyword, Loc);
    if Lower_Keyword = "executable" then
       State.Executable := True;
 
@@ -177,6 +178,8 @@ begin
    elsif Lower_Keyword = "button"
      or Lower_Keyword = "textbox"
      or Lower_Keyword = "dialog"
+     or Lower_Keyword = "list"
+     or Lower_Keyword = "listitem"
    then
       --  An MVP role word: the widget role goes to the GUI payload;
       --  in the subject part it also resets a wrongly categorized
@@ -189,11 +192,56 @@ begin
          State.Subject := No_Subject;
       end if;
 
+   elsif Lower_Keyword = "has" then
+      --  The GUI item count step verb (cf. Initialize_GUI_Grammar):
+      --  "the `To do` list has `3` items". Like "is", the rest of the
+      --  step line is the object part.
+      Set_Verb (Has_V, Loc);
+
+   elsif Lower_Keyword = "items"
+     or else Lower_Keyword = "item"
+   then
+      --  The GUI item count step object: the code span met since the
+      --  "has" verb is the expected child count (cf. G080).
+      if In_Object_Part
+        and then Chunk.Verb = Has_V
+        and then State.Object = Obj_Text
+      then
+         State.Object          := Obj_Widget_Count;
+         State.GUI_Widget_Text := State.Object_String;
+         State.Object_String   := Null_Unbounded_String;
+      end if;
+
+   elsif Lower_Keyword = "into" then
+      --  The GUI type step marker (cf. Initialize_GUI_Grammar): the
+      --  code span met before "into" is the entry text, the following
+      --  one is the target field name. Without it, "I type `X`" stays
+      --  the CLI interactive input step (a code span to the running
+      --  command standard input, cf. A290).
+      if In_Object_Part
+        and then Chunk.Verb in Type_Text | Enter_Text
+        and then State.Object = Obj_Text
+      then
+         State.GUI_Entry_Text := State.Object_String;
+         State.Object_String  := Null_Unbounded_String;
+         State.Object         := Obj_Widget_Name;
+      end if;
+
    elsif Lower_Keyword = "appears" then
       Set_Verb (Appears, Loc);
 
-   elsif Lower_Keyword = "press" then
+   elsif Lower_Keyword = "press"
+     or Lower_Keyword = "select"
+   then
+      --  "select" is the synonym of "press" for selectable items, like
+      --  a listitem: "I select the `Buy milk` listitem" is the natural
+      --  wording of the item activation (G020), the same action.
       Set_Verb (Press, Loc);
+
+   elsif Lower_Keyword = "close" then
+      --  The window close verb (cf. Initialize_GUI_Grammar):
+      --  "I close the window" / "I close the `title` window"
+      Set_Verb (Close, Loc);
 
    elsif Lower_Keyword = "enabled"
      or Lower_Keyword = "disabled"
@@ -205,6 +253,15 @@ begin
          else Model.Steps.GUI_Disabled);
       if In_Object_Part then
          State.Object := Obj_Widget_State;
+      end if;
+
+   elsif Lower_Keyword = "empty" then
+      --  "Then the `name` `role` is empty": the emptiness of a
+      --  container widget subtree (G030). The CLI steps never use a
+      --  bare "empty" keyword (output emptiness has its own step
+      --  forms), so this keyword is unambiguous.
+      if In_Object_Part then
+         State.Object := Obj_Widget_Empty;
       end if;
 
    end if;

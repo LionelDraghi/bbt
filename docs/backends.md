@@ -31,7 +31,7 @@ any backend crate.
 
 ## Step vocabulary × backends
 
-The shared suite (`backends/scenarios/`) runs the same steps against
+The shared suite (`Apps/ToDoMVC/docs/features/`) runs the same steps against
 each backend and its witness. `pass` means the scenario passed on the
 platform, run by the backend CI or locally; the missing vocabulary is
 absorbed one feature at a time (plan step 5), each entering the suite
@@ -39,14 +39,18 @@ and this table.
 
 | Vocabulary step (feature)                     | gtk4 | webapp | adi2 |
 |-----------------------------------------------|------|--------|------|
-| `a window appears` (F005)                     | pass | —      |      |
-| `the window contains `text`` (F010)           | pass | —      |      |
-| `there is a role named `name`` (F015)         | pass | —      |      |
-| `the name role is enabled / disabled` (F015)  | pass | —      |      |
-| typing into a textbox (ToDoMVC spec)          | pending vocabulary | — | — |
-| `I press the name role` (F020)                | pending vocabulary | — | — |
-| dialog checks (F025)                          | pending vocabulary | — | — |
-| focus checks (F030)                           | pending vocabulary | — | — |
+| `a window appears` (G005)                     | pass | —      |      |
+| `the window contains `text`` (G010)           | pass | —      |      |
+| `there is a role named `name`` (G015)         | pass | —      |      |
+| `the name role is enabled / disabled` (G015)  | pass | —      |      |
+| typing into a textbox (G035)                  | pass | —      |      |
+| `I press the name role` (G020)                | pass | —      |      |
+| `there is a list named `name`` (G080)         | pass | —      |      |
+| `the name list is empty` (G080)               | pass | —      |      |
+| `the name list contains `text`` (G080)        | pass | —      |      |
+| `I close the window` (G095)                   | pass | —      |      |
+| dialog checks (G025)                          | pending vocabulary | — | — |
+| focus checks (G030)                           | pending vocabulary | — | — |
 
 ## Platforms × backends
 

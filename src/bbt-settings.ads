@@ -84,7 +84,7 @@ private package BBT.Settings is
    -- --------------------------------------------------------------------------
    type Shell_Kind is (Sh, Bash, Dash, Zsh, Fish, Cmd, Powershell, Pwsh);
    -- Shells a shell step may run the command string through
-   -- (cf. docs/features/A310_Run_Shell.md)
+   -- (cf. docs/cli_features/A310_Run_Shell.md)
 
    function Shell return Shell_Kind;
    -- The shell selected by the --shell option or the BBT_SHELL

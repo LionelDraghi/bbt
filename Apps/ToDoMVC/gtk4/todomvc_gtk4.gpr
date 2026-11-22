@@ -12,6 +12,13 @@ project TodoMvc_Gtk4 is
    for Exec_Dir use ".";
    for Main use ("todomvc");
 
+   package Linker is
+      --  The pinned GtkAda builds as a static, non-PIC archive on the
+      --  dev machines: the default PIE link fails on it
+      --  (R_X86_64_32 relocation, cf. obj link logs).
+      for Switches ("ada") use ("-no-pie");
+   end Linker;
+
    package Compiler is
       for Switches ("ada") use ("-gnat2022", "-gnatwa");
    end Compiler;

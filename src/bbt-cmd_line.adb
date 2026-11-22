@@ -114,7 +114,7 @@ package body BBT.Cmd_Line is
    --  arguments unchanged, except for the --gui=<kind> option itself.
    --  If the executable is not found, bbt fails before running any
    --  scenario (cf. docs/proposed/crate_restructuring.md).
-      use Ada.Command_Line, GNAT.OS_Lib;
+      use GNAT.OS_Lib;
 
       Exe_Name  : constant String := "bbt_" & Settings.Gui_Backend;
       Full_Path : constant GNAT.OS_Lib.String_Access :=
@@ -145,13 +145,18 @@ package body BBT.Cmd_Line is
             end if;
          end loop;
 
-         Code := GNAT.OS_Lib.Spawn (Program_Name => Exe_Name,
+         Code := GNAT.OS_Lib.Spawn (Program_Name => Full_Path.all,
                                     Args         => Args (1 .. Last));
-         Settings.Gui_Backend_Ran := True;
 
+         --  The flag means "the process was replaced by the backend
+         --  executable, whose exit status is already propagated": it
+         --  must only be set when the spawn succeeded, otherwise the
+         --  driver would exit silently on a failed handover (the
+         --  Some_Error path below reports it instead).
          if Code < 0 then
-            Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);
+            IO.Put_Error ("cannot spawn " & Exe_Name);
          else
+            Settings.Gui_Backend_Ran := True;
             Ada.Command_Line.Set_Exit_Status
               (Ada.Command_Line.Exit_Status (Code mod 256));
          end if;

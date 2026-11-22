@@ -359,8 +359,12 @@ package body BBT.Tests.Runner is
             end if;
 
          when GUI_Window_Contains =>
+            --  The check inverts with the step polarity
+            --  ("does not contain" sees the negation set as the
+            --  step polarity, cf. Negatable)
             if BBT.Backends.Window_Contains
                  (To_String (Step.Data.GUI_Access_Name))
+                 xor Step.Data.Negated
             then
                Put_Step_Result (Step      => Step,
                                 Success   => True,
@@ -403,9 +407,43 @@ package body BBT.Tests.Runner is
          when GUI_Widget_State =>
             --  The check inverts with the step polarity, like the CLI
             --  comparisons: "is not enabled" expects the other state
-            if BBT.Backends.Widget_Enabled
+            declare
+               Expected : constant Boolean :=
+                 (case Step.Data.GUI_Widget_State is
+                     when GUI_Enabled | GUI_Any => True,
+                     when GUI_Disabled          => False);
+               Enabled  : constant Boolean :=
+                 BBT.Backends.Widget_Enabled
+                   (To_String (Step.Data.GUI_Role),
+                    To_String (Step.Data.GUI_Access_Name));
+            begin
+               if (Enabled = Expected) xor Step.Data.Negated then
+                  Put_Step_Result (Step      => Step,
+                                   Success   => True,
+                                   Fail_Msg  => "",
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+               else
+                  Put_Step_Result
+                    (Step      => Step,
+                     Success   => False,
+                     Fail_Msg  => To_String (Step.Data.GUI_Role)
+                               & " """ & To_String (Step.Data.GUI_Access_Name)
+                               & """ not in the expected state",
+                     Loc       => Step.Location,
+                     Verbosity => Verbosity);
+                  Run_Error := True;
+               end if;
+            end;
+
+         when GUI_Widget_Contains =>
+            --  The named widget subtree's rendered text: the check
+            --  inverts with the step polarity ("does not contain")
+            if BBT.Backends.Widget_Contains
                  (To_String (Step.Data.GUI_Role),
-                  To_String (Step.Data.GUI_Access_Name))
+                  To_String (Step.Data.GUI_Access_Name),
+                  To_String (Step.Data.GUI_Widget_Text))
+                 xor Step.Data.Negated
             then
                Put_Step_Result (Step      => Step,
                                 Success   => True,
@@ -416,13 +454,160 @@ package body BBT.Tests.Runner is
                Put_Step_Result
                  (Step      => Step,
                   Success   => False,
-                  Fail_Msg  => To_String (Step.Data.GUI_Role)
+                  Fail_Msg  => "the "
+                            & To_String (Step.Data.GUI_Role)
                             & " """ & To_String (Step.Data.GUI_Access_Name)
-                            & """ not in the expected state",
+                            & """ "
+                            & (if Step.Data.Negated
+                               then "contains"
+                               else "does not contain")
+                            & " """ & To_String (Step.Data.GUI_Widget_Text)
+                            & """",
                   Loc       => Step.Location,
                   Verbosity => Verbosity);
                Run_Error := True;
             end if;
+
+         when GUI_Widget_Empty =>
+            --  The named widget holds no child (empty list checks,
+            --  G030); the check inverts with the step polarity
+            if BBT.Backends.Widget_Is_Empty
+                 (To_String (Step.Data.GUI_Role),
+                  To_String (Step.Data.GUI_Access_Name))
+                 xor Step.Data.Negated
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "the "
+                            & To_String (Step.Data.GUI_Role)
+                            & " """ & To_String (Step.Data.GUI_Access_Name)
+                            & """ is"
+                            & (if Step.Data.Negated then "" else " not")
+                            & " empty",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
+
+         when GUI_Widget_Item_Count =>
+            --  The named container holds the expected number of
+            --  children (the "`To do` list has `3` items" step,
+            --  G080); the check inverts with the step polarity
+            declare
+               Expected : constant Natural :=
+                            Natural'Value
+                              (To_String (Step.Data.GUI_Widget_Text));
+               Found    : constant Natural :=
+                            BBT.Backends.Widget_Item_Count
+                              (To_String (Step.Data.GUI_Role),
+                               To_String (Step.Data.GUI_Access_Name));
+            begin
+               if (Found = Expected) xor Step.Data.Negated then
+                  Put_Step_Result (Step      => Step,
+                                   Success   => True,
+                                   Fail_Msg  => "",
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+               else
+                  Put_Step_Result
+                    (Step      => Step,
+                     Success   => False,
+                     Fail_Msg  => "the "
+                                  & To_String (Step.Data.GUI_Role)
+                                  & " """ & To_String (Step.Data.GUI_Access_Name)
+                                  & """ has "
+                                  & (if Step.Data.Negated
+                                     then "" else " not")
+                                  & Found'Image
+                                  & (if Found = 1 then " item" else " items")
+                                  & " (expected"
+                                  & (if Step.Data.Negated then " not" else "")
+                                  & Expected'Image & ")",
+                     Loc       => Step.Location,
+                     Verbosity => Verbosity);
+                  Run_Error := True;
+               end if;
+            end;
+
+         when GUI_Type_Into =>
+            --  A semantic value set through the backend's editable
+            --  text interface: no injected key, no validation (the
+            --  validation is the following semantic press, when the
+            --  application asks for one)
+            begin
+               if BBT.Backends.Type_Into
+                    (To_String (Step.Data.GUI_Role),
+                     To_String (Step.Data.GUI_Access_Name),
+                     To_String (Step.Data.GUI_Entry_Text))
+               then
+                  Put_Step_Result (Step      => Step,
+                                   Success   => True,
+                                   Fail_Msg  => "",
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+               else
+                  Put_Step_Result
+                    (Step      => Step,
+                     Success   => False,
+                     Fail_Msg  => "no GUI backend available"
+                                & " (select one with --gui=<kind>)",
+                     Loc       => Step.Location,
+                     Verbosity => Verbosity);
+                  Run_Error := True;
+               end if;
+            exception
+               when E : BBT.Backends.No_Backend_Available =>
+                  Put_Step_Result (Step      => Step,
+                                   Success   => False,
+                                   Fail_Msg  =>
+                                     Ada.Exceptions.Exception_Message (E),
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+                  Run_Error := True;
+            end;
+
+         when GUI_Enter_Into =>
+            --  The G035 value set, then the field commit: the Enter
+            --  key of a real user, injected since the entries' AT-SPI
+            --  activate action is a silent no-op on GTK 4
+            begin
+               if BBT.Backends.Enter_Into
+                    (To_String (Step.Data.GUI_Role),
+                     To_String (Step.Data.GUI_Access_Name),
+                     To_String (Step.Data.GUI_Entry_Text))
+               then
+                  Put_Step_Result (Step      => Step,
+                                   Success   => True,
+                                   Fail_Msg  => "",
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+               else
+                  Put_Step_Result
+                    (Step      => Step,
+                     Success   => False,
+                     Fail_Msg  => "no GUI backend available"
+                                & " (select one with --gui=<kind>)",
+                     Loc       => Step.Location,
+                     Verbosity => Verbosity);
+                  Run_Error := True;
+               end if;
+            exception
+               when E : BBT.Backends.No_Backend_Available =>
+                  Put_Step_Result (Step      => Step,
+                                   Success   => False,
+                                   Fail_Msg  =>
+                                     Ada.Exceptions.Exception_Message (E),
+                                   Loc       => Step.Location,
+                                   Verbosity => Verbosity);
+                  Run_Error := True;
+            end;
 
          when GUI_Press_Widget =>
             if BBT.Backends.Press_Widget
@@ -446,6 +631,33 @@ package body BBT.Tests.Runner is
                Run_Error := True;
             end if;
 
+         when GUI_Close_Window =>
+            --  The G095 window close: the accessibility close action
+            --  of the window (graceful, the application's own close
+            --  path), closing the application with it when its main
+            --  loop ends with its windows; the process-level close
+            --  is the backend fallback
+            if BBT.Backends.Close_Window
+                 (To_String (Step.Data.GUI_Access_Name))
+            then
+               Put_Step_Result (Step      => Step,
+                                Success   => True,
+                                Fail_Msg  => "",
+                                Loc       => Step.Location,
+                                Verbosity => Verbosity);
+            else
+               Put_Step_Result
+                 (Step      => Step,
+                  Success   => False,
+                  Fail_Msg  => "cannot close the window"
+                            & " " & To_String (Step.Data.GUI_Access_Name)
+                            & " (no such window of the launched"
+                            & " application, or the close did not"
+                            & " happen within the deadline, cf. G095)",
+                  Loc       => Step.Location,
+                  Verbosity => Verbosity);
+               Run_Error := True;
+            end if;
          when File_Matches =>
             File_Matches (Step, Verbosity);
 
@@ -740,6 +952,13 @@ package body BBT.Tests.Runner is
          --  as they are by the final counters (Not Run).
          Restore_Environment;
          Reset_Interactive_State;
+         --  No backend shutdown here: the launched application is the
+         --  document's, not the scenario's — it survives the scenario
+         --  boundaries of its document, closed by an explicit window
+         --  close step (G095), by the next launch, or by the
+         --  end-of-run shutdown. Killing it here would force every
+         --  acting scenario to launch and accessibility-register its
+         --  own application anew.
          -- Variables set in the scenario or its backgrounds apply to that
          -- scenario only.
          exit when IO.Some_Error and not Settings.Keep_Going

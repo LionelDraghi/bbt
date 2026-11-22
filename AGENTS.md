@@ -23,7 +23,7 @@ The shared build pointers apply ([reference repository on GitHub](https://github
 - `make tools` builds `sut` and `rpl`, and refreshes the test links in `tests/`.
 - `make doc` regenerates the generated docs (help reference files, fixme and issues indexes, badges) and checks the links with mlc.
 - `make install` copies bbt to `~/bin`.
-- Scenario sources live in `docs/features/` and `docs/examples/`; `tests/` is the run directory, and also hosts the unit and non-regression suites (`expect_test`, `file_utilities_tests`, `non_reg_tests`, `spawn_test`, `utilada_test`).
+- Scenario sources live in `docs/cli_features/` and `docs/examples/`; `tests/` is the run directory, and also hosts the unit and non-regression suites (`expect_test`, `file_utilities_tests`, `non_reg_tests`, `spawn_test`, `utilada_test`).
 - Deviation on `clean`: `make clean` removes the test-run artefacts only, keeping the built binaries and links usable; `make distclean` matches the shared full clean (everything that can be rebuilt).
 
 ## Test procedure
@@ -34,7 +34,7 @@ The shared build pointers apply ([reference repository on GitHub](https://github
   rerun or tweak it, e.g. replace `./bbt` with `./bbt explain`, or add
   `-d` for debug traces.
 - To run sanity checks (rapid): `cd tests && ./bbt ../docs/examples`
-- To run functional tests: `cd tests && ./bbt ../docs/features`
+- To run functional tests: `cd tests && ./bbt ../docs/cli_features`
 - Add the option `--exclude Windows_Only` when you are on Linux/macOS.
 - Add the option `--exclude Unix_Only` when you are on Windows.
 

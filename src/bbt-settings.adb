@@ -42,7 +42,7 @@ package body BBT.Settings is
 
    -- --------------------------------------------------------------------------
    --  Shells a shell step may run the command string through
-   --  (cf. docs/features/A310_Run_Shell.md): the default is cmd.exe on
+   --  (cf. docs/cli_features/A310_Run_Shell.md): the default is cmd.exe on
    --  Windows, whose redirections have the POSIX semantics, and sh
    --  on the other systems
    function Shell_Name (K : Shell_Kind) return String is

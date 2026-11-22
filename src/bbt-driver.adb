@@ -64,9 +64,19 @@ package body BBT.Driver is
             --  Eager backend check (cf.
             --  docs/proposed/crate_restructuring.md): documents with
             --  GUI steps are rejected before any scenario runs, with
-            --  an actionable backend selection hint
-            IO.Put_Error
-              ("no GUI backend available: select one with --gui=<kind>");
+            --  an actionable backend selection hint. In debugger
+            --  mode, the backend lives in the backend executable
+            --  (the debugger itself is in every bbt executable): the
+            --  working combination is --gui --gui=<kind>.
+            if Settings.Gui then
+               IO.Put_Error
+                 ("no GUI backend available in the interactive debugger;"
+                  & " run the debugger in the backend executable instead,"
+                  & " e.g. bbt --gui --gui=<kind> <scenarios>");
+            else
+               IO.Put_Error
+                 ("no GUI backend available: select one with --gui=<kind>");
+            end if;
          end if;
 
       end if;

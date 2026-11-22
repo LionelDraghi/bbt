@@ -283,7 +283,7 @@ package body BBT.Tests.Actions.Commands is
          --  The command string is passed as a single argument to the
          --  shell set in the settings: it is not split by bbt, and its
          --  pipes, redirections and command substitutions are
-         --  interpreted by that shell (cf. docs/features/A310_Run_Shell.md)
+         --  interpreted by that shell (cf. docs/cli_features/A310_Run_Shell.md)
          declare
             The_Shell : constant Settings.Shell_Kind := Settings.Shell;
             Full_Path : constant GNAT.OS_Lib.String_Access :=

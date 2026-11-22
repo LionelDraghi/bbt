@@ -21,10 +21,12 @@ never on positions or pixels. Each implementation must expose:
 
 | Widget | Role | Accessible name |
 |---|---|---|
-| Todo input | textbox | `What needs to be done?` |
+| Todo input | textbox | `New task` (placeholder: `What needs to be done?`, a visual hint only) |
 | Todo creation | button | `Create` (single) |
+| Todo list | list | `To do` (todos still to be done) |
+| Done list | list | `Done` (completed todos) |
 | Mark-all control | button | `Mark all as complete` (footer, with the purge) |
-| Item completion toggle | button | `Complete` (one per todo item) |
+| Item completion toggle | button | `Complete` (single, on the selected todo) |
 | Item editing trigger | button | `Edit` (single, on the selected todo) |
 | Item delete control | button | `Delete` (single, on the selected todo) |
 | Item editing input | textbox | `Edit todo` |
@@ -42,9 +44,14 @@ window, above the list, right under the creation line; the footer sits
 at the bottom, and holds the mark-all and purge controls together,
 side by side, on the same line, with the active counter.
 
-The todo items themselves appear in the window content; a completed
-todo is rendered with its title struck through in implementations with
-rich text, and reflected by the `Completed` filter in all of them.
+The todo items themselves appear in the two semantic lists: a todo
+still to be done sits in the `To do` list, a completed one moves to
+the `Done` list. The lists are exposed (role `list`) with their
+accessible names, whatever their content: a list that happens to be
+empty is still present, so that a scenario can assert both "empty"
+and "contains" on them. A completed todo is rendered with its title
+struck through in implementations with rich text, and reflected by
+the `Completed` filter in all of them.
 
 Note: the reference spec drives item edition with a double click and
 deletion with a hover-revealed button. These pixel-level interactions
@@ -70,7 +77,8 @@ footer (mark-all, counter, purge button) are hidden.
 
 ### New todo
 
-Todo text is entered in the `What needs to be done?` textbox, which has
+Todo text is entered in the `New task` textbox (placeholder:
+`What needs to be done?`, a visual hint only), which has
 the focus when the app starts. Validating the entry (the `Create`
 button, standing for the Enter key of the reference spec) appends the
 todo to the list and clears the input. Text is trimmed, and empty text
@@ -79,7 +87,7 @@ is not accepted.
 ```bbt
 ### Scenario: create a todo
 - When I run `./todomvc`
-- And I type "buy milk" into the `What needs to be done?` textboxcompleted
+- And I type "buy milk" into the `New task` textboxcompleted
 - And I press the `Create` button
 - Then the window contains "buy milk"
 
@@ -110,13 +118,22 @@ the counter. When there is no completed todo, the button is not shown.
 
 ### List
 
-The todo list is visually set off from the surrounding window
-content: it sits in a frame (a hollow box) of the same width.
-The todo title text is justified to the left within its item.
-The todos appear in their creation order, whatever their completion
-state; a completed todo is green, a todo still to be done is blue
-(the colors are per-implementation, as long as the two states stay
-visually distinct in the default theme).
+The todos are displayed as two semantic lists (role `list`), named
+`To do` and `Done` per the widget naming contract: a todo still to be
+done sits in the `To do` list, a completed one moves to the `Done`
+list. Each list slot is a visible display zone: a header label with
+the list's name, and a border in the slot's color — blue for the
+`To do` zone, green for the `Done` zone, the same colors as the todo
+text (visual only, separate widgets: the list accessible
+name remains the one from the naming contract), with a minimal
+height, so that the two empty lists stay recognizable as display
+zones on a fresh app. The lists stay exposed whatever their content — an
+empty list is still present, so that "empty" and "contains" are both
+assertable. The todo title text is justified to the left within its
+item. Within each list, the todos appear in their creation order; a
+completed todo is green, a todo still to be done is blue (the colors
+are per-implementation, as long as the two states stay visually
+distinct in the default theme).
 
 ### Item
 
@@ -125,8 +142,8 @@ selected todo is highlighted, and the unique `Edit` and `Delete`
 controls (see the widget naming contract) apply to it. The item's
 completion toggle is the single `Complete` button: it applies to the
 selected todo, like `Edit` and `Delete`. Marking a todo complete
-updates its rendering and its filter membership, and decrements the
-active counter.
+moves it from the `To do` list to the `Done` list, updates its
+rendering, and decrements the active counter.
 
 ### Editing
 
@@ -145,8 +162,8 @@ pluralized: `0 items left`, `1 item left`, `2 items left`.
 ```bbt
 ### Scenario: counter pluralization
 - When I run `./todomvc`
-- And I type "a" into the `What needs to be done?` textbox
-- And I type "b" into the `What needs to be done?` textbox
+- And I type "a" into the `New task` textbox
+- And I type "b" into the `New task` textbox
 - Then the window contains "2 items left"
 ```
 
@@ -159,7 +176,7 @@ implementation storage; an edition in progress is not persisted
 ```bbt
 ### Scenario: todos survive a restart
 - When I run `./todomvc`
-- And I type "buy milk" into the `What needs to be done?` textbox
+- And I type "buy milk" into the `New task` textbox
 - And I close the application window
 - When I run `./todomvc`
 - Then the window contains "buy milk"

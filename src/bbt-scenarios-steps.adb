@@ -70,6 +70,11 @@ package body BBT.Scenarios.Steps is
                     Enter_Text,
                     Appears,
                     Press,
+                    Close,
+                    Has_V,
+                    -- the verb of the GUI item count step
+                    -- ("the `To do` list has `3` items"), cf.
+                    -- Initialize_GUI_Grammar
                     -- Objects ----------------------------------------------
                     No_Object,
                     Obj_Output,
@@ -88,6 +93,10 @@ package body BBT.Scenarios.Steps is
                     -- "there is a button named `Continue`"
                     Obj_Widget_State,
                     -- the "enabled/disabled" of a widget state step
+                    Obj_Widget_Empty,
+                    -- the "empty" of a GUI widget content step
+                    Obj_Widget_Count,
+                    -- the "has <n> items" of a GUI item count step
                     -- Adjectives
                     Unordered);
 
@@ -150,7 +159,9 @@ package body BBT.Scenarios.Steps is
            File_Is               | File_Contains | File_Matches |
            Stderr_Is             | Stderr_Contains | Stderr_Not_Empty |
            GUI_Window_Appears    | GUI_Window_Contains |
-           GUI_Widget_Exists     | GUI_Widget_State
+           GUI_Widget_Exists     | GUI_Widget_State |
+           GUI_Widget_Contains   | GUI_Widget_Empty |
+           GUI_Widget_Item_Count
         => True,
       when others => False);
 
@@ -163,11 +174,13 @@ package body BBT.Scenarios.Steps is
                     SA   : Subject_Attrib;
                     Sub  : Subjects;
                     Verb : Verbs;
-                    Obj  : Objects)
+                    Obj  : Objects;
+                    Set  : Rule_Sets := CLI_Set)
                     return Grammar_Items is
    begin
       for R of The_Rules loop
-         if    R.Key.Prep = Prep
+         if    R.Set = Set
+           and then R.Key.Prep = Prep
            and then R.Key.SA   = SA
            and then R.Key.Sub  = Sub
            and then R.Key.Verb = Verb
@@ -183,6 +196,12 @@ package body BBT.Scenarios.Steps is
    end Lookup;
 
    type Preposition_Lists is array (Positive range <>) of Prepositions;
+
+   --  The rule set the Set procedures below register into: the GUI
+   --  rules are stated in Initialize_GUI_Grammar and must land in the
+   --  GUI set, so that Lookup can keep the CLI and GUI registries
+   --  distinct when both define the same signature.
+   Current_Set : Rule_Sets := CLI_Set;
 
    procedure Set_One (Prep       : Prepositions;
                       Sub_Attrib : Subject_Attrib;
@@ -210,7 +229,7 @@ package body BBT.Scenarios.Steps is
          end if;
       end loop;
       The_Rules.Append
-        (Grammar_Rule'(Set  => CLI_Set,
+        (Grammar_Rule'(Set  => Current_Set,
                        Key  => Grammar_Key'(Prep, Sub_Attrib, Sub, Verb,
                                             Object),
                        Item => (Action,
@@ -301,6 +320,8 @@ package body BBT.Scenarios.Steps is
       GUI_Role         : Unbounded_String         := Null_Unbounded_String;
       GUI_Access_Name  : Unbounded_String         := Null_Unbounded_String;
       GUI_Widget_State : Model.Steps.GUI_Widget_States := Model.Steps.GUI_Any;
+      GUI_Widget_Text  : Unbounded_String         := Null_Unbounded_String;
+      GUI_Entry_Text   : Unbounded_String         := Null_Unbounded_String;
       -- The GUI payload, only meaningful on the GUI actions (cf.
       -- docs/proposed/gui_vocabulary.md)
    end record;
@@ -521,11 +542,22 @@ package body BBT.Scenarios.Steps is
 
          end loop Line_Processing;
 
+         --  GUI steps resolve in the GUI set first, then the CLI set
+         --  (a GUI keyword may shadow a CLI signature, cf. Set)
          State.Action := Lookup (State.Prep,
                                  State.Subject_Attr,
                                  State.Subject,
                                  Chunk.Verb,
-                                 State.Object).Action;
+                                 State.Object,
+                                 GUI_Set).Action;
+         if State.Action = None then
+            State.Action := Lookup (State.Prep,
+                                    State.Subject_Attr,
+                                    State.Subject,
+                                    Chunk.Verb,
+                                    State.Object,
+                                    CLI_Set).Action;
+         end if;
 
          --  The run verb qualifiers ("shell", "successfully") are not
          --  grammar entries: like the negation words, they set flags,
@@ -586,8 +618,19 @@ package body BBT.Scenarios.Steps is
 
       end if;
 
-      if State.Action in GUI_Window_Appears | GUI_Window_Contains |
-                          GUI_Widget_Exists | GUI_Widget_State | GUI_Press_Widget
+      if State.Action = GUI_Widget_Contains then
+         --  "the `name` `role` contains `text`": the widget comes from
+         --  the subject phrase, the expected text from the object
+         State.GUI_Access_Name := State.Subject_String;
+         State.GUI_Widget_Text := State.Object_String;
+         State.Object_String   := Null_Unbounded_String;
+         State.Subject_String  := Null_Unbounded_String;
+
+      elsif State.Action in GUI_Window_Appears | GUI_Window_Contains |
+                          GUI_Widget_Exists | GUI_Widget_State |
+                          GUI_Widget_Empty | GUI_Type_Into |
+                          GUI_Widget_Item_Count | GUI_Press_Widget |
+                          GUI_Enter_Into | GUI_Close_Window
       then
          --  Remember the document GUI vocabulary usage, so that BBT.Main
          --  can fail eagerly when no backend was selected
@@ -625,11 +668,15 @@ package body BBT.Scenarios.Steps is
               Syntax_Error     => IO.Some_Error,
               GUI_Role         => State.GUI_Role,
               GUI_Access_Name  => State.GUI_Access_Name,
-              GUI_Widget_State => State.GUI_Widget_State);
+              GUI_Widget_State => State.GUI_Widget_State,
+              GUI_Widget_Text  => State.GUI_Widget_Text,
+              GUI_Entry_Text   => State.GUI_Entry_Text);
    end Parse;
 
 begin
    Initialize_Grammar;
+   Current_Set := GUI_Set;
    Initialize_GUI_Grammar;
+   Current_Set := CLI_Set;
 
 end BBT.Scenarios.Steps;

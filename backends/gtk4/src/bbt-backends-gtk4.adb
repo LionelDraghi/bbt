@@ -35,6 +35,14 @@ package body BBT.Backends.Gtk4 is
    use type GNAT.OS_Lib.Process_Id;
    use type System.Address;
 
+   procedure Atspi_Shutdown;
+   --  Kills and reaps the currently launched application, if any.
+   --  Forward declared for Atspi_Launch, which disposes of the
+   --  previous application before spawning a new one: a scenario may
+   --  spawn the app several times, and each launch must not leak the
+   --  previous process (the runner only calls Shutdown at scenario
+   --  boundaries).
+
    --  libatspi direct imports (no dev headers installed): exactly the
    --  calls a canonical tree walk needs. Correlation is by process id
    --  — the spawned binary IS the application (no intermediate
@@ -80,6 +88,8 @@ package body BBT.Backends.Gtk4 is
    Role_Push_Button : constant int := 43;
    Role_Dialog      : constant int := 16;
    Role_Text        : constant int := 61;
+   Role_List        : constant int := 31;
+   Role_List_Item   : constant int := 32;
    State_Sensitive  : constant int := 24;
    State_Focused    : constant int := 12;
 
@@ -91,6 +101,73 @@ package body BBT.Backends.Gtk4 is
      (Obj : System.Address; Index : int; Error : System.Address)
      return int;
    pragma Import (C, Atspi_Action_Do_Action, "atspi_action_do_action");
+
+   --  The action list of an object's AT-SPI Action interface, to
+   --  resolve an action by name (window.close on frames, cf. G095).
+   --  Never a fixed index: the reachable action set depends on the
+   --  toolkit version.
+   function Atspi_Action_Get_N_Actions
+     (Obj : System.Address; Error : System.Address) return int;
+   pragma Import (C, Atspi_Action_Get_N_Actions,
+                     "atspi_action_get_n_actions");
+
+   function Atspi_Action_Get_Action_Name
+     (Obj   : System.Address;
+      Index : int;
+      Error : System.Address) return System.Address;
+   pragma Import (C, Atspi_Action_Get_Action_Name,
+                     "atspi_action_get_action_name");
+
+   function Atspi_Accessible_Get_Editable_Text
+     (Obj : System.Address; Error : System.Address) return System.Address;
+   pragma Import (C, Atspi_Accessible_Get_Editable_Text,
+                     "atspi_accessible_get_editable_text");
+
+   --  Set the whole contents of an editable field: the backend side of
+   --  the GUI "I type `text` into the `name` textbox" action (G035),
+   --  i.e. a semantic value set, not key injection. The returned
+   --  interface reference is owned by the caller (unref it).
+   function Atspi_Editable_Text_Set_Text_Contents
+     (Obj   : System.Address;
+      Text  : Interfaces.C.Strings.chars_ptr;
+      Error : System.Address) return int;
+   pragma Import (C, Atspi_Editable_Text_Set_Text_Contents,
+                     "atspi_editable_text_set_text_contents");
+
+   --  The keyboard synthesis of the accessibility stack itself
+   --  (atspi_generate_keyboard_event, the virtual keyboards API of
+   --  the AT-SPI device event controller): the submission key of an
+   --  entry, pressed and released. The synthesis is delegated to
+   --  the accessibility daemon, so no windowing call is made here;
+   --  on a stack where the daemon cannot inject (e.g. Wayland without
+   --  compositor support), the call is accepted but has no effect.
+   --  ATSPI_KEY_PRESSRELEASE = 2 (AtspiKeySynthType, verified on
+   --  docs.gtk.org/atspi2: PRESS = 0, RELEASE = 1, PRESSRELEASE = 2,
+   --  SYM = 3, STRING = 4). An earlier version passed 3 — the SYM
+   --  form — which reads the keycode argument as an X keysym: 36 is
+   --  the dollar sign, so the daemon synthesized "$" instead of
+   --  Return, and no submission ever happened.
+   Atspi_Key_Pressrelease : constant int := 2;
+   --  The X keycode of Return on the evdev layout, the keycode
+   --  argument of the PRESSRELEASE form (the SYM form takes a
+   --  keysym — 65293 for Return — but the daemon's on-the-fly keysym
+   --  generation has limited reliability per the AT-SPI doc, so the
+   --  hardware keycode form is used).
+   Return_Keycode        : constant long := 36;
+
+   --  C prototype (docs.gtk.org/atspi2): gboolean
+   --  atspi_generate_keyboard_event (glong keyval,
+   --  const gchar *keystring, AtspiKeySynthType synth_type,
+   --  GError **error). The keystring argument is only read by the
+   --  STRING form; keyval is a glong, and the error location is
+   --  part of the profile, so it must be passed (NULL here).
+   function Atspi_Generate_Keyboard_Event
+     (Keycode   : long;
+      Keystring : Interfaces.C.Strings.chars_ptr;
+      Synth     : int;
+      Error     : System.Address) return int;
+   pragma Import (C, Atspi_Generate_Keyboard_Event,
+                     "atspi_generate_keyboard_event");
 
    procedure G_Object_Unref (Obj : System.Address);
    pragma Import (C, G_Object_Unref, "g_object_unref");
@@ -182,12 +259,19 @@ package body BBT.Backends.Gtk4 is
       return System.Null_Address;
    end Window_Of;
 
-   --  Depth-first search for a node of role Role named Name. The
-   --  caller owns the returned reference; every visited node is
-   --  unref'd.
+   --  Depth-first search for a node of role Role. When Name_Text is
+   --  empty, any node of the role matches: the caller owns the
+   --  returned reference, every visited node is unref'd.
+   --
+   --  Note: the lookup key is the accessible name, always compared
+   --  when provided. An earlier version toked a -1 "no name" flag,
+   --  and every named lookup silently degraded to the first node of
+   --  the role in tree order — it went unnoticed as long as the
+   --  suite widgets were unique per role (two same-role lists
+   --  exposed it, cf. G080).
 
    function Find_Role_Named
-     (Obj : System.Address; Role, Name : int; Name_Text : String)
+     (Obj : System.Address; Role : int; Name_Text : String)
      return System.Address
    is
       Child, Found : System.Address;
@@ -200,7 +284,7 @@ package body BBT.Backends.Gtk4 is
          if Child /= System.Null_Address then
             if Atspi_Accessible_Get_Role (Child, System.Null_Address)
                  = Role
-              and then (Name = -1
+              and then (Name_Text = ""
                         or else C_String_Of
                                   (Atspi_Accessible_Get_Name
                                      (Child, System.Null_Address))
@@ -208,7 +292,7 @@ package body BBT.Backends.Gtk4 is
             then
                return Child;
             end if;
-            Found := Find_Role_Named (Child, Role, Name, Name_Text);
+            Found := Find_Role_Named (Child, Role, Name_Text);
             G_Object_Unref (Child);
             if Found /= System.Null_Address then
                return Found;
@@ -258,6 +342,11 @@ package body BBT.Backends.Gtk4 is
       Binary_List : constant GNAT.OS_Lib.Argument_List :=
         [Binary];
    begin
+      --  A still running application from an earlier run step is
+      --  killed first: two applications would compete for the
+      --  accessibility bus (and the same todos.state).
+      Atspi_Shutdown;
+
       App_Pid := GNAT.OS_Lib.Non_Blocking_Spawn
         (Binary_Path, Binary_List);
       GNAT.OS_Lib.Free (Binary);
@@ -358,7 +447,7 @@ package body BBT.Backends.Gtk4 is
          Frame := Window_Of ("");
          if Frame /= System.Null_Address then
             Button := Find_Role_Named
-                         (Frame, Role_Push_Button, -1, Name);
+                         (Frame, Role_Push_Button, Name);
             G_Object_Unref (Frame);
             if Button /= System.Null_Address then
                G_Object_Unref (Button);
@@ -382,7 +471,7 @@ package body BBT.Backends.Gtk4 is
          Frame := Window_Of ("");
          if Frame /= System.Null_Address then
             Button := Find_Role_Named
-                         (Frame, Role_Push_Button, -1, Name);
+                         (Frame, Role_Push_Button, Name);
             G_Object_Unref (Frame);
             if Button /= System.Null_Address then
                Enabled := Atspi_State_Set_Contains
@@ -408,7 +497,7 @@ package body BBT.Backends.Gtk4 is
          Frame := Window_Of ("");
          if Frame /= System.Null_Address then
             Button := Find_Role_Named
-                         (Frame, Role_Push_Button, -1, Name);
+                         (Frame, Role_Push_Button, Name);
             G_Object_Unref (Frame);
             if Button /= System.Null_Address then
                declare
@@ -439,7 +528,7 @@ package body BBT.Backends.Gtk4 is
          App := App_Node;
          if App /= System.Null_Address then
             Found := Find_Role_Named
-                       (App, Role_Dialog, -1, Expected_Name);
+                       (App, Role_Dialog, Expected_Name);
             G_Object_Unref (App);
             if Found /= System.Null_Address then
                G_Object_Unref (Found);
@@ -555,6 +644,108 @@ package body BBT.Backends.Gtk4 is
       end if;
    end Atspi_Shutdown;
 
+   --  The index of the action named Name in the AT-SPI Action
+   --  interface of Obj, -1 when none is exposed. The search is by
+   --  name: the reachable action set depends on the toolkit version
+   --  (cf. G095), so no fixed index.
+   function Atspi_Action_Named (Obj : System.Address; Name : String)
+                                return int
+   is
+   begin
+      for A in 0 .. Atspi_Action_Get_N_Actions
+                      (Obj, System.Null_Address) - 1
+      loop
+         if C_String_Of (Atspi_Action_Get_Action_Name
+                           (Obj, A, System.Null_Address)) = Name
+         then
+            return A;
+         end if;
+      end loop;
+      return -1;
+   end Atspi_Action_Named;
+
+   --  The G095 window close: the window.close action of the frame
+   --  accessible — graceful, the application's own close path, its
+   --  persistence hooks included — then the bounded wait for the
+   --  window to leave the accessibility tree, and the process reaped
+   --  when the application ended with its window. A stack that does
+   --  not expose a close action gets the process-level close (the
+   --  spec's fallback): the window is gone either way. The unnamed
+   --  form closes the application's only window, and refuses (False)
+   --  when the application exposes several: the name disambiguates.
+
+   function Atspi_Close_Window
+     (Title : String) return Boolean
+   is
+      App     : System.Address;
+      Frame   : System.Address;
+      Windows : int;
+
+      function Gone return Boolean is
+         Left : constant System.Address := Window_Of (Title);
+      begin
+         if Left /= System.Null_Address then
+            G_Object_Unref (Left);
+            return False;
+         end if;
+         return True;
+      end Gone;
+      function Poll is new Eventually (Gone);
+
+   begin
+      if Title = "" then
+         --  The unnamed form requires a single target window
+         App := App_Node;
+         if App = System.Null_Address then
+            return False;
+         end if;
+         Windows := Atspi_Accessible_Get_Child_Count (App);
+         G_Object_Unref (App);
+         if Windows > 1 then
+            return False;
+         end if;
+      end if;
+
+      Frame := Window_Of (Title);
+      if Frame = System.Null_Address then
+         return False;
+      end if;
+
+      declare
+         Idx : constant int :=
+                 Atspi_Action_Named (Frame, "window.close");
+         Done : constant Boolean :=
+           Idx >= 0
+             and then Atspi_Action_Do_Action
+                        (Frame, Idx, System.Null_Address) /= 0;
+      begin
+         G_Object_Unref (Frame);
+         if not Done then
+            --  No close action on this stack, or the action was
+            --  refused: the process-level close of the spec fallback
+            Atspi_Shutdown;
+            return True;
+         end if;
+      end;
+
+      if not Poll then
+         return False;
+      end if;
+
+      --  Reap the application when it ended with its window; an
+      --  application with other windows left open survives the step
+      declare
+         Left_App : constant System.Address := App_Node;
+      begin
+         if Left_App = System.Null_Address then
+            Atspi_Shutdown;
+         else
+            G_Object_Unref (Left_App);
+         end if;
+      end;
+      return True;
+   end Atspi_Close_Window;
+
 
    --  -----------------------------------------------------------------------
    --  The MVP role set: the user visible vocabulary (button, textbox,
@@ -566,6 +757,8 @@ package body BBT.Backends.Gtk4 is
       if    T = "button"  then return Role_Push_Button;
       elsif T = "textbox" then return Role_Text;
       elsif T = "dialog"  then return Role_Dialog;
+      elsif T = "list"    then return Role_List;
+      elsif T = "listitem" then return Role_List_Item;
       else return -1;
       end if;
    end Atspi_Role_Of;
@@ -581,7 +774,7 @@ package body BBT.Backends.Gtk4 is
          if Frame = System.Null_Address then
             return False;
          end if;
-         Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
+         Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
          G_Object_Unref (Frame);
          if Found /= System.Null_Address then
             G_Object_Unref (Found);
@@ -604,7 +797,7 @@ package body BBT.Backends.Gtk4 is
          Found : System.Address;
       begin
          if Frame /= System.Null_Address then
-            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
+            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
             G_Object_Unref (Frame);
             Widget := Found;
          end if;
@@ -640,7 +833,7 @@ package body BBT.Backends.Gtk4 is
          Found : System.Address;
       begin
          if Frame /= System.Null_Address then
-            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), -1, Name);
+            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
             G_Object_Unref (Frame);
             Widget := Found;
          end if;
@@ -661,6 +854,233 @@ package body BBT.Backends.Gtk4 is
    begin
       return Poll;
    end Atspi_Press_Widget;
+
+   --  Type the entry text into the named text field: find the field
+   --  (role text, the GTK 4 mapping of entries and password entries),
+   --  then set its contents through the EditableText interface — a
+   --  semantic value set, never an injected key sequence. The field
+   --  needs an (empty) text contents set even to clear it.
+
+   function Atspi_Type_Into
+     (Role : String; Name : String; Text : String) return Boolean
+   is
+      pragma Unreferenced (Role);
+      --  The search is by accessible name on the role text mapping;
+      --  the role word of the step is conformance only (cf. Q011).
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         App   : constant System.Address := App_Node;
+         Field : System.Address;
+      begin
+         if App /= System.Null_Address then
+            Field := Find_Text_Field_Named (App, Name);
+            G_Object_Unref (App);
+            Widget := Field;
+         end if;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Typed return Boolean is
+         Editable : constant System.Address :=
+           Atspi_Accessible_Get_Editable_Text (Widget, System.Null_Address);
+         C_Text   : Interfaces.C.Strings.chars_ptr
+           := Interfaces.C.Strings.New_String (Text);
+         Done     : constant Boolean :=
+           Atspi_Editable_Text_Set_Text_Contents
+             (Obj   => Editable,
+              Text  => C_Text,
+              Error => System.Null_Address) /= 0;
+      begin
+         Interfaces.C.Strings.Free (C_Text);
+         G_Object_Unref (Editable);
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return Done;
+      end Typed;
+
+      function Poll is new Eventually_Get (Present   => Present,
+                                           Observed  => Typed);
+   begin
+      return Poll;
+   end Atspi_Type_Into;
+
+   --  The Enter of "I enter `text` into the `name` textbox" (G035):
+   --  the value set of I type, then the submission of the value, as
+   --  when a user presses Return in the field. The value set alone
+   --  is not a submission, and no accessibility API activates a
+   --  GTK 4 entry (no exposed action, GrabFocus refused, a newline
+   --  inserted through the editable text interface is filtered out):
+   --  the only external path to the entry's Return handling is the
+   --  keyboard synthesis of the accessibility stack itself
+   --  (atspi_generate_keyboard_event, the virtual keyboards API —
+   --  the same call onboard makes). The synthesis is delegated to
+   --  the accessibility daemon, so no windowing call is made here;
+   --  the daemon injects by its own environment: verified on
+   --  at-spi2-core 2.62, the registryd takes the XTest route when
+   --  WAYLAND_DISPLAY is unset, and the Wayland route otherwise
+   --  (which reaches the compositor's focused window, needs
+   --  compositor support, and cannot target the application of the
+   --  step: synthesizing from a Wayland session is unreliable).
+
+   function Atspi_Enter_Into
+     (Role : String; Name : String; Text : String) return Boolean
+   is
+      pragma Unreferenced (Role);
+      --  The search is by accessible name on the role text mapping;
+      --  the role word of the step is conformance only (cf. Q011).
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         App   : constant System.Address := App_Node;
+         Field : System.Address;
+      begin
+         if App /= System.Null_Address then
+            Field := Find_Text_Field_Named (App, Name);
+            G_Object_Unref (App);
+            Widget := Field;
+         end if;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Entered return Boolean is
+         Editable : constant System.Address :=
+           Atspi_Accessible_Get_Editable_Text (Widget, System.Null_Address);
+         C_Text   : Interfaces.C.Strings.chars_ptr
+           := Interfaces.C.Strings.New_String (Text);
+         Set_Done : constant Boolean :=
+           Atspi_Editable_Text_Set_Text_Contents
+             (Obj   => Editable,
+              Text  => C_Text,
+              Error => System.Null_Address) /= 0;
+         Key_Done : Boolean;
+      begin
+         --  Let the value set settle in the field before synthesizing
+         --  the Return key: the key must be processed by the entry
+         --  after its text changed, not concurrently. The keystring
+         --  argument is not read by the PRESSRELEASE form (NULL).
+         delay 0.2;
+         Key_Done :=
+           Atspi_Generate_Keyboard_Event
+             (Keycode   => Return_Keycode,
+              Keystring => Interfaces.C.Strings.Null_Ptr,
+              Synth     => Atspi_Key_Pressrelease,
+              Error     => System.Null_Address) /= 0;
+         Interfaces.C.Strings.Free (C_Text);
+         G_Object_Unref (Editable);
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return Set_Done and then Key_Done;
+      end Entered;
+
+      function Poll is new Eventually_Get (Present   => Present,
+                                           Observed  => Entered);
+   begin
+      return Poll;
+   end Atspi_Enter_Into;
+
+   --  The rendered text content of the named widget subtree: the
+   --  same gathering as the window content, restricted to the
+   --  widget of role Role named Name (list content checks, G080).
+
+   function Atspi_Widget_Contains
+     (Role, Name, Expected : String) return Boolean
+   is
+      function Try return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
+         if Frame = System.Null_Address then
+            return False;
+         end if;
+         Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
+         G_Object_Unref (Frame);
+         if Found = System.Null_Address then
+            return False;
+         end if;
+         declare
+            Text : constant String := Gather_Text (Found);
+         begin
+            G_Object_Unref (Found);
+            Last_Text := To_Unbounded_String (Text);
+            return Ada.Strings.Fixed.Index (Text, Expected) /= 0;
+         end;
+      end Try;
+      function Poll is new Eventually (Try);
+   begin
+      return Poll;
+   end Atspi_Widget_Contains;
+
+   --  The named container widget holds no child (empty list checks,
+   --  G080). The existence of the widget is polled first: a list
+   --  only known to the builder is not an empty list.
+
+   function Atspi_Widget_Is_Empty (Role, Name : String) return Boolean is
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
+         if Frame /= System.Null_Address then
+            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
+            G_Object_Unref (Frame);
+            Widget := Found;
+         end if;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Empty return Boolean is
+         Kids : constant int :=
+           Atspi_Accessible_Get_Child_Count (Widget);
+      begin
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return Kids = 0;
+      end Empty;
+
+      function Poll is new Eventually_Get (Present   => Present,
+                                           Observed  => Empty);
+   begin
+      return Poll;
+   end Atspi_Widget_Is_Empty;
+
+   function Atspi_Widget_Item_Count
+     (Role, Name : String) return Natural
+   is
+      Widget : System.Address := System.Null_Address;
+
+      function Present return Boolean is
+         Frame : constant System.Address := Window_Of ("");
+         Found : System.Address;
+      begin
+         if Frame /= System.Null_Address then
+            Found := Find_Role_Named (Frame, Atspi_Role_Of (Role), Name);
+            G_Object_Unref (Frame);
+            Widget := Found;
+         end if;
+         return Widget /= System.Null_Address;
+      end Present;
+
+      function Item_Count return int is
+         Kids : constant int :=
+                  Atspi_Accessible_Get_Child_Count (Widget);
+      begin
+         G_Object_Unref (Widget);
+         Widget := System.Null_Address;
+         return Kids;
+      end Item_Count;
+
+      function Poll is new Eventually (Attempt => Present);
+      --  The widget presence is waited for; the count is read once
+      --  below, at the same moment as the presence holds
+   begin
+      if Poll then
+         return Natural (Item_Count);
+      else
+         return 0;
+      end if;
+   end Atspi_Widget_Item_Count;
 
    --  -----------------------------------------------------------------------
    --  The dispatching primitives, one per root operation: thin
@@ -732,5 +1152,73 @@ package body BBT.Backends.Gtk4 is
    begin
       return Atspi_Press_Widget (Role, Name);
    end Press_Widget;
+
+   function Widget_Contains
+     (The_Backend : Gtk4_Backend; Role, Name, Expected : String)
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Widget_Contains (Role, Name, Expected);
+   end Widget_Contains;
+
+   function Widget_Is_Empty
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Widget_Is_Empty (Role, Name);
+   end Widget_Is_Empty;
+
+   function Widget_Item_Count
+     (The_Backend : Gtk4_Backend; Role : String; Name : String)
+      return Natural
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Widget_Item_Count (Role, Name);
+   end Widget_Item_Count;
+
+   procedure Type_Into
+     (The_Backend : in out Gtk4_Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String)
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      if not Atspi_Type_Into (Role, Name, Text) then
+         raise No_Backend_Available
+           with "cannot type into " & Name
+              & " (no editable text field of that name)";
+      end if;
+   end Type_Into;
+
+   procedure Enter_Into
+     (The_Backend : in out Gtk4_Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String)
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      if not Atspi_Enter_Into (Role, Name, Text) then
+         raise No_Backend_Available
+           with "cannot enter into " & Name
+              & " (no editable text field of that name, or the"
+              & " accessibility daemon did not accept the Return"
+              & " key synthesis, cf. G035)";
+      end if;
+   end Enter_Into;
+
+   function Close_Window
+     (The_Backend : Gtk4_Backend; Title : String := "")
+      return Boolean
+   is
+      pragma Unreferenced (The_Backend);
+   begin
+      return Atspi_Close_Window (Title);
+   end Close_Window;
 
 end BBT.Backends.Gtk4;

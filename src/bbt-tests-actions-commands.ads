@@ -43,7 +43,7 @@ package BBT.Tests.Actions.Commands is
    -- text to the still running command with Send_Input.
    -- With Through_Shell, the command string is not split by bbt: it is
    -- passed as a single argument to the shell set in the settings
-   -- (cf. docs/features/A310_Run_Shell.md), that interprets its pipes,
+   -- (cf. docs/cli_features/A310_Run_Shell.md), that interprets its pipes,
    -- redirections and command substitutions.
 
    procedure Send_Input (Step           :     Step_Type'Class;

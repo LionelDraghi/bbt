@@ -72,6 +72,59 @@ package BBT.Backends is
    --  Semantic activation of the named widget (the first AT-SPI
    --  action, not injected input)
 
+   function Widget_Contains
+     (The_Backend : Backend; Role, Name, Expected : String)
+      return Boolean
+     is abstract;
+   --  The rendered text of the named widget subtree contains the
+   --  expected text (list content checks, G030)
+
+   function Widget_Is_Empty
+     (The_Backend : Backend; Role : String; Name : String)
+      return Boolean
+     is abstract;
+   --  The named container widget holds no child
+
+   function Widget_Item_Count
+     (The_Backend : Backend; Role : String; Name : String)
+      return Natural
+   is abstract;
+   --  The number of children of the named container widget (the
+   --  "`To do` list has `3` items" step, G080)
+
+   procedure Type_Into
+     (The_Backend : in out Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String)
+   is abstract;
+   --  Types Text into the named widget: a semantic value set (its
+   --  backend equivalent of the ARIA textbox accessible value, AT-SPI:
+   --  the EditableText interface), without any validation. The
+   --  validation is a separate semantic press (Press_Widget) on an
+   --  application action; no injected Enter.
+
+   procedure Enter_Into
+     (The_Backend : in out Backend;
+      Role        : String;
+      Name        : String;
+      Text        : String)
+   is abstract;
+   --  The value set of Type_Into, followed by the field commit (its
+   --  Enter key). Raises No_Backend_Available when the named field is
+   --  not reachable or the commit cannot be injected.
+
+   function Close_Window
+     (The_Backend : Backend; Title : String := "")
+      return Boolean
+   is abstract;
+   --  Closes the window named Title, or the launched application's
+   --  only window when no title is given, through the accessibility
+   --  close action where the stack provides one (window.close on
+   --  GTK 4): a graceful close, the application's own close path,
+   --  with a process-level close as the backend fallback. The
+   --  application process is reaped when it ends with its windows.
+
    Selected : access Backend'Class := null;
    --  Set at startup by whoever owns a concrete backend; left null
    --  when bbt runs backend-less
@@ -100,5 +153,27 @@ package BBT.Backends is
 
    function Press_Widget (Role : String; Name : String) return Boolean;
    --  Dispatches to Selected.Press_Widget, False without backend
+
+   function Widget_Contains
+     (Role, Name, Expected : String) return Boolean;
+   --  Dispatches to Selected.Widget_Contains, False without backend
+
+   function Widget_Is_Empty (Role : String; Name : String) return Boolean;
+   --  Dispatches to Selected.Widget_Is_Empty, False without backend
+
+   function Widget_Item_Count
+     (Role : String; Name : String) return Natural;
+   --  Dispatches to Selected.Widget_Item_Count, 0 without backend
+
+   function Type_Into
+     (Role : String; Name : String; Text : String) return Boolean;
+   --  Dispatches to Selected.Type_Into, False without backend
+
+   function Enter_Into
+     (Role : String; Name : String; Text : String) return Boolean;
+   --  Dispatches to Selected.Enter_Into, False without backend
+
+   function Close_Window (Title : String := "") return Boolean;
+   --  Dispatches to Selected.Close_Window, False without backend
 
 end BBT.Backends;

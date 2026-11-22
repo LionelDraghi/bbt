@@ -44,4 +44,4 @@ The (ignoring ...) clause:
   The clause is accepted on the comparison steps and their negated
   forms (is, is not, contains, does not contain ...), whatever the
   checked flow: standard output, file or error output.
-  cf. docs/features/A300_Ignoring.md
+  cf. docs/cli_features/A300_Ignoring.md
