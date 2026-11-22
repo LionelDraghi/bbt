@@ -2,7 +2,7 @@
 
 The GUI backends live in this repository, outside the core crate:
 one git repository, several published crates. The structure, the
-launcher (`bbt --gui=<kind>`) and the backend injection are specified
+launcher (`bbt --backend=<kind>`) and the backend injection are specified
 in `docs/proposed/crate_restructuring.md`. This page maintains the
 cross tables (step vocabulary × backends), fed by each backend CI and
 by local validation runs, in the same spirit as `docs/tests_results/`.

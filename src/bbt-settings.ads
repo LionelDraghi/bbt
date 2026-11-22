@@ -72,7 +72,7 @@ private package BBT.Settings is
    Current_Topic         : Help_Topic := Base;
    Selection_Mode        : Boolean    := False;
    Gui_Backend_Ran       : Boolean    := False;
-   --  Set when the --gui=<kind> launcher has spawned the backend
+   --  Set when the --backend=<kind> launcher has spawned the backend
    --  process and propagated its exit status: BBT.Main then returns
    --  immediately (the run happened in the backend process)
    --  In the default mode no File/Feature/Scenario etc. is filtered except those
@@ -158,7 +158,7 @@ private package BBT.Settings is
    --  --------------------------------------------------------------------------
    procedure Set_Gui_Backend (Name : String);
    function Gui_Backend return String;
-   --  The GUI backend kind registered with the --gui=<kind> launcher
+   --  The GUI backend kind registered with the --backend=<kind> launcher
    --  option, empty when none (cf.
    --  docs/proposed/crate_restructuring.md)
 

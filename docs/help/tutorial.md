@@ -283,7 +283,7 @@ widgets by **role** and **accessible name** (the WAI-ARIA concepts),
 whatever the toolkit behind. What you type or press is not injected
 input: it is the semantic action, as announced by the accessibility
 API. There is no backend reference in the scenarios: the GUI backend
-is selected on the command line, `bbt --gui=<kind>` (currently `gtk4`
+is selected on the command line, `bbt --backend=<kind>` (currently `gtk4`
 on Linux), so that the same scenario runs on several backends
 unchanged.
 

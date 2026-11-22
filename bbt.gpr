@@ -6,7 +6,8 @@ project BBT is
    --  The executable side of the bbt crate: a thin main on top of
    --  BBT_Lib (cf. docs/proposed/crate_restructuring.md). The engine
    --  logic lives in the library; the GUI backends are separate
-   --  executables in the backends/ crates, launched with --gui=<kind>.
+   --  executables in the backends/ crates, launched with
+   --  --backend=<kind>.
 
    for Source_Dirs use ("src/main");
 

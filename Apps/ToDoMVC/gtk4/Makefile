@@ -12,7 +12,7 @@ APP := todomvc
 #   make check STORY=add_a_task.md
 # Optional GUI=1 variable: run the scenarios under the interactive bbt
 # --gui debugger window (the working combination with the backend
-# selection is --gui --gui=gtk4, cf. src/bbt-driver.adb).
+# selection is --gui --backend=gtk4, cf. src/bbt-driver.adb).
 SCENARIOS := $(if $(STORY),$(addprefix ./scenarios/,$(STORY)),./scenarios)
 
 .PHONY: all help build check clean
@@ -24,7 +24,7 @@ help:
 	@echo "  all   - build the app (default target)"
 	@echo "  build - build ./$(APP) with Alire"
 	@echo "  check - run the shared GUI scenarios (Apps/ToDoMVC/docs,"\
-	        "/scenarios, linked in ./scenarios) with --gui=gtk4"
+	        "/scenarios, linked in ./scenarios) with --backend=gtk4"
 	@echo "          restrict to some stories with STORY=<files>"
 	@echo "          add GUI=1 to run under the interactive bbt --gui"
 	@echo "          debugger window"
@@ -38,7 +38,7 @@ check:
 	   echo "No $(APP) binary: run 'make build' first."; \
 	   exit 1; \
 	fi
-	bbt --yes $(BBT_OPTIONS) $(if $(GUI),--gui,) --gui=gtk4 $(SCENARIOS)
+	bbt --yes $(BBT_OPTIONS) $(if $(GUI),--gui,) --backend=gtk4 $(SCENARIOS)
 
 clean:
 	alr clean

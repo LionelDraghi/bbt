@@ -96,7 +96,7 @@ build-%:
 # The shared suite entry point of each backend: build, then run the
 # witness check (Apps/ToDoMVC/<kind>/Makefile), with the freshly
 # built core and backend executable first in PATH, so that the
-# witness 'bbt --gui=<kind>' finds the backend built here. Extra bbt
+# witness 'bbt --backend=<kind>' finds the backend built here. Extra bbt
 # options (e.g. BBT_OPTIONS=--keep_going) are forwarded.
 check-%: build-%
 	@ if [ -z "$($*_WITNESS)" ]; then \

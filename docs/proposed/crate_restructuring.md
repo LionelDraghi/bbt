@@ -80,7 +80,7 @@ For the user:
   and the interactive debugger are unchanged;
 - `alr install bbt_gtk4` (or `bbt_webapp`, `bbt_adi2`) pulls exactly
   one backend stack, for the kind of application under test;
-- one entry point: `bbt my_scenario.md --gui=gtk4` launches the right
+- one entry point: `bbt my_scenario.md --backend=gtk4` launches the right
   backend; a GUI step without any backend gives an immediate,
   actionable error instead of a backend-specific crash.
 
@@ -104,7 +104,7 @@ today. No grammar extension API is introduced by this proposal.
 - Move the AT-SPI backend sources from `src/atspi` to
   `backends/gtk4`, and `libglib` from the root manifest to the
   `bbt_gtk4` manifest.
-- Add a `--gui=<kind>` option to the core CLI: a launcher that
+- Add a `--backend=<kind>` option to the core CLI: a launcher that
   executes `bbt_<kind>` found in the PATH, or fails with an
   actionable message; a run-facing check also fails at analysis
   time when a document contains GUI steps but no backend is
@@ -187,7 +187,7 @@ checked eagerly, at analysis time and before any scenario runs, so
 that a document containing GUI steps fails with exactly:
 
 ```
-Error: no GUI backend available: select one with --gui=<kind>
+Error: no GUI backend available: select one with --backend=<kind>
 ```
 
 and the whole command output is this single line. The same error can
@@ -202,7 +202,7 @@ into the concerned backend, never into the common library.
 
 ### Launcher
 
-`--gui=<kind>` on the core CLI:
+`--backend=<kind>` on the core CLI:
 
 1. the bbt process replaces itself with `bbt_<kind>` found in the
    PATH, forwarding the remaining arguments unchanged;
@@ -300,7 +300,7 @@ not by scenarios here.
 - When I run `./bbt scen.md`
 - Then the output is
 ~~~text
-Error: no GUI backend available: select one with --gui=<kind>
+Error: no GUI backend available: select one with --backend=<kind>
 ~~~
 
 ### Scenario: `--gui` with a missing backend executable gives an install hint
@@ -312,7 +312,7 @@ Error: no GUI backend available: select one with --gui=<kind>
 - When I run `echo hello`
 - Then the output contains `hello`
 ~~~
-- When I run `./bbt scen.md --gui=nosuch`
+- When I run `./bbt scen.md --backend=nosuch`
 - Then the output is
 ~~~text
 Error: bbt_nosuch executable not found in PATH; install it with: alr install bbt_nosuch
@@ -339,9 +339,10 @@ Error: bbt_nosuch executable not found in PATH; install it with: alr install bbt
   debug protocol); one repository with several published crates;
   backend injection instead of per-OS source-dir selection.
 - `gui_vocabulary.md` must be revised for backend selection:
-  `--gui=<kind>` at the core level replaces `--backend` /
-  `BBT_BACKEND`, immediately and with no deprecation period (the
-  option was never publicly advertised).
+  `--backend=<kind>` at the core level keeps the `--backend` name of
+  0.6.1 (taking a kind value instead of the removed `BBT_BACKEND`
+  variable): `--gui` stays alone for the interactive debugger, so
+  `--gui=<kind>` drafted here was renamed before any release.
 - The dynamic-loading door stays documented (Kazakov pattern) for a
   possible third-party backend future.
 

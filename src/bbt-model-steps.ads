@@ -117,7 +117,7 @@ package BBT.Model.Steps is
    --  Set when a step of the GUI vocabulary is processed (cf.
    --  BBT.Scenarios.Steps): BBT.Main fails at analysis time, before
    --  any scenario runs, when GUI steps are present and no backend was
-   --  selected with --gui=<kind>
+   --  selected with --backend=<kind>
    --  (cf. docs/proposed/crate_restructuring.md).
 
    type Step_Type;

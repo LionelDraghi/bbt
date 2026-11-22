@@ -16,7 +16,7 @@ package body BBT.Backends is
    begin
       if Selected = null then
          raise No_Backend_Available
-           with "no GUI backend available: select one with --gui=<kind>";
+           with "no GUI backend available: select one with --backend=<kind>";
       else
          Selected.Launch (Binary_Path);
       end if;

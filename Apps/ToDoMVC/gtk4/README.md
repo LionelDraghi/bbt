@@ -8,7 +8,7 @@
 
 Native GTK 4 application, observed and driven through the AT-SPI
 accessibility backend (the `bbt_gtk4` backend crate, launched with
-`bbt --gui=gtk4`), on Linux.
+`bbt --backend=gtk4`), on Linux.
 
 - builds a `./todomvc` binary (`alr build`, with the GtkAda
   27 crate pinned in `alire.toml`),

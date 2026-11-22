@@ -13,6 +13,7 @@
 - [D10. Diff display alignment](#d10-diff-display-alignment)
 - [D11. Run shell step](#d11-run-shell-step)
 - [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir)
+- [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names)
 - [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)
 
 This document holds the design discussions: each entry records a
@@ -28,6 +29,7 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
+| [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names) | Arbitrated (2026-11), implemented | [crate_restructuring.md](../proposed/crate_restructuring.md), [bbt-cmd_line.adb](../../src/bbt-cmd_line.adb) |
 | [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)                     | Arbitrated (2026-10), implemented  | [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md), [bbt-scenarios-steps.adb](../../src/bbt-scenarios-steps.adb) |
 | [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
 | [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
@@ -956,6 +958,48 @@ References:
   (src/bbt-created_file_list.adb, src/bbt-created_file_list.ads),
   the `Full_Cleanup` setting (src/bbt-settings.ads) and the
   `--cleanup=full` parsing (src/bbt-cmd_line.adb).
+
+## D15. GUI testing versus GUI debugger: the option names
+
+### Subject
+
+The word `--gui` was about to mean two different things on the
+command line: the exact `--gui` form runs the scenarios under the
+interactive web debugger of the 0.7.0-dev cycle, while the
+`--gui=<kind>` launcher drafted in the crate restructuring delegates
+the run to the `bbt_<kind>` backend executable, which drives GUI
+application testing — the two discriminated only by the presence of
+an `=`. Both forms are unreleased: the backend selection option of
+0.6.1 (`--backend`, taking no value) was never publicly advertised,
+and neither `--gui` form is documented in the base help.
+
+### Decision
+
+`--backend=<kind>` selects the GUI testing backend, keeping the
+`--backend` name of 0.6.1 (now taking the backend kind as its
+value); `--gui` alone runs the interactive debugger. The whole
+vocabulary of the project (backends.md cross tables, capability
+reports, the CI workflows) already says backend for the GUI testing
+stack, and `--gui` is literally a GUI — of bbt this time.
+
+### Alternatives rejected
+
+- Keeping `--gui=<kind>` for the backend and renaming the debugger
+  (`--interactive` or similar): it leaves the word gui naming the
+  tested application stack, against the established backend
+  vocabulary.
+- Keeping the status quo with the two meanings discriminated by the
+  `=`: a collision latent now, but guaranteed confusing once both
+  options land in the base help.
+
+### Consequences
+
+Nothing to deprecate: no released version had `--gui=<kind>`, and
+the 0.6.1 `--backend` option was never advertised — the net
+user-visible state is unchanged versus 0.6.1, so no changelog entry.
+The decision is recorded in crate_restructuring.md (amendment of
+the initial launcher sketch); the code comments of bbt-cmd_line.adb
+state the two option semantics.
 
 ## D13. Negation as a step polarity
 

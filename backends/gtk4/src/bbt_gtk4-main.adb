@@ -7,7 +7,7 @@
 --  The bbt_gtk4 backend main: registers the AT-SPI / GTK 4 backend,
 --  then runs the same driver as the bbt CLI
 --  (cf. docs/proposed/crate_restructuring.md). The bbt core CLI
---  delegates to this executable thanks to --gui=gtk4.
+--  delegates to this executable thanks to --backend=gtk4.
 
 with BBT.Driver;
 with BBT.Backends;

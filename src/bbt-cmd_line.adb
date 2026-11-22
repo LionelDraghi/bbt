@@ -111,7 +111,8 @@ package body BBT.Cmd_Line is
    procedure Replace_By_Backend is
    --  The bbt process replaces itself with the bbt_<kind> backend
    --  executable found in the PATH, forwarding the command line
-   --  arguments unchanged, except for the --gui=<kind> option itself.
+   --  arguments unchanged, except for the --backend=<kind> option
+   --  itself.
    --  If the executable is not found, bbt fails before running any
    --  scenario (cf. docs/proposed/crate_restructuring.md).
       use GNAT.OS_Lib;
@@ -120,7 +121,7 @@ package body BBT.Cmd_Line is
       Full_Path : constant GNAT.OS_Lib.String_Access :=
         GNAT.OS_Lib.Locate_Exec_On_Path (Exe_Name);
 
-      Ignore  : constant String := "--gui=";
+      Ignore  : constant String := "--backend=";
       --  The launcher option forwarded as skipped argument, see below
 
       Args : GNAT.OS_Lib.Argument_List (1 .. Ada.Command_Line.Argument_Count);
@@ -134,8 +135,8 @@ package body BBT.Cmd_Line is
             & " executable not found in PATH; install it with: alr install "
             & Exe_Name);
       else
-         --  Forward the arguments unchanged, minus the --gui=<kind>
-         --  option itself
+         --  Forward the arguments unchanged, minus the
+         --  --backend=<kind> option itself
          for I in 1 .. Ada.Command_Line.Argument_Count loop
             if Ada.Strings.Fixed.Index (Ada.Command_Line.Argument (I), Ignore)
                /= 1
@@ -358,11 +359,11 @@ package body BBT.Cmd_Line is
                   Set_Shell_Option (Current_Arg);
                end if;
 
-            elsif Ada.Strings.Fixed.Index (Cmd, "--gui=") = 1 then
+            elsif Ada.Strings.Fixed.Index (Cmd, "--backend=") = 1 then
                --  GUI backend launcher (cf.
                --  docs/proposed/crate_restructuring.md): the exact
                --  "--gui" form below runs the interactive debugger,
-               --  --gui=<kind> delegates the run to the backend
+               --  --backend=<kind> delegates the run to the backend
                --  executable
                Settings.Set_Gui_Backend
                  (Cmd (Ada.Strings.Fixed.Index (Cmd, "=") + 1 .. Cmd'Last));
@@ -539,7 +540,7 @@ package body BBT.Cmd_Line is
       end loop Opt_Analysis_Loop;
 
       -- --------------------------------------------------------------------------
-      --  GUI backend launcher: when --gui=<kind> was given, the bbt
+      --  GUI backend launcher: when --backend=<kind> was given, the bbt
       --  process is replaced by the backend executable, and nothing
       --  runs in this bbt process
       if Settings.Gui_Backend /= "" then

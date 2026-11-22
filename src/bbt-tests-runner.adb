@@ -557,7 +557,7 @@ package body BBT.Tests.Runner is
                     (Step      => Step,
                      Success   => False,
                      Fail_Msg  => "no GUI backend available"
-                                & " (select one with --gui=<kind>)",
+                                & " (select one with --backend=<kind>)",
                      Loc       => Step.Location,
                      Verbosity => Verbosity);
                   Run_Error := True;
@@ -593,7 +593,7 @@ package body BBT.Tests.Runner is
                     (Step      => Step,
                      Success   => False,
                      Fail_Msg  => "no GUI backend available"
-                                & " (select one with --gui=<kind>)",
+                                & " (select one with --backend=<kind>)",
                      Loc       => Step.Location,
                      Verbosity => Verbosity);
                   Run_Error := True;

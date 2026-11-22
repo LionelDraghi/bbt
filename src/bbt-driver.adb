@@ -67,15 +67,15 @@ package body BBT.Driver is
             --  an actionable backend selection hint. In debugger
             --  mode, the backend lives in the backend executable
             --  (the debugger itself is in every bbt executable): the
-            --  working combination is --gui --gui=<kind>.
+            --  working combination is --gui --backend=<kind>.
             if Settings.Gui then
                IO.Put_Error
                  ("no GUI backend available in the interactive debugger;"
                   & " run the debugger in the backend executable instead,"
-                  & " e.g. bbt --gui --gui=<kind> <scenarios>");
+                  & " e.g. bbt --gui --backend=<kind> <scenarios>");
             else
                IO.Put_Error
-                 ("no GUI backend available: select one with --gui=<kind>");
+                 ("no GUI backend available: select one with --backend=<kind>");
             end if;
          end if;
 
@@ -96,7 +96,7 @@ package body BBT.Driver is
       Cmd_Line.Analyze;
 
       if Settings.Gui_Backend_Ran then
-         --  The --gui=<kind> launcher replaced this process by the
+         --  The --backend=<kind> launcher replaced this process by the
          --  backend executable, whose exit status is already propagated:
          --  nothing more to run in this process
          return;
