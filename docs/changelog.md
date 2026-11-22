@@ -130,7 +130,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
               part of the step, then the expected output is in the file, otherwise, it's the string.
   - [Fixed]   `explain` output is now readable!
   - [Added]   `-k` | `--keep_going` implemented. Without, bbt stop when a test fails.
-  - [Added]   *file is equal to file* syntax added (thanks to [Paul](https://forum.ada-lang.io/u/pyj)!)
+  - [Added]   *file is equal to file* syntax added (thanks to Paul!)
   - [Added]   `unordered` keyword added to get the comparison of actual and expected output/file insensitive to line order
   - [Added]   `--strict` implemented to get warning on steps not in GWT order
   - [Added]   `output|file doesn't contain` syntax added

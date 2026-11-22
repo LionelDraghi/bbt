@@ -25,7 +25,7 @@ shared ones. GUI toolkit helpers never land there, they go down into
 the concerned backend crate.
 
 The witness applications are in `Apps/` (e.g. the GTK 4 witness
-[ToDoMVC](Apps/ToDoMVC/ToDoMVC.md), driven through AT-SPI), and stay CI-bound: they are test
+[ToDoMVC](../Apps/ToDoMVC/ToDoMVC.md), driven through AT-SPI), and stay CI-bound: they are test
 targets, not products, and are not in the published dependencies of
 any backend crate.
 

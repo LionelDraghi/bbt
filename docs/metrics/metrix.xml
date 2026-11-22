@@ -705,20 +705,20 @@
       <metric name="max_loop_nesting">1.00</metric>
    </file>
    <file name="/home/lionel/prj/bbt/src/bbt-cmd_line.adb">
-      <metric name="all_lines">556</metric>
+      <metric name="all_lines">557</metric>
       <metric name="code_lines">375</metric>
-      <metric name="comment_lines">87</metric>
+      <metric name="comment_lines">88</metric>
       <metric name="eol_comments">0</metric>
-      <metric name="comment_percentage">18.83</metric>
+      <metric name="comment_percentage">19.00</metric>
       <metric name="blank_lines">94</metric>
       <metric name="average_lines_in_bodies">31.63</metric>
       <metric name="spark_lines">0</metric>
       <unit name="BBT.Cmd_Line" kind="package body" line="26" col="1">
-         <metric name="all_lines">531</metric>
+         <metric name="all_lines">532</metric>
          <metric name="code_lines">360</metric>
-         <metric name="comment_lines">82</metric>
+         <metric name="comment_lines">83</metric>
          <metric name="eol_comments">0</metric>
-         <metric name="comment_percentage">18.55</metric>
+         <metric name="comment_percentage">18.73</metric>
          <metric name="blank_lines">89</metric>
          <metric name="all_subprograms">11</metric>
          <metric name="all_stmts">158</metric>
@@ -887,11 +887,11 @@
             <metric name="extra_exit_points">0</metric>
          </unit>
          <unit name="Replace_By_Backend" kind="procedure body" line="111" col="4">
-            <metric name="all_lines">54</metric>
+            <metric name="all_lines">55</metric>
             <metric name="code_lines">35</metric>
-            <metric name="comment_lines">13</metric>
+            <metric name="comment_lines">14</metric>
             <metric name="eol_comments">0</metric>
-            <metric name="comment_percentage">27.08</metric>
+            <metric name="comment_percentage">28.57</metric>
             <metric name="blank_lines">6</metric>
             <metric name="all_stmts">11</metric>
             <metric name="all_dcls">8</metric>
@@ -905,7 +905,7 @@
             <metric name="max_loop_nesting">1</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_Cleanup_Option" kind="procedure body" line="167" col="4">
+         <unit name="Set_Cleanup_Option" kind="procedure body" line="168" col="4">
             <metric name="all_lines">11</metric>
             <metric name="code_lines">10</metric>
             <metric name="comment_lines">1</metric>
@@ -927,7 +927,7 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Set_Cmd" kind="procedure body" line="180" col="4">
+         <unit name="Set_Cmd" kind="procedure body" line="181" col="4">
             <metric name="all_lines">9</metric>
             <metric name="code_lines">9</metric>
             <metric name="comment_lines">0</metric>
@@ -949,19 +949,19 @@
             <metric name="max_loop_nesting">0</metric>
             <metric name="extra_exit_points">0</metric>
          </unit>
-         <unit name="Put_Settings" kind="procedure body stub" line="191" col="4">
+         <unit name="Put_Settings" kind="procedure body stub" line="192" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Put_Help" kind="procedure body stub" line="192" col="4">
+         <unit name="Put_Help" kind="procedure body stub" line="193" col="4">
             <metric name="all_parameters">1</metric>
                <metric name="in_parameters">1</metric>
                <metric name="out_parameters">0</metric>
                <metric name="in_out_parameters">0</metric>
          </unit>
-         <unit name="Put_Trace_Topics" kind="procedure body stub" line="193" col="4">
+         <unit name="Put_Trace_Topics" kind="procedure body stub" line="194" col="4">
             <metric name="all_parameters">0</metric>
          </unit>
-         <unit name="Analyze" kind="procedure body" line="196" col="4">
+         <unit name="Analyze" kind="procedure body" line="197" col="4">
             <metric name="all_lines">359</metric>
             <metric name="code_lines">246</metric>
             <metric name="comment_lines">47</metric>
@@ -18709,11 +18709,11 @@
       <metric name="essential_complexity">1.00</metric>
       <metric name="max_loop_nesting">0.00</metric>
    </file>
-   <metric name="all_lines">18572</metric>
+   <metric name="all_lines">18573</metric>
    <metric name="code_lines">12031</metric>
-   <metric name="comment_lines">4212</metric>
+   <metric name="comment_lines">4213</metric>
    <metric name="eol_comments">61</metric>
-   <metric name="comment_percentage">26.30</metric>
+   <metric name="comment_percentage">26.31</metric>
    <metric name="blank_lines">2329</metric>
    <metric name="average_lines_in_bodies">20.31</metric>
    <metric name="spark_lines">0</metric>

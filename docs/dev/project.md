@@ -70,8 +70,8 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   reference stable (time tags, paths, version numbers, ... masked with
   the `(ignoring ...)` clause), how to generate and refresh the
   reference file, and when to prefer focused `is` / `contains` /
-  `matches` checks instead. cf. [A080_Then_Output_Equal_To_File.md](../features/A080_Then_Output_Equal_To_File.md),
-  [A300_Ignoring.md](../features/A300_Ignoring.md) and the bbt skill
+  `matches` checks instead. cf. [A080_Then_Output_Equal_To_File.md](../cli_features/A080_Then_Output_Equal_To_File.md),
+  [A300_Ignoring.md](../cli_features/A300_Ignoring.md) and the bbt skill
   authoring principles on expected results.
 
 - the (ignoring ...) clause on the matches steps  
@@ -91,7 +91,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   which must combine the regexp spans and the clause masks on the line
   before deciding (the other comparisons mask both sides before
   comparing, which does not transpose to a regexp).  
-  Scenarios to be added in [A300_Ignoring.md](../features/A300_Ignoring.md).
+  Scenarios to be added in [A300_Ignoring.md](../cli_features/A300_Ignoring.md).
 
 - masking patterns scope and danger: review whether the doc, help and
   examples warn enough about the `(ign ...)` clauses dangers - silently
@@ -101,7 +101,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   numbers, so durations in compared files are silently filtered too.
   To be treated later.
 - cleanup level 2, snapshot and diff of the exec dir: implemented as
-  `--cleanup=full` (cf. [B010](../features/B010_Deleting_created_files.md)
+  `--cleanup=full` (cf. [B010](../cli_features/B010_Deleting_created_files.md)
   and the changelog); to be validated on Windows and macOS  
 
 - non interactive commands output redirect  
@@ -112,7 +112,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   cf. [non_interactive_redirect](../proposed/non_interactive_redirect.md)
 
 - run in shell step: implemented (cf.
-  [A310_Run_Shell.md](../features/A310_Run_Shell.md) and the design
+  [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md) and the design
   discussion [D11](design_discussions.md))  
   A dedicated step running the command through a configurable
   shell (`--shell` setting, `BBT_SHELL` override), for the steps
@@ -134,7 +134,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   The status bar, displayed by default on a terminal, draws a
   transient bar on the current line, with a spinner and a
   `<done>/<total>` scenario counter
-  (cf. [B210_Status_Bar.md](../features/B210_Status_Bar.md)).
+  (cf. [B210_Status_Bar.md](../cli_features/B210_Status_Bar.md)).
   The spinner advances at each step only: it stays frozen while a
   single command runs for a long time. A background task refreshing
   the bar on a timer would remove this, at the cost of serializing
@@ -160,7 +160,7 @@ Note that Ideas are welcomed. You may submit yours through [Issue](https://githu
   `ignoring dir`, `ignoring version`, `ignoring location`,
   `ignoring path syntax`, and any regexp as in
   `ignoring [0-9.]+`) are specified and implemented
-  in [A300_Ignoring.md](../features/A300_Ignoring.md); the `Given`
+  in [A300_Ignoring.md](../cli_features/A300_Ignoring.md); the `Given`
   step, the command line option
   and the scope precedence are deferred, as is the diff display
   showing the ignored segments in a distinct color, which pairs with

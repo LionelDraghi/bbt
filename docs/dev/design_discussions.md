@@ -30,16 +30,16 @@ updated with a reference to its replacement.
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
 | [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names) | Arbitrated (2026-11), implemented | [crate_restructuring.md](../proposed/crate_restructuring.md), [bbt-cmd_line.adb](../../src/bbt-cmd_line.adb) |
-| [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)                     | Arbitrated (2026-10), implemented  | [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md), [bbt-scenarios-steps.adb](../../src/bbt-scenarios-steps.adb) |
-| [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
-| [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
-| [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
-| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10), step clause implemented | [A300_Ignoring.md](../features/A300_Ignoring.md) |
+| [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)                     | Arbitrated (2026-10), implemented  | [A030_Then_Does_Not_Contain.md](../cli_features/A030_Then_Does_Not_Contain.md), [bbt-scenarios-steps.adb](../../src/bbt-scenarios-steps.adb) |
+| [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../cli_features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
+| [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
+| [D10. Diff display alignment](#d10-diff-display-alignment)                               | Arbitrated (2026-10), implemented  | [B105_Expected_vs_Actual_Output.md](../cli_features/B105_Expected_vs_Actual_Output.md), [text_utilities.ads](../../src/text_utilities.ads) |
+| [D9. Ignoring volatile parts: keyword and first increment](#d9-ignoring-volatile-parts-keyword-and-first-increment) | Arbitrated (2026-10), step clause implemented | [A300_Ignoring.md](../cli_features/A300_Ignoring.md) |
 | [D3. Readers and writers organization](#d3-readers-and-writers-organization)             | Under discussion                   | [markdown_utilities.ads](../../src/markdown_utilities.ads)                         |
-| [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
-| [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../features/B210_Status_Bar.md)                               |
+| [D7. Status bar rendering](#d7-status-bar-rendering)                                     | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../cli_features/B210_Status_Bar.md)                               |
+| [D8. Status bar default and --no_tty](#d8-status-bar-default-and-no_tty)                  | Arbitrated (2026-10), implemented  | [B210_Status_Bar.md](../cli_features/B210_Status_Bar.md)                               |
 | [D5. Tests.Actions organization](#d5-testsactions-organization)                         | Arbitrated (2026-10), implemented                   | [bbt-tests-actions.ads](../../src/bbt-tests-actions.ads)                          |
-| [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md)                   |
+| [D6. Scenario timeout](#d6-scenario-timeout)                                             | Arbitrated (2026-10), implemented           | [B200_Scenario_Timeout.md](../cli_features/B200_Scenario_Timeout.md)                   |
 | [D1. Command execution library: Spawn](#d1-command-execution-library-spawn)              | Arbitrated (2026-10), implemented  | [pty.md](../proposed/pty.md), [PR #41](https://github.com/LionelDraghi/bbt/pull/41), [PR #43](https://github.com/LionelDraghi/bbt/pull/43) |
 | [D2. successfully and the interactive steps](#d2-successfully-and-the-interactive-steps) | Arbitrated (2026-10), implemented | [PR #40](https://github.com/LionelDraghi/bbt/pull/40)                              |
 | [D4. Line endings: LF everywhere](#d4-line-endings-lf-everywhere)                        | Arbitrated (2026-10)               | [.gitattributes](../../.gitattributes)                                             |
@@ -316,10 +316,10 @@ References:
 Status: arbitrated (October 2026), implemented (October 2026)
 
 `when I successfully run 'X'` is defined in
-[A130](../features/A130_Successfully_Keyword.md) as the shortcut for
+[A130](../cli_features/A130_Successfully_Keyword.md) as the shortcut for
 `When I run 'X'` followed by `Then I get no error`. Since the
 interactive steps
-([A290](../features/A290_When_I_Type_Or_Enter.md),
+([A290](../cli_features/A290_When_I_Type_Or_Enter.md),
 [PR #39](https://github.com/LionelDraghi/bbt/pull/39)) start a command
 and feed it across steps, the command may still be running long after
 its `run` step: what does "successfully" check then?
@@ -407,7 +407,7 @@ that is, today, all Markdown derived.
 
 References:
 
-- [B140_Index_File.md](../features/B140_Index_File.md): the text
+- [B140_Index_File.md](../cli_features/B140_Index_File.md): the text
   writer output is the Markdown index;
 - [markdown_utilities.ads](../../src/markdown_utilities.ads): the first
   factorization step.
@@ -550,7 +550,7 @@ the user, not for a command.
 References:
 
 - the specification and the scenarios:
-  [B200_Scenario_Timeout.md](../features/B200_Scenario_Timeout.md);
+  [B200_Scenario_Timeout.md](../cli_features/B200_Scenario_Timeout.md);
 - the former proposal docs/proposed/timeouts.md, removed
   once implemented.
 
@@ -634,7 +634,7 @@ when the writers organization (D3) is arbitrated.
 References:
 
 - the specification and the scenarios:
-  [B210_Status_Bar.md](../features/B210_Status_Bar.md);
+  [B210_Status_Bar.md](../cli_features/B210_Status_Bar.md);
 - the implementation: bbt-status_bar.adb, and the erase/redraw
   hooks in bbt-io.adb.
 
@@ -673,8 +673,8 @@ displayed by default. Decisions:
 References:
 
 - the specification and the scenarios:
-  [B210_Status_Bar.md](../features/B210_Status_Bar.md) and
-  [B150_Deprecated_Options.md](../features/B150_Deprecated_Options.md);
+  [B210_Status_Bar.md](../cli_features/B210_Status_Bar.md) and
+  [B150_Deprecated_Options.md](../cli_features/B150_Deprecated_Options.md);
 - the implementation: bbt-cmd_line.adb, bbt-main.adb, bbt-settings.ads.
 
 ## D9. Ignoring volatile parts: keyword and first increment
@@ -685,7 +685,7 @@ Time tags and machine dependent paths frequently break comparisons on
 parts the scenario does not target. The comparison steps accept an
 ignoring clause, `(ignoring time)`, `(ignoring dir, time)`, that masks
 the volatile parts on both sides before comparing
-(cf. [A300_Ignoring.md](../features/A300_Ignoring.md)). Decisions:
+(cf. [A300_Ignoring.md](../cli_features/A300_Ignoring.md)). Decisions:
 
 - the step clause keyword is the participle `ignoring`: it reads as a
   modifier of the comparison ("the output is X, ignoring time"), is
@@ -698,7 +698,7 @@ the volatile parts on both sides before comparing
   `Given I ignore time and dir in the following steps`. The doctrinal
   objection — a `Given` tunes the checker, not the system under
   test — does not hold in bbt: it is deliberately not BDD Gherkin
-  (cf. [B050](../features/B050_Strict_gherkin.md)), and its `Given`
+  (cf. [B050](../cli_features/B050_Strict_gherkin.md)), and its `Given`
   steps already arrange the test bench rather than the software
   under test (`Given the new file`, `Given the environment
   variable`). The real risk is scope leakage: a Background `Given`
@@ -709,7 +709,7 @@ the volatile parts on both sides before comparing
 - the step clause increments are the `time`, `dir`, `version`,
   `<regexp>`, `order`, `casing`, `whitespaces` and `blank_lines`
   patterns, specified in
-  [A300_Ignoring.md](../features/A300_Ignoring.md). The settings
+  [A300_Ignoring.md](../cli_features/A300_Ignoring.md). The settings
   patterns bring the `ignore_casing` and co. matching settings back
   into the scenario, closing the in-scenario part of
   [issue #18](https://github.com/LionelDraghi/bbt/issues/18); the
@@ -745,7 +745,7 @@ the volatile parts on both sides before comparing
 References:
 
 - the specification and the scenarios:
-  [A300_Ignoring.md](../features/A300_Ignoring.md);
+  [A300_Ignoring.md](../cli_features/A300_Ignoring.md);
 - the laxity settings precedent:
   [issue #18](https://github.com/LionelDraghi/bbt/issues/18);
 - the owner arbitration of October 2026.
@@ -800,7 +800,7 @@ Follow-ups left open:
 References:
 
 - the specification and the scenarios:
-  [B105_Expected_vs_Actual_Output.md](../features/B105_Expected_vs_Actual_Output.md);
+  [B105_Expected_vs_Actual_Output.md](../cli_features/B105_Expected_vs_Actual_Output.md);
 - the implementation: `Text_Utilities.Align` and `Side_By_Side`
   (src/text_utilities.ads, src/text_utilities.adb).
 
@@ -809,10 +809,10 @@ References:
 Status: arbitrated (October 2026), implemented
 
 Context: bbt spawns the commands directly (cf.
-[B110_Spawn.md](../features/B110_Spawn.md)), so a step needing pipes,
+[B110_Spawn.md](../cli_features/B110_Spawn.md)), so a step needing pipes,
 redirections or command substitutions had to spawn the shell
 explicitly in the command, as in the workaround of
-[B115_Warning_On_Shell_Metacharacters.md](../features/B115_Warning_On_Shell_Metacharacters.md):
+[B115_Warning_On_Shell_Metacharacters.md](../cli_features/B115_Warning_On_Shell_Metacharacters.md):
 verbose, with the shell-level quoting embedded in the Markdown code
 span (double-escaping patterns such as `cut -d'\"'`), and an implicit
 shell, that bbt could not check the command against.
@@ -823,7 +823,7 @@ Decision:
   command string as a single argument to a shell, without splitting
   it, so that pipes, redirections and command substitutions are
   interpreted by that shell (cf.
-  [A310_Run_Shell.md](../features/A310_Run_Shell.md));
+  [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md));
 - the step keywords are `run` and `shell`: a preposition such as
   `in` would be pure decoration;
 - the shell is selected with the `--shell` option or the `BBT_SHELL`
@@ -897,7 +897,7 @@ Follow-ups left open:
 References:
 
 - the specification and the scenarios:
-  [A310_Run_Shell.md](../features/A310_Run_Shell.md);
+  [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md);
 - the discussion and the feedback:
   [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42);
 - the implementation: `BBT.Settings.Shell_Kind`, `Shell_Exe`,
@@ -919,7 +919,7 @@ Decision:
 - the `--cleanup=full` option takes a recursive snapshot of the exec
   dir at the start of each document, and removes at the end every
   entry that appeared since, whatever created it (cf.
-  [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md));
+  [B010_Deleting_created_files.md](../cli_features/B010_Deleting_created_files.md));
 - one confirmation per document is asked before removing, through
   the common confirmation function, so that `--yes` applies
   uniformly, and the removal is refused on a non interactive stdin;
@@ -953,7 +953,7 @@ Accepted limitations:
 References:
 
 - the specification and the scenarios:
-  [B010_Deleting_created_files.md](../features/B010_Deleting_created_files.md);
+  [B010_Deleting_created_files.md](../cli_features/B010_Deleting_created_files.md);
 - the implementation: `Take_Snapshot`, `Delete_New_Entries`
   (src/bbt-created_file_list.adb, src/bbt-created_file_list.ads),
   the `Full_Cleanup` setting (src/bbt-settings.ads) and the
@@ -1056,7 +1056,7 @@ new verb.
   word on a non negatable form: too strict for a word that may belong
   to the free text; the warning keeps the scenario runnable while
   making the dropped negation visible (pinned by a scenario in
-  [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md)).
+  [A030_Then_Does_Not_Contain.md](../cli_features/A030_Then_Does_Not_Contain.md)).
 
 ### Consequences
 
@@ -1070,9 +1070,9 @@ resolving to the same actions as their positive twin.
 References:
 
 - the scenarios:
-  [A030_Then_Does_Not_Contain.md](../features/A030_Then_Does_Not_Contain.md),
-  [A270_Then_Error_Output.md](../features/A270_Then_Error_Output.md),
-  [A300_Ignoring.md](../features/A300_Ignoring.md);
+  [A030_Then_Does_Not_Contain.md](../cli_features/A030_Then_Does_Not_Contain.md),
+  [A270_Then_Error_Output.md](../cli_features/A270_Then_Error_Output.md),
+  [A300_Ignoring.md](../cli_features/A300_Ignoring.md);
 - the implementation: `Negatable` and the resolution in `Parse`
   (src/bbt-scenarios-steps.adb), `Step_Data.Negated`
   (src/bbt-model-steps.ads), the merged check procedures
@@ -1144,8 +1144,8 @@ forms before the flags are known.
 References:
 
 - the scenarios:
-  [A310_Run_Shell.md](../features/A310_Run_Shell.md),
-  [A130_Successfully_Keyword.md](../features/A130_Successfully_Keyword.md);
+  [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md),
+  [A130_Successfully_Keyword.md](../cli_features/A130_Successfully_Keyword.md);
 - the implementation: the qualifier derivation in `Parse`
   (src/bbt-scenarios-steps.adb), `State.Shell_Met`
   (src/bbt-scenarios-steps.adb), the simplified `Set_Verb`

@@ -301,7 +301,7 @@ would fail today.
 
 The terminal translates the line feeds of the program into `CR` `LF`.
 The expected outputs are the same as in
-[A290_When_I_Type_Or_Enter](../features/A290_When_I_Type_Or_Enter.md),
+[A290_When_I_Type_Or_Enter](../cli_features/A290_When_I_Type_Or_Enter.md),
 they must not depend on the terminal translation.
 
 - Given the new file `to_delete.txt` containing `some data`

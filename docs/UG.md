@@ -180,15 +180,15 @@ bbt is designed for humans, and is not going to trap users with blank line, whit
 - blank lines and casing are ignored when comparing actual with expected output. I suppose that if you expect `version 1.0` and the actual output is `Version 1.0` the test is OK.
 
 This is not always the expected behavior, you may want to check the exact output. Use then the `--exact_match` option on the command line.  
-Actually, there is more options to control individually casing, whitespaces and blank lines, refer to the [feature file](features/A210_Exact_Match.md) for more details.
+Actually, there is more options to control individually casing, whitespaces and blank lines, refer to the [feature file](cli_features/A210_Exact_Match.md) for more details.
 
-The comparison steps also accept an `(ignoring ...)` clause, that states explicitly in the scenario which parts are volatile — `(ignoring time)` for time tags, `(ignoring dir)` for the directory part of a path, `(ignoring version)` for version numbers, and any other word of the clause is a regexp masking what it matches, as in `(ignoring [0-9.]+)` for a varying duration — and masks them on both sides before comparing (cf. [feature `ignoring`](features/A300_Ignoring.md)).  
+The comparison steps also accept an `(ignoring ...)` clause, that states explicitly in the scenario which parts are volatile — `(ignoring time)` for time tags, `(ignoring dir)` for the directory part of a path, `(ignoring version)` for version numbers, and any other word of the clause is a regexp masking what it matches, as in `(ignoring [0-9.]+)` for a varying duration — and masks them on both sides before comparing (cf. [feature `ignoring`](cli_features/A300_Ignoring.md)).  
 The clause also states the matching settings themselves: `(ignoring casing)`, `(ignoring whitespaces)` and `(ignoring blank_lines)` say that the comparison ignores the casing, the white spaces or the blank lines, as the human match default does, and `(ignoring order)` that it ignores the order of the lines. The command line options take priority: a clause contradicting `--exact_match` is ignored, with a warning.
 
 On the other hand, the order of lines in files is generally meaningful.
 But not always. If you want to check the presence of some files in a directory, you don't care in which order they are listed, and you don't want your test to fail on another platform because the `ls` command behavior may be different.
 The "I don't care the line order" behavior is stated with the `(ignoring order)` clause.
-(cf. [feature `ignoring order`](features/A140_Unordered_Keyword.md)).
+(cf. [feature `ignoring order`](cli_features/A140_Unordered_Keyword.md)).
 The historical `unordered` adjective remains legal, but is deprecated.
 
 ### Understanding errors
@@ -229,7 +229,7 @@ failed_doesnt_2.md:3: Error: flowers.txt contains unexpected at line 2:
 Tulip
 ```
 
-(cf. [feature expected vs actual output](features/B105_Expected_vs_Actual_Output.md)
+(cf. [feature expected vs actual output](cli_features/B105_Expected_vs_Actual_Output.md)
 for more examples).
 
 ### Execution
@@ -251,17 +251,17 @@ of the command, merged. When a scenario checks the error output
 (`Then the error output contains ...`, `Then there is no error output`), the
 commands of that scenario write their standard error apart, and `output`
 steps check the standard output alone.
-(cf. [feature `error output`](features/A270_Then_Error_Output.md)).
+(cf. [feature `error output`](cli_features/A270_Then_Error_Output.md)).
 
 `Then I get an error` only tells success from failure;
 ``Then the exit code is `2` `` checks the exact code of the last command.
-(cf. [feature `exit code`](features/A260_Then_Exit_Code_Is.md)).
+(cf. [feature `exit code`](cli_features/A260_Then_Exit_Code_Is.md)).
 
 ``Given the environment variable `LANG` is `C` `` and
 `Given the environment variable `NO_COLOR` is not set` change the
 environment of the commands run afterwards in the scenario; the variables
 get their previous state back at the end of the scenario.
-(cf. [feature `environment variable`](features/A280_Given_Environment_Variable.md)).
+(cf. [feature `environment variable`](cli_features/A280_Given_Environment_Variable.md)).
 
 ### Interaction
 
@@ -279,7 +279,7 @@ The output of the program is a consequence of its input: the output checks
 following an input step apply only to the output produced after it, the
 prompt displayed before the input is ignored. Any other step, such as a file
 check or a new `When I run`, first waits for the command to terminate.
-(cf. [feature `type or enter`](features/A290_When_I_Type_Or_Enter.md)).
+(cf. [feature `type or enter`](cli_features/A290_When_I_Type_Or_Enter.md)).
 
 Note that the command input and output are pipes, not a terminal: a program
 that does not flush its prompt before waiting for input will not show it.
@@ -295,7 +295,7 @@ terminal, removing this constraint on POSIX systems.
 Due to different conventions for file paths between Unix and Windows, the same test may have `/home/username/Documents` as expected output on the first and `c:\users\username\documents` on the later.
 
 An example of such a tags use may be found in bbt own tests.  
-(Refer to [this scenario](features/B040_Find_scenarios.md) and the corresponding [Makefile](../tests/Makefile))
+(Refer to [this scenario](cli_features/B040_Find_scenarios.md) and the corresponding [Makefile](../tests/Makefile))
 
 Steps or Scenarios contains *Unix_Only* or *Windows_Only* accordingly :
 ~~~md

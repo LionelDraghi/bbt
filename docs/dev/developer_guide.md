@@ -80,7 +80,7 @@ its commands are started on a pseudo terminal allocated by the library
 prompts are visible before the program waits for input, without any
 explicit flush, the input is not echoed, and the output bytes are
 exact, so the expected outputs are the same as over pipes
-(cf. [A290](../features/A290_When_I_Type_Or_Enter.md), and
+(cf. [A290](../cli_features/A290_When_I_Type_Or_Enter.md), and
 [proposed/pty.md](../proposed/pty.md) for the
 experiment results that led to this design). The pseudo terminal is
 given a fixed 80x24 window size (`BBT.Terminal`, through a thin C
