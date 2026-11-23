@@ -2955,12 +2955,12 @@
    - [X] scenario   [tables and diagrams with Gherkin-like content](../../../cli_features/C140_Special_Markdown_Constructs.md) pass  
 
 
-## Summary : **Success**, 294 scenarios OK
+## Summary : **Success**, 293 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 294   |
+| Successful | 293   |
 | Empty      | 0     |
 | Not Run    | 6     |
 
