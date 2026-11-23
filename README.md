@@ -247,7 +247,7 @@ Alternatively, simply copy the [docs/bbt-skill](docs/bbt-skill) directory into t
 ## Some projects using *bbt*
 
 - Raffle, an Ada compiler with a LLVM backend (not yet public) by Paul Jarret. Kudos to the first bbt adopter!
-- [CoAP-SPARK]( https://github.com/mgrojo/coap_spark), by Manuel Gomez 
+- [CoAP-SPARK]( https://github.com/mgrojo/coap_spark) and [alr2appimage](https://github.com/mgrojo/alr2appimage/tree/main), by Manuel Gomez 
 - [ada-caser]( https://github.com/simonjwright/ada_caser/tree/main), by Simon Wright
 - aclida (not yet public) by [Heziode](https://github.com/Heziode)
 - [GRBL Parser]( https://github.com/RREE/grbl_parser_ada), by Rolf Ebert

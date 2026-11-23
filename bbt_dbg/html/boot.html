@@ -10,6 +10,8 @@
       <script src="/js/jquery.min.js" type="text/javascript"></script>
       <script src="/js/boot.js" type="text/javascript"></script>
       <script src="/js/mermaid.min.js" type="text/javascript"></script>
+      <script src="/js/markdown-it.min.js" type="text/javascript"></script>
+      <script src="/js/markdown-it-anchor.min.js" type="text/javascript"></script>
       <script src="/js/page.js" type="text/javascript"></script>
       <style>
          /* The page is a flex column: the three header rows are fixed,
@@ -183,9 +185,10 @@
             counter-reset: ln;
             scroll-behavior: smooth;
          }
+         /* Raw fallback mode (rendering by markdown-it unavailable):
+            one div.line per source line, gutter numbers by CSS
+            counters, kept in sync with the file lines. */
          .line { padding: 0 8px 0 0; border-radius: 3px; }
-         /* Line numbers: a gutter column, kept, by CSS counters, in sync
-            with the file lines: one div.line per source line */
          .line::before {
             counter-increment: ln;
             content: counter(ln);
@@ -201,18 +204,85 @@
             pointer-events: none;
          }
          .hl   { background: #ffef99; }
-         .hl::before { background: #ffe27a; color: #5a4a00; font-weight: bold; }
          .fail { background: #ffb3a7; }
-         .fence { background: #f6f8fa; }
-         .md_h1 { font-weight: bold; font-size: 115%; color: #222; margin-top: 6px; }
-         .md_h2 { font-weight: bold; font-size: 108%; color: #333; margin-top: 4px; }
-         .md_h3 { font-weight: bold; color: #444; }
-         code { background: #eee; padding: 0 3px; border-radius: 2px; font-family: inherit; }
-         a.toc { color: #0366d6; text-decoration: none; cursor: pointer; }
-         a.toc:hover { text-decoration: underline; }
-         .quote { color: #6a737d; font-style: italic; }
-         .mm { color: #666; background: #fbfbfd; }
-         .mm svg { display: block; margin: 4px 0; max-width: 100%; }
+         /* Auto-expand off: the run position marker on the first
+            visible ancestor of the (folded) selected node, styled
+            after jstree's own selected anchor. */
+         #navtree .jstree-anchor.jstree-alias {
+            background: #e7f4f9;
+            box-shadow: inset 0 0 1px #cccccc;
+            font-weight: bold;
+         }
+         /* Rendered mode: the scenario displayed GitHub style by the
+            vendored markdown-it (cf. page.js). The per-block
+            data-source-line start is echoed in the left margin. */
+         #content.md {
+            white-space: normal;
+            font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 8px 16px 8px 60px;
+            color: #1f2328;
+         }
+         #content.md > [data-source-line] { position: relative; }
+         #content.md > [data-source-line]::before {
+            content: attr(data-source-line);
+            position: absolute;
+            left: -52px;
+            width: 40px;
+            text-align: right;
+            font-family: "Cascadia Mono", Consolas, Menlo, monospace;
+            font-size: 9pt;
+            color: #b0b0b0;
+            user-select: none;
+            pointer-events: none;
+         }
+         #content.md h1, #content.md h2, #content.md h3,
+         #content.md h4, #content.md h5, #content.md h6 {
+            font-weight: 600; line-height: 1.25; margin: 16px 0 8px;
+         }
+         #content.md h1 { font-size: 1.7em; border-bottom: 1px solid #d8dee4; padding-bottom: 4px; }
+         #content.md h2 { font-size: 1.35em; border-bottom: 1px solid #d8dee4; padding-bottom: 4px; }
+         #content.md h3 { font-size: 1.15em; }
+         #content.md p  { margin: 6px 0; }
+         #content.md ul, #content.md ol { margin: 6px 0; padding-left: 28px; }
+         #content.md li { margin: 2px 0; }
+         #content.md a  { color: #0969da; text-decoration: none; }
+         #content.md a:hover { text-decoration: underline; }
+         #content.md code {
+            font-family: "Cascadia Mono", Consolas, Menlo, monospace;
+            font-size: 85%;
+            background: #f2f2f2;
+            padding: 1px 4px;
+            border-radius: 4px;
+         }
+         #content.md pre {
+            background: #f6f8fa;
+            padding: 8px 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            line-height: 1.35;
+         }
+         #content.md pre code { background: none; padding: 0; font-size: 9pt; }
+         #content.md pre.mm { color: #666; background: #fbfbfd; }
+         #content.md pre.mm svg { display: block; margin: 4px 0; max-width: 100%; }
+         #content.md blockquote {
+            border-left: 4px solid #d0d7de;
+            color: #59636e;
+            margin: 6px 0 6px 4px;
+            padding: 0 8px;
+         }
+         #content.md table { border-collapse: collapse; margin: 8px 0; }
+         #content.md th, #content.md td {
+            border: 1px solid #d0d7de;
+            padding: 3px 10px;
+         }
+         #content.md th { background: #f6f8fa; }
+         #content.md hr {
+            border: 0; height: 1px; background: #d8dee4; margin: 14px 0;
+         }
+         #content.md img { max-width: 100%; }
+         #content.md .hl { background: #ffef99; }
       </style>
    </HEAD>
 <BODY>

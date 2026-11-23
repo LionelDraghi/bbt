@@ -44,43 +44,8 @@ with File_Utilities;
 
 package body BBT.GUI is
 
-   --  Heading anchors, for the ToC links: the slug of each markdown
-   --  heading mapped to its line number in the currently displayed
-   --  file. Rebuilt by Show_File at each file load, read by Beautify.
-   package String_Natural_Maps is
-     new Ada.Containers.Indefinite_Ordered_Maps
-       (Key_Type     => String,
-        Element_Type => Natural);
-   Headings : String_Natural_Maps.Map;
-
-   function Slug (S : String) return String is
-      --  Anchor normalization: letters (lower cased) and digits only,
-      --  everything else dropped. Formatting insensitive, so that ToC
-      --  hrefs and headings match whatever the flattening style is.
-      Buffer : Ada.Strings.Unbounded.Unbounded_String;
-   begin
-      for C of S loop
-         if C in 'a' .. 'z' or C in '0' .. '9' then
-            Ada.Strings.Unbounded.Append (Buffer, [C]);
-         elsif C in 'A' .. 'Z' then
-            Ada.Strings.Unbounded.Append
-              (Buffer, [Character'Val (Character'Pos (C) + 32)]);
-         end if;
-      end loop;
-      return Ada.Strings.Unbounded.To_String (Buffer);
-   end Slug;
-
    function Trimmed_Image (N : Natural) return String is
      (Ada.Strings.Fixed.Trim (N'Image, Ada.Strings.Both));
-
-   function Heading_Line (Key : String) return String is
-   begin
-      if Headings.Contains (Key) then
-         return Trimmed_Image (Headings.Element (Key));
-      else
-         return "";
-      end if;
-   end Heading_Line;
 
    --------------------------------------------------------------------------
    --  Runtime state shared between the runner task, the gnoga
@@ -277,124 +242,6 @@ package body BBT.GUI is
 
 
    --------------------------------------------------------------------------
-   --  Beautify escapes HTML and applies a light markdown to a source
-   --  line for display: headings, inline code, bold, list bullets,
-   --  blockquotes and links. In-document links (ToC) are turned into
-   --  scroll-to-line anchors (data-ln attribute), using the Headings
-   --  map built by Show_File.
-   --------------------------------------------------------------------------
-
-   function Beautify (S : String) return Ada.Strings.Unbounded.Unbounded_String is
-      Text : Ada.Strings.Unbounded.Unbounded_String := Escape (S);
-
-      procedure Wrap_All (Mark, Open_Tag, Close_Tag : String) is
-         From : Positive := 1;
-         P1, P2 : Natural;
-      begin
-         loop
-            P1 := Index (Text, Mark, From);
-            exit when P1 = 0;
-            P2 := Index (Text, Mark, P1 + Mark'Length);
-            exit when P2 = 0;
-            Replace_Slice (Text, P2, P2 + Mark'Length - 1, Close_Tag);
-            Replace_Slice (Text, P1, P1 + Mark'Length - 1, Open_Tag);
-            From := P1 + Open_Tag'Length + (P2 - P1 - Mark'Length) + Close_Tag'Length;
-         end loop;
-      end Wrap_All;
-
-      procedure Make_Links is
-         From : Positive := 1;
-         P1, P2, P3, P4 : Natural;
-      begin
-         loop
-            P1 := Index (Text, "[", From);
-            exit when P1 = 0;
-            P2 := Index (Text, "]", From => P1 + 1);
-            exit when P2 = 0;
-            P3 := Index (Text, "(", From => P2 + 1);
-            exit when P3 = 0;
-            P4 := Index (Text, ")", From => P3 + 1);
-            exit when P4 = 0;
-            declare
-               Link_Text : constant String :=
-                             Ada.Strings.Unbounded.Slice (Text, P1 + 1, P2 - 1);
-               Url       : constant String :=
-                             Ada.Strings.Unbounded.Slice (Text, P3 + 1, P4 - 1);
-               Tail      : constant Ada.Strings.Unbounded.Unbounded_String :=
-                             Ada.Strings.Unbounded.Unbounded_Slice (Text, P4 + 1, Length (Text));
-               Head      : constant Ada.Strings.Unbounded.Unbounded_String :=
-                             Ada.Strings.Unbounded.Unbounded_Slice (Text, 1, P1 - 1);
-            begin
-               if Url'Length > 0 and then Url (Url'First) = '#' then
-                  --  In-document anchor: scroll-to-line link, resolved
-                  --  against the Headings map; unresolved targets stay
-                  --  inert (no data-ln, the click handler ignores them)
-                  Text := Head
-                    & "<a class=""toc"" href=""#"""
-                    & (if Heading_Line (Slug (Url (Url'First + 1 .. Url'Last))) /= ""
-                       then " data-ln="""
-                            & Heading_Line (Slug (Url (Url'First + 1 .. Url'Last)))
-                            & """"
-                       else "")
-                    & ">" & Link_Text & "</a>" & Tail;
-               else
-                  Text := Head
-                    & "<a href=""" & Url & """ target=""_blank"">"
-                    & Link_Text & "</a>" & Tail;
-               end if;
-            end;
-            From := P1 + 1;
-            exit when From > Length (Text);
-         end loop;
-      end Make_Links;
-
-   begin
-      Wrap_All ("`", "<code>", "</code>");
-      Wrap_All ("**", "<b>", "</b>");
-      Make_Links;
-
-      --  Headings: strip the leading #'s, wrap in a span.
-      if Length (Text) > 0 and then Element (Text, 1) = '#' then
-         declare
-            Level : Natural := 0;
-            Cut   : Natural;
-            --  One past the last stripped character: the #'s and, if
-            --  present, the space that follows them.
-         begin
-            while Level < Length (Text)
-              and then Element (Text, Level + 1) = '#'
-            loop
-               Level := Level + 1;
-            end loop;
-            Level := Natural'Min (Level, 3);
-            Cut   := Level
-                       + (if Level < Length (Text)
-                            and then Element (Text, Level + 1) = ' '
-                          then 1 else 0);
-            if Cut > 0 then
-               Replace_Slice (Text, 1, Cut, "");
-            end if;
-            Text := "<span class=""md_h"
-              & Ada.Strings.Fixed.Trim (Level'Image, Ada.Strings.Both)
-              & """>" & Text & "</span>";
-         end;
-      elsif Length (Text) >= 8
-        and then Slice (Text, 1, 5) = "&gt; "
-      then
-         --  Blockquote (the '>' was escaped by Beautify's Escape)
-         Replace_Slice (Text, 1, 5, "<span class=""quote"">");
-         Text := Text & "</span>";
-      elsif Length (Text) >= 2
-        and then Element (Text, 1) = '-'
-        and then Element (Text, 2) = ' '
-      then
-         Replace_Slice (Text, 1, 2, "&bull; ");
-      end if;
-
-      return Text;
-   end Beautify;
-
-   --------------------------------------------------------------------------
    procedure Show_File (File_Name : String) is
       Source : constant Text := Get_Source (File_Name);
       --  The verbatim content registered by the runtime at analysis
@@ -402,60 +249,19 @@ package body BBT.GUI is
       --  line rank, so the div ids (ln_n) and the step locations match.
       Page   : Ada.Strings.Unbounded.Unbounded_String := To_Unbounded_String ("");
 
-      In_Fence    : Boolean := False;
-      Is_Mermaid  : Boolean := False;
-      MM_Sequence : Natural := 0;
-      --  Fence state: lines inside a code fence keep their raw text
-      --  (class fence), and lines inside a mermaid fence are grouped
-      --  (data-mm id) so that page.js can join and render them.
-
       --  -----------------------------------------------------------------------
       procedure Append_Line (Line : Natural; Text : String) is
       begin
-         if Text'Length >= 3
-           and then Text (Text'First .. Text'First + 2) = "```"
-         then
-            --  A fence marker: switch the state, and show the
-            --  marker line itself as a fence line
-            In_Fence := not In_Fence;
-            if In_Fence then
-               Is_Mermaid := Text'Length >= 10
-                             and then Text (Text'First + 3 .. Text'First + 9)
-                                         = "mermaid";
-               if Is_Mermaid then
-                  MM_Sequence := MM_Sequence + 1;
-               end if;
-            end if;
-            Append (Page, "<div class=""line fence"" id=""ln_"
-                          & Trimmed_Image (Line) & """>" & To_String (Escape (Text)) & "</div>");
-
-         elsif In_Fence and then Is_Mermaid then
-            Append (Page, "<div class=""line mm"" id=""ln_"
-                          & Trimmed_Image (Line) & """ data-mm=""mm_"
-                          & Trimmed_Image (MM_Sequence)
-                          & """>" & To_String (Escape (Text)) & "</div>");
-
-         elsif In_Fence then
-            Append (Page, "<div class=""line fence"" id=""ln_"
-                          & Trimmed_Image (Line) & """>" & To_String (Escape (Text)) & "</div>");
-
-         else
-            Append (Page, "<div class=""line"" id=""ln_"
-                          & Trimmed_Image (Line) & """>" & To_String (Beautify (Text)) & "</div>");
-         end if;
+         --  One div per line, raw escaped text: the rendering to HTML
+         --  is done browser side by page.js with the vendored
+         --  markdown-it (the divs are rebuilt into the full source,
+         --  rendered, and tagged with their source line ranges).
+         Append (Page, "<div class=""line"" id=""ln_"
+                       & Trimmed_Image (Line) & """>" & To_String (Escape (Text)) & "</div>");
       end Append_Line;
-
    begin
-      Headings.Clear;
       for I in Source.First_Index .. Source.Last_Index loop
-         declare
-            Text : constant String := Source.Element (I);
-         begin
-            if Text'Length > 0 and then Text (Text'First) = '#' then
-               Headings.Include (Key => Slug (Text), New_Item => Natural (I));
-            end if;
-            Append_Line (Natural (I), Text);
-         end;
+         Append_Line (Natural (I), Source.Element (I));
       end loop;
 
       Content.Inner_HTML (UXStrings.From_UTF_8 (To_String (Page)));
@@ -465,9 +271,11 @@ package body BBT.GUI is
    --------------------------------------------------------------------------
    --  Highlights are applied in the browser by the bbt:highlight
    --  handler installed by page.js: it removes the current step and
-   --  failure highlights, tags the target line, and scrolls the
-   --  #content view so that the line is centered. We just fire the
-   --  event, with the line number and the classes to add.
+   --  failure highlights, tags the block that renders the target
+   --  line (blocks are tagged with their source line range by the
+   --  markdown-it rendering), and scrolls the #content view so that
+   --  it is centered. We just fire the event, with the line number
+   --  and the classes to add.
    --------------------------------------------------------------------------
 
    procedure Highlight_Line (Line : Ada.Text_IO.Count;
@@ -699,17 +507,19 @@ package body BBT.GUI is
       --  always visible, so the file name stays highlighted even
       --  when the tree is folded. The target node is selected too:
       --  jstree keeps selections on hidden nodes, and shows them
-      --  when the user unfolds. The select_node calls pass false as
-      --  their third argument (prevent_open): without it, a jstree
-      --  select silently expands the whole ancestor chain on its
-      --  own, whatever the Auto_Expand switch below.
+      --  when the user unfolds. The select_node calls pass true as
+      --  their third argument (prevent_open): jstree's default,
+      --  false, makes every select silently expand the whole
+      --  ancestor chain, whatever the Auto_Expand switch below.
       --
       --  With Auto_Expand on, the target node and all its ancestors
       --  are opened as well (no animation, so the layout is ready
       --  right away), and the tree panel is scrolled so that the
       --  node is centered - only #navtree's scrollTop is touched,
       --  never the page's. With Auto_Expand off, no expansion, no
-      --  scroll.
+      --  scroll: the Alias branch below tags the first visible
+      --  ancestor instead, so that the run position stays visible
+      --  in a folded tree.
       use Location_Node_Maps;
 
       Prefix : constant String := Norm (File_Name) & "|";
@@ -750,6 +560,36 @@ package body BBT.GUI is
                        & "                 - (nc.clientHeight"
                        & "                    - el.offsetHeight) / 2; } }"
                   else "");
+
+      --  With Auto_Expand off (no Expand branch above), the selected
+      --  scenario node is typically hidden in a folded branch, and
+      --  jstree's selection highlight with it: the selection would
+      --  carry no visible cue at all in the tree panel. The Alias
+      --  branch records the run position node and delegates to the
+      --  page's pos_alias routine (cf. page.js): it tags the anchor
+      --  of the first visible ancestor (the feature line, or usually
+      --  the document line - the top of a fold) with the jstree-alias
+      --  class, so that the current position stays visible without
+      --  touching jstree's selection state. A previous alias is
+      --  cleared on each update, and the page also re-applies the
+      --  alias on every tree open or close, so the cue follows the
+      --  fold state without waiting for the next stop. The walk has
+      --  to climb the jstree model, not the DOM: jstree does not
+      --  render a closed branch's children at all, and drops them
+      --  from the DOM on close - a node hidden in a fold has no
+      --  element to test for visibility, while it is the very node
+      --  the walk starts from.
+      Alias : constant String :=
+                (if Auto_Expand
+                 then "$('#navtree .jstree-alias')"
+                      & ".removeClass ('jstree-alias');"
+                      & "window.bbt_alias_on = false;"
+                      & "window.bbt_pos_node = null;"
+                 else "$('#navtree .jstree-alias')"
+                      & ".removeClass ('jstree-alias');"
+                      & "window.bbt_alias_on = true;"
+                      & "window.bbt_pos_node = n ? n.id : (d ? d.id : null);"
+                      & "gnoga.pos_alias ();");
    begin
       if UI_State.Wired
         and then Target'Length > 0
@@ -760,10 +600,11 @@ package body BBT.GUI is
               ("$('#navtree').jstree('deselect_all', true);"
                & "var inst = $('#navtree').jstree(true);"
                & "var d = inst.get_node ('" & Doc_Id & "');"
-               & "if (d) { inst.select_node (d, true, false); }"
+               & "if (d) { inst.select_node (d, true, true); }"
                & "var n = inst.get_node ('" & Node_Id & "');"
                & "if (n && (!d || n.id !== d.id))"
-               & " { inst.select_node (n, true, false); }"
+               & " { inst.select_node (n, true, true); }"
+               & Alias
                & Expand));
       end if;
    end Select_Tree_Node;
@@ -1148,6 +989,11 @@ package body BBT.GUI is
          Expand_Toggle.Add_Class ("off");
          Expand_Toggle.Inner_HTML
           (UXStrings.From_UTF_8 ("Auto expand: OFF"));
+         --  Same as the on branch: the current location gets its
+         --  position cue right away, no need to wait for a stop.
+         if Length (Last_Loc_File) > 0 then
+            Select_Tree_Node (To_String (Last_Loc_File), Last_Line);
+         end if;
       end if;
    end On_Toggle_Auto_Expand;
 
@@ -1296,6 +1142,10 @@ package body BBT.GUI is
                        Exe_Dir & "js/jquery.min.js");
          Refresh_File (Src & "/js/mermaid.min.js",
                        Exe_Dir & "js/mermaid.min.js");
+         Refresh_File (Src & "/js/markdown-it.min.js",
+                       Exe_Dir & "js/markdown-it.min.js");
+         Refresh_File (Src & "/js/markdown-it-anchor.min.js",
+                       Exe_Dir & "js/markdown-it-anchor.min.js");
          Refresh_File (Src & "/js/page.js",
                        Exe_Dir & "js/page.js");
          Refresh_File (Src & "/js/jstree.min.js",

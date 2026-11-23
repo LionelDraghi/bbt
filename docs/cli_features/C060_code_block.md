@@ -74,8 +74,4 @@ Popy
 
 - When I run `./bbt -c lot_of_code_blocks.md`
 - Then I get no error
-```
-- And output contains  
-```
-Success, 1 scenarios OK
-```
+- And output contains `## Summary : **Success**, 1 scenarios OK`

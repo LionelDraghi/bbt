@@ -18,8 +18,10 @@
 --  Prototype limitations:
 --  - one debugger connection at a time (limitation inherent to the
 --    underlying single run);
---  - no Markdown syntax highlighting yet, and no step highlighting
---    other than the current line background;
+--  - the scenario display is rendered browser side by the vendored
+--    markdown-it (bbt_dbg/js): blocks are tagged with their source
+--    line range, but the highlight of the current step covers the
+--    whole rendered block, not the exact source line yet;
 --  - closing the debugger tab releases the halted execution in keep
 --    going mode (the run completes);
 --  - the terminal still displays some bbt output (verbose messages,

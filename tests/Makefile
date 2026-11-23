@@ -47,9 +47,11 @@ gui_assets:
 	  done
 else
 gui_assets:
-	@ ln -fs ../bbt_dbg/html html
-	@ ln -fs ../bbt_dbg/js js
-	@ ln -fs ../bbt_dbg/css css
+	@ ln -fsn ../bbt_dbg/html html
+	@ ln -fsn ../bbt_dbg/js js
+	@ ln -fsn ../bbt_dbg/css css
+	# -n: without it, ln dereferences an existing link pointing to a
+	# directory, and creates the new link inside bbt_dbg/<dir>/
 endif
 
 # Options common to the three bbt suite invocations below
@@ -154,7 +156,11 @@ help:
 build:
 	@ $(MAKE) -s build --directory=file_utilities_tests
 
-setup: ../sut$(EXE_SUFFIX) ../bbt$(EXE_SUFFIX)
+setup: ../sut$(EXE_SUFFIX) ../bbt$(EXE_SUFFIX) gui_assets
+	# gui_assets refreshes the html/js/css asset links before any
+	# check: a stale link (e.g. after a gui/ -> bbt_dbg/ rename)
+	# would make the GUI asset deployment fail on the dangling path,
+	# and ln -fs overwrites whatever link is there.
 	mkdir -p $(RESULTS_DIR)
     
 	@$(REFRESH) ../sut$(EXE_SUFFIX) sut$(EXE_SUFFIX)
@@ -215,7 +221,7 @@ examples: setup
 	@ ./bbt --version
 	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
 	--index $(RESULTS_DIR)/examples_results.md \
-	../docs/examples ../docs/examples/gcc_hello_world.md || echo KO, check the availability of gcc on your platform "********"
+	../docs/examples || echo KO, check the availability of gcc on your platform "********"
 	@ echo
 	@ # The usage documents are not run (their scenarios need some
 	@ # non available exes), but they are parsed by bbt, so that we

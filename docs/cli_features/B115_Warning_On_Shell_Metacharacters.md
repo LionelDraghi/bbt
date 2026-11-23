@@ -76,11 +76,11 @@ quoted argument of the `sh -c`, and must not raise a warning.
 - Given the new file `escaped_quote_test.md`
   ~~~
   # Scenario
-  - Given the new file `alire.toml`
+  - Given the new file `dummy.toml`
     ```
     version = "1.2.3"
     ```
-  - When I run `sh -c "grep ^version alire.toml | cut -d'\"' -f2 > out.version.txt"` Successfully
+  - When I run `sh -c "grep ^version dummy.toml | cut -d'\"' -f2 > out.version.txt"` Successfully
   ~~~
 
 - When I run `./bbt -c escaped_quote_test.md`
@@ -88,8 +88,8 @@ quoted argument of the `sh -c`, and must not raise a warning.
   ```
   # Document: [escaped_quote_test.md](escaped_quote_test.md)
   ### Scenario: [](escaped_quote_test.md):
-  - OK : Given the new file `alire.toml`
-  - OK : When I run `sh -c "grep ^version alire.toml | cut -d'\"' -f2 > out.version.txt"` Successfully
+  - OK : Given the new file `dummy.toml`
+  - OK : When I run `sh -c "grep ^version dummy.toml | cut -d'\"' -f2 > out.version.txt"` Successfully
   - [X] scenario [](escaped_quote_test.md) pass
 
   ## Summary : **Success**, 1 scenarios OK

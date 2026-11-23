@@ -2862,6 +2862,7 @@
    - OK : Given the new file `lot_of_code_blocks.md`  
    - OK : When I run `./bbt -c lot_of_code_blocks.md`  
    - OK : Then I get no error  
+   - OK : And output contains `## Summary : **Success**, 1 scenarios OK`  
    - [X] scenario   [Code fenced blocks](../../../cli_features/C060_code_block.md) pass  
 
 
@@ -2945,12 +2946,21 @@
    - [X] scenario   [](../../../cli_features/C120_Ill_Formated_Steps.md) pass  
 
 
-## Summary : **Success**, 292 scenarios OK
+# Document: [C140_Special_Markdown_Constructs.md](../../../cli_features/C140_Special_Markdown_Constructs.md)  
+  ## Feature: bbt is not perturbed by rich Markdown constructs in scenario bodies  
+   ### Scenario: [tables and diagrams with Gherkin-like content](../../../cli_features/C140_Special_Markdown_Constructs.md): 
+   - OK : Given the new file `md_constructs.md`  
+   - OK : When I run `./bbt -c md_constructs.md`  
+   - OK : Then the output is  
+   - [X] scenario   [tables and diagrams with Gherkin-like content](../../../cli_features/C140_Special_Markdown_Constructs.md) pass  
+
+
+## Summary : **Success**, 294 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 292   |
+| Successful | 294   |
 | Empty      | 0     |
 | Not Run    | 6     |
 

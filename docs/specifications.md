@@ -97,6 +97,7 @@ and a retired number is never reused.
 | C090 | [cli_features/C090_GNU_Error_Msg_Format.md](cli_features/C090_GNU_Error_Msg_Format.md) |
 | C110 | [cli_features/C110_Two_Verbs_In_The_Step.md](cli_features/C110_Two_Verbs_In_The_Step.md) |
 | C120 | [cli_features/C120_Ill_Formated_Steps.md](cli_features/C120_Ill_Formated_Steps.md) |
+| C140 | [cli_features/C140_Special_Markdown_Constructs.md](cli_features/C140_Special_Markdown_Constructs.md) |
 
 ### `Gnnn` — GUI vocabulary
 
