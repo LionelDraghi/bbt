@@ -426,7 +426,7 @@ docs/proposed
 Also add an entry to the TDL chapter of:
 
 ```text
-docs/dev/project.md
+docs/dev/project_status.md
 ```
 
 The proposal may be a short description of the need or a complete feature file

@@ -69,7 +69,7 @@ both sides before the (inverted) comparison. The `matches` / `does not
 match` steps do not take it yet: when allowed, the clause will mask the
 volatile parts of the actual line outside of what the regexp already
 matches, the regexp itself being applied as is (cf. the TDL in
-[project.md](../dev/project.md)).
+[project_status.md](../dev/project_status.md)).
 
 ## Semantics: masking on both sides
 

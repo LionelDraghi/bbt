@@ -175,3 +175,63 @@ May imply to switch to Max Reznik's more sophisticated MarkDown parser...
   and https://github.com/carapace-sh
 
 
+
+### GUI backends
+
+The structure and the design decisions are [D16](design_discussions.md)
+and [backends.md](../backends.md); what follows is the development work
+they left open.
+
+- webapp backend  
+  Migrate the webdriver prototype into `backends/webapp` (crate
+  `bbt_webapp`), with its witness `Apps/ToDoMVC/web` — one gnoga-served
+  application, and the static WAI-ARIA page served as data —, its own
+  CI, and its rows in the cross tables of `docs/backends.md`. Then add
+  it to `IMPLEMENTED` and to the parameter lines of `backends/Makefile`.
+
+- Adi2 backend  
+  `backends/adi2` (crate `bbt_adi2`) and its witness `Apps/ToDoMVC/adi2`.
+  One question first: publish
+  [ovenpasta/adi2](https://github.com/ovenpasta/adi2) in the community
+  index, or keep a git-URL dependency.
+
+- absorb the remaining GUI vocabulary  
+  Eleven proposals are still in `docs/proposed` (G025, G030, G040, G045,
+  G050, G055, G060, G065, G070, G085, G090). Each enters the single
+  grammar (`src/bbt-scenarios-steps-initialize_gui_grammar.adb`), its
+  scenarios in `Apps/ToDoMVC/docs/features`, its entries in
+  `docs/gui_features.md`, `docs/specifications.md` and the cross tables,
+  then its proposal file disappears.
+
+- publish the backend crates  
+  `alr publish --skip-submit` for `bbt_backends` and `bbt_gtk4`, then
+  the index submissions; align their versions on the core crate (`0.6.1`
+  against `0.7.0-dev` today), and add the step to the release procedure.
+
+- the backend CI maintains its cross-table column  
+  `backend-gtk4.yml` runs the shared suite but publishes no row: the
+  tables are still maintained by hand, while `docs/backends.md` says
+  they are fed by each backend CI.
+
+- retire the prototypes repository  
+  Merge what remains useful of its documents into `docs/`, then archive
+  it read-only. What the migration kept, when the backends were
+  extracted: the prototype scenario parser is dropped (one core
+  grammar), the AT-SPI backend prototype became `backends/gtk4`, the
+  webdriver one becomes `backends/webapp`, the Adi2 one
+  `backends/adi2`; the witness gnoga applications become
+  `Apps/ToDoMVC/web` (one dynamic target, one static ARIA page); the
+  prototype test scenarios merged into the core grammar and
+  `Apps/ToDoMVC/docs/features`; the manifesto, comparables and roadmap
+  documents merged selectively into `docs/`; the Adi2 library was
+  extracted as its own crate.
+
+- core manifest guard  
+  A CI check that `libglib` and `libatspi` appear nowhere in the root
+  manifest nor in its solved solution.
+
+- backend documentation  
+  The README installation section per backend kind, a User Guide
+  section on running GUI scenarios, the `AGENTS.md` build pointers
+  (`make gtk4`, `make check BACKEND=gtk4`, `make -C backends`), and the
+  `--backend` line in the base help (`docs/help/base.txt`).

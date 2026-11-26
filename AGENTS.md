@@ -54,7 +54,7 @@ Read a document only when the task requires it; do not open them all up front.
   (`npx skills add LionelDraghi/bbt --skill bbt-skill`)
 - To prepare or run a release: the [common release procedure on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/release_procedure.md), with the bbt parameters and additions in `docs/dev/release_procedure.md`
 - To choose the next task or find already-tracked work:
-  `docs/dev/concerns.md`, `docs/dev/project.md`,
+  `docs/dev/concerns.md`, `docs/dev/project_status.md`,
   `docs/dev/fixme_index.md`, `docs/proposed`
 - To review or challenge the design: `docs/dev/design_discussions.md`
 - To follow the developer workflow: `docs/dev/developer_guide.md`

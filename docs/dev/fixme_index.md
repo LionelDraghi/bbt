@@ -4,7 +4,7 @@ Fixme in current version
 Location | Text
 ---------|-----
 [docs/cli_features/B160_JUnit_XML_Export.md](../../docs/cli_features/B160_JUnit_XML_Export.md):163| robustness fail when using '-'
-[docs/dev/project.md](../../docs/dev/project.md):64|  guide, and completed (cf. also the ` should be private` marks
+[docs/dev/project_status.md](../../docs/dev/project_status.md):64|  guide, and completed (cf. also the ` should be private` marks
 [src/bbt-cmd_line.adb](../../src/bbt-cmd_line.adb):307|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-io.adb](../../src/bbt-io.adb):8|--   this with inverts the dependency direction: the base output
 [src/bbt-junit_writer.adb](../../src/bbt-junit_writer.adb):136|                   Time_Attrib (Elapsed_Time (Docs.First_Element)) & ">"); --  total time for all docs not implemented
