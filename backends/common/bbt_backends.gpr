@@ -11,7 +11,7 @@ project BBT_Backends is
    --  The shared backend support library crate: polling, harness
    --  deadline, text normalization, and failure diagnostics helpers
    --  common to every GUI backend, owned by no GUI stack
-   --  (cf. docs/proposed/crate_restructuring.md). Like bbt_lib, built
+   --  (cf. docs/dev/design_discussions.md (D16)). Like bbt_lib, built
    --  locally with gprbuild against the sibling core sources; the
    --  alr manifests target publication.
 

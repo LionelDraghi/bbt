@@ -4,7 +4,7 @@ with "bbt_lib.gpr";
 project BBT is
 
    --  The executable side of the bbt crate: a thin main on top of
-   --  BBT_Lib (cf. docs/proposed/crate_restructuring.md). The engine
+   --  BBT_Lib (cf. docs/dev/design_discussions.md (D16)). The engine
    --  logic lives in the library; the GUI backends are separate
    --  executables in the backends/ crates, launched with
    --  --backend=<kind>.

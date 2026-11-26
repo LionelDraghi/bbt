@@ -6,7 +6,7 @@
 
 --  Shared backend support library (crate bbt_backends): the services
 --  every GUI backend needs and no GUI stack provides, per
---  docs/proposed/crate_restructuring.md. The harness deadline and the
+--  docs/dev/design_discussions.md (D16). The harness deadline and the
 --  polling (Eventually semantics), text normalization for accessible
 --  names and titles, and, from the webapp backend on, the failure
 --  diagnostics helpers.

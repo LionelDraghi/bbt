@@ -118,7 +118,7 @@ package BBT.Model.Steps is
    --  BBT.Scenarios.Steps): BBT.Main fails at analysis time, before
    --  any scenario runs, when GUI steps are present and no backend was
    --  selected with --backend=<kind>
-   --  (cf. docs/proposed/crate_restructuring.md).
+   --  (cf. docs/dev/design_discussions.md (D16)).
 
    type Step_Type;
    type Step_Maybe is access all Step_Type;

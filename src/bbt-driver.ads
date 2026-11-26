@@ -9,7 +9,7 @@
 --  backend executable main (bbt_gtk4, ...): a backend main registers
 --  its concrete backend in BBT.Backends.Selected, then
 --  calls Run
---  (cf. docs/proposed/crate_restructuring.md).
+--  (cf. docs/dev/design_discussions.md (D16)).
 
 package BBT.Driver is
 

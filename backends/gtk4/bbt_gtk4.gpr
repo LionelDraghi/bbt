@@ -14,7 +14,7 @@ project BBT_Gtk4 is
    --  The GTK 4 backend crate: the bbt_gtk4 executable, which
    --  registers the AT-SPI accessibility backend and runs the bbt
    --  driver on top of the BBT_Lib archive (Linux only; cf.
-   --  docs/proposed/crate_restructuring.md). The bbt core CLI
+   --  docs/dev/design_discussions.md (D16)). The bbt core CLI
    --  delegates to this executable with --backend=gtk4.
 
    for Source_Dirs use ("src");
@@ -31,7 +31,7 @@ project BBT_Gtk4 is
    --  libatspi direct binding, plus the glib objects it needs (no dev
    --  headers required). Those flags live here, and not in the bbt
    --  core anymore: a CLI-only bbt user never links them
-   --  (cf. docs/proposed/crate_restructuring.md).
+   --  (cf. docs/dev/design_discussions.md (D16)).
    package Linker is
       for Switches ("ada") use ("-g", "-l:libatspi.so.0",
                                 "-lgobject-2.0", "-lglib-2.0");

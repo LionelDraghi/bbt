@@ -5,7 +5,7 @@ project BBT_Lib is
    --  The library side of the bbt crate: the engine sources, including
    --  the embedded gnoga debugger and the GUI vocabulary. Backend
    --  selection is injection based: the core embeds no concrete
-   --  backend anymore (cf. docs/proposed/crate_restructuring.md); the
+   --  backend anymore (cf. docs/dev/design_discussions.md (D16)); the
    --  backend crates (backends/) register their concrete backend and
    --  link this archive.
 

@@ -7,7 +7,7 @@
 --  Body of the GUI backends root: dispatch every GUI operation to the
 --  Selected backend access, cf. the spec comment, or return the
 --  backend-less value. Selected is set at startup by the backend
---  executable main (cf. docs/proposed/crate_restructuring.md);
+--  executable main (cf. docs/dev/design_discussions.md (D16));
 --  the default is no backend.
 
 package body BBT.Backends is

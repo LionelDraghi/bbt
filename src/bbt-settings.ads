@@ -160,6 +160,6 @@ private package BBT.Settings is
    function Gui_Backend return String;
    --  The GUI backend kind registered with the --backend=<kind> launcher
    --  option, empty when none (cf.
-   --  docs/proposed/crate_restructuring.md)
+   --  docs/dev/design_discussions.md (D16))
 
 end BBT.Settings;

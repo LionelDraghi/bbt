@@ -6,7 +6,7 @@
 
 --  GTK 4 GUI backend (Linux): the AT-SPI accessibility backend,
 --  packaged as its own bbt backend crate
---  (cf. docs/proposed/crate_restructuring.md). Own libatspi binding:
+--  (cf. docs/dev/design_discussions.md (D16)). Own libatspi binding:
 --  direct imports, no dev headers required, accessibility bus
 --  connection lazy and automatic, correlation with the launched
 --  application by process id, with an application name fallback for

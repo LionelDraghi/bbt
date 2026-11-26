@@ -62,7 +62,7 @@ package body BBT.Driver is
            and then BBT.Backends.Selected = null
          then
             --  Eager backend check (cf.
-            --  docs/proposed/crate_restructuring.md): documents with
+            --  docs/dev/design_discussions.md (D16)): documents with
             --  GUI steps are rejected before any scenario runs, with
             --  an actionable backend selection hint. In debugger
             --  mode, the backend lives in the backend executable

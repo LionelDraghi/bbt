@@ -7,7 +7,7 @@
 --  GUI backends root: the runner only sees this package, and dispatches
 --  every GUI operation to the Selected backend access, set at startup by
 --  whoever owns a concrete backend (a backend executable crate main,
---  cf. docs/proposed/crate_restructuring.md).
+--  cf. docs/dev/design_discussions.md (D16)).
 --
 --  The core embeds no concrete backend anymore: the default is no
 --  backend at all. A document with GUI steps and no registered backend

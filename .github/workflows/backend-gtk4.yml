@@ -1,6 +1,6 @@
 name: Backend gtk4
 
-# The per-backend CI (cf. docs/proposed/crate_restructuring.md,
+# The per-backend CI (cf. docs/dev/design_discussions.md (D16),
 # acceptance criteria): builds the backend crate and its witness
 # application, and runs the shared GUI scenario suite
 # (Apps/ToDoMVC/docs/cli_features) headlessly, on the platforms the backend

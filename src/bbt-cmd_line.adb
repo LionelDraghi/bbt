@@ -114,7 +114,7 @@ package body BBT.Cmd_Line is
    --  arguments unchanged, except for the --backend=<kind> option
    --  itself.
    --  If the executable is not found, bbt fails before running any
-   --  scenario (cf. docs/proposed/crate_restructuring.md).
+   --  scenario (cf. docs/dev/design_discussions.md (D16)).
       use GNAT.OS_Lib;
 
       Exe_Name  : constant String := "bbt_" & Settings.Gui_Backend;
@@ -361,7 +361,7 @@ package body BBT.Cmd_Line is
 
             elsif Ada.Strings.Fixed.Index (Cmd, "--backend=") = 1 then
                --  GUI backend launcher (cf.
-               --  docs/proposed/crate_restructuring.md): the exact
+               --  docs/dev/design_discussions.md (D16)): the exact
                --  "--gui" form below runs the interactive debugger,
                --  --backend=<kind> delegates the run to the backend
                --  executable
