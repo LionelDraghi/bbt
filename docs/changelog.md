@@ -15,6 +15,7 @@ Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0
   - [Added]   text field steps: `When I type `text` into the `name` textbox` sets the field value without validating it, and `When I enter `text` into the `name` textbox` commits it like a user pressing the field's `Return` key (cf. docs/gui_features.md)
   - [Added]   `When I close the window` closes the application's window through its own close path, so no acknowledged change is lost; with several windows exposed, `When I close the `title` window` names the target
   - [Changed] an application launched by a `run` step now lives through the whole scenario document instead of being killed at each scenario boundary: a GUI story needs one single launch, and a scenario can build on the state left by the previous one; a `run` step still closes any previous instance first
+  - [Fixed]   `bbt explain` no longer reports a missing GUI backend on a document containing GUI steps, nor fails on it: a backend is an execution precondition, checked before the first scenario runs, so a backend-less machine can rebuild the GUI steps of a document, which is how a missing backend is diagnosed (cf. docs/cli_features/A320_Backend_Selection.md)
 
 - **[0.6.1] - 2026-11-09**
   - [Added]   experimental GUI testing GUI steps, driven by a pluggable backend (`--backend`, first one: AT-SPI on Linux, `--headless` for CI); the vocabulary concepts — role, accessible name, state — follow WAI-ARIA (cf. docs/proposed/gui_vocabulary.md)

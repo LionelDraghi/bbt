@@ -58,29 +58,37 @@ package body BBT.Driver is
 
          Model.Documents.Apply_Filters;
 
-         if Model.Steps.Some_Gui_Steps
-           and then BBT.Backends.Selected = null
-         then
-            --  Eager backend check (cf.
-            --  docs/dev/design_discussions.md (D16)): documents with
-            --  GUI steps are rejected before any scenario runs, with
-            --  an actionable backend selection hint. In debugger
-            --  mode, the backend lives in the backend executable
-            --  (the debugger itself is in every bbt executable): the
-            --  working combination is --gui --backend=<kind>.
-            if Settings.Gui then
-               IO.Put_Error
-                 ("no GUI backend available in the interactive debugger;"
-                  & " run the debugger in the backend executable instead,"
-                  & " e.g. bbt --gui --backend=<kind> <scenarios>");
-            else
-               IO.Put_Error
-                 ("no GUI backend available: select one with --backend=<kind>");
-            end if;
-         end if;
-
       end if;
    end Analyze_Documents;
+
+   -- --------------------------------------------------------------------------
+
+   procedure Check_Backend_Selected is
+   begin
+      if Model.Steps.Some_Gui_Steps
+        and then BBT.Backends.Selected = null
+      then
+         --  Execution precondition (cf.
+         --  docs/dev/design_discussions.md (D16)): a document with GUI
+         --  steps is rejected before any scenario runs, with an
+         --  actionable backend selection hint. Analysis is not
+         --  concerned: `explain` rebuilds such a document with no
+         --  backend, and that is how a missing backend is diagnosed.
+         --  In debugger mode, the backend lives in the backend
+         --  executable (the debugger itself is in every bbt
+         --  executable): the working combination is --gui
+         --  --backend=<kind>.
+         if Settings.Gui then
+            IO.Put_Error
+              ("no GUI backend available in the interactive debugger;"
+               & " run the debugger in the backend executable instead,"
+               & " e.g. bbt --gui --backend=<kind> <scenarios>");
+         else
+            IO.Put_Error
+              ("no GUI backend available: select one with --backend=<kind>");
+         end if;
+      end if;
+   end Check_Backend_Selected;
 
    -- --------------------------------------------------------------------------
 
@@ -167,6 +175,11 @@ package body BBT.Driver is
          -- Run is the default command, so None => Run
          Status_Bar.Put_Activity ("Analyzing documents");
          Analyze_Documents;
+
+         --  A scenario is about to run: the backend is an execution
+         --  precondition, so it is checked here, once, and not at
+         --  analysis time (cf. `explain`, which analyses alone).
+         Check_Backend_Selected;
 
          if Settings.Gui then
             --  GUI mode: hand over the execution to the interactive

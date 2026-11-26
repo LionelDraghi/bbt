@@ -11,8 +11,9 @@
 --
 --  The core embeds no concrete backend anymore: the default is no
 --  backend at all. A document with GUI steps and no registered backend
---  fails eagerly at analysis time (cf. BBT.Main), and each operation
---  below raises No_Backend_Available as a late run time fallback.
+--  is rejected before the first scenario runs, once the documents are
+--  analysed (cf. BBT.Driver), and each operation below raises
+--  No_Backend_Available as a late run time fallback.
 
 package BBT.Backends is
 
