@@ -1088,7 +1088,6 @@ package body BBT.GUI is
          --  built in a subdirectory, two levels up for a backend
          --  executable (backends/<kind>/), etc. Walk up the tree
          --  instead of hardcoding a depth.
-         use Ada.Strings.Unbounded;
          Prefix : Unbounded_String := To_Unbounded_String (Exe_Dir);
       begin
          for Level in 0 .. 4 loop
