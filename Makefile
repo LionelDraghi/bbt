@@ -22,6 +22,13 @@ PROFILE ?= validation
 RESULTS_ROOT := docs/tests_results/$(PLATFORM)
 RESULTS_DIR = $(RESULTS_ROOT)/$(PROFILE)
 
+# Binary packaging (cf. docs/proposed/bin_crate.md, and
+# tools/bin_archive.sh): the archive of the current platform, in the
+# shape the bbt_bin crate declares as its origin, then the check of
+# that manifest through a private index. Everything lands under obj/,
+# which is git-ignored and removed by clean.
+BIN_DIR := obj/bin
+
 .SILENT:
 
 # The empty recipes below are required: without a recipe, make would
@@ -37,7 +44,7 @@ sut$(EXE_SUFFIX): tools
 rpl$(EXE_SUFFIX): tools
 	@:
 
-.PHONY : all help tools build build-release release check test-run features examples sanity backends doc install
+.PHONY : all help tools build build-release release check test-run features examples sanity backends doc install bin bin-check
 help:
 	echo "Usage: make [target]"
 	echo ""
@@ -63,6 +70,11 @@ help:
 	echo "  doc          : regenerate the generated docs (help reference files,"
 	echo "                 indexes, badges) and check the links with mlc"
 	echo "  install      : copy bbt to ~/bin"
+	echo "  bin          : package the executable of this platform into the"
+	echo "                 archive the bbt_bin crate declares as its origin,"
+	echo "                 check it in a clean directory, print its sha256"
+	echo "  bin-check    : resolve, then install the bbt_bin crate of this"
+	echo "                 platform, from a local index, and run a scenario with it"
 	echo "  clean        : remove the test run artifacts and the backend"
 	echo "                 build residues only, keeping binaries and"
 	echo "                 links usable"
@@ -245,6 +257,29 @@ install: ./bbt$(EXE_SUFFIX)
 	echo OK
 	echo
 
+# The packaging of the bbt_bin crate (cf. docs/proposed/bin_crate.md):
+# the archive of this platform, its sha256, and a check that extracts it
+# in a clean directory and runs a scenario with it. The build is the
+# release one, the shipped profile, so the tree stays on the release
+# stamp afterwards and the next `make build` redoes a full Alire build
+# (cf. build-release).
+bin: build-release
+	echo
+	echo === packaging bbt for $(PLATFORM)
+	@ ./tools/bin_archive.sh package
+	echo
+
+# The manifest of this platform, resolved through a private index and
+# then installed into a throwaway prefix: it checks what packaging
+# cannot — that Alire accepts the manifest, that the origin resolves,
+# that the hash it carries is the archive's, and that the archive
+# deploys, the installed bbt running a scenario.
+bin-check: bin
+	echo
+	echo === checking the bbt_bin manifest of this platform
+	@ ./tools/bin_archive.sh check
+	echo
+
 .PHONY : clean distclean
 
 # clean removes the test run artifacts only,
@@ -253,6 +288,7 @@ clean:
 	echo --- clean:
 	@ $(MAKE) -s clean --directory=tests
 	@ $(MAKE) -s clean --directory=backends
+	@ - rm -rf $(BIN_DIR)
 	@ - rm -rf config.ini *.out dir* tmp.txt output2.txt \
 	  main main.c main$(EXE_SUFFIX) tmp html js css
 	# The local results (ignored files in the profile directories) go

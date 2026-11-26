@@ -1,0 +1,126 @@
+# Build and upload the prebuilt archives of the bbt_bin crate
+# (cf. docs/proposed/bin_crate.md): the bbt executable of each platform,
+# packaged as the binary crate declares it as its origin, attached to
+# the release of the tag.
+#
+# The macOS arm64 archive is produced here; the macOS x86_64 one has no
+# GitHub runner any more and is packaged by hand on the maintainer's
+# Intel machine, then attached to the same release (same document).
+name: Binary archive
+
+on:                    # Run the workflow for each of the following events:
+  push:                # - A version tag is pushed (0.7.0, no v prefix)
+    tags:
+      - '[0-9]*'
+  workflow_dispatch:   # - A manual run is requested from the GitHub web interface
+
+permissions:
+  contents: write
+# One run per tag: an interrupted packaging would leave a half-filled
+# release, which the bbt_bin manifest then points at.
+concurrency:
+  group: bin-crate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: Package
+    strategy:
+      fail-fast: false
+    matrix:
+      include:
+        # The oldest supported Ubuntu, for a glibc floor low enough for
+        # the current LTS distributions (same choice as appimage.yml).
+        - os: ubuntu-22.04
+          platform: Linux
+        # macos-15, not macos-latest: the macOS 26 image ships Command
+        # Line Tools 26.6, whose SDK stubs make every link fail with
+        # the bundled GNAT linker (cf. the gnat note of alire.toml).
+        - os: macos-15
+          platform: Darwin
+        - os: windows-latest
+          platform: Windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install and setup Alire package manager
+      - uses: alire-project/setup-alire@v5
+        with:
+          # Same version as the local development environment.
+          version: 2.1.1
+
+      - name: Relocate the Alire cache on Windows
+        # Same 256-character path limit as in build-test.yml.
+        if: runner.os == 'Windows'
+        run: alr settings --global --set cache.dir C:\alr-cache
+
+      - name: Cache Alire dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/alire
+            ~/.local/share/alire
+            ~/AppData/Local/alire
+            C:/alr-cache
+          key: bin-${{ matrix.os }}-alire-${{ hashFiles('alire.toml') }}
+          restore-keys: |
+            bin-${{ matrix.os }}-alire-
+
+      - name: Refresh the community index and raise the solver timeout
+        shell: bash
+        run: |
+          alr index --reset-community
+          alr settings --global --set solver.timeout 120
+
+      - name: Clone the pinned sibling crates
+        shell: bash
+        run: |
+          git clone --depth 1 --branch master https://github.com/LionelDraghi/List_Image ../list_image
+
+      # The packaging itself, and the check of the crate that carries
+      # it: `make bin-check` is the release build, the archive and its
+      # sha256, the smoke test that extracts the archive into a clean
+      # directory and runs a scenario with it, then the resolution of
+      # the bbt_bin manifest through a private index and the real
+      # installation of the crate into a throwaway prefix.
+      #
+      # The installation is the point: an archive that no `alr install`
+      # can deploy is exactly the defect this job must catch, and it
+      # cannot be caught by looking at the tarball — Alire requires a
+      # single top-level directory and `binary = true` in the origin
+      # (cf. docs/proposed/bin_crate.md). One command, so the CI and
+      # `make bin` cannot drift apart, and the archive that is uploaded
+      # is the one that was installed and run here.
+      - name: Package and check the archive
+        shell: bash
+        env:
+          GNAT_FILE_NAME_CASE_SENSITIVE: ${{ startsWith(matrix.os, 'macos') && '1' || '' }}
+        run: |
+          make bin-check
+
+      - name: Upload the archive to the release
+        # Only a tag push has a release to attach to; a manual run keeps
+        # the archive as a workflow artefact, for inspection.
+        if: github.event_name == 'push'
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+          # gh reads neither the workflow token nor the permissions on
+          # its own: `permissions: contents: write` above is what gives
+          # it the right to attach an asset to the release, and the
+          # token has to be handed over explicitly.
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ARCHIVE=$(ls obj/bin/bbt-*.tar.gz)
+          echo "Attaching $ARCHIVE to release $TAG"
+          gh release upload "$TAG" "$ARCHIVE" --clobber
+          echo "sha256: $(sha256sum "$ARCHIVE" | cut -d' ' -f1)"
+
+      - name: Keep the archive as a workflow artefact
+        if: github.event_name != 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbt-archive-${{ matrix.platform }}
+          path: obj/bin/bbt-*.tar.gz
+          if-no-files-found: error
