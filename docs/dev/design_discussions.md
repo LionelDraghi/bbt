@@ -15,6 +15,7 @@
 - [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir)
 - [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names)
 - [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)
+- [D16. One repository, several crates: the GUI backends](#d16-one-repository-several-crates-the-gui-backends)
 
 This document holds the design discussions: each entry records a
 significant design subject, with its status - under discussion, or
@@ -29,7 +30,8 @@ updated with a reference to its replacement.
 
 | Subject                                                                                  | Status                             | References                                                                         |
 |------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------|
-| [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names) | Arbitrated (2026-11), implemented | [crate_restructuring.md](../proposed/crate_restructuring.md), [bbt-cmd_line.adb](../../src/bbt-cmd_line.adb) |
+| [D16. One repository, several crates: the GUI backends](#d16-one-repository-several-crates-the-gui-backends) | Arbitrated (2026-11), implemented | [backends.md](../backends.md), [bbt_lib.gpr](../../bbt_lib.gpr), [bbt-backends.ads](../../src/bbt-backends.ads) |
+| [D15. GUI testing versus GUI debugger: the option names](#d15-gui-testing-versus-gui-debugger-the-option-names) | Arbitrated (2026-11), implemented | [D16](#d16-one-repository-several-crates-the-gui-backends), [bbt-cmd_line.adb](../../src/bbt-cmd_line.adb) |
 | [D13. Negation as a step polarity](#d13-negation-as-a-step-polarity)                     | Arbitrated (2026-10), implemented  | [A030_Then_Does_Not_Contain.md](../cli_features/A030_Then_Does_Not_Contain.md), [bbt-scenarios-steps.adb](../../src/bbt-scenarios-steps.adb) |
 | [D12. Full cleanup: snapshot and diff of the exec dir](#d12-full-cleanup-snapshot-and-diff-of-the-exec-dir) | Arbitrated (2026-10), implemented | [B010_Deleting_created_files.md](../cli_features/B010_Deleting_created_files.md), [bbt-created_file_list.adb](../../src/bbt-created_file_list.adb) |
 | [D11. Run shell step](#d11-run-shell-step)                                               | Arbitrated (2026-10), implemented  | [A310_Run_Shell.md](../cli_features/A310_Run_Shell.md), [discussion #42](https://github.com/LionelDraghi/bbt/discussions/42) |
@@ -360,7 +362,7 @@ Complements, decided with the owner:
 - the deferred check at the end of a scenario may have to wait for the
   command termination: bounding the tests execution time is a parked
   proposal, cf. the to do list in
-  [project.md](project.md#tdl).
+  [project_status.md](project_status.md#tdl).
 
 References:
 
@@ -579,7 +581,7 @@ transient bar. Decisions:
   animation, the steps having very uneven durations, and frames
   skipped by the eye; the glyph is still sampled by the redraws, so
   a background timer remains the only way to animate during a long
-  silent command (cf. the TDL in project.md);
+  silent command (cf. the TDL in project_status.md);
 - the bar is written directly through Ada.Text_IO, never through
   BBT.IO, so that it never ends up in the tee file, and the
   erase/redraw protocol cannot recurse;
@@ -616,7 +618,7 @@ transient bar. Decisions:
 Known limitation: the spinner is frozen while a single command
 runs for a long time; a background task refreshing the bar on a
 timer would remove this, at the cost of serializing the writes
-on the standard output (cf. the TDL in project.md).
+on the standard output (cf. the TDL in project_status.md).
 
 Known refactoring candidate: the `with BBT.Status_Bar` in
 bbt-io.adb inverts the dependency direction: the base output
@@ -997,9 +999,10 @@ stack, and `--gui` is literally a GUI — of bbt this time.
 Nothing to deprecate: no released version had `--gui=<kind>`, and
 the 0.6.1 `--backend` option was never advertised — the net
 user-visible state is unchanged versus 0.6.1, so no changelog entry.
-The decision is recorded in crate_restructuring.md (amendment of
-the initial launcher sketch); the code comments of bbt-cmd_line.adb
-state the two option semantics.
+The decision is recorded in
+[D16. One repository, several crates](#d16-one-repository-several-crates-the-gui-backends),
+as an amendment of the initial launcher sketch; the code comments of
+bbt-cmd_line.adb state the two option semantics.
 
 ## D13. Negation as a step polarity
 
@@ -1079,7 +1082,7 @@ References:
   (src/bbt-tests-actions-output_checks.adb) and the dispatch on the
   polarity (src/bbt-tests-runner.adb);
 - the remaining related work: the `(ignoring ...)` clause on the
-  `matches` steps (cf. the TDL in [project.md](project.md)).
+  `matches` steps (cf. the TDL in [project_status.md](project_status.md)).
 
 ## D14. Run verb qualifiers
 
@@ -1151,3 +1154,82 @@ References:
   (src/bbt-scenarios-steps.adb), the simplified `Set_Verb`
   (src/bbt-scenarios-steps-chunk.adb) and the merged grammar entries
   (src/bbt-scenarios-steps-initialize_grammar.adb).
+
+## D16. One repository, several crates: the GUI backends
+
+### Subject
+
+The GUI testing backends drag a whole GUI stack (`libglib`,
+`libatspi`, a toolkit binding) while a command-line user needs none of
+it. Alire has no optional dependency: everything declared in the root
+manifest is fetched and compiled by every user, on every platform. The
+backends therefore had to leave the root crate, and two questions came
+with them: how far, and how a scenario reaches a backend that now lives
+in another crate.
+
+### Decision
+
+One git repository, several published crates.
+
+- `bbt` is the core crate: `bbt_lib.gpr` (the engine, the grammar
+  including the GUI vocabulary, the embedded gnoga debugger) plus the
+  thin executable project `bbt.gpr` over `src/main`, and no GUI
+  dependency.
+- `backends/common` (crate `bbt_backends`), `backends/gtk4` (crate
+  `bbt_gtk4`) and the future `backends/webapp` and `backends/adi2` are
+  independent crates of the same repository, published from their
+  subdirectory (`[origin]` `subdir`, as `aaa` and `aaa_texts` do): a
+  crate limits what a user fetches, the single repository keeps one
+  review flow and no cross-repository synchronization.
+- the core embeds no concrete backend. `BBT.Backends` keeps its
+  interface and dispatches to a class-wide `Selected` access, which a
+  backend's main registers at startup; with no backend registered, a
+  document containing GUI steps is rejected before the first scenario
+  runs, with `Error: no GUI backend available: select one with
+  --backend=<kind>`. The check is an execution precondition, not an
+  analysis one: `explain` rebuilds such a document with no backend, and
+  exits 0.
+- `--backend=<kind>` makes bbt replace itself with `bbt_<kind>` found in
+  the `PATH`, forwarding the remaining arguments unchanged; a missing
+  executable is reported before any scenario runs, with the command
+  that provides it (cf.
+  [A320_Backend_Selection.md](../cli_features/A320_Backend_Selection.md)).
+- the interactive debugger stays embedded in `bbt_lib`: `--gui` works in
+  every backend variant, and no cross-process debug protocol exists.
+- availability is per crate, and asymmetric by construction: a backend
+  declares its platforms (`bbt_gtk4` is Linux only, it links AT-SPI),
+  while the core `bbt` crate declares none — an `[available]`
+  restriction on the core is a publication defect, never a
+  configuration (cf.
+  [release_procedure.md](release_procedure.md)).
+
+### Alternatives rejected
+
+- **Per-OS sources inside the core** (`src/atspi` against
+  `src/no_gui`, a `case Alire_Host_OS` in `bbt.gpr`, the
+  `-l:libatspi` link switches): the former state, which made every
+  user pay libglib and every new backend edit the core project.
+- **Dynamic plugin loading** (`dlopen`/`LoadLibrary`, the Kazakov
+  pattern): `alr install` can distribute shared libraries, but version
+  consistency is then "on your own" per `alr`'s own help. The backend
+  executables are statically linked; the door stays documented for a
+  possible third-party backend.
+- **A separate debugger crate** (`bbt_dbg`) with a debug protocol:
+  rejected as a second front-end for one feature; the debugger is part
+  of the engine, and `--debug` works in every variant.
+- **A grammar extension API** for the backends: the grammar, GUI
+  vocabulary included, stays in one place, registered by the same
+  engine; no extension payload is defined.
+
+### Consequences
+
+- the core resolves no GUI stack: `libglib` and `libatspi` appear in
+  `backends/gtk4` only, and the CI guard is their absence from the root
+  manifest and from its solved solution;
+- one grammar for every GUI step, one backend executable per kind,
+  `bbt --backend=<kind> ...` as the single entry point;
+- what remains is ordinary development, not restructuring, and the TDL
+  of [project_status.md](project_status.md) carries it: the webapp and Adi2 backends,
+  the absorption of the remaining `docs/proposed/G0*.md` vocabulary, the
+  publication of the backend crates, the CI update of the cross tables,
+  and the retirement of the prototypes repository.

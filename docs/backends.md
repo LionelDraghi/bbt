@@ -1,11 +1,32 @@
 # Backends: the GUI backend crates
 
-The GUI backends live in this repository, outside the core crate:
-one git repository, several published crates. The structure, the
-launcher (`bbt --backend=<kind>`) and the backend injection are specified
-in `docs/proposed/crate_restructuring.md`. This page maintains the
-cross tables (step vocabulary × backends), fed by each backend CI and
-by local validation runs, in the same spirit as `docs/tests_results/`.
+The GUI backends live in this repository, outside the core crate: one
+git repository, several published crates, each with its own manifest,
+its own dependencies and its own publication; the core reaches none of
+them, and builds none of them. The decision, its alternatives and its
+consequences are [D16](dev/design_discussions.md#d16-one-repository-several-crates-the-gui-backends).
+This page keeps the structure as it stands, and maintains the cross
+tables (step vocabulary × backends, platforms × backends), fed by each
+backend CI and by local validation runs, in the same spirit as
+`docs/tests_results/`.
+
+## Structure
+
+- the core `bbt` crate carries the engine and the grammar, GUI vocabulary
+  included, and declares no GUI dependency: `bbt_lib.gpr` is the engine
+  library, `bbt.gpr` a thin main over `src/main`;
+- a backend is one crate per kind, with its own manifest, its
+  `bbt_<kind>` executable, its link flags and its `[available]`
+  platforms; the core reaches none of them at build time.
+
+## Launcher
+
+`bbt --backend=<kind> ...` replaces the bbt process with `bbt_<kind>`
+found in the `PATH`, forwarding the remaining arguments unchanged. A
+document containing GUI steps with no backend registered fails before
+any scenario runs, and so does a `--backend=<kind>` whose executable is
+missing, each with the command that fixes it
+(cf. [A320_Backend_Selection.md](cli_features/A320_Backend_Selection.md)).
 
 ## The crates
 

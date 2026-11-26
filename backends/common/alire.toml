@@ -17,7 +17,7 @@ tags = ["test", "testing", "gherkin", "markdown", "tdd", "bdd", "gui"]
 #  The bbt core library: the harness the backends serve. The shared
 #  helpers of this crate (polling, text normalization) are pure Ada
 #  for now, the core dependency is the crate contract
-#  (cf. docs/proposed/crate_restructuring.md); local development
+#  (cf. docs/dev/design_discussions.md, D16); local development
 #  builds backends/common directly against the sibling sources, no
 #  path pin yet, like the backend crates.
 bbt = "^0.6.1"

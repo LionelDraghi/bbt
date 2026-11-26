@@ -24,10 +24,20 @@ bbt = "^0.6.1"
 #  Linux-only.
 libglib = "*"
 
+#  The backend is Linux by construction, and says so: AT-SPI is the
+#  Linux accessibility bus, and the Windows and macOS counterparts
+#  (UI Automation, ...) are other backends behind the same injection
+#  interface, never a port of this one (cf. docs/backends.md, the
+#  platforms cross table). Availability is per crate: the core bbt
+#  crate declares none, this one declares its platform.
+[available.'case(os)']
+linux = true
+'...' = false
+
 #  The gnoga dependency of the core (the embedded interactive
 #  debugger) is a dependency of this crate too, through bbt.
 
 #  Note: this manifest targets publication (cf.
-#  docs/proposed/crate_restructuring.md, development plan step 2);
-#  local development builds backends/gtk4 directly against the
-#  sibling bbt sources with gprbuild, no path pin yet.
+#  docs/dev/design_discussions.md, D16); local development builds
+#  backends/gtk4 directly against the sibling bbt sources with
+#  gprbuild, no path pin yet.
