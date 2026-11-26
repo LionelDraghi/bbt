@@ -1,0 +1,28 @@
+name = "bbt_webapp"
+description = "Web / WebDriver GUI backend for the bbt black box tester"
+version = "0.6.1"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+tags = ["test", "testing", "gherkin", "gui", "web", "webdriver"]
+
+executables = ["bbt_webapp"]
+
+[[depends-on]]
+#  The bbt core library: the engine, the grammar and the GUI
+#  vocabulary; the backend main registers the concrete backend in
+#  BBT.Backends.Selected and runs the BBT.Driver.
+bbt = "^0.6.1"
+
+#  No GUI stack here: the browser side is reached over the W3C
+#  WebDriver protocol (a chromedriver in the PATH), so this crate stays
+#  portable -- the platforms cross table of docs/backends.md lists it
+#  wherever a driver and a browser are.
+
+#  Note: this manifest targets publication (cf.
+#  docs/dev/design_discussions.md, D16); local development builds
+#  backends/webapp directly against the sibling bbt sources with
+#  gprbuild, no path pin yet.

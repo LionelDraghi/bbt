@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/), 
 Version numbering adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - **[0.7.0-dev] - 2026-??-??**
+  - [Added]   a second GUI backend, `--backend=webapp`, drives a web application through a browser: the W3C WebDriver protocol (a `chromedriver` and a chromium/chrome binary in the `PATH`), the page playing the window role, its ARIA roles and accessible names playing the widget ones. The shared GUI suite runs unchanged against it, on the ToDoMVC witness web implementation (cf. Apps/ToDoMVC/web/README.md)
   - [Added]   the `--gui` option runs the scenarios under an interactive debugger window in the browser, served by an embedded web server (cf. docs/proposed/interactive_execution.md): the Markdown scenario is the main view, with the current step highlighted, Step and Continue controls, a pause at each step, scenario, feature, file or error (configurable), and a terminal panel replaying the bbt messages, including for a browser connecting later or reloading the page
   - [Changed] with `GUI=1`, `make check`, `make features` and a single scenario run open under the `bbt --gui` debugger window instead of a batch run: a debug session is not a check, it gets no scenario timeout and no test report output
   - [Fixed]   the debugger progress display no longer counts the background steps against the step totals: they are re-run for every scenario under their scope, so only steps run exactly once are counted

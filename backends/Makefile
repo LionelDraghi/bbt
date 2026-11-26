@@ -26,8 +26,8 @@ CORE := $(ROOT)/bbt
 endif
 
 # Implemented backends (cf. the restructuring plan: step 2 gtk4,
-# step 3 webapp, step 4 adi2)
-IMPLEMENTED := gtk4
+# step 3 webapp, step 4 adi2 left)
+IMPLEMENTED := gtk4 webapp
 
 # Per-backend parameters: the project file (each one withs the
 # common library project transitively), the witness application
@@ -37,6 +37,13 @@ IMPLEMENTED := gtk4
 gtk4_GPR     := gtk4/bbt_gtk4.gpr
 gtk4_WITNESS := $(ROOT)/Apps/ToDoMVC/gtk4
 gtk4_EXE     := gtk4/bbt_gtk4
+
+# The webapp backend drives the witness through a browser: it needs a
+# chromedriver and a chromium/chrome binary in the PATH, and no display
+# (headless by default).
+webapp_GPR     := webapp/bbt_webapp.gpr
+webapp_WITNESS := $(ROOT)/Apps/ToDoMVC/web
+webapp_EXE     := webapp/bbt_webapp
 
 # The per-backend targets are matched by the pattern rules below:
 # they must NOT be phony, as GNU make skips the implicit rule search
@@ -60,7 +67,7 @@ help:
 	@echo "  witness-<b> : build the witness app of backend <b>"
 	@echo "  clean       : remove the backend build and test residues"
 	@echo ""
-	@echo "Planned: webapp (restructuring step 3), adi2 (step 4)"
+	@echo "Planned: adi2 (restructuring step 4)"
 
 build: $(foreach b,$(IMPLEMENTED),build-$(b))
 	@:
@@ -88,7 +95,7 @@ build-%:
 	  fi
 	@ if [ -z "$($*_GPR)" ]; then \
 	    echo "Error: no '$*' backend (implemented: $(IMPLEMENTED))"; \
-	    echo "Planned: webapp (restructuring step 3), adi2 (step 4)"; \
+	    echo "Planned: adi2 (restructuring step 4)"; \
 	    exit 1; \
 	  fi
 	alr exec -- gprbuild -q -P $($*_GPR)
