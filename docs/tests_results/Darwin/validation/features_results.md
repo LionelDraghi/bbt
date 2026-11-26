@@ -1665,6 +1665,30 @@
    - [X] scenario   [the pwsh shell is set on the command line (needs_pwsh)](../../../cli_features/A310_Run_Shell.md) pass  
 
 
+# Document: [A320_Backend_Selection.md](../../../cli_features/A320_Backend_Selection.md)  
+  ## Feature: GUI backend selection  
+   ### Scenario: [a GUI step without any backend aborts with a selection hint](../../../cli_features/A320_Backend_Selection.md): 
+   - OK : Given the file `gui.md` containing  
+   - OK : When I run `./bbt gui.md`  
+   - OK : Then the output is `Error: no GUI backend available: select one with --backend=<kind>`  
+   - OK : And the exit code is `1`  
+   - [X] scenario   [a GUI step without any backend aborts with a selection hint](../../../cli_features/A320_Backend_Selection.md) pass  
+
+   ### Scenario: [a missing backend executable gives an install hint](../../../cli_features/A320_Backend_Selection.md): 
+   - OK : Given the file `scen.md` containing  
+   - OK : When I run `./bbt scen.md --backend=nosuch`  
+   - OK : Then the output is `Error: bbt_nosuch executable not found in PATH; install it with: alr install bbt_nosuch`  
+   - OK : And the exit code is `1`  
+   - [X] scenario   [a missing backend executable gives an install hint](../../../cli_features/A320_Backend_Selection.md) pass  
+
+   ### Scenario: [explain rebuilds a GUI document with no backend](../../../cli_features/A320_Backend_Selection.md): 
+   - OK : Given the file `gui.md` containing  
+   - OK : When I run `./bbt explain gui.md`  
+   - OK : Then the output contains `Check that a window appears`  
+   - OK : And the exit code is `0`  
+   - [X] scenario   [explain rebuilds a GUI document with no backend](../../../cli_features/A320_Backend_Selection.md) pass  
+
+
 # Document: [B010_Deleting_created_files.md](../../../cli_features/B010_Deleting_created_files.md)  
   ## Feature: tmp files and directories deletion  
    ### Background: [](../../../cli_features/B010_Deleting_created_files.md): 
@@ -2962,12 +2986,12 @@
    - [X] scenario   [tables and diagrams with Gherkin-like content](../../../cli_features/C140_Special_Markdown_Constructs.md) pass  
 
 
-## Summary : **Success**, 294 scenarios OK
+## Summary : **Success**, 297 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 294   |
+| Successful | 297   |
 | Empty      | 0     |
 | Not Run    | 5     |
 
