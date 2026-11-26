@@ -22,9 +22,14 @@ desktop.ini
 /bbt.exe
 /backends/gtk4/bbt_gtk4
 /backends/gtk4/bbt_gtk4.exe
+/backends/webapp/bbt_webapp
+/backends/webapp/bbt_webapp.exe
 /Apps/ToDoMVC/gtk4/todomvc
 /Apps/ToDoMVC/gtk4/todomvc.exe
 /Apps/ToDoMVC/gtk4/todos.state
+/Apps/ToDoMVC/web/todomvc
+/Apps/ToDoMVC/web/todomvc.exe
+/Apps/ToDoMVC/web/todos.state
 /sut
 /sut.exe
 /rpl

@@ -1,0 +1,119 @@
+/*
+ bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+ SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+ SPDX-FileCopyrightText: 2026 Lionel Draghi
+
+ Styling of the web implementation of the ToDoMVC witness app. Per
+ the spec (Apps/ToDoMVC/ToDoMVC.md), the colors and the zone borders
+ are visual only: a scenario never relies on them.
+*/
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  color: #212121;
+}
+
+#app {
+  max-width: 42rem;
+}
+
+/* The [hidden] rule: the zones below set their own display, which
+   would otherwise win over the user agent's [hidden] default. */
+[hidden] {
+  display: none !important;
+}
+
+#creation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#new-todo {
+  flex: 1;
+}
+
+#filters {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+#filters button[aria-pressed="true"] {
+  background: #cfd8dc;
+  font-weight: bold;
+}
+
+.zone {
+  border: 1px solid;
+  border-radius: 6px;
+  min-height: 90px;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.zone-name {
+  display: block;
+  font-weight: bold;
+}
+
+#todo-zone {
+  border-color: #1565c0;
+}
+
+#done-zone {
+  border-color: #2e7d32;
+}
+
+#todo-zone .zone-name {
+  color: #1565c0;
+}
+
+#done-zone .zone-name {
+  color: #2e7d32;
+}
+
+ul.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.list li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+li .title {
+  color: #1565c0;
+  text-align: left;
+  cursor: pointer;
+}
+
+li .title.done {
+  color: #2e7d32;
+  text-decoration: line-through;
+}
+
+li .title.selected {
+  font-weight: bold;
+}
+
+#selection {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+#footer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+#counter {
+  flex: 1;
+}
