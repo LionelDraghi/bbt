@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="gtk4_gui_results" tests="7" failures="0" errors="0" skipped="0" time="34.624998000">
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="34.624998000">
-    <testcase name="The creation line is ready for a new task" classname="" time="7.683703000"/>
-    <testcase name="The user adds a task" classname="" time="20.644618000"/>
-    <testcase name="The user adds several tasks" classname="" time="6.296338000"/>
+<testsuites name="gtk4_gui_results" tests="7" failures="0" errors="0" skipped="0" time="39.529810000">
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="39.529810000">
+    <testcase name="The creation line is ready for a new task" classname="" time="12.499517000"/>
+    <testcase name="The user adds a task" classname="" time="20.695634000"/>
+    <testcase name="The user adds several tasks" classname="" time="6.334307000"/>
   </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="50.949776000">
-    <testcase name="A completed todo moves to the Done list" classname="" time="10.813870000"/>
-    <testcase name="Completing one task, then the remaining ones" classname="" time="40.135595000"/>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="51.310568000">
+    <testcase name="A completed todo moves to the Done list" classname="" time="11.037194000"/>
+    <testcase name="Completing one task, then the remaining ones" classname="" time="40.272990000"/>
   </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="55.053269000">
-    <testcase name="The fresh app leaves the selection actions disabled" classname="" time="26.428240000"/>
-    <testcase name="The user edits the second item, and that one is edited" classname="" time="28.624697000"/>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="54.939861000">
+    <testcase name="The fresh app leaves the selection actions disabled" classname="" time="26.150526000"/>
+    <testcase name="The user edits the second item, and that one is edited" classname="" time="28.788954000"/>
   </testsuite>
 </testsuites>
