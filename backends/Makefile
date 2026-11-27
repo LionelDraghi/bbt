@@ -78,11 +78,14 @@ check: $(foreach b,$(IMPLEMENTED),check-$(b))
 all: check
 	@:
 
-# No generated docs for the backends yet: the cross tables of
-# docs/backends.md are maintained by the CI and the local check runs.
-# This target keeps the doc chain uniform (the root make doc calls it
-# like the tests/ one) and is the place holder for the webapp backend
-# future generated docs (step 3 of the restructuring).
+# Each check-<b> records the run where the CLI suites do: the witness
+# Makefile writes the JUnit and Markdown reports in the platform results
+# directory, named after the backend
+# (docs/tests_results/<Platform>/<profile>/<backend>_gui_results.*, cf.
+# docs/gui_matrix.md), and the backend CI publishes them the way the
+# main workflow publishes the CLI results. This doc target keeps the doc
+# chain uniform (the root make doc calls it like the tests/ one) and is
+# the place holder for the future generated docs of the backend crates.
 doc:
 	echo === doc prod
 	echo OK

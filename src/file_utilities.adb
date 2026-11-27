@@ -4,7 +4,8 @@
 -- SPDX-FileCopyrightText: 2024, Lionel Draghi
 -- -----------------------------------------------------------------------------
 
-with Ada.Directories.Hierarchical_File_Names,
+with Ada.Directories,
+     Ada.Directories.Hierarchical_File_Names,
      Ada.Strings,
      Ada.Strings.Fixed,
      Ada.Strings.Fixed.Equal_Case_Insensitive,
@@ -50,15 +51,43 @@ package body File_Utilities is
         renames Ada.Strings.Fixed.Translate;
 
       -- Dir and File are From_Dir and To_File without final Separator:
+      -- a pair of relative paths is resolved against the current directory
+      -- first, as the note above assumes both are rooted there: the walk
+      -- below goes up component by component, and an unresolved ".." is a
+      -- component of its own, so two relative paths whose ".." chains
+      -- differ in depth (a results directory and a document, e.g.) would
+      -- be walked as if they shared a component they do not.
+      function Is_Resolvable (Path : String) return Boolean
+      is (if On_Windows
+               and then Path'Length >= 2
+               and then Path (Path'First + 1) = ':'
+          then False
+          --  a drive qualified but relative name ("x:"), that the runtime
+          --  cannot resolve either: the walk keeps handling it as a
+          --  component, as it always did
+          else not Is_Full_Name (Path));
+
+      Resolve_Both : constant Boolean :=
+        Is_Resolvable (From_Dir) and then Is_Resolvable (To_File);
+      --  Both or neither: resolving one side only would compare a resolved
+      --  path with an unresolved one, and the pair would have nothing in
+      --  common any more. So a pair mixing an absolute and a relative path
+      --  is left as it is, as before.
+
+      function Resolved (Path : String) return String
+      is (if Resolve_Both then Ada.Directories.Full_Name (Path) else Path);
+
       Dir : constant String :=
-         (if On_Windows
-          then Remove_Final_Separator (To_Windows_Separator (From_Dir))
-          else Remove_Final_Separator (From_Dir));
+         Remove_Final_Separator
+           (Resolved (if On_Windows
+                      then To_Windows_Separator (From_Dir)
+                      else From_Dir));
 
       File : constant String :=
-               (if On_Windows
-                then Remove_Final_Separator (To_Windows_Separator (To_File))
-                else Remove_Final_Separator (To_File));
+               Remove_Final_Separator
+                 (Resolved (if On_Windows
+                            then To_Windows_Separator (To_File)
+                            else To_File));
 
       -- -----------------------------------------------------------------------
       function "=" (S1, S2 : String) return Boolean is

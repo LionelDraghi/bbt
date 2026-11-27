@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="webapp_gui_results" tests="7" failures="0" errors="0" skipped="0" time="34.261654600">
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="34.261654600">
+    <testcase name="The creation line is ready for a new task" classname="" time="11.090366801"/>
+    <testcase name="The user adds a task" classname="" time="13.154504700"/>
+    <testcase name="The user adds several tasks" classname="" time="10.016388700"/>
+  </testsuite>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="41.278325800">
+    <testcase name="A completed todo moves to the Done list" classname="" time="19.647217800"/>
+    <testcase name="Completing one task, then the remaining ones" classname="" time="21.630677900"/>
+  </testsuite>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="31.332693000">
+    <testcase name="The fresh app leaves the selection actions disabled" classname="" time="12.757951100"/>
+    <testcase name="The user edits the second item, and that one is edited" classname="" time="18.574472200"/>
+  </testsuite>
+</testsuites>

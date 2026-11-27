@@ -186,7 +186,7 @@ they left open.
   Migrate the webdriver prototype into `backends/webapp` (crate
   `bbt_webapp`), with its witness `Apps/ToDoMVC/web` — one gnoga-served
   application, and the static WAI-ARIA page served as data —, its own
-  CI, and its rows in the cross tables of `docs/backends.md`. Then add
+  CI, and its rows in the [capability matrix](../gui_matrix.md). Then add
   it to `IMPLEMENTED` and to the parameter lines of `backends/Makefile`.
 
 - Adi2 backend  
@@ -200,7 +200,8 @@ they left open.
   G050, G055, G060, G065, G070, G085, G090). Each enters the single
   grammar (`src/bbt-scenarios-steps-initialize_gui_grammar.adb`), its
   scenarios in `Apps/ToDoMVC/docs/features`, its entries in
-  `docs/gui_features.md`, `docs/specifications.md` and the cross tables,
+  `docs/gui_features.md`, `docs/specifications.md` and the
+  [capability matrix](../gui_matrix.md),
   then its proposal file disappears.
 
 - publish the backend crates  
@@ -208,10 +209,10 @@ they left open.
   the index submissions; align their versions on the core crate (`0.6.1`
   against `0.7.0-dev` today), and add the step to the release procedure.
 
-- the backend CI maintains its cross-table column  
-  `backend-gtk4.yml` runs the shared suite but publishes no row: the
-  tables are still maintained by hand, while `docs/backends.md` says
-  they are fed by each backend CI.
+- the backend CI fills the capability matrix  
+  `backend-gtk4.yml` runs the shared suite but records no per-platform
+  status: the [matrix](../gui_matrix.md) is still maintained by hand,
+  its `?` cells waiting for a recorded run.
 
 - retire the prototypes repository  
   Merge what remains useful of its documents into `docs/`, then archive

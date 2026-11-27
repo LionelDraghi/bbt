@@ -16,7 +16,10 @@ blur of a real user).
 
 - Given there is no file `todos.state`
 - When I run `./todomvc` [G005]
-- Then the `Edit` button is disabled [G015]
+- Then a window named `ToDoMVC` appears
+- And there is a window named `ToDoMVC`
+(just a test of the alternative syntax)
+- And the `Edit` button is disabled [G015]
 - And the `Delete` button is disabled
 
 ## Scenario: The user edits the second item, and that one is edited
@@ -39,4 +42,4 @@ blur of a real user).
 The story is done with the application: its window is closed
 explicitly (G095).
 
-- When I close the window
+- When I close the `ToDoMVC` window

@@ -116,7 +116,7 @@ and a retired number is never reused.
 Candidates pending absorption. On absorption, a proposed feature
 gets its entry in [gui_features.md](gui_features.md), its
 executable scenarios in the shared witness suite, and its rows in
-the [backends.md](backends.md) cross tables. A number never changes
+the [GUI capability matrix](gui_matrix.md). A number never changes
 meaning between the proposed page and the absorbed one.
 Several candidates may share one user story scenario: the story
 exercises them together on a single application launch.

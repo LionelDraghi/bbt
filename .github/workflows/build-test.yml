@@ -236,7 +236,9 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/validation/features_results.xml
+          # every suite of the run writes its JUnit report in the same
+          # per-platform results directory (cf. tests/Makefile)
+          report_paths: docs/tests_results/${{ env.OS_PLATFORM }}/validation/*.xml
 
       - name: Publish test results and badges
         # make -k above regenerated docs/tests_results/${OS_PLATFORM}/validation

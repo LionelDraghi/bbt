@@ -220,6 +220,7 @@ examples: setup
 	@ echo 2. examples check ================
 	@ ./bbt --version
 	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
+	$(if $(GUI),,--junit $(RESULTS_DIR)/examples_results.xml) \
 	--index $(RESULTS_DIR)/examples_results.md \
 	../docs/examples || echo KO, check the availability of gcc on your platform "********"
 	@ echo
@@ -234,6 +235,7 @@ non_reg: setup
 	@ echo 3. non regression tests ==========
 	@ ./bbt --version
 	./bbt $(if $(GUI),--gui,) $(COMMON_OPTIONS) \
+	$(if $(GUI),,--junit $(RESULTS_DIR)/non_reg_tests.xml) \
 	$(if $(GUI),,--index $(RESULTS_DIR)/non_reg_tests.md) \
 	../tests/non_reg_tests
 	@ echo

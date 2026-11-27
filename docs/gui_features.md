@@ -8,8 +8,8 @@ witness suite
 ([Apps/ToDoMVC/docs/features](../Apps/ToDoMVC/docs/features)) —
 one scenario launches the app once and checks everything the
 implemented vocabulary allows, the exercised steps tagged `[Gnnn]`.
-The per-step backend status is tracked in
-[backends.md](backends.md).
+The per-step backend status is tracked in the
+[GUI capability matrix](gui_matrix.md).
 
 ## Contents <!-- omit from toc -->
 - [G005 — Launch and window observation](#g005--launch-and-window-observation)
@@ -41,8 +41,10 @@ fixes the launch/observe boundary between the runner core and a
 backend (Q005).
 
 Verified by: every witness story opens with a launch; the suite as
-a whole exercises the relaunch semantics. Open questions: Q001,
-Q002.
+a whole exercises the relaunch semantics, and the two named forms are
+exercised by the first scenario of
+[edit_or_delete_a_task.md](../Apps/ToDoMVC/docs/features/edit_or_delete_a_task.md).
+Open questions: Q001, Q002.
 
 #### G010 — Text content of a window
 
@@ -62,10 +64,13 @@ accessible text of the document subtree, and no DOM or CSS concept
 leaks into the scenario. A control is found by name (G015); a text
 assertion reads content.
 
-No executable subset yet: the natural target is the witness footer
-once implemented — the active-items counter ("3 items left") and the
-hiding of the header/footer on a fresh app are content assertions no
-semantic lookup covers.
+Verified by:
+[add_a_task.md](../Apps/ToDoMVC/docs/features/add_a_task.md): the task
+the scenario creates is asserted in the window text, and a task it
+never created is asserted absent, the negated form. The footer counter
+("3 items left") stays out of the executable subset so far: no story
+needs it, and the two lists (G080) carry the same information without
+depending on how a toolkit renders a counter.
 
 #### G015 — Button by accessible name, with enabled state
 
@@ -102,30 +107,59 @@ Need: the first action, from observation to acting on the
 application — without one semantic action, nothing can be driven.
 
 - `When I press the <name> button`: semantic activation of a button;
-- `When I press the <name> listitem`: activation of a list item —
-  selects a todo in the ToDoMVC witness (the row's select action,
-  exposed on the AT-SPI action interface by the GTK 4
-  implementation);
-- `When I select the <name> listitem`: synonym of the press form for
-  selectable items — the natural wording of the selection (same
-  action, same rule).
+- `When I select the <name> listitem`: selecting an item of a list —
+  the todo a scenario then edits or deletes in the ToDoMVC witness;
+- `When I press the <name> listitem`: the synonym, same action, same
+  rule, for the items a user would rather say they press; the suite
+  exercises it once.
 
-Grounding: ARIA declares semantics, not actions; actions live in
-the platform layer
-([Core-AAM](https://www.w3.org/TR/core-aam-1.2/)). The vocabulary
-keeps the user's verb (`press`, `select` where activation just makes
-the item selected); each backend maps it to its native activation
-(Web: the element's default action; GTK/AT-SPI: the DoAction
-interface; UIA: Invoke). A device-level `click` is deliberately
-kept for a later candidate feature. This is the first entry in the
-action tier model (semantic action vs system input) that the
-architecture and the CI strategy rely on.
+Same verb behind the scenes (both set `press`), so a scenario says
+what its reader understands: `select` for an item, `press` for a
+button. The wording is the user's, not the specification's —
+"activate" is jargon, and "press" on a row leaves the gesture open
+(pressed while the button is held, released after?), whereas the row
+changing colour is exactly what "selected" says.
+
+Grounding: ARIA declares roles, states and properties, never
+actions; what maps them onto the platform layer is
+[Core-AAM](https://www.w3.org/TR/core-aam-1.2/), the W3C
+Accessibility API Mappings — per accessibility API (MSAA/IAccessible2,
+UIA, ATK/AT-SPI, macOS AX), each role with its state and property
+mapping, and with them the patterns that carry the actions. So there
+is no "press" or "select" in ARIA to be conformant with: each backend
+maps the verb to its native activation (Web: the element's default
+action; GTK/AT-SPI: the `DoAction` interface, and the action named
+`select` that a GTK 4 list row exposes; UIA: `Invoke`, or
+`SelectionItem` where the widget carries a selection). A device-level
+`click` is deliberately kept for a later candidate feature. This is
+the first entry in the action tier model (semantic action vs system
+input) that the architecture and the CI strategy rely on.
+
+Two things are worth knowing before inventing more verbs:
+
+- *selection is a state in ARIA* — `aria-selected`, on `gridcell`,
+  `option`, `row` and `tab`, inherited into `columnheader`,
+  `rowheader` and `treeitem`; a `list`/`listitem` pair is a static
+  list, and the selectable collection of the Authoring Practices is
+  `listbox`/`option` (or `grid`/`row`). A `listitem` therefore
+  carries no state a backend could assert, which is why `select`
+  here is a wording, not a check — the state predicate is G045's
+  (`is selected`), and the witness may have to expose a
+  `listbox`/`option` pair for the selection to be ARIA-visible;
+- *the platform layer separates the two actions*: the UIA
+  `SelectionItem` pattern (`Select`, `IsSelected`) against the
+  `Invoke` pattern, the AT-SPI `Selection` interface and the action
+  named `select` of a GTK 4 list row, against `DoAction` on a
+  button; the "activate" of the Authoring Practices is the default
+  action of the widget, whatever the pattern behind it.
 
 Verified by:
 [add_a_task.md](../Apps/ToDoMVC/docs/features/add_a_task.md),
-[complete_a_task.md](../Apps/ToDoMVC/docs/features/complete_a_task.md)
-(select by pressing the item). Open questions: Q008 (automatic
-fallback between action levels).
+[complete_a_task.md](../Apps/ToDoMVC/docs/features/complete_a_task.md),
+[edit_or_delete_a_task.md](../Apps/ToDoMVC/docs/features/edit_or_delete_a_task.md)
+(the item selected in every scenario, plus the one `press` of the
+synonym). Open questions: Q008 (automatic fallback between action
+levels).
 
 #### G035 — Type text into a field, and enter it
 
@@ -171,7 +205,11 @@ list is indistinguishable from stray labels in the window text.
 
 - `there is a <name> list`: the role-word form of `there is a <role>
   named <name>` — it reuses the same lookup machinery;
-- `the <name> <role> is empty`: no child under the widget;
+- `the <name> <role> is empty`: nothing to see, in the role's own
+  terms — no text for a `textbox` or a `listitem`, no item for a
+  `list`, whatever else the widget may hold: a `textbox` decorated
+  with a clear button, or a container keeping invisible placeholder
+  children, is still empty for the user;
 - `the <name> <role> contains <text>`: rendered text in the widget
   subtree, the negated form reporting the inverted check;
 - `the <name> <role> has <n> items`: the child count of the accessor
@@ -194,10 +232,22 @@ Verified by:
 [complete_a_task.md](../Apps/ToDoMVC/docs/features/complete_a_task.md)
 (the two witness lists, "To do" and "Done", are the fixture). Open
 questions: Q013 (the deadlines are shared, the same as the window
-checks); the `is empty` semantics on widgets that keep invisible
-placeholder children — keep the "no child" definition, or count only
-showing children? (the web `ul:empty` equivalent; GTK is clean
-here).
+checks); and the implementation gap below.
+
+`is empty` is a user-facing statement, not a count of children: the
+emptiness is the one of the role at hand. A `textbox` holding no
+text is empty even when it also exposes a button in its corner; a
+`list` with no item is empty, whatever the toolkit keeps under the
+widget; a `button` is neither empty nor full of anything, it is
+named, so the qualifier means nothing there. Both backends
+implement it today as "no child under the widget", for every role —
+right for the witness lists, wrong for the fields (a filled
+`textbox` reads empty) and meaningless for a `button`. The intended
+scope is thus per role family, with a (qualifier, role) pair that
+means nothing failing with a diagnostic instead of answering.
+Nothing is implemented nor decided yet: the step accepts every role,
+and only the two witness lists are exercised (cf.
+[gui_matrix.md](gui_matrix.md#roles)).
 
 #### G095 — Window close and cross-scenario application lifetime
 
@@ -229,7 +279,9 @@ reported. The close is graceful: the application's own close path
 runs, persistence hooks included.
 
 Verified by: the `close the window` steps closing every witness
-story, and the chained scenarios of
+story, the by-title form closing the last scenario of
+[edit_or_delete_a_task.md](../Apps/ToDoMVC/docs/features/edit_or_delete_a_task.md),
+and the chained scenarios of
 [add_a_task.md](../Apps/ToDoMVC/docs/features/add_a_task.md)
 (several scenarios on one launch, cross-scenario lifetime).
 

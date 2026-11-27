@@ -980,7 +980,7 @@ and neither `--gui` form is documented in the base help.
 `--backend=<kind>` selects the GUI testing backend, keeping the
 `--backend` name of 0.6.1 (now taking the backend kind as its
 value); `--gui` alone runs the interactive debugger. The whole
-vocabulary of the project (backends.md cross tables, capability
+vocabulary of the project (the capability matrix, capability
 reports, the CI workflows) already says backend for the GUI testing
 stack, and `--gui` is literally a GUI — of bbt this time.
 
@@ -1231,5 +1231,6 @@ One git repository, several published crates.
 - what remains is ordinary development, not restructuring, and the TDL
   of [project_status.md](project_status.md) carries it: the webapp and Adi2 backends,
   the absorption of the remaining `docs/proposed/G0*.md` vocabulary, the
-  publication of the backend crates, the CI update of the cross tables,
+  publication of the backend crates, the CI update of the capability
+  matrix,
   and the retirement of the prototypes repository.

@@ -29,7 +29,11 @@ package File_Utilities is
    --   then Short_Path returns  "mysite/site/idx.txt"
    --
    -- - NOTE that if both dir & file are not absolute path, then we assume
-   --   that both are rooted in the same directory.
+   --   that both are rooted in the same directory, and both are resolved
+   --   against the current directory before the walk: a relative ".." is a
+   --   level only once resolved. So the two paths may carry ".." chains of
+   --   different depths, e.g. From_Dir => "../../../docs/results" and
+   --   To_File => "../docs/idx.txt".
    --
    -- - From_Dir may ends with a Separator or not, meaning that
    --   both "/usr" and "/usr/" are OK.
@@ -47,10 +51,17 @@ package File_Utilities is
    --   and To_File  => "/home/tests/idx.txt"
    --   then Short_Path returns "../../idx.txt"
    --
-   -- - WARNING : this function strongly rely on the fact that both parameter
-   --             are straight path. It's not going to work with path
-   --             embedding for example "../lionel/../lionel/../lionel/"
-   --             instead of "../lionel".
+   -- - In short: the walk below is textual, it compares the two paths
+   --   component by component. A pair of relative paths is resolved first
+   --   (see above), which handles their ".." chains. What is not supported:
+   --     * a pair mixing an absolute and a relative path, walked as given:
+   --       only two relative paths are resolved, both or neither, since
+   --       comparing a resolved path with an unresolved one would leave
+   --       them with nothing in common;
+   --     * a Windows drive-qualified relative name ("x:foo"), that the
+   --       runtime cannot resolve either;
+   --     * a ".." embedded in the middle of a path ("../lionel/../lionel/"),
+   --       walked component by component like anything else.
    --
    -- Exceptions:
    --   If From_Dir is not a To_File's parent, function

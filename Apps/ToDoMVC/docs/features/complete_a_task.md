@@ -45,7 +45,8 @@ completes everything at once.
 - Then the `Complete` button is enabled
 
 - When I press the `Complete` button
-- And  I select the `Buy milk` listitem
+- And  I press the `Buy milk` listitem
+(the synonym of `select`: same action, same rule, cf. G020)
 - Then the `Complete` button is enabled [G015]
   (the completion toggle applies to done todos too: pressing it again
    would uncomplete the selected todo, cf. the widget naming contract)

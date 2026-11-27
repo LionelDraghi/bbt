@@ -32,6 +32,9 @@ the scenarios of a story chain on the same instance (G095).
 - When I type `Buy milk` into the `New task` textbox [G035]
 - And I press the `Create` button [G020]
 - Then the `To do` list contains `Buy milk`
+- And the window contains `Buy milk` [G010]
+- And the window does not contain `Book the dentist`
+(those two steps are just tests of the "windows contains" form, testing directly the todo list is more precise)
 - And the `Done` list is empty
 
 ## Scenario: The user adds several tasks

@@ -120,10 +120,49 @@ jobs:
         # with the accessibility registry (org.a11y.Bus activates
         # at-spi2-registryd on demand). First headless iteration:
         # check the output on a failure before trusting the setup.
+        # The run goes through the witness Makefile, which owns the
+        # layout of the recorded results (docs/tests_results/Linux/validation,
+        # cf. docs/gui_matrix.md), and through the bbt launcher rather
+        # than the backend executable: --backend=gtk4 is the documented
+        # entry point, and it is what a user runs.
         shell: bash
         run: |
-          export PATH="$(pwd)/backends/gtk4:$PATH"
+          export PATH="$(pwd):$(pwd)/backends/gtk4:$PATH"
           xvfb-run -a dbus-run-session -- bash -c '
             cd Apps/ToDoMVC/gtk4
-            bbt_gtk4 --yes --keep_going ./scenarios
+            make -s check BBT_OPTIONS=--keep_going
           '
+
+      - name: Publish the gtk4 results
+        # The run above regenerated docs/tests_results/Linux/validation in the
+        # runner workspace without committing it: publish it, on the model
+        # of the build-and-test workflow, so that the gtk4 column of
+        # docs/gui_matrix.md rests on a recorded run and not on a note.
+        # The publication happens even when scenarios failed, so that the
+        # record states the actual status; only main is published.
+        if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/tests_results/Linux/validation
+          if git diff --cached --quiet; then
+            echo "No change in docs/tests_results/Linux/validation, nothing to publish"
+            exit 0
+          fi
+          git commit -m "CI: update Linux gtk4 GUI results [skip ci]"
+          # The other workflows push to the same branch: retry with rebase
+          # if one of them pushed in between. --autostash is required: the
+          # regenerated files outside docs/tests_results are not committed,
+          # and would make the rebase fail on unstaged changes.
+          for i in 1 2 3 4 5; do
+            if git fetch origin main && git rebase --autostash -X theirs origin/main && git push origin HEAD:main; then
+              echo "gtk4 results published"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "Push failed (attempt $i), retrying after a delay"
+            sleep $((i * 10))
+          done
+          echo "Could not publish the gtk4 results"
+          exit 1

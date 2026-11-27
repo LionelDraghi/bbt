@@ -309,13 +309,20 @@ package body BBT.Model.Steps is
                 & " " & Object_String;
 
       when GUI_Window_Appears =>
-         return Prefix & "that a window appears";
+         --  The title is optional: "a window appears" for the
+         --  application's only one, "a `title` window appears" when the
+         --  step names it (G005). Echoing it is what lets a backend-free
+         --  test tell the two forms apart (cf. explain).
+         return Prefix
+           & (if Step.Data.GUI_Access_Name = Null_Unbounded_String
+              then "that a window appears"
+              else "that the " & Wrap_In_Backticks (+Step.Data.GUI_Access_Name)
+                   & " window appears");
 
       when GUI_Window_Contains =>
-         return Prefix & "that the window contains the text "
-           & (if Step.Data.Negated
-              then """..."""
-              else Wrap_In_Backticks (+Step.Data.GUI_Access_Name));
+         return Prefix & "that the window "
+           & (if Step.Data.Negated then "does not contain" else "contains")
+           & " the text " & Wrap_In_Backticks (+Step.Data.GUI_Access_Name);
 
       when GUI_Widget_Exists =>
          return Prefix & "that there is a " & (+Step.Data.GUI_Role)

@@ -5,6 +5,7 @@
 -- -----------------------------------------------------------------------------
 
 with File_Utilities;
+with Ada.Directories;
 
 with Ada.Command_Line;
 with Ada.Text_IO;      -- use Ada.Text_IO;
@@ -39,6 +40,10 @@ procedure Test_File_Utilities is
 
    -- --------------------------------------------------------------------------
    function On_Windows return Boolean is (File_Utilities.Separator = '\');
+
+   -- --------------------------------------------------------------------------
+   Sep : constant String := (1 => File_Utilities.Separator);
+   -- To write the platform neutral relative paths below
 
    -- --------------------------------------------------------------------------
    procedure Check (Title    : String;
@@ -292,6 +297,27 @@ begin
              To_File  => "../docs/features/A190_Run.md",
              Expected => "..\..\..\features\A190_Run.md");
    end if;
+
+   -- --------------------------------------------------------------------------
+   --  The answer to a pair of relative paths must not depend on the current
+   --  directory: walked as they are, the ".." of a relative path counts as a
+   --  directory name, and two chains of different depths (a results directory
+   --  and a document, e.g.) are walked as if they shared a component that
+   --  they do not. The same pair, resolved, gives the expected answer.
+   declare
+      use File_Utilities;
+      Dir : constant String := ".." & Sep & ".." & Sep & "docs" & Sep
+                               & "Windows" & Sep & "validation";
+      Doc : constant String := ".." & Sep & "docs" & Sep & "features" & Sep
+                               & "x.md";
+   begin
+      Check (Title    => "Relative paths, resolved",
+             From_Dir => Dir,
+             To_File  => Doc,
+             Expected => Short_Path
+               (From_Dir => Ada.Directories.Full_Name (Dir),
+                To_File  => Ada.Directories.Full_Name (Doc)));
+   end;
 
    -- --------------------------------------------------------------------------
    Quiet := False;
