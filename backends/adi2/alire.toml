@@ -1,0 +1,28 @@
+name = "bbt_adi2"
+description = "Adi2 (Adi.MCP) GUI backend for the bbt black box tester"
+version = "0.6.1"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+tags = ["test", "testing", "gherkin", "gui", "adi2", "mcp"]
+
+executables = ["bbt_adi2"]
+
+[[depends-on]]
+#  The bbt core library: the engine, the grammar and the GUI
+#  vocabulary; the backend main registers the concrete backend in
+#  BBT.Backends.Selected and runs the BBT.Driver.
+bbt = "^0.6.1"
+
+#  No GUI stack here either: the application side is reached through
+#  Adi2's own development bridge (Adi.MCP, file IPC), so this crate
+#  links no toolkit and stays portable -- the observed application is
+#  the one that carries Adi2, in a development-profile build.
+
+#  Note: this manifest targets publication (cf.
+#  docs/dev/design_discussions.md, D16); local development builds
+#  backends/adi2 directly against the sibling bbt sources with
+#  gprbuild, no path pin yet.

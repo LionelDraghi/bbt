@@ -26,8 +26,8 @@ CORE := $(ROOT)/bbt
 endif
 
 # Implemented backends (cf. the restructuring plan: step 2 gtk4,
-# step 3 webapp, step 4 adi2 left)
-IMPLEMENTED := gtk4 webapp
+# step 3 webapp, step 4 adi2)
+IMPLEMENTED := gtk4 webapp adi2
 
 # Per-backend parameters: the project file (each one withs the
 # common library project transitively), the witness application
@@ -44,6 +44,14 @@ gtk4_EXE     := gtk4/bbt_gtk4
 webapp_GPR     := webapp/bbt_webapp.gpr
 webapp_WITNESS := $(ROOT)/Apps/ToDoMVC/web
 webapp_EXE     := webapp/bbt_webapp
+
+# The adi2 backend drives its witness through Adi2's own development
+# bridge (Adi.MCP, file IPC): no driver, no accessibility bus, but the
+# witness itself needs a display, and a development-profile build of
+# Adi2 (the bridge is compiled in that profile only).
+adi2_GPR     := adi2/bbt_adi2.gpr
+adi2_WITNESS := $(ROOT)/Apps/ToDoMVC/adi2
+adi2_EXE     := adi2/bbt_adi2
 
 # The per-backend targets are matched by the pattern rules below:
 # they must NOT be phony, as GNU make skips the implicit rule search
@@ -67,7 +75,8 @@ help:
 	@echo "  witness-<b> : build the witness app of backend <b>"
 	@echo "  clean       : remove the backend build and test residues"
 	@echo ""
-	@echo "Planned: adi2 (restructuring step 4)"
+	@echo "The backends take their parameter lines from IMPLEMENTED:"
+	@echo "  build-<b>, check-<b>, witness-<b> for $(IMPLEMENTED)"
 
 build: $(foreach b,$(IMPLEMENTED),build-$(b))
 	@:
