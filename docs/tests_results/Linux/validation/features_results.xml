@@ -1,435 +1,435 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="features_results" tests="302" failures="0" errors="0" skipped="6" time="1.101676000">
-  <testsuite name="../docs/cli_features/A005_Given.md" tests="10" failures="0" errors="0" skipped="0" time="1.101676000">
-    <testcase name="Checking that there is no file or dir" classname="../docs/cli_features/A005_Given.md" time="0.000238000"/>
-    <testcase name="Checking that there is some dir" classname="../docs/cli_features/A005_Given.md" time="0.000235000"/>
-    <testcase name="An existing directory is kept as is" classname="../docs/cli_features/A005_Given.md" time="0.000329000"/>
-    <testcase name="Checking that there is a file with some content" classname="../docs/cli_features/A005_Given.md" time="0.000304000"/>
-    <testcase name="Creating a file with some content" classname="../docs/cli_features/A005_Given.md" time="0.000292000"/>
-    <testcase name="An existing file with the expected content is just a leftover" classname="../docs/cli_features/A005_Given.md" time="0.026885000"/>
-    <testcase name="An existing file with a different content is replaced with --yes" classname="../docs/cli_features/A005_Given.md" time="0.025381000"/>
-    <testcase name="Replacing confirmed by a typed key" classname="../docs/cli_features/A005_Given.md" time="0.366560000"/>
-    <testcase name="Replacing refused by a typed key" classname="../docs/cli_features/A005_Given.md" time="0.327708000"/>
-    <testcase name="The current match mode drives the comparison" classname="../docs/cli_features/A005_Given.md" time="0.352005000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A006_Given_Executable_File.md" tests="2" failures="0" errors="0" skipped="0" time="0.027872000">
-    <testcase name="trying to run a script without the executable keyword should fail" classname="../docs/cli_features/A006_Given_Executable_File.md" time="0.024934000"/>
-    <testcase name="trying to run the same script created with the executable attribute should succeed" classname="../docs/cli_features/A006_Given_Executable_File.md" time="0.002353000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A010_Then_Contains_Code_Span.md" tests="3" failures="0" errors="0" skipped="0" time="0.004710000">
-    <testcase name="test on a string output" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.001992000"/>
-    <testcase name="test on a multiline output" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.001920000"/>
-    <testcase name="test on a file" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.000256000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A020_Then_Contains_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.025515000">
-    <testcase name="test the standard output" classname="../docs/cli_features/A020_Then_Contains_Code_Block.md" time="0.000409000"/>
-    <testcase name="compare with an existing file" classname="../docs/cli_features/A020_Then_Contains_Code_Block.md" time="0.024594000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A030_Then_Does_Not_Contain.md" tests="6" failures="0" errors="0" skipped="0" time="0.119413000">
-    <testcase name="Successful checks" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.002417000"/>
-    <testcase name="Failed &quot;output doesn&apos;t contain&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.030511000"/>
-    <testcase name="Failed &quot;file doesn&apos;t contain&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.027211000"/>
-    <testcase name="Successful &quot;output is not&quot; check" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.003841000"/>
-    <testcase name="Failed &quot;output is not&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026635000"/>
-    <testcase name="a negation word on a non negatable step warns" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026771000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A040_Example_Keyword.md" tests="2" failures="0" errors="0" skipped="0" time="0.004673000">
-    <testcase name="NOK return code" classname="../docs/cli_features/A040_Example_Keyword.md" time="0.002184000"/>
-    <testcase name="NOK return code" classname="../docs/cli_features/A040_Example_Keyword.md" time="0.001935000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A050_Then_File_Is_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.025309000">
-    <testcase name="file is as expected" classname="../docs/cli_features/A050_Then_File_Is_Code_Block.md" time="0.000265000"/>
-    <testcase name="file is not as expected" classname="../docs/cli_features/A050_Then_File_Is_Code_Block.md" time="0.024535000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.034383000">
-    <testcase name="test on a single line file" classname="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" time="0.004113000"/>
-    <testcase name="adding a second line to the file, so the same test should fail" classname="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" time="0.029721000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A065_Then_File_Equal_File.md" tests="3" failures="0" errors="0" skipped="0" time="0.026247000">
-    <testcase name="test `is equal to file` form" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.000358000"/>
-    <testcase name="test `is equal to file` when files are *not* equal" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.024981000"/>
-    <testcase name="test the negative form `is not equal to file`" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.000358000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A070_Then_Get_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.004749000">
-    <testcase name="asking for sut help" classname="../docs/cli_features/A070_Then_Get_Code_Span.md" time="0.002256000"/>
-    <testcase name="causing an sut error with a long explanation" classname="../docs/cli_features/A070_Then_Get_Code_Span.md" time="0.001984000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A080_Then_Output_Equal_To_File.md" tests="1" failures="0" errors="0" skipped="0" time="0.002543000">
-    <testcase name="test `output is equal` keyword" classname="../docs/cli_features/A080_Then_Output_Equal_To_File.md" time="0.002075000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A090_Then_Get_Error.md" tests="2" failures="0" errors="0" skipped="0" time="0.004228000">
-    <testcase name="NOK return code" classname="../docs/cli_features/A090_Then_Get_Error.md" time="0.001849000"/>
-    <testcase name="OK return code" classname="../docs/cli_features/A090_Then_Get_Error.md" time="0.001823000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A100_Then_Get_Stderr.md" tests="1" failures="0" errors="0" skipped="0" time="0.002316000">
-    <testcase name="missing file name" classname="../docs/cli_features/A100_Then_Get_Stderr.md" time="0.001857000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A110_Then_No_Output.md" tests="2" failures="0" errors="0" skipped="0" time="0.029105000">
-    <testcase name="silent operation" classname="../docs/cli_features/A110_Then_No_Output.md" time="0.001976000"/>
-    <testcase name="silent operation expected, but there is an output" classname="../docs/cli_features/A110_Then_No_Output.md" time="0.026611000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A120_Then_Get_String.md" tests="1" failures="0" errors="0" skipped="0" time="0.002779000">
-    <testcase name="asking for sut version" classname="../docs/cli_features/A120_Then_Get_String.md" time="0.002224000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A130_Successfully_Keyword.md" tests="7" failures="0" errors="0" skipped="0" time="1.298134000">
-    <testcase name="*when I successfully run* a command with successful run" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.002051000"/>
-    <testcase name="*when I successfully run* a command with a wrong command line, returns an error status" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.026390000"/>
-    <testcase name="*when I run* a command with a wrong command line" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.002444000"/>
-    <testcase name="*when I successfully run* an interactive command that finally exits cleanly" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.304125000"/>
-    <testcase name="*when I successfully run* an interactive command that finally fails" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.328920000"/>
-    <testcase name="the deferred failure is reported before the next step" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.328684000"/>
-    <testcase name="successfully run, then an explicit no error check" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.304406000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A140_Unordered_Keyword.md" tests="7" failures="0" errors="0" skipped="0" time="0.064334000">
-    <testcase name="&quot;I get&quot; without the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.026456000"/>
-    <testcase name="same &quot;I get&quot; with the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002084000"/>
-    <testcase name="same &quot;I get&quot; with the deprecated unordered adjective" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002076000"/>
-    <testcase name="&quot;contains&quot; without the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.026140000"/>
-    <testcase name="same &quot;contains&quot; with the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002381000"/>
-    <testcase name="same &quot;contains&quot; with the deprecated unordered adjective" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002076000"/>
-    <testcase name="order combines with the masking patterns" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.000327000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A150_Background_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.002530000">
-    <testcase name="lets erase what was created by previous background runs" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000212000"/>
-    <testcase name="Two Background executed" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000167000"/>
-    <testcase name="lets erase once more what was created by previous background runs" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000184000"/>
-    <testcase name="only first background should apply" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000158000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A160_Ignoring_Blank_Lines.md" tests="5" failures="0" errors="0" skipped="0" time="0.147493000">
-    <testcase name="some obvious tests" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.000257000"/>
-    <testcase name="default behavior, non sensible to blank lines" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.048089000"/>
-    <testcase name="with --exact_match, sensible to blank lines" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.048481000"/>
-    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.024126000"/>
-    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.023972000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A170_File_vs_File_Name.md" tests="3" failures="0" errors="0" skipped="0" time="0.004874000">
-    <testcase name="&quot;Then I get file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.002144000"/>
-    <testcase name="&quot;Then output is | contains | does not contain file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.001966000"/>
-    <testcase name="&quot;Then file is | contains | does not contain file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.000234000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A190_Run.md" tests="4" failures="0" errors="0" skipped="0" time="0.079775000">
-    <testcase name="the command relative path is given" classname="../docs/cli_features/A190_Run.md" time="0.023700000"/>
-    <testcase name="the command is in the PATH" classname="../docs/cli_features/A190_Run.md" time="0.003001000"/>
-    <testcase name="command not found" classname="../docs/cli_features/A190_Run.md" time="0.027320000"/>
-    <testcase name="the command is not executable (Unix_Only)" classname="../docs/cli_features/A190_Run.md" time="0.024848000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A195_Run_Or.md" tests="5" failures="0" errors="0" skipped="0" time="0.140346000">
-    <testcase name="normal use case" classname="../docs/cli_features/A195_Run_Or.md" time="0.027897000"/>
-    <testcase name="The last command does not meet expectation (test should fail)" classname="../docs/cli_features/A195_Run_Or.md" time="0.029772000"/>
-    <testcase name="Missing command before &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.028350000"/>
-    <testcase name="Missing command after &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.024599000"/>
-    <testcase name="Two consecutive &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.028943000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A200_Regexp.md" tests="5" failures="0" errors="0" skipped="0" time="0.059008000">
-    <testcase name="version number match" classname="../docs/cli_features/A200_Regexp.md" time="0.002334000"/>
-    <testcase name="version number mismatch" classname="../docs/cli_features/A200_Regexp.md" time="0.026710000"/>
-    <testcase name="Test of &quot;output does not match&quot;" classname="../docs/cli_features/A200_Regexp.md" time="0.002404000"/>
-    <testcase name="Test of &quot;output does not match&quot; that indeed matches" classname="../docs/cli_features/A200_Regexp.md" time="0.026492000"/>
-    <testcase name="test of &quot;file match&quot;" classname="../docs/cli_features/A200_Regexp.md" time="0.000333000"/>
-  </testsuite>
-  <testsuite name="" tests="8" failures="0" errors="0" skipped="0" time="0.252306000">
-    <testcase name="Human match" classname="" time="0.049623000"/>
-    <testcase name="exact match" classname="" time="0.025140000"/>
-    <testcase name="exact match except for casing" classname="" time="0.025398000"/>
-    <testcase name="exact match except for casing and blank lines" classname="" time="0.025096000"/>
-    <testcase name="human match ignores CR at line ends" classname="" time="0.024677000"/>
-    <testcase name="exact match is sensitive to CR at line ends" classname="" time="0.024879000"/>
-    <testcase name="an (ignoring casing) clause agreeing with the human match default" classname="" time="0.024651000"/>
-    <testcase name="an (ignoring casing) clause contradicting --exact_match is ignored and warns" classname="" time="0.024627000"/>
-  </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.081457000">
-    <testcase name="gcc version?" classname="" time="0.006108000"/>
-    <testcase name="compiling and executing an hello word" classname="" time="0.074807000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A230_select_exclude_include.md" tests="9" failures="0" errors="0" skipped="0" time="0.249977000">
-    <testcase name="no filtering" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.029059000"/>
-    <testcase name="step filtering" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.027618000"/>
-    <testcase name="step selection" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.026346000"/>
-    <testcase name="Selecting a scenario" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.030092000"/>
-    <testcase name="selection is empty" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.024628000"/>
-    <testcase name="Selecting a Background only" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.027133000"/>
-    <testcase name="Select followed by an exclude" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.028110000"/>
-    <testcase name="scenario Excluded followed by an include of a step inside" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.028188000"/>
-    <testcase name="Exclude by file name" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.024406000"/>
-  </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.002539000">
-    <testcase name="Running something in postcondition" classname="" time="0.002078000"/>
-  </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.004174000">
-    <testcase name="Checking that a command fails" classname="" time="0.003733000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A260_Then_Exit_Code_Is.md" tests="5" failures="0" errors="0" skipped="0" time="0.058803000">
-    <testcase name="exit code of a successful command" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.001816000"/>
-    <testcase name="exit code of a failing command" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.001779000"/>
-    <testcase name="the exit code of the last command is checked" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.003330000"/>
-    <testcase name="wrong exit code" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.026261000"/>
-    <testcase name="the code must be an integer" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.024929000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A270_Then_Error_Output.md" tests="8" failures="0" errors="0" skipped="0" time="0.068400000">
-    <testcase name="error message on the error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002255000"/>
-    <testcase name="nothing on the error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002014000"/>
-    <testcase name="error output contains and does not contain" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.003947000"/>
-    <testcase name="error output in a code block" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.001967000"/>
-    <testcase name="without error output step, the outputs stay merged" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.001811000"/>
-    <testcase name="wrong error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.026355000"/>
-    <testcase name="the error output is not" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002520000"/>
-    <testcase name="failed &quot;the error output is not&quot;" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.026601000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A280_Given_Environment_Variable.md" tests="6" failures="0" errors="0" skipped="0" time="0.039446000">
-    <testcase name="set a variable" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002219000"/>
-    <testcase name="the variable is back to its previous state" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002010000"/>
-    <testcase name="unset a variable" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002082000"/>
-    <testcase name="the unset variable is back" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.001929000"/>
-    <testcase name="set twice in the same scenario" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.001983000"/>
-    <testcase name="variable set in a background" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.028432000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A290_When_I_Type_Or_Enter.md" tests="5" failures="0" errors="0" skipped="0" time="1.142343000">
-    <testcase name="answering a key prompt with type" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304274000"/>
-    <testcase name="refusing with type" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.203489000"/>
-    <testcase name="several inputs in a row" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304051000"/>
-    <testcase name="answering a line prompt with enter" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304288000"/>
-    <testcase name="enter without a running command" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.025264000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A300_Ignoring.md" tests="23" failures="0" errors="0" skipped="0" time="0.228009000">
-    <testcase name="a time tag in the output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.002398000"/>
-    <testcase name="a time tag in the error output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.002077000"/>
-    <testcase name="the common clock, date and date-time formats are ignored" classname="../docs/cli_features/A300_Ignoring.md" time="0.000341000"/>
-    <testcase name="only the file name is checked, not the directory" classname="../docs/cli_features/A300_Ignoring.md" time="0.002041000"/>
-    <testcase name="a differing file name fails, differing directories do not" classname="../docs/cli_features/A300_Ignoring.md" time="0.024870000"/>
-    <testcase name="a Windows and a Unix print of the same path compare equal" classname="../docs/cli_features/A300_Ignoring.md" time="0.000360000"/>
-    <testcase name="mixed syntaxes of the same path compare equal" classname="../docs/cli_features/A300_Ignoring.md" time="0.000418000"/>
-    <testcase name="a differing path still fails" classname="../docs/cli_features/A300_Ignoring.md" time="0.024974000"/>
-    <testcase name="URL colons and clock times are not drive prefixes" classname="../docs/cli_features/A300_Ignoring.md" time="0.000382000"/>
-    <testcase name="a regexp combines with path syntax, and sees the rewritten text" classname="../docs/cli_features/A300_Ignoring.md" time="0.000322000"/>
-    <testcase name="a differing stable part still fails" classname="../docs/cli_features/A300_Ignoring.md" time="0.024833000"/>
-    <testcase name="time and dir combine on one step" classname="../docs/cli_features/A300_Ignoring.md" time="0.002441000"/>
-    <testcase name="a time tag does not fail a contains check" classname="../docs/cli_features/A300_Ignoring.md" time="0.002066000"/>
-    <testcase name="version number does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.024007000"/>
-    <testcase name="a time tag missing on the actual side fails and warns" classname="../docs/cli_features/A300_Ignoring.md" time="0.024654000"/>
-    <testcase name="the clause on a non comparison step is an error" classname="../docs/cli_features/A300_Ignoring.md" time="0.024510000"/>
-    <testcase name="a duration may vary" classname="../docs/cli_features/A300_Ignoring.md" time="0.002413000"/>
-    <testcase name="a source location in the output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.000339000"/>
-    <testcase name="a locator in the GNAT style is masked as well" classname="../docs/cli_features/A300_Ignoring.md" time="0.000331000"/>
-    <testcase name="a duration is not mistaken for a location" classname="../docs/cli_features/A300_Ignoring.md" time="0.000311000"/>
-    <testcase name="a regexp combines with a named pattern" classname="../docs/cli_features/A300_Ignoring.md" time="0.002140000"/>
-    <testcase name="a regexp matching nothing on the actual side fails and warns" classname="../docs/cli_features/A300_Ignoring.md" time="0.024757000"/>
-    <testcase name="an illegal regexp in the clause is an error" classname="../docs/cli_features/A300_Ignoring.md" time="0.024488000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A310_Run_Shell.md" tests="20" failures="0" errors="0" skipped="5" time="7.328344000">
-    <testcase name="successfully run shell" classname="../docs/cli_features/A310_Run_Shell.md" time="0.002181000"/>
-    <testcase name="shell redirections are interpreted by the shell" classname="../docs/cli_features/A310_Run_Shell.md" time="0.001869000"/>
-    <testcase name="shell pipes are interpreted by the shell (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.002966000"/>
-    <testcase name="the exit code is the shell command one (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="1.002824000"/>
-    <testcase name="no warning on shell metacharacters in a shell step" classname="../docs/cli_features/A310_Run_Shell.md" time="0.024733000"/>
-    <testcase name="run shell with alternatives" classname="../docs/cli_features/A310_Run_Shell.md" time="0.028279000"/>
-    <testcase name="successfully run shell with alternatives" classname="../docs/cli_features/A310_Run_Shell.md" time="0.028666000"/>
-    <testcase name="the run qualifiers are position independent" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026720000"/>
-    <testcase name="warning on an inapplicable qualifier" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026627000"/>
-    <testcase name="invalid shell on the command line" classname="../docs/cli_features/A310_Run_Shell.md" time="0.024209000"/>
-    <testcase name="the shell is set on the command line (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.029143000"/>
-    <testcase name="the shell is set with the BBT_SHELL environment variable (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.053717000"/>
-    <testcase name="the sh shell is set on the command line (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026466000"/>
-    <testcase name="the dash shell is set on the command line (Unix_Only) (needs_dash)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026432000"/>
-    <testcase name="the pwsh shell is set on the command line (needs_pwsh)" classname="../docs/cli_features/A310_Run_Shell.md" time="6.020249000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/A320_Backend_Selection.md" tests="3" failures="0" errors="0" skipped="0" time="0.072014000">
-    <testcase name="a GUI step without any backend aborts with a selection hint" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.024072000"/>
-    <testcase name="a missing backend executable gives an install hint" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.023464000"/>
-    <testcase name="explain rebuilds a GUI document with no backend" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.023831000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B010_Deleting_created_files.md" tests="10" failures="0" errors="0" skipped="0" time="0.580005000">
-    <testcase name="run without --cleanup" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.024148000"/>
-    <testcase name="run with --cleanup" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.024495000"/>
-    <testcase name="run with --cleanup leaves what the tested command created" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.030958000"/>
-    <testcase name="run with --cleanup=full removes what the tested command created" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.031476000"/>
-    <testcase name="--cleanup=full keeps pre-existing files" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.031425000"/>
-    <testcase name="--cleanup=full removal refused on a non interactive stdin" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.031532000"/>
-    <testcase name="--cleanup=full removes a pre-existing file with the expected content" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.024871000"/>
-    <testcase name="--cleanup=full removes a file overwritten with --yes" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025076000"/>
-    <testcase name="a refused overwrite keeps the pre-existing file" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.325656000"/>
-    <testcase name="a non interactive run refuses the overwrite and keeps the file" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.024222000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B020_Exec_dir.md" tests="2" failures="0" errors="0" skipped="0" time="0.048437000">
-    <testcase name="Lets run &quot;create_tree.md&quot; in the current dir" classname="../docs/cli_features/B020_Exec_dir.md" time="0.023652000"/>
-    <testcase name="Lets run &quot;create_tree.md&quot; in ./dir2" classname="../docs/cli_features/B020_Exec_dir.md" time="0.023703000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B030_File_creation_in_Given_steps.md" tests="9" failures="0" errors="0" skipped="0" time="1.984628000">
-    <testcase name="a required file does not exist" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.002491000"/>
-    <testcase name="&quot;Given there is no&quot;, when there actually is, should erase the file" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.000237000"/>
-    <testcase name="erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.325062000"/>
-    <testcase name="erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.325570000"/>
-    <testcase name="erasing refused on a non interactive stdin" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.024144000"/>
-    <testcase name="directory tree erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.325612000"/>
-    <testcase name="directory tree erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.326734000"/>
-    <testcase name="new directory erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.327060000"/>
-    <testcase name="new directory erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.326238000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B040_Find_scenarios.md" tests="6" failures="0" errors="0" skipped="0" time="0.146923000">
-    <testcase name="no file or dir on the command line" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.023928000"/>
-    <testcase name="running all scenarios in dir1" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.023728000"/>
-    <testcase name="running multiple scenarios given on command line" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.023624000"/>
-    <testcase name="running scenarios in a tree thanks to `-r`" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024385000"/>
-    <testcase name="error msg when trying to run scenarios, but none found in given directories" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.023786000"/>
-    <testcase name="empty list file on list_files if there is no scenario in given directories" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.023490000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B050_Strict_gherkin.md" tests="1" failures="0" errors="0" skipped="0" time="0.057336000">
-    <testcase name="Multiple When in a scenario" classname="../docs/cli_features/B050_Strict_gherkin.md" time="0.056865000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B060_Return_code_on_test_failure.md" tests="3" failures="0" errors="0" skipped="0" time="0.077145000">
-    <testcase name="return code on test success" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.025438000"/>
-    <testcase name="return code when the test fail" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.025448000"/>
-    <testcase name="return code when one fail and the other succeed" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.025656000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B080_Keep_Going.md" tests="6" failures="0" errors="0" skipped="0" time="0.157543000">
-    <testcase name="scenario_with_syntax_error run without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.023553000"/>
-    <testcase name="scenario_with_syntax_error run with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.027489000"/>
-    <testcase name="scenario_with_assertion_error run without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.027218000"/>
-    <testcase name="scenario_with_assertion_error run with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.029295000"/>
-    <testcase name="explain scenario_with_syntax_error without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.023785000"/>
-    <testcase name="explain scenario_with_syntax_error with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.023901000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B090_tmp_dir.md" tests="4" failures="0" errors="0" skipped="0" time="0.105285000">
-    <testcase name="Current dir, no cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.025462000"/>
-    <testcase name="Current dir, with cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.025310000"/>
-    <testcase name="Within dir1, no cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.025436000"/>
-    <testcase name="Within dir1, with cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.027175000"/>
-  </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.051663000">
-    <testcase name="default mode run" classname="" time="0.025307000"/>
-    <testcase name="verbose mode run" classname="" time="0.025359000"/>
-  </testsuite>
-  <testsuite name="" tests="4" failures="0" errors="0" skipped="0" time="0.098299000">
-    <testcase name="full comparison with no error" classname="" time="0.000174000"/>
-    <testcase name="full comparison with error in the middle of the file" classname="" time="0.024171000"/>
-    <testcase name="full comparison with blank lines on the left and on the right" classname="" time="0.048283000"/>
-    <testcase name="full comparison with an inserted line" classname="" time="0.024303000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B110_Spawn.md" tests="2" failures="0" errors="0" skipped="0" time="0.006025000">
-    <testcase name="Directory with space in the name (Unix_Only)" classname="../docs/cli_features/B110_Spawn.md" time="0.001907000"/>
-    <testcase name="Command with quoted arguments (Unix_Only)" classname="../docs/cli_features/B110_Spawn.md" time="0.003590000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" tests="5" failures="0" errors="0" skipped="0" time="0.127100000">
-    <testcase name="warning when a command contains a pipe" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.025216000"/>
-    <testcase name="warning also displayed by bbt explain" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.023465000"/>
-    <testcase name="no warning when the metacharacter is quoted (Unix_Only)" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.025994000"/>
-    <testcase name="no warning on an escaped quote inside a quoted command (Unix_Only)" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.027996000"/>
-    <testcase name="no warning on a quoted metacharacter in bbt explain" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.023751000"/>
-  </testsuite>
-  <testsuite name="" tests="5" failures="0" errors="0" skipped="0" time="0.152569000">
-    <testcase name="Quiet mode run" classname="" time="0.030738000"/>
-    <testcase name="Default mode run" classname="" time="0.030849000"/>
-    <testcase name="Verbose mode run" classname="" time="0.031206000"/>
-    <testcase name="Normal mode with an error" classname="" time="0.026371000"/>
-    <testcase name="Quiet mode with an error" classname="" time="0.031553000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B130_Cmd_Line_Help.md" tests="12" failures="0" errors="0" skipped="0" time="0.301937000">
-    <testcase name="filtering help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.026285000"/>
-    <testcase name="matching help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.027200000"/>
-    <testcase name="ignoring help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.025748000"/>
-    <testcase name="others help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024978000"/>
-    <testcase name="On_All help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.027482000"/>
-    <testcase name="tutorial generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024009000"/>
-    <testcase name="example generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023616000"/>
-    <testcase name="grammar generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.026126000"/>
-    <testcase name="listing keywords" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023735000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 1/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023664000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 2/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023730000"/>
-    <testcase name="calling bbt without parameter or with -h put the normal help 3/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023668000"/>
-  </testsuite>
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.197546000">
-    <testcase name="Successful run index file" classname="" time="0.093745000"/>
-    <testcase name="Unsuccessful run index file" classname="" time="0.077174000"/>
-    <testcase name="index links use web separators" classname="" time="0.025976000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B150_Deprecated_Options.md" tests="2" failures="0" errors="0" skipped="0" time="0.051482000">
-    <testcase name="--output option" classname="../docs/cli_features/B150_Deprecated_Options.md" time="0.025490000"/>
-    <testcase name="-sb and --status_bar options" classname="../docs/cli_features/B150_Deprecated_Options.md" time="0.025426000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B160_JUnit_XML_Export.md" tests="5" failures="0" errors="0" skipped="1" time="0.108646000">
-    <testcase name="1 : Basic file with only a single scenario" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.025484000"/>
-    <testcase name="1: both scenario are run" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.027146000"/>
-    <testcase name="2 : one scenario is skipped" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.025889000"/>
-    <testcase name="Test XML escaping with special characters" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.028884000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B170_Explain.md" tests="19" failures="0" errors="0" skipped="0" time="0.487101000">
-    <testcase name="explain elements other than steps" classname="../docs/cli_features/B170_Explain.md" time="0.023633000"/>
-    <testcase name="explain action Setup_No_File" classname="../docs/cli_features/B170_Explain.md" time="0.023624000"/>
-    <testcase name="explain action Setup_No_Dir" classname="../docs/cli_features/B170_Explain.md" time="0.023806000"/>
-    <testcase name="explain action Check_File_Existence" classname="../docs/cli_features/B170_Explain.md" time="0.023901000"/>
-    <testcase name="explain action Check_Dir_Existence" classname="../docs/cli_features/B170_Explain.md" time="0.023872000"/>
-    <testcase name="explain action Erase_And_Create" classname="../docs/cli_features/B170_Explain.md" time="0.023910000"/>
-    <testcase name="explain action Create_If_None" classname="../docs/cli_features/B170_Explain.md" time="0.023906000"/>
-    <testcase name="explain action Run" classname="../docs/cli_features/B170_Explain.md" time="0.023857000"/>
-    <testcase name="explain action Run_Without_Error" classname="../docs/cli_features/B170_Explain.md" time="0.025567000"/>
-    <testcase name="explain action Check_No_File" classname="../docs/cli_features/B170_Explain.md" time="0.024221000"/>
-    <testcase name="explain action Check_No_Dir" classname="../docs/cli_features/B170_Explain.md" time="0.024316000"/>
-    <testcase name="explain action Error_Return_Code and No_Error_Return_Code" classname="../docs/cli_features/B170_Explain.md" time="0.023948000"/>
-    <testcase name="explain action Output_Is" classname="../docs/cli_features/B170_Explain.md" time="0.023978000"/>
-    <testcase name="explain action Output_Contains and Output_Does_Not_Contain" classname="../docs/cli_features/B170_Explain.md" time="0.024008000"/>
-    <testcase name="explain action Output|File_Matches and Output|File_Does_Not_Match" classname="../docs/cli_features/B170_Explain.md" time="0.023831000"/>
-    <testcase name="explain action File_Is and File_Is_Not" classname="../docs/cli_features/B170_Explain.md" time="0.024026000"/>
-    <testcase name="explain action File_Contains and File_Does_Not_Contain" classname="../docs/cli_features/B170_Explain.md" time="0.024052000"/>
-    <testcase name="explain action No_Output" classname="../docs/cli_features/B170_Explain.md" time="0.025765000"/>
-    <testcase name="explain Invalid Step" classname="../docs/cli_features/B170_Explain.md" time="0.049958000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B180_Ignored_Files.md" tests="1" failures="0" errors="0" skipped="0" time="0.024165000">
-    <testcase name="Checking that the index file is ignored" classname="../docs/cli_features/B180_Ignored_Files.md" time="0.023672000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B190_Clean_Error_When_No_Output.md" tests="1" failures="0" errors="0" skipped="0" time="0.024587000">
-    <testcase name="check the output of a command that does not exist" classname="../docs/cli_features/B190_Clean_Error_When_No_Output.md" time="0.024104000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B200_Scenario_Timeout.md" tests="3" failures="0" errors="0" skipped="0" time="2.109870000">
-    <testcase name="a hanging command fails the scenario on timeout" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="1.029081000"/>
-    <testcase name="the deferred exit status check waits no more than the timeout" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="1.030440000"/>
-    <testcase name="the duration is a number of seconds, with an optional unit" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="0.049607000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/B210_Status_Bar.md" tests="6" failures="0" errors="0" skipped="0" time="0.180223000">
-    <testcase name="backgrounds are not counted" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026593000"/>
-    <testcase name="filtered scenarios are counted" classname="../docs/cli_features/B210_Status_Bar.md" time="0.027230000"/>
-    <testcase name="the normal output is preserved" classname="../docs/cli_features/B210_Status_Bar.md" time="0.029007000"/>
-    <testcase name="the bar is disabled when the standard output is not a terminal" classname="../docs/cli_features/B210_Status_Bar.md" time="0.027305000"/>
-    <testcase name="--no_tty disables the bar and wins over --force_status_bar" classname="../docs/cli_features/B210_Status_Bar.md" time="0.031176000"/>
-    <testcase name="the failure stays visible" classname="../docs/cli_features/B210_Status_Bar.md" time="0.037816000"/>
-  </testsuite>
-  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.071707000">
-    <testcase name="No step test A" classname="" time="0.023638000"/>
-    <testcase name="No step test B" classname="" time="0.023641000"/>
-    <testcase name="No scenario in Feature" classname="" time="0.023845000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C030_Markdown_syntax.md" tests="3" failures="0" errors="0" skipped="0" time="0.263941000">
-    <testcase name="Heading variations" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.216014000"/>
-    <testcase name="Missing heading marker" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.023542000"/>
-    <testcase name="Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.023729000"/>
-  </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.027194000">
-    <testcase name="Missing tittle in scenario, background and feature" classname="" time="0.026752000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C050_Step_marker.md" tests="1" failures="0" errors="0" skipped="0" time="0.024276000">
-    <testcase name="Different markers within the scenario" classname="../docs/cli_features/C050_Step_marker.md" time="0.023804000"/>
-  </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.026392000">
-    <testcase name="Code fenced blocks" classname="" time="0.025944000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C070_missing_code_block.md" tests="4" failures="0" errors="0" skipped="0" time="0.123998000">
-    <testcase name="Code block missing at the end of the file" classname="../docs/cli_features/C070_missing_code_block.md" time="0.025158000"/>
-    <testcase name="Code block missing while reaching next step" classname="../docs/cli_features/C070_missing_code_block.md" time="0.025305000"/>
-    <testcase name="Code block missing while reaching next scenario" classname="../docs/cli_features/C070_missing_code_block.md" time="0.025501000"/>
-    <testcase name="Closing code block mark missing" classname="../docs/cli_features/C070_missing_code_block.md" time="0.047430000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C080_missing_scenario.md" tests="2" failures="0" errors="0" skipped="0" time="0.047693000">
-    <testcase name="Steps without scenario header" classname="../docs/cli_features/C080_missing_scenario.md" time="0.023563000"/>
-    <testcase name="Empty file" classname="../docs/cli_features/C080_missing_scenario.md" time="0.023589000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C090_GNU_Error_Msg_Format.md" tests="1" failures="0" errors="0" skipped="0" time="0.029108000">
-    <testcase name="" classname="../docs/cli_features/C090_GNU_Error_Msg_Format.md" time="0.028627000"/>
-  </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.026410000">
-    <testcase name="Detection of ambiguous use of multiple recognized verbs in the same Step" classname="" time="0.025941000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C120_Ill_Formated_Steps.md" tests="1" failures="0" errors="0" skipped="0" time="0.028980000">
-    <testcase name="" classname="../docs/cli_features/C120_Ill_Formated_Steps.md" time="0.028514000"/>
-  </testsuite>
-  <testsuite name="../docs/cli_features/C140_Special_Markdown_Constructs.md" tests="1" failures="0" errors="0" skipped="0" time="0.027649000">
-    <testcase name="tables and diagrams with Gherkin-like content" classname="../docs/cli_features/C140_Special_Markdown_Constructs.md" time="0.027172000"/>
+<testsuites name="features_results" tests="302" failures="0" errors="0" skipped="6" time="1.059436000">
+  <testsuite name="../docs/cli_features/A005_Given.md" tests="10" failures="0" errors="0" skipped="0" time="1.059436000">
+    <testcase name="Checking that there is no file or dir" classname="../docs/cli_features/A005_Given.md" time="0.000274000"/>
+    <testcase name="Checking that there is some dir" classname="../docs/cli_features/A005_Given.md" time="0.000286000"/>
+    <testcase name="An existing directory is kept as is" classname="../docs/cli_features/A005_Given.md" time="0.000379000"/>
+    <testcase name="Checking that there is a file with some content" classname="../docs/cli_features/A005_Given.md" time="0.000349000"/>
+    <testcase name="Creating a file with some content" classname="../docs/cli_features/A005_Given.md" time="0.000380000"/>
+    <testcase name="An existing file with the expected content is just a leftover" classname="../docs/cli_features/A005_Given.md" time="0.025172000"/>
+    <testcase name="An existing file with a different content is replaced with --yes" classname="../docs/cli_features/A005_Given.md" time="0.024770000"/>
+    <testcase name="Replacing confirmed by a typed key" classname="../docs/cli_features/A005_Given.md" time="0.327363000"/>
+    <testcase name="Replacing refused by a typed key" classname="../docs/cli_features/A005_Given.md" time="0.327332000"/>
+    <testcase name="The current match mode drives the comparison" classname="../docs/cli_features/A005_Given.md" time="0.351642000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A006_Given_Executable_File.md" tests="2" failures="0" errors="0" skipped="0" time="0.027954000">
+    <testcase name="trying to run a script without the executable keyword should fail" classname="../docs/cli_features/A006_Given_Executable_File.md" time="0.024988000"/>
+    <testcase name="trying to run the same script created with the executable attribute should succeed" classname="../docs/cli_features/A006_Given_Executable_File.md" time="0.002349000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A010_Then_Contains_Code_Span.md" tests="3" failures="0" errors="0" skipped="0" time="0.005107000">
+    <testcase name="test on a string output" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.002096000"/>
+    <testcase name="test on a multiline output" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.002106000"/>
+    <testcase name="test on a file" classname="../docs/cli_features/A010_Then_Contains_Code_Span.md" time="0.000268000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A020_Then_Contains_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.025592000">
+    <testcase name="test the standard output" classname="../docs/cli_features/A020_Then_Contains_Code_Block.md" time="0.000514000"/>
+    <testcase name="compare with an existing file" classname="../docs/cli_features/A020_Then_Contains_Code_Block.md" time="0.024508000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A030_Then_Does_Not_Contain.md" tests="6" failures="0" errors="0" skipped="0" time="0.113208000">
+    <testcase name="Successful checks" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.002316000"/>
+    <testcase name="Failed &quot;output doesn&apos;t contain&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026446000"/>
+    <testcase name="Failed &quot;file doesn&apos;t contain&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026604000"/>
+    <testcase name="Successful &quot;output is not&quot; check" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.002524000"/>
+    <testcase name="Failed &quot;output is not&quot;" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026600000"/>
+    <testcase name="a negation word on a non negatable step warns" classname="../docs/cli_features/A030_Then_Does_Not_Contain.md" time="0.026513000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A040_Example_Keyword.md" tests="2" failures="0" errors="0" skipped="0" time="0.004664000">
+    <testcase name="NOK return code" classname="../docs/cli_features/A040_Example_Keyword.md" time="0.002085000"/>
+    <testcase name="NOK return code" classname="../docs/cli_features/A040_Example_Keyword.md" time="0.001975000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A050_Then_File_Is_Code_Block.md" tests="2" failures="0" errors="0" skipped="0" time="0.025297000">
+    <testcase name="file is as expected" classname="../docs/cli_features/A050_Then_File_Is_Code_Block.md" time="0.000297000"/>
+    <testcase name="file is not as expected" classname="../docs/cli_features/A050_Then_File_Is_Code_Block.md" time="0.024422000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.034859000">
+    <testcase name="test on a single line file" classname="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" time="0.004116000"/>
+    <testcase name="adding a second line to the file, so the same test should fail" classname="../docs/cli_features/A060_Then_File_Equal_Code_Span.md" time="0.030110000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A065_Then_File_Equal_File.md" tests="3" failures="0" errors="0" skipped="0" time="0.026013000">
+    <testcase name="test `is equal to file` form" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.000374000"/>
+    <testcase name="test `is equal to file` when files are *not* equal" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.024637000"/>
+    <testcase name="test the negative form `is not equal to file`" classname="../docs/cli_features/A065_Then_File_Equal_File.md" time="0.000394000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A070_Then_Get_Code_Span.md" tests="2" failures="0" errors="0" skipped="0" time="0.004939000">
+    <testcase name="asking for sut help" classname="../docs/cli_features/A070_Then_Get_Code_Span.md" time="0.002262000"/>
+    <testcase name="causing an sut error with a long explanation" classname="../docs/cli_features/A070_Then_Get_Code_Span.md" time="0.002083000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A080_Then_Output_Equal_To_File.md" tests="1" failures="0" errors="0" skipped="0" time="0.002781000">
+    <testcase name="test `output is equal` keyword" classname="../docs/cli_features/A080_Then_Output_Equal_To_File.md" time="0.002249000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A090_Then_Get_Error.md" tests="2" failures="0" errors="0" skipped="0" time="0.004622000">
+    <testcase name="NOK return code" classname="../docs/cli_features/A090_Then_Get_Error.md" time="0.001963000"/>
+    <testcase name="OK return code" classname="../docs/cli_features/A090_Then_Get_Error.md" time="0.002080000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A100_Then_Get_Stderr.md" tests="1" failures="0" errors="0" skipped="0" time="0.002621000">
+    <testcase name="missing file name" classname="../docs/cli_features/A100_Then_Get_Stderr.md" time="0.002071000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A110_Then_No_Output.md" tests="2" failures="0" errors="0" skipped="0" time="0.029238000">
+    <testcase name="silent operation" classname="../docs/cli_features/A110_Then_No_Output.md" time="0.002158000"/>
+    <testcase name="silent operation expected, but there is an output" classname="../docs/cli_features/A110_Then_No_Output.md" time="0.026484000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A120_Then_Get_String.md" tests="1" failures="0" errors="0" skipped="0" time="0.002649000">
+    <testcase name="asking for sut version" classname="../docs/cli_features/A120_Then_Get_String.md" time="0.002092000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A130_Successfully_Keyword.md" tests="7" failures="0" errors="0" skipped="0" time="1.300012000">
+    <testcase name="*when I successfully run* a command with successful run" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.002042000"/>
+    <testcase name="*when I successfully run* a command with a wrong command line, returns an error status" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.026094000"/>
+    <testcase name="*when I run* a command with a wrong command line" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.002341000"/>
+    <testcase name="*when I successfully run* an interactive command that finally exits cleanly" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.304480000"/>
+    <testcase name="*when I successfully run* an interactive command that finally fails" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.329052000"/>
+    <testcase name="the deferred failure is reported before the next step" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.330390000"/>
+    <testcase name="successfully run, then an explicit no error check" classname="../docs/cli_features/A130_Successfully_Keyword.md" time="0.304435000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A140_Unordered_Keyword.md" tests="7" failures="0" errors="0" skipped="0" time="0.066164000">
+    <testcase name="&quot;I get&quot; without the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.026895000"/>
+    <testcase name="same &quot;I get&quot; with the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002223000"/>
+    <testcase name="same &quot;I get&quot; with the deprecated unordered adjective" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002284000"/>
+    <testcase name="&quot;contains&quot; without the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.026458000"/>
+    <testcase name="same &quot;contains&quot; with the clause" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002360000"/>
+    <testcase name="same &quot;contains&quot; with the deprecated unordered adjective" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.002230000"/>
+    <testcase name="order combines with the masking patterns" classname="../docs/cli_features/A140_Unordered_Keyword.md" time="0.000374000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A150_Background_Keyword.md" tests="4" failures="0" errors="0" skipped="0" time="0.003018000">
+    <testcase name="lets erase what was created by previous background runs" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000241000"/>
+    <testcase name="Two Background executed" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000191000"/>
+    <testcase name="lets erase once more what was created by previous background runs" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000221000"/>
+    <testcase name="only first background should apply" classname="../docs/cli_features/A150_Background_Keyword.md" time="0.000189000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A160_Ignoring_Blank_Lines.md" tests="5" failures="0" errors="0" skipped="0" time="0.162592000">
+    <testcase name="some obvious tests" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.000324000"/>
+    <testcase name="default behavior, non sensible to blank lines" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.048559000"/>
+    <testcase name="with --exact_match, sensible to blank lines" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.061649000"/>
+    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 1/2" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.024484000"/>
+    <testcase name="with --exact_match and --ignore_blank_lines, non sensible to blank lines 2/2" classname="../docs/cli_features/A160_Ignoring_Blank_Lines.md" time="0.024550000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A170_File_vs_File_Name.md" tests="3" failures="0" errors="0" skipped="0" time="0.005559000">
+    <testcase name="&quot;Then I get file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.002390000"/>
+    <testcase name="&quot;Then output is | contains | does not contain file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.002287000"/>
+    <testcase name="&quot;Then file is | contains | does not contain file&quot; form" classname="../docs/cli_features/A170_File_vs_File_Name.md" time="0.000258000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A190_Run.md" tests="4" failures="0" errors="0" skipped="0" time="0.076685000">
+    <testcase name="the command relative path is given" classname="../docs/cli_features/A190_Run.md" time="0.023950000"/>
+    <testcase name="the command is in the PATH" classname="../docs/cli_features/A190_Run.md" time="0.002673000"/>
+    <testcase name="command not found" classname="../docs/cli_features/A190_Run.md" time="0.024709000"/>
+    <testcase name="the command is not executable (Unix_Only)" classname="../docs/cli_features/A190_Run.md" time="0.024651000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A195_Run_Or.md" tests="5" failures="0" errors="0" skipped="0" time="0.141080000">
+    <testcase name="normal use case" classname="../docs/cli_features/A195_Run_Or.md" time="0.028309000"/>
+    <testcase name="The last command does not meet expectation (test should fail)" classname="../docs/cli_features/A195_Run_Or.md" time="0.030375000"/>
+    <testcase name="Missing command before &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.028651000"/>
+    <testcase name="Missing command after &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.024479000"/>
+    <testcase name="Two consecutive &quot;or&quot;" classname="../docs/cli_features/A195_Run_Or.md" time="0.028428000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A200_Regexp.md" tests="5" failures="0" errors="0" skipped="0" time="0.058729000">
+    <testcase name="version number match" classname="../docs/cli_features/A200_Regexp.md" time="0.002197000"/>
+    <testcase name="version number mismatch" classname="../docs/cli_features/A200_Regexp.md" time="0.026383000"/>
+    <testcase name="Test of &quot;output does not match&quot;" classname="../docs/cli_features/A200_Regexp.md" time="0.002405000"/>
+    <testcase name="Test of &quot;output does not match&quot; that indeed matches" classname="../docs/cli_features/A200_Regexp.md" time="0.026580000"/>
+    <testcase name="test of &quot;file match&quot;" classname="../docs/cli_features/A200_Regexp.md" time="0.000372000"/>
+  </testsuite>
+  <testsuite name="" tests="8" failures="0" errors="0" skipped="0" time="0.253784000">
+    <testcase name="Human match" classname="" time="0.049945000"/>
+    <testcase name="exact match" classname="" time="0.024941000"/>
+    <testcase name="exact match except for casing" classname="" time="0.024857000"/>
+    <testcase name="exact match except for casing and blank lines" classname="" time="0.024888000"/>
+    <testcase name="human match ignores CR at line ends" classname="" time="0.024336000"/>
+    <testcase name="exact match is sensitive to CR at line ends" classname="" time="0.024408000"/>
+    <testcase name="an (ignoring casing) clause agreeing with the human match default" classname="" time="0.024475000"/>
+    <testcase name="an (ignoring casing) clause contradicting --exact_match is ignored and warns" classname="" time="0.024537000"/>
+  </testsuite>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.136447000">
+    <testcase name="gcc version?" classname="" time="0.063359000"/>
+    <testcase name="compiling and executing an hello word" classname="" time="0.072434000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A230_select_exclude_include.md" tests="9" failures="0" errors="0" skipped="0" time="0.248989000">
+    <testcase name="no filtering" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.029908000"/>
+    <testcase name="step filtering" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.027972000"/>
+    <testcase name="step selection" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.026345000"/>
+    <testcase name="Selecting a scenario" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.030101000"/>
+    <testcase name="selection is empty" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.024467000"/>
+    <testcase name="Selecting a Background only" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.024568000"/>
+    <testcase name="Select followed by an exclude" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.028161000"/>
+    <testcase name="scenario Excluded followed by an include of a step inside" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.028125000"/>
+    <testcase name="Exclude by file name" classname="../docs/cli_features/A230_select_exclude_include.md" time="0.024382000"/>
+  </testsuite>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.002602000">
+    <testcase name="Running something in postcondition" classname="" time="0.002065000"/>
+  </testsuite>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.004469000">
+    <testcase name="Checking that a command fails" classname="" time="0.003940000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A260_Then_Exit_Code_Is.md" tests="5" failures="0" errors="0" skipped="0" time="0.073049000">
+    <testcase name="exit code of a successful command" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.001971000"/>
+    <testcase name="exit code of a failing command" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.001992000"/>
+    <testcase name="the exit code of the last command is checked" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.003800000"/>
+    <testcase name="wrong exit code" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.026434000"/>
+    <testcase name="the code must be an integer" classname="../docs/cli_features/A260_Then_Exit_Code_Is.md" time="0.038057000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A270_Then_Error_Output.md" tests="8" failures="0" errors="0" skipped="0" time="0.074778000">
+    <testcase name="error message on the error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002242000"/>
+    <testcase name="nothing on the error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002141000"/>
+    <testcase name="error output contains and does not contain" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.004358000"/>
+    <testcase name="error output in a code block" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002179000"/>
+    <testcase name="without error output step, the outputs stay merged" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.002083000"/>
+    <testcase name="wrong error output" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.026421000"/>
+    <testcase name="the error output is not" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.007993000"/>
+    <testcase name="failed &quot;the error output is not&quot;" classname="../docs/cli_features/A270_Then_Error_Output.md" time="0.026356000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A280_Given_Environment_Variable.md" tests="6" failures="0" errors="0" skipped="0" time="0.040488000">
+    <testcase name="set a variable" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002258000"/>
+    <testcase name="the variable is back to its previous state" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002101000"/>
+    <testcase name="unset a variable" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002315000"/>
+    <testcase name="the unset variable is back" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002156000"/>
+    <testcase name="set twice in the same scenario" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.002280000"/>
+    <testcase name="variable set in a background" classname="../docs/cli_features/A280_Given_Environment_Variable.md" time="0.028507000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A290_When_I_Type_Or_Enter.md" tests="5" failures="0" errors="0" skipped="0" time="1.143755000">
+    <testcase name="answering a key prompt with type" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304382000"/>
+    <testcase name="refusing with type" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.203859000"/>
+    <testcase name="several inputs in a row" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304632000"/>
+    <testcase name="answering a line prompt with enter" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.304646000"/>
+    <testcase name="enter without a running command" classname="../docs/cli_features/A290_When_I_Type_Or_Enter.md" time="0.025071000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A300_Ignoring.md" tests="23" failures="0" errors="0" skipped="0" time="0.240771000">
+    <testcase name="a time tag in the output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.002321000"/>
+    <testcase name="a time tag in the error output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.002217000"/>
+    <testcase name="the common clock, date and date-time formats are ignored" classname="../docs/cli_features/A300_Ignoring.md" time="0.000429000"/>
+    <testcase name="only the file name is checked, not the directory" classname="../docs/cli_features/A300_Ignoring.md" time="0.002225000"/>
+    <testcase name="a differing file name fails, differing directories do not" classname="../docs/cli_features/A300_Ignoring.md" time="0.024673000"/>
+    <testcase name="a Windows and a Unix print of the same path compare equal" classname="../docs/cli_features/A300_Ignoring.md" time="0.000431000"/>
+    <testcase name="mixed syntaxes of the same path compare equal" classname="../docs/cli_features/A300_Ignoring.md" time="0.000548000"/>
+    <testcase name="a differing path still fails" classname="../docs/cli_features/A300_Ignoring.md" time="0.024777000"/>
+    <testcase name="URL colons and clock times are not drive prefixes" classname="../docs/cli_features/A300_Ignoring.md" time="0.000434000"/>
+    <testcase name="a regexp combines with path syntax, and sees the rewritten text" classname="../docs/cli_features/A300_Ignoring.md" time="0.000413000"/>
+    <testcase name="a differing stable part still fails" classname="../docs/cli_features/A300_Ignoring.md" time="0.024748000"/>
+    <testcase name="time and dir combine on one step" classname="../docs/cli_features/A300_Ignoring.md" time="0.002565000"/>
+    <testcase name="a time tag does not fail a contains check" classname="../docs/cli_features/A300_Ignoring.md" time="0.002327000"/>
+    <testcase name="version number does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.024277000"/>
+    <testcase name="a time tag missing on the actual side fails and warns" classname="../docs/cli_features/A300_Ignoring.md" time="0.024634000"/>
+    <testcase name="the clause on a non comparison step is an error" classname="../docs/cli_features/A300_Ignoring.md" time="0.033230000"/>
+    <testcase name="a duration may vary" classname="../docs/cli_features/A300_Ignoring.md" time="0.002532000"/>
+    <testcase name="a source location in the output does not fail the comparison" classname="../docs/cli_features/A300_Ignoring.md" time="0.000422000"/>
+    <testcase name="a locator in the GNAT style is masked as well" classname="../docs/cli_features/A300_Ignoring.md" time="0.000431000"/>
+    <testcase name="a duration is not mistaken for a location" classname="../docs/cli_features/A300_Ignoring.md" time="0.000404000"/>
+    <testcase name="a regexp combines with a named pattern" classname="../docs/cli_features/A300_Ignoring.md" time="0.002414000"/>
+    <testcase name="a regexp matching nothing on the actual side fails and warns" classname="../docs/cli_features/A300_Ignoring.md" time="0.024858000"/>
+    <testcase name="an illegal regexp in the clause is an error" classname="../docs/cli_features/A300_Ignoring.md" time="0.024397000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A310_Run_Shell.md" tests="20" failures="0" errors="0" skipped="5" time="5.824281000">
+    <testcase name="successfully run shell" classname="../docs/cli_features/A310_Run_Shell.md" time="0.002202000"/>
+    <testcase name="shell redirections are interpreted by the shell" classname="../docs/cli_features/A310_Run_Shell.md" time="0.002101000"/>
+    <testcase name="shell pipes are interpreted by the shell (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.003255000"/>
+    <testcase name="the exit code is the shell command one (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="1.003156000"/>
+    <testcase name="no warning on shell metacharacters in a shell step" classname="../docs/cli_features/A310_Run_Shell.md" time="0.025033000"/>
+    <testcase name="run shell with alternatives" classname="../docs/cli_features/A310_Run_Shell.md" time="0.028690000"/>
+    <testcase name="successfully run shell with alternatives" classname="../docs/cli_features/A310_Run_Shell.md" time="0.028822000"/>
+    <testcase name="the run qualifiers are position independent" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026663000"/>
+    <testcase name="warning on an inapplicable qualifier" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026677000"/>
+    <testcase name="invalid shell on the command line" classname="../docs/cli_features/A310_Run_Shell.md" time="0.024079000"/>
+    <testcase name="the shell is set on the command line (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.027336000"/>
+    <testcase name="the shell is set with the BBT_SHELL environment variable (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.053626000"/>
+    <testcase name="the sh shell is set on the command line (Unix_Only)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026640000"/>
+    <testcase name="the dash shell is set on the command line (Unix_Only) (needs_dash)" classname="../docs/cli_features/A310_Run_Shell.md" time="0.026575000"/>
+    <testcase name="the pwsh shell is set on the command line (needs_pwsh)" classname="../docs/cli_features/A310_Run_Shell.md" time="4.516072000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/A320_Backend_Selection.md" tests="3" failures="0" errors="0" skipped="0" time="0.073906000">
+    <testcase name="a GUI step without any backend aborts with a selection hint" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.024580000"/>
+    <testcase name="a missing backend executable gives an install hint" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.024030000"/>
+    <testcase name="explain rebuilds a GUI document with no backend" classname="../docs/cli_features/A320_Backend_Selection.md" time="0.024490000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B010_Deleting_created_files.md" tests="10" failures="0" errors="0" skipped="0" time="0.593894000">
+    <testcase name="run without --cleanup" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025013000"/>
+    <testcase name="run with --cleanup" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025226000"/>
+    <testcase name="run with --cleanup leaves what the tested command created" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.032576000"/>
+    <testcase name="run with --cleanup=full removes what the tested command created" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.033420000"/>
+    <testcase name="--cleanup=full keeps pre-existing files" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.033259000"/>
+    <testcase name="--cleanup=full removal refused on a non interactive stdin" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.033127000"/>
+    <testcase name="--cleanup=full removes a pre-existing file with the expected content" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025649000"/>
+    <testcase name="--cleanup=full removes a file overwritten with --yes" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025930000"/>
+    <testcase name="a refused overwrite keeps the pre-existing file" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.327001000"/>
+    <testcase name="a non interactive run refuses the overwrite and keeps the file" classname="../docs/cli_features/B010_Deleting_created_files.md" time="0.025112000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B020_Exec_dir.md" tests="2" failures="0" errors="0" skipped="0" time="0.050451000">
+    <testcase name="Lets run &quot;create_tree.md&quot; in the current dir" classname="../docs/cli_features/B020_Exec_dir.md" time="0.024533000"/>
+    <testcase name="Lets run &quot;create_tree.md&quot; in ./dir2" classname="../docs/cli_features/B020_Exec_dir.md" time="0.024609000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B030_File_creation_in_Given_steps.md" tests="9" failures="0" errors="0" skipped="0" time="1.992253000">
+    <testcase name="a required file does not exist" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.003098000"/>
+    <testcase name="&quot;Given there is no&quot;, when there actually is, should erase the file" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.000306000"/>
+    <testcase name="erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.326494000"/>
+    <testcase name="erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.327094000"/>
+    <testcase name="erasing refused on a non interactive stdin" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.024907000"/>
+    <testcase name="directory tree erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.326994000"/>
+    <testcase name="directory tree erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.327130000"/>
+    <testcase name="new directory erasing confirmed by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.327407000"/>
+    <testcase name="new directory erasing refused by a typed key" classname="../docs/cli_features/B030_File_creation_in_Given_steps.md" time="0.327007000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B040_Find_scenarios.md" tests="6" failures="0" errors="0" skipped="0" time="0.151586000">
+    <testcase name="no file or dir on the command line" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024301000"/>
+    <testcase name="running all scenarios in dir1" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024192000"/>
+    <testcase name="running multiple scenarios given on command line" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024202000"/>
+    <testcase name="running scenarios in a tree thanks to `-r`" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.025105000"/>
+    <testcase name="error msg when trying to run scenarios, but none found in given directories" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024571000"/>
+    <testcase name="empty list file on list_files if there is no scenario in given directories" classname="../docs/cli_features/B040_Find_scenarios.md" time="0.024263000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B050_Strict_gherkin.md" tests="1" failures="0" errors="0" skipped="0" time="0.060449000">
+    <testcase name="Multiple When in a scenario" classname="../docs/cli_features/B050_Strict_gherkin.md" time="0.059874000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B060_Return_code_on_test_failure.md" tests="3" failures="0" errors="0" skipped="0" time="0.079932000">
+    <testcase name="return code on test success" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.026332000"/>
+    <testcase name="return code when the test fail" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.026250000"/>
+    <testcase name="return code when one fail and the other succeed" classname="../docs/cli_features/B060_Return_code_on_test_failure.md" time="0.026597000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B080_Keep_Going.md" tests="6" failures="0" errors="0" skipped="0" time="0.172617000">
+    <testcase name="scenario_with_syntax_error run without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.024196000"/>
+    <testcase name="scenario_with_syntax_error run with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.028671000"/>
+    <testcase name="scenario_with_assertion_error run without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.037066000"/>
+    <testcase name="scenario_with_assertion_error run with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.030739000"/>
+    <testcase name="explain scenario_with_syntax_error without `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.024400000"/>
+    <testcase name="explain scenario_with_syntax_error with `-k`" classname="../docs/cli_features/B080_Keep_Going.md" time="0.024599000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B090_tmp_dir.md" tests="4" failures="0" errors="0" skipped="0" time="0.109963000">
+    <testcase name="Current dir, no cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.026125000"/>
+    <testcase name="Current dir, with cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.026054000"/>
+    <testcase name="Within dir1, no cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.026317000"/>
+    <testcase name="Within dir1, with cleanup" classname="../docs/cli_features/B090_tmp_dir.md" time="0.029130000"/>
+  </testsuite>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.053642000">
+    <testcase name="default mode run" classname="" time="0.026138000"/>
+    <testcase name="verbose mode run" classname="" time="0.026239000"/>
+  </testsuite>
+  <testsuite name="" tests="4" failures="0" errors="0" skipped="0" time="0.101624000">
+    <testcase name="full comparison with no error" classname="" time="0.000218000"/>
+    <testcase name="full comparison with error in the middle of the file" classname="" time="0.024854000"/>
+    <testcase name="full comparison with blank lines on the left and on the right" classname="" time="0.049673000"/>
+    <testcase name="full comparison with an inserted line" classname="" time="0.025180000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B110_Spawn.md" tests="2" failures="0" errors="0" skipped="0" time="0.007073000">
+    <testcase name="Directory with space in the name (Unix_Only)" classname="../docs/cli_features/B110_Spawn.md" time="0.002331000"/>
+    <testcase name="Command with quoted arguments (Unix_Only)" classname="../docs/cli_features/B110_Spawn.md" time="0.004090000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" tests="5" failures="0" errors="0" skipped="0" time="0.131587000">
+    <testcase name="warning when a command contains a pipe" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.026069000"/>
+    <testcase name="warning also displayed by bbt explain" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.024226000"/>
+    <testcase name="no warning when the metacharacter is quoted (Unix_Only)" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.026966000"/>
+    <testcase name="no warning on an escaped quote inside a quoted command (Unix_Only)" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.029059000"/>
+    <testcase name="no warning on a quoted metacharacter in bbt explain" classname="../docs/cli_features/B115_Warning_On_Shell_Metacharacters.md" time="0.024421000"/>
+  </testsuite>
+  <testsuite name="" tests="5" failures="0" errors="0" skipped="0" time="0.161084000">
+    <testcase name="Quiet mode run" classname="" time="0.032915000"/>
+    <testcase name="Default mode run" classname="" time="0.040452000"/>
+    <testcase name="Verbose mode run" classname="" time="0.032794000"/>
+    <testcase name="Normal mode with an error" classname="" time="0.026345000"/>
+    <testcase name="Quiet mode with an error" classname="" time="0.026319000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B130_Cmd_Line_Help.md" tests="12" failures="0" errors="0" skipped="0" time="0.303571000">
+    <testcase name="filtering help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.023963000"/>
+    <testcase name="matching help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024013000"/>
+    <testcase name="ignoring help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024211000"/>
+    <testcase name="others help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.030686000"/>
+    <testcase name="On_All help" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.025274000"/>
+    <testcase name="tutorial generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024622000"/>
+    <testcase name="example generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024374000"/>
+    <testcase name="grammar generation" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.027289000"/>
+    <testcase name="listing keywords" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024332000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 1/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024403000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 2/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024454000"/>
+    <testcase name="calling bbt without parameter or with -h put the normal help 3/3" classname="../docs/cli_features/B130_Cmd_Line_Help.md" time="0.024347000"/>
+  </testsuite>
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.346974000">
+    <testcase name="Successful run index file" classname="" time="0.098509000"/>
+    <testcase name="Unsuccessful run index file" classname="" time="0.180872000"/>
+    <testcase name="index links use web separators" classname="" time="0.066800000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B150_Deprecated_Options.md" tests="2" failures="0" errors="0" skipped="0" time="0.054164000">
+    <testcase name="--output option" classname="../docs/cli_features/B150_Deprecated_Options.md" time="0.027017000"/>
+    <testcase name="-sb and --status_bar options" classname="../docs/cli_features/B150_Deprecated_Options.md" time="0.026378000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B160_JUnit_XML_Export.md" tests="5" failures="0" errors="0" skipped="1" time="0.110079000">
+    <testcase name="1 : Basic file with only a single scenario" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.026468000"/>
+    <testcase name="1: both scenario are run" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.028531000"/>
+    <testcase name="2 : one scenario is skipped" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.026835000"/>
+    <testcase name="Test XML escaping with special characters" classname="../docs/cli_features/B160_JUnit_XML_Export.md" time="0.026729000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B170_Explain.md" tests="19" failures="0" errors="0" skipped="0" time="0.517397000">
+    <testcase name="explain elements other than steps" classname="../docs/cli_features/B170_Explain.md" time="0.024356000"/>
+    <testcase name="explain action Setup_No_File" classname="../docs/cli_features/B170_Explain.md" time="0.024199000"/>
+    <testcase name="explain action Setup_No_Dir" classname="../docs/cli_features/B170_Explain.md" time="0.036937000"/>
+    <testcase name="explain action Check_File_Existence" classname="../docs/cli_features/B170_Explain.md" time="0.024528000"/>
+    <testcase name="explain action Check_Dir_Existence" classname="../docs/cli_features/B170_Explain.md" time="0.024395000"/>
+    <testcase name="explain action Erase_And_Create" classname="../docs/cli_features/B170_Explain.md" time="0.024593000"/>
+    <testcase name="explain action Create_If_None" classname="../docs/cli_features/B170_Explain.md" time="0.025068000"/>
+    <testcase name="explain action Run" classname="../docs/cli_features/B170_Explain.md" time="0.026490000"/>
+    <testcase name="explain action Run_Without_Error" classname="../docs/cli_features/B170_Explain.md" time="0.025435000"/>
+    <testcase name="explain action Check_No_File" classname="../docs/cli_features/B170_Explain.md" time="0.027930000"/>
+    <testcase name="explain action Check_No_Dir" classname="../docs/cli_features/B170_Explain.md" time="0.025195000"/>
+    <testcase name="explain action Error_Return_Code and No_Error_Return_Code" classname="../docs/cli_features/B170_Explain.md" time="0.024557000"/>
+    <testcase name="explain action Output_Is" classname="../docs/cli_features/B170_Explain.md" time="0.024703000"/>
+    <testcase name="explain action Output_Contains and Output_Does_Not_Contain" classname="../docs/cli_features/B170_Explain.md" time="0.024722000"/>
+    <testcase name="explain action Output|File_Matches and Output|File_Does_Not_Match" classname="../docs/cli_features/B170_Explain.md" time="0.026843000"/>
+    <testcase name="explain action File_Is and File_Is_Not" classname="../docs/cli_features/B170_Explain.md" time="0.024666000"/>
+    <testcase name="explain action File_Contains and File_Does_Not_Contain" classname="../docs/cli_features/B170_Explain.md" time="0.024740000"/>
+    <testcase name="explain action No_Output" classname="../docs/cli_features/B170_Explain.md" time="0.024482000"/>
+    <testcase name="explain Invalid Step" classname="../docs/cli_features/B170_Explain.md" time="0.048859000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B180_Ignored_Files.md" tests="1" failures="0" errors="0" skipped="0" time="0.024951000">
+    <testcase name="Checking that the index file is ignored" classname="../docs/cli_features/B180_Ignored_Files.md" time="0.024377000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B190_Clean_Error_When_No_Output.md" tests="1" failures="0" errors="0" skipped="0" time="0.025545000">
+    <testcase name="check the output of a command that does not exist" classname="../docs/cli_features/B190_Clean_Error_When_No_Output.md" time="0.024884000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B200_Scenario_Timeout.md" tests="3" failures="0" errors="0" skipped="0" time="2.114431000">
+    <testcase name="a hanging command fails the scenario on timeout" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="1.030631000"/>
+    <testcase name="the deferred exit status check waits no more than the timeout" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="1.032178000"/>
+    <testcase name="the duration is a number of seconds, with an optional unit" classname="../docs/cli_features/B200_Scenario_Timeout.md" time="0.050802000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/B210_Status_Bar.md" tests="6" failures="0" errors="0" skipped="0" time="0.165492000">
+    <testcase name="backgrounds are not counted" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026622000"/>
+    <testcase name="filtered scenarios are counted" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026476000"/>
+    <testcase name="the normal output is preserved" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026842000"/>
+    <testcase name="the bar is disabled when the standard output is not a terminal" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026795000"/>
+    <testcase name="--no_tty disables the bar and wins over --force_status_bar" classname="../docs/cli_features/B210_Status_Bar.md" time="0.026667000"/>
+    <testcase name="the failure stays visible" classname="../docs/cli_features/B210_Status_Bar.md" time="0.030906000"/>
+  </testsuite>
+  <testsuite name="" tests="3" failures="0" errors="0" skipped="0" time="0.073937000">
+    <testcase name="No step test A" classname="" time="0.024385000"/>
+    <testcase name="No step test B" classname="" time="0.024343000"/>
+    <testcase name="No scenario in Feature" classname="" time="0.024491000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C030_Markdown_syntax.md" tests="3" failures="0" errors="0" skipped="0" time="0.269182000">
+    <testcase name="Heading variations" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.219138000"/>
+    <testcase name="Missing heading marker" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.024487000"/>
+    <testcase name="Steps using [Emphasis and strong emphasis](https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis)" classname="../docs/cli_features/C030_Markdown_syntax.md" time="0.024733000"/>
+  </testsuite>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.029517000">
+    <testcase name="Missing tittle in scenario, background and feature" classname="" time="0.028918000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C050_Step_marker.md" tests="1" failures="0" errors="0" skipped="0" time="0.026662000">
+    <testcase name="Different markers within the scenario" classname="../docs/cli_features/C050_Step_marker.md" time="0.025902000"/>
+  </testsuite>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.027867000">
+    <testcase name="Code fenced blocks" classname="" time="0.027305000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C070_missing_code_block.md" tests="4" failures="0" errors="0" skipped="0" time="0.128967000">
+    <testcase name="Code block missing at the end of the file" classname="../docs/cli_features/C070_missing_code_block.md" time="0.026335000"/>
+    <testcase name="Code block missing while reaching next step" classname="../docs/cli_features/C070_missing_code_block.md" time="0.026385000"/>
+    <testcase name="Code block missing while reaching next scenario" classname="../docs/cli_features/C070_missing_code_block.md" time="0.026607000"/>
+    <testcase name="Closing code block mark missing" classname="../docs/cli_features/C070_missing_code_block.md" time="0.048846000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C080_missing_scenario.md" tests="2" failures="0" errors="0" skipped="0" time="0.049130000">
+    <testcase name="Steps without scenario header" classname="../docs/cli_features/C080_missing_scenario.md" time="0.024274000"/>
+    <testcase name="Empty file" classname="../docs/cli_features/C080_missing_scenario.md" time="0.024235000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C090_GNU_Error_Msg_Format.md" tests="1" failures="0" errors="0" skipped="0" time="0.030795000">
+    <testcase name="" classname="../docs/cli_features/C090_GNU_Error_Msg_Format.md" time="0.030253000"/>
+  </testsuite>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.027408000">
+    <testcase name="Detection of ambiguous use of multiple recognized verbs in the same Step" classname="" time="0.026863000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C120_Ill_Formated_Steps.md" tests="1" failures="0" errors="0" skipped="0" time="0.030443000">
+    <testcase name="" classname="../docs/cli_features/C120_Ill_Formated_Steps.md" time="0.029902000"/>
+  </testsuite>
+  <testsuite name="../docs/cli_features/C140_Special_Markdown_Constructs.md" tests="1" failures="0" errors="0" skipped="0" time="0.028724000">
+    <testcase name="tables and diagrams with Gherkin-like content" classname="../docs/cli_features/C140_Special_Markdown_Constructs.md" time="0.028164000"/>
   </testsuite>
 </testsuites>
