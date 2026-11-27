@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="examples_results" tests="10" failures="0" errors="0" skipped="0" time="1.222684900">
+  <testsuite name="" tests="7" failures="0" errors="0" skipped="0" time="1.222684900">
+    <testcase name="1: Checking installed gcc version" classname="" time="0.031013100"/>
+    <testcase name="2 : compiling and executing an hello word" classname="" time="0.079807800"/>
+    <testcase name="3 : get gcc version" classname="" time="0.009273200"/>
+    <testcase name="4 : checking error output and return code" classname="" time="0.020232801"/>
+    <testcase name="5 : checking environment variables handling" classname="" time="0.084188100"/>
+    <testcase name="6 : interacting with a program prompt" classname="" time="0.913989500"/>
+    <testcase name="7 : ignoring a volatile part of the output" classname="" time="0.081447900"/>
+  </testsuite>
+  <testsuite name="../docs/examples\rpl_case_insensitivity.md" tests="1" failures="0" errors="0" skipped="0" time="0.010696500">
+    <testcase name="1.1 : simple use (single file, no globbing)" classname="../docs/examples\rpl_case_insensitivity.md" time="0.009032400"/>
+  </testsuite>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.016889800">
+    <testcase name="I want to know sut version 1/2" classname="" time="0.007403900"/>
+    <testcase name="I want to know sut version 2/2" classname="" time="0.007871300"/>
+  </testsuite>
+</testsuites>
