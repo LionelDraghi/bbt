@@ -151,6 +151,27 @@ package body BBT.Model.Documents is
    function No_Fail return Boolean is (Results (Failed) = 0);
 
    -- --------------------------------------------------------------------------
+   function Failed_Scenarios return Scenarios.List is
+      Failed_List : Scenarios.List;
+   begin
+      for D of The_Doc_List loop
+         for Scen of D.Scenario_List loop
+            if Scenarios.Result (Scen) = Failed then
+               Failed_List.Append (Scen);
+            end if;
+         end loop;
+         for F of D.Feature_List loop
+            for Scen of F.Scenario_List loop
+               if Scenarios.Result (Scen) = Failed then
+                  Failed_List.Append (Scen);
+               end if;
+            end loop;
+         end loop;
+      end loop;
+      return Failed_List;
+   end Failed_Scenarios;
+
+   -- --------------------------------------------------------------------------
    procedure Sum_Results (Docs : List) is
    begin
       for D of Docs loop

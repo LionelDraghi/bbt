@@ -74,6 +74,12 @@ package BBT.Model.Documents is
    -- As per Issue #32, both Success and No_Fail have the same semantics,
    -- and **just** check that there is no fail test. As a consequence,
    -- Success is removed.
+   function Failed_Scenarios return Scenarios.List;
+   -- Walk through the Document list and collect the scenarios whose
+   -- result is Failed, in document order, so that the summary can name
+   -- them instead of leaving the reader to scroll back up the run.
+   -- Backgrounds are not collected: the results table does not count
+   -- them either.
    procedure Sum_Results (Docs : List);
    function Get_Results (DL : List) return Test_Results_Count;
    -- -----------------------------------------------------------------------

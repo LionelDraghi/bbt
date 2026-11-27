@@ -11,10 +11,13 @@ For each scenario, there is a summary line, with a bullet list item, using the [
 
 In error messages, outputs are put in code blocks to be easily identified (Refer to [Issue #9](https://github.com/LionelDraghi/bbt/issues/9)).
 
+When a run fails, its summary names the failed scenarios again, between the summary title and the results table: the run above is long, and they would otherwise have to be looked for by scrolling back up.
+
 _Table of Contents:_
 - [Background:](#background)
   - [Scenario: default mode run](#scenario-default-mode-run)
   - [Scenario: verbose mode run](#scenario-verbose-mode-run)
+  - [Scenario: failing run names the failed scenarios](#scenario-failing-run-names-the-failed-scenarios)
 
 ## Background:
 
@@ -71,3 +74,22 @@ _Table of Contents:_
   | Not Run    | 0     |  
   ~~~
 
+### Scenario: failing run names the failed scenarios
+
+- When I run `./bbt -c --yes NOK_scen.md`
+
+- Then there is an error
+- And the output contains
+  ~~~
+  - [ ] scenario   [](NOK_scen.md) **fails**
+
+  ## Summary : **Fail**
+     - [ ] scenario   [](NOK_scen.md) **fails**
+
+  | Status     | Count |
+  |------------|-------|
+  | Failed     | 1     |
+  | Successful | 0     |
+  | Empty      | 0     |
+  | Not Run    | 0     |
+  ~~~

@@ -140,6 +140,16 @@ package body BBT.Writers is
    begin
       for F in Writer_List'Range when Enabled (F) loop
          Put_Summary (Writer_List (F).all);
+         --  A failed run has to name its failures here: the run output
+         --  above is long enough that the reader would otherwise have
+         --  to scroll back up to find them. The lines are the same as
+         --  the ones printed when each scenario ended, so that both
+         --  readings agree.
+         if not Documents.No_Fail then
+            for Scen of Documents.Failed_Scenarios loop
+               Put_Scenario_Result (Writer_List (F).all, Scen, Quiet);
+            end loop;
+         end if;
          Put_Detailed_Results (Writer_List (F).all);
       end loop;
    end Put_Overall_Results;

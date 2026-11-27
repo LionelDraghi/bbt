@@ -8,7 +8,7 @@ Location | Text
 [src/bbt-cmd_line.adb](../../src/bbt-cmd_line.adb):307|               --     --  opt -ot / --output_tag not yet coded
 [src/bbt-io.adb](../../src/bbt-io.adb):8|--   this with inverts the dependency direction: the base output
 [src/bbt-junit_writer.adb](../../src/bbt-junit_writer.adb):136|                   Time_Attrib (Elapsed_Time (Docs.First_Element)) & ">"); --  total time for all docs not implemented
-[src/bbt-model-documents.adb](../../src/bbt-model-documents.adb):210|      --  to be replaced with a Reduce?
+[src/bbt-model-documents.adb](../../src/bbt-model-documents.adb):231|      --  to be replaced with a Reduce?
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):48|     (D : in out Document_Type); --  should be private
 [src/bbt-model-documents.ads](../../src/bbt-model-documents.ads):65|     (D : in out Documents_Lists.Vector) --  should be type List
 [src/bbt-scenarios-files.adb](../../src/bbt-scenarios-files.adb):202|            --  to be moved in Text_Utilities or so

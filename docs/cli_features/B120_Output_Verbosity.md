@@ -136,6 +136,7 @@ _Table of Contents:_
   - [ ] scenario   [sut version](NOK_scen.md) **fails**    
 
   ## Summary : **Fail**
+  - [ ] scenario   [sut version](NOK_scen.md) **fails**  
 
   | Status     | Count |
   |------------|-------|
@@ -160,6 +161,7 @@ When there is an error, even if quiet mode is specified, we output all info.
   v3.1  | sut version 1.0
   
   ## Summary : **Fail**
+  - [ ] scenario   [sut version](NOK_scen.md) **fails**  
 
   | Status     | Count |
   |------------|-------|

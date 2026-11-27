@@ -103,6 +103,7 @@ _Table of Contents:_
 - and output contains
   ```
   ## Summary : **Fail**
+  - [ ] scenario   [2](scenario_with_syntax_error.md) **fails**  
 
   | Status     | Count |
   |------------|-------|
@@ -128,6 +129,7 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
    - [ ] scenario   [2](scenario_with_assertion_error.md) **fails**  
 
 ## Summary : **Fail**
+   - [ ] scenario   [2](scenario_with_assertion_error.md) **fails**  
 
 | Status     | Count |
 |------------|-------|
@@ -157,6 +159,7 @@ scenario_with_assertion_error.md:8: Error: Expected error code, got no error
    - [X] scenario   [3](scenario_with_assertion_error.md) pass  
 
 ## Summary : **Fail**
+   - [ ] scenario   [2](scenario_with_assertion_error.md) **fails**  
 
 | Status     | Count |
 |------------|-------|
