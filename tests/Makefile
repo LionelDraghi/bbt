@@ -34,16 +34,21 @@ RESULTS_DIR ?= ../docs/tests_results/$(PLATFORM)/$(PROFILE)
 # by clean, and by setup). When Deploy_Assets (src/bbt-gui.adb) finds
 # links, Same_Asset keeps it from re-copying the assets onto themselves.
 ifeq ($(OS), Windows_NT)
-# $(CURDIR) is a POSIX path here, cygpath turns it into the C:\ form
-# mklink demands.
+# $(CURDIR) is a POSIX path here, so cygpath turns each end of the
+# junction into the C:\ form mklink demands. It is the only source of
+# backslashes: a doubled one written in this recipe does not reach the
+# shell as two characters on every Windows make, and the \$ that
+# results escapes the dollar of $$A instead of separating the paths, so
+# mklink then names the junction after the loop variable.
 gui_assets:
-	@ W=$$(cygpath -w "$(CURDIR)") ; \
-	  for A in html js css ; do \
-	    if [ -e $$A ] ; then \
-	      echo "  $$A already there" ; \
-	    else \
-	      cmd //c "mklink /J $$W\\$$A $$W\\..\\bbt_dbg\\$$A" ; \
-	    fi ; \
+	@ for A in html js css ; do \
+	  if [ -e $$A ] ; then \
+	    echo "  $$A already there" ; \
+	  else \
+	    Link=$$(cygpath -w "$(CURDIR)/$$A") ; \
+	    Target=$$(cygpath -w "$(CURDIR)/../bbt_dbg/$$A") ; \
+	    cmd //c "mklink /J $$Link $$Target" ; \
+	  fi ; \
 	  done
 else
 gui_assets:
