@@ -26,3 +26,12 @@ bbt = "^0.6.1"
 #  docs/dev/design_discussions.md, D16); local development builds
 #  backends/adi2 directly against the sibling bbt sources with
 #  gprbuild, no path pin yet.
+
+#  Linux only, and for a reason of its own: nothing in this backend is
+#  platform bound — the transport is a file IPC session — but the
+#  witness it drives needs an Adi2 build with its SDL3 stack, and that
+#  is what a run records. The column of docs/gui_matrix.md follows this
+#  declaration, and a platform joins it the day a run there is recorded.
+[available.'case(os)']
+linux = true
+'...' = false
