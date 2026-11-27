@@ -86,5 +86,9 @@ Short_Path (From_Dir => "../docs/tests_results/Windows",
 Short_Path (From_Dir => "../docs/tests_results/Windows/sub",
             To_File  => "../docs/features/A190_Run.md") = ..\..\..\features\A190_Run.md
 
+22. Relative paths, resolved : OK
+Short_Path (From_Dir => "..\..\docs\Windows\validation",
+            To_File  => "..\docs\features\x.md") = ..\..\..\tests\docs\features\x.md
+
 
 File_Utilities.Short_Path tests OK
