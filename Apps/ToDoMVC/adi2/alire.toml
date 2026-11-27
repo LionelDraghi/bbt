@@ -1,0 +1,41 @@
+# bbt, the black box tester (https://github.com/LionelDraghi/bbt)
+# SPDX-License-Identifier: MIT OR Apache-2.0 WITH LLVM-exception
+# SPDX-FileCopyrightText: 2026 Lionel Draghi
+
+name = "todomvc_adi2"
+description = "ToDoMVC witness app (Adi2), for the bbt GUI vocabulary"
+version = "0.1.0-dev"
+
+authors = ["Lionel Draghi"]
+maintainers = ["Lionel Draghi <lionel.draghi@free.fr>"]
+maintainers-logins = ["LionelDraghi"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/LionelDraghi/bbt"
+
+executables = ["todomvc"]
+project-files = ["todomvc_adi2.gpr"]
+
+[configuration]
+generate_C = false
+
+[[depends-on]]
+gnat = ">=16"
+
+[[depends-on]]
+#  Adi2, the GUI toolkit (SDL3-based, Ada 2022). Not in the community
+#  index yet: pinned to its repository at a fixed commit, so the build
+#  stays reproducible until the crate lands there. Its own SDL3
+#  dependencies resolve to the system libraries through Alire's
+#  external definitions (libsdl3, libsdl3_ttf, libsdl3_image).
+adi2 = "*"
+
+#  The probe, i.e. Adi2's development bridge (Adi.MCP): the SAME source
+#  builds with and without it, the build profile decides. Development
+#  compiles src/mcp (the file-IPC introspection bridge the adi2 backend
+#  speaks), every other profile the documented no-op stub. Removing
+#  this table produces the same application without the probe.
+[build-profiles]
+adi2 = "development"
+
+[[pins]]
+adi2 = { url = "https://github.com/ovenpasta/adi2", commit = "71f4635a3fcab9d5293df8e0cd9b4d53df44c602" }

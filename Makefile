@@ -167,7 +167,7 @@ release:
 #                  and unit tests)
 #   gtk4         : the shared GUI suite (backends/scenarios)
 #   webserver    : not implemented yet (restructuring step 3)
-#   all          : cli + every implemented backend (gtk4 today)
+#   all          : cli + every implemented backend (gtk4, webapp, adi2)
 BACKEND ?= cli
 
 check: bbt$(EXE_SUFFIX)
@@ -236,11 +236,11 @@ doc: ./bbt$(EXE_SUFFIX)
 
 	echo Checking links in md files
 ifeq ($(OS), Windows_NT)
-	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path Apps/ToDoMVC/adi2/alire --ignore-path docs/tests_results/Linux --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
 else ifeq ($(PLATFORM), Darwin)
-	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path Apps/ToDoMVC/adi2/alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Linux | grep '\[Err' && echo OK 
 else ifeq ($(PLATFORM), Linux)
-	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
+	- mlc --ignore-path alire --ignore-path Apps/ToDoMVC/gtk4/alire --ignore-path Apps/ToDoMVC/web/alire --ignore-path Apps/ToDoMVC/adi2/alire --ignore-path docs/tests_results/Windows --ignore-path docs/tests_results/Darwin | grep '\[Err' && echo OK 
 else
 	echo "Unknown platform $(PLATFORM)"
 	exit 1
