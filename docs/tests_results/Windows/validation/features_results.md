@@ -2207,6 +2207,17 @@
    - OK : Then the output contains  
    - [X] scenario   [verbose mode run](../../../cli_features/B100_Results_Output_In_MD_Format.md) pass  
 
+   ### Background: [](../../../cli_features/B100_Results_Output_In_MD_Format.md): 
+   - OK : Given the new file `OK_scen.md`  
+   - OK : Given the new file `NOK_scen.md`  
+   - [X] background [](../../../cli_features/B100_Results_Output_In_MD_Format.md) pass  
+
+   ### Scenario: [failing run names the failed scenarios](../../../cli_features/B100_Results_Output_In_MD_Format.md): 
+   - OK : When I run `./bbt -c --yes NOK_scen.md`  
+   - OK : Then there is an error  
+   - OK : And the output contains  
+   - [X] scenario   [failing run names the failed scenarios](../../../cli_features/B100_Results_Output_In_MD_Format.md) pass  
+
 
 # Document: [B105_Expected_vs_Actual_Output.md](../../../cli_features/B105_Expected_vs_Actual_Output.md)  
    ### Background: [](../../../cli_features/B105_Expected_vs_Actual_Output.md): 
@@ -2905,12 +2916,12 @@
    - [X] scenario   [tables and diagrams with Gherkin-like content](../../../cli_features/C140_Special_Markdown_Constructs.md) pass  
 
 
-## Summary : **Success**, 286 scenarios OK
+## Summary : **Success**, 287 scenarios OK
 
 | Status     | Count |
 |------------|-------|
 | Failed     | 0     |
-| Successful | 286   |
+| Successful | 287   |
 | Empty      | 0     |
 | Not Run    | 16    |
 

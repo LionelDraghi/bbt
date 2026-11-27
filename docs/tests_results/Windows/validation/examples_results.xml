@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="examples_results" tests="10" failures="0" errors="0" skipped="0" time="2.799883900">
-  <testsuite name="" tests="7" failures="0" errors="0" skipped="0" time="2.799883900">
-    <testcase name="1: Checking installed gcc version" classname="" time="0.027345300"/>
-    <testcase name="2 : compiling and executing an hello word" classname="" time="0.100857800"/>
-    <testcase name="3 : get gcc version" classname="" time="0.010123600"/>
-    <testcase name="4 : checking error output and return code" classname="" time="0.030948600"/>
-    <testcase name="5 : checking environment variables handling" classname="" time="0.161418900"/>
-    <testcase name="6 : interacting with a program prompt" classname="" time="2.361633200"/>
-    <testcase name="7 : ignoring a volatile part of the output" classname="" time="0.104338900"/>
+<testsuites name="examples_results" tests="10" failures="0" errors="0" skipped="0" time="1.411787500">
+  <testsuite name="" tests="7" failures="0" errors="0" skipped="0" time="1.411787500">
+    <testcase name="1: Checking installed gcc version" classname="" time="0.035220600"/>
+    <testcase name="2 : compiling and executing an hello word" classname="" time="0.110351400"/>
+    <testcase name="3 : get gcc version" classname="" time="0.016183000"/>
+    <testcase name="4 : checking error output and return code" classname="" time="0.030490200"/>
+    <testcase name="5 : checking environment variables handling" classname="" time="0.121026900"/>
+    <testcase name="6 : interacting with a program prompt" classname="" time="0.990272500"/>
+    <testcase name="7 : ignoring a volatile part of the output" classname="" time="0.104771400"/>
   </testsuite>
-  <testsuite name="../docs/examples\rpl_case_insensitivity.md" tests="1" failures="0" errors="0" skipped="0" time="0.018420700">
-    <testcase name="1.1 : simple use (single file, no globbing)" classname="../docs/examples\rpl_case_insensitivity.md" time="0.016072700"/>
+  <testsuite name="../docs/examples\rpl_case_insensitivity.md" tests="1" failures="0" errors="0" skipped="0" time="0.014058300">
+    <testcase name="1.1 : simple use (single file, no globbing)" classname="../docs/examples\rpl_case_insensitivity.md" time="0.011796900"/>
   </testsuite>
-  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.021773700">
-    <testcase name="I want to know sut version 1/2" classname="" time="0.011233800"/>
-    <testcase name="I want to know sut version 2/2" classname="" time="0.008250400"/>
+  <testsuite name="" tests="2" failures="0" errors="0" skipped="0" time="0.027390500">
+    <testcase name="I want to know sut version 1/2" classname="" time="0.009205100"/>
+    <testcase name="I want to know sut version 2/2" classname="" time="0.015889800"/>
   </testsuite>
 </testsuites>
