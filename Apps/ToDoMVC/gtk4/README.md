@@ -23,14 +23,21 @@ accessibility backend (the `bbt_gtk4` backend crate, launched with
 
 The GtkAda crate is pinned to a commit of its GitHub sources — a
 branch pin would follow AdaCore's `main`, whose project file can stop
-parsing with the gprbuild the CI installs; the library must be built
-once before `alr build`:
+parsing with the gprbuild the CI installs. Its library must be built
+once, by GtkAda's own build system, before `alr build` can link it,
+and Alire materializes the pin in a directory named after that commit
+(`alire/cache/pins/gtkada4_<commit>`): the sequence is therefore a
+target, which reads the commit from the manifest, rather than a
+literal path:
 
 ```
-export PATH=$HOME/.local/share/alire/toolchains/<gnat>/bin:$HOME/.local/share/alire/toolchains/<gprbuild>/bin:$PATH
-cd alire/cache/pins/gtkada4 && make static && cd -
-alr build
+make pin
 ```
+
+It runs in the Alire environment (`alr exec`), because GtkAda's bare
+`make` needs the compiler and `GPR_PROJECT_PATH` that Alire exports.
+An `alr build` alone, on a fresh clone, fails at the link on purpose:
+that first failure is what materializes the pin.
 
 The project links the static `libgtkada.a` of the pin
 (`with "gtkada.gpr"`, default `LIBRARY_TYPE=static`).
