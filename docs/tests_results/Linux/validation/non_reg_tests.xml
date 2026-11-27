@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="non_reg_tests" tests="5" failures="0" errors="0" skipped="0" time="0.025005000">
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.025005000">
-    <testcase name="Step analysis is interrupted when exiting the section ([Issue #37](https://github.com/LionelDraghi/bbt/issues/37))" classname="" time="0.024389000"/>
+<testsuites name="non_reg_tests" tests="5" failures="0" errors="0" skipped="0" time="0.023720000">
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.023720000">
+    <testcase name="Step analysis is interrupted when exiting the section ([Issue #37](https://github.com/LionelDraghi/bbt/issues/37))" classname="" time="0.023456000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.027168000">
-    <testcase name="comparing an empty actual output with a non empty expected content shall fail normally, not raise an exception, and the scenario shall be counted as failed (bug present in bbt 0.4.2-dev, found on 2026-10-03 while migrating the ArchiCheck test suite)" classname="" time="0.026628000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.025565000">
+    <testcase name="comparing an empty actual output with a non empty expected content shall fail normally, not raise an exception, and the scenario shall be counted as failed (bug present in bbt 0.4.2-dev, found on 2026-10-03 while migrating the ArchiCheck test suite)" classname="" time="0.025337000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.025361000">
-    <testcase name="test that `is equal to file` no more raise an exception when files are of different sizes, check Issue: #7" classname="" time="0.024807000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.023930000">
+    <testcase name="test that `is equal to file` no more raise an exception when files are of different sizes, check Issue: #7" classname="" time="0.023686000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.026794000">
-    <testcase name="" classname="" time="0.026247000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.025370000">
+    <testcase name="" classname="" time="0.025141000"/>
   </testsuite>
-  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.052803000">
-    <testcase name="a step with a missing code block followed by a new Scenario header shall not crash the analysis (bug present in bbt 0.4.2-dev, found on 2026-10-03 while migrating the ArchiCheck test suite)" classname="" time="0.052244000"/>
+  <testsuite name="" tests="1" failures="0" errors="0" skipped="0" time="0.050557000">
+    <testcase name="a step with a missing code block followed by a new Scenario header shall not crash the analysis (bug present in bbt 0.4.2-dev, found on 2026-10-03 while migrating the ArchiCheck test suite)" classname="" time="0.050327000"/>
   </testsuite>
 </testsuites>
