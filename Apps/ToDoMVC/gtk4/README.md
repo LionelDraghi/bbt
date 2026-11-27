@@ -21,8 +21,10 @@ accessibility backend (the `bbt_gtk4` backend crate, launched with
 
 ## Build
 
-The GtkAda crate is pinned to its GitHub sources; the library must be
-built once before `alr build`:
+The GtkAda crate is pinned to a commit of its GitHub sources — a
+branch pin would follow AdaCore's `main`, whose project file can stop
+parsing with the gprbuild the CI installs; the library must be built
+once before `alr build`:
 
 ```
 export PATH=$HOME/.local/share/alire/toolchains/<gnat>/bin:$HOME/.local/share/alire/toolchains/<gprbuild>/bin:$PATH

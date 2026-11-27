@@ -17,5 +17,10 @@ executables = ["todomvc"]
 [[depends-on]]
 gtkada4 = "^27.0.0"
 
+# The commit, not the branch: a branch pin makes the build follow
+# AdaCore's main, and the GtkAda project file of the day can stop
+# parsing with the gprbuild the CI installs (26.0.1 rejects the
+# variable declarations of the 2026-11-27 main, gtkada.gpr:49). The
+# 2026-11-04 merge builds with it.
 [[pins]]
-gtkada4 = { url='https://github.com/AdaCore/gtkada' }
+gtkada4 = { url = "https://github.com/AdaCore/gtkada", commit = "40f1f506fd8655d3b9c5508e6f5a1cbe7bc42cd4" }
