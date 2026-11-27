@@ -190,10 +190,15 @@ they left open.
   it to `IMPLEMENTED` and to the parameter lines of `backends/Makefile`.
 
 - Adi2 backend  
-  `backends/adi2` (crate `bbt_adi2`) and its witness `Apps/ToDoMVC/adi2`.
-  One question first: publish
-  [ovenpasta/adi2](https://github.com/ovenpasta/adi2) in the community
-  index, or keep a git-URL dependency.
+  Done: `backends/adi2` (crate `bbt_adi2`) and its witness
+  `Apps/ToDoMVC/adi2`, both ran the shared suite green locally, and
+  their cross-table rows are in [backends.md](../backends.md). What is
+  left: the witness pins
+  [ovenpasta/adi2](https://github.com/ovenpasta/adi2) at a commit,
+  because the crate is not in the community index — publish it there,
+  or keep the git-URL pin and say so in the witness README; and give
+  the backend its CI job, which no workflow has yet (the shared suite
+  needs a display and a development-profile Adi2 build).
 
 - absorb the remaining GUI vocabulary  
   Eleven proposals are still in `docs/proposed` (G025, G030, G040, G045,

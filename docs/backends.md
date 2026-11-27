@@ -34,7 +34,11 @@ missing, each with the command that fixes it
 | `bbt`           | repository root      | `bbt` executable + `bbt_lib`     | published (v0.6.1) |
 | `bbt_backends`  | `backends/common`    | `bbt_backends` static library    | local, unpublished |
 | `bbt_gtk4`      | `backends/gtk4`      | `bbt_gtk4` executable (Linux)    | local, unpublished |
+| `bbt_webapp`    | `backends/webapp`    | `bbt_webapp` executable          | local, unpublished |
+| `bbt_adi2`      | `backends/adi2`      | `bbt_adi2` executable            | local, unpublished |
 | `todomvc_gtk4`  | `Apps/ToDoMVC/gtk4`  | `todomvc` witness (Linux, CI-only)| local, unpublished |
+| `todomvc_web`   | `Apps/ToDoMVC/web`   | `todomvc` witness (gnoga)        | local, unpublished |
+| `todomvc_adi2`  | `Apps/ToDoMVC/adi2`  | `todomvc` witness (Adi2)         | local, unpublished |
 
 The `bbt_backends` library holds what every backend needs and no GUI
 stack provides: the harness deadline and the bounded polling
@@ -45,9 +49,13 @@ shared ones. GUI toolkit helpers never land there, they go down into
 the concerned backend crate.
 
 The witness applications are in `Apps/` (e.g. the GTK 4 witness
-[ToDoMVC](../Apps/ToDoMVC/ToDoMVC.md), driven through AT-SPI), and stay CI-bound: they are test
-targets, not products, and are not in the published dependencies of
-any backend crate.
+[ToDoMVC](../Apps/ToDoMVC/ToDoMVC.md), driven through AT-SPI), and stay
+CI-bound: they are test targets, not products, and are not in the
+published dependencies of any backend crate. Each backend has its own
+projection: GTK 4 over AT-SPI, a gnoga-served page over WebDriver
+(`Apps/ToDoMVC/web`), and an Adi2 application over Adi2's own
+development bridge (`Apps/ToDoMVC/adi2`, cf. its README for the naming
+conventions the bridge allows).
 
 ## What each backend supports
 
