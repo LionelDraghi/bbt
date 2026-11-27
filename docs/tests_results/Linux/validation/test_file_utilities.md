@@ -54,5 +54,9 @@ Short_Path (From_Dir => "/home/tests/",
 Short_Path (From_Dir => "/home/toto/src/tests/",
             To_File  => "/opt/GNAT/2018/lib64/libgcc_s.so") = /opt/GNAT/2018/lib64/libgcc_s.so
 
+14. Relative paths, resolved : OK
+Short_Path (From_Dir => "../../docs/Windows/validation",
+            To_File  => "../docs/features/x.md") = ../../../tests/docs/features/x.md
+
 
 File_Utilities.Short_Path tests OK
